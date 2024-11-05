@@ -5,6 +5,7 @@ logs/
 
 firebase_config.json
 
+.DS_Store
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
