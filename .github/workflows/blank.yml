@@ -35,3 +35,5 @@ jobs:
       run: ./gradlew jib --image=my-docker-repo/my-image:latest
       env:
         FIREBASE_CONFIG_PATH: "config/firebase_config.json"
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
