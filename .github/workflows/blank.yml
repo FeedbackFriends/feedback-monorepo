@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Checkout code
+   # 1. Checkout code
     - name: Checkout code
       uses: actions/checkout@v4
 
@@ -21,12 +21,19 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # 3. Decode and write Firebase Config to a file
-    - name: Setup Firebase Config
-      run: echo "${{ secrets.FIREBASE_CONFIG }}" > app
+    # 3. Create Resources Directory
+    - name: Create Resources Directory
+      run: mkdir -p app/resources
 
-    # 4. Build and Push with Jib
+    # 4. Decode and write Firebase Config to a file
+    - name: Setup Firebase Config
+      run: |
+        echo "${{ secrets.FIREBASE_CONFIG }}" > app/resources/firebase_config.json
+
+    # 5. Build docker with Jib
     - name: Build and Push Docker Image
       run: ./gradlew jibDockerBuild --image=my-docker-repo/my-image:latest
       env:
         FIREBASE_CONFIG_PATH: "app/resources/firebase_config.json"
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
