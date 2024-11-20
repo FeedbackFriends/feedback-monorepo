@@ -1,4 +1,4 @@
-name: Build with Jib and Firebase Config
+name: Build and Push Docker Image with Jib
 
 on:
   push:
@@ -14,24 +14,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Set up Java (adjust version if needed)
+    # 2. Set up Java
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: '17' # or your required Java version
+        java-version: '17'
         distribution: 'temurin'
 
-    # 3. Decode and write Firebase config to a file
+    # 3. Decode and write Firebase Config to a file
     - name: Setup Firebase Config
-      run: |
-        echo "${{ secrets.FIREBASE_CONFIG }}" > firebase-config.json
+      run: echo "${{ secrets.FIREBASE_CONFIG }}" > src/main/resources/firebase-config.json
 
-    # 4. Build and push Docker image with Jib
+    # 4. Build and Push with Jib
     - name: Build and Push Docker Image
-      uses: docker/build-push-action@v4
-      with:
-        push: true
-        tags: my-docker-repo/my-image:latest
-        context: .
-        build-args: >
-          --build-arg FIREBASE_CONFIG_FILE=firebase-config.json
+      run: ./gradlew jib --image=my-docker-repo/my-image:latest
+      env:
+        FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}  # Pass secrets if needed in Gradle build
