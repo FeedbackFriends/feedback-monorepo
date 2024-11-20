@@ -34,6 +34,6 @@ jobs:
     - name: Build docker image with Jib and push to docker hub
       run: ./gradlew jib --image=nicolaidam/feedback:1.0.22
       env:
-        FIREBASE_CONFIG_PATH: "config/firebase_config.json"
-        DOCKER_USERNAME: "nicolaidam"
-        DOCKER_PASSWORD: "dckr_pat_T_N2ZxKYNxQDbn0WaQ_NepfD64c"
+        FIREBASE_CONFIG_PATH: "config/firebase_config.json"'
+        DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
+        DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
