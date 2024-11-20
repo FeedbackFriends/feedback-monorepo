@@ -20,22 +20,13 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Create config directory
-      run: mkdir -p config
-
-    - name: Decode and write Firebase Config to a file in config directory
+    - name: Create and prepare config directory
       run: |
-        echo "${{ secrets.FIREBASE_CONFIG }}" > config/firebase_config.json
-
-    - name: Verify config directory and file
-      run: ls -la config && cat config/firebase_config.json
-    # 5. Authenticate Docker Hub
-    #- name: Authenticate Docker Hub
-    #  run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
+        mkdir -p src/main/jib/config
+        echo "${{ secrets.FIREBASE_CONFIG }}" > src/main/jib/config/firebase_config.json
 
     - name: Build Docker image with Jib
-      run: ./gradlew jib --image=nicolaidam/feedback:1.0.22
+      run: ./gradlew jib --image=nicolaidam/feedback:1.0.23
       env:
         JIB_EXTRA_DIRECTORIES_PATH: "${{ github.workspace }}/config"
         DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
