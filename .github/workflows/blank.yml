@@ -24,9 +24,11 @@ jobs:
       run: |
         mkdir -p src/main/jib/config
         printf '%s' "${{ secrets.FIREBASE_CONFIG }}" > src/main/jib/config/firebase_config.json
+        jq . src/main/jib/config/firebase_config.json
+        head -n 10 src/main/jib/config/firebase_config.json
 
     - name: Build Docker image with Jib
-      run: ./gradlew jib --image=nicolaidam/feedback:1.0.24
+      run: ./gradlew jib --image=nicolaidam/feedback:1.0.25
       env:
         JIB_EXTRA_DIRECTORIES_PATH: "${{ github.workspace }}/config"
         DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
