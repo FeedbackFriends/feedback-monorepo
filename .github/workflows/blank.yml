@@ -27,6 +27,8 @@ jobs:
       run: |
         echo "${{ secrets.FIREBASE_CONFIG }}" > config/firebase_config.json
 
+    - name: Verify config directory and file
+      run: ls -la config && cat config/firebase_config.json
     # 5. Authenticate Docker Hub
     #- name: Authenticate Docker Hub
     #  run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
