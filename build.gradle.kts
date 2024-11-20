@@ -87,6 +87,14 @@ jib {
 			username = System.getenv("DOCKER_USERNAME")
 			password = System.getenv("DOCKER_PASSWORD")
 		}
+		extraDirectories {
+			paths {
+				path {
+					from { file("config") }
+					into = "/app/config"
+				}
+			}
+		}
 	}
 }
 //jib {
