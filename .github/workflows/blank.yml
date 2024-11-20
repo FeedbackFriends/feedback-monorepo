@@ -23,7 +23,7 @@ jobs:
 
     # 3. Decode and write Firebase Config to a file
     - name: Setup Firebase Config
-      run: echo "${{ secrets.FIREBASE_CONFIG }}" > app/resources/firebase-config.json
+      run: echo "${{ secrets.FIREBASE_CONFIG }}" > app/resources
 
     # 4. Build and Push with Jib
     - name: Build and Push Docker Image
