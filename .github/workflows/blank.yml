@@ -23,17 +23,17 @@ jobs:
 
     # 3. Create Resources Directory
     - name: Create Resources Directory
-      run: mkdir -p app/resources
+      run: mkdir -p config
 
     # 4. Decode and write Firebase Config to a file
     - name: Setup Firebase Config
       run: |
-        echo "${{ secrets.FIREBASE_CONFIG }}" > app/resources/firebase_config.json
+        echo "${{ secrets.FIREBASE_CONFIG }}" > config/firebase_config.json
 
     # 5. Build docker with Jib
     - name: Build and Push Docker Image
       run: ./gradlew jib --image=my-docker-repo/my-image:latest
       env:
-        FIREBASE_CONFIG_PATH: "app/resources/firebase_config.json"
+        FIREBASE_CONFIG_PATH: "config/firebase_config.json"
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
