@@ -27,6 +27,6 @@ jobs:
 
     # 4. Build and Push with Jib
     - name: Build and Push Docker Image
-      run: ./gradlew jib --image=my-docker-repo/my-image:latest
+      run: ./gradlew jibDockerBuild --image=my-docker-repo/my-image:latest
       env:
         FIREBASE_CONFIG_PATH: "app/resources/firebase_config.json"
