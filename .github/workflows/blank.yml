@@ -10,23 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Checkout code
+
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 2. Set up Java
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # 3. Create config directory
-    - name: Create Resources Directory
+    - name: Create config directory
       run: mkdir -p config
 
-    # 4. Decode and write Firebase Config to a file in config directory
-    - name: Setup Firebase Config
+    - name: Decode and write Firebase Config to a file in config directory
       run: |
         echo "${{ secrets.FIREBASE_CONFIG }}" > config/firebase_config.json
 
@@ -34,8 +31,9 @@ jobs:
     #- name: Authenticate Docker Hub
     #  run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    # 6. Build and Push Docker Image with Jib
-    - name: Build and Push Docker Image
+    - name: Build docker image with Jib and push to docker hub
       run: ./gradlew jib --image=my-docker-repo/my-image:latest
       env:
         FIREBASE_CONFIG_PATH: "config/firebase_config.json"
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
