@@ -23,9 +23,15 @@ jobs:
     - name: Create and prepare config directory
       run: |
         mkdir -p src/main/jib/config
-        printf '%s' "${{ secrets.FIREBASE_CONFIG }}" > src/main/jib/config/firebase_config.json
-        jq . src/main/jib/config/firebase_config.json
-        head -n 10 src/main/jib/config/firebase_config.json
+        echo "${{ secrets.FIREBASE_CONFIG }}" | base64 -d > src/main/jib/config/firebase_config.json
+
+    - name: Validate Firebase config (optional debugging)
+      run: |
+        echo "Decoded Firebase Config Debug Output:"
+        cat src/main/jib/config/firebase_config.json | jq .
+      env:
+        FIREBASE_CONFIG: "${{ secrets.FIREBASE_CONFIG }}"
+
 
     - name: Build Docker image with Jib
       run: ./gradlew jib --image=nicolaidam/feedback:1.0.25
