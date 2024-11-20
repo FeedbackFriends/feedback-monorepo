@@ -82,15 +82,16 @@ jib {
 		image = "eclipse-temurin:17-jre"
 	}
 	to {
-		image = "feedback/0.0.19"
+		image = "feedback/0.0.20"
 	}
-	jib {
-		extraDirectories {
-			paths {
-				path { file("firebase-config.json") }
-			}
-		}
-	}
+
+
+//		extraDirectories {
+//			paths {
+//				path { file("firebase-config.json") }
+//			}
+//		}
+
 }
 //jib {
 //	dockerClient {
