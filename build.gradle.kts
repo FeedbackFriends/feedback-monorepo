@@ -88,15 +88,6 @@ jib {
 			password = System.getenv("DOCKER_PASSWORD")
 		}
 	}
-
-	extraDirectories {
-		paths {
-			path {
-				from { file("config") }
-				into = "/app/config"
-			}
-		}
-	}
 }
 //jib {
 //	dockerClient {
