@@ -82,7 +82,7 @@ jib {
 		image = "eclipse-temurin:17-jre"
 	}
 	to {
-		image = "nicolaidam/feedback:0.0.20"
+		image = "nicolaidam/feedback:0.0.21"
 		auth {
 			username = System.getenv("DOCKER_USERNAME")
 			password = System.getenv("DOCKER_PASSWORD")
