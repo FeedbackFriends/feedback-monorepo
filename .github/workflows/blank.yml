@@ -20,13 +20,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Print Firebase config (DEBUG ONLY)
+      run: |
+        echo "Firebase Config Debug Output:"
+        cat src/main/jib/config/firebase_config.json | jq .
+      env:
+        FIREBASE_CONFIG: "${{ secrets.FIREBASE_CONFIG }}"
+
     - name: Create and prepare config directory
       run: |
         mkdir -p src/main/jib/config
         echo "${{ secrets.FIREBASE_CONFIG }}" > src/main/jib/config/firebase_config.json
 
     - name: Build Docker image with Jib
-      run: ./gradlew jib --image=nicolaidam/feedback:1.0.23
+      run: ./gradlew jib --image=nicolaidam/feedback:1.0.24
       env:
         JIB_EXTRA_DIRECTORIES_PATH: "${{ github.workspace }}/config"
         DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
