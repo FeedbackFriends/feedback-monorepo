@@ -20,10 +20,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Print Firebase config (DEBUG ONLY)
+    - name: Print Firebase secret
       run: |
         echo "Firebase Config Debug Output:"
-        cat src/main/jib/config/firebase_config.json | jq .
+        cat ${{ secrets.FIREBASE_CONFIG }} | jq .
       env:
         FIREBASE_CONFIG: "${{ secrets.FIREBASE_CONFIG }}"
 
@@ -31,6 +31,13 @@ jobs:
       run: |
         mkdir -p src/main/jib/config
         echo "${{ secrets.FIREBASE_CONFIG }}" > src/main/jib/config/firebase_config.json
+
+    - name: Print Firebase config (DEBUG ONLY)
+      run: |
+        echo "Firebase Config Debug Output:"
+        cat src/main/jib/config/firebase_config.json | jq .
+      env:
+        FIREBASE_CONFIG: "${{ secrets.FIREBASE_CONFIG }}"
 
     - name: Build Docker image with Jib
       run: ./gradlew jib --image=nicolaidam/feedback:1.0.24
