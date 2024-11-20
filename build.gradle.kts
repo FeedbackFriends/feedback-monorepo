@@ -3,13 +3,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "3.2.1"
 	id("io.spring.dependency-management") version "1.1.4"
-	id("com.google.cloud.tools.jib") version "3.4.2"
 	kotlin("jvm") version "1.9.21"
 	kotlin("plugin.spring") version "1.9.21"
+
+	id("com.google.cloud.tools.jib") version "3.4.4"
 }
 
-group = "dk.ufst.appudvikling"
-version = "0.0.1-SNAPSHOT"
+group = "dk.nicolai"
+version = "0.0.5"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -33,7 +34,6 @@ dependencies {
 	implementation(libs.springboot.security)
 	implementation(libs.springboot.test)
 	implementation(libs.spring.security.test)
-	// implementation(libs.spring.security.oauth2.jose)
 	implementation(libs.springboot.oauth2.resource.server)
 
 	implementation(enforcedPlatform(libs.springboot.dependencies))
@@ -54,16 +54,6 @@ dependencies {
 
 	implementation(libs.bundles.exposed)
 	implementation(libs.firebase)
-
-	// logging
-	implementation("org.apache.logging.log4j:log4j-core:2.20.0")
-	implementation("org.apache.logging.log4j:log4j-api:2.20.0")
-}
-
-configurations {
-	all {
-		exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
-	}
 }
 
 tasks.withType<KotlinCompile> {
@@ -77,10 +67,52 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-jib {
-	jib.from.image = "eclipse-temurin:17-jdk"
-	jib.to.image = "nicolaidam/feedback:latest"
-	container {
-		ports = listOf("8080")
+if (hasProperty("buildScan")) {
+	extensions.findByName("buildScan")?.withGroovyBuilder {
+		setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
+		setProperty("termsOfServiceAgree", "yes")
 	}
 }
+
+jib {
+	dockerClient {
+		executable = "/usr/local/bin/docker"
+	}
+	from {
+		image = "eclipse-temurin:17-jre"
+	}
+	to {
+		image = "feedback/0.0.19"
+	}
+	jib {
+		extraDirectories {
+			paths {
+				path { file("firebase-config.json") }
+			}
+		}
+	}
+}
+//jib {
+//	dockerClient {
+//		executable = "/usr/local/bin/docker"
+//	}
+//	from {
+//		image = "openjdk:17-jdk"
+//	}
+//	to {
+//		image = "nicolaidam/feedback:0.0.11"
+//	}
+//	extraDirectories {
+//		paths {
+//			path {
+//				// copies the contents of 'src/main/another/dir' into '/extras' on the container
+//				from { file("config") }
+//				into = "/app/config"
+//			}
+////			path {
+////				from { file("firebase_config.json") }
+////				into = "/app/config"
+////			}
+//		}
+//	}
+//}

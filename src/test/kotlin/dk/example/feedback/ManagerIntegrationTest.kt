@@ -2,8 +2,11 @@ package dk.example.feedback
 
 import ControllerPaths
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import dk.example.feedback.controller.AccountController
 import dk.example.feedback.model.Role
+import dk.example.feedback.model.dto.SessionDto
 import dk.example.feedback.persistence.table.AccountTable
+import dk.example.feedback.service.Claim
 import dk.example.feedback.service.FirebaseService
 import jakarta.transaction.Transactional
 import org.jetbrains.exposed.sql.deleteAll
@@ -17,6 +20,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import java.util.UUID
+import org.mockito.Mockito
 
 //@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @SpringBootTest
@@ -39,191 +43,113 @@ class ManagerIntegrationTest(
 //        firebaseService = Mockito.mock(IFirebaseService::class.java)
 
         AccountTable.deleteAll()
-
-        // Add 10 Particiants
-
     }
-
-    val getSessionRequest = MockMvcRequestBuilders
-        .get(ControllerPaths.Session)
-        .with (SecurityMockMvcRequestPostProcessors.jwt())
-        .contentType(MediaType.APPLICATION_JSON)
 
     @Test
     fun integrationTest() {
-        `AppOpen - Get session of anonymous firebase account, verify response`()
-        `Login button tapped - Account role is set before login is shown`()
-//        `Get session `
-        `Successful login - Verify get session response`()
-
-//        `Manager can create account`()
-//        `Manager can update account`()
-//        `Manager can create team with participant1 and participant2`()
-//        `manager can edit team`()
-        // manager can edit team
-        // participant1 accepts, participant2 declines
-        // manager can reinvite participant2
-        // manager can create event with Team, and one with no team
-        // manager can edit event
-        // participants give feedback
+        `AppOpen - Create anonymous account`()
+        `Logged in - Create manager account`()
+        `Create event`()
     }
 
     @Test
-    fun `AppOpen - Get session of anonymous firebase account, verify response`() {
+    fun `AppOpen - Create anonymous account`() {
 
-        // Mock anonymous user
-//        Mockito.`when`(firebaseService.getUser(userId = Mockito.anyString())).thenReturn(
-//            null
-//        )
-//
-//        mockMvc.perform(getSessionRequest).andExpect {
-//            it.response.status = 200
-//            val expectedSession = SessionDto(
-//                accountInfo = null,
-//                participantEvents = emptyList(),
-//                managerData = null
-//            )
-//            val actualSession: SessionDto = objectMapper.readValue(it.response.contentAsString, SessionDto::class.java)
-//            Assertions.assertEquals(expectedSession, actualSession)
-//        }.andReturn()
-    }
+        Mockito.`when`(firebaseService.setUserClaims(Mockito.anyString(), Mockito.any())).then { }
 
-
-    @Test
-    fun `Login button tapped - Account role is set before login is shown`() {
-
-        val roleInput = Role.Manager
-
-        val updateAccountRoleRequest = MockMvcRequestBuilders
-            .post(ControllerPaths.Account.Role+"/${roleInput.name}")
+        val createUserInput = AccountController.CreateAccountInput(requestedClaim = null)
+        val createAccountRequest = MockMvcRequestBuilders
+            .post(ControllerPaths.Account.ControllerUrl)
+            .content(objectMapper.writeValueAsString(createUserInput))
             .with (SecurityMockMvcRequestPostProcessors.jwt())
             .contentType(MediaType.APPLICATION_JSON)
 
-        mockMvc.perform(updateAccountRoleRequest).andExpect {
+        mockMvc.perform(createAccountRequest).andExpect {
             it.response.status = 200
+            val expectedSession = SessionDto(
+                accountInfo = SessionDto.AccountInfoDto(
+                    name = null,
+                    email = null,
+                    phoneNumber = null,
+                ),
+                participantEvents = emptyList(),
+                managerData = null,
+                claim = null
+            )
+            val actualSession: SessionDto = objectMapper.readValue(it.response.contentAsString, SessionDto::class.java)
+            Assertions.assertEquals(expectedSession, actualSession)
         }.andReturn()
+
     }
 
     @Test
-    fun `Successful login - Verify get session response`() {
+    fun `Logged in - Create manager account`() {
 
-//        val displayName = "Nicolai Dam"
-//        val email = "hello@hello.dk"
-//        val phoneNumber = null
-//
-//        // Mock logged in user
-//        Mockito.`when`(firebaseService.getUser(userId = Mockito.anyString())).thenReturn(
-//            IFirebaseService.User(displayName = displayName, email = email, phoneNumber = phoneNumber)
-//        )
-//
-//        mockMvc.perform(getSessionRequest).andExpect {
-//            it.response.status = 200
-//            val expectedSession = SessionDto(
-//                accountInfo = SessionDto.AccountInfoDto(
-//                    name = displayName,
-//                    email = email,
-//                    phoneNumber = phoneNumber,
-//                ),
-//                participantEvents = emptyList(),
-//                managerData = SessionDto.ManagerDataDto(
-//                    managerEvents = emptyList(),
-//                    teams = emptyList()
-//                )
-//            )
-//            val actualSession: SessionDto = objectMapper.readValue(it.response.contentAsString, SessionDto::class.java)
-//            Assertions.assertEquals(expectedSession, actualSession)
-//        }.andReturn()
+        Mockito.`when`(firebaseService.setUserClaims(Mockito.anyString(), Mockito.any())).then { }
+
+        Mockito.`when`(firebaseService.getUser(Mockito.anyString())).thenReturn(
+            FirebaseService.User(displayName = "Nicolai Dam", email = "nicolai@email.dk", phoneNumber = "12345678")
+        )
+
+        val createUserInput = AccountController.CreateAccountInput(requestedClaim = Claim.Manager)
+        val createAccountRequest = MockMvcRequestBuilders
+            .post(ControllerPaths.Account.ControllerUrl)
+            .content(objectMapper.writeValueAsString(createUserInput))
+            .with (SecurityMockMvcRequestPostProcessors.jwt())
+            .contentType(MediaType.APPLICATION_JSON)
+
+        mockMvc.perform(createAccountRequest).andExpect {
+            it.response.status = 200
+            val expectedSession = SessionDto(
+                accountInfo = SessionDto.AccountInfoDto(
+                    name = "Nicolai Dam",
+                    email = "nicolai@email.dk",
+                    phoneNumber = "12345678",
+                ),
+                participantEvents = emptyList(),
+                managerData = SessionDto.ManagerDataDto(
+                    managerEvents = emptyList(),
+                ),
+                claim = Claim.Manager
+            )
+            val actualSession: SessionDto = objectMapper.readValue(it.response.contentAsString, SessionDto::class.java)
+            Assertions.assertEquals(expectedSession, actualSession)
+        }.andReturn()
     }
 
-
-    //    @Test
-//    @Order(1)
-//    fun `Manager can create account`() {
-//
-//        val expectedUser = IFirebaseService.User(displayName = "Nicolai Dam", email = "hello@hello.dk", phoneNumber = null)
-//
-//        Mockito.`when`(firebaseService.getUser(userId = Mockito.anyString())).thenReturn(
-//            expectedUser
+    fun `Create event`() {
+//        val createEventInput = EventController.CreateEventInputDto(
+//            eventName = "Event 1",
+//            eventDescription = "Description 1",
+//            eventDate = "2021-12-24",
+//            eventTime = "12:00",
+//            eventLocation = "Location 1",
+//            eventParticipants = listOf("participant1", "participant2")
 //        )
-//
-//        val createUserInput = AccountController.CreateAccountInputDto(
-//            fcmToken = fcmToken,
-//            accountType = AccountType.Manager,
-//            deviceId = deviceId
-//        )
-//        val createAccountRequest = MockMvcRequestBuilders
-//            .post("/account")
-//            .content(objectMapper.writeValueAsString(createUserInput))
+//        val createEventRequest = MockMvcRequestBuilders
+//            .post(ControllerPaths.Event.ControllerUrl)
+//            .content(objectMapper.writeValueAsString(createEventInput))
 //            .with (SecurityMockMvcRequestPostProcessors.jwt())
 //            .contentType(MediaType.APPLICATION_JSON)
 //
-//        mockMvc.perform(createAccountRequest).andExpect {
+//        mockMvc.perform(createEventRequest).andExpect {
 //            it.response.status = 200
-//        }.andReturn()
-//
-//        mockMvc.perform(getSessionRequest).andExpect {
-//            it.response.status = 200
-//            val expectedSession = SessionDto(
-//                accountInfo = SessionDto.AccountInfoDto(
-//                    name = "Nicolai Dam",
-//                    email = "hello@hello.dk",
-//                    phoneNumber = null,
-//                ),
-//                participantEvents = emptyList(),
-//                managerData = SessionDto.ManagerDataDto(
-//                    managerEvents = emptyList(),
-//                    teams = emptyList()
-//                )
-//            )
-//            val actualSession: SessionDto = objectMapper.readValue(it.response.contentAsString, SessionDto::class.java)
-//            Assertions.assertEquals(expectedSession, actualSession)
-//        }.andReturn()
-//    }
+//            val actualResponse: EventDto = objectMapper.readValue(it.response.contentAsString, EventDto::class.java)
+//            val expectedResponse = EventDto(
+//                id = actualResponse.id,
+//                eventName = "Event 1",
+//                eventDescription = "Description 1",
+//                eventDate = "2021-12-24",
+//                eventTime = "12:00",
+//                eventLocation = "Location 1",
+//                eventParticipants = listOf(
+//                    EventParticipantDto(
+//                        accountId = "participant1",
+//                        name = "Participant 1",
+//                        email = "
+//        }
+    }
 
-    //    @Test
-//    @Order(2)
-//    fun `Manager can update account`() {
-//        val updateAccountInput = AccountController.UpdateAccountInputDto(
-//            name = "Nicolai Oyen Dam",
-//            email = "new@email.dk",
-//            phoneNumber = "12345678",
-//            fcmToken = fcmToken,
-//        )
-//        val updateAccountRequest = MockMvcRequestBuilders
-//            .put("/account")
-//            .content(objectMapper.writeValueAsString(updateAccountInput))
-//            .with (SecurityMockMvcRequestPostProcessors.jwt())
-//            .contentType(MediaType.APPLICATION_JSON)
-//        mockMvc.perform(updateAccountRequest).andExpect {
-//            it.response.status = 200
-//            val expectedResponse = SessionDto.AccountInfoDto(
-//                name = "Nicolai Oyen Dam",
-//                email = "new@email.dk",
-//                phoneNumber = "12345678",
-//            )
-//            val actualResponse: SessionDto.AccountInfoDto = objectMapper.readValue(it.response.contentAsString, SessionDto.AccountInfoDto::class.java)
-//            Assertions.assertEquals(expectedResponse, actualResponse)
-//        }.andReturn()
-//
-//        mockMvc.perform(getSessionRequest).andExpect {
-//            it.response.status = 200
-//            val expectedSession = SessionDto(
-//                accountInfo = SessionDto.AccountInfoDto(
-//                    name = "Nicolai Oyen Dam",
-//                    email = "new@email.dk",
-//                    phoneNumber = "12345678",
-//                ),
-//                participantEvents = emptyList(),
-//                managerData = SessionDto.ManagerDataDto(
-//                    managerEvents = emptyList(),
-//                    teams = emptyList()
-//                )
-//            )
-//            val actualSession: SessionDto = objectMapper.readValue(it.response.contentAsString, SessionDto::class.java)
-//            Assertions.assertEquals(expectedSession, actualSession)
-//        }.andReturn()
-//    }
-//
 //    fun `Manager can create team with participant1 and participant2`() {
 //        val createTeamInput = TeamController.CreateTeamInputDto(
 //            teamName = "Team 1",

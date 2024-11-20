@@ -17,12 +17,14 @@ import java.util.UUID
 class FeedbackRepo {
 
     fun throwExceptionIfAccountAlreadyGivenFeedback(eventId: UUID, accountId: String)  {
-        QuestionDao.find { QuestionTable.event eq eventId }.flatMap { it.feedback }.forEach {
-            if (it.participant?.id?.value == accountId) {
-                return
-            }
+        val hasGivenFeedback = QuestionDao
+            .find { QuestionTable.event eq eventId }
+            .flatMap { it.feedback }
+            .any { it.participant?.id?.value == accountId }
+
+        if (hasGivenFeedback) {
+            throw FeedbackAlreadyGivenException()
         }
-        throw FeedbackAlreadyGivenException()
     }
 
     fun getFeedbackCountByAccountId(accountId: String): Long {
@@ -35,7 +37,7 @@ class FeedbackRepo {
 
             val feedback: FeedbackEntity = when (it.feedbackType) {
                 FeedbackType.Emoji -> {
-                    val emoji: Emoji = it.emoji ?: throw IllegalArgumentException("Emoji is required since type is emoji")
+                    val emoji: Emoji = it.emoji ?: throw IllegalArgumentException("Emoji is required since type is emoji: expected: ${FeedbackType.Emoji}, gotten: ${it.feedbackType}")
                     FeedbackEntity(emoji = emoji, comment = it.comment, feedbackType = FeedbackType.Emoji, questionId = it.questionId)
                 }
                 FeedbackType.Comment -> {
@@ -69,8 +71,8 @@ class FeedbackRepo {
                 this.opinion = feedback.opinion
                 this.oneToTen = feedback.oneToTen
                 this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
-                this.question = QuestionDao.findById(feedback.questionId) ?: throw IllegalArgumentException("Question not found")
-                this.manager = AccountDao.findById(EntityID(managerId, AccountTable)) ?: throw IllegalArgumentException("Manager not found")
+                this.question = QuestionDao.findById(feedback.questionId) ?: throw IllegalArgumentException("Question not found with id ${feedback.questionId}")
+                this.manager = AccountDao.findById(EntityID(managerId, AccountTable)) ?: throw IllegalArgumentException("Manager not found with id $managerId")
                 this.participant = AccountDao.findById(EntityID(participantId, AccountTable))
             }
 

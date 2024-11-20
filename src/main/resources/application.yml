@@ -45,3 +45,4 @@ springdoc:
   default-produces-media-type: application/json
 feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
+  firebase-config-path: ${FIREBASE_CONFIG_PATH}

@@ -11,7 +11,6 @@ data class SessionDto(
 ) {
     data class ManagerDataDto(
         val managerEvents: List<ManagerEventDto>,
-        val teams: List<TeamDto>
     )
     data class AccountInfoDto(
         val name: String?,

@@ -1,6 +1,7 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.controller.FeedbackController.SendFeedbackResponse
+import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.*
 import dk.example.feedback.model.db_models.FeedbackEntity
 import dk.example.feedback.model.dto.FeedbackSessionDto
@@ -18,10 +19,11 @@ class FeedbackService(
     val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
     val firebaseService: FirebaseService,
+    val context: AuthContextHelper,
 ) {
 
-    fun startSession(pinCode: String, accountId: String): FeedbackSessionDto {
-
+    fun startSession(pinCode: String): FeedbackSessionDto {
+        val accountId = context.getAuthContext().accountId
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
 
         feedbackRepo.throwExceptionIfAccountAlreadyGivenFeedback(eventId = event.id, accountId = accountId)
@@ -45,15 +47,15 @@ class FeedbackService(
         )
     }
 
-    fun sendFeedback(accountId: String, feedback: List<FeedbackEntity>, pinCode: String): SendFeedbackResponse {
-
+    fun sendFeedback(feedback: List<FeedbackEntity>, pinCode: String): SendFeedbackResponse {
+        val accountId = context.getAuthContext().accountId
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val managerId = event.managerId
-        val managerAccount = accountRepo.getAccountById(accountId = managerId) ?: throw Exception("Could not find manager with id: ${managerId}")
+        val managerAccount = accountRepo.getAccount(accountId = managerId) ?: throw Exception("Could not find manager with id: ${managerId}")
         // Check if user with given client id already provided feedback
         feedbackRepo.throwExceptionIfAccountAlreadyGivenFeedback(eventId = event.id, accountId = accountId)
 
-        val participantAccount = accountRepo.getAccountById(accountId = accountId) ?: throw Exception("Could not find participant with id: ${accountId}")
+        val participantAccount = accountRepo.getAccount(accountId = accountId) ?: throw Exception("Could not find participant with id: ${accountId}")
 
         feedbackRepo.sendFeedback(
             feedback = feedback,

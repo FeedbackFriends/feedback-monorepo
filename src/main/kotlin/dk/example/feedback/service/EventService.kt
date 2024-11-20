@@ -4,6 +4,8 @@ import dk.example.feedback.model.*
 import dk.example.feedback.model.dto.ManagerEventDto
 import dk.example.feedback.model.dto.ParticipantEventDto
 import dk.example.feedback.model.dto.toManagerEvent
+import dk.example.feedback.model.dto.toParticipantEvent
+import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -12,7 +14,8 @@ import java.util.*
 @Service
 @Transactional
 class EventService(
-    val eventRepo: EventRepo
+    val eventRepo: EventRepo,
+    val accountRepo: AccountRepo,
 ) {
 
     fun create(eventInput: EventInput, accountId: String): ManagerEventDto {
@@ -25,11 +28,15 @@ class EventService(
         return eventEntity.toManagerEvent()
     }
 
-    fun delete(eventId: UUID) {
+    fun delete(eventId: UUID, accountId: String) {
+        val event = eventRepo.getEvent(eventId = eventId)
+        if (event?.managerId != accountId) throw Exception("You are not the manager of this event.")
         eventRepo.deleteEvent(eventId = eventId)
     }
 
-    fun update(eventInput: EventInput, eventId: UUID): ManagerEventDto {
+    fun update(eventInput: EventInput, eventId: UUID, accountId: String): ManagerEventDto {
+        val event = eventRepo.getEvent(eventId = eventId)
+        if (event?.managerId != accountId) throw Exception("You are not the manager of this event.")
         return eventRepo.updateEvent(eventInput = eventInput, eventId = eventId).toManagerEvent()
     }
 
@@ -39,6 +46,13 @@ class EventService(
 
     fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
         return eventRepo.getParticipantEvents(accountId = accountId)
+    }
+
+    fun acceptEventInvite(eventId: UUID, accountId: String): ParticipantEventDto {
+        val event = eventRepo.getEvent(eventId = eventId) ?: throw Exception("Event not found.")
+        accountRepo.getAccount(accountId = accountId) ?: throw Exception("Account not found.")
+        eventRepo.addParticipantToEvent(eventId = eventId, accountId = accountId)
+        return event.toParticipantEvent()
     }
 
     private fun generatePinCode(): String {

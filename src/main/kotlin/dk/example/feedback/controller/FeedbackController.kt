@@ -17,13 +17,11 @@ class FeedbackController(val feedbackService: FeedbackService) {
         val pinCode: String,
     )
 
-    @PostMapping("/start-session")
+    @PostMapping("/start")
     fun startFeedbackSession(
         @RequestBody startFeedbackSession: StartFeedbackSession,
-        @AuthenticationPrincipal principal: Jwt,
     ): FeedbackSessionDto {
-        val accountId = principal.subject
-        return feedbackService.startSession(pinCode = startFeedbackSession.pinCode, accountId = accountId)
+        return feedbackService.startSession(pinCode = startFeedbackSession.pinCode)
     }
 
     data class SendFeedback(
@@ -35,13 +33,11 @@ class FeedbackController(val feedbackService: FeedbackService) {
         val shouldPresentRatingPrompt: Boolean,
     )
 
-    @PostMapping("/send")
-    fun sendFeedback(@RequestBody input: SendFeedback, principal: Principal): SendFeedbackResponse {
-        val accountId = principal.name
+    @PostMapping("/submit")
+    fun sendFeedback(@RequestBody input: SendFeedback): SendFeedbackResponse {
         return feedbackService.sendFeedback(
             feedback = input.feedback,
             pinCode = input.pinCode,
-            accountId = accountId
         )
     }
 }

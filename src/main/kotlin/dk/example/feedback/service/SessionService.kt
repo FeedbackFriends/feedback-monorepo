@@ -1,5 +1,6 @@
 package dk.example.feedback.service
 
+import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.dto.SessionDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -8,11 +9,13 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class SessionService(
     val eventService: EventService,
-    val firebaseService: FirebaseService
+    val accountService: AccountService,
+    val context: AuthContextHelper
 ) {
-
-    fun getSession(accountId: String, claim: Claim?): SessionDto {
-        val account = firebaseService.getUser(accountId)
+    fun getSession(): SessionDto {
+        val accountId = context.getAuthContext().accountId
+        val claim = context.getAuthContext().customClaim
+        val account = accountService.fetchAccount(accountId = accountId) ?: throw Exception("Account not found")
         val participantEvents = eventService.getParticipantEvents(accountId = accountId)
         when (claim) {
             Claim.Manager -> {
@@ -20,14 +23,13 @@ class SessionService(
                 return SessionDto(
                     claim = claim,
                     accountInfo = SessionDto.AccountInfoDto(
-                        name = account.displayName,
+                        name = account.name,
                         email = account.email,
                         phoneNumber = account.phoneNumber
                     ),
                     participantEvents = participantEvents,
                     managerData = SessionDto.ManagerDataDto(
                         managerEvents = managerEvents,
-                        teams = emptyList()
                     )
                 )
             }
@@ -35,7 +37,7 @@ class SessionService(
                 return SessionDto(
                     claim = claim,
                     accountInfo = SessionDto.AccountInfoDto(
-                        name = account.displayName,
+                        name = account.name,
                         email = account.email,
                         phoneNumber = account.phoneNumber
                     ),
@@ -47,7 +49,7 @@ class SessionService(
                 return SessionDto(
                     claim = claim,
                     accountInfo = SessionDto.AccountInfoDto(
-                        name = account.displayName,
+                        name = account.name,
                         email = account.email,
                         phoneNumber = account.phoneNumber
                     ),

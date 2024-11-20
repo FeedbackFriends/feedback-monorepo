@@ -107,6 +107,27 @@ fun EventEntity.toManagerEvent(): ManagerEventDto {
     )
 }
 
+fun EventEntity.toParticipantEvent(): ParticipantEventDto {
+    return ParticipantEventDto(
+        id = this.id,
+        title = this.title,
+        agenda = this.agenda,
+        date = this.date,
+        durationInMinutes = this.durationInMinutes,
+        location = this.location,
+        pinCode = this.pinCode,
+        teamName = team?.teamName,
+        questions = this.questions.map { question ->
+            ParticipantQuestion(
+                id = question.id,
+                questionText = question.questionText,
+                feedbackType = question.feedbackType,
+            )
+        },
+        feedbackProvided = feedback.isNotEmpty()
+    )
+}
+
 data class ParticipantEventDto (
     var id: UUID,
     val title: String,

@@ -17,7 +17,6 @@ object AccountTable: IdTable<String>("account") {
     val fcmToken = varchar("fcm_token", 255).nullable()
     val email =  varchar("email", 255).nullable() // is never null if user is not anonymous
     val phoneNumber = varchar("phone_number", 255).nullable()
-//    val role = enumerationByName("role", 255, Role::class).nullable()
     val createdAt = timestampWithTimeZone("created_at")
     val updatedAt = timestampWithTimeZone("updated_at")
     val ratingPrompted = bool("rating_prompted").default(false)
@@ -65,6 +64,12 @@ object TeamTable: UUIDTable("team") {
     val manager = reference(name = "manager_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
     val createdAt = timestampWithTimeZone("created_at")
     val updatedAt = timestampWithTimeZone("updated_at")
+}
+
+object EventParticipantTable: UUIDTable("event_participant") {
+    val event = reference("event_id", EventTable.id, ReferenceOption.CASCADE)
+    val participant = reference("participant_id", AccountTable.id, ReferenceOption.CASCADE)
+    val feedback = reference("feedback_id", FeedbackTable.id, ReferenceOption.SET_NULL).nullable()
 }
 
 object TeamMemberTable: UUIDTable("team_member") {

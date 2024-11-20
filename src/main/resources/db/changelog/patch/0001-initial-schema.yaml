@@ -269,6 +269,38 @@ databaseChangeLog:
                   constraints:
                     nullable: true
         - createTable:
+            tableName: event_participant
+            columns:
+              - column:
+                  name: event_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                    name: participant_id
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+              - column:
+                  name: feedback_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: event_participant
+            baseColumnNames: event_id
+            referencedTableName: event
+            referencedColumnNames: id
+            constraintName: fk_event_participant_event_id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: event_participant
+            baseColumnNames: participant_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_event_participant_participant_id
+            onDelete: CASCADE
+        - createTable:
             tableName: team
             columns:
               - column:

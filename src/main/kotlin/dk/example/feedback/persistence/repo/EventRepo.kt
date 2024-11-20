@@ -69,6 +69,10 @@ class EventRepo {
         return optionalFoundEvent.toModel()
     }
 
+    fun getEvent(eventId: UUID): EventEntity? {
+        return EventDao.findById(eventId)?.toModel()
+    }
+
     fun getManagerEvents(managerId: String): List<ManagerEventDto> {
         val eventsDao = EventDao.find { EventTable.manager eq managerId }
         val events = eventsDao.toList().map { it.toModel().toManagerEvent() }
@@ -115,6 +119,13 @@ class EventRepo {
             this[QuestionTable.createdAt] = OffsetDateTime.now(ZoneOffset.UTC)
             this[QuestionTable.updatedAt] = OffsetDateTime.now(ZoneOffset.UTC)
             this[QuestionTable.manager] = managerId
+        }
+    }
+
+    fun addParticipantToEvent(eventId: UUID, accountId: String) {
+        EventParticipantTable.upsert {
+            it[EventParticipantTable.event] = eventId
+            it[EventParticipantTable.participant] = accountId
         }
     }
 }

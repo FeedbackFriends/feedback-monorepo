@@ -117,7 +117,7 @@ class AdminController(val accountService: AccountService, val feedbackConfig: Fe
 
         val uid = "mock_id"
 
-        accountService.createAnonymousAccountIfNotExist(uid)
+        accountService.createAnonymousAccountIfNotExist()
 //        accountService.updateRole(uid, Role.Manager)
 //        accountService.updateAccount(
 //            accountId = uid,

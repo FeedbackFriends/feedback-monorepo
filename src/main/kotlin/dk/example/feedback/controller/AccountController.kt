@@ -1,14 +1,13 @@
 package dk.example.feedback.controller
 
 import ControllerPaths
-import dk.example.feedback.helpers.getCustomClaim
-import dk.example.feedback.logger
 import dk.example.feedback.model.AccountDetails
 import dk.example.feedback.model.dto.SessionDto
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.Claim
 import dk.example.feedback.service.FirebaseService
 import dk.example.feedback.service.SessionService
+import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -22,14 +21,7 @@ class AccountController(
     val sessionService: SessionService,
 ) {
 
-    @GetMapping("/TestReadClaim")
-    @PreAuthorize("hasAuthority('Manager')")
-    fun testReadClaim(
-        @AuthenticationPrincipal principal: Jwt
-    ): String {
-        val claim = principal.getCustomClaim()
-        return "Success, had claims: $claim"
-    }
+    val logger = LoggerFactory.getLogger(AccountController::class.java)
 
     @DeleteMapping
     @PreAuthorize("hasAuthority('Manager' or 'Participant')")
@@ -88,41 +80,18 @@ class AccountController(
 
     @PutMapping("/fcmToken")
     fun updateFcmToken(
-        @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: SetFcmTokenInput,
     ) {
-        val accountId = principal.subject
-        return accountService.updateAccountFcmToken(accountId = accountId, fcmToken = input.fcmToken)
+        return accountService.updateAccountFcmToken(fcmToken = input.fcmToken)
     }
-
-    /*
-    Called when App opened for the first time after Firebase setup anunymous account
-    */
-    @PostMapping("/setup-anonymous-account")
-    fun createAnonymousAccount(
-        @AuthenticationPrincipal principal: Jwt,
-    ): SessionDto {
-        val accountId = principal.subject
-        logger.info("Creating anonymous account for $accountId if custom claim is null")
-        // Firebase user is anonymous if null
-        if (principal.getCustomClaim() == null) {
-            logger.info("Creating anonymous account for $accountId since custom claim is null")
-            accountService.createAnonymousAccountIfNotExist(
-                accountId = accountId
-            )
-        }
-        logger.info("Will now get session")
-        return sessionService.getSession(accountId = accountId, claim = principal.getCustomClaim())
-    }
-
-    /*
-     Called after the user has logged in anynoymously or with a provider
-     */
 
     data class CreateAccountInput(
         val requestedClaim: Claim?
     )
 
+    /*
+    Called after the user has logged in anynoymously or with a provider
+    */
     @PostMapping
     fun createAccount(
         @AuthenticationPrincipal principal: Jwt,
@@ -134,9 +103,7 @@ class AccountController(
         when (input.requestedClaim) {
             null -> {
                 logger.info("Creating anonymous account for $accountId since custom claim is null")
-                accountService.createAnonymousAccountIfNotExist(
-                    accountId = accountId
-                )
+                accountService.createAnonymousAccountIfNotExist()
             }
             Claim.Manager, Claim.Participant -> {
                 logger.info("Creating account for $accountId since requested custom claim is $input.requestedClaim")
@@ -149,7 +116,7 @@ class AccountController(
                 )
             }
         }
-        return sessionService.getSession(accountId = accountId, claim = input.requestedClaim)
+        return sessionService.getSession()
     }
 }
 

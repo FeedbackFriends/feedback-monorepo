@@ -1,35 +1,37 @@
 package dk.example.feedback.persistence.repo
 
-import dk.example.feedback.logger
-import dk.example.feedback.model.AccountDetails
 import dk.example.feedback.model.db_models.AccountEntity
 import dk.example.feedback.persistence.dao.AccountDao
-import dk.example.feedback.persistence.table.AccountTable
-import org.jetbrains.exposed.sql.*
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import org.slf4j.LoggerFactory
 
 @Component
 @Transactional
 class AccountRepo {
 
+    val logger = LoggerFactory.getLogger(AccountRepo::class.java)
+
+    /*
+    Create account
+    If account already exists, null is returned
+     */
     fun createAccount(
         name: String?,
         email: String?,
         phoneNumber: String?,
         accountId: String,
     ): AccountEntity {
-        AccountTable.insert {
-            it[id] = accountId
-            it[AccountTable.name] = name
-            it[AccountTable.email] = email
-            it[AccountTable.phoneNumber] = phoneNumber
-            it[AccountTable.createdAt] = OffsetDateTime.now(ZoneOffset.UTC)
-            it[AccountTable.updatedAt] = OffsetDateTime.now(ZoneOffset.UTC)
-        }
-        return getAccountById(accountId) ?: throw NoSuchElementException("User not found")
+        logger.info("AccountRepo: Opretter account")
+        return AccountDao.new(id = accountId) {
+            this.name = name
+            this.email = email
+            this.phoneNumber = phoneNumber
+            this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
+            this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
+        }.toModel()
     }
 
     fun updateAccount(
@@ -52,8 +54,8 @@ class AccountRepo {
         AccountDao.findById(accountId)?.delete() ?: throw NoSuchElementException("User not found")
     }
 
-    fun getAccountById(accountId: String): AccountEntity? {
-        logger.info("Creating anonymous account with id: $accountId")
+    fun getAccount(accountId: String): AccountEntity? {
+        logger.info("Get account with id: $accountId")
         return AccountDao.findById(accountId)?.toModel()
     }
 

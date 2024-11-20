@@ -1,10 +1,8 @@
 HELP.md
 
-# Ignore the entire logs directory
-logs/
-
+# Ignore everything in the logs directory
 firebase_config.json
-
+logs/*
 .DS_Store
 .gradle
 build/
