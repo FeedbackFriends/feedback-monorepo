@@ -82,16 +82,12 @@ jib {
 		image = "eclipse-temurin:17-jre"
 	}
 	to {
-		image = "feedback/0.0.20"
+		image = "nicolaidam/feedback:0.0.20"
+		auth {
+			username = System.getenv("DOCKER_USERNAME")
+			password = System.getenv("DOCKER_PASSWORD")
+		}
 	}
-
-
-//		extraDirectories {
-//			paths {
-//				path { file("firebase-config.json") }
-//			}
-//		}
-
 }
 //jib {
 //	dockerClient {
