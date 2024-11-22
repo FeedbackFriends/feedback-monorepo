@@ -34,7 +34,7 @@ jobs:
 
 
     - name: Build Docker image with Jib
-      run: ./gradlew jib --image=nicolaidam/feedback:1.0.25
+      run: ./gradlew jib --image=nicolaidam/feedback:1.0.26
       env:
         JIB_EXTRA_DIRECTORIES_PATH: "${{ github.workspace }}/config"
         DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
