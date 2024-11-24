@@ -29,12 +29,9 @@ jobs:
       run: |
         echo "Decoded Firebase Config Debug Output:"
         cat src/main/jib/config/firebase_config.json | jq .
-      env:
-        FIREBASE_CONFIG: "${{ secrets.FIREBASE_CONFIG }}"
-
-
+        
     - name: Build Docker image with Jib
-      run: ./gradlew jib --image=nicolaidam/feedback:1.0.27
+      run: ./gradlew jib --image=nicolaidam/feedback:1.0.28
       env:
         JIB_EXTRA_DIRECTORIES_PATH: "${{ github.workspace }}/config"
         DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
@@ -43,4 +40,5 @@ jobs:
         SPRING_DATASOURCE_URL: "${{ secrets.SPRING_DATASOURCE_URL }}"
         SPRING_DATASOURCE_USERNAME: "${{ secrets.SPRING_DATASOURCE_USERNAME }}"
         SPRING_DATASOURCE_PASSWORD: "${{ secrets.SPRING_DATASOURCE_PASSWORD }}"
+        FIREBASE_CONFIG: "${{ secrets.FIREBASE_CONFIG }}"
 
