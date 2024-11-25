@@ -7,6 +7,8 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.UserRecord
 import dk.example.feedback.config.FeedbackConfig
 import dk.example.feedback.model.*
+import dk.example.feedback.persistence.repo.AccountRepo
+import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.Claim
 import dk.example.feedback.service.EventService
@@ -20,7 +22,7 @@ import org.springframework.web.client.postForEntity
 
 @RestController
 @RequestMapping(ControllerPaths.AdminUrl)
-class AdminController(val accountService: AccountService, val feedbackConfig: FeedbackConfig, val eventService: EventService, val firebaseService: FirebaseService) {
+class AdminController(val accountService: AccountService, val feedbackConfig: FeedbackConfig, val eventService: EventService, val firebaseService: FirebaseService, val accountRepo: AccountRepo) {
 
 //
 //    @GetMapping("/get-all-accounts")
@@ -117,16 +119,14 @@ class AdminController(val accountService: AccountService, val feedbackConfig: Fe
 
         val uid = "mock_id"
 
-        accountService.createAnonymousAccountIfNotExist()
-//        accountService.updateRole(uid, Role.Manager)
-//        accountService.updateAccount(
-//            accountId = uid,
-//            accountDetails = AccountDetails(
-//                name = "hello",
-//                email = "mock@mock.dk",
-//                phoneNumber = null,
-//            ),
-//        )
+//        accountService.createAnonymousAccountIfNotExist()
+
+        accountRepo.createAccount(
+            name = "Mock",
+            email = "Mock@gmail.com",
+            phoneNumber = "27630505",
+            accountId = uid
+        )
 
         val createUserRequest = UserRecord.CreateRequest()
             .setUid(uid)

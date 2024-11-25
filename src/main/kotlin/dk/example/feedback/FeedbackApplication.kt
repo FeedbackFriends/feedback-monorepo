@@ -29,6 +29,7 @@ class FirebaseInitializer(private val feedbackConfig: FeedbackConfig) {
 	@PostConstruct
 	fun initializeFirebaseApp() {
 		try {
+			logger.info("Initializing FirebaseApp: Getting config file from path: ${feedbackConfig.firebaseConfigPath}")
 			val firebaseServiceAccount = FileInputStream(feedbackConfig.firebaseConfigPath)
 			val options = FirebaseOptions.builder()
 				.setCredentials(GoogleCredentials.fromStream(firebaseServiceAccount))
