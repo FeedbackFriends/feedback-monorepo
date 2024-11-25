@@ -1,4 +1,5 @@
 server:
+  port: 8080
   shutdown: graceful
   max-http-request-header-size: 16KB
 management:
