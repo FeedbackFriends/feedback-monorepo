@@ -21,7 +21,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Build Docker image with Jib
-      run: ./gradlew jib --image=nicolaidam/feedback:1.0.32
+      run: ./gradlew jib --image=nicolaidam/feedback:1.0.34
       env:
         DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
         DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
