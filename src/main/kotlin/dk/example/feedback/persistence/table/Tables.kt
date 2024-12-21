@@ -1,6 +1,7 @@
 package dk.example.feedback.persistence.table
 
 import dk.example.feedback.model.*
+//import dk.example.feedback.persistence.dao.CommonColumns
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.dao.id.UUIDTable
@@ -32,7 +33,7 @@ object EventTable: UUIDTable("event") {
     val manager = reference("manager_id", AccountTable, onDelete = ReferenceOption.CASCADE)
     val createdAt = timestampWithTimeZone("created_at")
     val updatedAt = timestampWithTimeZone("updated_at")
-    val team = optReference("team_id", TeamTable, onDelete = ReferenceOption.SET_NULL).default(null)
+//    val team = optReference("team_id", TeamTable, onDelete = ReferenceOption.SET_NULL).default(null)
     val newFeedback = integer("new_feedback").default(0)
 }
 
@@ -54,30 +55,33 @@ object FeedbackTable: UUIDTable("feedback") {
     val oneToTen = integer("one_to_ten").nullable()
     val opinion = enumerationByName("opinion", 255, Opinion::class).nullable()
     val createdAt = timestampWithTimeZone("created_at")
+    val updatedAt = timestampWithTimeZone("updated_at")
     val question = reference("question_id", QuestionTable, onDelete = ReferenceOption.CASCADE)
     val manager = reference(name = "manager_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
     val participant = optReference(name = "participant_id", AccountTable.id, onDelete = ReferenceOption.CASCADE).default(null)
 }
 
-object TeamTable: UUIDTable("team") {
-    val name = varchar("name", 255)
-    val manager = reference(name = "manager_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
-    val createdAt = timestampWithTimeZone("created_at")
-    val updatedAt = timestampWithTimeZone("updated_at")
-}
+//object TeamTable: UUIDTable("team") {
+//    val name = varchar("name", 255)
+//    val manager = reference(name = "manager_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
+//    val createdAt = timestampWithTimeZone("created_at")
+//    val updatedAt = timestampWithTimeZone("updated_at")
+//}
 
 object EventParticipantTable: UUIDTable("event_participant") {
     val event = reference("event_id", EventTable.id, ReferenceOption.CASCADE)
     val participant = reference("participant_id", AccountTable.id, ReferenceOption.CASCADE)
     val feedback = reference("feedback_id", FeedbackTable.id, ReferenceOption.SET_NULL).nullable()
+    val createdAt = timestampWithTimeZone("created_at")
+    val updatedAt = timestampWithTimeZone("updated_at")
 }
 
-object TeamMemberTable: UUIDTable("team_member") {
-    val team = reference("team_id", TeamTable.id, ReferenceOption.CASCADE)
-    val account = reference("member_id", AccountTable.id, ReferenceOption.CASCADE)
-    val status = enumerationByName("status", 255, TeamMemberStatus::class)
-//    val hasBeenNotified = bool("has_been_notified").default(false)
-}
+//object TeamMemberTable: UUIDTable("team_member") {
+//    val team = reference("team_id", TeamTable.id, ReferenceOption.CASCADE)
+//    val account = reference("member_id", AccountTable.id, ReferenceOption.CASCADE)
+//    val status = enumerationByName("status", 255, TeamMemberStatus::class)
+////    val hasBeenNotified = bool("has_been_notified").default(false)
+//}
 
 //object TeamNotificationTable: UUIDTable("notification") {
 //    val notificationType = enumerationByName("notification_type", 255, NotificationType::class)
