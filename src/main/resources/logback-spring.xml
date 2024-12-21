@@ -37,6 +37,6 @@
 
     <!-- Specific logger settings -->
     <logger name="org.springframework" level="INFO" />
-    <logger name="dk.ufst.appudvikling" level="DEBUG" />
+    <logger name="dk.example.feedback" level="DEBUG" />
 
 </configuration>
