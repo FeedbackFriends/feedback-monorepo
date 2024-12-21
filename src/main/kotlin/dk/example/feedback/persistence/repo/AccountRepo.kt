@@ -2,10 +2,12 @@ package dk.example.feedback.persistence.repo
 
 import dk.example.feedback.model.db_models.AccountEntity
 import dk.example.feedback.persistence.dao.AccountDao
+import dk.example.feedback.persistence.table.AccountTable
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import org.jetbrains.exposed.sql.or
 import org.slf4j.LoggerFactory
 
 @Component
@@ -14,24 +16,26 @@ class AccountRepo {
 
     val logger = LoggerFactory.getLogger(AccountRepo::class.java)
 
-    /*
-    Create account
-    If account already exists, null is returned
-     */
-    fun createAccount(
+    fun createOrGetAccount(
         name: String?,
         email: String?,
         phoneNumber: String?,
         accountId: String,
     ): AccountEntity {
         logger.info("AccountRepo: Opretter account")
-        return AccountDao.new(id = accountId) {
-            this.name = name
-            this.email = email
-            this.phoneNumber = phoneNumber
-            this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
-            this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
-        }.toModel()
+        try {
+            val account = AccountDao.new(id = accountId) {
+                this.name = name
+                this.email = email
+                this.phoneNumber = phoneNumber
+                this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
+                this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
+            }.toModel()
+            return account
+        } catch (e: Throwable) {
+            logger.error("Caught exception: Account already exists")
+            return getAccount(accountId)
+        }
     }
 
     fun updateAccount(
@@ -40,7 +44,7 @@ class AccountRepo {
         email: String?,
         phoneNumber: String?,
     ): AccountEntity {
-        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("User not found")
+        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found")
         found.apply {
             this.name = name
             this.email = email
@@ -50,46 +54,37 @@ class AccountRepo {
         return found.toModel()
     }
 
-    fun delete(accountId: String) {
-        AccountDao.findById(accountId)?.delete() ?: throw NoSuchElementException("User not found")
+    fun deleteAccount(accountId: String) {
+        AccountDao.findById(accountId)?.delete() ?: throw NoSuchElementException("Account not found")
     }
 
-    fun getAccount(accountId: String): AccountEntity? {
+    fun getAccount(accountId: String): AccountEntity {
         logger.info("Get account with id: $accountId")
-        return AccountDao.findById(accountId)?.toModel()
+        return AccountDao.findById(accountId)?.toModel() ?: throw NoSuchElementException("Account not found")
     }
 
     fun updateFcmToken(accountId: String, fcmToken: String?) {
-        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("User not found")
+        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found")
         found.apply {
             this.fcmToken = fcmToken
         }
     }
-
-//    fun updateRole(userId: String, role: Role) {
-//        val found = AccountDao.findById(userId) ?: throw NoSuchElementException("User not found")
-//        found.apply {
-//            this.role = role
-//        }
-//    }
-
-    fun findAccountsMatchingInput(input: String): List<AccountEntity> {
-        TODO()
-//        return AccountDao.find {
-//            (AccountTable.email like "%$input%") or (AccountTable.name like "%$input%") or (AccountTable.phoneNumber like "%$input%")
-//        }
-//            .toList()
-//            .map { it.toModel() }
+    fun lookupAccount(input: String): List<AccountEntity> {
+        return AccountDao.find {
+            (AccountTable.email like "%$input%") or (AccountTable.name like "%$input%") or (AccountTable.phoneNumber like "%$input%")
+        }
+            .toList()
+            .map { it.toModel() }
     }
 
     fun getAll(): List<AccountEntity> {
         return AccountDao.all().toList().map { it.toModel() }
     }
 
-    fun updateRatingPrompted(ratingPrompted: Boolean, accountId: String) {
-        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("User not found")
+    fun markRatingPrompted(accountId: String) {
+        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found")
         found.apply {
-            this.ratingPrompted = ratingPrompted
+            this.ratingPrompted = true
         }
     }
 }
