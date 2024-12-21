@@ -1,8 +1,10 @@
 package dk.example.feedback.service
 
+import dk.example.feedback.controller.FeedbackAlreadyGivenException
 import dk.example.feedback.controller.FeedbackController.SendFeedbackResponse
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.*
+import dk.example.feedback.model.db_models.EventEntity
 import dk.example.feedback.model.db_models.FeedbackEntity
 import dk.example.feedback.model.dto.FeedbackSessionDto
 import dk.example.feedback.model.dto.ManagerInfoDto
@@ -18,17 +20,16 @@ class FeedbackService(
     val feedbackRepo: FeedbackRepo,
     val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
-    val firebaseService: FirebaseService,
     val context: AuthContextHelper,
 ) {
 
     fun startSession(pinCode: String): FeedbackSessionDto {
         val accountId = context.getAuthContext().accountId
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
-
-        feedbackRepo.throwExceptionIfAccountAlreadyGivenFeedback(eventId = event.id, accountId = accountId)
-
-        val manager = firebaseService.getUser(event.managerId) ?: throw Exception("Could not find manager with id: ${event.managerId}")
+        val feedback = event.feedback
+        val manager = event.manager
+        throwIfAccountAlreadyGivenFeedback(feedback = feedback, accountId = accountId)
+        throwIfAccountIsManager(events = event, accountId = accountId)
         return FeedbackSessionDto(
             title = event.title,
             agenda = event.agenda,
@@ -40,34 +41,50 @@ class FeedbackService(
                 )
             },
             managerInfo = ManagerInfoDto(
-                name = manager.displayName,
+                name = manager.name,
                 email = manager.email,
                 phoneNumber = manager.phoneNumber
             )
         )
     }
 
-    fun sendFeedback(feedback: List<FeedbackEntity>, pinCode: String): SendFeedbackResponse {
+    fun sendFeedback(feedbackList: List<FeedbackEntity>, pinCode: String): SendFeedbackResponse {
         val accountId = context.getAuthContext().accountId
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
-        val managerId = event.managerId
-        val managerAccount = accountRepo.getAccount(accountId = managerId) ?: throw Exception("Could not find manager with id: ${managerId}")
+        val managerId = event.manager.id
         // Check if user with given client id already provided feedback
-        feedbackRepo.throwExceptionIfAccountAlreadyGivenFeedback(eventId = event.id, accountId = accountId)
-
-        val participantAccount = accountRepo.getAccount(accountId = accountId) ?: throw Exception("Could not find participant with id: ${accountId}")
-
-        feedbackRepo.sendFeedback(
-            feedback = feedback,
+        throwIfAccountAlreadyGivenFeedback(feedback = feedbackList, accountId = accountId)
+        throwIfAccountIsManager(events = event, accountId = accountId)
+        feedbackRepo.persistFeedback(
+            feedbackList = feedbackList,
             participantId = accountId,
             managerId = managerId,
             eventId = event.id
         )
-
-        if (!participantAccount.ratingPrompted && feedbackRepo.getFeedbackCountByAccountId(accountId = accountId) >= 3) {
-            accountRepo.updateRatingPrompted(accountId = accountId, ratingPrompted = true)
-            return SendFeedbackResponse(shouldPresentRatingPrompt = true)
+        eventRepo.incrementNewFeedbackCount(eventId = event.id)
+        feedbackList.forEach { eventRepo.addParticipantToEvent(eventId = event.id, accountId = accountId, feedback = it.id) }
+        val shouldPresentRatingPrompt = shouldPresentRatingPrompt(accountId = accountId)
+        if (shouldPresentRatingPrompt) {
+            accountRepo.markRatingPrompted(accountId = accountId)
         }
-        return SendFeedbackResponse(shouldPresentRatingPrompt = false)
+        return SendFeedbackResponse(shouldPresentRatingPrompt = shouldPresentRatingPrompt)
+    }
+
+    private fun throwIfAccountAlreadyGivenFeedback(feedback: List<FeedbackEntity>, accountId: String) {
+        val hasGivenFeedback = feedback.any { it.participantId == accountId }
+        if (hasGivenFeedback) {
+            throw FeedbackAlreadyGivenException()
+        }
+    }
+
+    private fun throwIfAccountIsManager(events: EventEntity, accountId: String) {
+        val isManager = events.manager.id == accountId
+        if (isManager) {
+            throw IllegalArgumentException("Owner of event cannot give feedback")
+        }
+    }
+
+    private fun shouldPresentRatingPrompt(accountId: String): Boolean {
+        return feedbackRepo.getTotalFeedbackSubmissionsForAccount(accountId = accountId) >= 3
     }
 }
