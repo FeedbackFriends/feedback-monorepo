@@ -36,7 +36,7 @@ class FeedbackController(val feedbackService: FeedbackService) {
     @PostMapping("/submit")
     fun sendFeedback(@RequestBody input: SendFeedback): SendFeedbackResponse {
         return feedbackService.sendFeedback(
-            feedback = input.feedback,
+            feedbackList = input.feedback,
             pinCode = input.pinCode,
         )
     }

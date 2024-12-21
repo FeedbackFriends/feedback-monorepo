@@ -1,8 +1,8 @@
 package dk.example.feedback.persistence.dao
 
 import dk.example.feedback.model.db_models.FeedbackEntity
+import dk.example.feedback.persistence.table.AccountTable.default
 import dk.example.feedback.persistence.table.FeedbackTable
-import dk.example.feedback.persistence.table.TeamMemberTable.default
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -33,8 +33,9 @@ class FeedbackDao(id: EntityID<UUID>): UUIDEntity(id) {
             thumbsUpThumpsDown = thumbsUpThumpsDown,
             oneToTen = oneToTen,
             opinion = opinion,
-            questionId = UUID.randomUUID() // question.id.value,
-//            participant = participant?.toModel(),
+            questionId = UUID.randomUUID(),
+            id = id.value,
+            participantId = participant?.id?.value,
         )
     }
 }
