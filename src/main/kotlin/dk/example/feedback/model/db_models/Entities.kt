@@ -24,11 +24,10 @@ data class EventEntity(
     val location : String?,
     val createdAt: OffsetDateTime,
     val updatedAt: OffsetDateTime,
-    val managerId: String,
     val questions: List<QuestionEntity>,
-    val team: TeamEntity?,
     val feedback: List<FeedbackEntity>,
-    val newFeedback: Int
+    val newFeedback: Int,
+    val manager: AccountEntity,
 ) {
     fun isActive(): Boolean {
         return date.isAfter(OffsetDateTime.now().minusDays(1)) || !feedback.isEmpty()
@@ -48,6 +47,7 @@ data class QuestionEntity(
 
 
 data class FeedbackEntity(
+    var id: UUID,
     val feedbackType: FeedbackType,
     val comment: String? = null,
     val emoji: Emoji? = null,
@@ -55,17 +55,20 @@ data class FeedbackEntity(
     val opinion: Opinion? = null,
     val oneToTen: Int? = null,
     val questionId: UUID,
+    val participantId: String?,
 )
 
-data class TeamEntity(
-    val id: UUID,
-    val teamName: String,
-    val teamMembers: List<TeamMember>,
-    val manager: AccountEntity,
-) {
-    data class TeamMember(
-        val account: AccountEntity,
-        val memberStatus: TeamMemberStatus,
-    )
-}
+data class EventParticipantEntity(val event: EventEntity, val participant: AccountEntity, val feedback: FeedbackEntity?)
 
+//data class TeamEntity(
+//    val id: UUID,
+//    val teamName: String,
+//    val teamMembers: List<TeamMember>,
+//    val manager: AccountEntity,
+//) {
+//    data class TeamMember(
+//        val account: AccountEntity,
+//        val memberStatus: TeamMemberStatus,
+//    )
+//}
+//

@@ -2,7 +2,7 @@ package dk.example.feedback.persistence.dao
 
 import dk.example.feedback.model.db_models.EventEntity
 import dk.example.feedback.persistence.table.*
-import dk.example.feedback.persistence.table.TeamMemberTable.default
+import dk.example.feedback.persistence.table.AccountTable.default
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -24,7 +24,7 @@ class EventDao(id: EntityID<UUID>): UUIDEntity(id) {
     var createdAt by EventTable.createdAt.default(OffsetDateTime.now(ZoneOffset.UTC))
     var updatedAt by EventTable.updatedAt.default(OffsetDateTime.now(ZoneOffset.UTC))
     val questions by QuestionDao referrersOn QuestionTable.event
-    var team by TeamDao optionalReferencedOn EventTable.team
+//    var team by TeamDao optionalReferencedOn EventTable.team
     var newFeedback by EventTable.newFeedback
 
     fun toModel(): EventEntity {
@@ -36,13 +36,12 @@ class EventDao(id: EntityID<UUID>): UUIDEntity(id) {
             durationInMinutes = durationInMinutes,
             location = location,
             pinCode = pinCode,
-            managerId = manager.id.value,
             createdAt = createdAt,
             updatedAt = updatedAt,
             feedback = questions.flatMap { it.feedback }.map { it.toModel() },
             questions = questions.map { it.toModel() },
-            team = team?.toModel(),
-            newFeedback = newFeedback
+            newFeedback = newFeedback,
+            manager = manager.toModel(),
         )
     }
 }
