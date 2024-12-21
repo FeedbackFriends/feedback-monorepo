@@ -1,6 +1,7 @@
 package dk.example.feedback.controller
 
 import ControllerPaths
+import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.AccountDetails
 import dk.example.feedback.model.dto.SessionDto
 import dk.example.feedback.service.AccountService
@@ -19,6 +20,7 @@ class AccountController(
     val accountService: AccountService,
     val firebaseService: FirebaseService,
     val sessionService: SessionService,
+    val authContext: AuthContextHelper,
 ) {
 
     val logger = LoggerFactory.getLogger(AccountController::class.java)
@@ -92,24 +94,24 @@ class AccountController(
     /*
     Called after the user has logged in anynoymously or with a provider
     */
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     fun createAccount(
-        @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: CreateAccountInput,
     ): SessionDto {
-        val accountId = principal.subject
-        firebaseService.setUserClaims(userId = accountId, requestedClaim = input.requestedClaim)
-        // Firebase user is anonymous if null
+        val authContext = authContext.getAuthContext()
+        firebaseService.setUserClaims(userId = authContext.accountId, requestedClaim = input.requestedClaim)
         when (input.requestedClaim) {
+            // Firebase user is anonymous if null
             null -> {
-                logger.info("Creating anonymous account for $accountId since custom claim is null")
+                logger.info("Creating anonymous account for ${authContext.accountId} since custom claim is null")
                 accountService.createAnonymousAccountIfNotExist()
             }
             Claim.Manager, Claim.Participant -> {
-                logger.info("Creating account for $accountId since requested custom claim is $input.requestedClaim")
-                val firebaseUser = firebaseService.getUser(userId = accountId)
+                logger.info("Creating account for ${authContext.accountId} since requested custom claim is $input.requestedClaim")
+                val firebaseUser = firebaseService.getUser(userId = authContext.accountId)
                 accountService.upsertAccount(
-                    accountId = accountId,
+                    accountId = authContext.accountId,
                     name = firebaseUser.displayName,
                     email = firebaseUser.email,
                     phoneNumber = firebaseUser.phoneNumber,
