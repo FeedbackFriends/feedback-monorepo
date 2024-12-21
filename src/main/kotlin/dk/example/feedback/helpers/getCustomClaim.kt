@@ -1,6 +1,8 @@
 package dk.example.feedback.helpers
 
+import com.google.api.Authentication
 import dk.example.feedback.service.Claim
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Component
@@ -13,29 +15,42 @@ data class AuthContext(
 @Component
 class AuthContextHelper {
 
+    val logger = LoggerFactory.getLogger(AuthContextHelper::class.java)
+
     fun getAuthContext(): AuthContext {
-        val authentication = SecurityContextHolder.getContext().authentication
+        val authentication: org.springframework.security.core.Authentication = SecurityContextHolder.getContext().authentication
         if (authentication.principal is Jwt) {
-            return AuthContext(
+            val authContext = AuthContext(
                 accountId = authentication.name,
-                customClaim = (authentication.principal as Jwt).getCustomClaim(),
+                customClaim = getCustomClaim(authentication.principal as Jwt),
             )
+            logger.info("Auth context: $authContext")
+            return authContext
         } else {
+            logger.error("Principal is not of type Jwt")
             throw IllegalStateException("Principal is not of type Jwt")
+        }
+    }
+
+    fun verifyLoggedInAccountHasId(id: String) {
+        logger.info("Verifying logged in account has id: $id")
+        val authContext = getAuthContext()
+        if (authContext.accountId != id) {
+            logger.error("User does not have access to this resource")
+            throw IllegalStateException("User does not have access to this resource")
+        }
+    }
+
+    private fun getCustomClaim(jwt: Jwt): Claim? {
+        // Extract the "custom_claims" from the JWT claims
+        val customClaimsValue = jwt.claims["custom_claims"] as? String ?: return null
+        logger.info("Custom claims: $customClaimsValue")
+        return try {
+            Claim.valueOf(customClaimsValue)
+        } catch (e: IllegalArgumentException) {
+            logger.error("Invalid custom claim: $customClaimsValue")
+            null
         }
     }
 }
 
-/**
- * Retrieves the custom claim from a JWT.
- *
- * Assumes the claim "custom_claims" is a list, and returns the first element if present.
- *
- * @return the custom claim as a [Claim], or null if not found or improperly structured.
- */
-fun Jwt.getCustomClaim(): Claim? {
-    return when (val claim = this.claims["custom_claims"]) {
-        is List<*> -> claim.firstOrNull()?.toString()?.let { Claim.valueOf(it) }
-        else -> null
-    }
-}
