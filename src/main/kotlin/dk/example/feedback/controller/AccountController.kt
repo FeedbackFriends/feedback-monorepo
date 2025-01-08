@@ -4,6 +4,7 @@ import ControllerPaths
 import dk.example.feedback.constants.Roles
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.dto.SessionDto
+import dk.example.feedback.model.payloads.CreateAccountInput
 import dk.example.feedback.model.payloads.ModifyAccountInput
 import dk.example.feedback.model.payloads.SetFcmTokenInput
 import dk.example.feedback.service.AccountService
@@ -11,10 +12,15 @@ import dk.example.feedback.service.Claim
 import dk.example.feedback.service.FirebaseService
 import dk.example.feedback.service.SessionService
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.*
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(ControllerPaths.Account.ControllerUrl)
@@ -59,10 +65,6 @@ class AccountController(
     ) {
         return accountService.updateAccountFcmToken(fcmToken = input.fcmToken)
     }
-
-    data class CreateAccountInput(
-        val requestedClaim: Claim?
-    )
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping
