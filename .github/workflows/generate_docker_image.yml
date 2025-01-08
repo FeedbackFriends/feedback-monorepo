@@ -28,25 +28,8 @@ jobs:
         env:
           VERSION: "${{ env.VERSION }}"
 
-      - name: Clone target repository
-        run: |
-          git clone https://github.com/FeedbackFriends/feedback-be.git feedback-be
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Copy OpenAPI spec to target repository
-        run: |
-          cp build/openapi.yaml feedback-be/
-          cd feedback-be
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b update-openapi-spec-${{ env.VERSION }}
-          git add openapi.yaml
-          git commit -m "Update OpenAPI spec for version ${{ env.VERSION }}"
-          git push origin update-openapi-spec-${{ env.VERSION }}
-          gh pr create --repo FeedbackFriends/feedback-be --title "Update OpenAPI spec for version ${{ env.VERSION }}" --body "Generated OpenAPI spec for version ${{ env.VERSION }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print OpenAPI YAML file content
+        run: cat build/openapi.yaml
 
       - name: Build Docker image with Jib
         run: ./gradlew jib --image=nicolaidam/feedback:${{ env.VERSION }}
