@@ -13,8 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract tag name
-        id: extract-tag
+      - name: Extract tag name as VERSION
+        id: extract-version
         run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Set up JDK
@@ -24,7 +24,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Generate OpenAPI spec
-        run: ./gradlew generateOpenApiDocs
+        run: ./gradlew generateOpenApiDocs -Pversion=${{ env.VERSION }}
         env:
           VERSION: "${{ env.VERSION }}"
 
