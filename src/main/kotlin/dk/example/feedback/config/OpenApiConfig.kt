@@ -14,12 +14,18 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class OpenApiConfig {
+class OpenApiConfig(private val feedbackConfig: FeedbackConfig) {
 
     @Bean
     fun swagger(): OpenAPI {
         val securitySchemeName = "bearerAuth"
         return OpenAPI()
+            .info(
+                io.swagger.v3.oas.models.info.Info()
+                    .title("Feedback API")
+                    .version(feedbackConfig.version)
+                    .description("API documentation for the Feedback service")
+            )
             .addSecurityItem(SecurityRequirement().addList(securitySchemeName))
             .components(
                 Components()

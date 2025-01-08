@@ -3,12 +3,12 @@ package dk.example.feedback.persistence.repo
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.table.AccountTable
-import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import org.jetbrains.exposed.sql.or
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional
@@ -61,6 +61,10 @@ class AccountRepo {
     fun getAccount(accountId: String): AccountEntity {
         logger.info("Get account with id: $accountId")
         return AccountDao.findById(accountId)?.toModel() ?: throw NoSuchElementException("Account not found")
+    }
+
+    fun accountExists(accountId: String): Boolean {
+        return AccountDao.findById(accountId) != null
     }
 
     fun updateFcmToken(accountId: String, fcmToken: String?) {

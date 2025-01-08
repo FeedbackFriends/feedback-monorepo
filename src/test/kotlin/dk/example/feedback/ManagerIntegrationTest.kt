@@ -2,14 +2,18 @@ package dk.example.feedback
 
 import ControllerPaths
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import dk.example.feedback.controller.AccountController
 import dk.example.feedback.model.dto.SessionDto
+import dk.example.feedback.model.payloads.CreateAccountInput
 import dk.example.feedback.persistence.table.AccountTable
 import dk.example.feedback.service.Claim
 import dk.example.feedback.service.FirebaseService
 import jakarta.transaction.Transactional
+import java.util.*
 import org.jetbrains.exposed.sql.deleteAll
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,8 +22,6 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import java.util.UUID
-import org.mockito.Mockito
 
 //@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @SpringBootTest
@@ -56,7 +58,7 @@ class ManagerIntegrationTest(
 
         Mockito.`when`(firebaseService.setUserClaims(Mockito.anyString(), Mockito.any())).then { }
 
-        val createUserInput = AccountController.CreateAccountInput(requestedClaim = null)
+        val createUserInput = CreateAccountInput(requestedClaim = null)
         val createAccountRequest = MockMvcRequestBuilders
             .post(ControllerPaths.Account.ControllerUrl)
             .content(objectMapper.writeValueAsString(createUserInput))
@@ -90,7 +92,7 @@ class ManagerIntegrationTest(
             FirebaseService.User(displayName = "Nicolai Dam", email = "nicolai@email.dk", phoneNumber = "12345678")
         )
 
-        val createUserInput = AccountController.CreateAccountInput(requestedClaim = Claim.Manager)
+        val createUserInput = CreateAccountInput(requestedClaim = Claim.Manager)
         val createAccountRequest = MockMvcRequestBuilders
             .post(ControllerPaths.Account.ControllerUrl)
             .content(objectMapper.writeValueAsString(createUserInput))

@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -6,6 +7,7 @@ plugins {
 	kotlin("jvm") version "1.9.21"
 	kotlin("plugin.spring") version "1.9.21"
 	id("com.google.cloud.tools.jib") version "3.4.4"
+	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 }
 
 group = "dk.nicolai"
@@ -18,6 +20,9 @@ java {
 repositories {
 	mavenCentral()
 }
+
+val compileKotlin: KotlinCompilationTask<*> by tasks
+compileKotlin.compilerOptions.allWarningsAsErrors.set(true)
 
 dependencies {
 	// Spring Boot
@@ -88,27 +93,8 @@ jib {
 		}
 	}
 }
-//jib {
-//	dockerClient {
-//		executable = "/usr/local/bin/docker"
-//	}
-//	from {
-//		image = "openjdk:17-jdk"
-//	}
-//	to {
-//		image = "nicolaidam/feedback:0.0.11"
-//	}
-//	extraDirectories {
-//		paths {
-//			path {
-//				// copies the contents of 'src/main/another/dir' into '/extras' on the container
-//				from { file("config") }
-//				into = "/app/config"
-//			}
-////			path {
-////				from { file("firebase_config.json") }
-////				into = "/app/config"
-////			}
-//		}
-//	}
-//}
+
+openApi {
+	apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
+	outputFileName.set("openapi.yaml")
+}

@@ -6,4 +6,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 data class FeedbackConfig (
     val firebaseApiKey: String,
     val firebaseConfigPath: String,
+    val version: String,
 )

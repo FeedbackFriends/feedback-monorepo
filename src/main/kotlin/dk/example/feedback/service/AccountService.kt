@@ -41,7 +41,7 @@ class AccountService(
         email: String?,
         phoneNumber: String?,
     ) {
-        val accountExists = accountRepo.getAccount(accountId) != null
+        val accountExists = accountRepo.accountExists(accountId)
         if (accountExists) {
             accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
         } else {
@@ -56,10 +56,6 @@ class AccountService(
 
     fun deleteAccount(accountId: String) {
         accountRepo.deleteAccount(accountId)
-    }
-
-    fun lookupAccount(input: String): List<AccountEntity> {
-        return accountRepo.lookupAccount(input)
     }
 
     fun updateAccountFcmToken(fcmToken: String?) {
