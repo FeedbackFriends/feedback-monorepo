@@ -96,5 +96,5 @@ jib {
 openApi {
 	apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
 	outputFileName.set("openapi.yaml")
-	waitTimeInSeconds.set(10)
+	waitTimeInSeconds.set(15)
 }
