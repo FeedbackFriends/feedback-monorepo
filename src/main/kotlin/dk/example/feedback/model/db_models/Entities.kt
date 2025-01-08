@@ -26,7 +26,6 @@ data class EventEntity(
     val updatedAt: OffsetDateTime,
     val questions: List<QuestionEntity>,
     val feedback: List<FeedbackEntity>,
-    val newFeedback: Int,
     val manager: AccountEntity,
 ) {
     fun isActive(): Boolean {
@@ -47,18 +46,25 @@ data class QuestionEntity(
 
 
 data class FeedbackEntity(
-    var id: UUID,
-    val feedbackType: FeedbackType,
-    val comment: String? = null,
-    val emoji: Emoji? = null,
-    val thumbsUpThumpsDown: ThumbsUpThumpsDown? = null,
-    val opinion: Opinion? = null,
-    val oneToTen: Int? = null,
-    val questionId: UUID,
+    val id: UUID,
+    override val feedbackType: FeedbackType,
+    override val comment: String? = null,
+    override val emoji: Emoji? = null,
+    override val thumbsUpThumpsDown: ThumbsUpThumpsDown? = null,
+    override val opinion: Opinion? = null,
+    override val oneToTen: Int? = null,
+    override val questionId: UUID,
     val participantId: String?,
-)
+    val isNew: Boolean,
+): Feedback
 
-data class EventParticipantEntity(val event: EventEntity, val participant: AccountEntity, val feedback: FeedbackEntity?)
+
+
+data class EventParticipantEntity(
+    val event: EventEntity,
+    val participant: AccountEntity,
+    val feedback: FeedbackEntity?
+)
 
 //data class TeamEntity(
 //    val id: UUID,

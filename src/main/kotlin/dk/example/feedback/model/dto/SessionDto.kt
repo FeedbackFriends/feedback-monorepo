@@ -1,6 +1,5 @@
 package dk.example.feedback.model.dto
 
-import dk.example.feedback.model.TeamDto
 import dk.example.feedback.service.Claim
 
 data class SessionDto(

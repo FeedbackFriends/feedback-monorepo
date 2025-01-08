@@ -1,13 +1,14 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.controller.FeedbackAlreadyGivenException
-import dk.example.feedback.controller.FeedbackController.SendFeedbackResponse
+import dk.example.feedback.controller.SendFeedbackResponse
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.*
 import dk.example.feedback.model.db_models.EventEntity
 import dk.example.feedback.model.db_models.FeedbackEntity
 import dk.example.feedback.model.dto.FeedbackSessionDto
-import dk.example.feedback.model.dto.ManagerInfoDto
+import dk.example.feedback.model.dto.OwnerInfoDto
+import dk.example.feedback.model.payloads.FeedbackInput
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
 import dk.example.feedback.persistence.repo.AccountRepo
@@ -40,29 +41,29 @@ class FeedbackService(
                     feedbackType = it.feedbackType,
                 )
             },
-            managerInfo = ManagerInfoDto(
+            ownerInfo = OwnerInfoDto(
                 name = manager.name,
                 email = manager.email,
                 phoneNumber = manager.phoneNumber
-            )
+            ),
+            date = event.date,
         )
     }
 
-    fun sendFeedback(feedbackList: List<FeedbackEntity>, pinCode: String): SendFeedbackResponse {
+    fun sendFeedback(feedbackInputList: List<FeedbackInput>, pinCode: String): SendFeedbackResponse {
         val accountId = context.getAuthContext().accountId
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val managerId = event.manager.id
         // Check if user with given client id already provided feedback
-        throwIfAccountAlreadyGivenFeedback(feedback = feedbackList, accountId = accountId)
+        throwIfAccountAlreadyGivenFeedback(feedback = event.feedback, accountId = accountId)
         throwIfAccountIsManager(events = event, accountId = accountId)
-        feedbackRepo.persistFeedback(
-            feedbackList = feedbackList,
+        val createdFeedbackList = feedbackRepo.persistFeedback(
+            feedbackList = feedbackInputList,
             participantId = accountId,
             managerId = managerId,
             eventId = event.id
         )
-        eventRepo.incrementNewFeedbackCount(eventId = event.id)
-        feedbackList.forEach { eventRepo.addParticipantToEvent(eventId = event.id, accountId = accountId, feedback = it.id) }
+        createdFeedbackList.forEach { eventRepo.addParticipantToEvent(eventId = event.id, accountId = accountId, feedback = it.id) }
         val shouldPresentRatingPrompt = shouldPresentRatingPrompt(accountId = accountId)
         if (shouldPresentRatingPrompt) {
             accountRepo.markRatingPrompted(accountId = accountId)

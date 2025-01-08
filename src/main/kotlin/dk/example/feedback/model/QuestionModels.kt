@@ -9,6 +9,7 @@ data class ManagerQuestion(
     val feedbackType: FeedbackType,
     val feedback: List<FeedbackEntity>?,
     val feedbackSummary: QuestionFeedbackSummary?,
+    val newFeedbackForQuestion: Int,
 )
 
 data class QuestionFeedbackSummary(

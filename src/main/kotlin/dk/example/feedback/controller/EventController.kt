@@ -1,9 +1,9 @@
 package dk.example.feedback.controller
 
 import dk.example.feedback.constants.Roles
-import dk.example.feedback.model.EventInput
 import dk.example.feedback.model.dto.ManagerEventDto
 import dk.example.feedback.model.dto.ParticipantEventDto
+import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.service.EventService
 import org.springframework.web.bind.annotation.*
 import java.util.*

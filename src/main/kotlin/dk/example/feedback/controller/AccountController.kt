@@ -1,6 +1,7 @@
 package dk.example.feedback.controller
 
 import ControllerPaths
+import dk.example.feedback.constants.Roles
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.AccountDetails
 import dk.example.feedback.model.dto.SessionDto
@@ -26,7 +27,7 @@ class AccountController(
     val logger = LoggerFactory.getLogger(AccountController::class.java)
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('Manager' or 'Participant')")
+    @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")
     fun deleteAccount(
         @AuthenticationPrincipal principal: Jwt,
     ) {
@@ -41,7 +42,7 @@ class AccountController(
     )
 
     @PutMapping
-    @PreAuthorize("hasAuthority('Manager' or 'Participant')")
+    @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")
     fun modifyAccount(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: ModifyAccountInputDto,
@@ -56,8 +57,8 @@ class AccountController(
         firebaseService.setUserClaims(userId = accountId, requestedClaim = input.requestedClaim)
     }
 
-    @PostMapping("/find/{searchInput}")
-    fun findAccount(@PathVariable searchInput: String): List<FoundAccount>{
+    @PostMapping("/lookup/{searchInput}")
+    fun lookupAccount(@PathVariable searchInput: String): List<FoundAccount>{
         TODO()
 //        return accountService.findAccount(searchInput).map {
 //            FoundAccount(
@@ -91,9 +92,6 @@ class AccountController(
         val requestedClaim: Claim?
     )
 
-    /*
-    Called after the user has logged in anynoymously or with a provider
-    */
     @PreAuthorize("isAuthenticated()")
     @PostMapping
     fun createAccount(

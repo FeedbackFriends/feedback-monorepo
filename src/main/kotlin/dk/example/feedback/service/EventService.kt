@@ -4,8 +4,11 @@ import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.*
 import dk.example.feedback.model.db_models.EventEntity
 import dk.example.feedback.model.db_models.FeedbackEntity
+import dk.example.feedback.model.dto.FeedbackSummaryDto
 import dk.example.feedback.model.dto.ManagerEventDto
+import dk.example.feedback.model.dto.OwnerInfoDto
 import dk.example.feedback.model.dto.ParticipantEventDto
+import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -41,7 +44,7 @@ class EventService(
     fun getManagerEvents(managerId: String): List<ManagerEventDto> {
         val managerEvents = eventRepo.getManagerEvents(managerId).map { it.toManagerEvent() }
         managerEvents.forEach {
-            eventRepo.resetNewFeedbackCount(it.id)
+            eventRepo.resetNewFeedbackForEvent(it.id)
         }
         return managerEvents
     }
@@ -109,11 +112,12 @@ fun EventEntity.toManagerEvent(): ManagerEventDto {
                     veryHappyCount = questionFeedback.count { it.emoji == Emoji.VeryHappy }
                 ),
                 feedback = question.feedback,
+                newFeedbackForQuestion = questionFeedback.map { it.isNew }.count()
             )
         },
         feedbackSummary = feedbackSummary,
-        newFeedback = newFeedback,
-        managerName = manager.name ?: "Unknown"
+        newFeedbackForEvent = questions.map { it.feedback }.flatten().map { it.isNew }.count(),
+        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
     )
 }
 
@@ -133,7 +137,8 @@ fun EventEntity.toParticipantEvent(): ParticipantEventDto {
                 feedbackType = question.feedbackType
             )
         },
-        feedbackProvided = feedback.isNotEmpty()
+        feedbackSubmited = feedback.isNotEmpty(),
+        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
     )
 }
 

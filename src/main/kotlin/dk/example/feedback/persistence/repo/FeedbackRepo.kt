@@ -2,11 +2,9 @@ package dk.example.feedback.persistence.repo
 
 import dk.example.feedback.model.*
 import dk.example.feedback.model.db_models.FeedbackEntity
-import dk.example.feedback.model.dto.FeedbackSessionDto
-import dk.example.feedback.model.dto.ManagerInfoDto
+import dk.example.feedback.model.payloads.FeedbackInput
 import dk.example.feedback.persistence.dao.*
 import dk.example.feedback.persistence.table.*
-import dk.example.feedback.persistence.table.EventParticipantTable.event
 import org.jetbrains.exposed.dao.id.EntityID
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -27,14 +25,14 @@ class FeedbackRepo {
         return FeedbackDao.find { FeedbackTable.participant eq accountId }.count()
     }
 
-    fun persistFeedback(feedbackList: List<FeedbackEntity>, managerId: String, participantId: String, eventId: UUID) {
+    fun persistFeedback(feedbackList: List<FeedbackInput>, managerId: String, participantId: String, eventId: UUID): List<FeedbackEntity> {
 
         val manager = AccountDao.findById(EntityID(managerId, AccountTable))
             ?: throw IllegalArgumentException("Manager not found with id: $managerId")
-
+        val createdFeedbackList = emptyList<FeedbackEntity>()
         feedbackList.forEach { feedbackEntity ->
             feedbackEntity.validateFeedbackInput()
-            FeedbackDao.new {
+            val feedback = FeedbackDao.new {
                 this.type = feedbackEntity.feedbackType
                 this.comment = feedbackEntity.comment
                 this.emoji = feedbackEntity.emoji
@@ -45,11 +43,14 @@ class FeedbackRepo {
                     ?: throw IllegalArgumentException("Question not found with id: ${feedbackEntity.questionId}")
                 this.manager = manager
                 this.participant = AccountDao.findById(EntityID(participantId, AccountTable))
-            }
+                this.isNew = true
+            }.toModel()
+            createdFeedbackList.plus(feedback)
         }
+        return createdFeedbackList
     }
 
-    private fun FeedbackEntity.validateFeedbackInput() {
+    private fun FeedbackInput.validateFeedbackInput() {
         when (feedbackType) {
             FeedbackType.Emoji -> {
                 requireNotNull(emoji) { "Emoji is required for feedback type Emoji" }

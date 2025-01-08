@@ -1,13 +1,10 @@
 package dk.example.feedback.controller
 
-import dk.example.feedback.model.db_models.FeedbackEntity
 import dk.example.feedback.model.dto.FeedbackSessionDto
+import dk.example.feedback.model.payloads.SendFeedbackInput
 import dk.example.feedback.service.FeedbackService
 import org.springframework.web.bind.annotation.*
-import java.security.Principal
-import java.util.UUID
-import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.access.prepost.PreAuthorize
 
 @RestController
 @RequestMapping(ControllerPaths.FeedbackUrl)
@@ -17,6 +14,7 @@ class FeedbackController(val feedbackService: FeedbackService) {
         val pinCode: String,
     )
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/start")
     fun startFeedbackSession(
         @RequestBody startFeedbackSession: StartFeedbackSession,
@@ -24,20 +22,17 @@ class FeedbackController(val feedbackService: FeedbackService) {
         return feedbackService.startSession(pinCode = startFeedbackSession.pinCode)
     }
 
-    data class SendFeedback(
-        val feedback: List<FeedbackEntity>,
-        val pinCode: String,
-    )
 
-    data class SendFeedbackResponse(
-        val shouldPresentRatingPrompt: Boolean,
-    )
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/submit")
-    fun sendFeedback(@RequestBody input: SendFeedback): SendFeedbackResponse {
+    fun sendFeedback(@RequestBody input: SendFeedbackInput): SendFeedbackResponse {
         return feedbackService.sendFeedback(
-            feedbackList = input.feedback,
+            feedbackInputList = input.feedback,
             pinCode = input.pinCode,
         )
     }
 }
+
+data class SendFeedbackResponse(
+    val shouldPresentRatingPrompt: Boolean,
+)

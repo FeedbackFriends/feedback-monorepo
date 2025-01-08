@@ -1,7 +1,7 @@
 package dk.example.feedback.persistence.repo
 
-import dk.example.feedback.model.*
 import dk.example.feedback.model.db_models.EventEntity
+import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.persistence.dao.*
 import dk.example.feedback.persistence.table.*
 import org.jetbrains.exposed.dao.id.EntityID
@@ -82,15 +82,13 @@ class EventRepo {
         }
     }
 
-    fun resetNewFeedbackCount(eventId: UUID) {
+    fun resetNewFeedbackForEvent(eventId: UUID) {
         EventDao.findById(eventId)?.apply {
-            this.newFeedback = 0
-        }
-    }
-
-    fun incrementNewFeedbackCount(eventId: UUID) {
-        EventDao.findById(eventId)?.apply {
-            this.newFeedback += 1
+            this.questions.forEach {
+                it.feedback.forEach { feedback ->
+                    feedback.isNew = false
+                }
+            }
         }
     }
 

@@ -104,11 +104,6 @@ databaseChangeLog:
                   type: timestamp with time zone
                   constraints:
                     nullable: false
-              - column:
-                  name: new_feedback
-                  type: integer
-                  constraints:
-                    nullable: false
         - addForeignKeyConstraint:
             baseTableName: event
             baseColumnNames: manager_id
@@ -271,6 +266,11 @@ databaseChangeLog:
               - column:
                   name: manager_id
                   type: varchar(255)
+              - column:
+                  name: is_new
+                  type: boolean
+                  constraints:
+                    nullable: false
               - column:
                   name: participant_id
                   type: varchar(255)
