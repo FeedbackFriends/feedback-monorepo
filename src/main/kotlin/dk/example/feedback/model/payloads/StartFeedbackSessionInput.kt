@@ -1,6 +1,5 @@
 package dk.example.feedback.model.payloads
 
-data class SendFeedbackInput(
-    val feedback: List<FeedbackInput>,
+data class StartFeedbackSessionInput(
     val pinCode: String,
 )

@@ -3,8 +3,9 @@ package dk.example.feedback.controller
 import ControllerPaths
 import dk.example.feedback.constants.Roles
 import dk.example.feedback.helpers.AuthContextHelper
-import dk.example.feedback.model.AccountDetails
 import dk.example.feedback.model.dto.SessionDto
+import dk.example.feedback.model.payloads.ModifyAccountInput
+import dk.example.feedback.model.payloads.SetFcmTokenInput
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.Claim
 import dk.example.feedback.service.FirebaseService
@@ -36,16 +37,11 @@ class AccountController(
         accountService.deleteAccount(accountId = accountId)
     }
 
-    data class ModifyAccountInputDto(
-        val accountDetails: AccountDetails,
-        val requestedClaim: Claim
-    )
-
     @PutMapping
     @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")
     fun modifyAccount(
         @AuthenticationPrincipal principal: Jwt,
-        @RequestBody input: ModifyAccountInputDto,
+        @RequestBody input: ModifyAccountInput,
     ) {
         val accountId = principal.subject
         firebaseService.updateUser(
@@ -56,30 +52,6 @@ class AccountController(
         )
         firebaseService.setUserClaims(userId = accountId, requestedClaim = input.requestedClaim)
     }
-
-    @PostMapping("/lookup/{searchInput}")
-    fun lookupAccount(@PathVariable searchInput: String): List<FoundAccount>{
-        TODO()
-//        return accountService.findAccount(searchInput).map {
-//            FoundAccount(
-//                id = it.id,
-//                name = it.name!!,
-//                email = it.email!!,
-//                phoneNumber = it.phoneNumber
-//            )
-//        }
-    }
-
-    data class FoundAccount(
-        val id: String,
-        val name: String,
-        val email: String,
-        val phoneNumber: String?
-    )
-
-    data class SetFcmTokenInput(
-        val fcmToken: String?
-    )
 
     @PutMapping("/fcmToken")
     fun updateFcmToken(

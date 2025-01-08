@@ -1,4 +1,4 @@
-package dk.example.feedback.persistence.dao
+package dk.example.feedback.persistence.dao.utility
 
 import java.time.OffsetDateTime
 import java.util.*
@@ -20,14 +20,6 @@ abstract class BaseCompanion<T, E : CommonColumns<T>>(table: CommonColumnsTbl) :
         }
     }
 }
-abstract class CommonColumnsTbl(name: String, idColumn: String = "${name}") : UUIDTable(name, idColumn) {
-    val dateCreated = timestampWithTimeZone("date_created").clientDefault { OffsetDateTime.now() }
-    val lastUpdated = timestampWithTimeZone("last_updated").clientDefault { OffsetDateTime.now() }
-}
 
-abstract class CommonColumns<T>(id: EntityID<UUID>, table: CommonColumnsTbl) : UUIDEntity(id) {
-    val dateCreated by table.dateCreated
-    var lastUpdate by table.lastUpdated
 
-    abstract fun toModel(): T
-}
+

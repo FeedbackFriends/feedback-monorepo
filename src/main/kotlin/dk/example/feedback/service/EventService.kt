@@ -1,13 +1,17 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.helpers.AuthContextHelper
-import dk.example.feedback.model.*
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.dto.FeedbackSummaryDto
 import dk.example.feedback.model.dto.ManagerEventDto
+import dk.example.feedback.model.dto.ManagerQuestion
 import dk.example.feedback.model.dto.OwnerInfoDto
 import dk.example.feedback.model.dto.ParticipantEventDto
+import dk.example.feedback.model.dto.ParticipantQuestionDto
+import dk.example.feedback.model.dto.QuestionFeedbackSummary
+import dk.example.feedback.model.enumerations.Emoji
+import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
 import org.springframework.stereotype.Service
@@ -145,7 +149,7 @@ fun EventEntity.toParticipantEvent(pinCode: String): ParticipantEventDto {
         location = location,
         pinCode = pinCode,
         questions = questions.map { question ->
-            ParticipantQuestion(
+            ParticipantQuestionDto(
                 id = question.id,
                 questionText = question.questionText,
                 feedbackType = question.feedbackType

@@ -1,6 +1,6 @@
-package dk.example.feedback.model
+package dk.example.feedback.model.dto
 
-data class AccountDetails(
+data class OwnerInfoDto(
     val name: String?,
     val email: String?,
     val phoneNumber: String?,

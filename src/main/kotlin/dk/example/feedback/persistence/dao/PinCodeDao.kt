@@ -1,6 +1,8 @@
 package dk.example.feedback.persistence.dao
 
 import dk.example.feedback.model.database.PinCodeEntity
+import dk.example.feedback.persistence.dao.utility.BaseCompanion
+import dk.example.feedback.persistence.dao.utility.CommonColumns
 import dk.example.feedback.persistence.table.PinCodeTable
 import java.util.*
 import org.jetbrains.exposed.dao.id.EntityID

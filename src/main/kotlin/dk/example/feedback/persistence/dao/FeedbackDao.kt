@@ -1,6 +1,8 @@
 package dk.example.feedback.persistence.dao
 
 import dk.example.feedback.model.database.FeedbackEntity
+import dk.example.feedback.persistence.dao.utility.BaseCompanion
+import dk.example.feedback.persistence.dao.utility.CommonColumns
 import dk.example.feedback.persistence.table.FeedbackTable
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*

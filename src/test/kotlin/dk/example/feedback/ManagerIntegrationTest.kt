@@ -3,7 +3,6 @@ package dk.example.feedback
 import ControllerPaths
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import dk.example.feedback.controller.AccountController
-import dk.example.feedback.model.Role
 import dk.example.feedback.model.dto.SessionDto
 import dk.example.feedback.persistence.table.AccountTable
 import dk.example.feedback.service.Claim

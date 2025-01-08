@@ -1,13 +1,13 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.controller.FeedbackAlreadyGivenException
-import dk.example.feedback.controller.SendFeedbackResponse
 import dk.example.feedback.helpers.AuthContextHelper
-import dk.example.feedback.model.*
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.dto.FeedbackSessionDto
 import dk.example.feedback.model.dto.OwnerInfoDto
+import dk.example.feedback.model.dto.ParticipantQuestionDto
+import dk.example.feedback.model.dto.SubmitFeedbackResponseDto
 import dk.example.feedback.model.payloads.FeedbackInput
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
@@ -35,7 +35,7 @@ class FeedbackService(
             title = event.title,
             agenda = event.agenda,
             questions = event.questions.map {
-                ParticipantQuestion(
+                ParticipantQuestionDto(
                     id = it.id,
                     questionText = it.questionText,
                     feedbackType = it.feedbackType,
@@ -50,7 +50,7 @@ class FeedbackService(
         )
     }
 
-    fun sendFeedback(feedbackInputList: List<FeedbackInput>, pinCode: String): SendFeedbackResponse {
+    fun sendFeedback(feedbackInputList: List<FeedbackInput>, pinCode: String): SubmitFeedbackResponseDto {
         val accountId = context.getAuthContext().accountId
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val managerId = event.manager.id
@@ -68,7 +68,7 @@ class FeedbackService(
         if (shouldPresentRatingPrompt) {
             accountRepo.markRatingPrompted(accountId = accountId)
         }
-        return SendFeedbackResponse(shouldPresentRatingPrompt = shouldPresentRatingPrompt)
+        return SubmitFeedbackResponseDto(shouldPresentRatingPrompt = shouldPresentRatingPrompt)
     }
 
     private fun throwIfAccountAlreadyGivenFeedback(feedback: List<FeedbackEntity>, accountId: String) {

@@ -1,10 +1,10 @@
 package dk.example.feedback.model.payloads
 
-import dk.example.feedback.model.Emoji
-import dk.example.feedback.model.Feedback
-import dk.example.feedback.model.FeedbackType
-import dk.example.feedback.model.Opinion
-import dk.example.feedback.model.ThumbsUpThumpsDown
+import dk.example.feedback.model.enumerations.Emoji
+import dk.example.feedback.model.enumerations.FeedbackType
+import dk.example.feedback.model.enumerations.Opinion
+import dk.example.feedback.model.enumerations.ThumbsUpThumpsDown
+import dk.example.feedback.model.interfaces.Feedback
 import java.util.*
 
 data class FeedbackInput(

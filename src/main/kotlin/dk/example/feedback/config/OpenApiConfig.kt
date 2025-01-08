@@ -1,6 +1,6 @@
 package dk.example.feedback.config
 
-import dk.example.feedback.controller.ApiError
+import dk.example.feedback.model.error.ApiError
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.media.Content
