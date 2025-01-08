@@ -2,6 +2,8 @@ package dk.example.feedback.service
 
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.dto.SessionDto
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -10,13 +12,17 @@ import org.springframework.transaction.annotation.Transactional
 class SessionService(
     val eventService: EventService,
     val accountService: AccountService,
-    val context: AuthContextHelper
+    val context: AuthContextHelper,
 ) {
+
+    val logger = LoggerFactory.getLogger(AccountService::class.java)
+
     fun getSession(): SessionDto {
         val accountId = context.getAuthContext().accountId
         val claim = context.getAuthContext().customClaim
         val account = accountService.fetchAccount(accountId = accountId) ?: throw Exception("Account not found")
         val participantEvents = eventService.getParticipantEvents(accountId = accountId)
+        logger.info("Get session with claim: $claim")
         when (claim) {
             Claim.Manager -> {
                 val managerEvents = eventService.getManagerEvents(accountId)

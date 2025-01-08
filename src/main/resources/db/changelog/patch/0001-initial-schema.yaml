@@ -22,7 +22,7 @@ databaseChangeLog:
                   name: fcm_token
                   type: varchar(255)
                   constraints:
-                      nullable: true
+                    nullable: true
               - column:
                   name: email
                   type: varchar(255)
@@ -33,11 +33,11 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: true
-#              - column:
-#                  name: role
-#                  type: varchar(255)
-#                  constraints:
-#                    nullable: true
+              #              - column:
+              #                  name: role
+              #                  type: varchar(255)
+              #                  constraints:
+              #                    nullable: true
               - column:
                   name: created_at
                   type: timestamp with time zone
@@ -52,7 +52,7 @@ databaseChangeLog:
                   name: rating_prompted
                   type: boolean
                   constraints:
-                      nullable: false
+                    nullable: false
 
         - createTable:
             tableName: event
@@ -85,20 +85,35 @@ databaseChangeLog:
                   name: location
                   type: varchar(255)
               - column:
-                  name: pin_code
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
                   name: manager_id
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: team_id
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: event
+            baseColumnNames: manager_id
+            referencedTableName: account
+            constraintName: fk_event_manager_id
+            referencedColumnNames: id
+        - createTable:
+            tableName: event_participant
+            columns:
+              - column:
+                  name: id
                   type: uuid
                   constraints:
-                    nullable: true
+                    primaryKey: true
+                    nullable: false
               - column:
                   name: created_at
                   type: timestamp with time zone
@@ -110,51 +125,34 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: new_feedback
-                  type: integer
+                  name: event_id
+                  type: uuid
                   constraints:
                     nullable: false
+              - column:
+                  name: participant_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: feedback_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
         - addForeignKeyConstraint:
-            baseTableName: event
-            baseColumnNames: manager_id
-            referencedTableName: account
-            constraintName: fk_event_manager_id
+            baseTableName: event_participant
+            baseColumnNames: event_id
+            referencedTableName: event
             referencedColumnNames: id
-#        - addForeignKeyConstraint:
-#            baseTableName: event
-#            baseColumnNames: team_id
-#            referencedTableName: team
-#            constraintName: fk_event_team_id
-#            referencedColumnNames: id
-
-#        - createTable:
-#            tableName: event_participant
-#            columns:
-#              - column:
-#                  name: event_id
-#                  type: uuid
-#                  constraints:
-#                    nullable: false
-#              - column:
-#                  name: participant_id
-#                  type: varchar(255)
-#                  constraints:
-#                    nullable: false
-#        - addForeignKeyConstraint:
-#            baseTableName: event_participant
-#            baseColumnNames: event_id
-#            referencedTableName: event
-#            referencedColumnNames: id
-#            constraintName: fk_event_participant_event_id
-#            onDelete: CASCADE
-#        - addForeignKeyConstraint:
-#            baseTableName: event_participant
-#            baseColumnNames: participant_id
-#            referencedTableName: account
-#            referencedColumnNames: id
-#            constraintName: fk_event_participant_participant_id
-#            onDelete: CASCADE
-
+            constraintName: fk_event_participant_event_id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: event_participant
+            baseColumnNames: participant_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_event_participant_participant_id
+            onDelete: CASCADE
         - createTable:
             tableName: question
             columns:
@@ -214,6 +212,26 @@ databaseChangeLog:
             onDelete: CASCADE
 
         - createTable:
+            tableName: pin_code
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                    name: pin_code
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+              - column:
+                    name: event_id
+                    type: uuid
+                    constraints:
+                        nullable: false
+
+        - createTable:
             tableName: feedback
             columns:
               - column:
@@ -264,42 +282,15 @@ databaseChangeLog:
                   name: manager_id
                   type: varchar(255)
               - column:
+                  name: is_new
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
                   name: participant_id
                   type: varchar(255)
                   constraints:
                     nullable: true
-        - createTable:
-            tableName: event_participant
-            columns:
-              - column:
-                  name: event_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-              - column:
-                    name: participant_id
-                    type: varchar(255)
-                    constraints:
-                        nullable: false
-              - column:
-                  name: feedback_id
-                  type: varchar(255)
-                  constraints:
-                    nullable: true
-        - addForeignKeyConstraint:
-            baseTableName: event_participant
-            baseColumnNames: event_id
-            referencedTableName: event
-            referencedColumnNames: id
-            constraintName: fk_event_participant_event_id
-            onDelete: CASCADE
-        - addForeignKeyConstraint:
-            baseTableName: event_participant
-            baseColumnNames: participant_id
-            referencedTableName: account
-            referencedColumnNames: id
-            constraintName: fk_event_participant_participant_id
-            onDelete: CASCADE
         - createTable:
             tableName: team
             columns:
@@ -336,52 +327,6 @@ databaseChangeLog:
             referencedColumnNames: id
             constraintName: fk_team_manager_id
             onDelete: CASCADE
-
-        - createTable:
-            tableName: team_member
-            columns:
-              - column:
-                  name: id
-                  type: uuid
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: team_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-              - column:
-                  name: member_id
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: status
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-        - addForeignKeyConstraint:
-            baseTableName: team_member
-            baseColumnNames: team_id
-            referencedTableName: team
-            referencedColumnNames: id
-            constraintName: fk_team_member_team_id
-            onDelete: CASCADE
-        - addForeignKeyConstraint:
-            baseTableName: team_member
-            baseColumnNames: member_id
-            referencedTableName: account
-            referencedColumnNames: id
-            constraintName: fk_team_member_member_id
-            onDelete: CASCADE
-        - addForeignKeyConstraint:
-            baseTableName: event
-            baseColumnNames: team_id
-            referencedTableName: team
-            constraintName: fk_event_team_id
-            referencedColumnNames: id
-
         #feedback foreign keys
         - addForeignKeyConstraint:
             baseTableName: feedback

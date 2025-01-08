@@ -1,11 +1,18 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.model.*
+import dk.example.feedback.helpers.AuthContextHelper
+import dk.example.feedback.model.database.EventEntity
+import dk.example.feedback.model.database.FeedbackEntity
+import dk.example.feedback.model.dto.FeedbackSummaryDto
 import dk.example.feedback.model.dto.ManagerEventDto
+import dk.example.feedback.model.dto.ManagerQuestion
+import dk.example.feedback.model.dto.OwnerInfoDto
 import dk.example.feedback.model.dto.ParticipantEventDto
-import dk.example.feedback.model.dto.toManagerEvent
-import dk.example.feedback.model.dto.toParticipantEvent
-import dk.example.feedback.persistence.repo.AccountRepo
+import dk.example.feedback.model.dto.ParticipantQuestionDto
+import dk.example.feedback.model.dto.QuestionFeedbackSummary
+import dk.example.feedback.model.enumerations.Emoji
+import dk.example.feedback.model.enumerations.FeedbackType
+import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,50 +21,150 @@ import java.util.*
 @Service
 @Transactional
 class EventService(
-    val eventRepo: EventRepo,
-    val accountRepo: AccountRepo,
+    private val eventRepo: EventRepo,
+    private val authContext: AuthContextHelper
 ) {
 
-    fun create(eventInput: EventInput, accountId: String): ManagerEventDto {
-        val generatedPinCode = generatePinCode()
-        val eventEntity = eventRepo.createEvent(
-            eventInput = eventInput,
-            generatedPinCode = generatedPinCode,
-            managerId = accountId
+    fun createEvent(eventInput: EventInput): ManagerEventDto {
+        val generatedPinCode = generateUniquePinCode()
+        val managerId = authContext.getAuthContext().accountId
+        val eventEntity = eventRepo.createEvent(eventInput, generatedPinCode, managerId)
+        return eventEntity.toManagerEvent(
+            pinCode = generatedPinCode
         )
-        return eventEntity.toManagerEvent()
     }
 
-    fun delete(eventId: UUID, accountId: String) {
-        val event = eventRepo.getEvent(eventId = eventId)
-        if (event?.managerId != accountId) throw Exception("You are not the manager of this event.")
-        eventRepo.deleteEvent(eventId = eventId)
+    fun deleteEvent(eventId: UUID) {
+        val event = eventRepo.getEvent(eventId)
+        authContext.verifyLoggedInAccountHasId(event.manager.id)
+        eventRepo.deleteEvent(eventId)
     }
 
-    fun update(eventInput: EventInput, eventId: UUID, accountId: String): ManagerEventDto {
-        val event = eventRepo.getEvent(eventId = eventId)
-        if (event?.managerId != accountId) throw Exception("You are not the manager of this event.")
-        return eventRepo.updateEvent(eventInput = eventInput, eventId = eventId).toManagerEvent()
+    fun updateEvent(eventInput: EventInput, eventId: UUID): ManagerEventDto {
+        val event = eventRepo.getEvent(eventId)
+        authContext.verifyLoggedInAccountHasId(event.manager.id)
+        val updatedEvent = eventRepo.updateEvent(eventInput, eventId)
+        return updatedEvent.toManagerEvent(
+            pinCode = getPinCodeForEvent(eventId)
+        )
     }
 
     fun getManagerEvents(managerId: String): List<ManagerEventDto> {
-        return eventRepo.getManagerEvents(managerId = managerId)
+        val managerEvents = eventRepo.getManagerEvents(managerId).map {
+            it.toManagerEvent(pinCode = getPinCodeForEvent(eventId = it.id))
+        }
+        managerEvents.forEach {
+            eventRepo.resetNewFeedbackForEvent(it.id)
+        }
+        return managerEvents
     }
 
     fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
-        return eventRepo.getParticipantEvents(accountId = accountId)
+        return eventRepo.getParticipantEvents(accountId).map {
+            it.toParticipantEvent(getPinCodeForEvent(eventId = it.id))
+        }
     }
 
-    fun acceptEventInvite(eventId: UUID, accountId: String): ParticipantEventDto {
-        val event = eventRepo.getEvent(eventId = eventId) ?: throw Exception("Event not found.")
-        accountRepo.getAccount(accountId = accountId) ?: throw Exception("Account not found.")
-        eventRepo.addParticipantToEvent(eventId = eventId, accountId = accountId)
-        return event.toParticipantEvent()
+    fun joinEvent(eventCode: String): ParticipantEventDto {
+        val accountId = authContext.getAuthContext().accountId
+        val event = eventRepo.getEventByPinCode(eventCode)
+        throwIfAccountIsManager(event, accountId)
+        eventRepo.addParticipantToEvent(eventId = event.id, accountId =  accountId, feedback = null)
+        return event.toParticipantEvent(
+            pinCode = getPinCodeForEvent(event.id)
+        )
     }
 
-    private fun generatePinCode(): String {
-        // random 4 digit pin code
-        val generatedPinCode = (1000..9999).random().toString()
-        return if (eventRepo.pinCodeExistsAlready(generatedPinCode)) throw Exception("The generated pin code already exist.") else generatedPinCode
+    private fun getPinCodeForEvent(eventId: UUID): String {
+        return eventRepo.getPinCodeForEvent(eventId)
     }
+
+    private fun generateUniquePinCode(): String {
+        repeat(10) {
+            val pinCode = (1000..9999).random().toString()
+            if (!eventRepo.pinCodeExists(pinCode)) return pinCode
+        }
+        throw IllegalStateException("Failed to generate a unique pin code after multiple attempts")
+    }
+
+    private fun throwIfAccountIsManager(events: EventEntity, accountId: String) {
+        val isManager = events.manager.id == accountId
+        if (isManager) {
+            throw IllegalArgumentException("Owner of event cannot give feedback")
+        }
+    }
+}
+
+fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
+    val totalFeedback = feedback.size
+    val totalEmojiFeedback = feedback.count { it.feedbackType == FeedbackType.Emoji }
+    val feedbackSummary = if (totalFeedback > 0) {
+        FeedbackSummaryDto(
+            totalFeedback = totalFeedback,
+            verySadPercentage = calculatePercentage(feedback, Emoji.VerySad, totalEmojiFeedback),
+            sadPercentage = calculatePercentage(feedback, Emoji.Sad, totalEmojiFeedback),
+            happyPercentage = calculatePercentage(feedback, Emoji.Happy, totalEmojiFeedback),
+            veryHappyPercentage = calculatePercentage(feedback, Emoji.VeryHappy, totalEmojiFeedback)
+        )
+    } else null
+
+    return ManagerEventDto(
+        id = id,
+        title = title,
+        agenda = agenda,
+        date = date,
+        durationInMinutes = durationInMinutes,
+        location = location,
+        pinCode = pinCode,
+        questions = questions.map { question ->
+            val questionFeedback = feedback.filter { it.questionId == question.id }
+            ManagerQuestion(
+                id = question.id,
+                questionText = question.questionText,
+                feedbackType = question.feedbackType,
+                feedbackSummary = if (questionFeedback.isEmpty()) null else QuestionFeedbackSummary(
+                    totalFeedback = questionFeedback.size,
+                    verySadCount = questionFeedback.count { it.emoji == Emoji.VerySad },
+                    sadCount = questionFeedback.count { it.emoji == Emoji.Sad },
+                    happyCount = questionFeedback.count { it.emoji == Emoji.Happy },
+                    veryHappyCount = questionFeedback.count { it.emoji == Emoji.VeryHappy }
+                ),
+                feedback = question.feedback,
+                newFeedbackForQuestion = questionFeedback.map { it.isNew }.count()
+            )
+        },
+        feedbackSummary = feedbackSummary,
+        newFeedbackForEvent = questions.map { it.feedback }.flatten().map { it.isNew }.count(),
+        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
+    )
+}
+
+fun EventEntity.toParticipantEvent(pinCode: String): ParticipantEventDto {
+    return ParticipantEventDto(
+        id = id,
+        title = title,
+        agenda = agenda,
+        date = date,
+        durationInMinutes = durationInMinutes,
+        location = location,
+        pinCode = pinCode,
+        questions = questions.map { question ->
+            ParticipantQuestionDto(
+                id = question.id,
+                questionText = question.questionText,
+                feedbackType = question.feedbackType
+            )
+        },
+        feedbackSubmited = feedback.isNotEmpty(),
+        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
+    )
+}
+
+private fun calculatePercentage(
+    feedback: List<FeedbackEntity>,
+    emoji: Emoji,
+    totalEmojiFeedback: Int
+): Double {
+    if (totalEmojiFeedback == 0) return 0.0
+    return (feedback.count { it.emoji == emoji } * 100.0) / totalEmojiFeedback
 }

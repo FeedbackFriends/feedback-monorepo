@@ -8,7 +8,6 @@ import com.google.firebase.auth.UserRecord
 import dk.example.feedback.config.FeedbackConfig
 import dk.example.feedback.model.*
 import dk.example.feedback.persistence.repo.AccountRepo
-import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.Claim
 import dk.example.feedback.service.EventService
@@ -120,13 +119,16 @@ class AdminController(val accountService: AccountService, val feedbackConfig: Fe
         val uid = "mock_id"
 
 //        accountService.createAnonymousAccountIfNotExist()
-
-        accountRepo.createAccount(
-            name = "Mock",
-            email = "Mock@gmail.com",
-            phoneNumber = "27630505",
-            accountId = uid
-        )
+        try {
+            accountRepo.createOrGetAccount(
+                name = "Mock",
+                email = "Mock@gmail.com",
+                phoneNumber = "27630505",
+                accountId = uid
+            )
+        } catch (e: Exception) {
+            println("Account already exists")
+        }
 
         val createUserRequest = UserRecord.CreateRequest()
             .setUid(uid)

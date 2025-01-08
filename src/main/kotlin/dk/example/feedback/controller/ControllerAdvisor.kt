@@ -1,5 +1,6 @@
 package dk.example.feedback.controller
 
+import dk.example.feedback.model.error.ApiError
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -30,8 +31,3 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     }
 }
 
-data class ApiError(
-    val timestamp: OffsetDateTime,
-    val message: String,
-    val stackTrace: String,
-)

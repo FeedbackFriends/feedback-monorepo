@@ -1,12 +1,11 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.helpers.AuthContextHelper
-import dk.example.feedback.model.db_models.AccountEntity
+import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.persistence.repo.AccountRepo
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-
 
 @Service
 @Transactional
@@ -27,7 +26,7 @@ class AccountService(
 
     fun createAnonymousAccountIfNotExist() {
         val accountId = context.getAuthContext().accountId
-        accountRepo.createAccount(
+        accountRepo.createOrGetAccount(
             accountId = accountId,
             name = null,
             email = null,
@@ -42,11 +41,11 @@ class AccountService(
         email: String?,
         phoneNumber: String?,
     ) {
-        val accountExists = accountRepo.getAccount(accountId) != null
+        val accountExists = accountRepo.accountExists(accountId)
         if (accountExists) {
             accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
         } else {
-            accountRepo.createAccount(
+            accountRepo.createOrGetAccount(
                 accountId = accountId,
                 name = name,
                 email = email,
@@ -56,11 +55,7 @@ class AccountService(
     }
 
     fun deleteAccount(accountId: String) {
-        accountRepo.delete(accountId)
-    }
-
-    fun findAccount(input: String): List<AccountEntity> {
-        return accountRepo.findAccountsMatchingInput(input)
+        accountRepo.deleteAccount(accountId)
     }
 
     fun updateAccountFcmToken(fcmToken: String?) {
