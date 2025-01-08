@@ -86,7 +86,6 @@ jib {
 		image = "eclipse-temurin:17-jre"
 	}
 	to {
-		image = "nicolaidam/feedback:0.0.21"
 		auth {
 			username = System.getenv("DOCKER_USERNAME")
 			password = System.getenv("DOCKER_PASSWORD")
@@ -97,4 +96,5 @@ jib {
 openApi {
 	apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
 	outputFileName.set("openapi.yaml")
+	waitTimeInSeconds.set(10)
 }
