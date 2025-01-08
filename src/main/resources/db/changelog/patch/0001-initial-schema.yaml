@@ -85,11 +85,6 @@ databaseChangeLog:
                   name: location
                   type: varchar(255)
               - column:
-                  name: pin_code
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
                   name: manager_id
                   type: varchar(255)
                   constraints:
@@ -215,6 +210,26 @@ databaseChangeLog:
             referencedColumnNames: id
             constraintName: fk_question_event_id
             onDelete: CASCADE
+
+        - createTable:
+            tableName: pin_code
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                    name: pin_code
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+              - column:
+                    name: event_id
+                    type: uuid
+                    constraints:
+                        nullable: false
 
         - createTable:
             tableName: feedback

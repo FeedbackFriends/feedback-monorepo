@@ -1,6 +1,7 @@
 package dk.example.feedback.persistence.dao
 
-import dk.example.feedback.model.db_models.EventEntity
+import dk.example.feedback.model.database.EventEntity
+import dk.example.feedback.model.database.PinCodeEntity
 import dk.example.feedback.persistence.table.*
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
@@ -14,7 +15,6 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
     var date by EventTable.date
     var durationInMinutes by EventTable.durationInMinutes
     var location by EventTable.location
-    var pinCode by EventTable.pinCode
     var manager by AccountDao referencedOn EventTable.manager
     val questions by QuestionDao referrersOn QuestionTable.event
 
@@ -26,12 +26,11 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
             date = date,
             durationInMinutes = durationInMinutes,
             location = location,
-            pinCode = pinCode,
             createdAt = dateCreated,
             updatedAt = lastUpdate,
             feedback = questions.flatMap { it.feedback }.map { it.toModel() },
             questions = questions.map { it.toModel() },
-            manager = manager.toModel()
+            manager = manager.toModel(),
         )
     }
 }

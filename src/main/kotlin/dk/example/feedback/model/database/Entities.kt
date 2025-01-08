@@ -1,4 +1,4 @@
-package dk.example.feedback.model.db_models
+package dk.example.feedback.model.database
 
 import dk.example.feedback.model.*
 import java.time.OffsetDateTime
@@ -20,18 +20,20 @@ data class EventEntity(
     val agenda: String?,
     val date: OffsetDateTime,
     val durationInMinutes: Int,
-    val pinCode: String,
     val location : String?,
     val createdAt: OffsetDateTime,
     val updatedAt: OffsetDateTime,
     val questions: List<QuestionEntity>,
     val feedback: List<FeedbackEntity>,
     val manager: AccountEntity,
-) {
-    fun isActive(): Boolean {
-        return date.isAfter(OffsetDateTime.now().minusDays(1)) || !feedback.isEmpty()
-    }
-}
+)
+
+data class PinCodeEntity(
+    val id: UUID,
+    val pinCode: String,
+    val createdAt: OffsetDateTime,
+    val updatedAt: OffsetDateTime,
+)
 
 data class QuestionEntity(
     val id: UUID,
@@ -58,23 +60,8 @@ data class FeedbackEntity(
     val isNew: Boolean,
 ): Feedback
 
-
-
 data class EventParticipantEntity(
     val event: EventEntity,
     val participant: AccountEntity,
     val feedback: FeedbackEntity?
 )
-
-//data class TeamEntity(
-//    val id: UUID,
-//    val teamName: String,
-//    val teamMembers: List<TeamMember>,
-//    val manager: AccountEntity,
-//) {
-//    data class TeamMember(
-//        val account: AccountEntity,
-//        val memberStatus: TeamMemberStatus,
-//    )
-//}
-//

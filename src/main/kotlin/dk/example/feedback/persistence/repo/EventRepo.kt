@@ -1,6 +1,6 @@
 package dk.example.feedback.persistence.repo
 
-import dk.example.feedback.model.db_models.EventEntity
+import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.persistence.dao.*
 import dk.example.feedback.persistence.table.*
@@ -15,8 +15,8 @@ import java.util.UUID
 class EventRepo {
 
     fun pinCodeExists(pinCode: String): Boolean {
-        val optionalFoundPincode = EventDao.find { EventTable.pinCode eq pinCode }.firstOrNull()
-        return optionalFoundPincode?.pinCode == pinCode
+        val optionalFoundPinCode = PinCodeDao.find { PinCodeTable.pinCode eq pinCode }.firstOrNull()
+        return optionalFoundPinCode?.pinCode == pinCode
     }
 
     fun createEvent(eventInput: EventInput, generatedPinCode: String, managerId: String): EventEntity {
@@ -27,9 +27,12 @@ class EventRepo {
             this.agenda = eventInput.agenda
             this.date = eventInput.date
             this.location = eventInput.location
-            this.pinCode = generatedPinCode
             this.durationInMinutes = eventInput.durationInMinutes
             this.manager = managerAccount
+        }
+        PinCodeDao.new {
+            this.pinCode = generatedPinCode
+            this.event = createdEvent
         }
         addQuestionsAndRemoveExisting(createdEvent.id.value, eventInput, createdEvent.manager.id.value)
         return createdEvent.toModel()
@@ -54,11 +57,8 @@ class EventRepo {
     }
 
     fun getEventByPinCode(pinCode: String): EventEntity {
-        val optionalFoundEvent = EventDao.find { EventTable.pinCode eq pinCode }.firstOrNull()
-        if (optionalFoundEvent == null) {
-            throw Exception("Could not find event with pin code: $pinCode")
-        }
-        return optionalFoundEvent.toModel()
+        return PinCodeDao.find { PinCodeTable.pinCode eq pinCode }.firstOrNull()?.event?.toModel()
+            ?: throw Exception("Could not find event with pin code: $pinCode")
     }
 
     fun getEvent(eventId: UUID): EventEntity {
@@ -90,6 +90,11 @@ class EventRepo {
                 }
             }
         }
+    }
+
+    fun getPinCodeForEvent(eventId: UUID): String {
+        return PinCodeDao.find { PinCodeTable.event eq eventId }.firstOrNull()?.pinCode
+            ?: throw Exception("Could not find pin code for event id: $eventId")
     }
 
     private fun addQuestionsAndRemoveExisting(eventId: UUID, eventInput: EventInput, managerId: String) {

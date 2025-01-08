@@ -11,10 +11,12 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import javax.annotation.PostConstruct
 import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.stereotype.Component
 
 @SpringBootApplication
 @EnableConfigurationProperties(FeedbackConfig::class)
+@EnableScheduling
 class FeedbackApplication
 
 fun main(args: Array<String>) {

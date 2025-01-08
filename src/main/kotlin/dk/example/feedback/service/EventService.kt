@@ -2,8 +2,8 @@ package dk.example.feedback.service
 
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.*
-import dk.example.feedback.model.db_models.EventEntity
-import dk.example.feedback.model.db_models.FeedbackEntity
+import dk.example.feedback.model.database.EventEntity
+import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.dto.FeedbackSummaryDto
 import dk.example.feedback.model.dto.ManagerEventDto
 import dk.example.feedback.model.dto.OwnerInfoDto
@@ -25,7 +25,9 @@ class EventService(
         val generatedPinCode = generateUniquePinCode()
         val managerId = authContext.getAuthContext().accountId
         val eventEntity = eventRepo.createEvent(eventInput, generatedPinCode, managerId)
-        return eventEntity.toManagerEvent()
+        return eventEntity.toManagerEvent(
+            pinCode = generatedPinCode
+        )
     }
 
     fun deleteEvent(eventId: UUID) {
@@ -38,11 +40,15 @@ class EventService(
         val event = eventRepo.getEvent(eventId)
         authContext.verifyLoggedInAccountHasId(event.manager.id)
         val updatedEvent = eventRepo.updateEvent(eventInput, eventId)
-        return updatedEvent.toManagerEvent()
+        return updatedEvent.toManagerEvent(
+            pinCode = getPinCodeForEvent(eventId)
+        )
     }
 
     fun getManagerEvents(managerId: String): List<ManagerEventDto> {
-        val managerEvents = eventRepo.getManagerEvents(managerId).map { it.toManagerEvent() }
+        val managerEvents = eventRepo.getManagerEvents(managerId).map {
+            it.toManagerEvent(pinCode = getPinCodeForEvent(eventId = it.id))
+        }
         managerEvents.forEach {
             eventRepo.resetNewFeedbackForEvent(it.id)
         }
@@ -50,7 +56,9 @@ class EventService(
     }
 
     fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
-        return eventRepo.getParticipantEvents(accountId).map { it.toParticipantEvent() }
+        return eventRepo.getParticipantEvents(accountId).map {
+            it.toParticipantEvent(getPinCodeForEvent(eventId = it.id))
+        }
     }
 
     fun joinEvent(eventCode: String): ParticipantEventDto {
@@ -58,7 +66,13 @@ class EventService(
         val event = eventRepo.getEventByPinCode(eventCode)
         throwIfAccountIsManager(event, accountId)
         eventRepo.addParticipantToEvent(eventId = event.id, accountId =  accountId, feedback = null)
-        return event.toParticipantEvent()
+        return event.toParticipantEvent(
+            pinCode = getPinCodeForEvent(event.id)
+        )
+    }
+
+    private fun getPinCodeForEvent(eventId: UUID): String {
+        return eventRepo.getPinCodeForEvent(eventId)
     }
 
     private fun generateUniquePinCode(): String {
@@ -77,7 +91,7 @@ class EventService(
     }
 }
 
-fun EventEntity.toManagerEvent(): ManagerEventDto {
+fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
     val totalFeedback = feedback.size
     val totalEmojiFeedback = feedback.count { it.feedbackType == FeedbackType.Emoji }
     val feedbackSummary = if (totalFeedback > 0) {
@@ -121,7 +135,7 @@ fun EventEntity.toManagerEvent(): ManagerEventDto {
     )
 }
 
-fun EventEntity.toParticipantEvent(): ParticipantEventDto {
+fun EventEntity.toParticipantEvent(pinCode: String): ParticipantEventDto {
     return ParticipantEventDto(
         id = id,
         title = title,

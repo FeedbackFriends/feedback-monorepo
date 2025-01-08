@@ -1,7 +1,7 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.helpers.AuthContextHelper
-import dk.example.feedback.model.db_models.AccountEntity
+import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.persistence.repo.AccountRepo
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

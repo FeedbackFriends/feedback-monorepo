@@ -4,8 +4,8 @@ import dk.example.feedback.controller.FeedbackAlreadyGivenException
 import dk.example.feedback.controller.SendFeedbackResponse
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.*
-import dk.example.feedback.model.db_models.EventEntity
-import dk.example.feedback.model.db_models.FeedbackEntity
+import dk.example.feedback.model.database.EventEntity
+import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.dto.FeedbackSessionDto
 import dk.example.feedback.model.dto.OwnerInfoDto
 import dk.example.feedback.model.payloads.FeedbackInput

@@ -1,6 +1,6 @@
 package dk.example.feedback.persistence.repo
 
-import dk.example.feedback.model.db_models.AccountEntity
+import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.table.AccountTable
 import org.springframework.stereotype.Component

@@ -1,7 +1,7 @@
 package dk.example.feedback.persistence.repo
 
 import dk.example.feedback.model.*
-import dk.example.feedback.model.db_models.FeedbackEntity
+import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.payloads.FeedbackInput
 import dk.example.feedback.persistence.dao.*
 import dk.example.feedback.persistence.table.*

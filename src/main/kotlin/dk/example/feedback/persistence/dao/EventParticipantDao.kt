@@ -1,6 +1,6 @@
 package dk.example.feedback.persistence.dao
 
-import dk.example.feedback.model.db_models.EventParticipantEntity
+import dk.example.feedback.model.database.EventParticipantEntity
 import dk.example.feedback.persistence.table.EventParticipantTable
 import java.util.*
 import org.jetbrains.exposed.dao.id.EntityID

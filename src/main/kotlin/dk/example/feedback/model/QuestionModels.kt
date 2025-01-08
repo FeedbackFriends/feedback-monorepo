@@ -1,6 +1,6 @@
 package dk.example.feedback.model
 
-import dk.example.feedback.model.db_models.FeedbackEntity
+import dk.example.feedback.model.database.FeedbackEntity
 import java.util.*
 
 data class ManagerQuestion(

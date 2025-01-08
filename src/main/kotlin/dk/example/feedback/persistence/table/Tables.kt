@@ -29,8 +29,12 @@ object EventTable: CommonColumnsTbl("event") {
     val date = timestampWithTimeZone("date")
     val durationInMinutes = integer("duration_in_minutes")
     val location = varchar("location", 255).nullable().default(null)
-    val pinCode = varchar("pin_code", 255)
     val manager = reference("manager_id", AccountTable, onDelete = ReferenceOption.CASCADE)
+}
+
+object PinCodeTable: CommonColumnsTbl("pin_code") {
+    val pinCode = varchar("pin_code", 255)
+    val event = reference("event_id", EventTable, onDelete = ReferenceOption.CASCADE)
 }
 
 object QuestionTable: CommonColumnsTbl("question") {
