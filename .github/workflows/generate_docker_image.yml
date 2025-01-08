@@ -1,0 +1,55 @@
+name: Generate OpenAPI Spec and Build Docker Image
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-and-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract tag name
+        id: extract-tag
+        run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Generate OpenAPI spec
+        run: ./gradlew generateOpenApiDocs
+        env:
+          VERSION: "${{ env.VERSION }}"
+
+      - name: Clone target repository
+        run: |
+          git clone https://github.com/FeedbackFriends/feedback-be.git feedback-be
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Copy OpenAPI spec to target repository
+        run: |
+          cp build/openapi.yaml feedback-be/
+          cd feedback-be
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b update-openapi-spec-${{ env.VERSION }}
+          git add openapi.yaml
+          git commit -m "Update OpenAPI spec for version ${{ env.VERSION }}"
+          git push origin update-openapi-spec-${{ env.VERSION }}
+          gh pr create --repo FeedbackFriends/feedback-be --title "Update OpenAPI spec for version ${{ env.VERSION }}" --body "Generated OpenAPI spec for version ${{ env.VERSION }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image with Jib
+        run: ./gradlew jib --image=nicolaidam/feedback:${{ env.VERSION }}
+        env:
+          DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
+          DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
