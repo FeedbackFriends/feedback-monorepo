@@ -14,7 +14,7 @@ data class AuthContext(
 @Component
 class AuthContextHelper {
 
-    val logger = LoggerFactory.getLogger(AuthContextHelper::class.java)
+    private val logger = LoggerFactory.getLogger(AuthContextHelper::class.java)
 
     fun getAuthContext(): AuthContext {
         val authentication: org.springframework.security.core.Authentication = SecurityContextHolder.getContext().authentication

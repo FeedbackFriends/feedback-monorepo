@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class AccountRepo {
 
-    val logger = LoggerFactory.getLogger(AccountRepo::class.java)
+    private val logger = LoggerFactory.getLogger(AccountRepo::class.java)
 
     fun createOrGetAccount(
         name: String?,
@@ -22,20 +22,19 @@ class AccountRepo {
         phoneNumber: String?,
         accountId: String,
     ): AccountEntity {
-        logger.info("AccountRepo: Opretter account")
-        try {
-            val account = AccountDao.new(id = accountId) {
-                this.name = name
-                this.email = email
-                this.phoneNumber = phoneNumber
-                this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
-                this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
-            }.toModel()
-            return account
-        } catch (e: Throwable) {
-            logger.error("Caught exception: Account already exists")
-            return getAccount(accountId)
+        val existingAccount = AccountDao.findById(accountId)
+        if (existingAccount != null) {
+            logger.info("Account already exists, returning existing account")
+            return existingAccount.toModel()
         }
+        logger.info("Creating new account")
+        return AccountDao.new(id = accountId) {
+            this.name = name
+            this.email = email
+            this.phoneNumber = phoneNumber
+            this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
+            this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
+        }.toModel()
     }
 
     fun updateAccount(

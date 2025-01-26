@@ -5,6 +5,7 @@ import com.google.firebase.auth.UserRecord
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 enum class Claim {
@@ -35,6 +36,8 @@ interface FirebaseService {
 
 @Service
 class FirebaseServiceLive: FirebaseService {
+
+    private val logger = LoggerFactory.getLogger(FirebaseServiceLive::class.java)
 
     override fun sendNotifications(messages: List<FirebaseService.Message>) {
         FirebaseMessaging.getInstance().sendEachAsync(
@@ -78,11 +81,15 @@ class FirebaseServiceLive: FirebaseService {
     }
 
     override fun setUserClaims(userId: String, requestedClaim: Claim?) {
-        val requestedClaims: MutableList<String> = mutableListOf()
-        requestedClaim?.let { requestedClaims.add(it.name) }
-        val claims = mapOf(
-            "custom_claims" to requestedClaims
-        )
-        FirebaseAuth.getInstance().setCustomUserClaimsAsync(userId,  claims)
+//        val requestedClaims: MutableList<String> = mutableListOf()
+//        requestedClaim?.let { requestedClaims.add(it.name) }
+
+
+//        val claims = mapOf(
+//            "custom_claims" to requestedClaim?.name
+//        )
+        logger.info("Setting custom claim ${requestedClaim?.name} for user $userId")
+        FirebaseAuth.getInstance()
+            .setCustomUserClaimsAsync(userId, mapOf("custom_claims" to requestedClaim?.toString()))
     }
 }

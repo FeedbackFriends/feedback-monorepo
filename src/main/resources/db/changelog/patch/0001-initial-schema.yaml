@@ -135,10 +135,10 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: feedback_id
-                  type: varchar(255)
+                  name: feedback_submitted
+                  type: boolean
                   constraints:
-                    nullable: true
+                    nullable: false
         - addForeignKeyConstraint:
             baseTableName: event_participant
             baseColumnNames: event_id
@@ -215,12 +215,6 @@ databaseChangeLog:
             tableName: pin_code
             columns:
               - column:
-                  name: id
-                  type: uuid
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
                     name: pin_code
                     type: varchar(255)
                     constraints:
@@ -272,6 +266,11 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
                   type: timestamp with time zone
                   constraints:
                     nullable: false

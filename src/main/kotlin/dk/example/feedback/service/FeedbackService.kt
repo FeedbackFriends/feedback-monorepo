@@ -9,9 +9,9 @@ import dk.example.feedback.model.dto.OwnerInfoDto
 import dk.example.feedback.model.dto.ParticipantQuestionDto
 import dk.example.feedback.model.dto.SubmitFeedbackResponseDto
 import dk.example.feedback.model.payloads.FeedbackInput
+import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
-import dk.example.feedback.persistence.repo.AccountRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -57,18 +57,21 @@ class FeedbackService(
         // Check if user with given client id already provided feedback
         throwIfAccountAlreadyGivenFeedback(feedback = event.feedback, accountId = accountId)
         throwIfAccountIsManager(events = event, accountId = accountId)
-        val createdFeedbackList = feedbackRepo.persistFeedback(
+        feedbackRepo.persistFeedback(
             feedbackList = feedbackInputList,
             participantId = accountId,
             managerId = managerId,
             eventId = event.id
         )
-        createdFeedbackList.forEach { eventRepo.addParticipantToEvent(eventId = event.id, accountId = accountId, feedback = it.id) }
+        eventRepo.addParticipantToEvent(eventId = event.id, accountId = accountId, feedbackSubmitted = true)
         val shouldPresentRatingPrompt = shouldPresentRatingPrompt(accountId = accountId)
         if (shouldPresentRatingPrompt) {
             accountRepo.markRatingPrompted(accountId = accountId)
         }
-        return SubmitFeedbackResponseDto(shouldPresentRatingPrompt = shouldPresentRatingPrompt)
+        return SubmitFeedbackResponseDto(
+            shouldPresentRatingPrompt = shouldPresentRatingPrompt,
+            event = event.toParticipantEvent(pinCode = pinCode, feedbackSubmitted = true)
+        )
     }
 
     private fun throwIfAccountAlreadyGivenFeedback(feedback: List<FeedbackEntity>, accountId: String) {

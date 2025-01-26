@@ -13,6 +13,7 @@ import dk.example.feedback.service.Claim
 import dk.example.feedback.service.EventService
 import dk.example.feedback.service.FirebaseService
 import java.util.*
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.RestTemplate
@@ -23,7 +24,9 @@ import org.springframework.web.client.postForEntity
 @RequestMapping(ControllerPaths.AdminUrl)
 class AdminController(val accountService: AccountService, val feedbackConfig: FeedbackConfig, val eventService: EventService, val firebaseService: FirebaseService, val accountRepo: AccountRepo) {
 
-//
+    private val logger = LoggerFactory.getLogger(AdminController::class.java)
+
+    //
 //    @GetMapping("/get-all-accounts")
 //    fun getAllAccounts(): List<AccountEntity> {
 //        return service.getAllAccounts()
@@ -118,41 +121,36 @@ class AdminController(val accountService: AccountService, val feedbackConfig: Fe
 
         val uid = "mock_id"
 
-//        accountService.createAnonymousAccountIfNotExist()
-        try {
-            accountRepo.createOrGetAccount(
-                name = "Mock",
-                email = "Mock@gmail.com",
-                phoneNumber = "27630505",
-                accountId = uid
-            )
-        } catch (e: Exception) {
-            println("Account already exists")
-        }
+
+        accountRepo.createOrGetAccount(
+            name = "Mock",
+            email = "Mock@gmail.com",
+            phoneNumber = "27630505",
+            accountId = uid
+        )
+
 
         val createUserRequest = UserRecord.CreateRequest()
             .setUid(uid)
             .setEmail("mock@mock.dk")
-            .setDisplayName("Hello")
+            .setDisplayName("Mocked displayname")
 
-        // catch error if user exists
         try {
+            logger.info("Firebase: Creating user")
             FirebaseAuth.getInstance().createUser(createUserRequest)
         } catch (e: Exception) {
-            FirebaseAuth.getInstance().setCustomUserClaims(uid, mapOf("custom_claims" to input.claim?.name))
-            val token = FirebaseAuth.getInstance().createCustomToken(uid)
-            return signInWithCustomToken(token,uid)
+            logger.info("Firebase: User already exists so will sign in")
         }
-
-
-        FirebaseAuth.getInstance().setCustomUserClaims(uid, mapOf("custom_claims" to input.claim?.name))
+        try {
+            FirebaseAuth.getInstance().setCustomUserClaims(uid, mapOf("custom_claims" to input.claim?.name))
+        } catch (e: Exception) {
+            logger.info("Firebase: Failed to set custom claims")
+        }
         val token = FirebaseAuth.getInstance().createCustomToken(uid)
-
-        return signInWithCustomToken(token,uid)
+        return signInWithCustomToken(token)
     }
 
-    fun signInWithCustomToken(customToken: String, uid: String): FirebaseResponseDto {
-        val token = FirebaseAuth.getInstance().createCustomToken(uid)
+    fun signInWithCustomToken(token: String): FirebaseResponseDto {
         val apiKey = feedbackConfig.firebaseApiKey
         val url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=$apiKey"
 

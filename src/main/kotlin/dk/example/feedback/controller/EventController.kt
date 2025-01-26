@@ -1,15 +1,22 @@
 package dk.example.feedback.controller
 
+import ControllerPaths
 import dk.example.feedback.constants.Roles
 import dk.example.feedback.model.dto.ManagerEventDto
 import dk.example.feedback.model.dto.ParticipantEventDto
 import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.service.EventService
-import org.springframework.web.bind.annotation.*
 import java.util.*
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(ControllerPaths.EventUrl)
@@ -36,9 +43,9 @@ class EventController(
     }
 
     @PostMapping("join/{eventCode}")
-    @PreAuthorize("hasAuthority('${Roles.MANAGER}') or hasAuthority('${Roles.PARTICIPANT}')")
+    @PreAuthorize("isAuthenticated()")
     fun acceptEvent(@PathVariable eventCode: String, @AuthenticationPrincipal principal: Jwt): ParticipantEventDto {
-        return eventService.joinEvent(eventCode = eventCode)
+        return eventService.joinEvent(pinCode = eventCode)
     }
 }
 

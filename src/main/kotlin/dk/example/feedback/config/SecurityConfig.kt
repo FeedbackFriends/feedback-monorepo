@@ -21,7 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableMethodSecurity
 class SecurityConfig {
 
-    val logger = LoggerFactory.getLogger(SecurityConfig::class.java)
+    private val logger = LoggerFactory.getLogger(SecurityConfig::class.java)
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {

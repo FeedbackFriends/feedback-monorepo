@@ -31,7 +31,7 @@ class AccountController(
     val authContext: AuthContextHelper,
 ) {
 
-    val logger = LoggerFactory.getLogger(AccountController::class.java)
+    private val logger = LoggerFactory.getLogger(AccountController::class.java)
 
     @DeleteMapping
     @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")

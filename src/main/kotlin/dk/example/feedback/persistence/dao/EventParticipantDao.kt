@@ -13,13 +13,13 @@ class EventParticipantDao(id: EntityID<UUID>): CommonColumns<EventParticipantEnt
 
     var event by EventDao referencedOn EventParticipantTable.event
     var participant by AccountDao referencedOn EventParticipantTable.participant
-    var feedback by FeedbackDao optionalReferencedOn  EventParticipantTable.feedback
+    var feedbackSubmitted by EventParticipantTable.feedbackSubmitted
 
     override fun toModel(): EventParticipantEntity {
         return EventParticipantEntity(
             event = event.toModel(),
             participant = participant.toModel(),
-            feedback = feedback?.toModel()
+            feedbackSubmitted = feedbackSubmitted,
         )
     }
 }

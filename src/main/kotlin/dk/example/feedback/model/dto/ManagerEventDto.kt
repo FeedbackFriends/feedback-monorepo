@@ -10,7 +10,7 @@ data class ManagerEventDto(
     val title: String,
     val agenda: String?,
     val date: OffsetDateTime,
-    val pinCode: String,
+    val pinCode: String?,
     val durationInMinutes: Int,
     val location : String?,
     val ownerInfo: OwnerInfoDto,

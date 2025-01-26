@@ -4,8 +4,8 @@ import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.persistence.dao.utility.BaseCompanion
 import dk.example.feedback.persistence.dao.utility.CommonColumns
 import dk.example.feedback.persistence.table.FeedbackTable
-import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
+import org.jetbrains.exposed.dao.id.EntityID
 
 class FeedbackDao(id: EntityID<UUID>): CommonColumns<FeedbackEntity>(id, FeedbackTable) {
 
@@ -30,7 +30,7 @@ class FeedbackDao(id: EntityID<UUID>): CommonColumns<FeedbackEntity>(id, Feedbac
             thumbsUpThumpsDown = thumbsUpThumpsDown,
             oneToTen = oneToTen,
             opinion = opinion,
-            questionId = UUID.randomUUID(),
+            questionId = question.id.value,
             id = id.value,
             participantId = participant?.id?.value,
             isNew = isNew

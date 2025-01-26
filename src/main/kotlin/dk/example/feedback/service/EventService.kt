@@ -1,5 +1,6 @@
 package dk.example.feedback.service
 
+import dk.example.feedback.controller.FeedbackAlreadyGivenException
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
@@ -14,9 +15,9 @@ import dk.example.feedback.model.enumerations.Emoji
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
+import java.util.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 @Service
 @Transactional
@@ -61,17 +62,24 @@ class EventService(
 
     fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
         return eventRepo.getParticipantEvents(accountId).map {
-            it.toParticipantEvent(getPinCodeForEvent(eventId = it.id))
+            val accountDidSubmitFeedbackForEvent = eventRepo.accountDidSubmitFeedbackForEvent(it.id, accountId)
+            it.toParticipantEvent(
+                getPinCodeForEvent(eventId = it.id),
+                feedbackSubmitted = accountDidSubmitFeedbackForEvent
+            )
         }
     }
 
-    fun joinEvent(eventCode: String): ParticipantEventDto {
+    fun joinEvent(pinCode: String): ParticipantEventDto {
         val accountId = authContext.getAuthContext().accountId
-        val event = eventRepo.getEventByPinCode(eventCode)
+        val event = eventRepo.getEventByPinCode(pinCode)
         throwIfAccountIsManager(event, accountId)
-        eventRepo.addParticipantToEvent(eventId = event.id, accountId =  accountId, feedback = null)
+        throwIfAccountAlreadyJoinedEvent(event, accountId)
+        throwIfFeedbackAlreadySubmitted(event, accountId)
+        eventRepo.addParticipantToEvent(eventId = event.id, accountId = accountId, feedbackSubmitted = false)
         return event.toParticipantEvent(
-            pinCode = getPinCodeForEvent(event.id)
+            pinCode = getPinCodeForEvent(event.id),
+            feedbackSubmitted = false
         )
     }
 
@@ -87,10 +95,26 @@ class EventService(
         throw IllegalStateException("Failed to generate a unique pin code after multiple attempts")
     }
 
-    private fun throwIfAccountIsManager(events: EventEntity, accountId: String) {
-        val isManager = events.manager.id == accountId
+    private fun throwIfAccountIsManager(event: EventEntity, accountId: String) {
+        val isManager = event.manager.id == accountId
         if (isManager) {
             throw IllegalArgumentException("Owner of event cannot give feedback")
+        }
+    }
+
+    private fun throwIfFeedbackAlreadySubmitted(event: EventEntity, accountId: String) {
+        val events = eventRepo.getParticipantEvents(accountId)
+        val feedbackAlreadySubmitted = events.find { it.id == event.id }
+        if (feedbackAlreadySubmitted != null) {
+            throw FeedbackAlreadyGivenException()
+        }
+    }
+
+    private fun throwIfAccountAlreadyJoinedEvent(event: EventEntity, accountId: String) {
+        val participantEvents = eventRepo.getParticipantEvents(accountId)
+        val hasJoinedEvent = participantEvents.any { it.id == event.id }
+        if (hasJoinedEvent) {
+            throw FeedbackAlreadyGivenException()
         }
     }
 }
@@ -139,7 +163,7 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
     )
 }
 
-fun EventEntity.toParticipantEvent(pinCode: String): ParticipantEventDto {
+fun EventEntity.toParticipantEvent(pinCode: String, feedbackSubmitted: Boolean): ParticipantEventDto {
     return ParticipantEventDto(
         id = id,
         title = title,
@@ -155,7 +179,7 @@ fun EventEntity.toParticipantEvent(pinCode: String): ParticipantEventDto {
                 feedbackType = question.feedbackType
             )
         },
-        feedbackSubmited = feedback.isNotEmpty(),
+        feedbackSubmited = feedbackSubmitted,
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
     )
 }

@@ -14,7 +14,7 @@ class AccountService(
     val context: AuthContextHelper
 ) {
 
-    val logger = LoggerFactory.getLogger(AccountService::class.java)
+    private val logger = LoggerFactory.getLogger(AccountService::class.java)
 
     fun fetchAccounts(): List<AccountEntity> {
         return accountRepo.getAll()

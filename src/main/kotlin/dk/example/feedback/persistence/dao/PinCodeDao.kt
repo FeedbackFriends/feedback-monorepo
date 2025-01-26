@@ -1,26 +1,22 @@
 package dk.example.feedback.persistence.dao
 
 import dk.example.feedback.model.database.PinCodeEntity
-import dk.example.feedback.persistence.dao.utility.BaseCompanion
-import dk.example.feedback.persistence.dao.utility.CommonColumns
 import dk.example.feedback.persistence.table.PinCodeTable
-import java.util.*
+import org.jetbrains.exposed.dao.Entity
+import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 
-class PinCodeDao(id: EntityID<UUID>): CommonColumns<PinCodeEntity>(id, PinCodeTable) {
+class PinCodeDao(id: EntityID<String>) : Entity<String>(id) {
 
-    companion object : BaseCompanion<PinCodeEntity, PinCodeDao>(PinCodeTable)
+    companion object : EntityClass<String, PinCodeDao>(PinCodeTable)
 
-    var pinCode by PinCodeTable.pinCode
+    var pinCode by PinCodeTable.id
     var event by EventDao referencedOn PinCodeTable.event
-    
 
-    override fun toModel(): PinCodeEntity {
+    fun toModel(): PinCodeEntity {
         return PinCodeEntity(
-            id = id.value,
-            pinCode = pinCode,
-            createdAt = dateCreated,
-            updatedAt = lastUpdate,
+            pinCode = pinCode.value,
+            event = event.toModel()
         )
     }
 }
