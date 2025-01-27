@@ -1,11 +1,7 @@
 name: Release to Debian Server
 
 on:
-  workflow_run:
-    workflows:
-      - Build Docker Image # Name of the triggering workflow
-    types:
-      - completed
+  workflow_dispatch:
 
 jobs:
   release:
@@ -15,22 +11,67 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get Docker image tag from triggering workflow
+      - name: Get latest tag
+        id: get-latest-tag
         run: |
-          # Extract the tag from the triggering workflow
-          TAG=${{ github.event.workflow_run.head_commit.message }}
-          echo "Extracted tag: $TAG"
-          echo "TAG=$TAG" >> $GITHUB_ENV
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          echo "Latest tag: $LATEST_TAG"
 
       - name: Deploy to Debian server
         run: |
-          echo "Deploying tag ${{ env.TAG }} to Debian server"
+          echo "Deploying tag ${{ env.LATEST_TAG }} to Debian server"
 
           # SSH into the Debian server and run the deployment script
           ssh -o StrictHostKeyChecking=no -i "${{ secrets.SSH_PRIVATE_KEY }}" ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
           set -e
           echo "Pulling and running Docker image"
-          ./run-docker.sh ${{ env.TAG }}
+          ./run-docker.sh ${{ env.LATEST_TAG }}
+          EOF
+        env:
+          DEBIAN_IP: "${{ secrets.DEBIAN_IP }}"
+          DEBIAN_USER: "${{ secrets.DEB
+
+Here is the corrected workflow using **`workflow_dispatch`**, where the tag is provided as an input when triggering the workflow.
+
+### Workflow: `release-to-debian.yml`
+
+```yaml
+name: Release to Debian Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag of the Docker image to release'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate input tag
+        run: |
+          if [ -z "${{ github.event.inputs.tag }}" ]; then
+            echo "Error: Tag input is required."
+            exit 1
+          fi
+          echo "Using tag: ${{ github.event.inputs.tag }}"
+
+      - name: Deploy to Debian server
+        run: |
+          echo "Deploying tag ${{ github.event.inputs.tag }} to Debian server"
+
+          # SSH into the Debian server and run the deployment script
+          ssh -o StrictHostKeyChecking=no -i "${{ secrets.SSH_PRIVATE_KEY }}" ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
+          set -e
+          echo "Pulling and running Docker image"
+          ./run-docker.sh ${{ github.event.inputs.tag }}
           EOF
         env:
           DEBIAN_IP: "${{ secrets.DEBIAN_IP }}"
@@ -41,10 +82,10 @@ jobs:
         id: create-release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ env.TAG }}
-          release_name: Release ${{ env.TAG }}
+          tag_name: ${{ github.event.inputs.tag }}
+          release_name: Release ${{ github.event.inputs.tag }}
           body: |
-            Deployed Docker image tagged as ${{ env.TAG }} to the Debian server.
+            Deployed Docker image tagged as ${{ github.event.inputs.tag }} to the Debian server.
           draft: false
           prerelease: false
         env:
