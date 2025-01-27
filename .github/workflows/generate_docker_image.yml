@@ -70,12 +70,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Replace ${VERSION} in OpenAPI spec
-        run: |
-          export VERSION=${{ env.NEW_VERSION }}
-          envsubst '${VERSION}' < build/openapi.yaml > build/openapi_resolved.yaml
-          mv build/openapi_resolved.yaml build/openapi.yaml
-
       - name: Generate OpenAPI spec
         run: ./gradlew generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
         env:
