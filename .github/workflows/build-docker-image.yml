@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Build docker image
 
 on:
   workflow_dispatch:
@@ -75,15 +75,8 @@ jobs:
         env:
           VERSION: "${{ env.NEW_VERSION }}"
 
-      - name: Get commit hash
-        id: get-commit-hash
-        run: |
-          COMMIT_HASH=$(git rev-parse --short HEAD)
-          echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
-          echo "Commit hash: $COMMIT_HASH"
-
       - name: Build Docker image with Jib
-        run: ./gradlew jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}-${{ env.COMMIT_HASH }}
+        run: ./gradlew jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
           DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
           DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
