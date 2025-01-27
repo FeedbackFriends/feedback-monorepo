@@ -1,9 +1,11 @@
-name: Release to Debian Server
+name: Deploy
 
 on:
-  release:
-    types:
-      - created
+  workflow_dispatch:
+    inputs:
+      selected_tag:
+        description: "Select the tag to deploy"
+        required: true
 
 jobs:
   release:
@@ -13,10 +15,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get release tag
+      - name: Validate input tag
         run: |
-          echo "Release tag: ${{ github.event.release.tag_name }}"
-          echo "TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          echo "Selected tag: ${{ github.event.inputs.selected_tag }}"
+          echo "TAG=${{ github.event.inputs.selected_tag }}" >> $GITHUB_ENV
 
       - name: Deploy to Debian server
         run: |
@@ -39,7 +41,7 @@ jobs:
           curl -X PATCH \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }} \
+            https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.event.inputs.selected_tag }} \
             -d '{"make_latest": true}'
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
