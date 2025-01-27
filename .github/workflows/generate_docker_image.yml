@@ -75,9 +75,6 @@ jobs:
         env:
           VERSION: "${{ env.NEW_VERSION }}"
 
-      - name: Print OpenAPI YAML file content
-        run: cat build/openapi.yaml
-
       - name: Build Docker image with Jib
         run: ./gradlew jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
