@@ -2,46 +2,6 @@ name: Release to Debian Server
 
 on:
   workflow_dispatch:
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Get latest tag
-        id: get-latest-tag
-        run: |
-          git fetch --tags
-          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
-          echo "Latest tag: $LATEST_TAG"
-
-      - name: Deploy to Debian server
-        run: |
-          echo "Deploying tag ${{ env.LATEST_TAG }} to Debian server"
-
-          # SSH into the Debian server and run the deployment script
-          ssh -o StrictHostKeyChecking=no -i "${{ secrets.SSH_PRIVATE_KEY }}" ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
-          set -e
-          echo "Pulling and running Docker image"
-          ./run-docker.sh ${{ env.LATEST_TAG }}
-          EOF
-        env:
-          DEBIAN_IP: "${{ secrets.DEBIAN_IP }}"
-          DEBIAN_USER: "${{ secrets.DEB
-
-Here is the corrected workflow using **`workflow_dispatch`**, where the tag is provided as an input when triggering the workflow.
-
-### Workflow: `release-to-debian.yml`
-
-```yaml
-name: Release to Debian Server
-
-on:
-  workflow_dispatch:
     inputs:
       tag:
         description: 'Tag of the Docker image to release'
