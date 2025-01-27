@@ -73,7 +73,7 @@ jobs:
       - name: Generate OpenAPI spec
         run: ./gradlew generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
         env:
-          NEW_VERSION: "${{ env.NEW_VERSION }}"
+          VERSION: "${{ env.NEW_VERSION }}"
 
       - name: Print OpenAPI YAML file content
         run: cat build/openapi.yaml
