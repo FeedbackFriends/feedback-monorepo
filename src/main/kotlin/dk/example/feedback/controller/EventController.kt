@@ -48,10 +48,10 @@ class EventController(
         return eventService.joinEvent(pinCode = eventCode)
     }
 
-    @PostMapping
+    @PostMapping("resetNewFeedback/{eventId}")
     @PreAuthorize("hasAuthority('${Roles.MANAGER}')")
-    fun resetNewFeedback(@RequestBody evendId: UUID): Unit {
-        return eventService.resetNewFeedback(eventId = evendId)
+    fun resetNewFeedback(@PathVariable eventId: UUID): Unit {
+        return eventService.resetNewFeedback(eventId = eventId)
     }
 }
 
