@@ -1,9 +1,11 @@
 name: Generate OpenAPI Spec and Build Docker Image
 
 on:
-  push:
-    tags:
-      - '*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version for the tag (e.g., v1.0.0)'
+        required: true
 
 jobs:
   build-and-pr:
@@ -13,9 +15,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract tag name as VERSION
-        id: extract-version
-        run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Set input version as VERSION
+        id: set-version
+        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Check if tag already exists
+        id: check-tag
+        run: |
+          if git rev-parse "refs/tags/${{ env.VERSION }}" >/dev/null 2>&1; then
+            echo "Tag ${{ env.VERSION }} already exists."
+            exit 1
+          fi
+        env:
+          VERSION: "${{ env.VERSION }}"
+
+      - name: Create new tag
+        id: create-tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ env.VERSION }}
+          git push origin ${{ env.VERSION }}
+        env:
+          VERSION: "${{ env.VERSION }}"
 
       - name: Set up JDK
         uses: actions/setup-java@v4
