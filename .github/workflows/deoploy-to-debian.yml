@@ -1,11 +1,11 @@
-name: Deploy to Debian Server
+name: Release to Debian Server
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Tag of the Docker image to release'
-        required: true
+  workflow_run:
+    workflows:
+      - Build Docker Image # Name of the triggering workflow
+    types:
+      - completed
 
 jobs:
   release:
@@ -15,15 +15,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Get Docker image tag from triggering workflow
+        run: |
+          # Extract the tag from the triggering workflow
+          TAG=${{ github.event.workflow_run.head_commit.message }}
+          echo "Extracted tag: $TAG"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
       - name: Deploy to Debian server
         run: |
-          echo "Deploying tag ${{ github.event.inputs.tag }} to Debian server"
+          echo "Deploying tag ${{ env.TAG }} to Debian server"
 
           # SSH into the Debian server and run the deployment script
           ssh -o StrictHostKeyChecking=no -i "${{ secrets.SSH_PRIVATE_KEY }}" ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
           set -e
           echo "Pulling and running Docker image"
-          ./run-docker.sh ${{ github.event.inputs.tag }}
+          ./run-docker.sh ${{ env.TAG }}
           EOF
         env:
           DEBIAN_IP: "${{ secrets.DEBIAN_IP }}"
@@ -34,10 +41,10 @@ jobs:
         id: create-release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.event.inputs.tag }}
-          release_name: Release ${{ github.event.inputs.tag }}
+          tag_name: ${{ env.TAG }}
+          release_name: Release ${{ env.TAG }}
           body: |
-            Deployed Docker image tagged as ${{ github.event.inputs.tag }} to the Debian server.
+            Deployed Docker image tagged as ${{ env.TAG }} to the Debian server.
           draft: false
           prerelease: false
         env:
