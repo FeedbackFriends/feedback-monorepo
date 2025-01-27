@@ -1,11 +1,9 @@
 name: Release to Debian Server
 
 on:
-  workflow_run:
-    workflows:
-      - Build Docker Image # Name of the triggering workflow
+  release:
     types:
-      - completed
+      - created
 
 jobs:
   release:
@@ -15,12 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get Docker image tag from triggering workflow
+      - name: Get release tag
         run: |
-          # Extract the tag from the triggering workflow
-          TAG=${{ github.event.workflow_run.head_commit.message }}
-          echo "Extracted tag: $TAG"
-          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "Release tag: ${{ github.event.release.tag_name }}"
+          echo "TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
 
       - name: Deploy to Debian server
         run: |
@@ -36,26 +32,14 @@ jobs:
           DEBIAN_IP: "${{ secrets.DEBIAN_IP }}"
           DEBIAN_USER: "${{ secrets.DEBIAN_USER }}"
           SSH_PRIVATE_KEY: "${{ secrets.SSH_PRIVATE_KEY }}"
-
-      - name: Create GitHub Release
-        id: create-release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ env.TAG }}
-          release_name: Release ${{ env.TAG }}
-          body: |
-            Deployed Docker image tagged as ${{ env.TAG }} to the Debian server.
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          TAG: "${{ env.TAG }}"
 
       - name: Set as Latest Release
         run: |
           curl -X PATCH \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create-release.outputs.id }} \
+            https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }} \
             -d '{"make_latest": true}'
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
