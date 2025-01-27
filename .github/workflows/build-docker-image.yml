@@ -1,4 +1,4 @@
-name: Build Docker Image - ${{ env.NEW_VERSION }}
+name: Build Docker Image - VERSION_X
 
 on:
   workflow_dispatch:
@@ -63,6 +63,12 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag ${{ env.NEW_VERSION }}
           git push origin ${{ env.NEW_VERSION }}
+
+      - name: Set dynamic run name
+        run: |
+          echo "::group::Setting workflow name dynamically"
+          echo "::set-output name=run_name::Build Docker Image - ${{ env.NEW_VERSION }}"
+          echo "::endgroup::"
 
       - name: Set up JDK
         uses: actions/setup-java@v4
