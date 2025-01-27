@@ -1,7 +1,6 @@
 package dk.example.feedback
 
 import ControllerPaths
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import dk.example.feedback.model.dto.SessionDto
 import dk.example.feedback.model.payloads.CreateAccountInput
 import dk.example.feedback.persistence.table.AccountTable

@@ -1,6 +1,5 @@
 package dk.example.feedback.model.dto
 
-import dk.example.feedback.model.*
 import java.time.OffsetDateTime
 
 data class FeedbackSessionDto(
