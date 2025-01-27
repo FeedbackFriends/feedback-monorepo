@@ -3,9 +3,15 @@ name: Generate OpenAPI Spec and Build Docker Image
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version for the tag (e.g., v1.0.0)'
+      version_type:
+        description: 'Type of version increment (major, minor, patch)'
         required: true
+        default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 
 jobs:
   build-and-pr:
@@ -15,29 +21,54 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set input version as VERSION
-        id: set-version
-        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+      - name: Get current version
+        id: get-current-version
+        run: |
+          CURRENT_VERSION=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "0.0.0")
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+        env:
+          GIT_FETCH_TAGS: "true"
+
+      - name: Calculate new version
+        id: calculate-version
+        run: |
+          VERSION_TYPE=${{ github.event.inputs.version_type }}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.CURRENT_VERSION }}"
+          if [ "$VERSION_TYPE" = "patch" ]; then
+            PATCH=$((PATCH + 1))
+          elif [ "$VERSION_TYPE" = "minor" ]; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          elif [ "$VERSION_TYPE" = "major" ]; then
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          fi
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "New version: $NEW_VERSION"
+        env:
+          CURRENT_VERSION: "${{ env.CURRENT_VERSION }}"
 
       - name: Check if tag already exists
         id: check-tag
         run: |
-          if git rev-parse "refs/tags/${{ env.VERSION }}" >/dev/null 2>&1; then
-            echo "Tag ${{ env.VERSION }} already exists."
+          if git rev-parse "refs/tags/${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
+            echo "Tag ${{ env.NEW_VERSION }} already exists."
             exit 1
           fi
         env:
-          VERSION: "${{ env.VERSION }}"
+          NEW_VERSION: "${{ env.NEW_VERSION }}"
 
       - name: Create new tag
         id: create-tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag ${{ env.VERSION }}
-          git push origin ${{ env.VERSION }}
+          git tag ${{ env.NEW_VERSION }}
+          git push origin ${{ env.NEW_VERSION }}
         env:
-          VERSION: "${{ env.VERSION }}"
+          NEW_VERSION: "${{ env.NEW_VERSION }}"
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -46,15 +77,15 @@ jobs:
           distribution: 'temurin'
 
       - name: Generate OpenAPI spec
-        run: ./gradlew generateOpenApiDocs -Pversion=${{ env.VERSION }}
+        run: ./gradlew generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
         env:
-          VERSION: "${{ env.VERSION }}"
+          NEW_VERSION: "${{ env.NEW_VERSION }}"
 
       - name: Print OpenAPI YAML file content
         run: cat build/openapi.yaml
 
       - name: Build Docker image with Jib
-        run: ./gradlew jib --image=nicolaidam/feedback:${{ env.VERSION }}
+        run: ./gradlew jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
           DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
           DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
