@@ -24,7 +24,6 @@ jobs:
       - name: Get current version
         id: get-current-version
         run: |
-          # Fetch all tags and get the latest tag, defaulting to 0.0.0 if none exist
           git fetch --tags
           CURRENT_VERSION=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "0.0.0")
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
@@ -70,6 +69,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Replace ${VERSION} in OpenAPI spec
+        run: |
+          export VERSION=${{ env.NEW_VERSION }}
+          envsubst '${VERSION}' < build/openapi.yaml > build/openapi_resolved.yaml
+          mv build/openapi_resolved.yaml build/openapi.yaml
 
       - name: Generate OpenAPI spec
         run: ./gradlew generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
