@@ -14,7 +14,7 @@ on:
           - patch
 
 jobs:
-  build-and-pr:
+  build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +24,11 @@ jobs:
       - name: Get current version
         id: get-current-version
         run: |
+          # Fetch all tags and get the latest tag, defaulting to 0.0.0 if none exist
+          git fetch --tags
           CURRENT_VERSION=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "0.0.0")
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
-        env:
-          GIT_FETCH_TAGS: "true"
+          echo "Current version: $CURRENT_VERSION"
 
       - name: Calculate new version
         id: calculate-version
@@ -46,29 +47,23 @@ jobs:
           fi
           NEW_VERSION="$MAJOR.$MINOR.$PATCH"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "New version: $NEW_VERSION"
-        env:
-          CURRENT_VERSION: "${{ env.CURRENT_VERSION }}"
+          echo "Calculated new version: $NEW_VERSION"
 
       - name: Check if tag already exists
         id: check-tag
         run: |
           if git rev-parse "refs/tags/${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
-            echo "Tag ${{ env.NEW_VERSION }} already exists."
-            exit 1
+            echo "Tag ${{ env.NEW_VERSION }} already exists. Skipping tag creation."
+            exit 0
           fi
-        env:
-          NEW_VERSION: "${{ env.NEW_VERSION }}"
 
-      - name: Create new tag
-        id: create-tag
+      - name: Create and push new tag
+        if: success() && steps.check-tag.outcome != 'skipped'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag ${{ env.NEW_VERSION }}
           git push origin ${{ env.NEW_VERSION }}
-        env:
-          NEW_VERSION: "${{ env.NEW_VERSION }}"
 
       - name: Set up JDK
         uses: actions/setup-java@v4
