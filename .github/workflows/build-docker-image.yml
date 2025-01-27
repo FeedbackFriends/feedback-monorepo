@@ -1,4 +1,4 @@
-name: Build docker image
+name: Build Docker Image - ${{ env.NEW_VERSION }}
 
 on:
   workflow_dispatch:
