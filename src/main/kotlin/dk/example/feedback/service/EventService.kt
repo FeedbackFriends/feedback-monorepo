@@ -83,6 +83,12 @@ class EventService(
         )
     }
 
+    fun resetNewFeedback(eventId: UUID) {
+        val event = eventRepo.getEvent(eventId)
+        authContext.verifyLoggedInAccountHasId(event.manager.id)
+        eventRepo.resetNewFeedbackForEvent(eventId)
+    }
+
     private fun getPinCodeForEvent(eventId: UUID): String {
         return eventRepo.getPinCodeForEvent(eventId)
     }

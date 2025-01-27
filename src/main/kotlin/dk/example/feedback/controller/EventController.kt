@@ -47,5 +47,11 @@ class EventController(
     fun acceptEvent(@PathVariable eventCode: String, @AuthenticationPrincipal principal: Jwt): ParticipantEventDto {
         return eventService.joinEvent(pinCode = eventCode)
     }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('${Roles.MANAGER}')")
+    fun resetNewFeedback(@RequestBody evendId: UUID): ManagerEventDto {
+        return eventService.resetNewFeedback(eventId = evendId)
+    }
 }
 
