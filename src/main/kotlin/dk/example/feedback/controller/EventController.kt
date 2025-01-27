@@ -50,7 +50,7 @@ class EventController(
 
     @PostMapping
     @PreAuthorize("hasAuthority('${Roles.MANAGER}')")
-    fun resetNewFeedback(@RequestBody evendId: UUID): ManagerEventDto {
+    fun resetNewFeedback(@RequestBody evendId: UUID): Unit {
         return eventService.resetNewFeedback(eventId = evendId)
     }
 }
