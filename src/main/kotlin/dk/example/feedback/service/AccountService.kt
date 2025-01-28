@@ -11,14 +11,11 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class AccountService(
     val accountRepo: AccountRepo,
-    val context: AuthContextHelper
+    val context: AuthContextHelper,
+    private val authContextHelper: AuthContextHelper
 ) {
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)
-
-    fun fetchAccounts(): List<AccountEntity> {
-        return accountRepo.getAll()
-    }
 
     fun fetchAccount(accountId: String): AccountEntity? {
         return accountRepo.getAccount(accountId)
@@ -34,7 +31,6 @@ class AccountService(
         )
     }
 
-
     fun upsertAccount(
         accountId: String,
         name: String?,
@@ -42,6 +38,7 @@ class AccountService(
         phoneNumber: String?,
     ) {
         val accountExists = accountRepo.accountExists(accountId)
+        authContextHelper.verifyLoggedInAccountHasId(id = accountId)
         if (accountExists) {
             accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
         } else {
@@ -55,6 +52,7 @@ class AccountService(
     }
 
     fun deleteAccount(accountId: String) {
+        authContextHelper.verifyLoggedInAccountHasId(id = accountId)
         accountRepo.deleteAccount(accountId)
     }
 

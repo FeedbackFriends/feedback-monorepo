@@ -24,6 +24,7 @@ interface FirebaseService {
         val displayName: String?,
         val phoneNumber: String?,
         val email: String?,
+        val photoUrl: String?
     )
 
     data class Message(
@@ -63,7 +64,8 @@ class FirebaseServiceLive: FirebaseService {
         return FirebaseService.User(
             displayName = userRecord.displayName,
             phoneNumber = userRecord.phoneNumber,
-            email = userRecord.email
+            email = userRecord.email,
+            photoUrl = userRecord.photoUrl
         )
     }
 
@@ -74,20 +76,13 @@ class FirebaseServiceLive: FirebaseService {
     override fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?) {
         FirebaseAuth.getInstance().updateUser(
             UserRecord.UpdateRequest(userId)
-                .setEmail(email)
-                .setDisplayName(displayName)
-                .setPhoneNumber(phoneNumber)
+                .takeIf { email != null }?.setEmail(email)
+                .takeIf { displayName != null }?.setDisplayName(displayName)
+                .takeIf { phoneNumber != null }?.setPhoneNumber(phoneNumber)
         )
     }
 
     override fun setUserClaims(userId: String, requestedClaim: Claim?) {
-//        val requestedClaims: MutableList<String> = mutableListOf()
-//        requestedClaim?.let { requestedClaims.add(it.name) }
-
-
-//        val claims = mapOf(
-//            "custom_claims" to requestedClaim?.name
-//        )
         logger.info("Setting custom claim ${requestedClaim?.name} for user $userId")
         FirebaseAuth.getInstance()
             .setCustomUserClaimsAsync(userId, mapOf("custom_claims" to requestedClaim?.toString()))

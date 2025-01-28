@@ -52,11 +52,19 @@ class AccountController(
         val accountId = principal.subject
         firebaseService.updateUser(
             userId = accountId,
-            email = input.accountDetails.email,
-            displayName = input.accountDetails.name,
-            phoneNumber = input.accountDetails.phoneNumber
+            email = input.email,
+            displayName = input.name,
+            phoneNumber = input.phoneNumber
         )
-        firebaseService.setUserClaims(userId = accountId, requestedClaim = input.requestedClaim)
+        if (input.requestedClaim != null) {
+            firebaseService.setUserClaims(userId = accountId, requestedClaim = input.requestedClaim)
+        }
+        accountService.upsertAccount(
+            accountId = accountId,
+            name = input.name,
+            email = input.email,
+            phoneNumber = input.phoneNumber
+        )
     }
 
     @PutMapping("/fcmToken")
