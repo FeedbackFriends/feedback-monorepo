@@ -65,14 +65,14 @@ class AccountController(
         )
     }
 
-    @PutMapping
+    @PutMapping("/claim")
     @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")
     fun updateClaim(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: UpdateClaimInput,
     ) {
         val accountId = principal.subject
-        firebaseService.setUserClaims(userId = accountId, requestedClaim = input.claim)
+        return firebaseService.setUserClaims(userId = accountId, requestedClaim = input.claim)
     }
 
     @PutMapping("/fcmToken")
