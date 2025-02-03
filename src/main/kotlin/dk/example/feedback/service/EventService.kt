@@ -29,7 +29,7 @@ class EventService(
     fun createEvent(eventInput: EventInput): ManagerEventDto {
         val generatedPinCode = generateUniquePinCode()
         val managerId = authContext.getAuthContext().accountId
-        val eventEntity = eventRepo.createEvent(eventInput, generatedPinCode, managerId)
+        val eventEntity = eventRepo.persistEvent(eventInput, generatedPinCode, managerId)
         return eventEntity.toManagerEvent(
             pinCode = generatedPinCode
         )
@@ -61,10 +61,11 @@ class EventService(
     }
 
     fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
-        return eventRepo.getParticipantEvents(accountId).map {
-            val accountDidSubmitFeedbackForEvent = eventRepo.accountDidSubmitFeedbackForEvent(it.id, accountId)
-            it.toParticipantEvent(
-                getPinCodeForEvent(eventId = it.id),
+        val events = eventRepo.getParticipantEvents(accountId)
+        return events.map { event ->
+            val accountDidSubmitFeedbackForEvent = eventRepo.accountDidSubmitFeedbackForEvent(event.id, accountId)
+            event.toParticipantEvent(
+                getPinCodeForEvent(eventId = event.id),
                 feedbackSubmitted = accountDidSubmitFeedbackForEvent
             )
         }
@@ -76,7 +77,7 @@ class EventService(
         throwIfAccountIsManager(event, accountId)
         throwIfAccountAlreadyJoinedEvent(event, accountId)
         throwIfFeedbackAlreadySubmitted(event, accountId)
-        eventRepo.addParticipantToEvent(eventId = event.id, accountId = accountId, feedbackSubmitted = false)
+        eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = false)
         return event.toParticipantEvent(
             pinCode = getPinCodeForEvent(event.id),
             feedbackSubmitted = false

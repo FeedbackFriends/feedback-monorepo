@@ -4,7 +4,6 @@ import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.EventDao
-import dk.example.feedback.persistence.dao.EventParticipantDao
 import dk.example.feedback.persistence.dao.PinCodeDao
 import dk.example.feedback.persistence.dao.QuestionDao
 import dk.example.feedback.persistence.table.EventParticipantTable
@@ -20,7 +19,9 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -31,7 +32,7 @@ class EventRepo {
 
     private val logger = LoggerFactory.getLogger(EventRepo::class.java)
 
-    fun cleanUpPinCodesOlderThan(duration: Duration) {
+    fun cleanUpPinCodesWithStopTimeOlderThan(duration: Duration) {
         logger.info("Started cleaning up pin codes job")
         val allEvents = EventDao.all()
         val now = OffsetDateTime.now(ZoneOffset.UTC)
@@ -54,7 +55,7 @@ class EventRepo {
         return optionalFoundPinCode?.pinCode?.value == pinCode
     }
 
-    fun createEvent(eventInput: EventInput, generatedPinCode: String, managerId: String): EventEntity {
+    fun persistEvent(eventInput: EventInput, generatedPinCode: String, managerId: String): EventEntity {
 
         val managerAccount = AccountDao.findById(managerId) ?: throw Exception("Could not find manager id: $managerId")
         val createdEvent = EventDao.new {
@@ -99,26 +100,52 @@ class EventRepo {
         return EventDao.findById(eventId)?.toModel() ?: throw Exception("Could not find event id: $eventId")
     }
 
+    fun getEvents(eventIds: List<UUID>): List<EventEntity> {
+        return eventIds.map {
+            EventDao.findById(it)
+        }.mapNotNull {
+            it?.toModel()
+        }
+    }
+
     fun getManagerEvents(managerId: String): List<EventEntity> {
         return EventDao.find { EventTable.manager eq managerId }.map { it.toModel() }
     }
 
     fun getParticipantEvents(participantId: String): List<EventEntity> {
-       return EventParticipantDao.find { EventParticipantTable.participant eq participantId }
-           .map { it.event.toModel() }
+        val ids = EventParticipantTable
+            .selectAll()
+            .where { EventParticipantTable.participant eq participantId }
+            .map {
+                it[EventParticipantTable.event].value
+            }
+        return getEvents(ids)
     }
 
     fun accountDidSubmitFeedbackForEvent(eventId: UUID, accountId: String): Boolean {
-        return EventParticipantDao.find {
-            (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId)
-        }.firstOrNull()?.feedbackSubmitted ?: false
+        return EventParticipantTable
+            .selectAll()
+            .where { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
+            .singleOrNull()
+            ?.get(EventParticipantTable.feedbackSubmitted)
+            ?: false
     }
 
-    fun addParticipantToEvent(eventId: UUID, accountId: String, feedbackSubmitted: Boolean) {
-        EventParticipantTable.upsert {
-            it[EventParticipantTable.event] = eventId
-            it[EventParticipantTable.participant] = accountId
-            it[EventParticipantTable.feedbackSubmitted] = feedbackSubmitted
+    fun updateOrCreateParticipant(eventId: UUID, accountId: String, feedbackSubmitted: Boolean) {
+        val existingTable = EventParticipantTable
+            .selectAll()
+            .where { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
+            .singleOrNull()
+        if (existingTable == null) {
+            EventParticipantTable.insert {
+                it[event] = eventId
+                it[participant] = accountId
+                it[EventParticipantTable.feedbackSubmitted] = feedbackSubmitted
+            }
+        } else {
+            EventParticipantTable.update({ (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }) {
+                it[EventParticipantTable.feedbackSubmitted] = feedbackSubmitted
+            }
         }
     }
 

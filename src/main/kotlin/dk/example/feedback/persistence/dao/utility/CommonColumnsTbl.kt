@@ -8,3 +8,8 @@ abstract class CommonColumnsTbl(name: String, idColumn: String = "id") : UUIDTab
     val dateCreated = timestampWithTimeZone("created_at").clientDefault { OffsetDateTime.now() }
     val lastUpdated = timestampWithTimeZone("updated_at").clientDefault { OffsetDateTime.now() }
 }
+
+//abstract class CommonColumnsTbl2(name: String, idColumn: String = "id", table: Table)<T: Table> : T {
+//    val dateCreated = timestampWithTimeZone("created_at").clientDefault { OffsetDateTime.now() }
+//    val lastUpdated = timestampWithTimeZone("updated_at").clientDefault { OffsetDateTime.now() }
+//}

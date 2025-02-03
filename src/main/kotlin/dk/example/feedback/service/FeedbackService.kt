@@ -63,7 +63,7 @@ class FeedbackService(
             managerId = managerId,
             eventId = event.id
         )
-        eventRepo.addParticipantToEvent(eventId = event.id, accountId = accountId, feedbackSubmitted = true)
+        eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = true)
         val shouldPresentRatingPrompt = shouldPresentRatingPrompt(accountId = accountId)
         if (shouldPresentRatingPrompt) {
             accountRepo.markRatingPrompted(accountId = accountId)

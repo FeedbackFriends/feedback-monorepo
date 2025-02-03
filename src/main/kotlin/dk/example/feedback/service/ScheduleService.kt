@@ -13,6 +13,6 @@ class ScheduleService(
     @Scheduled(cron = "0 0 0 * * *", zone = "Europe/Copenhagen")
     fun cleanUpPinsScheduler() {
         val sevenDays = Duration.ofDays(7)
-        eventRepo.cleanUpPinCodesOlderThan(duration = sevenDays)
+        eventRepo.cleanUpPinCodesWithStopTimeOlderThan(duration = sevenDays)
     }
 }
