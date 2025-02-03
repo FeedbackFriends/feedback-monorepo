@@ -7,6 +7,7 @@ import dk.example.feedback.model.dto.SessionDto
 import dk.example.feedback.model.payloads.CreateAccountInput
 import dk.example.feedback.model.payloads.ModifyAccountInput
 import dk.example.feedback.model.payloads.SetFcmTokenInput
+import dk.example.feedback.model.payloads.UpdateClaimInput
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.Claim
 import dk.example.feedback.service.FirebaseService
@@ -56,15 +57,22 @@ class AccountController(
             displayName = input.name,
             phoneNumber = input.phoneNumber
         )
-        if (input.requestedClaim != null) {
-            firebaseService.setUserClaims(userId = accountId, requestedClaim = input.requestedClaim)
-        }
         accountService.upsertAccount(
             accountId = accountId,
             name = input.name,
             email = input.email,
             phoneNumber = input.phoneNumber
         )
+    }
+
+    @PutMapping
+    @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")
+    fun updateClaim(
+        @AuthenticationPrincipal principal: Jwt,
+        @RequestBody input: UpdateClaimInput,
+    ) {
+        val accountId = principal.subject
+        firebaseService.setUserClaims(userId = accountId, requestedClaim = input.claim)
     }
 
     @PutMapping("/fcmToken")
