@@ -35,7 +35,7 @@ class AccountController(
     private val logger = LoggerFactory.getLogger(AccountController::class.java)
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")
+    @PreAuthorize("hasAnyAuthority('${Roles.MANAGER}', '${Roles.PARTICIPANT}')")
     fun deleteAccount(
         @AuthenticationPrincipal principal: Jwt,
     ) {
@@ -45,28 +45,23 @@ class AccountController(
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")
+    @PreAuthorize("hasAnyAuthority('${Roles.MANAGER}', '${Roles.PARTICIPANT}')")
     fun modifyAccount(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: ModifyAccountInput,
     ) {
         val accountId = principal.subject
-        firebaseService.updateUser(
-            userId = accountId,
-            email = input.email,
-            displayName = input.name,
-            phoneNumber = input.phoneNumber
-        )
-        accountService.upsertAccount(
+        accountService.updateAccount(
             accountId = accountId,
             name = input.name,
             email = input.email,
             phoneNumber = input.phoneNumber
         )
+
     }
 
     @PutMapping("/claim")
-    @PreAuthorize("hasAuthority('${Roles.MANAGER}' or '${Roles.PARTICIPANT}')")
+    @PreAuthorize("hasAnyAuthority('${Roles.MANAGER}', '${Roles.PARTICIPANT}')")
     fun updateClaim(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: UpdateClaimInput,
@@ -93,17 +88,11 @@ class AccountController(
             // Firebase user is anonymous if null
             null -> {
                 logger.info("Creating anonymous account for ${authContext.accountId} since custom claim is null")
-                accountService.createAnonymousAccountIfNotExist()
+                accountService.createAnonymousAccount()
             }
             Claim.Manager, Claim.Participant -> {
                 logger.info("Creating account for ${authContext.accountId} since requested custom claim is $input.requestedClaim")
-                val firebaseUser = firebaseService.getUser(userId = authContext.accountId)
-                accountService.upsertAccount(
-                    accountId = authContext.accountId,
-                    name = firebaseUser.displayName,
-                    email = firebaseUser.email,
-                    phoneNumber = firebaseUser.phoneNumber,
-                )
+                accountService.createAccount()
             }
         }
         return sessionService.getSession()

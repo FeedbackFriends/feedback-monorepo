@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional
 class AccountService(
     val accountRepo: AccountRepo,
     val context: AuthContextHelper,
-    private val authContextHelper: AuthContextHelper
+    private val authContext: AuthContextHelper,
+    val firebaseService: FirebaseService,
 ) {
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)
@@ -21,7 +22,7 @@ class AccountService(
         return accountRepo.getAccount(accountId)
     }
 
-    fun createAnonymousAccountIfNotExist() {
+    fun createAnonymousAccount() {
         val accountId = context.getAuthContext().accountId
         accountRepo.createOrGetAccount(
             accountId = accountId,
@@ -31,28 +32,30 @@ class AccountService(
         )
     }
 
-    fun upsertAccount(
+    fun updateAccount(
         accountId: String,
         name: String?,
         email: String?,
         phoneNumber: String?,
     ) {
-        val accountExists = accountRepo.accountExists(accountId)
-        authContextHelper.verifyLoggedInAccountHasId(id = accountId)
-        if (accountExists) {
-            accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
-        } else {
-            accountRepo.createOrGetAccount(
-                accountId = accountId,
-                name = name,
-                email = email,
-                phoneNumber = phoneNumber,
-            )
-        }
+        authContext.verifyLoggedInAccountHasId(id = accountId)
+        accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
+    }
+
+    fun createAccount() {
+        val accountId = context.getAuthContext().accountId
+        authContext.verifyLoggedInAccountHasId(id = accountId)
+        val firebaseUser = firebaseService.getUser(userId = accountId)
+        accountRepo.createOrGetAccount(
+            accountId = accountId,
+            name = firebaseUser.displayName,
+            email = firebaseUser.email,
+            phoneNumber = firebaseUser.phoneNumber,
+        )
     }
 
     fun deleteAccount(accountId: String) {
-        authContextHelper.verifyLoggedInAccountHasId(id = accountId)
+        authContext.verifyLoggedInAccountHasId(id = accountId)
         accountRepo.deleteAccount(accountId)
     }
 

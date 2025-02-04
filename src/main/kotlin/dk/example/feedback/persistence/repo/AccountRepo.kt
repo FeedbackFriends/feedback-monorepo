@@ -45,15 +45,9 @@ class AccountRepo {
     ): AccountEntity {
         val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found")
         found.apply {
-            if (name != null) {
-                this.name = name
-            }
-            if (email != null) {
-                this.email = email
-            }
-            if (phoneNumber != null) {
-                this.phoneNumber = phoneNumber
-            }
+            this.name = name
+            this.email = email
+            this.phoneNumber = phoneNumber
             this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
         }
         return found.toModel()
