@@ -1,11 +1,15 @@
 [versions]
-springboot = "3.2.5"
-kotlin = "1.9.21"
+springboot = "3.4.2"
+kotlin = "2.0.10"
 jackson = "2.16.1"
 okhttp = "4.12.0"
 junit-jupiter = "5.10.1"
-spring-security = "6.3.1"
-exposed = "0.53.0"
+spring-security = "6.4.2"
+exposed = "0.59.0"
+firebase = "9.4.3"
+liquibase = "4.31.0"
+postgresql = "42.7.5"
+h2 = "2.3.232"
 
 [libraries]
 springboot-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "springboot" }
@@ -43,9 +47,9 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.10.1"
 
-liquibase = "org.liquibase:liquibase-core:4.29.1"
-postgresql = "org.postgresql:postgresql:42.7.1"
-h2database = "com.h2database:h2:2.3.230"
+liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+h2database = { module = "com.h2database:h2", version.ref = "h2" }
 
 micrometer-registry-prometheus = "io.micrometer:micrometer-registry-prometheus:1.12.1"
 kotlinx-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
@@ -53,7 +57,7 @@ apm-agent-attach = "co.elastic.apm:apm-agent-attach:1.45.0"
 kotlin-mustache = "net.pwall.mustache:kotlin-mustache:0.11"
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 guava = "com.google.guava:guava:33.0.0-jre"
-firebase = "com.google.firebase:firebase-admin:9.2.0"
+firebase = { module = "com.google.firebase:firebase-admin", version.ref = "firebase" }
 
 [bundles]
 exposed = ["exposed-dao", "exposed-javatime", "exposed-springboot"]

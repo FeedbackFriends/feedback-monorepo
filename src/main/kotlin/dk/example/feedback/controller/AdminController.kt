@@ -112,12 +112,17 @@ class AdminController(val accountService: AccountService, val feedbackConfig: Fe
         val expiresIn: String
     )
 
+    data class MockTokenResponse(
+        val firebaseResponse: FirebaseResponseDto,
+        val token: String
+    )
+
     data class MockIdTokenRequestDto(
         val claim: Claim?
     )
 
     @PostMapping("/mockIdToken")
-    fun mockIdToken(@RequestBody input: MockIdTokenRequestDto): FirebaseResponseDto {
+    fun mockIdToken(@RequestBody input: MockIdTokenRequestDto): MockTokenResponse {
 
         val uid = "mock_id"
 
@@ -150,7 +155,7 @@ class AdminController(val accountService: AccountService, val feedbackConfig: Fe
         return signInWithCustomToken(token)
     }
 
-    fun signInWithCustomToken(token: String): FirebaseResponseDto {
+    fun signInWithCustomToken(token: String): MockTokenResponse {
         val apiKey = feedbackConfig.firebaseApiKey
         val url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=$apiKey"
 
@@ -163,7 +168,7 @@ class AdminController(val accountService: AccountService, val feedbackConfig: Fe
         val response: ResponseEntity<FirebaseResponseDto> = restTemplate.postForEntity(url = url, request = body)
 
         if (response.statusCode.is2xxSuccessful) {
-            return response.body!!
+            return MockTokenResponse(firebaseResponse = response.body!!, token = token)
         }
         throw RuntimeException("Failed to sign in with custom token")
     }
