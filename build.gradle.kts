@@ -2,12 +2,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.2.1"
+    alias(libs.plugins.springboot) version "3.2.1"
 	id("io.spring.dependency-management") version "1.1.4"
-	kotlin("jvm") version "2.0.10"
-	kotlin("plugin.spring") version "2.0.10"
+    kotlin("jvm") version libs.versions.kotlin
+    kotlin("plugin.spring") version libs.versions.kotlin
 	id("com.google.cloud.tools.jib") version "3.4.4"
 	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
+//	id("io.gitlab.arturbosch.detekt") version "1.23.7"
 }
 
 group = "dk.nicolai"
@@ -92,6 +93,10 @@ jib {
 		}
 	}
 }
+
+//detekt {
+//	config.setFrom(files("config/detekt.yml"))
+//}
 
 openApi {
 	apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")

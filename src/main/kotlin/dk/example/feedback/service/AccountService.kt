@@ -18,18 +18,23 @@ class AccountService(
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)
 
-    fun fetchAccount(accountId: String): AccountEntity? {
-        return accountRepo.getAccount(accountId)
+    fun createAccount(requestedClaim: Claim?) {
+        when (requestedClaim) {
+            // Firebase user is anonymous if null
+            null -> {
+                logger.info("Creating anonymous account for ${authContext.getAuthContext().accountId} since custom claim is null")
+                createAnonymousAccount()
+            }
+
+            Claim.Manager, Claim.Participant -> {
+                logger.info("Creating account for ${authContext.getAuthContext().accountId} since requested custom claim is $requestedClaim")
+                createOrGetAccount()
+            }
+        }
     }
 
-    fun createAnonymousAccount() {
-        val accountId = context.getAuthContext().accountId
-        accountRepo.createOrGetAccount(
-            accountId = accountId,
-            name = null,
-            email = null,
-            phoneNumber = null,
-        )
+    fun fetchAccount(accountId: String): AccountEntity? {
+        return accountRepo.getAccount(accountId)
     }
 
     fun updateAccount(
@@ -42,7 +47,16 @@ class AccountService(
         accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
     }
 
-    fun createAccount() {
+    fun updateAccountFcmToken(fcmToken: String?) {
+        accountRepo.updateFcmToken(accountId = context.getAuthContext().accountId, fcmToken = fcmToken)
+    }
+
+    fun deleteAccount(accountId: String) {
+        authContext.verifyLoggedInAccountHasId(id = accountId)
+        accountRepo.deleteAccount(accountId)
+    }
+
+    private fun createOrGetAccount() {
         val accountId = context.getAuthContext().accountId
         authContext.verifyLoggedInAccountHasId(id = accountId)
         val firebaseUser = firebaseService.getUser(userId = accountId)
@@ -54,12 +68,13 @@ class AccountService(
         )
     }
 
-    fun deleteAccount(accountId: String) {
-        authContext.verifyLoggedInAccountHasId(id = accountId)
-        accountRepo.deleteAccount(accountId)
-    }
-
-    fun updateAccountFcmToken(fcmToken: String?) {
-        accountRepo.updateFcmToken(accountId = context.getAuthContext().accountId, fcmToken = fcmToken)
+    private fun createAnonymousAccount() {
+        val accountId = context.getAuthContext().accountId
+        accountRepo.createOrGetAccount(
+            accountId = accountId,
+            name = null,
+            email = null,
+            phoneNumber = null,
+        )
     }
 }

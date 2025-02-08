@@ -1,6 +1,5 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.controller.FeedbackAlreadyGivenException
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
@@ -8,10 +7,12 @@ import dk.example.feedback.model.dto.FeedbackSessionDto
 import dk.example.feedback.model.dto.OwnerInfoDto
 import dk.example.feedback.model.dto.ParticipantQuestionDto
 import dk.example.feedback.model.dto.SubmitFeedbackResponseDto
+import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.model.payloads.FeedbackInput
 import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
+import java.util.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -29,7 +30,7 @@ class FeedbackService(
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val feedback = event.feedback
         val manager = event.manager
-        throwIfAccountAlreadyGivenFeedback(feedback = feedback, accountId = accountId)
+        throwIfAccountAlreadyGivenFeedback(feedback = feedback, accountId = accountId, eventId = event.id)
         throwIfAccountIsManager(events = event, accountId = accountId)
         return FeedbackSessionDto(
             title = event.title,
@@ -55,7 +56,7 @@ class FeedbackService(
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val managerId = event.manager.id
         // Check if user with given client id already provided feedback
-        throwIfAccountAlreadyGivenFeedback(feedback = event.feedback, accountId = accountId)
+        throwIfAccountAlreadyGivenFeedback(feedback = event.feedback, accountId = accountId, eventId = event.id)
         throwIfAccountIsManager(events = event, accountId = accountId)
         feedbackRepo.persistFeedback(
             feedbackList = feedbackInputList,
@@ -74,10 +75,10 @@ class FeedbackService(
         )
     }
 
-    private fun throwIfAccountAlreadyGivenFeedback(feedback: List<FeedbackEntity>, accountId: String) {
+    private fun throwIfAccountAlreadyGivenFeedback(feedback: List<FeedbackEntity>, accountId: String, eventId: UUID) {
         val hasGivenFeedback = feedback.any { it.participantId == accountId }
         if (hasGivenFeedback) {
-            throw FeedbackAlreadyGivenException()
+            throw FeedbackAlreadySubmittedException(eventId = eventId, accountId = accountId)
         }
     }
 

@@ -143,7 +143,9 @@ class EventRepo {
                 it[EventParticipantTable.feedbackSubmitted] = feedbackSubmitted
             }
         } else {
-            EventParticipantTable.update({ (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }) {
+            EventParticipantTable.update(
+                { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
+            ) {
                 it[EventParticipantTable.feedbackSubmitted] = feedbackSubmitted
             }
         }

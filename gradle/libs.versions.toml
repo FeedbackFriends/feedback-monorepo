@@ -59,6 +59,9 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref =
 guava = "com.google.guava:guava:33.0.0-jre"
 firebase = { module = "com.google.firebase:firebase-admin", version.ref = "firebase" }
 
+[plugins]
+springboot = { id = "org.springframework.boot", version.ref = "springboot" }
+
 [bundles]
 exposed = ["exposed-dao", "exposed-javatime", "exposed-springboot"]
 jackson = ["jackson-module-kotlin", "jackson-datatype-jsr310"]

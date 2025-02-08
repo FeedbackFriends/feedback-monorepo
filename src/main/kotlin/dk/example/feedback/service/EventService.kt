@@ -1,6 +1,5 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.controller.FeedbackAlreadyGivenException
 import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
@@ -13,6 +12,8 @@ import dk.example.feedback.model.dto.ParticipantQuestionDto
 import dk.example.feedback.model.dto.QuestionFeedbackSummary
 import dk.example.feedback.model.enumerations.Emoji
 import dk.example.feedback.model.enumerations.FeedbackType
+import dk.example.feedback.model.exceptions.EventAlreadyJoinedException
+import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.model.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
 import java.util.*
@@ -113,7 +114,7 @@ class EventService(
         val events = eventRepo.getParticipantEvents(accountId)
         val feedbackAlreadySubmitted = events.find { it.id == event.id }
         if (feedbackAlreadySubmitted != null) {
-            throw FeedbackAlreadyGivenException()
+            throw FeedbackAlreadySubmittedException(eventId = event.id, accountId = accountId)
         }
     }
 
@@ -121,7 +122,7 @@ class EventService(
         val participantEvents = eventRepo.getParticipantEvents(accountId)
         val hasJoinedEvent = participantEvents.any { it.id == event.id }
         if (hasJoinedEvent) {
-            throw FeedbackAlreadyGivenException()
+            throw EventAlreadyJoinedException(eventId = event.id, accountId = accountId)
         }
     }
 }

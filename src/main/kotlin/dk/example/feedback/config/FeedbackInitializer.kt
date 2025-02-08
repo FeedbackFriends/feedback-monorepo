@@ -23,11 +23,11 @@ import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
 
 @Component
-class FirebaseInitializer(
+class FeedbackInitializer(
     private val feedbackConfig: FeedbackConfig
 ) : ApplicationListener<ApplicationReadyEvent> {
 
-    private val logger = LoggerFactory.getLogger(FirebaseInitializer::class.java)
+    private val logger = LoggerFactory.getLogger(FeedbackInitializer::class.java)
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         initializeFirebaseApp()

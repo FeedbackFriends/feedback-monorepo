@@ -1,33 +1,34 @@
 package dk.example.feedback.controller
 
 import dk.example.feedback.model.error.ApiError
-import org.springframework.http.HttpStatusCode
+import dk.example.feedback.model.exceptions.DomainException
+import jakarta.servlet.http.HttpServletRequest
+import java.time.OffsetDateTime
+import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import java.time.OffsetDateTime
-
-class FeedbackAlreadyGivenException: Exception("Feedback already given")
 
 @ControllerAdvice
-class ControllerAdvisor : ResponseEntityExceptionHandler() {
+class ControllerAdvisor {
 
-    @ExceptionHandler
-    fun handleError(ex: Exception): ResponseEntity<Any> {
+    private val logger = LoggerFactory.getLogger(ControllerAdvisor::class.java)
+
+    @ExceptionHandler(Exception::class)
+    fun handleException(exception: Exception, request: HttpServletRequest): ResponseEntity<ApiError> {
+        logger.error("Exception caught: ${exception.javaClass.simpleName}", exception)
+
+        val domainCode = if (exception is DomainException) exception.domainCode else null
 
         val error = ApiError(
             timestamp = OffsetDateTime.now(),
-            message = ex.message ?: "Internal server error",
-            stackTrace = ex.stackTraceToString()
+            message = exception.message ?: "An unexpected error occurred",
+            domainCode = domainCode,
+            exceptionType = exception.javaClass.simpleName,
+            path = request.requestURI,
         )
 
-        val code = if (ex is FeedbackAlreadyGivenException) {
-            409
-        } else {
-            500
-        }
-        return ResponseEntity(error, HttpStatusCode.valueOf(code))
+        return ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }
-

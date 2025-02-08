@@ -22,7 +22,13 @@ import org.springframework.web.client.postForEntity
 
 @RestController
 @RequestMapping(ControllerPaths.AdminUrl)
-class AdminController(val accountService: AccountService, val feedbackConfig: FeedbackConfig, val eventService: EventService, val firebaseService: FirebaseService, val accountRepo: AccountRepo) {
+class AdminController(
+    val accountService: AccountService,
+    val feedbackConfig: FeedbackConfig,
+    val eventService: EventService,
+    val firebaseService: FirebaseService,
+    val accountRepo: AccountRepo
+) {
 
     private val logger = LoggerFactory.getLogger(AdminController::class.java)
 
@@ -43,39 +49,6 @@ class AdminController(val accountService: AccountService, val feedbackConfig: Fe
         val users = FirebaseAuth.getInstance().listUsers(null).values.toList()
         return users
     }
-//
-//    data class OrganizationDto(
-//        val id: UUID,
-//        val name: String,
-//        val maximumMembers: Int,
-//        val owner: OwnerDto
-//    )
-//
-//    data class OwnerDto(
-//        val name: String,
-//        val phone: String,
-//        val email: String,
-//    )
-//
-//    @PostMapping("/create-organization")
-//    fun create(@RequestBody organizationDto: OrganizationDto) {
-//        val generatedPassword = UUID.randomUUID().toString()
-//        val owner = UserRecord.CreateRequest()
-//            .setEmail(organizationDto.owner.email)
-//            .setPassword(generatedPassword)
-//            .setDisplayName(organizationDto.owner.name)
-//            .setPhoneNumber(organizationDto.owner.phone)
-//        FirebaseAuth.getInstance().createUser(owner)
-//        // save user in database with organizationDto.owner.email as foreign key
-//
-//    }
-//
-//    @PostMapping("/change_owner")
-//    fun changeOwner(@RequestBody organizationDto: OrganizationDto) {
-//        // delete owner
-//        // cretae new owner
-//
-//    }
 
 //    @PostMapping("/send-notification")
 //    fun mockNotification(@RequestBody fcmToken: String?) {

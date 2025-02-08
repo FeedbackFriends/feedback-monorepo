@@ -1,9 +1,11 @@
 package dk.example.feedback.config
 
 import dk.example.feedback.model.error.ApiError
+import dk.example.feedback.model.error.DomainCode
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.media.Content
+import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.media.StringSchema
 import io.swagger.v3.oas.models.responses.ApiResponse
@@ -40,23 +42,30 @@ class OpenApiConfig(private val feedbackConfig: FeedbackConfig) {
             )
     }
 
+
     @Bean
     fun customizeGlobalResponses(): OpenApiCustomizer {
+
+        val domainCodeSchema = StringSchema().apply {
+            enum = DomainCode.entries.map { it.name }
+        }
+
         return OpenApiCustomizer { openApi ->
 
             openApi.components.addSchemas("ApiError", Schema<Any>()
-                .addProperty("stackTrace", StringSchema())
-                .addProperty("message", StringSchema())
                 .addProperty("timestamp", StringSchema())
+                .addProperty("message", StringSchema())
+                .addProperty("domainCode", domainCodeSchema)
+                .addProperty("exceptionType", StringSchema())
+                .addProperty("path", StringSchema())
+
             )
 
             openApi.paths.forEach { (_, pathItem) ->
                 pathItem. readOperations().forEach { operation ->
-                    operation.responses.addApiResponse("401", ApiResponse().description("Unauthorized"))
-                    operation.responses.addApiResponse("403", ApiResponse().description("Forbidden"))
                     val apiErrorSchema = Schema<ApiError>().`$ref`("#/components/schemas/ApiError")
                     val errorContent = Content().addMediaType(
-                        "application/json", io.swagger.v3.oas.models.media.MediaType().schema(apiErrorSchema)
+                        "application/json", MediaType().schema(apiErrorSchema)
                     )
                     operation.responses.addApiResponse("500", ApiResponse().description("Internal Server Error").content(errorContent))
                 }

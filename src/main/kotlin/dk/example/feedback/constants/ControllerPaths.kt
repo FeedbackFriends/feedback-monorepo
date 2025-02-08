@@ -1,5 +1,5 @@
 object ControllerPaths {
-    private const val BASE = "/v1"
+    private const val BASE = "/api"
     const val EventUrl = "$BASE/event"
     object Account {
         const val ControllerUrl = "$BASE/account"
@@ -8,5 +8,4 @@ object ControllerPaths {
     const val FeedbackUrl = "$BASE/feedback"
     const val Session = "$BASE/session"
     const val AdminUrl = "/admin"
-
 }
