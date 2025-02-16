@@ -1,9 +1,9 @@
 package dk.example.feedback.model.dto
 
-import dk.example.feedback.service.Claim
+import dk.example.feedback.service.Role
 
 data class SessionDto(
-    val claim: Claim?,
+    val role: Role?,
     val accountInfo: AccountInfoDto,
     val participantEvents: List<ParticipantEventDto>,
     val managerData: ManagerDataDto?

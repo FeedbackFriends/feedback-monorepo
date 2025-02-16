@@ -1,6 +1,6 @@
 package dk.example.feedback.helpers
 
-import dk.example.feedback.service.Claim
+import dk.example.feedback.service.Role
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 data class AuthContext(
     val accountId: String,
-    val customClaim: Claim?,
+    val role: Role?,
 )
 
 @Component
@@ -17,11 +17,11 @@ class AuthContextHelper {
     private val logger = LoggerFactory.getLogger(AuthContextHelper::class.java)
 
     fun getAuthContext(): AuthContext {
-        val authentication: org.springframework.security.core.Authentication = SecurityContextHolder.getContext().authentication
+        val authentication = SecurityContextHolder.getContext().authentication
         if (authentication.principal is Jwt) {
             val authContext = AuthContext(
                 accountId = authentication.name,
-                customClaim = getCustomClaim(authentication.principal as Jwt),
+                role = getRole(authentication.principal as Jwt),
             )
             logger.info("Auth context: $authContext")
             return authContext
@@ -40,14 +40,13 @@ class AuthContextHelper {
         }
     }
 
-    private fun getCustomClaim(jwt: Jwt): Claim? {
-        // Extract the "custom_claims" from the JWT claims
-        val customClaimsValue = jwt.claims["custom_claims"] as? String ?: return null
-        logger.info("Custom claims: $customClaimsValue")
+    private fun getRole(jwt: Jwt): Role? {
+        val roleValue = jwt.claims["role"] as? String ?: return null
+        logger.info("Roles: $roleValue")
         return try {
-            Claim.valueOf(customClaimsValue)
+            Role.valueOf(roleValue)
         } catch (e: IllegalArgumentException) {
-            logger.error("Invalid custom claim: $customClaimsValue")
+            logger.error("Invalid role: $roleValue")
             null
         }
     }

@@ -18,15 +18,15 @@ class SessionService(
 
     fun getSession(): SessionDto {
         val accountId = context.getAuthContext().accountId
-        val claim = context.getAuthContext().customClaim
+        val role = context.getAuthContext().role
         val account = accountService.fetchAccount(accountId = accountId) ?: throw Exception("Account not found")
         val participantEvents = eventService.getParticipantEvents(accountId = accountId)
-        logger.info("Get session with claim: $claim")
-        when (claim) {
-            Claim.Manager -> {
+        logger.info("Get session with role: $role")
+        when (role) {
+            Role.Organizer -> {
                 val managerEvents = eventService.getManagerEvents(accountId)
                 return SessionDto(
-                    claim = claim,
+                    role = role,
                     accountInfo = SessionDto.AccountInfoDto(
                         name = account.name,
                         email = account.email,
@@ -38,9 +38,10 @@ class SessionService(
                     )
                 )
             }
-            Claim.Participant -> {
+
+            Role.Participant -> {
                 return SessionDto(
-                    claim = claim,
+                    role = role,
                     accountInfo = SessionDto.AccountInfoDto(
                         name = account.name,
                         email = account.email,
@@ -52,7 +53,7 @@ class SessionService(
             }
             null -> {
                 return SessionDto(
-                    claim = claim,
+                    role = role,
                     accountInfo = SessionDto.AccountInfoDto(
                         name = account.name,
                         email = account.email,

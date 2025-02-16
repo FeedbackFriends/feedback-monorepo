@@ -1,6 +1,6 @@
 package dk.example.feedback.constants
 
 object Roles {
-    const val MANAGER = "Manager"
+    const val ORGANIZER = "Organizer"
     const val PARTICIPANT = "Participant"
 }

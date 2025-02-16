@@ -1,6 +1,5 @@
 package dk.example.feedback.config
 
-import ControllerPaths
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -41,7 +40,7 @@ class SecurityConfig {
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers(AntPathRequestMatcher("${ControllerPaths.AdminUrl}/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher("/admin/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/v3/**")).permitAll()
                     .requestMatchers(AntPathRequestMatcher("/swagger-ui/**")).permitAll()
@@ -58,7 +57,7 @@ class SecurityConfig {
     fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
         val converter = JwtAuthenticationConverter()
         converter.setJwtGrantedAuthoritiesConverter { jwt ->
-            val roles = jwt.getClaimAsStringList("custom_claims") ?: emptyList()
+            val roles = jwt.getClaimAsStringList("role") ?: emptyList()
             logger.debug("Extracted roles: {}", roles)
             roles.map { SimpleGrantedAuthority(it) }
         }

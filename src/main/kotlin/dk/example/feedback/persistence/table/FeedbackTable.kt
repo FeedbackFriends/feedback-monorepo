@@ -17,5 +17,5 @@ object FeedbackTable: CommonColumnsTbl("feedback") {
     val question = reference("question_id", QuestionTable, onDelete = ReferenceOption.CASCADE)
     val manager = reference(name = "manager_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
     val participant = optReference(name = "participant_id", AccountTable.id, onDelete = ReferenceOption.CASCADE).default(null)
-    val isNew = bool("is_new").default(true)
+    val isNew = bool("is_new")
 }

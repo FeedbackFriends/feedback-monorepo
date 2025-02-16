@@ -1,27 +1,27 @@
 package dk.example.feedback.controller
 
-import ControllerPaths
-import com.google.firebase.auth.ExportedUserRecord
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.UserRecord
 import dk.example.feedback.config.FeedbackConfig
-import dk.example.feedback.model.*
 import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.service.AccountService
-import dk.example.feedback.service.Claim
 import dk.example.feedback.service.EventService
 import dk.example.feedback.service.FirebaseService
-import java.util.*
+import dk.example.feedback.service.Role
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 
 
 @RestController
-@RequestMapping(ControllerPaths.AdminUrl)
+@Tag(name = "Admin")
+@RequestMapping("/admin")
 class AdminController(
     val accountService: AccountService,
     val feedbackConfig: FeedbackConfig,
@@ -31,24 +31,6 @@ class AdminController(
 ) {
 
     private val logger = LoggerFactory.getLogger(AdminController::class.java)
-
-    //
-//    @GetMapping("/get-all-accounts")
-//    fun getAllAccounts(): List<AccountEntity> {
-//        return service.getAllAccounts()
-//    }
-//
-//    @PostMapping("/create-event")
-//    fun createEvent(@RequestBody createEventInput: EventInput): ManagerEventDto {
-//        TODO()
-////        return eventService.createOrUpdate(createEventInput = createEventInput, userId = "userId")
-//    }
-//
-    @GetMapping("/all-users")
-    fun allUsers(): List<ExportedUserRecord> {
-        val users = FirebaseAuth.getInstance().listUsers(null).values.toList()
-        return users
-    }
 
 //    @PostMapping("/send-notification")
 //    fun mockNotification(@RequestBody fcmToken: String?) {
@@ -65,33 +47,13 @@ class AdminController(
 
 
 
-    @PostMapping(path = ["/user-claims/{uid}"])
-    @Throws(FirebaseAuthException::class)
-    fun setUserClaims(
-        @PathVariable uid: String,
-        @RequestBody requestedClaims: Claim
-    ) {
-        firebaseService.setUserClaims(uid, requestedClaims)
-    }
-
-    data class FirebaseRequestDto(
-        val token: String,
-        val returnSecureToken: Boolean
-    )
-
-    data class FirebaseResponseDto (
-        val idToken: String,
-        val refreshToken: String,
-        val expiresIn: String
-    )
-
     data class MockTokenResponse(
-        val firebaseResponse: FirebaseResponseDto,
+        val firebaseResponse: SignInFirebaseResponseDto,
         val token: String
     )
 
     data class MockIdTokenRequestDto(
-        val claim: Claim?
+        val role: Role?
     )
 
     @PostMapping("/mockIdToken")
@@ -120,25 +82,37 @@ class AdminController(
             logger.info("Firebase: User already exists so will sign in")
         }
         try {
-            FirebaseAuth.getInstance().setCustomUserClaims(uid, mapOf("custom_claims" to input.claim?.name))
+            FirebaseAuth.getInstance().setCustomUserClaims(uid, mapOf("role" to input.role?.name))
         } catch (e: Exception) {
-            logger.info("Firebase: Failed to set custom claims")
+            logger.info("Firebase: Failed to set custom claims for role with value ${input.role}")
         }
         val token = FirebaseAuth.getInstance().createCustomToken(uid)
         return signInWithCustomToken(token)
     }
 
+    data class SignInFirebaseRequestDto(
+        val token: String,
+        val returnSecureToken: Boolean
+    )
+
+    data class SignInFirebaseResponseDto(
+        val idToken: String,
+        val refreshToken: String,
+        val expiresIn: String
+    )
+
     fun signInWithCustomToken(token: String): MockTokenResponse {
         val apiKey = feedbackConfig.firebaseApiKey
         val url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=$apiKey"
 
-        val body = FirebaseRequestDto(
+
+        val body = SignInFirebaseRequestDto(
             token = token,
             returnSecureToken = true
         )
 
         val restTemplate = RestTemplate()
-        val response: ResponseEntity<FirebaseResponseDto> = restTemplate.postForEntity(url = url, request = body)
+        val response: ResponseEntity<SignInFirebaseResponseDto> = restTemplate.postForEntity(url = url, request = body)
 
         if (response.statusCode.is2xxSuccessful) {
             return MockTokenResponse(firebaseResponse = response.body!!, token = token)

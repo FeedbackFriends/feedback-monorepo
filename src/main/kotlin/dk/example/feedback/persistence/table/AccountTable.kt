@@ -17,5 +17,5 @@ object AccountTable: IdTable<String>("account") {
     val phoneNumber = varchar("phone_number", 255).nullable()
     val createdAt = timestampWithTimeZone("created_at")
     val updatedAt = timestampWithTimeZone("updated_at")
-    val ratingPrompted = bool("rating_prompted").default(false)
+    val ratingPrompted = bool("rating_prompted")
 }

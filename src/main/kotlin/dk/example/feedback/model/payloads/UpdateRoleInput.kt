@@ -2,6 +2,6 @@ package dk.example.feedback.model.payloads
 
 import dk.example.feedback.service.Role
 
-data class CreateAccountInput(
-    val requestedRole: Role?
+data class UpdateRoleInput(
+    val role: Role
 )

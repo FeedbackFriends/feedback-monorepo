@@ -13,4 +13,6 @@ data class ApiError(
 enum class DomainCode {
     FEEDBACK_ALREADY_SUBMITTED,
     EVENT_ALREADY_JOINED,
+    CANNOT_JOIN_OWN_EVENT,
+    CANNOT_GIVE_FEEDBACK_TO_SELF,
 }

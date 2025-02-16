@@ -1,7 +1,9 @@
 package dk.example.feedback.persistence.dao
 
 import dk.example.feedback.model.database.AccountEntity
-import dk.example.feedback.persistence.table.*
+import dk.example.feedback.persistence.table.AccountTable
+import dk.example.feedback.persistence.table.EventTable
+import dk.example.feedback.persistence.table.QuestionTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID

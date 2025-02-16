@@ -55,7 +55,7 @@ class FeedbackInitializer(
         try {
             // Insert mock data in a transaction
             transaction {
-                val testId = "testId"
+                val testId = "mock_id"
                 AccountTable.selectAll().where { AccountTable.id eq testId }.firstOrNull()?.let {
                     logger.info("Mock data already exists.")
                     return@transaction

@@ -34,6 +34,7 @@ class AccountRepo {
             this.phoneNumber = phoneNumber
             this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
+            this.ratingPrompted = false
         }.toModel()
     }
 

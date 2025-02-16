@@ -18,17 +18,31 @@ class AccountService(
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)
 
-    fun createAccount(requestedClaim: Claim?) {
-        when (requestedClaim) {
+    fun createAccount(requestedRole: Role?) {
+        when (requestedRole) {
             // Firebase user is anonymous if null
             null -> {
-                logger.info("Creating anonymous account for ${authContext.getAuthContext().accountId} since custom claim is null")
-                createAnonymousAccount()
+                logger.info("Creating anonymous account for ${authContext.getAuthContext().accountId} since role is null")
+                val accountId = context.getAuthContext().accountId
+                accountRepo.createOrGetAccount(
+                    accountId = accountId,
+                    name = null,
+                    email = null,
+                    phoneNumber = null,
+                )
             }
 
-            Claim.Manager, Claim.Participant -> {
-                logger.info("Creating account for ${authContext.getAuthContext().accountId} since requested custom claim is $requestedClaim")
-                createOrGetAccount()
+            Role.Organizer, Role.Participant -> {
+                logger.info("Creating account for ${authContext.getAuthContext().accountId} since requested role is $requestedRole")
+                val accountId = context.getAuthContext().accountId
+                authContext.verifyLoggedInAccountHasId(id = accountId)
+                val firebaseUser = firebaseService.getUser(userId = accountId)
+                accountRepo.createOrGetAccount(
+                    accountId = accountId,
+                    name = firebaseUser.displayName,
+                    email = firebaseUser.email,
+                    phoneNumber = firebaseUser.phoneNumber,
+                )
             }
         }
     }
@@ -54,27 +68,5 @@ class AccountService(
     fun deleteAccount(accountId: String) {
         authContext.verifyLoggedInAccountHasId(id = accountId)
         accountRepo.deleteAccount(accountId)
-    }
-
-    private fun createOrGetAccount() {
-        val accountId = context.getAuthContext().accountId
-        authContext.verifyLoggedInAccountHasId(id = accountId)
-        val firebaseUser = firebaseService.getUser(userId = accountId)
-        accountRepo.createOrGetAccount(
-            accountId = accountId,
-            name = firebaseUser.displayName,
-            email = firebaseUser.email,
-            phoneNumber = firebaseUser.phoneNumber,
-        )
-    }
-
-    private fun createAnonymousAccount() {
-        val accountId = context.getAuthContext().accountId
-        accountRepo.createOrGetAccount(
-            accountId = accountId,
-            name = null,
-            email = null,
-            phoneNumber = null,
-        )
     }
 }

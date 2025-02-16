@@ -29,7 +29,7 @@ spring:
   liquibase:
     enabled: true
   exposed:
-    show-sql: true
+    show-sql: false
     generate-ddl: false
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:devDb;DATABASE_TO_UPPER=false}

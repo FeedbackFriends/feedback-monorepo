@@ -8,8 +8,8 @@ import com.google.firebase.messaging.Notification
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
-enum class Claim {
-    Manager,
+enum class Role {
+    Organizer,
     Participant
 }
 
@@ -18,7 +18,7 @@ interface FirebaseService {
     fun getUser(userId: String): User
     fun deleteUser(userId: String)
     fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?)
-    fun setUserClaims(userId: String, requestedClaim: Claim?)
+    fun setRole(userId: String, requestedRole: Role?)
 
     data class User(
         val displayName: String?,
@@ -82,9 +82,9 @@ class FirebaseServiceLive: FirebaseService {
         )
     }
 
-    override fun setUserClaims(userId: String, requestedClaim: Claim?) {
-        logger.info("Setting custom claim ${requestedClaim?.name} for user $userId")
+    override fun setRole(userId: String, requestedRole: Role?) {
+        logger.info("Setting role ${requestedRole?.name} for user $userId")
         FirebaseAuth.getInstance()
-            .setCustomUserClaimsAsync(userId, mapOf("custom_claims" to requestedClaim?.toString()))
+            .setCustomUserClaimsAsync(userId, mapOf("role" to requestedRole?.toString()))
     }
 }
