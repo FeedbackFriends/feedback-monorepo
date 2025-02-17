@@ -74,6 +74,24 @@ jobs:
         run: ./gradlew generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
         env:
           VERSION: "${{ env.NEW_VERSION }}"
+          
+      - name: Push OpenAPI to `feedback-openapi`
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git clone --depth 1 https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git
+          cd feedback-openapi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Copy OpenAPI YAML and commit changes
+          cp ../build/openapi.yml .
+          git add openapi.yml
+          git commit -m "Update OpenAPI spec for v${{ env.NEW_VERSION }}"
+
+          # Create and push tag
+          git tag "v${{ env.NEW_VERSION }}"
+          git push origin main --tags
 
       - name: Build Docker image with Jib
         run: ./gradlew jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
