@@ -65,12 +65,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Ensure the OpenAPI YAML file exists before proceeding
-          if [ ! -f "${{ env.OPENAPI_YAML }}" ]; then
-            echo "Error: OpenAPI spec file not found!"
-            exit 1
-          fi
-
+          
           # Clone the `feedback-openapi` repository
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cd feedback-openapi
@@ -89,7 +84,7 @@ jobs:
             git commit -m "Update OpenAPI spec for v${{ env.NEW_VERSION }}"
             git push origin main
           fi
-
+          
       - name: Build Docker image with Jib
         run: ./gradlew jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
