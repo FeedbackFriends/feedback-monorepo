@@ -81,9 +81,13 @@ jobs:
           # Stop the application after retrieving the spec
           kill $APP_PID || true
 
-          # Checkout the `feedback-openapi` repository
+          # Clone the `feedback-openapi` repository
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cd feedback-openapi
+
+          # Configure Git identity
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Move OpenAPI spec into the repository
           mv ../openapi.yml .
