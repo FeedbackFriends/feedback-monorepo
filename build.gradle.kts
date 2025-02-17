@@ -8,7 +8,6 @@ plugins {
     kotlin("plugin.spring") version libs.versions.kotlin
 	id("com.google.cloud.tools.jib") version "3.4.4"
 	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
-//	id("io.gitlab.arturbosch.detekt") version "1.23.7"
 }
 
 group = "dk.nicolai"
@@ -94,12 +93,8 @@ jib {
 	}
 }
 
-//detekt {
-//	config.setFrom(files("config/detekt.yml"))
-//}
-
 openApi {
 	apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
 	outputFileName.set("openapi.yaml")
-	waitTimeInSeconds.set(15)
+	waitTimeInSeconds.set(30)
 }
