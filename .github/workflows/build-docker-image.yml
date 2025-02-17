@@ -57,7 +57,7 @@ jobs:
       - name: Generate OpenAPI spec
         run: |
           ./gradlew generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
-          echo "OPENAPI_YAML=build/openapi.yml" >> $GITHUB_ENV
+          echo "OPENAPI_YAML=apps/api/build/openapi.yml" >> $GITHUB_ENV
         env:
           VERSION: "${{ env.NEW_VERSION }}"
           
