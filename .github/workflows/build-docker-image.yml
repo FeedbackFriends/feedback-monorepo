@@ -63,48 +63,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Start the Spring Boot application in the background
-          ./gradlew bootRun &
-          APP_PID=$!
-
-          # Wait for the application to be ready
-          echo "Waiting for OpenAPI spec to be available..."
-          for i in {1..15}; do
-            if curl --fail http://localhost:8080/v3/api-docs.yaml -o openapi.yml; then
-              echo "OpenAPI spec downloaded successfully."
-              break
-            fi
-            echo "Retrying in 5 seconds..."
-            sleep 5
-          done
-
-          # Stop the application after retrieving the spec
-          kill $APP_PID || true
-
-          # Clone the `feedback-openapi` repository
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cd feedback-openapi
-
-          # Configure Git identity
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Move OpenAPI spec into the repository
+          
           mv ../openapi.yml .
-
-          # Check for changes before committing
+          
           git add openapi.yml
           if git diff --cached --exit-code; then
             echo "No changes to OpenAPI spec. Skipping commit."
           else
             git commit -m "Update OpenAPI spec for v${{ env.NEW_VERSION }}"
             git push origin main
-          fi
-
-          # Create and push tag if there was a commit
-          if [ "$(git tag -l "v${{ env.NEW_VERSION }}")" == "" ]; then
-            git tag "v${{ env.NEW_VERSION }}"
-            git push origin "v${{ env.NEW_VERSION }}"
           fi
 
       - name: Build Docker image with Jib
