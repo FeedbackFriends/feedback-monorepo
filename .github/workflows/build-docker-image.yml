@@ -63,22 +63,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Checkout the `feedback-openapi` repository instead of cloning
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Start the Spring Boot application in the background
+          ./gradlew bootRun &
+          APP_PID=$!
 
+          # Wait for the application to be ready
+          echo "Waiting for OpenAPI spec to be available..."
+          for i in {1..15}; do
+            if curl --fail http://localhost:8080/v3/api-docs.yaml -o openapi.yml; then
+              echo "OpenAPI spec downloaded successfully."
+              break
+            fi
+            echo "Retrying in 5 seconds..."
+            sleep 5
+          done
+
+          # Stop the application after retrieving the spec
+          kill $APP_PID || true
+
+          # Checkout the `feedback-openapi` repository
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cd feedback-openapi
 
-          # Ensure the OpenAPI YAML file exists before proceeding
-          if [ ! -f "../build/openapi.yml" ]; then
-            echo "Error: OpenAPI spec file not found!"
-            exit 1
-          fi
+          # Move OpenAPI spec into the repository
+          mv ../openapi.yml .
 
-          cp ../build/openapi.yml .
-
-          # Check if there are changes
+          # Check for changes before committing
           git add openapi.yml
           if git diff --cached --exit-code; then
             echo "No changes to OpenAPI spec. Skipping commit."
