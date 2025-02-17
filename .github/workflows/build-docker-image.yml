@@ -48,22 +48,6 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           echo "Calculated new version: $NEW_VERSION"
 
-      - name: Check if tag already exists
-        id: check-tag
-        run: |
-          if git rev-parse "refs/tags/${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
-            echo "Tag ${{ env.NEW_VERSION }} already exists. Skipping tag creation."
-            exit 0
-          fi
-
-      - name: Create and push new tag
-        if: success() && steps.check-tag.outcome != 'skipped'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag ${{ env.NEW_VERSION }}
-          git push origin ${{ env.NEW_VERSION }}
-
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -98,3 +82,11 @@ jobs:
         env:
           DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
           DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
+
+      - name: Create and push new tag
+        if: success() && steps.check-tag.outcome != 'skipped'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ env.NEW_VERSION }}
+          git push origin ${{ env.NEW_VERSION }}
