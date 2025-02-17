@@ -63,8 +63,8 @@ jobs:
           echo "Checking OpenAPI output..."
           OPENAPI_YAML="./api/build/openapi.yml"
           
-          echo "OPENAPI_YAML=$OPENAPI_YAML_PATH" >> $GITHUB_ENV
-          echo "OpenAPI spec generated at: $OPENAPI_YAML_PATH"
+          echo "OPENAPI_YAML=$OPENAPI_YAML" >> $GITHUB_ENV
+          echo "OpenAPI spec generated at: $OPENAPI_YAML"
         env:
           VERSION: "${{ env.NEW_VERSION }}"
 
@@ -82,10 +82,10 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Move OpenAPI spec into the repository
-          if [ -f "${{ env.OPENAPI_YAML_PATH }}" ]; then
-            cp "${{ env.OPENAPI_YAML_PATH }}" openapi.yml
+          if [ -f "${{ env.OPENAPI_YAML }}" ]; then
+            cp "${{ env.OPENAPI_YAML }}" openapi.yml
           else
-            echo "Error: OpenAPI YAML file not found at '${{ env.OPENAPI_YAML_PATH }}'"
+            echo "Error: OpenAPI YAML file not found at '${{ env.OPENAPI_YAML }}'"
             exit 1
           fi
           
