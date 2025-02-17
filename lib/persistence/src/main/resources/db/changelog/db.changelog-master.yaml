@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - property:
+      name: uuid
+      value: "gen_random_uuid()"
+      dbms: postgresql
+  - property:
+      name: uuid
+      value: "random_uuid()"
+      dbms: h2
+
+  - include:
+      file: 0001-initial-schema.yaml
+      relativeToChangelogFile: true

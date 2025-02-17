@@ -1,0 +1,50 @@
+server:
+  port: 8080
+  shutdown: graceful
+  max-http-request-header-size: 16KB
+management:
+  server:
+    port: 8090
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,beans,env
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-url: https://www.googleapis.com/oauth2/v3/certs
+          issuer-uri: https://securetoken.google.com/feedback2-a4dd9
+  liquibase:
+    enabled: true
+  exposed:
+    show-sql: false
+    generate-ddl: false
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:devDb;DATABASE_TO_UPPER=false}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:''}
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /
+  default-produces-media-type: application/json
+feedback:
+  firebase-api-key: ${FIREBASE_API_KEY}
+  firebase-config-path: ${FIREBASE_CONFIG_PATH}
+  version: ${VERSION}
