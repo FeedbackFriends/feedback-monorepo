@@ -55,7 +55,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Generate OpenAPI spec
-        run: ./gradlew generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
+        run: |
+          ./gradlew generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
+          echo "OPENAPI_YAML=build/openapi.yml" >> $GITHUB_ENV
         env:
           VERSION: "${{ env.NEW_VERSION }}"
           
@@ -63,12 +65,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Ensure the OpenAPI YAML file exists before proceeding
+          if [ ! -f "${{ env.OPENAPI_YAML }}" ]; then
+            echo "Error: OpenAPI spec file not found!"
+            exit 1
+          fi
+
+          # Clone the `feedback-openapi` repository
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cd feedback-openapi
+
+          # Configure Git identity
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          mv ../openapi.yml .
+
+          # Move OpenAPI spec into the repository
+          cp "${{ env.OPENAPI_YAML }}" openapi.yml
           
           git add openapi.yml
           if git diff --cached --exit-code; then
