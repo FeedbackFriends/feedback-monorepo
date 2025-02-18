@@ -102,6 +102,11 @@ jobs:
           echo "❌ OpenAPI YAML file not found at '${{ env.OPENAPI_YAML }}'."
           exit 1
           fi
+      - name: Debug OpenAPI File
+        run: |
+          ls -al
+          find . -name "openapi.yaml"
+          cat openapi.yaml || echo "openapi.yaml not found"
           
       - name: Push OpenAPI to `feedback-openapi`
         env:
