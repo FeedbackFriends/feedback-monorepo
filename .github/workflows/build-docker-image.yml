@@ -62,57 +62,50 @@ jobs:
           echo "🔄 Starting OpenAPI generation..."
           chmod +x ./gradlew  # Ensure Gradle wrapper is executable
           ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
-          
+
           echo "🔍 Checking OpenAPI output..."
-          
+
           # Define the expected OpenAPI YAML file path
           OPENAPI_YAML="./apps/api/build/openapi.yaml"
-          
+
           # Log the expected file path
           echo "📌 Expected OpenAPI YAML path: $OPENAPI_YAML"
-          
+
           # Check if the OpenAPI file exists
           if [ -f "$OPENAPI_YAML" ]; then
-          echo "✅ OpenAPI YAML file found at: $OPENAPI_YAML"
-          echo "📜 OpenAPI YAML file content:"
-          cat "$OPENAPI_YAML"
+            echo "✅ OpenAPI YAML file found at: $OPENAPI_YAML"
+            echo "📜 OpenAPI YAML file content:"
+            cat "$OPENAPI_YAML"
           else
-          echo "❌ Error: OpenAPI YAML file NOT found!"
-          exit 1
+            echo "❌ Error: OpenAPI YAML file NOT found!"
+            exit 1
           fi
-          
+
           # Clone the `feedback-openapi` repository
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cd feedback-openapi
-          
+
           # Configure Git identity
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           # Ensure we are on the correct branch
           git checkout main
-          
+
           # Move OpenAPI spec into the repository
-          OPENAPI_YAML=$(find . -name "openapi.yaml" | head -n 1)
-          if [ -f "$OPENAPI_YAML" ]; then
-          echo "✅ OpenAPI YAML file found at: $OPENAPI_YAML"
           cp "$OPENAPI_YAML" ./openapi.yaml
-          else
-          echo "❌ Error: OpenAPI YAML file NOT found!"
-          exit 1
-          fi
-          
+
           # Verify file exists in the expected location
           ls -l openapi.yaml
-          
+
           # Add and commit changes
           git add openapi.yaml
           if git diff --cached --quiet; then
-          echo "✅ No changes detected in OpenAPI spec. Skipping commit."
+            echo "✅ No changes detected in OpenAPI spec. Skipping commit."
           else
-          echo "📌 Changes detected, committing OpenAPI spec update..."
-          git commit -m "Update OpenAPI spec for v${{ env.NEW_VERSION }}"
-          git push origin main
+            echo "📌 Changes detected, committing OpenAPI spec update..."
+            git commit -m "Update OpenAPI spec for v${{ env.NEW_VERSION }}"
+            git push origin main
           fi
       - name: Build Docker image with Jib
         run: ./gradlew :api:jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
