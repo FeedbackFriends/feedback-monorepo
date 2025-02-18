@@ -63,7 +63,7 @@ jobs:
           echo "🔍 Checking OpenAPI output..."
     
           # Define the expected OpenAPI YAML file path
-          OPENAPI_YAML="./apps/api/build/openapi.yml"
+          OPENAPI_YAML="./apps/api/build/openapi.yaml"
 
           # Log the expected file path
           echo "📌 Expected OpenAPI YAML path: $OPENAPI_YAML"
