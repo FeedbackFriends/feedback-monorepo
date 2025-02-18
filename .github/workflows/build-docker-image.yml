@@ -71,6 +71,8 @@ jobs:
           # Check if the OpenAPI file exists
           if [ -f "$OPENAPI_YAML" ]; then
             echo "✅ OpenAPI YAML file found at: $OPENAPI_YAML"
+            echo "📜 OpenAPI YAML file content:"
+            cat "$OPENAPI_YAML" || echo "⚠️ Failed to read OpenAPI YAML file!"
           else
             echo "❌ Error: OpenAPI YAML file NOT found!"
             echo "📂 Listing all files in expected directory for debugging..."
@@ -78,11 +80,19 @@ jobs:
             exit 1
           fi
 
+          #print yaml file here: 
+
           # Save to environment variable
           echo "OPENAPI_YAML=$OPENAPI_YAML" >> $GITHUB_ENV
           echo "🚀 OpenAPI spec path saved to environment variable."
         env:
           VERSION: "${{ env.NEW_VERSION }}"
+
+      - name: Debug OpenAPI YAML Path
+        run: |
+          echo "🔎 Checking if OPENAPI_YAML variable is set..."
+          echo "Stored path: '${{ env.OPENAPI_YAML }}'"
+          ls -l "${{ env.OPENAPI_YAML }}" || echo "⚠️ File does not exist at stored path!"
 
           
       - name: Push OpenAPI to `feedback-openapi`
