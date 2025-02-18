@@ -61,10 +61,15 @@ jobs:
           ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }} 
 
           echo "Checking OpenAPI output..."
-          OPENAPI_YAML="./api/build/openapi.yml"
+          OPENAPI_YAML_PATH=$(find . -name "openapi.yml" | head -n 1)
           
-          echo "OPENAPI_YAML=$OPENAPI_YAML" >> $GITHUB_ENV
-          echo "OpenAPI spec generated at: $OPENAPI_YAML"
+          if [ -f "$OPENAPI_YAML_PATH" ]; then
+            echo "OpenAPI YAML file found at $OPENAPI_YAML_PATH"
+            echo "OPENAPI_YAML=$OPENAPI_YAML_PATH" >> $GITHUB_ENV  # Save it for other steps
+          else
+            echo "ERROR: OpenAPI YAML file not found!"
+            exit 1
+          fi
         env:
           VERSION: "${{ env.NEW_VERSION }}"
 
