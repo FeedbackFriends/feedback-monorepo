@@ -93,7 +93,14 @@ jobs:
           git checkout main
           
           # Move OpenAPI spec into the repository
+          OPENAPI_YAML=$(find . -name "openapi.yaml" | head -n 1)
+          if [ -f "$OPENAPI_YAML" ]; then
+          echo "✅ OpenAPI YAML file found at: $OPENAPI_YAML"
           cp "$OPENAPI_YAML" ./openapi.yaml
+          else
+          echo "❌ Error: OpenAPI YAML file NOT found!"
+          exit 1
+          fi
           
           # Verify file exists in the expected location
           ls -l openapi.yaml
