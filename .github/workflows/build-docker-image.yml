@@ -54,7 +54,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Generate OpenAPI spec
+      - name: Generate OpenAPI spec and commit openapi.yaml to repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "🔄 Starting OpenAPI generation..."
           chmod +x ./gradlew  # Ensure Gradle wrapper is executable
@@ -72,46 +74,12 @@ jobs:
           if [ -f "$OPENAPI_YAML" ]; then
             echo "✅ OpenAPI YAML file found at: $OPENAPI_YAML"
             echo "📜 OpenAPI YAML file content:"
-            cat "$OPENAPI_YAML" || echo "⚠️ Failed to read OpenAPI YAML file!"
+            cat "$OPENAPI_YAML"
           else
             echo "❌ Error: OpenAPI YAML file NOT found!"
-            echo "📂 Listing all files in expected directory for debugging..."
-            ls -R ./apps/api/build || echo "⚠️ Directory './apps/api/build' not found!"
             exit 1
           fi
 
-          #print yaml file here: 
-
-          # Save to environment variable
-          echo "OPENAPI_YAML=$OPENAPI_YAML" >> $GITHUB_ENV
-          echo "🚀 OpenAPI spec path saved to environment variable."
-        env:
-          VERSION: "${{ env.NEW_VERSION }}"
-
-      - name: Debug OpenAPI YAML Path
-        run: |
-          echo "🔎 Checking if OPENAPI_YAML variable is set..."
-          echo "Stored path: '${{ env.OPENAPI_YAML }}'"
-          echo "📂 Listing directory contents for debugging..."
-          ls -R ./apps/api/build || echo "⚠️ Directory './apps/api/build' not found!"
-          ls -l "${{ env.OPENAPI_YAML }}" || echo "⚠️ File does not exist at stored path!"
-
-      - name: Ensure OpenAPI YAML Exists
-        run: |
-          if [ ! -f "${{ env.OPENAPI_YAML }}" ]; then
-          echo "❌ OpenAPI YAML file not found at '${{ env.OPENAPI_YAML }}'."
-          exit 1
-          fi
-      - name: Debug OpenAPI File
-        run: |
-          ls -al
-          find . -name "openapi.yaml"
-          cat openapi.yaml || echo "openapi.yaml not found"
-          
-      - name: Push OpenAPI to `feedback-openapi`
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
           # Clone the `feedback-openapi` repository
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cd feedback-openapi
@@ -121,21 +89,17 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Move OpenAPI spec into the repository
-          if [ -f "${{ env.OPENAPI_YAML }}" ]; then
-            cp "${{ env.OPENAPI_YAML }}" openapi.yml
-          else
-            echo "Error: OpenAPI YAML file not found at '${{ env.OPENAPI_YAML }}'"
-            exit 1
-          fi
-          
+          cp "$OPENAPI_YAML" openapi.yml
+
           git add openapi.yml
-          if git diff --cached --exit-code; then
-            echo "No changes to OpenAPI spec. Skipping commit."
+          if git diff --cached --quiet; then
+            echo "✅ No changes detected in OpenAPI spec. Skipping commit."
           else
+            echo "📌 Changes detected, committing OpenAPI spec update..."
             git commit -m "Update OpenAPI spec for v${{ env.NEW_VERSION }}"
             git push origin main
           fi
-          
+
       - name: Build Docker image with Jib
         run: ./gradlew :api:jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
@@ -143,7 +107,7 @@ jobs:
           DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
 
       - name: Create and push new tag
-        if: success() && steps.check-tag.outcome != 'skipped'
+        if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
