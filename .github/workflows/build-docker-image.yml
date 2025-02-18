@@ -92,8 +92,16 @@ jobs:
         run: |
           echo "🔎 Checking if OPENAPI_YAML variable is set..."
           echo "Stored path: '${{ env.OPENAPI_YAML }}'"
+          echo "📂 Listing directory contents for debugging..."
+          ls -R ./apps/api/build || echo "⚠️ Directory './apps/api/build' not found!"
           ls -l "${{ env.OPENAPI_YAML }}" || echo "⚠️ File does not exist at stored path!"
 
+      - name: Ensure OpenAPI YAML Exists
+        run: |
+          if [ ! -f "${{ env.OPENAPI_YAML }}" ]; then
+          echo "❌ OpenAPI YAML file not found at '${{ env.OPENAPI_YAML }}'."
+          exit 1
+          fi
           
       - name: Push OpenAPI to `feedback-openapi`
         env:
