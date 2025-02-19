@@ -38,7 +38,7 @@ jobs:
             ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
           set -e
           echo "Pulling and running Docker image"
-          ./run-docker.sh nicolaidam/feedback:${{ env.TAG }}
+          docker pull nicolaidam/feedback:${{ env.TAG }}
           EOF
         env:
           DEBIAN_IP: "${{ secrets.DEBIAN_IP }}"
