@@ -1,114 +1,88 @@
-name: Build Docker Image
+name: Generate OpenAPI & Docker Image
 
 on:
   workflow_dispatch:
     inputs:
       version_type:
-        description: 'Type of version increment (major, minor, patch)'
+        description: "Type of version increment (major, minor, patch)"
         required: true
-        default: 'patch'
+        default: "patch"
         type: choice
         options:
           - major
           - minor
           - patch
+
 permissions:
-  actions: write
-  checks: write
   contents: write
-  deployments: write
-  id-token: write
-  issues: write
-  discussions: write
   packages: write
-  pages: write
-  pull-requests: write
-  repository-projects: write
-  security-events: write
-  statuses: write
 
 jobs:
-  build-and-publish:
+  release-openapi-and-docker:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get current version
-        id: get-current-version
+      - name: Fetch latest version tag
+        id: get-version
         run: |
           git fetch --tags
           CURRENT_VERSION=$(git tag --sort=-version:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
-          echo "Current version: $CURRENT_VERSION"
+          echo "Latest detected version: $CURRENT_VERSION"
 
-      - name: Calculate new version
+      - name: Increment version based on user input
         id: calculate-version
         run: |
           VERSION_TYPE=${{ github.event.inputs.version_type }}
           IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.CURRENT_VERSION }}"
-          if [ "$VERSION_TYPE" = "patch" ]; then
-            PATCH=$((PATCH + 1))
-          elif [ "$VERSION_TYPE" = "minor" ]; then
-            MINOR=$((MINOR + 1))
-            PATCH=0
-          elif [ "$VERSION_TYPE" = "major" ]; then
-            MAJOR=$((MAJOR + 1))
-            MINOR=0
-            PATCH=0
-          fi
+          case "$VERSION_TYPE" in
+            patch) PATCH=$((PATCH + 1)) ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+          esac
           NEW_VERSION="$MAJOR.$MINOR.$PATCH"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "Calculated new version: $NEW_VERSION"
+          echo "New version to release: $NEW_VERSION"
 
-      - name: Set up JDK
+      - name: Set up JDK environment
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: "17"
+          distribution: "temurin"
 
-      - name: Generate OpenAPI spec and push openapi.yaml to feedback-openapi
+      - name: Update OpenAPI and sync with feedback-openapi repo
         env:
           VERSION: ${{ env.NEW_VERSION }}
         run: |
           ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}          
           ABS_OPENAPI_YAML="$(pwd)/apps/api/build/openapi.yaml"
 
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
+          cp "$ABS_OPENAPI_YAML" feedback-openapi/openapi.yaml
+
           cd feedback-openapi
-
-          # Move OpenAPI spec into the repository
-          cp "$ABS_OPENAPI_YAML" ./openapi.yaml
-
-          # Ensure Git identity is set inside the cloned repo
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Add and commit changes
           git add openapi.yaml
-          git commit -m "Update OpenAPI ${{ env.NEW_VERSION }}"
+          git status
+          git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
           git push origin main
           git tag -a ${{ env.NEW_VERSION }} -m "Generated OpenAPI spec for version ${{ env.NEW_VERSION }}"
-      - name: Build Docker image with Jib
+          git push origin ${{ env.NEW_VERSION }}
+
+      - name: Build and publish Docker image with Jib
         run: ./gradlew :api:jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
           DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
           DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
 
-      - name: Create and push new tag
-        if: success()
+      - name: Tag and release new API version
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Get latest commit SHA
           COMMIT_SHA=$(git rev-parse HEAD)
           COMMIT_URL="https://github.com/FeedbackFriends/feedback-api/commit/$COMMIT_SHA"
-
-          # Create tag with commit message
-          git tag -a ${{ env.NEW_VERSION }} -m "https://github.com/FeedbackFriends/feedback-openapi/releases/tag/${{ env.NEW_VERSION }}"
+          git tag -a ${{ env.NEW_VERSION }} -m "$COMMIT_URL"
           git push origin ${{ env.NEW_VERSION }}
