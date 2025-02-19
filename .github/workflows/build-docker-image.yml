@@ -63,25 +63,29 @@ jobs:
         run: |
       - name: Generate OpenAPI spec and push openapi.yaml to feedback-openapi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PAT: ${{ secrets.MY_PAT }}  # Change from GITHUB_TOKEN to PAT if needed
           VERSION: ${{ env.NEW_VERSION }}
         run: |
           ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}          
           ABS_OPENAPI_YAML="$(pwd)/apps/api/build/openapi.yaml"
-          
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
+
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
+          git clone https://x-access-token:${{ secrets.GITHUB_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cd feedback-openapi
-          
+
           # Move OpenAPI spec into the repository
           cp "$ABS_OPENAPI_YAML" ./openapi.yaml
+
+          # Ensure Git identity is set inside the cloned repo
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
 
           # Add and commit changes
           git add openapi.yaml
           git commit -m "Update OpenAPI ${{ env.NEW_VERSION }}"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git main
+          git push https://x-access-token:${{ secrets.GITHUB_PAT }}@github.com/FeedbackFriends/feedback-openapi.git main
       - name: Build Docker image with Jib
         run: ./gradlew :api:jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
