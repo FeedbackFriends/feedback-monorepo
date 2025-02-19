@@ -92,7 +92,7 @@ jobs:
           git add openapi.yaml
           git commit -m "Update OpenAPI ${{ env.NEW_VERSION }}"
           git push origin main
-          git tag -a ${{ env.NEW_VERSION }}
+          git tag -a ${{ env.NEW_VERSION }} -m "Generated OpenAPI spec for version ${{ env.NEW_VERSION }}"
       - name: Build Docker image with Jib
         run: ./gradlew :api:jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
