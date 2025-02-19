@@ -65,23 +65,14 @@ jobs:
           # Clone feedback-openapi repository
           git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
 
-          # ✅ Ensure OpenAPI spec is updated before committing
+          # Ensure OpenAPI spec is updated before committing
           cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
 
           cd feedback-openapi
 
-          # Ensure version is correctly updated inside openapi.yaml
-          # sed -i "s/version:.*/version: \"${{ env.NEW_VERSION }}\"/g" openapi.yaml
-
           # Stage file for commit
           git add openapi.yaml
           git status
-
-          # ✅ Stop early if no changes exist
-          if git diff --cached --quiet; then
-            echo "No changes detected. Skipping commit and push."
-            exit 0
-          fi
 
           # Commit and push changes
           git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
