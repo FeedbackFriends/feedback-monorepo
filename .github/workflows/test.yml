@@ -9,9 +9,14 @@ jobs:
   update-openapi-repo:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write  # Ensures GITHUB_TOKEN can push to the repository
+
     steps:
       - name: Checkout feedback-api repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1  # Avoids fetching full history for faster performance
 
       - name: Set up Git
         run: |
@@ -26,8 +31,15 @@ jobs:
 
       - name: Modify a file to trigger a commit
         run: |
+          set -e  # Ensures the script exits if any command fails
           cd feedback-openapi
           echo "Random change: $(date)" >> test.txt
           git add test.txt
           git commit -m "Automated update from feedback-api [$(date)]"
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git main
+
+      - name: Push changes
+        run: |
+          cd feedback-openapi
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
