@@ -103,5 +103,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag ${{ env.NEW_VERSION }}
+
+          # Get latest commit SHA
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_URL="https://github.com/FeedbackFriends/feedback-api/commit/$COMMIT_SHA"
+
+          # Create tag with commit message
+          git tag -a ${{ env.NEW_VERSION }} -m "Release ${{ env.NEW_VERSION }} - Commit: $COMMIT_URL"
           git push origin ${{ env.NEW_VERSION }}
