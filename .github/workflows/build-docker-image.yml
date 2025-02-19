@@ -58,15 +58,16 @@ jobs:
           VERSION: ${{ env.NEW_VERSION }}
         run: |
           ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}          
-          ABS_OPENAPI_YAML="$(pwd)/apps/api/build/openapi.yaml"
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
-          cp "$ABS_OPENAPI_YAML" feedback-openapi/openapi.yaml
 
+          cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
           cd feedback-openapi
+
+          # Stage file for commit
           git add openapi.yaml
           git status
           git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
