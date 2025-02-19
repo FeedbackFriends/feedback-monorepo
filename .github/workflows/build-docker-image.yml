@@ -70,13 +70,8 @@ jobs:
 
           cd feedback-openapi
 
-          # ✅ Ensure version is correctly updated inside openapi.yaml
-          sed -i "s/version:.*/version: \"${{ env.NEW_VERSION }}\"/g" openapi.yaml
-
-          # ✅ Print OpenAPI spec after copying
-          echo "🔍 OpenAPI spec before commit:"
-          cat openapi.yaml
-          echo "----------------------"
+          # Ensure version is correctly updated inside openapi.yaml
+          # sed -i "s/version:.*/version: \"${{ env.NEW_VERSION }}\"/g" openapi.yaml
 
           # Stage file for commit
           git add openapi.yaml
