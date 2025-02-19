@@ -90,7 +90,6 @@ jobs:
 
       - name: Tag and release new API version
         run: |
-          COMMIT_SHA=$(git rev-parse HEAD)
-          COMMIT_URL="https://github.com/FeedbackFriends/feedback-api/commit/$COMMIT_SHA"
+          COMMIT_URL="https://github.com/FeedbackFriends/feedback-openapi/releases/tag/${{ env.NEW_VERSION }}"
           git tag -a ${{ env.NEW_VERSION }} -m "$COMMIT_URL"
           git push origin ${{ env.NEW_VERSION }}
