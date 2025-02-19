@@ -64,11 +64,17 @@ jobs:
 
           git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
 
-          cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
           cd feedback-openapi
+          cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
+          
+          echo "🔍 Updated OpenAPI spec (openapi.yaml):"
+          cat feedback-openapi/openapi.yaml
+          echo "----------------------"
 
-          # Stage file for commit
+
           git add openapi.yaml
+          # Stage file for commit
+          git add $(pwd)/apps/api/build/openapi.yaml
           git status
           git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
           git push origin main
