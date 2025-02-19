@@ -92,6 +92,7 @@ jobs:
           git add openapi.yaml
           git commit -m "Update OpenAPI ${{ env.NEW_VERSION }}"
           git push origin main
+          git tag -a ${{ env.NEW_VERSION }}
       - name: Build Docker image with Jib
         run: ./gradlew :api:jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
         env:
@@ -109,5 +110,5 @@ jobs:
           COMMIT_URL="https://github.com/FeedbackFriends/feedback-api/commit/$COMMIT_SHA"
 
           # Create tag with commit message
-          git tag -a ${{ env.NEW_VERSION }} -m "Release ${{ env.NEW_VERSION }} - Commit: $COMMIT_URL"
+          git tag -a ${{ env.NEW_VERSION }} -m "https://github.com/FeedbackFriends/feedback-openapi/releases/tag/${{ env.NEW_VERSION }}"
           git push origin ${{ env.NEW_VERSION }}
