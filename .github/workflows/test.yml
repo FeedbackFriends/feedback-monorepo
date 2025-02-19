@@ -9,9 +9,6 @@ jobs:
   update-openapi-repo:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write  # Ensures GITHUB_TOKEN can push to the repository
-
     steps:
       - name: Checkout feedback-api repository
         uses: actions/checkout@v4
@@ -25,7 +22,7 @@ jobs:
 
       - name: Clone feedback-openapi repository
         run: |
-          git clone https://github.com/FeedbackFriends/feedback-openapi.git
+          git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git
           cd feedback-openapi
           git checkout main
 
@@ -40,6 +37,4 @@ jobs:
       - name: Push changes
         run: |
           cd feedback-openapi
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FeedbackFriends/feedback-openapi.git main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git push https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git main
