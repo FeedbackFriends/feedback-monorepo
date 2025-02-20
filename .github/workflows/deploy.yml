@@ -1,8 +1,8 @@
-name: Deploy
+name: Deploy API and Scheduler
 
 on:
   release:
-    types: [ created ]
+    types: [created]
   workflow_dispatch:
     inputs:
       tag:
@@ -11,7 +11,7 @@ on:
         type: string
 
 jobs:
-  release:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,24 +33,24 @@ jobs:
         run: |
           echo "Deploying tag ${{ env.TAG }} to Debian server"
 
-          # Using SSH with password authentication
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
             ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
           set -e
-          echo "Pulling and running Docker image"
-          docker pull nicolaidam/feedback:${{ env.TAG }}
-          EOF
-        env:
-          DEBIAN_IP: "${{ secrets.DEBIAN_IP }}"
-          DEBIAN_USER: "${{ secrets.DEBIAN_USER }}"
-          DEBIAN_PASSWORD: "${{ secrets.DEBIAN_PASSWORD }}"
-          TAG: "${{ env.TAG }}"
 
-      - name: Set as Latest Release (Only for Release Trigger)
-        if: github.event_name == 'release'
-        run: |
-          curl -X PATCH \
-            -H "Authorization: token ${{ secrets.FEEDBACK_GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.event.release.tag_name }} \
-            -d '{"make_latest": true}'
+          cd /home/debian/config  # Navigate to Docker Compose directory
+
+          echo "Setting API_TAG and SCHEDULER_TAG..."
+          echo "API_TAG=${{ env.TAG }}" > .env
+          echo "SCHEDULER_TAG=${{ env.TAG }}" >> .env
+
+          echo "Pulling new images..."
+          docker-compose pull
+
+          echo "Starting new containers..."
+          docker-compose up -d --remove-orphans
+
+          echo "Cleaning up old images..."
+          docker image prune -f
+
+          echo "Deployment of version ${{ env.TAG }} completed!"
+          EOF
