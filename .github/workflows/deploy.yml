@@ -44,10 +44,10 @@ jobs:
           echo "SCHEDULER_TAG=${{ env.TAG }}" | sudo tee -a /home/debian/config/.env > /dev/null
 
           echo "Pulling new images..."
-          docker-compose pull
+          docker compose pull
 
           echo "Starting new containers..."
-          docker-compose up -d --remove-orphans
+          docker compose up -d --remove-orphans
 
           echo "Cleaning up old images..."
           docker image prune -f
