@@ -36,7 +36,7 @@ jobs:
       - name: Detect version type and deployment from commit message
         id: detect
         run: |
-          VERSION_TYPE="patch"
+          VERSION_TYPE="none"
           DEPLOY="false"
 
           # Get the latest commit message
@@ -66,6 +66,12 @@ jobs:
           echo "Deploy: $DEPLOY"
           echo "VERSION_TYPE=$VERSION_TYPE" >> $GITHUB_ENV
           echo "DEPLOY=$DEPLOY" >> $GITHUB_ENV
+
+      - name: Skip build if no version bump detected
+        if: ${{ env.VERSION_TYPE == 'none' }}
+        run: |
+          echo "No version bump detected ([patch], [minor], or [major]). Skipping build and deployment."
+          exit 0
 
       - name: Fetch latest version tag
         id: get-version
