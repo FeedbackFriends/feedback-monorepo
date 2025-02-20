@@ -42,6 +42,8 @@ jobs:
           echo "Setting API_TAG and SCHEDULER_TAG..."
           echo "DEPLOY_TAG=${{ env.TAG }}" | sudo tee /home/debian/config/.env > /dev/null
 
+          docker image prune -af
+          
           echo "Pulling new images..."
           docker compose pull
 
