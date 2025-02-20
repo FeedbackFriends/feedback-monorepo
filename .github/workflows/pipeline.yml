@@ -3,7 +3,7 @@ name: Build, Deploy, and Release API & Scheduler
 on:
   push:
     branches:
-      - main 
+      - main
   workflow_dispatch:
     inputs:
       version_type:
@@ -64,11 +64,13 @@ jobs:
 
           echo "Detected version type: $VERSION_TYPE"
           echo "Deploy: $DEPLOY"
-          echo "VERSION_TYPE=$VERSION_TYPE" >> $GITHUB_ENV
-          echo "DEPLOY=$DEPLOY" >> $GITHUB_ENV
+
+          # Set outputs
+          echo "::set-output name=version_type::$VERSION_TYPE"
+          echo "::set-output name=deploy::$DEPLOY"
 
       - name: Skip build if no version bump detected
-        if: ${{ env.VERSION_TYPE == 'none' }}
+        if: ${{ steps.detect.outputs.version_type == 'none' }}
         run: |
           echo "No version bump detected ([patch], [minor], or [major]). Skipping build and deployment."
           exit 0
@@ -85,7 +87,7 @@ jobs:
         id: calculate-version
         run: |
           IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.CURRENT_VERSION }}"
-          case "${{ env.VERSION_TYPE }}" in
+          case "${{ steps.detect.outputs.version_type }}" in
             patch) PATCH=$((PATCH + 1)) ;;
             minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
             major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
@@ -121,9 +123,9 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes detected in OpenAPI spec. Skipping commit."
           else
-          echo "Changes detected. Committing..."
-          git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
-          git push origin main
+            echo "Changes detected. Committing..."
+            git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
+            git push origin main
           fi
 
       - name: Build and publish Docker images with Jib
@@ -135,7 +137,7 @@ jobs:
           DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
 
       - name: Conditional Deployment to Debian server
-        if: env.DEPLOY == 'true'
+        if: ${{ steps.detect.outputs.deploy == 'true' }}
         run: |
           echo "Deploying tag ${{ env.NEW_VERSION }} to Debian server"
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
@@ -150,9 +152,10 @@ jobs:
           echo "Starting new containers..."
           docker compose up -d --remove-orphans
           echo "Cleaning up old images..."
+          EOF
 
       - name: Create and Push Git Tag
-        if: env.DEPLOY == 'true'
+        if: ${{ steps.detect.outputs.deploy == 'true' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -163,16 +166,15 @@ jobs:
           # Push the tag to the remote repository
           git push origin ${{ env.NEW_VERSION }}
 
-          
       - name: Create GitHub Release (via REST API)
-        if: env.DEPLOY == 'true'
+        if: ${{ steps.detect.outputs.deploy == 'true' }}
         run: |
           echo "Creating a GitHub Release for tag ${{ env.NEW_VERSION }}"
 
           API_JSON=$(jq -n \
             --arg tag_name "${{ env.NEW_VERSION }}" \
             --arg name "Release ${{ env.NEW_VERSION }}" \
-            --arg body "🚀 New release of the API and Scheduler:\n\n${{ env.CHANGELOG }}" \
+            --arg body "🚀 New release of the API and Scheduler." \
             '{ tag_name: $tag_name, name: $name, body: $body, draft: false, prerelease: false }')
 
           curl -s -X POST \
@@ -180,6 +182,3 @@ jobs:
             -H "Content-Type: application/json" \
             -d "$API_JSON" \
             "https://api.github.com/repos/${{ github.repository }}/releases"
-          docker image prune -f
-          echo "Deployment of version ${{ env.NEW_VERSION }} completed!"
-          EOF
