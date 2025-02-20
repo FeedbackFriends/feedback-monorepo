@@ -150,13 +150,19 @@ jobs:
           echo "Deployment of version ${{ env.NEW_VERSION }} completed!"
           EOF
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release (via REST API)
         if: env.DEPLOY == 'true'
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.NEW_VERSION }}
-          name: Release ${{ env.NEW_VERSION }}
-          body: |
-            Version: ${{ env.NEW_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Creating a GitHub Release for tag ${{ env.NEW_VERSION }}"
+
+          API_JSON=$(jq -n \
+            --arg tag_name "${{ env.NEW_VERSION }}" \
+            --arg name "Release ${{ env.NEW_VERSION }}" \
+            --arg body "🚀 New release of the API and Scheduler:\n\n${{ env.CHANGELOG }}" \
+            '{ tag_name: $tag_name, name: $name, body: $body, draft: false, prerelease: false }')
+
+          curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "$API_JSON" \
+            "https://api.github.com/repos/${{ github.repository }}/releases"
