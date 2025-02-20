@@ -3,7 +3,7 @@ name: Build, Deploy, and Release API & Scheduler
 on:
   push:
     branches:
-      - main  # Automatically trigger on commits to the main branch
+      - main 
   workflow_dispatch:
     inputs:
       version_type:
@@ -144,6 +144,36 @@ jobs:
           echo "Starting new containers..."
           docker compose up -d --remove-orphans
           echo "Cleaning up old images..."
+
+      - name: Create and Push Git Tag
+        if: env.DEPLOY == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Create the tag
+          git tag -a ${{ env.NEW_VERSION }} -m "Release version ${{ env.NEW_VERSION }}"
+          
+          # Push the tag to the remote repository
+          git push origin ${{ env.NEW_VERSION }}
+
+          
+      - name: Create GitHub Release (via REST API)
+        if: env.DEPLOY == 'true'
+        run: |
+          echo "Creating a GitHub Release for tag ${{ env.NEW_VERSION }}"
+
+          API_JSON=$(jq -n \
+            --arg tag_name "${{ env.NEW_VERSION }}" \
+            --arg name "Release ${{ env.NEW_VERSION }}" \
+            --arg body "🚀 New release of the API and Scheduler:\n\n${{ env.CHANGELOG }}" \
+            '{ tag_name: $tag_name, name: $name, body: $body, draft: false, prerelease: false }')
+
+          curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "$API_JSON" \
+            "https://api.github.com/repos/${{ github.repository }}/releases"
           docker image prune -f
           echo "Deployment of version ${{ env.NEW_VERSION }} completed!"
           EOF
