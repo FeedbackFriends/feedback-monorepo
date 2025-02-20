@@ -1,0 +1,151 @@
+name: Build, Tag, and Deploy API & Scheduler
+
+on:
+  push:
+    branches:
+      - main  # Automatically trigger on commits to the main branch
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: "Type of version increment (major, minor, patch)"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+      deploy:
+        description: "Deploy after build"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect version type and deployment from commit message
+        id: detect
+        run: |
+          VERSION_TYPE="patch"
+          DEPLOY="false"
+
+          # Get the latest commit message
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+
+          # Detect version bump type from commit message
+          if echo "$COMMIT_MSG" | grep -q "\[major\]"; then
+            VERSION_TYPE="major"
+          elif echo "$COMMIT_MSG" | grep -q "\[minor\]"; then
+            VERSION_TYPE="minor"
+          elif echo "$COMMIT_MSG" | grep -q "\[patch\]"; then
+            VERSION_TYPE="patch"
+          fi
+
+          # Detect if deployment should happen
+          if echo "$COMMIT_MSG" | grep -q "\[deploy\]"; then
+            DEPLOY="true"
+          fi
+
+          # Override with manual input if specified
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION_TYPE="${{ github.event.inputs.version_type }}"
+            DEPLOY="${{ github.event.inputs.deploy }}"
+          fi
+
+          echo "Detected version type: $VERSION_TYPE"
+          echo "Deploy: $DEPLOY"
+          echo "VERSION_TYPE=$VERSION_TYPE" >> $GITHUB_ENV
+          echo "DEPLOY=$DEPLOY" >> $GITHUB_ENV
+
+      - name: Fetch latest version tag
+        id: get-version
+        run: |
+          git fetch --tags
+          CURRENT_VERSION=$(git tag --sort=-version:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          echo "Latest detected version: $CURRENT_VERSION"
+
+      - name: Increment version based on detected type
+        id: calculate-version
+        run: |
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.CURRENT_VERSION }}"
+          case "${{ env.VERSION_TYPE }}" in
+            patch) PATCH=$((PATCH + 1)) ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+          esac
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "New version to release: $NEW_VERSION"
+
+      - name: Set up JDK environment
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Generate OpenAPI & Sync with feedback-openapi repo
+        env:
+          VERSION: ${{ env.NEW_VERSION }}
+        run: |
+          ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
+          cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
+
+          cd feedback-openapi
+          git add openapi.yaml
+          git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
+          git push origin main
+
+          git tag -a ${{ env.NEW_VERSION }} -m "Generated OpenAPI spec for version ${{ env.NEW_VERSION }}"
+          git push origin ${{ env.NEW_VERSION }}
+
+      - name: Build and publish Docker images with Jib
+        run: |
+          ./gradlew :api:jib --image=nicolaidam/feedback-api:${{ env.NEW_VERSION }}
+          ./gradlew :scheduler:jib --image=nicolaidam/feedback-scheduler:${{ env.NEW_VERSION }}
+        env:
+          DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
+          DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
+
+      - name: Conditional Deployment to Debian server
+        if: env.DEPLOY == 'true'
+        run: |
+          echo "Deploying tag ${{ env.NEW_VERSION }} to Debian server"
+
+          sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
+          set -e
+
+          cd /home/debian/config  # Navigate to Docker Compose directory
+
+          echo "Setting DEPLOY_TAG..."
+          echo "DEPLOY_TAG=${{ env.NEW_VERSION }}" | sudo tee /home/debian/config/.env > /dev/null
+
+          docker image prune -af
+
+          echo "Pulling new images..."
+          docker compose pull
+
+          echo "Starting new containers..."
+          docker compose up -d --remove-orphans
+
+          echo "Cleaning up old images..."
+          docker image prune -f
+
+          echo "Deployment of version ${{ env.NEW_VERSION }} completed!"
+          EOF
