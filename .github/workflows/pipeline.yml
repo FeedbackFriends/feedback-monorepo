@@ -99,21 +99,16 @@ jobs:
           VERSION: ${{ env.NEW_VERSION }}
         run: |
           ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
-
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
           git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
           cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
-
           cd feedback-openapi
           git add openapi.yaml
           git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
           git push origin main
-
           git tag -a ${{ env.NEW_VERSION }} -m "Generated OpenAPI spec for version ${{ env.NEW_VERSION }}"
           git push origin ${{ env.NEW_VERSION }}
-
       - name: Build and publish Docker images with Jib
         run: |
           ./gradlew :api:jib --image=nicolaidam/feedback-api:${{ env.NEW_VERSION }}
@@ -126,43 +121,18 @@ jobs:
         if: env.DEPLOY == 'true'
         run: |
           echo "Deploying tag ${{ env.NEW_VERSION }} to Debian server"
-
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
             ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
           set -e
-
           cd /home/debian/config  # Navigate to Docker Compose directory
-
           echo "Setting DEPLOY_TAG..."
           echo "DEPLOY_TAG=${{ env.NEW_VERSION }}" | sudo tee /home/debian/config/.env > /dev/null
-
           docker image prune -af
-
           echo "Pulling new images..."
           docker compose pull
-
           echo "Starting new containers..."
           docker compose up -d --remove-orphans
-
           echo "Cleaning up old images..."
           docker image prune -f
-
           echo "Deployment of version ${{ env.NEW_VERSION }} completed!"
           EOF
-
-      - name: Create GitHub Release (via REST API)
-        if: env.DEPLOY == 'true'
-        run: |
-          echo "Creating a GitHub Release for tag ${{ env.NEW_VERSION }}"
-
-          API_JSON=$(jq -n \
-            --arg tag_name "${{ env.NEW_VERSION }}" \
-            --arg name "Release ${{ env.NEW_VERSION }}" \
-            --arg body "🚀 New release of the API and Scheduler:\n\n${{ env.CHANGELOG }}" \
-            '{ tag_name: $tag_name, name: $name, body: $body, draft: false, prerelease: false }')
-
-          curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "$API_JSON" \
-            "https://api.github.com/repos/${{ github.repository }}/releases"
