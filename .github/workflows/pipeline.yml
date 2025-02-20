@@ -94,21 +94,31 @@ jobs:
           java-version: "17"
           distribution: "temurin"
 
-      - name: Generate OpenAPI & Sync with feedback-openapi repo
+      - name: Update OpenAPI and sync with feedback-openapi repo
         env:
           VERSION: ${{ env.NEW_VERSION }}
         run: |
           ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
+
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Clone feedback-openapi repository
           git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
+
+          # Ensure OpenAPI spec is updated before committing
           cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
+
           cd feedback-openapi
+
+          # Stage file for commit
           git add openapi.yaml
+          git status
+
+          # Commit and push changes
           git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
           git push origin main
-          git tag -a ${{ env.NEW_VERSION }} -m "Generated OpenAPI spec for version ${{ env.NEW_VERSION }}"
-          git push origin ${{ env.NEW_VERSION }}
+
       - name: Build and publish Docker images with Jib
         run: |
           ./gradlew :api:jib --image=nicolaidam/feedback-api:${{ env.NEW_VERSION }}
