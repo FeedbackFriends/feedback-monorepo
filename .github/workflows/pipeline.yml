@@ -1,4 +1,4 @@
-name: Build, Tag, and Deploy API & Scheduler
+name: Build, Deploy, and Release API & Scheduler
 
 on:
   push:
@@ -26,7 +26,7 @@ permissions:
   packages: write
 
 jobs:
-  build-and-deploy:
+  build-deploy-and-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -149,3 +149,14 @@ jobs:
 
           echo "Deployment of version ${{ env.NEW_VERSION }} completed!"
           EOF
+
+      - name: Create GitHub Release
+        if: env.DEPLOY == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.NEW_VERSION }}
+          name: Release ${{ env.NEW_VERSION }}
+          body: |
+            Version: ${{ env.NEW_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
