@@ -103,21 +103,22 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Clone feedback-openapi repository
           git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
 
-          # Ensure OpenAPI spec is updated before committing
           cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
 
           cd feedback-openapi
-
-          # Stage file for commit
           git add openapi.yaml
           git status
 
-          # Commit and push changes
+          # Check if there are changes before committing
+          if git diff --cached --quiet; then
+            echo "No changes detected in OpenAPI spec. Skipping commit."
+          else
+          echo "Changes detected. Committing..."
           git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
           git push origin main
+          fi
 
       - name: Build and publish Docker images with Jib
         run: |
