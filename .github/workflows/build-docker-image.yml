@@ -84,8 +84,8 @@ jobs:
 
       - name: Build and publish Docker image with Jib
         run: |
-          ./gradlew :api:jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
-          ./gradlew :scheduler:jib --image=nicolaidam/feedback:${{ env.NEW_VERSION }}
+          ./gradlew :api:jib --image=nicolaidam/feedback-api:${{ env.NEW_VERSION }}
+          ./gradlew :scheduler:jib --image=nicolaidam/feedback-scheduler:${{ env.NEW_VERSION }}
         env:
           DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
           DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
