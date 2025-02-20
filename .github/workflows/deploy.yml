@@ -40,8 +40,7 @@ jobs:
           cd /home/debian/config  # Navigate to Docker Compose directory
 
           echo "Setting API_TAG and SCHEDULER_TAG..."
-          echo "API_TAG=${{ env.TAG }}" | sudo tee /home/debian/config/.env > /dev/null
-          echo "SCHEDULER_TAG=${{ env.TAG }}" | sudo tee -a /home/debian/config/.env > /dev/null
+          echo "DEPLOY_TAG=${{ env.TAG }}" | sudo tee /home/debian/config/.env > /dev/null
 
           echo "Pulling new images..."
           docker compose pull
