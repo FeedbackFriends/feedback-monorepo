@@ -4,6 +4,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     kotlin("jvm") version libs.versions.kotlin
+    alias(libs.plugins.springboot) version "3.2.1"
+    id("io.spring.dependency-management") version "1.1.4"
+    kotlin("plugin.spring") version libs.versions.kotlin
 }
 
 group = "dk.example.feedback.persistence"
@@ -25,6 +28,8 @@ dependencies {
     implementation(libs.liquibase)
     runtimeOnly(libs.postgresql)
     implementation(libs.bundles.exposed)
+    implementation(libs.springboot.data.jpa)
+
 }
 
 tasks.withType<KotlinJvmCompile>().configureEach {

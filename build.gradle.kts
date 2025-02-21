@@ -97,4 +97,11 @@ openApi {
 	apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
 	outputFileName.set("openapi.yaml")
 	waitTimeInSeconds.set(30)
+	customBootRun {
+		args.set(
+			listOf(
+				"--spring.liquibase.enabled=false", // Let's save a couple of seconds, no need to run liquibase
+			),
+		)
+	}
 }

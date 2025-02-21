@@ -20,6 +20,8 @@ management:
         enabled: true
       show-details: always
 spring:
+  #  jpa:
+  #    open-in-view: false
   security:
     oauth2:
       resourceserver:

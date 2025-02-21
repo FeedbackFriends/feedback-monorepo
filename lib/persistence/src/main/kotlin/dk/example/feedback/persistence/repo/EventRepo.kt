@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-@Transactional
 @Component
+@Transactional
 open class EventRepo {
 
     private val logger = LoggerFactory.getLogger(EventRepo::class.java)

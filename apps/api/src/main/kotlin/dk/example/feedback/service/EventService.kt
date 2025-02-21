@@ -18,10 +18,8 @@ import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
 import java.util.*
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class EventService(
     private val eventRepo: EventRepo,
     private val authContext: AuthContextHelper

@@ -12,8 +12,8 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-@Transactional
 @Component
+@Transactional
 open class FeedbackRepo {
 
     fun getTotalFeedbackSubmissionsForAccount(accountId: String): Long {

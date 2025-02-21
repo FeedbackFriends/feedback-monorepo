@@ -8,7 +8,6 @@ plugins {
     kotlin("jvm") version libs.versions.kotlin
     kotlin("plugin.spring") version libs.versions.kotlin
     id("com.google.cloud.tools.jib") version "3.4.4"
-    id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 }
 
 group = "dk.nicolai"
@@ -45,13 +44,8 @@ dependencies {
 
     implementation(enforcedPlatform(libs.springboot.dependencies))
 
-    runtimeOnly(libs.h2database)
-
     implementation(libs.bundles.jackson)
     implementation(libs.kotlin.reflect)
-    implementation(libs.liquibase)
-
-    runtimeOnly(libs.postgresql)
 
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
@@ -87,10 +81,4 @@ jib {
             password = System.getenv("DOCKER_PASSWORD")
         }
     }
-}
-
-openApi {
-    apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
-    outputFileName.set("openapi.yaml")
-    waitTimeInSeconds.set(15)
 }

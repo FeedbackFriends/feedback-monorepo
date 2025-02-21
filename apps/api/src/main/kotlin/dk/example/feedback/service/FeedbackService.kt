@@ -14,10 +14,8 @@ import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
 import java.util.*
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class FeedbackService(
     val feedbackRepo: FeedbackRepo,
     val eventRepo: EventRepo,

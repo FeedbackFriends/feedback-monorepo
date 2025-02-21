@@ -16,6 +16,7 @@ open class AccountRepo {
 
     private val logger = LoggerFactory.getLogger(AccountRepo::class.java)
 
+    @Transactional
     fun createOrGetAccount(
         name: String?,
         email: String?,

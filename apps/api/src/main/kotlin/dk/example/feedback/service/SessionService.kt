@@ -5,17 +5,15 @@ import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.enumerations.Role
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class SessionService(
     val eventService: EventService,
     val accountService: AccountService,
     val context: AuthContextHelper,
 ) {
 
-    private val logger = LoggerFactory.getLogger(AccountService::class.java)
+    private val logger = LoggerFactory.getLogger(SessionService::class.java)
 
     fun getSession(): SessionDto {
         val accountId = context.getAuthContext().accountId
