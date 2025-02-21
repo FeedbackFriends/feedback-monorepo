@@ -17,7 +17,7 @@ class AccountService(
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)
 
-    fun createAccount(requestedRole: Role?) {
+    suspend fun createAccount(requestedRole: Role?) {
         when (requestedRole) {
             // Firebase user is anonymous if null
             null -> {

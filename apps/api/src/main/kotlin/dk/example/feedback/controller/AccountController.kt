@@ -76,7 +76,7 @@ class AccountController(
 
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('${Roles.ORGANIZER}', '${Roles.PARTICIPANT}')")
-    fun deleteAccount(
+    suspend fun deleteAccount(
         @AuthenticationPrincipal principal: Jwt,
     ) {
         val accountId = principal.getAccountId()
