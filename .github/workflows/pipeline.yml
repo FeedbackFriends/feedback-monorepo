@@ -1,9 +1,6 @@
 name: Build, Deploy, and Release API & Scheduler
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       version_type:
@@ -33,68 +30,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Detect version type and deployment from commit message
-        id: detect
-        run: |
-          VERSION_TYPE="none"
-          DEPLOY="false"
-
-          # Get the latest commit message
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-
-          # Detect version bump type from commit message
-          if echo "$COMMIT_MSG" | grep -q "\[major\]"; then
-            VERSION_TYPE="major"
-          elif echo "$COMMIT_MSG" | grep -q "\[minor\]"; then
-            VERSION_TYPE="minor"
-          elif echo "$COMMIT_MSG" | grep -q "\[patch\]"; then
-            VERSION_TYPE="patch"
-          fi
-
-          # Detect if deployment should happen
-          if echo "$COMMIT_MSG" | grep -q "\[deploy\]"; then
-            DEPLOY="true"
-          fi
-
-          # Override with manual input if specified
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            VERSION_TYPE="${{ github.event.inputs.version_type }}"
-            DEPLOY="${{ github.event.inputs.deploy }}"
-          fi
-
-          echo "Detected version type: $VERSION_TYPE"
-          echo "Deploy: $DEPLOY"
-
-          # Set outputs
-          echo "::set-output name=version_type::$VERSION_TYPE"
-          echo "::set-output name=deploy::$DEPLOY"
-
-      - name: Skip build if no version bump detected
-        if: ${{ steps.detect.outputs.version_type == 'none' }}
-        run: |
-          echo "No version bump detected ([patch], [minor], or [major]). Skipping build and deployment."
-          exit 0
-
       - name: Fetch latest version tag
-        id: get-version
         run: |
           git fetch --tags
           CURRENT_VERSION=$(git tag --sort=-version:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
-          echo "Latest detected version: $CURRENT_VERSION"
 
-      - name: Increment version based on detected type
-        id: calculate-version
+      - name: Increment version
         run: |
           IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.CURRENT_VERSION }}"
-          case "${{ steps.detect.outputs.version_type }}" in
+          case "${{ github.event.inputs.version_type }}" in
             patch) PATCH=$((PATCH + 1)) ;;
             minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
             major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
           esac
           NEW_VERSION="$MAJOR.$MINOR.$PATCH"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "New version to release: $NEW_VERSION"
 
       - name: Set up JDK environment
         uses: actions/setup-java@v4
@@ -117,13 +68,10 @@ jobs:
 
           cd feedback-openapi
           git add openapi.yaml
-          git status
 
-          # Check if there are changes before committing
           if git diff --cached --quiet; then
-            echo "No changes detected in OpenAPI spec. Skipping commit."
+            echo "No changes detected in OpenAPI spec."
           else
-            echo "Changes detected. Committing..."
             git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
             git push origin main
           fi
@@ -136,41 +84,32 @@ jobs:
           DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
           DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
 
-      - name: Conditional Deployment to Debian server
-        if: ${{ steps.detect.outputs.deploy == 'true' }}
+      - name: Deploy to Debian server
+        if: ${{ github.event.inputs.deploy == 'true' }}
         run: |
           echo "Deploying tag ${{ env.NEW_VERSION }} to Debian server"
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
             ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
           set -e
-          cd /home/debian/config  # Navigate to Docker Compose directory
-          echo "Setting DEPLOY_TAG..."
+          cd /home/debian/config
           echo "DEPLOY_TAG=${{ env.NEW_VERSION }}" | sudo tee /home/debian/config/.env > /dev/null
           docker image prune -af
-          echo "Pulling new images..."
           docker compose pull
-          echo "Starting new containers..."
           docker compose up -d --remove-orphans
-          echo "Cleaning up old images..."
+          docker image prune -f
           EOF
 
       - name: Create and Push Git Tag
-        if: ${{ steps.detect.outputs.deploy == 'true' }}
+        if: ${{ github.event.inputs.deploy == 'true' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Create the tag
           git tag -a ${{ env.NEW_VERSION }} -m "Release version ${{ env.NEW_VERSION }}"
-          
-          # Push the tag to the remote repository
           git push origin ${{ env.NEW_VERSION }}
 
-      - name: Create GitHub Release (via REST API)
-        if: ${{ steps.detect.outputs.deploy == 'true' }}
+      - name: Create GitHub Release
+        if: ${{ github.event.inputs.deploy == 'true' }}
         run: |
-          echo "Creating a GitHub Release for tag ${{ env.NEW_VERSION }}"
-
           API_JSON=$(jq -n \
             --arg tag_name "${{ env.NEW_VERSION }}" \
             --arg name "Release ${{ env.NEW_VERSION }}" \
