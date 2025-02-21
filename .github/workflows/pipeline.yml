@@ -1,0 +1,123 @@
+name: Build, Deploy, and Release API & Scheduler
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: "Type of version increment (major, minor, patch)"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+      deploy:
+        description: "Deploy after build"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-deploy-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch latest version tag
+        run: |
+          git fetch --tags
+          CURRENT_VERSION=$(git tag --sort=-version:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+
+      - name: Increment version
+        run: |
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ env.CURRENT_VERSION }}"
+          case "${{ github.event.inputs.version_type }}" in
+            patch) PATCH=$((PATCH + 1)) ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+          esac
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Set up JDK environment
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Update OpenAPI and sync with feedback-openapi repo
+        env:
+          VERSION: ${{ env.NEW_VERSION }}
+        run: |
+          ./gradlew :api:generateOpenApiDocs -Pversion=${{ env.NEW_VERSION }}
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
+
+          cp "$(pwd)/apps/api/build/openapi.yaml" feedback-openapi/openapi.yaml
+
+          cd feedback-openapi
+          git add openapi.yaml
+
+          if git diff --cached --quiet; then
+            echo "No changes detected in OpenAPI spec."
+          else
+            git commit -m "Update OpenAPI spec for version ${{ env.NEW_VERSION }}"
+            git push origin main
+          fi
+
+      - name: Build and publish Docker images with Jib
+        run: |
+          ./gradlew :api:jib --image=nicolaidam/feedback-api:${{ env.NEW_VERSION }}
+          ./gradlew :scheduler:jib --image=nicolaidam/feedback-scheduler:${{ env.NEW_VERSION }}
+        env:
+          DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
+          DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
+
+      - name: Deploy to Debian server
+        if: ${{ github.event.inputs.deploy == 'true' }}
+        run: |
+          echo "Deploying tag ${{ env.NEW_VERSION }} to Debian server"
+          sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
+          set -e
+          cd /home/debian/config
+          echo "DEPLOY_TAG=${{ env.NEW_VERSION }}" | sudo tee /home/debian/config/.env > /dev/null
+          docker image prune -af
+          docker compose pull
+          docker compose up -d --remove-orphans
+          docker image prune -f
+          EOF
+
+      - name: Create and Push Git Tag
+        if: ${{ github.event.inputs.deploy == 'true' }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a ${{ env.NEW_VERSION }} -m "Release version ${{ env.NEW_VERSION }}"
+          git push origin ${{ env.NEW_VERSION }}
+
+      - name: Create GitHub Release
+        if: ${{ github.event.inputs.deploy == 'true' }}
+        run: |
+          API_JSON=$(jq -n \
+            --arg tag_name "${{ env.NEW_VERSION }}" \
+            --arg name "Release ${{ env.NEW_VERSION }}" \
+            --arg body "🚀 New release of the API and Scheduler." \
+            '{ tag_name: $tag_name, name: $name, body: $body, draft: false, prerelease: false }')
+
+          curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "$API_JSON" \
+            "https://api.github.com/repos/${{ github.repository }}/releases"
