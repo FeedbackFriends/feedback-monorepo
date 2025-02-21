@@ -27,6 +27,18 @@ compileKotlin.compilerOptions.allWarningsAsErrors.set(true)
 
 dependencies {
 
+    // Kotlin Coroutines Core
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+//
+//    // Kotlin Coroutines for JDK8 (suspend functions for CompletableFuture, etc.)
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.3")
+//
+//    // Kotlin Coroutines support for Spring (if you're using Spring Boot)
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-spring:1.7.3")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
     implementation(projects.persistence)
     implementation(projects.model)
 

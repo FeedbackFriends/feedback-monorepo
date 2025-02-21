@@ -34,7 +34,7 @@ class AccountController(
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    fun createAccount(
+    suspend fun createAccount(
         @RequestBody input: CreateAccountInput,
     ): SessionDto {
         val authContext = authContext.getAuthContext()
@@ -59,7 +59,7 @@ class AccountController(
 
     @PutMapping("/role")
     @PreAuthorize("hasAnyAuthority('${Roles.ORGANIZER}', '${Roles.PARTICIPANT}')")
-    fun updateRole(
+    suspend fun updateRole(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: UpdateRoleInput,
     ) {
