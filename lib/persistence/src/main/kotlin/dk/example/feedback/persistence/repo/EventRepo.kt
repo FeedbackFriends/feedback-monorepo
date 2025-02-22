@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional
-open class EventRepo {
+class EventRepo {
 
     private val logger = LoggerFactory.getLogger(EventRepo::class.java)
 

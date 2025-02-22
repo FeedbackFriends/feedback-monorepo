@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional
-open class AccountRepo {
+class AccountRepo {
 
     private val logger = LoggerFactory.getLogger(AccountRepo::class.java)
 

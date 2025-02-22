@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional
-open class MockRepo {
+class MockRepo {
 
     companion object {
         private val logger = LoggerFactory.getLogger(MockRepo::class.java)

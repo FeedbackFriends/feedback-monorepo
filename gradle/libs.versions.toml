@@ -10,6 +10,7 @@ firebase = "9.4.3"
 liquibase = "4.31.0"
 postgresql = "42.7.5"
 h2 = "2.3.232"
+tools-core = "1.0.0-alpha11"
 
 [libraries]
 springboot-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "springboot" }
@@ -58,6 +59,7 @@ kotlin-mustache = "net.pwall.mustache:kotlin-mustache:0.11"
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 guava = "com.google.guava:guava:33.0.0-jre"
 firebase = { module = "com.google.firebase:firebase-admin", version.ref = "firebase" }
+tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "tools-core" }
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springboot" }

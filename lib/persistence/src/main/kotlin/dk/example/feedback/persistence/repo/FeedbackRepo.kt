@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional
-open class FeedbackRepo {
+class FeedbackRepo {
 
     fun getTotalFeedbackSubmissionsForAccount(accountId: String): Long {
         return FeedbackDao.find { FeedbackTable.participant eq accountId }.count()

@@ -18,6 +18,12 @@ class AuthContextHelper {
 
     fun getAuthContext(): AuthContext {
         val authentication = SecurityContextHolder.getContext().authentication
+
+        if (authentication == null || !authentication.isAuthenticated) {
+            logger.error("No authenticated user found in security context.")
+            throw IllegalStateException("No authenticated user found.")
+        }
+
         if (authentication.principal is Jwt) {
             val authContext = AuthContext(
                 accountId = authentication.name,

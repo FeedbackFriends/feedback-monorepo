@@ -1,5 +1,6 @@
 package dk.example.feedback.controller
 
+import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.model.error.ApiError
 import dk.example.feedback.model.exceptions.DomainException
 import jakarta.servlet.http.HttpServletRequest
@@ -11,13 +12,30 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
-class ControllerAdvisor {
+class ControllerAdvisor(
+    private val authContextHelper: AuthContextHelper
+) {
 
     private val logger = LoggerFactory.getLogger(ControllerAdvisor::class.java)
 
     @ExceptionHandler(Exception::class)
     fun handleException(exception: Exception, request: HttpServletRequest): ResponseEntity<ApiError> {
-        logger.error("Exception caught: ${exception.javaClass.simpleName}", exception)
+        val authContext = try {
+            authContextHelper.getAuthContext()
+        } catch (e: IllegalStateException) {
+            null
+        }
+
+        logger.error(
+            """
+            Exception: ${exception.javaClass.simpleName}
+            Message: ${exception.message}
+            Stacktrace: ${exception.stackTraceToString()}
+            Request Path: ${request.requestURI}
+            Method: ${request.method}
+            AuthContext: Account ID = ${authContext?.accountId ?: "Unauthenticated"}, Role = ${authContext?.role ?: "N/A"}
+            """.trimIndent(), exception
+        )
 
         val domainCode = if (exception is DomainException) exception.domainCode else null
 
