@@ -59,7 +59,6 @@ kotlin-mustache = "net.pwall.mustache:kotlin-mustache:0.11"
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 guava = "com.google.guava:guava:33.0.0-jre"
 firebase = { module = "com.google.firebase:firebase-admin", version.ref = "firebase" }
-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "tools-core" }
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springboot" }

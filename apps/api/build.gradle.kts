@@ -45,7 +45,6 @@ dependencies {
     implementation(libs.springboot.data.jpa)
     implementation(libs.springboot.web)
     implementation(libs.springboot.actuator)
-    implementation(libs.tools.core)
 
     developmentOnly(libs.springboot.devtools)
     testImplementation(libs.springboot.test)
