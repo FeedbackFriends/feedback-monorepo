@@ -92,7 +92,7 @@ class EventRepo {
         title: String,
         agenda: String?,
         date: OffsetDateTime,
-        location: String,
+        location: String?,
         durationInMinutes: Int,
         questions: List<Pair<String, FeedbackType>>,
     ): EventEntity {

@@ -56,13 +56,15 @@ class EventService(
         val event = eventRepo.getEvent(eventId)
         jwt.verifyAccountHasId(event.manager.id)
         val updatedEvent = eventRepo.updateEvent(
-            eventId = TODO(),
-            title = TODO(),
-            agenda = TODO(),
-            date = TODO(),
-            location = TODO(),
-            durationInMinutes = TODO(),
-            questions = TODO()
+            eventId = eventId,
+            title = eventInput.title,
+            agenda = eventInput.agenda,
+            date = eventInput.date,
+            location = eventInput.location,
+            durationInMinutes = eventInput.durationInMinutes,
+            questions = eventInput.questions.map { question ->
+                Pair(question.questionText, question.feedbackType)
+            }
         )
         return updatedEvent.toManagerEvent(
             pinCode = getPinCodeForEvent(eventId)
