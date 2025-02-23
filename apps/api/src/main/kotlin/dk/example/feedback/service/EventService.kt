@@ -7,7 +7,8 @@ import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.QuestionFeedbackSummary
-import dk.example.feedback.helpers.AuthContextHelper
+import dk.example.feedback.helpers.getAccountId
+import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.enumerations.Emoji
@@ -17,41 +18,43 @@ import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
 import java.util.*
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
 
 @Service
 class EventService(
     private val eventRepo: EventRepo,
-    private val authContext: AuthContextHelper
 ) {
 
-    fun createEvent(eventInput: EventInput): ManagerEventDto {
+    fun createEvent(eventInput: EventInput, jwt: Jwt): ManagerEventDto {
         val generatedPinCode = generateUniquePinCode()
-        val managerId = authContext.getAuthContext().accountId
+        val managerId = jwt.getAccountId()
         val eventEntity = eventRepo.persistEvent(
-            title = TODO(),
-            agenda = TODO(),
-            date = TODO(),
-            location = TODO(),
-            durationInMinutes = TODO(),
-            generatedPinCode = TODO(),
-            questions = TODO(),
-            managerId = TODO()
+            title = eventInput.title,
+            agenda = eventInput.agenda,
+            date = eventInput.date,
+            location = eventInput.location,
+            durationInMinutes = eventInput.durationInMinutes,
+            generatedPinCode = generatedPinCode,
+            questions = eventInput.questions.map { question ->
+                Pair(question.questionText, question.feedbackType)
+            },
+            managerId = managerId
         )
         return eventEntity.toManagerEvent(
             pinCode = generatedPinCode
         )
     }
 
-    fun deleteEvent(eventId: UUID) {
+    fun deleteEvent(eventId: UUID, jwt: Jwt) {
         val event = eventRepo.getEvent(eventId)
-        authContext.verifyLoggedInAccountHasId(event.manager.id)
+        jwt.verifyAccountHasId(event.manager.id)
         eventRepo.deleteEvent(eventId)
     }
 
-    fun updateEvent(eventInput: EventInput, eventId: UUID): ManagerEventDto {
+    fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): ManagerEventDto {
         val event = eventRepo.getEvent(eventId)
-        authContext.verifyLoggedInAccountHasId(event.manager.id)
+        jwt.verifyAccountHasId(event.manager.id)
         val updatedEvent = eventRepo.updateEvent(
             eventId = TODO(),
             title = TODO(),
@@ -87,8 +90,8 @@ class EventService(
         }
     }
 
-    fun joinEvent(pinCode: String): ParticipantEventDto {
-        val accountId = authContext.getAuthContext().accountId
+    fun joinEvent(pinCode: String, jwt: Jwt): ParticipantEventDto {
+        val accountId = jwt.getAccountId()
         val event = eventRepo.getEventByPinCode(pinCode)
         throwIfAccountIsManager(event, accountId)
         throwIfAccountAlreadyJoinedEvent(event, accountId)
@@ -100,9 +103,9 @@ class EventService(
         )
     }
 
-    fun resetNewFeedback(eventId: UUID) {
+    fun resetNewFeedback(eventId: UUID, jwt: Jwt) {
         val event = eventRepo.getEvent(eventId)
-        authContext.verifyLoggedInAccountHasId(event.manager.id)
+        jwt.verifyAccountHasId(event.manager.id)
         eventRepo.resetNewFeedbackForEvent(eventId)
     }
 

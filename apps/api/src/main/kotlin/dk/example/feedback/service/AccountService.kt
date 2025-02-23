@@ -1,28 +1,28 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.helpers.AuthContextHelper
+import dk.example.feedback.helpers.getAccountId
+import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.model.enumerations.Role
 import dk.example.feedback.persistence.repo.AccountRepo
 import org.slf4j.LoggerFactory
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
 
 @Service
 class AccountService(
     val accountRepo: AccountRepo,
-    val context: AuthContextHelper,
-    private val authContext: AuthContextHelper,
     val firebaseService: FirebaseService,
 ) {
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)
 
-    suspend fun createAccount(requestedRole: Role?) {
+    fun createAccount(requestedRole: Role?, name: String?, email: String?, phoneNumber: String?, jwt: Jwt) {
         when (requestedRole) {
             // Firebase user is anonymous if null
             null -> {
-                logger.info("Creating anonymous account for ${authContext.getAuthContext().accountId} since role is null")
-                val accountId = context.getAuthContext().accountId
+//                logger.info("Creating anonymous account for ${authContext.getAuthContext().accountId} since role is null")
+                val accountId = jwt.getAccountId()
                 accountRepo.createOrGetAccount(
                     accountId = accountId,
                     name = null,
@@ -32,15 +32,13 @@ class AccountService(
             }
 
             Role.Organizer, Role.Participant -> {
-                logger.info("Creating account for ${authContext.getAuthContext().accountId} since requested role is $requestedRole")
-                val accountId = context.getAuthContext().accountId
-                authContext.verifyLoggedInAccountHasId(id = accountId)
-                val firebaseUser = firebaseService.getUser(userId = accountId)
+//                logger.info("Creating account for ${authContext.getAuthContext().accountId} since requested role is $requestedRole")
+                val accountId = jwt.getAccountId()
                 accountRepo.createOrGetAccount(
                     accountId = accountId,
-                    name = firebaseUser.displayName,
-                    email = firebaseUser.email,
-                    phoneNumber = firebaseUser.phoneNumber,
+                    name = name,
+                    email = email,
+                    phoneNumber = phoneNumber,
                 )
             }
         }
@@ -55,17 +53,18 @@ class AccountService(
         name: String?,
         email: String?,
         phoneNumber: String?,
+        jwt: Jwt,
     ) {
-        authContext.verifyLoggedInAccountHasId(id = accountId)
+        jwt.verifyAccountHasId(accountId)
         accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
     }
 
-    fun updateAccountFcmToken(fcmToken: String?) {
-        accountRepo.updateFcmToken(accountId = context.getAuthContext().accountId, fcmToken = fcmToken)
+    fun updateAccountFcmToken(fcmToken: String?, jwt: Jwt) {
+        accountRepo.updateFcmToken(accountId = jwt.getAccountId(), fcmToken = fcmToken)
     }
 
-    fun deleteAccount(accountId: String) {
-        authContext.verifyLoggedInAccountHasId(id = accountId)
+    fun deleteAccount(accountId: String, jwt: Jwt) {
+        jwt.verifyAccountHasId(accountId)
         accountRepo.deleteAccount(accountId)
     }
 }

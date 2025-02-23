@@ -28,33 +28,37 @@ class EventController(
 
     @PreAuthorize("hasAuthority('${Roles.ORGANIZER}')")
     @PostMapping
-    fun createEvent(@RequestBody eventInput: EventInput): ManagerEventDto {
-        return eventService.createEvent(eventInput = eventInput)
+    fun createEvent(@RequestBody eventInput: EventInput, @AuthenticationPrincipal principal: Jwt): ManagerEventDto {
+        return eventService.createEvent(eventInput = eventInput, jwt = principal)
     }
 
     @PreAuthorize("hasAuthority('${Roles.ORGANIZER}')")
     @PutMapping("/{eventId}")
-    fun updateEvent(@RequestBody eventInput: EventInput, @PathVariable eventId: UUID): ManagerEventDto {
-        return eventService.updateEvent(eventInput = eventInput, eventId = eventId)
+    fun updateEvent(
+        @RequestBody eventInput: EventInput,
+        @PathVariable eventId: UUID,
+        @AuthenticationPrincipal principal: Jwt
+    ): ManagerEventDto {
+        return eventService.updateEvent(eventInput = eventInput, eventId = eventId, jwt = principal)
     }
 
     @PreAuthorize("hasAuthority('${Roles.ORGANIZER}')")
     @DeleteMapping("/{eventId}")
     fun deleteEvent(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
-        return eventService.deleteEvent(eventId = eventId)
+        return eventService.deleteEvent(eventId = eventId, jwt = principal)
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("join/{pinCode}")
     fun joinEvent(@PathVariable pinCode: String, @AuthenticationPrincipal principal: Jwt): ParticipantEventDto {
-        return eventService.joinEvent(pinCode = pinCode)
+        return eventService.joinEvent(pinCode = pinCode, jwt = principal)
     }
 
     @Operation(summary = "Called when a manager navigates to event so new feedback is reset")
     @PutMapping("resetNewFeedback/{eventId}")
     @PreAuthorize("hasAuthority('${Roles.ORGANIZER}')")
-    fun resetNewFeedback(@PathVariable eventId: UUID) {
-        return eventService.resetNewFeedback(eventId = eventId)
+    fun resetNewFeedback(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
+        return eventService.resetNewFeedback(eventId = eventId, jwt = principal)
     }
 }
 

@@ -2,7 +2,6 @@ package dk.example.feedback.controller
 
 import dk.example.feedback.constants.Roles
 import dk.example.feedback.dto.SessionDto
-import dk.example.feedback.helpers.AuthContextHelper
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.payloads.CreateAccountInput
 import dk.example.feedback.payloads.ModifyAccountInput
@@ -29,18 +28,24 @@ class AccountController(
     val accountService: AccountService,
     val firebaseService: FirebaseService,
     val sessionService: SessionService,
-    val authContext: AuthContextHelper,
 ) {
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     suspend fun createAccount(
         @RequestBody input: CreateAccountInput,
+        @AuthenticationPrincipal principal: Jwt,
     ): SessionDto {
-        val authContext = authContext.getAuthContext()
-        firebaseService.setRole(userId = authContext.accountId, requestedRole = input.requestedRole)
-        accountService.createAccount(requestedRole = input.requestedRole)
-        return sessionService.getSession()
+        firebaseService.setRole(userId = principal.getAccountId(), requestedRole = input.requestedRole)
+        val user = firebaseService.getUser(principal.getAccountId())
+        accountService.createAccount(
+            requestedRole = input.requestedRole,
+            name = user.displayName,
+            email = user.email,
+            phoneNumber = user.phoneNumber,
+            jwt = principal
+        )
+        return sessionService.getSession(jwt = principal)
     }
 
     @PutMapping
@@ -53,7 +58,8 @@ class AccountController(
             accountId = principal.getAccountId(),
             name = input.name,
             email = input.email,
-            phoneNumber = input.phoneNumber
+            phoneNumber = input.phoneNumber,
+            jwt = principal
         )
     }
 
@@ -70,8 +76,9 @@ class AccountController(
     @PreAuthorize("isAuthenticated()")
     fun updateFcmToken(
         @RequestBody input: SetFcmTokenInput,
+        @AuthenticationPrincipal principal: Jwt,
     ) {
-        accountService.updateAccountFcmToken(fcmToken = input.fcmToken)
+        accountService.updateAccountFcmToken(fcmToken = input.fcmToken, jwt = principal)
     }
 
     @DeleteMapping
@@ -81,6 +88,6 @@ class AccountController(
     ) {
         val accountId = principal.getAccountId()
         firebaseService.deleteUser(accountId)
-        accountService.deleteAccount(accountId = accountId)
+        accountService.deleteAccount(accountId = accountId, jwt = principal)
     }
 }

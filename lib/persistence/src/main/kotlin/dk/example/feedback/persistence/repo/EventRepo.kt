@@ -57,9 +57,9 @@ class EventRepo {
 
     fun persistEvent(
         title: String,
-        agenda: String,
+        agenda: String?,
         date: OffsetDateTime,
-        location: String,
+        location: String?,
         durationInMinutes: Int,
         generatedPinCode: String,
         questions: List<Pair<String, FeedbackType>>,

@@ -4,7 +4,7 @@ import dk.example.feedback.dto.FeedbackSessionDto
 import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.SubmitFeedbackResponseDto
-import dk.example.feedback.helpers.AuthContextHelper
+import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
@@ -13,6 +13,7 @@ import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
 import java.util.*
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,11 +21,10 @@ class FeedbackService(
     val feedbackRepo: FeedbackRepo,
     val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
-    val context: AuthContextHelper,
 ) {
 
-    fun startSession(pinCode: String): FeedbackSessionDto {
-        val accountId = context.getAuthContext().accountId
+    fun startSession(pinCode: String, jwt: Jwt): FeedbackSessionDto {
+        val accountId = jwt.getAccountId()
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val feedback = event.feedback
         val manager = event.manager
@@ -49,8 +49,8 @@ class FeedbackService(
         )
     }
 
-    fun sendFeedback(feedbackInputList: List<FeedbackInput>, pinCode: String): SubmitFeedbackResponseDto {
-        val accountId = context.getAuthContext().accountId
+    fun sendFeedback(feedbackInputList: List<FeedbackInput>, pinCode: String, jwt: Jwt): SubmitFeedbackResponseDto {
+        val accountId = jwt.getAccountId()
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val managerId = event.manager.id
         // Check if user with given client id already provided feedback
