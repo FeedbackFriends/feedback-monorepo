@@ -48,7 +48,7 @@ class AccountService(
         return accountRepo.getAccount(accountId)
     }
 
-    suspend fun updateAccount(
+    fun updateAccount(
         accountId: String,
         name: String?,
         email: String?,
@@ -56,12 +56,6 @@ class AccountService(
         jwt: Jwt,
     ) {
         jwt.verifyAccountHasId(accountId)
-        firebaseService.updateUser(
-            userId = accountId,
-            email = email,
-            displayName = name,
-            phoneNumber = phoneNumber
-        )
         accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
     }
 

@@ -50,7 +50,7 @@ class AccountController(
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('${Roles.ORGANIZER}', '${Roles.PARTICIPANT}')")
-    suspend fun modifyAccount(
+    fun modifyAccount(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: ModifyAccountInput,
     ) {
