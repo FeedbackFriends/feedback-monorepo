@@ -173,6 +173,7 @@ class EventRepo {
             this.questions.forEach {
                 it.feedback.forEach { feedback ->
                     feedback.isNew = false
+                    feedback.flush()
                 }
             }
         }

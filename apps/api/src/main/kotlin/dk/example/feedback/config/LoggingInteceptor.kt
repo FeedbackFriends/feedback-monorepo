@@ -40,7 +40,7 @@ class LoggingInterceptor : HandlerInterceptor {
                 response.status,
                 jwt?.getAccountId() ?: "Unknown",
                 jwt?.role() ?: "N/A",
-                exception // Stack trace automatically logged
+                exception
             )
         } else {
             logger.info(

@@ -76,15 +76,15 @@ class AdminController(
             .setDisplayName("Mocked displayname")
 
         try {
-            logger.info("Firebase: Creating user")
+            logger.debug("Firebase: Creating user")
             FirebaseAuth.getInstance().createUser(createUserRequest)
         } catch (e: Exception) {
-            logger.info("Firebase: User already exists so will sign in")
+            logger.debug("Firebase: User already exists so will sign in")
         }
         try {
             FirebaseAuth.getInstance().setCustomUserClaims(uid, mapOf("role" to input.role?.name))
         } catch (e: Exception) {
-            logger.info("Firebase: Failed to set custom claims for role with value ${input.role}")
+            logger.debug("Firebase: Failed to set custom claims for role with value ${input.role}")
         }
         val token = FirebaseAuth.getInstance().createCustomToken(uid)
         return signInWithCustomToken(token)

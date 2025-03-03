@@ -11,6 +11,7 @@ liquibase = "4.31.0"
 postgresql = "42.7.5"
 h2 = "2.3.232"
 tools-core = "1.0.0-alpha11"
+jib = "3.4.4"
 
 [libraries]
 springboot-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "springboot" }
@@ -62,6 +63,7 @@ firebase = { module = "com.google.firebase:firebase-admin", version.ref = "fireb
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springboot" }
+jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
 
 [bundles]
 exposed = ["exposed-dao", "exposed-javatime", "exposed-springboot"]

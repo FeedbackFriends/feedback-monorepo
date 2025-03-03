@@ -1,40 +1,9 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-
 plugins {
-    alias(libs.plugins.springboot) version "3.2.1"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version libs.versions.kotlin
-    kotlin("plugin.spring") version libs.versions.kotlin
-    id("com.google.cloud.tools.jib") version "3.4.4"
+    alias(libs.plugins.jib)
     id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 }
 
-group = "dk.nicolai"
-version = "0.0.5"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-}
-
-repositories {
-    mavenCentral()
-}
-
-val compileKotlin: KotlinCompilationTask<*> by tasks
-compileKotlin.compilerOptions.allWarningsAsErrors.set(true)
-
 dependencies {
-
-    // Kotlin Coroutines Core
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-//
-//    // Kotlin Coroutines for JDK8 (suspend functions for CompletableFuture, etc.)
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.3")
-//
-//    // Kotlin Coroutines support for Spring (if you're using Spring Boot)
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-spring:1.7.3")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
@@ -62,23 +31,8 @@ dependencies {
     implementation(libs.firebase)
 }
 
-tasks.withType<KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        freeCompilerArgs.add("-Xjsr305=strict")
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
-}
-
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-
-if (hasProperty("buildScan")) {
-    extensions.findByName("buildScan")?.withGroovyBuilder {
-        setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
-        setProperty("termsOfServiceAgree", "yes")
-    }
 }
 
 jib {

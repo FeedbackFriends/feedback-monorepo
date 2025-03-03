@@ -1,33 +1,11 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-
 plugins {
-    alias(libs.plugins.springboot) version "3.2.1"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version libs.versions.kotlin
-    kotlin("plugin.spring") version libs.versions.kotlin
-    id("com.google.cloud.tools.jib") version "3.4.4"
+    alias(libs.plugins.jib)
 }
-
-group = "dk.nicolai"
-version = "0.0.5"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-}
-
-repositories {
-    mavenCentral()
-}
-
-val compileKotlin: KotlinCompilationTask<*> by tasks
-compileKotlin.compilerOptions.allWarningsAsErrors.set(true)
 
 dependencies {
     implementation(projects.persistence)
     implementation(projects.model)
-    // Spring Boot
+
     implementation(libs.springboot.data.jpa)
     implementation(libs.springboot.mail)
     implementation(libs.springboot.web)
@@ -49,24 +27,13 @@ dependencies {
 
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
-
-    // swagger
-    implementation(libs.springdoc.openapi.starter.webmvc)
-
     implementation(libs.bundles.exposed)
     implementation(libs.firebase)
 }
 
-tasks.withType<KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        freeCompilerArgs.add("-Xjsr305=strict")
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
-}
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
 
 jib {
     dockerClient {
