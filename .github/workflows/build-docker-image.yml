@@ -50,7 +50,7 @@ jobs:
       - name: Set up JDK environment
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
+          java-version: "21"
           distribution: "temurin"
 
       - name: Update OpenAPI and sync with feedback-openapi repo
