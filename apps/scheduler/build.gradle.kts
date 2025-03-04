@@ -40,7 +40,7 @@ jib {
         executable = "/usr/local/bin/docker"
     }
     from {
-        image = "eclipse-temurin:17-jre"
+        image = "eclipse-temurin:21-jre"
     }
     to {
         auth {
