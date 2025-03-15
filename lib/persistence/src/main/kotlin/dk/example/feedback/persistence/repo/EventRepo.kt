@@ -169,9 +169,12 @@ class EventRepo {
     }
 
     fun resetNewFeedbackForEvent(eventId: UUID) {
+        logger.info("Reset new feedback for event: ${eventId}")
         EventDao.findById(eventId)?.apply {
-            this.questions.forEach {
-                it.feedback.forEach { feedback ->
+            logger.info("Event ${id.value} has ${questions.count()} questions")
+            this.questions.forEach { question ->
+                logger.info("Question ${question.id.value} has ${question.feedback.count()} feedback entries")
+                question.feedback.forEach { feedback ->
                     feedback.isNew = false
                     feedback.flush()
                 }

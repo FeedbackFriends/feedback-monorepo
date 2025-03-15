@@ -2,6 +2,7 @@ package dk.example.feedback.dto
 
 import dk.example.feedback.model.enumerations.Role
 
+
 data class SessionDto(
     val role: Role?,
     val accountInfo: AccountInfoDto,

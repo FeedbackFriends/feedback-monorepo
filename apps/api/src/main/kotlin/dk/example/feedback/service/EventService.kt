@@ -72,13 +72,9 @@ class EventService(
     }
 
     fun getManagerEvents(managerId: String): List<ManagerEventDto> {
-        val managerEvents = eventRepo.getManagerEvents(managerId).map {
+        return eventRepo.getManagerEvents(managerId).map {
             it.toManagerEvent(pinCode = getPinCodeForEvent(eventId = it.id))
         }
-        managerEvents.forEach {
-            eventRepo.resetNewFeedbackForEvent(it.id)
-        }
-        return managerEvents
     }
 
     fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
@@ -186,7 +182,10 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
             )
         },
         feedbackSummary = feedbackSummary,
-        newFeedbackForEvent = questions.map { it.feedback }.flatten().map { it.isNew }.count(),
+        newFeedbackForEvent = feedback.filter { it.isNew }
+            .mapNotNull { it.participantId }
+            .toSet()
+            .size,
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
     )
 }

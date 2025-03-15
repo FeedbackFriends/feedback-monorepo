@@ -1,8 +1,8 @@
 package dk.example.feedback.controller
 
-import dk.example.feedback.constants.Roles
 import dk.example.feedback.dto.ManagerEventDto
 import dk.example.feedback.dto.ParticipantEventDto
+import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.service.EventService
 import io.swagger.v3.oas.annotations.Operation
@@ -26,13 +26,13 @@ class EventController(
     val eventService: EventService,
 ) {
 
-    @PreAuthorize("hasAuthority('${Roles.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('Organizer')")
     @PostMapping
     fun createEvent(@RequestBody eventInput: EventInput, @AuthenticationPrincipal principal: Jwt): ManagerEventDto {
         return eventService.createEvent(eventInput = eventInput, jwt = principal)
     }
 
-    @PreAuthorize("hasAuthority('${Roles.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
     @PutMapping("/{eventId}")
     fun updateEvent(
         @RequestBody eventInput: EventInput,
@@ -42,7 +42,7 @@ class EventController(
         return eventService.updateEvent(eventInput = eventInput, eventId = eventId, jwt = principal)
     }
 
-    @PreAuthorize("hasAuthority('${Roles.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
     @DeleteMapping("/{eventId}")
     fun deleteEvent(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
         return eventService.deleteEvent(eventId = eventId, jwt = principal)
@@ -56,7 +56,7 @@ class EventController(
 
     @Operation(summary = "Called when a manager navigates to event so new feedback is reset")
     @PutMapping("resetNewFeedback/{eventId}")
-    @PreAuthorize("hasAuthority('${Roles.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
     fun resetNewFeedback(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
         return eventService.resetNewFeedback(eventId = eventId, jwt = principal)
     }

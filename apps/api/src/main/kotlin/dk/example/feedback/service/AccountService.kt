@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service
 @Service
 class AccountService(
     val accountRepo: AccountRepo,
-    val firebaseService: FirebaseService,
 ) {
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)

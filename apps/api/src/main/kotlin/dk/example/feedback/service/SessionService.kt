@@ -19,7 +19,8 @@ class SessionService(
     fun getSession(jwt: Jwt): SessionDto {
         val accountId = jwt.getAccountId()
         val role = jwt.role()
-        val account = accountService.fetchAccount(accountId = accountId) ?: throw Exception("Account not found")
+        val account = accountService.fetchAccount(accountId = accountId)
+            ?: throw Exception("Account not found for id: $accountId")
         val participantEvents = eventService.getParticipantEvents(accountId = accountId)
         logger.info("Get session with role: $role")
         when (role) {

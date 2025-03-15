@@ -1,15 +1,15 @@
 package dk.example.feedback.controller
 
-import dk.example.feedback.constants.Roles
 import dk.example.feedback.dto.SessionDto
 import dk.example.feedback.helpers.getAccountId
+import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.payloads.CreateAccountInput
 import dk.example.feedback.payloads.ModifyAccountInput
 import dk.example.feedback.payloads.SetFcmTokenInput
 import dk.example.feedback.payloads.UpdateRoleInput
 import dk.example.feedback.service.AccountService
-import dk.example.feedback.service.FirebaseService
 import dk.example.feedback.service.SessionService
+import dk.example.feedback.service.firebase.FirebaseService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -49,7 +49,7 @@ class AccountController(
     }
 
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('${Roles.ORGANIZER}', '${Roles.PARTICIPANT}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
     fun modifyAccount(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: ModifyAccountInput,
@@ -64,12 +64,19 @@ class AccountController(
     }
 
     @PutMapping("/role")
-    @PreAuthorize("hasAnyAuthority('${Roles.ORGANIZER}', '${Roles.PARTICIPANT}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
     suspend fun updateRole(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: UpdateRoleInput,
     ) {
         firebaseService.setRole(userId = principal.getAccountId(), requestedRole = input.role)
+    }
+
+
+    @PutMapping("/test")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
+    suspend fun test(): String {
+        return "It works"
     }
 
     @PutMapping("/fcmToken")
@@ -82,7 +89,7 @@ class AccountController(
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('${Roles.ORGANIZER}', '${Roles.PARTICIPANT}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
     suspend fun deleteAccount(
         @AuthenticationPrincipal principal: Jwt,
     ) {

@@ -43,7 +43,8 @@ class AccountRepo {
         email: String?,
         phoneNumber: String?,
     ): AccountEntity {
-        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found")
+        val found =
+            AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found with id: $accountId")
         found.apply {
             this.name = name
             this.email = email
@@ -54,16 +55,19 @@ class AccountRepo {
     }
 
     fun deleteAccount(accountId: String) {
-        AccountDao.findById(accountId)?.delete() ?: throw NoSuchElementException("Account not found")
+        AccountDao.findById(accountId)?.delete()
+            ?: throw NoSuchElementException("Account not found with id: $accountId")
     }
 
     fun getAccount(accountId: String): AccountEntity {
         logger.info("Get account with id: $accountId")
-        return AccountDao.findById(accountId)?.toModel() ?: throw NoSuchElementException("Account not found")
+        return AccountDao.findById(accountId)?.toModel()
+            ?: throw NoSuchElementException("Account not found with id: $accountId")
     }
 
     fun updateFcmToken(accountId: String, fcmToken: String?) {
-        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found")
+        val found =
+            AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found with id: $accountId")
         found.apply {
             this.fcmToken = fcmToken
         }
@@ -75,7 +79,8 @@ class AccountRepo {
     }
 
     fun markRatingPrompted(accountId: String) {
-        val found = AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found")
+        val found =
+            AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found with id: $accountId")
         found.apply {
             this.ratingPrompted = true
         }

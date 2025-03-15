@@ -1,5 +1,8 @@
-package dk.example.feedback.service
+package dk.example.feedback.service.firebase
 
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
 import com.google.firebase.messaging.FirebaseMessaging
@@ -7,37 +10,34 @@ import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
 import dk.example.feedback.helpers.await
 import dk.example.feedback.model.enumerations.Role
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
-interface FirebaseService {
-    suspend fun sendNotifications(messages: List<Message>)
-    suspend fun getUser(userId: String): User
-    suspend fun deleteUser(userId: String)
-    suspend fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?)
-    suspend fun setRole(userId: String, requestedRole: Role?)
-
-    data class User(
-        val displayName: String?,
-        val phoneNumber: String?,
-        val email: String?,
-        val photoUrl: String?
-    )
-
-    data class Message(
-        val title: String,
-        val body: String,
-        val fcmToken: String,
-        val data: Map<String, String>
-    )
-}
-
 @Service
-class FirebaseServiceLive: FirebaseService {
+class FirebaseServiceImpl : FirebaseService {
 
-    private val logger = LoggerFactory.getLogger(FirebaseServiceLive::class.java)
+    private val logger = LoggerFactory.getLogger(FirebaseServiceImpl::class.java)
 
-    override suspend fun sendNotifications(messages: List<FirebaseService.Message>) {
+    override fun configure(configFilePath: String) {
+        try {
+            logger.info("Initializing FirebaseApp: Getting config file from path: ${configFilePath}")
+            val firebaseServiceAccount = FileInputStream(configFilePath)
+            val options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(firebaseServiceAccount))
+                .setProjectId("feedback2-a4dd9") // TODO("Replace with your project ID")
+                .build()
+            FirebaseApp.initializeApp(options)
+            logger.info("FirebaseApp initialized successfully.")
+        } catch (e: FileNotFoundException) {
+            logger.error("Firebase configuration file not found at path: ${configFilePath}", e)
+        } catch (e: Exception) {
+            logger.error("Failed to initialize FirebaseApp", e)
+        }
+    }
+
+    override suspend fun sendNotifications(messages: List<FirebaseNotification>) {
         FirebaseMessaging.getInstance().sendEachAsync(
             messages.map {
                 Message.builder()
@@ -54,11 +54,11 @@ class FirebaseServiceLive: FirebaseService {
         ).await()
     }
 
-    override suspend fun getUser(userId: String): FirebaseService.User {
+    override suspend fun getUser(userId: String): FirebaseUser {
 
         val userRecord = FirebaseAuth.getInstance().getUserAsync(userId).await()
         // if email is null (user is anonymous) then return null
-        return FirebaseService.User(
+        return FirebaseUser(
             displayName = userRecord.displayName,
             phoneNumber = userRecord.phoneNumber,
             email = userRecord.email,
@@ -80,7 +80,7 @@ class FirebaseServiceLive: FirebaseService {
     }
 
     override suspend fun setRole(userId: String, requestedRole: Role?) {
-        logger.info("Setting role ${requestedRole?.name} for user $userId")
+        logger.info("Setting role ${requestedRole?.toString()} for user $userId")
         try {
             FirebaseAuth.getInstance()
                 .setCustomUserClaimsAsync(userId, mapOf("role" to requestedRole?.toString()))
@@ -92,4 +92,3 @@ class FirebaseServiceLive: FirebaseService {
         }
     }
 }
-

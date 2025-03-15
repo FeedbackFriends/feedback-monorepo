@@ -1,8 +1,9 @@
 package dk.example.feedback.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import dk.example.feedback.controller.OffsetDateTimeDeserializer
-import dk.example.feedback.controller.OffsetDateTimeSerializer
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import java.time.OffsetDateTime
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -10,10 +11,14 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class JacksonConfig {
     @Bean
-    fun javaTimeModule(): JavaTimeModule? {
-        val javaTimeModule = JavaTimeModule()
-        javaTimeModule.addDeserializer(OffsetDateTime::class.java, OffsetDateTimeDeserializer())
-        javaTimeModule.addSerializer(OffsetDateTime::class.java, OffsetDateTimeSerializer())
-        return javaTimeModule
+    fun objectMapper(): ObjectMapper {
+        return ObjectMapper()
+            .registerModule(KotlinModule.Builder().build())
+            .registerModule(JavaTimeModule())
+            .registerModule(
+                SimpleModule()
+                    .addDeserializer(OffsetDateTime::class.java, OffsetDateTimeDeserializer())
+                    .addSerializer(OffsetDateTime::class.java, OffsetDateTimeSerializer())
+            )
     }
 }

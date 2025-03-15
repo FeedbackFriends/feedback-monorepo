@@ -15,9 +15,5 @@ fun Jwt.verifyAccountHasId(id: String) {
 
 fun Jwt.role(): Role? {
     val roleValue = this.claims["role"] as? String ?: return null
-    return try {
-        Role.valueOf(roleValue)
-    } catch (e: IllegalArgumentException) {
-        null
-    }
+    return Role.fromString(roleValue)
 }

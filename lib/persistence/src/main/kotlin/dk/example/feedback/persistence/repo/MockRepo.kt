@@ -46,7 +46,7 @@ class MockRepo {
                 val eventId = UUID.randomUUID()
                 EventTable.insert {
                     it[id] = EntityID(eventId, EventTable)
-                    it[title] = "Test Event"
+                    it[title] = eventTitles[i - 1]
                     it[agenda] = null
                     it[location] = "Test Location"
                     it[durationInMinutes] = 30
@@ -83,4 +83,16 @@ class MockRepo {
             }
         }
     }
+
+    val eventTitles = listOf(
+        "Weekly Team Sync",
+        "Project Kickoff: New Feature X",
+        "Retrospective: Sprint Review",
+        "Product Strategy Discussion",
+        "Customer Feedback Review",
+        "Marketing & Sales Alignment",
+        "Tech Architecture Deep Dive",
+        "Quarterly Business Update",
+        "One-on-One Coaching Session"
+    )
 }

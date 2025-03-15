@@ -5,30 +5,38 @@ plugins {
 
 dependencies {
 
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    developmentOnly(libs.springboot.devtools)
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-
     implementation(projects.persistence)
     implementation(projects.model)
-
     implementation(libs.springboot.data.jpa)
     implementation(libs.springboot.web)
     implementation(libs.springboot.actuator)
-
-    developmentOnly(libs.springboot.devtools)
-    testImplementation(libs.springboot.test)
-
     implementation(libs.springboot.security)
-    implementation(libs.springboot.test)
     implementation(libs.spring.security.test)
     implementation(libs.springboot.oauth2.resource.server)
     implementation(enforcedPlatform(libs.springboot.dependencies))
     implementation(libs.bundles.jackson)
     implementation(libs.kotlin.reflect)
-    testImplementation(libs.junit.jupiter.api)
-    testRuntimeOnly(libs.junit.jupiter.engine)
     implementation(libs.springdoc.openapi.starter.webmvc)
     implementation(libs.firebase)
+    implementation(libs.jackson.module.kotlin)
+
+    // TODO: Remove
+    implementation(libs.junit.jupiter.api)
+    implementation(libs.springboot.test)
+
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.springboot.test)
+    testImplementation(libs.h2database)
+    implementation(libs.liquibase)
+    testImplementation(libs.bundles.exposed)
+    testImplementation(libs.spring.security.test)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+
 }
 
 tasks.withType<Test> {

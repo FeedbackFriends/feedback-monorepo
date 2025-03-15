@@ -21,6 +21,7 @@ class FeedbackService(
     val feedbackRepo: FeedbackRepo,
     val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
+    val notificationService: NotificationService,
 ) {
 
     fun startSession(pinCode: String, jwt: Jwt): FeedbackSessionDto {
@@ -49,7 +50,11 @@ class FeedbackService(
         )
     }
 
-    fun sendFeedback(feedbackInputList: List<FeedbackInput>, pinCode: String, jwt: Jwt): SubmitFeedbackResponseDto {
+    suspend fun sendFeedback(
+        feedbackInputList: List<FeedbackInput>,
+        pinCode: String,
+        jwt: Jwt
+    ): SubmitFeedbackResponseDto {
         val accountId = jwt.getAccountId()
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val managerId = event.manager.id
@@ -65,6 +70,12 @@ class FeedbackService(
         val shouldPresentRatingPrompt = shouldPresentRatingPrompt(accountId = accountId)
         if (shouldPresentRatingPrompt) {
             accountRepo.markRatingPrompted(accountId = accountId)
+        }
+        event.manager.fcmToken?.let { fcmToken ->
+            notificationService.notifyOrganizerThatFeedbackIsReceived(
+                event = event,
+                fcmToken = fcmToken
+            )
         }
         return SubmitFeedbackResponseDto(
             shouldPresentRatingPrompt = shouldPresentRatingPrompt,
