@@ -211,7 +211,7 @@ fun EventEntity.toParticipantEvent(pinCode: String, feedbackSubmitted: Boolean):
         },
         feedbackSubmited = feedbackSubmitted,
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber),
-        newlyJoined = createdAt.toInstant().isAfter(oneHourAgo)
+        recentlyJoined = createdAt.toInstant().isAfter(oneHourAgo)
     )
 }
 
