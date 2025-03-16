@@ -17,6 +17,8 @@ import dk.example.feedback.model.exceptions.EventAlreadyJoinedException
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
@@ -191,6 +193,7 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
 }
 
 fun EventEntity.toParticipantEvent(pinCode: String, feedbackSubmitted: Boolean): ParticipantEventDto {
+    val oneHourAgo = Instant.now().minus(1, ChronoUnit.HOURS)
     return ParticipantEventDto(
         id = id,
         title = title,
@@ -207,7 +210,8 @@ fun EventEntity.toParticipantEvent(pinCode: String, feedbackSubmitted: Boolean):
             )
         },
         feedbackSubmited = feedbackSubmitted,
-        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
+        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber),
+        newlyJoined = createdAt.toInstant().isAfter(oneHourAgo)
     )
 }
 

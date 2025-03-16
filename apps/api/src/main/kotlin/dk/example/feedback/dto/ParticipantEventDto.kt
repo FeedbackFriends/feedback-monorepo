@@ -14,5 +14,6 @@ data class ParticipantEventDto (
     val ownerInfo: OwnerInfoDto,
     val questions: List<ParticipantQuestionDto>,
     val feedbackSubmited: Boolean,
+    val newlyJoined: Boolean,
 )
 
