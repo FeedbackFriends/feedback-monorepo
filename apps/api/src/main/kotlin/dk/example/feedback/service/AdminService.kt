@@ -32,7 +32,8 @@ class AdminService(
                 name = "Mock",
                 email = "Mock@gmail.com",
                 phoneNumber = "27630505",
-                accountId = uid
+                accountId = uid,
+                fcmToken = null
             )
         }
 

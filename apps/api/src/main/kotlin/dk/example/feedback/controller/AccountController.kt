@@ -43,7 +43,8 @@ class AccountController(
             name = user.displayName,
             email = user.email,
             phoneNumber = user.phoneNumber,
-            jwt = principal
+            jwt = principal,
+            fcmToken = input.fcmToken
         )
         return sessionService.getSession(jwt = principal)
     }

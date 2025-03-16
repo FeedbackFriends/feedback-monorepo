@@ -16,28 +16,35 @@ class AccountService(
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)
 
-    fun createAccount(requestedRole: Role?, name: String?, email: String?, phoneNumber: String?, jwt: Jwt) {
+    fun createAccount(
+        requestedRole: Role?,
+        name: String?,
+        email: String?,
+        phoneNumber: String?,
+        jwt: Jwt,
+        fcmToken: String?
+    ) {
         when (requestedRole) {
             // Firebase user is anonymous if null
             null -> {
-//                logger.info("Creating anonymous account for ${authContext.getAuthContext().accountId} since role is null")
                 val accountId = jwt.getAccountId()
                 accountRepo.createOrGetAccount(
                     accountId = accountId,
                     name = null,
                     email = null,
                     phoneNumber = null,
+                    fcmToken = fcmToken,
                 )
             }
 
             Role.Organizer, Role.Participant -> {
-//                logger.info("Creating account for ${authContext.getAuthContext().accountId} since requested role is $requestedRole")
                 val accountId = jwt.getAccountId()
                 accountRepo.createOrGetAccount(
                     accountId = accountId,
                     name = name,
                     email = email,
                     phoneNumber = phoneNumber,
+                    fcmToken = fcmToken,
                 )
             }
         }

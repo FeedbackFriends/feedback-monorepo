@@ -22,6 +22,7 @@ class AccountRepo {
         email: String?,
         phoneNumber: String?,
         accountId: String,
+        fcmToken: String?
     ): AccountEntity {
         val existingAccount = AccountDao.findById(accountId)
         if (existingAccount != null) {
@@ -34,6 +35,7 @@ class AccountRepo {
             this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.ratingPrompted = false
+            this.fcmToken = fcmToken
         }.toModel()
     }
 

@@ -37,9 +37,9 @@ class FirebaseServiceImpl : FirebaseService {
         }
     }
 
-    override suspend fun sendNotifications(messages: List<FirebaseNotification>) {
+    override suspend fun sendNotifications(firebaseNotifications: List<FirebaseNotification>) {
         FirebaseMessaging.getInstance().sendEachAsync(
-            messages.map {
+            firebaseNotifications.map {
                 Message.builder()
                     .setNotification(
                         Notification.builder()
