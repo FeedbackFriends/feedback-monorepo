@@ -17,8 +17,6 @@ import dk.example.feedback.model.exceptions.EventAlreadyJoinedException
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.persistence.repo.EventRepo
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import java.util.*
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
@@ -80,12 +78,14 @@ class EventService(
     }
 
     fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
-        val events = eventRepo.getParticipantEvents(accountId)
-        return events.map { event ->
-            val accountDidSubmitFeedbackForEvent = eventRepo.accountDidSubmitFeedbackForEvent(event.id, accountId)
-            event.toParticipantEvent(
-                getPinCodeForEvent(eventId = event.id),
-                feedbackSubmitted = accountDidSubmitFeedbackForEvent
+        val eventsWrapped = eventRepo.getParticipantEvents(accountId)
+        return eventsWrapped.map { wrapped ->
+            val accountDidSubmitFeedbackForEvent =
+                eventRepo.accountDidSubmitFeedbackForEvent(wrapped.event.id, accountId)
+            wrapped.event.toParticipantEvent(
+                getPinCodeForEvent(eventId = wrapped.event.id),
+                feedbackSubmitted = accountDidSubmitFeedbackForEvent,
+                recentlyJoined = wrapped.recentlyJoined
             )
         }
     }
@@ -99,7 +99,8 @@ class EventService(
         eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = false)
         return event.toParticipantEvent(
             pinCode = getPinCodeForEvent(event.id),
-            feedbackSubmitted = false
+            feedbackSubmitted = false,
+            recentlyJoined = true
         )
     }
 
@@ -130,7 +131,7 @@ class EventService(
 
     private fun throwIfFeedbackAlreadySubmitted(event: EventEntity, accountId: String) {
         val events = eventRepo.getParticipantEvents(accountId)
-        val feedbackAlreadySubmitted = events.find { it.id == event.id }
+        val feedbackAlreadySubmitted = events.find { it.event.id == event.id }
         if (feedbackAlreadySubmitted != null) {
             throw FeedbackAlreadySubmittedException(eventId = event.id, accountId = accountId)
         }
@@ -138,7 +139,7 @@ class EventService(
 
     private fun throwIfAccountAlreadyJoinedEvent(event: EventEntity, accountId: String) {
         val participantEvents = eventRepo.getParticipantEvents(accountId)
-        val hasJoinedEvent = participantEvents.any { it.id == event.id }
+        val hasJoinedEvent = participantEvents.any { it.event.id == event.id }
         if (hasJoinedEvent) {
             throw EventAlreadyJoinedException(eventId = event.id, accountId = accountId)
         }
@@ -192,8 +193,11 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
     )
 }
 
-fun EventEntity.toParticipantEvent(pinCode: String, feedbackSubmitted: Boolean): ParticipantEventDto {
-    val oneHourAgo = Instant.now().minus(1, ChronoUnit.HOURS)
+fun EventEntity.toParticipantEvent(
+    pinCode: String,
+    feedbackSubmitted: Boolean,
+    recentlyJoined: Boolean
+): ParticipantEventDto {
     return ParticipantEventDto(
         id = id,
         title = title,
@@ -211,7 +215,7 @@ fun EventEntity.toParticipantEvent(pinCode: String, feedbackSubmitted: Boolean):
         },
         feedbackSubmited = feedbackSubmitted,
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber),
-        recentlyJoined = createdAt.toInstant().isAfter(oneHourAgo)
+        recentlyJoined = recentlyJoined
     )
 }
 

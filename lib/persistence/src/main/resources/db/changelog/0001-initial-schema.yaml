@@ -118,6 +118,11 @@ databaseChangeLog:
                   type: boolean
                   constraints:
                     nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
         - addForeignKeyConstraint:
             baseTableName: event_participant
             baseColumnNames: event_id

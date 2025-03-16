@@ -11,8 +11,10 @@ import dk.example.feedback.persistence.table.EventTable
 import dk.example.feedback.persistence.table.PinCodeTable
 import dk.example.feedback.persistence.table.QuestionTable
 import java.time.Duration
+import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 import java.util.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -129,14 +131,29 @@ class EventRepo {
         return EventDao.find { EventTable.manager eq managerId }.map { it.toModel() }
     }
 
-    fun getParticipantEvents(participantId: String): List<EventEntity> {
-        val ids = EventParticipantTable
+    data class ParticipantEventsWithJoinDate(
+        val event: EventEntity,
+        val recentlyJoined: Boolean,
+    )
+
+    fun getParticipantEvents(participantId: String): List<ParticipantEventsWithJoinDate> {
+
+        return EventParticipantTable
             .selectAll()
             .where { EventParticipantTable.participant eq participantId }
             .map {
-                it[EventParticipantTable.event].value
+                var recentlyJoined = false
+                if (!it[EventParticipantTable.feedbackSubmitted]) {
+                    val oneHourAgo = Instant.now().minus(1, ChronoUnit.HOURS)
+                    if (it[EventParticipantTable.dateCreated].toInstant().isAfter(oneHourAgo)) {
+                        recentlyJoined = true
+                    }
+                }
+                ParticipantEventsWithJoinDate(
+                    event = getEvent(it[EventParticipantTable.event].value),
+                    recentlyJoined = recentlyJoined
+                )
             }
-        return getEvents(ids)
     }
 
     fun accountDidSubmitFeedbackForEvent(eventId: UUID, accountId: String): Boolean {

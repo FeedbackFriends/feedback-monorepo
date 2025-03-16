@@ -79,7 +79,11 @@ class FeedbackService(
         }
         return SubmitFeedbackResponseDto(
             shouldPresentRatingPrompt = shouldPresentRatingPrompt,
-            event = event.toParticipantEvent(pinCode = pinCode, feedbackSubmitted = true)
+            event = event.toParticipantEvent(
+                pinCode = pinCode,
+                feedbackSubmitted = true,
+                recentlyJoined = false
+            )
         )
     }
 
