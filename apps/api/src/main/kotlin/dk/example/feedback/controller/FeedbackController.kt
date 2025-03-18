@@ -2,8 +2,6 @@ package dk.example.feedback.controller
 
 import dk.example.feedback.dto.FeedbackSessionDto
 import dk.example.feedback.dto.SubmitFeedbackResponseDto
-import dk.example.feedback.helpers.getAccountId
-import dk.example.feedback.helpers.role
 import dk.example.feedback.payloads.SendFeedbackInput
 import dk.example.feedback.payloads.StartFeedbackSessionInput
 import dk.example.feedback.service.FeedbackService
@@ -27,7 +25,6 @@ class FeedbackController(val feedbackService: FeedbackService) {
         @RequestBody startFeedbackSessionInput: StartFeedbackSessionInput,
         @AuthenticationPrincipal principal: Jwt
     ): FeedbackSessionDto {
-        print("**** START FEEDBACK CALLED: id ${principal.getAccountId()} with role ${principal.role()}")
         return feedbackService.startSession(pinCode = startFeedbackSessionInput.pinCode, jwt = principal)
     }
 
@@ -37,7 +34,6 @@ class FeedbackController(val feedbackService: FeedbackService) {
         @RequestBody input: SendFeedbackInput,
         @AuthenticationPrincipal principal: Jwt
     ): SubmitFeedbackResponseDto {
-        print("**** SUBMIT FEEDBACK CALLED: id ${principal.getAccountId()} with role ${principal.role()}")
         return feedbackService.sendFeedback(
             feedbackInputList = input.feedback,
             pinCode = input.pinCode,
