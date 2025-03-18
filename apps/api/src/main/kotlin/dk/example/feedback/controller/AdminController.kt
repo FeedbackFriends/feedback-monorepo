@@ -1,13 +1,13 @@
 package dk.example.feedback.controller
 
+import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.enumerations.Role
 import dk.example.feedback.service.AdminService
+import dk.example.feedback.service.NotificationService
 import dk.example.feedback.service.firebase.FirebaseNotification
 import dk.example.feedback.service.firebase.FirebaseService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
-import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/admin")
 class AdminController(
     val adminService: AdminService,
-    private val firebaseService: FirebaseService
+    val firebaseService: FirebaseService,
+    val notificationService: NotificationService,
 ) {
 
     private val logger = LoggerFactory.getLogger(AdminController::class.java)
@@ -53,7 +54,6 @@ class AdminController(
 
     @PutMapping("/send-mock-notification")
     suspend fun sendNotification(
-        @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: SendNotificationInput,
     ) {
         firebaseService.sendNotifications(
@@ -65,6 +65,21 @@ class AdminController(
                     data = mapOf()
                 )
             )
+        )
+    }
+
+    data class FeedbackReceivedNotificationInput(
+        val eventEntity: EventEntity,
+        val fcmToken: String,
+    )
+
+    @PutMapping("/mock-feedback-received-notification")
+    suspend fun sendFeedbackReceivedNotification(
+        @RequestBody input: FeedbackReceivedNotificationInput
+    ) {
+        notificationService.notifyOrganizerThatFeedbackIsReceived(
+            event = input.eventEntity,
+            fcmToken = input.fcmToken
         )
     }
 }

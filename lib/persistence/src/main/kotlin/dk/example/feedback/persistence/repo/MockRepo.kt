@@ -35,7 +35,7 @@ class MockRepo {
                 it[id] = testId
                 it[email] = "test@email.dk"
                 it[name] = "Test Name"
-                it[fcmToken] = null
+                it[fcmToken] = "hello fcm token"
                 it[phoneNumber] = "12345678"
                 it[ratingPrompted] = false
                 it[createdAt] = OffsetDateTime.now(UTC)
