@@ -73,14 +73,7 @@ class AccountController(
         firebaseService.setRole(userId = principal.getAccountId(), requestedRole = input.role)
     }
 
-
-    @PutMapping("/test")
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
-    suspend fun test(): String {
-        return "It works"
-    }
-
-    @PutMapping("/fcmToken")
+    @PutMapping("/fcm-token")
     @PreAuthorize("isAuthenticated()")
     fun updateFcmToken(
         @RequestBody input: SetFcmTokenInput,

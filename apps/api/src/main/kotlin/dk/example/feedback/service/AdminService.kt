@@ -3,8 +3,8 @@ package dk.example.feedback.service
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
 import dk.example.feedback.config.FeedbackConfig
-import dk.example.feedback.controller.AdminController.MockTokenResponse
-import dk.example.feedback.controller.AdminController.SignInFirebaseRequestDto
+import dk.example.feedback.controller.AdminController.MockTokenDto
+
 import dk.example.feedback.controller.AdminController.SignInFirebaseResponseDto
 import dk.example.feedback.helpers.await
 import dk.example.feedback.model.enumerations.Role
@@ -25,7 +25,7 @@ class AdminService(
 
     private val logger = LoggerFactory.getLogger(AdminService::class.java)
 
-    suspend fun getMockToken(role: Role?, uid: String): MockTokenResponse {
+    suspend fun getMockToken(role: Role?, uid: String): MockTokenDto {
 
         withContext(Dispatchers.IO) {
             accountRepo.createOrGetAccount(
@@ -58,9 +58,14 @@ class AdminService(
         return signInWithCustomToken(token)
     }
 
-    fun signInWithCustomToken(token: String): MockTokenResponse {
+    fun signInWithCustomToken(token: String): MockTokenDto {
         val apiKey = feedbackConfig.firebaseApiKey
         val url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=$apiKey"
+
+        data class SignInFirebaseRequestDto(
+            val token: String,
+            val returnSecureToken: Boolean
+        )
 
         val body = SignInFirebaseRequestDto(
             token = token,
@@ -71,7 +76,7 @@ class AdminService(
         val response: ResponseEntity<SignInFirebaseResponseDto> = restTemplate.postForEntity(url = url, request = body)
 
         if (response.statusCode.is2xxSuccessful) {
-            return MockTokenResponse(firebaseResponse = response.body!!, token = token)
+            return MockTokenDto(firebaseResponse = response.body!!, token = token)
         }
         throw RuntimeException("Failed to sign in with custom token")
     }

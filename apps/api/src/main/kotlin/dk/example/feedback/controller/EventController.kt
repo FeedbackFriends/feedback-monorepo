@@ -55,7 +55,7 @@ class EventController(
     }
 
     @Operation(summary = "Called when a manager navigates to event so new feedback is reset")
-    @PutMapping("resetNewFeedback/{eventId}")
+    @PutMapping("reset-new-feedback/{eventId}")
     @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
     fun resetNewFeedback(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
         return eventService.resetNewFeedback(eventId = eventId, jwt = principal)
