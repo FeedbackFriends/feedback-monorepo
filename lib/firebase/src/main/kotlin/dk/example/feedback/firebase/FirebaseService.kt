@@ -1,10 +1,10 @@
-package dk.example.feedback.service.firebase
+package dk.example.feedback.firebase
 
 import dk.example.feedback.model.enumerations.Role
 
 interface FirebaseService {
     fun configure(configFilePath: String)
-    suspend fun sendNotifications(firebaseNotifications: List<FirebaseNotification>)
+    suspend fun sendFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>)
     suspend fun getUser(userId: String): FirebaseUser
     suspend fun deleteUser(userId: String)
     suspend fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?)
@@ -18,9 +18,7 @@ data class FirebaseUser(
     val photoUrl: String?
 )
 
-data class FirebaseNotification(
-    val title: String,
-    val body: String,
+data class FeedbackReceivedNotification(
     val fcmToken: String,
-    val data: Map<String, String>
+    val newFeedback: Int,
 )

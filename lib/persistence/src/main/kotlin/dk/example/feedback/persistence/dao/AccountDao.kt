@@ -33,3 +33,6 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
         ratingPrompted = ratingPrompted,
     )
 }
+
+
+

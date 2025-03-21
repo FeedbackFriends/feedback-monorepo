@@ -12,3 +12,5 @@ object EventParticipantTable : Table("event_participant") {
     val dateCreated = timestampWithTimeZone("created_at").clientDefault { OffsetDateTime.now() }
     override val primaryKey = PrimaryKey(event, participant)
 }
+
+

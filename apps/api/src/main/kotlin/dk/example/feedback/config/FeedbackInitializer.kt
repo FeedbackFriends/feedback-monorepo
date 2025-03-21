@@ -1,7 +1,7 @@
 package dk.example.feedback.config
 
+import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.persistence.repo.MockRepo
-import dk.example.feedback.service.firebase.FirebaseService
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener

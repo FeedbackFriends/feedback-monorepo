@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(projects.persistence)
     implementation(projects.model)
+    implementation(projects.firebase)
 
     implementation(libs.springboot.data.jpa)
     implementation(libs.springboot.mail)

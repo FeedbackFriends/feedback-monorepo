@@ -1,6 +1,7 @@
 package dk.example.feedback.controller
 
 import dk.example.feedback.dto.SessionDto
+import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.payloads.CreateAccountInput
@@ -9,7 +10,6 @@ import dk.example.feedback.payloads.SetFcmTokenInput
 import dk.example.feedback.payloads.UpdateRoleInput
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.SessionService
-import dk.example.feedback.service.firebase.FirebaseService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal

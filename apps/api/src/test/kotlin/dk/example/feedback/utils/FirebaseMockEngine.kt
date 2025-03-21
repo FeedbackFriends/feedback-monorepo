@@ -1,9 +1,9 @@
 package dk.example.feedback.utils
 
+import dk.example.feedback.firebase.FeedbackReceivedNotification
+import dk.example.feedback.firebase.FirebaseService
+import dk.example.feedback.firebase.FirebaseUser
 import dk.example.feedback.model.enumerations.Role
-import dk.example.feedback.service.firebase.FirebaseNotification
-import dk.example.feedback.service.firebase.FirebaseService
-import dk.example.feedback.service.firebase.FirebaseUser
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -23,8 +23,8 @@ class FirebaseMockEngine(userId: String) : FirebaseService {
 
     override fun configure(configFilePath: String) {}
 
-    override suspend fun sendNotifications(firebaseNotifications: List<FirebaseNotification>) {
-        println("Mock sending ${firebaseNotifications.size} notifications")
+    override suspend fun sendFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
+        println("Mock sending ${feedbackReceivedNotifications.size} notifications")
     }
 
     override suspend fun getUser(userId: String): FirebaseUser {

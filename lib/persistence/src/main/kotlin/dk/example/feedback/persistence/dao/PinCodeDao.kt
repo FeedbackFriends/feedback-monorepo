@@ -20,3 +20,5 @@ class PinCodeDao(id: EntityID<String>) : Entity<String>(id) {
         )
     }
 }
+
+

@@ -69,7 +69,7 @@ class AccountControllerTest(
     }
 
     suspend fun `Create anonymous account and verify get session`(userId: String) {
-        val createUserInput = CreateAccountInput(requestedRole = null)
+        val createUserInput = CreateAccountInput(requestedRole = null, fcmToken = null)
 
         val createAccountRequest = MockMvcRequestBuilders
             .post("/account")
@@ -108,7 +108,7 @@ class AccountControllerTest(
     }
 
     suspend fun `Upgrade account to participant role and verify get session`(userId: String) {
-        val createUserInput = CreateAccountInput(requestedRole = Role.Participant)
+        val createUserInput = CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)
 
         val createAccountRequest = MockMvcRequestBuilders
             .post("/account")
@@ -372,7 +372,7 @@ class AccountControllerTest(
 
     suspend fun `Submit emoji feedback to event`(pinCode: String, emoji: Emoji, userId: String) {
 
-        val createUserInput = CreateAccountInput(requestedRole = null)
+        val createUserInput = CreateAccountInput(requestedRole = null, fcmToken = null)
 
         val createAccountRequest = MockMvcRequestBuilders
             .post("/account")

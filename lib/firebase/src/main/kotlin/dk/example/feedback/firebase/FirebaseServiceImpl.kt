@@ -5,10 +5,15 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
+import com.google.firebase.messaging.ApnsConfig
+import com.google.firebase.messaging.Aps
+import com.google.firebase.messaging.ApsAlert
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
-import com.google.firebase.messaging.Notification
-import dk.example.feedback.helpers.await
+import dk.example.feedback.firebase.FeedbackReceivedNotification
+import dk.example.feedback.firebase.FirebaseService
+import dk.example.feedback.firebase.FirebaseUser
+import dk.example.feedback.firebase.await
 import dk.example.feedback.model.enumerations.Role
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -37,17 +42,25 @@ class FirebaseServiceImpl : FirebaseService {
         }
     }
 
-    override suspend fun sendNotifications(firebaseNotifications: List<FirebaseNotification>) {
+    override suspend fun sendFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
         FirebaseMessaging.getInstance().sendEachAsync(
-            firebaseNotifications.map {
+            feedbackReceivedNotifications.map {
                 Message.builder()
-                    .setNotification(
-                        Notification.builder()
-                            .setTitle(it.title)
-                            .setBody(it.body)
+                    .setApnsConfig(
+                        ApnsConfig.builder()
+                            .setAps(
+                                Aps.builder()
+                                    .setAlert(
+                                        ApsAlert.builder()
+                                            .setTitleLocalizationKey("notification_feedback_received_title")
+                                            .setSubtitleLocalizationKey("notification_feedback_received_subtitle")
+                                            .addAllSubtitleLocArgs(listOf(it.newFeedback.toString()))
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
-                    .putAllData(it.data)
                     .setToken(it.fcmToken)
                     .build()
             }

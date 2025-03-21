@@ -1,6 +1,6 @@
 package dk.example.feedback.utils
 
-import dk.example.feedback.service.firebase.FirebaseService
+import dk.example.feedback.firebase.FirebaseService
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 

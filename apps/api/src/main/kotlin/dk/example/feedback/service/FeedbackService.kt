@@ -12,6 +12,7 @@ import dk.example.feedback.payloads.FeedbackInput
 import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
+import dk.example.feedback.persistence.repo.NotificationRepo
 import java.util.*
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
@@ -21,7 +22,7 @@ class FeedbackService(
     val feedbackRepo: FeedbackRepo,
     val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
-    val notificationService: NotificationService,
+    val notificationRepo: NotificationRepo,
 ) {
 
     fun startSession(pinCode: String, jwt: Jwt): FeedbackSessionDto {
@@ -71,12 +72,7 @@ class FeedbackService(
         if (shouldPresentRatingPrompt) {
             accountRepo.markRatingPrompted(accountId = accountId)
         }
-        event.manager.fcmToken?.let { fcmToken ->
-            notificationService.notifyOrganizerThatFeedbackIsReceived(
-                event = event,
-                fcmToken = fcmToken
-            )
-        }
+        notificationRepo.persistNotificationReceived(eventId = event.id)
         return SubmitFeedbackResponseDto(
             shouldPresentRatingPrompt = shouldPresentRatingPrompt,
             event = event.toParticipantEvent(
