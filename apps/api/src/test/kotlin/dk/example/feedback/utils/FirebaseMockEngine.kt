@@ -23,7 +23,7 @@ class FirebaseMockEngine(userId: String) : FirebaseService {
 
     override fun configure(configFilePath: String) {}
 
-    override suspend fun sendFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
+    override suspend fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
         println("Mock sending ${feedbackReceivedNotifications.size} notifications")
     }
 

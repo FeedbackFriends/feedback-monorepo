@@ -4,7 +4,7 @@ import dk.example.feedback.model.enumerations.Role
 
 interface FirebaseService {
     fun configure(configFilePath: String)
-    suspend fun sendFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>)
+    suspend fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>)
     suspend fun getUser(userId: String): FirebaseUser
     suspend fun deleteUser(userId: String)
     suspend fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?)

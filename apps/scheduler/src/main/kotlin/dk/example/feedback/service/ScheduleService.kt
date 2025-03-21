@@ -44,7 +44,7 @@ class ScheduleService(
             }
         }
         if (notificationsToPush.isNotEmpty()) {
-            firebaseService.sendFeedbackReceivedNotifications(feedbackReceivedNotifications = notificationsToPush)
+            firebaseService.pushFeedbackReceivedNotifications(feedbackReceivedNotifications = notificationsToPush)
         }
         if (notificationsToRemove.isNotEmpty()) {
             notificationRepo.removeFeedbackReceivedNotification(

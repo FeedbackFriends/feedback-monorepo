@@ -3,6 +3,8 @@ server:
   shutdown: graceful
   max-http-request-header-size: 16KB
 spring:
+  jpa:
+    open-in-view: false
   liquibase:
     enabled: true
   exposed:

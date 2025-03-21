@@ -42,7 +42,7 @@ class FirebaseServiceImpl : FirebaseService {
         }
     }
 
-    override suspend fun sendFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
+    override suspend fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
         FirebaseMessaging.getInstance().sendEachAsync(
             feedbackReceivedNotifications.map {
                 Message.builder()
@@ -53,8 +53,8 @@ class FirebaseServiceImpl : FirebaseService {
                                     .setAlert(
                                         ApsAlert.builder()
                                             .setTitleLocalizationKey("notification_feedback_received_title")
-                                            .setSubtitleLocalizationKey("notification_feedback_received_subtitle")
-                                            .addAllSubtitleLocArgs(listOf(it.newFeedback.toString(), it.eventTitle))
+                                            .setLocalizationKey("notification_feedback_received_body")
+                                            .addAllLocalizationArgs(listOf(it.newFeedback.toString(), it.eventTitle))
                                             .build()
                                     )
                                     .build()
