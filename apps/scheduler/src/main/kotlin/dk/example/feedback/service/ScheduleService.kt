@@ -43,10 +43,13 @@ class ScheduleService(
                 )
             }
         }
-
-        firebaseService.sendFeedbackReceivedNotifications(feedbackReceivedNotifications = notificationsToPush)
-        notificationRepo.removeFeedbackReceivedNotification(
-            eventIds = notificationsToRemove.map { EntityID(it.event.id, EventTable) }
-        )
+        if (notificationsToPush.isNotEmpty()) {
+            firebaseService.sendFeedbackReceivedNotifications(feedbackReceivedNotifications = notificationsToPush)
+        }
+        if (notificationsToRemove.isNotEmpty()) {
+            notificationRepo.removeFeedbackReceivedNotification(
+                eventIds = notificationsToRemove.map { EntityID(it.event.id, EventTable) }
+            )
+        }
     }
 }
