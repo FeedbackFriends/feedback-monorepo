@@ -1,4 +1,4 @@
-package dk.example.feedback.config
+package dk.example.feedback
 
 import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.persistence.repo.MockRepo
