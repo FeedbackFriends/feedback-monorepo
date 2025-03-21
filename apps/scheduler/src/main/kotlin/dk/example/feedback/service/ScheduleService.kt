@@ -38,7 +38,8 @@ class ScheduleService(
                 notificationsToRemove += notification
                 notificationsToPush += FeedbackReceivedNotification(
                     fcmToken = fcmToken,
-                    newFeedback = notification.newFeedback
+                    newFeedback = notification.newFeedback,
+                    eventTitle = notification.event.title,
                 )
             }
         }

@@ -21,4 +21,5 @@ data class FirebaseUser(
 data class FeedbackReceivedNotification(
     val fcmToken: String,
     val newFeedback: Int,
+    val eventTitle: String,
 )

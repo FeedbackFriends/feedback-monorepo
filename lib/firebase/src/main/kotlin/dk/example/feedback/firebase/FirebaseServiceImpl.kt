@@ -54,7 +54,7 @@ class FirebaseServiceImpl : FirebaseService {
                                         ApsAlert.builder()
                                             .setTitleLocalizationKey("notification_feedback_received_title")
                                             .setSubtitleLocalizationKey("notification_feedback_received_subtitle")
-                                            .addAllSubtitleLocArgs(listOf(it.newFeedback.toString()))
+                                            .addAllSubtitleLocArgs(listOf(it.newFeedback.toString(), it.eventTitle))
                                             .build()
                                     )
                                     .build()
