@@ -55,6 +55,9 @@ class EventService(
     fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): ManagerEventDto {
         val event = eventRepo.getEvent(eventId)
         jwt.verifyAccountHasId(event.manager.id)
+        if (event.feedback.isNotEmpty()) {
+            throw IllegalArgumentException("Cannot update event with feedback")
+        }
         val updatedEvent = eventRepo.updateEvent(
             eventId = eventId,
             title = eventInput.title,
