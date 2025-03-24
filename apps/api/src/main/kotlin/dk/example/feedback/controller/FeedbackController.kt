@@ -44,7 +44,7 @@ class FeedbackController(val feedbackService: FeedbackService) {
         )
     }
 
-    @GetMapping
+    @GetMapping("/new")
     @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
     fun getNewFeedback(
         @AuthenticationPrincipal principal: Jwt
