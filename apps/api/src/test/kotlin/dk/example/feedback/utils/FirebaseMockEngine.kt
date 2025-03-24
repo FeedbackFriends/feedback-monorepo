@@ -4,11 +4,9 @@ import dk.example.feedback.firebase.FeedbackReceivedNotification
 import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.firebase.FirebaseUser
 import dk.example.feedback.model.enumerations.Role
-import kotlinx.coroutines.sync.Mutex
 
 class FirebaseMockEngine(userId: String) : FirebaseService {
 
-    private val mutex = Mutex()
 
     private var user: FirebaseUser? = FirebaseUser(
         displayName = null,
@@ -18,7 +16,6 @@ class FirebaseMockEngine(userId: String) : FirebaseService {
     )
 
     private var role: Role? = null
-    private val mockJwtFactory = MockJwtFactory(userId = userId!!)
 
     override fun configure(configFilePath: String) {}
 

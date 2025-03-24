@@ -9,15 +9,12 @@ import dk.example.feedback.persistence.table.NewFeedbackTable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.*
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional
 class NewFeedbackRepo {
-
-    private val logger = LoggerFactory.getLogger(NewFeedbackRepo::class.java)
 
     fun getFeedbackReceivedNotifications(): List<NewFeedbackEntity> {
         return NewFeedbackDao.all().toList().map { it.toModel() }

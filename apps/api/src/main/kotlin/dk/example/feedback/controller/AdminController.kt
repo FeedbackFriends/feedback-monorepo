@@ -1,12 +1,12 @@
 package dk.example.feedback.controller
 
+import dk.example.feedback.firebase.FeedbackReceivedNotification
 import dk.example.feedback.firebase.FirebaseService
-import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.enumerations.Role
 import dk.example.feedback.service.AdminService
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 class AdminController(
     val adminService: AdminService,
     val firebaseService: FirebaseService,
-//    val notificationService: NotificationService,
 ) {
-
-    private val logger = LoggerFactory.getLogger(AdminController::class.java)
 
     data class MockTokenDto(
         val firebaseResponse: SignInFirebaseResponseDto,
@@ -46,38 +43,22 @@ class AdminController(
     data class SendNotificationInput(
         val fcmToken: String,
         val title: String,
-        val body: String,
+        val newFeedback: Int,
     )
 
-//    @PutMapping("/send-mock-notification")
-//    suspend fun sendNotification(
-//        @RequestBody input: SendNotificationInput,
-//    ) {
-//        firebaseService.sendFeedbackReceivedNotifications(
-//            listOf(
-//                FeedbackReceivedNotification(
-//                    title = input.title,
-//                    body = input.body,
-//                    fcmToken = input.fcmToken,
-//                    data = mapOf()
-//                )
-//            )
-//        )
-//    }
-
-    data class FeedbackReceivedNotificationInput(
-        val eventEntity: EventEntity,
-        val fcmToken: String,
-    )
-
-//    @PutMapping("/mock-feedback-received-notification")
-//    suspend fun sendFeedbackReceivedNotification(
-//        @RequestBody input: FeedbackReceivedNotificationInput
-//    ) {
-//        notificationService.sendPushNotificationToOrganizerThatFeedbackIsReceived(
-//            event = input.eventEntity,
-//            fcmToken = input.fcmToken
-//        )
-//    }
+    @PutMapping("/push-new-feedback-notification")
+    suspend fun sendNotification(
+        @RequestBody input: SendNotificationInput,
+    ) {
+        firebaseService.pushFeedbackReceivedNotifications(
+            listOf(
+                FeedbackReceivedNotification(
+                    fcmToken = input.fcmToken,
+                    newFeedback = input.newFeedback,
+                    eventTitle = input.title
+                )
+            )
+        )
+    }
 }
 
