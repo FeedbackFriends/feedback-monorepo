@@ -2,7 +2,7 @@ package dk.example.feedback.model.database
 
 import java.time.OffsetDateTime
 
-data class NotificationFeedbackReceivedEntity(
+data class NewFeedbackEntity(
     val lastFeedbackReceived: OffsetDateTime,
     val newFeedback: Int,
     val event: EventEntity,

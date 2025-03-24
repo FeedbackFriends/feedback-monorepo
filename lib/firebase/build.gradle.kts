@@ -7,6 +7,4 @@ dependencies {
     implementation(libs.spring.security.test)
     implementation(libs.firebase)
     implementation(projects.model)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 }

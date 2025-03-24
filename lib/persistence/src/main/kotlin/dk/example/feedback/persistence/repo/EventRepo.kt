@@ -119,24 +119,16 @@ class EventRepo {
         return EventDao.findById(eventId)?.toModel() ?: throw Exception("Could not find event id: $eventId")
     }
 
-    fun getEvents(eventIds: List<UUID>): List<EventEntity> {
-        return eventIds.map {
-            EventDao.findById(it)
-        }.mapNotNull {
-            it?.toModel()
-        }
-    }
-
     fun getManagerEvents(managerId: String): List<EventEntity> {
         return EventDao.find { EventTable.manager eq managerId }.map { it.toModel() }
     }
 
-    data class ParticipantEventsWithJoinDate(
+    data class ParticipantEventsWithRecentlyJoined(
         val event: EventEntity,
         val recentlyJoined: Boolean,
     )
 
-    fun getParticipantEvents(participantId: String): List<ParticipantEventsWithJoinDate> {
+    fun getParticipantEvents(participantId: String): List<ParticipantEventsWithRecentlyJoined> {
 
         return EventParticipantTable
             .selectAll()
@@ -149,7 +141,7 @@ class EventRepo {
                         recentlyJoined = true
                     }
                 }
-                ParticipantEventsWithJoinDate(
+                ParticipantEventsWithRecentlyJoined(
                     event = getEvent(it[EventParticipantTable.event].value),
                     recentlyJoined = recentlyJoined
                 )

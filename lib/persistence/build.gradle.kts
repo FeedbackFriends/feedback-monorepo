@@ -4,7 +4,6 @@ dependencies {
     implementation(libs.liquibase)
     runtimeOnly(libs.postgresql)
     implementation(libs.bundles.exposed)
-    implementation(libs.springboot.data.jpa)
 }
 
 tasks.withType<Test> {

@@ -8,6 +8,7 @@ import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.QuestionFeedbackSummary
 import dk.example.feedback.helpers.getAccountId
+import dk.example.feedback.helpers.totalFeedback
 import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
@@ -150,7 +151,7 @@ class EventService(
 }
 
 fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
-    val totalFeedback = feedback.size
+    val totalFeedback = feedback.totalFeedback()
     val totalEmojiFeedback = feedback.count { it.feedbackType == FeedbackType.Emoji }
     val feedbackSummary = if (totalFeedback > 0) {
         FeedbackSummaryDto(
@@ -177,21 +178,18 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
                 questionText = question.questionText,
                 feedbackType = question.feedbackType,
                 feedbackSummary = if (questionFeedback.isEmpty()) null else QuestionFeedbackSummary(
-                    totalFeedback = questionFeedback.size,
+                    totalFeedback = questionFeedback.totalFeedback(),
                     verySadCount = questionFeedback.count { it.emoji == Emoji.VerySad },
                     sadCount = questionFeedback.count { it.emoji == Emoji.Sad },
                     happyCount = questionFeedback.count { it.emoji == Emoji.Happy },
                     veryHappyCount = questionFeedback.count { it.emoji == Emoji.VeryHappy }
                 ),
                 feedback = question.feedback,
-                newFeedbackForQuestion = questionFeedback.map { it.isNew }.count()
+                newFeedbackForQuestion = questionFeedback.filter { it.isNew }.totalFeedback(),
             )
         },
         feedbackSummary = feedbackSummary,
-        newFeedbackForEvent = feedback.filter { it.isNew }
-            .mapNotNull { it.participantId }
-            .toSet()
-            .size,
+        newFeedbackForEvent = feedback.filter { it.isNew }.totalFeedback(),
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
     )
 }

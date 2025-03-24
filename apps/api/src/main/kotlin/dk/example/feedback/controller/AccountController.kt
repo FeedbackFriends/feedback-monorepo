@@ -32,7 +32,7 @@ class AccountController(
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    suspend fun createAccount(
+    fun createAccount(
         @RequestBody input: CreateAccountInput,
         @AuthenticationPrincipal principal: Jwt,
     ): SessionDto {
@@ -66,7 +66,7 @@ class AccountController(
 
     @PutMapping("/role")
     @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
-    suspend fun updateRole(
+    fun updateRole(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: UpdateRoleInput,
     ) {
@@ -84,7 +84,7 @@ class AccountController(
 
     @DeleteMapping
     @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
-    suspend fun deleteAccount(
+    fun deleteAccount(
         @AuthenticationPrincipal principal: Jwt,
     ) {
         val accountId = principal.getAccountId()

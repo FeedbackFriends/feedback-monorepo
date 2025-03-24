@@ -39,7 +39,7 @@ class AdminController(
     )
 
     @PostMapping("/mock-id-token")
-    suspend fun mockIdToken(@RequestBody input: MockIdTokenRequestDto): MockTokenDto {
+    fun mockIdToken(@RequestBody input: MockIdTokenRequestDto): MockTokenDto {
         return adminService.getMockToken(role = input.role, uid = "mock_id")
     }
 

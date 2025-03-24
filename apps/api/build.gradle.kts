@@ -8,8 +8,6 @@ dependencies {
     testRuntimeOnly(libs.junit.jupiter.engine)
     developmentOnly(libs.springboot.devtools)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation(projects.persistence)
     implementation(projects.model)
     implementation(projects.firebase)

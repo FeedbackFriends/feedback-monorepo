@@ -30,7 +30,7 @@ class FeedbackController(val feedbackService: FeedbackService) {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/submit")
-    suspend fun sendFeedback(
+    fun sendFeedback(
         @RequestBody input: SendFeedbackInput,
         @AuthenticationPrincipal principal: Jwt
     ): SubmitFeedbackResponseDto {

@@ -6,11 +6,8 @@ import dk.example.feedback.config.FeedbackConfig
 import dk.example.feedback.controller.AdminController.MockTokenDto
 
 import dk.example.feedback.controller.AdminController.SignInFirebaseResponseDto
-import dk.example.feedback.helpers.await
 import dk.example.feedback.model.enumerations.Role
 import dk.example.feedback.persistence.repo.AccountRepo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -25,18 +22,15 @@ class AdminService(
 
     private val logger = LoggerFactory.getLogger(AdminService::class.java)
 
-    suspend fun getMockToken(role: Role?, uid: String): MockTokenDto {
+    fun getMockToken(role: Role?, uid: String): MockTokenDto {
 
-        withContext(Dispatchers.IO) {
-            accountRepo.createOrGetAccount(
-                name = "Mock",
-                email = "Mock@gmail.com",
-                phoneNumber = "27630505",
-                accountId = uid,
-                fcmToken = null
-            )
-        }
-
+        accountRepo.createOrGetAccount(
+            name = "Mock",
+            email = "Mock@gmail.com",
+            phoneNumber = "27630505",
+            accountId = uid,
+            fcmToken = null
+        )
 
         val createUserRequest = UserRecord.CreateRequest()
             .setUid(uid)
@@ -50,12 +44,12 @@ class AdminService(
             logger.debug("Firebase: User already exists so will sign in")
         }
         try {
-            FirebaseAuth.getInstance().setCustomUserClaimsAsync(uid, mapOf("role" to role.toString())).await()
+            FirebaseAuth.getInstance().setCustomUserClaimsAsync(uid, mapOf("role" to role.toString()))
         } catch (e: Exception) {
             logger.debug("Firebase: Failed to set custom claims for role with value {}", role)
         }
-        val token = FirebaseAuth.getInstance().createCustomTokenAsync(uid).await()
-        return signInWithCustomToken(token)
+        val token = FirebaseAuth.getInstance().createCustomTokenAsync(uid)
+        return signInWithCustomToken(token.get())
     }
 
     fun signInWithCustomToken(token: String): MockTokenDto {

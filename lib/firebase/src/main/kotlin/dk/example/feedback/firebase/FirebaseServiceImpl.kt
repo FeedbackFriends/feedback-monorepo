@@ -13,7 +13,6 @@ import com.google.firebase.messaging.Message
 import dk.example.feedback.firebase.FeedbackReceivedNotification
 import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.firebase.FirebaseUser
-import dk.example.feedback.firebase.await
 import dk.example.feedback.model.enumerations.Role
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -42,8 +41,8 @@ class FirebaseServiceImpl : FirebaseService {
         }
     }
 
-    override suspend fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
-        FirebaseMessaging.getInstance().sendEachAsync(
+    override fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
+        FirebaseMessaging.getInstance().sendEach(
             feedbackReceivedNotifications.map {
                 Message.builder()
                     .setApnsConfig(
@@ -64,12 +63,12 @@ class FirebaseServiceImpl : FirebaseService {
                     .setToken(it.fcmToken)
                     .build()
             }
-        ).await()
+        )
     }
 
-    override suspend fun getUser(userId: String): FirebaseUser {
+    override fun getUser(userId: String): FirebaseUser {
 
-        val userRecord = FirebaseAuth.getInstance().getUserAsync(userId).await()
+        val userRecord = FirebaseAuth.getInstance().getUser(userId)
         // if email is null (user is anonymous) then return null
         return FirebaseUser(
             displayName = userRecord.displayName,
@@ -79,25 +78,24 @@ class FirebaseServiceImpl : FirebaseService {
         )
     }
 
-    override suspend fun deleteUser(userId: String) {
-        FirebaseAuth.getInstance().deleteUserAsync(userId).await()
+    override fun deleteUser(userId: String) {
+        FirebaseAuth.getInstance().deleteUserAsync(userId)
     }
 
-    override suspend fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?) {
-        FirebaseAuth.getInstance().updateUserAsync(
+    override fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?) {
+        FirebaseAuth.getInstance().updateUser(
             UserRecord.UpdateRequest(userId)
                 .takeIf { email != null }?.setEmail(email)
                 .takeIf { displayName != null }?.setDisplayName(displayName)
                 .takeIf { phoneNumber != null }?.setPhoneNumber(phoneNumber)
-        ).await()
+        )
     }
 
-    override suspend fun setRole(userId: String, requestedRole: Role?) {
+    override fun setRole(userId: String, requestedRole: Role?) {
         logger.info("Setting role ${requestedRole?.toString()} for user $userId")
         try {
             FirebaseAuth.getInstance()
-                .setCustomUserClaimsAsync(userId, mapOf("role" to requestedRole?.toString()))
-                .await()
+                .setCustomUserClaims(userId, mapOf("role" to requestedRole?.toString()))
             logger.info("Role successfully set for user $userId")
         } catch (e: Exception) {
             logger.error("Failed to set role for user $userId", e)

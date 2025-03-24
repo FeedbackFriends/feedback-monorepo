@@ -304,13 +304,18 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - createTable:
-            tableName: notification_feedback_received
+            tableName: new_feedback
             columns:
               - column:
                   name: event_id
                   type: uuid
                   constraints:
                     primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_id
+                  type: varchar(255)
+                  constraints:
                     nullable: false
               - column:
                   name: new_feedback

@@ -2,19 +2,17 @@ package dk.example.feedback.service
 
 import dk.example.feedback.firebase.FeedbackReceivedNotification
 import dk.example.feedback.firebase.FirebaseService
-import dk.example.feedback.model.database.NotificationFeedbackReceivedEntity
+import dk.example.feedback.model.database.NewFeedbackEntity
 import dk.example.feedback.persistence.repo.EventRepo
-import dk.example.feedback.persistence.repo.NotificationRepo
-import dk.example.feedback.persistence.table.EventTable
+import dk.example.feedback.persistence.repo.NewFeedbackRepo
 import java.time.Duration
-import org.jetbrains.exposed.dao.id.EntityID
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
 class ScheduleService(
     private val eventRepo: EventRepo,
-    private val notificationRepo: NotificationRepo,
+    private val newFeedbackRepo: NewFeedbackRepo,
     private val firebaseService: FirebaseService,
 ) {
 
@@ -25,11 +23,11 @@ class ScheduleService(
     }
 
     @Scheduled(fixedRate = 5000)
-    suspend fun pushNotificationScheduler() = run {
+    fun pushNotificationScheduler() {
         val notificationsToPush = mutableListOf<FeedbackReceivedNotification>()
-        val notificationsToRemove = mutableListOf<NotificationFeedbackReceivedEntity>()
+        val notificationsToRemove = mutableListOf<NewFeedbackEntity>()
 
-        notificationRepo.getFeedbackReceivedNotifications().forEach { notification ->
+        newFeedbackRepo.getFeedbackReceivedNotifications().forEach { notification ->
             val fcmToken = notification.account.fcmToken
 
             if (fcmToken == null) {
@@ -47,8 +45,8 @@ class ScheduleService(
             firebaseService.pushFeedbackReceivedNotifications(feedbackReceivedNotifications = notificationsToPush)
         }
         if (notificationsToRemove.isNotEmpty()) {
-            notificationRepo.removeFeedbackReceivedNotification(
-                eventIds = notificationsToRemove.map { EntityID(it.event.id, EventTable) }
+            newFeedbackRepo.removeNewFeedback(
+                eventIds = notificationsToRemove.map { it.event.id }
             )
         }
     }

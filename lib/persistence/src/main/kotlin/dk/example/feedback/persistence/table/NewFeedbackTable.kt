@@ -7,8 +7,9 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
 
-object NotificationFeedbackReceivedTable : IdTable<UUID>("notification_feedback_received") {
+object NewFeedbackTable : IdTable<UUID>("new_feedback") {
     val event = reference("event_id", EventTable.id, onDelete = ReferenceOption.CASCADE)
+    val account = reference("account_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
     val lastFeedbackReceived = timestampWithTimeZone("last_feedback_received")
     val newFeedback = integer("new_feedback")
     override val id: Column<EntityID<UUID>> = event
