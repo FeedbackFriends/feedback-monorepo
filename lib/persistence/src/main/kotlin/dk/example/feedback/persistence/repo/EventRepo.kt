@@ -137,7 +137,8 @@ class EventRepo {
                 var recentlyJoined = false
                 if (!it[EventParticipantTable.feedbackSubmitted]) {
                     val oneHourAgo = Instant.now().minus(1, ChronoUnit.HOURS)
-                    if (it[EventParticipantTable.dateCreated].toInstant().isAfter(oneHourAgo)) {
+                    val joinedWithinAnHour = it[EventParticipantTable.dateCreated].toInstant().isAfter(oneHourAgo)
+                    if (joinedWithinAnHour) {
                         recentlyJoined = true
                     }
                 }
@@ -184,7 +185,7 @@ class EventRepo {
             this.questions.forEach { question ->
                 logger.info("Question ${question.id.value} has ${question.feedback.count()} feedback entries")
                 question.feedback.forEach { feedback ->
-                    feedback.isNew = false
+                    feedback.seenByManager = true
                     feedback.flush()
                 }
             }

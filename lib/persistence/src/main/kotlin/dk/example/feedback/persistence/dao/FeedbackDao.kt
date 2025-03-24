@@ -20,7 +20,7 @@ class FeedbackDao(id: EntityID<UUID>): CommonColumns<FeedbackEntity>(id, Feedbac
     var question by QuestionDao referencedOn FeedbackTable.question
     var manager by AccountDao referencedOn FeedbackTable.manager
     var participant by AccountDao optionalReferencedOn FeedbackTable.participant
-    var isNew by FeedbackTable.isNew
+    var seenByManager by FeedbackTable.seenByManager
 
     override fun toModel(): FeedbackEntity {
         return FeedbackEntity(
@@ -33,7 +33,7 @@ class FeedbackDao(id: EntityID<UUID>): CommonColumns<FeedbackEntity>(id, Feedbac
             questionId = question.id.value,
             id = id.value,
             participantId = participant?.id?.value,
-            isNew = isNew
+            seenByManager = seenByManager
         )
     }
 }

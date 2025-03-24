@@ -45,9 +45,7 @@ class ScheduleService(
             firebaseService.pushFeedbackReceivedNotifications(feedbackReceivedNotifications = notificationsToPush)
         }
         if (notificationsToRemove.isNotEmpty()) {
-            newFeedbackRepo.removeNewFeedback(
-                eventIds = notificationsToRemove.map { it.event.id }
-            )
+            newFeedbackRepo.removeAllNewFeedback()
         }
     }
 }

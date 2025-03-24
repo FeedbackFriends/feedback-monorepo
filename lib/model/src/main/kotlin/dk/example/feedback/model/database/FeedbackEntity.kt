@@ -18,5 +18,5 @@ data class FeedbackEntity(
     override val oneToTen: Int? = null,
     override val questionId: UUID,
     val participantId: String?,
-    val isNew: Boolean,
+    val seenByManager: Boolean,
 ): Feedback

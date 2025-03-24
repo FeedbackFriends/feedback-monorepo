@@ -7,7 +7,6 @@ import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.FeedbackDao
 import dk.example.feedback.persistence.dao.QuestionDao
 import dk.example.feedback.persistence.table.AccountTable
-import dk.example.feedback.persistence.table.FeedbackTable
 import org.jetbrains.exposed.dao.id.EntityID
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -15,10 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 @Transactional
 class FeedbackRepo {
-
-    fun getTotalFeedbackSubmissionsForAccount(accountId: String): Long {
-        return FeedbackDao.find { FeedbackTable.participant eq accountId }.count()
-    }
 
     fun persistFeedback(
         feedbackList: List<Feedback>,
@@ -42,7 +37,7 @@ class FeedbackRepo {
                     ?: throw IllegalArgumentException("Question not found with id: ${feedbackEntity.questionId}")
                 this.manager = manager
                 this.participant = AccountDao.findById(EntityID(participantId, AccountTable))
-                this.isNew = true
+                this.seenByManager = false
             }.toModel()
             createdFeedbackList.plus(feedback)
         }

@@ -1,6 +1,5 @@
 package dk.example.feedback.persistence.repo
 
-import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.NewFeedbackEntity
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.EventDao
@@ -20,17 +19,18 @@ class NewFeedbackRepo {
         return NewFeedbackDao.all().toList().map { it.toModel() }
     }
 
-    fun getNewFeedbackForAccount(accountId: String): List<EventEntity> {
-        val newEvents = NewFeedbackDao.find {
+    fun getNewFeedbackForAccount(accountId: String): List<NewFeedbackEntity> {
+        return NewFeedbackDao.find {
             NewFeedbackTable.account eq accountId
-        }.map { it.event.toModel() }
-        return newEvents
+        }.map { it.toModel() }
     }
 
-    fun removeNewFeedback(eventIds: List<UUID>) {
-        NewFeedbackDao.find {
-            NewFeedbackTable.id inList eventIds
-        }.forEach { it.delete() }
+    fun removeNewFeedbackForAccount(accountId: String) {
+        NewFeedbackDao.find { NewFeedbackTable.account eq accountId }.forEach { it.delete() }
+    }
+
+    fun removeAllNewFeedback() {
+        NewFeedbackDao.all().forEach { it.delete() }
     }
 
     fun persistNewFeedback(eventId: UUID, accountId: String) {

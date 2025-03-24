@@ -265,7 +265,7 @@ databaseChangeLog:
                   name: manager_id
                   type: varchar(255)
               - column:
-                  name: is_new
+                  name: seen_by_manager
                   type: boolean
                   constraints:
                     nullable: false
