@@ -91,6 +91,11 @@ class SessionService(
         }
     }
 
+    fun markActivityAsSeen(jwt: Jwt) {
+        val accountId = jwt.getAccountId()
+        activityRepo.markAllAsSeen(accountId = accountId)
+    }
+
     private fun getActivity(accountId: String): ActivityDto {
         val items = activityRepo.listAllForAccount(accountId = accountId).map {
             ActivityItem(

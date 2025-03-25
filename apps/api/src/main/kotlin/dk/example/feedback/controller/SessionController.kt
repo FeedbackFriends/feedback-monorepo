@@ -32,4 +32,12 @@ class SessionController(val sessionService: SessionService) {
     ): UpdatedSessionDto {
         return sessionService.getUpdatedSession(jwt = principal)
     }
+
+    @GetMapping("/mark-activity-as-seen")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
+    fun markActivityAsSeen(
+        @AuthenticationPrincipal principal: Jwt
+    ) {
+        return sessionService.markActivityAsSeen(jwt = principal)
+    }
 }
