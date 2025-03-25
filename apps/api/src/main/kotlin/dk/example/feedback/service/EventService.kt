@@ -108,10 +108,10 @@ class EventService(
         )
     }
 
-    fun resetNewFeedback(eventId: UUID, jwt: Jwt) {
+    fun markEventAsSeen(eventId: UUID, jwt: Jwt) {
         val event = eventRepo.getEvent(eventId)
         jwt.verifyAccountHasId(event.manager.id)
-        eventRepo.resetNewFeedbackForEvent(eventId)
+        eventRepo.markEventAsSeen(eventId)
     }
 
     private fun getPinCodeForEvent(eventId: UUID): String {

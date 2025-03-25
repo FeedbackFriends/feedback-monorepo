@@ -55,10 +55,10 @@ class EventController(
     }
 
     @Operation(summary = "Called when a manager navigates to event so new feedback is reset")
-    @PutMapping("reset-new-feedback/{eventId}")
+    @PutMapping("mark-as-seen/{eventId}")
     @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
     fun resetNewFeedback(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
-        return eventService.resetNewFeedback(eventId = eventId, jwt = principal)
+        return eventService.markEventAsSeen(eventId = eventId, jwt = principal)
     }
 }
 

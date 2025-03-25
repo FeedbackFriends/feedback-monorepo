@@ -178,7 +178,7 @@ class EventRepo {
         }
     }
 
-    fun resetNewFeedbackForEvent(eventId: UUID) {
+    fun markEventAsSeen(eventId: UUID) {
         logger.info("Reset new feedback for event: ${eventId}")
         EventDao.findById(eventId)?.apply {
             logger.info("Event ${id.value} has ${questions.count()} questions")
