@@ -51,7 +51,7 @@ class MockRepo {
                     it[location] = "Test Location"
                     it[durationInMinutes] = 30
                     it[manager] = testId
-                    it[startTime] = OffsetDateTime.now(UTC)
+                    it[startDate] = OffsetDateTime.now(UTC)
                     it[lastUpdated] = OffsetDateTime.now(UTC)
                     it[dateCreated] = OffsetDateTime.now(UTC)
                 }
@@ -77,7 +77,7 @@ class MockRepo {
                 }
 
                 PinCodeTable.insert {
-                    it[pinCode] = "000${i}"
+                    it[code] = "000${i}"
                     it[event] = eventId
                 }
             }

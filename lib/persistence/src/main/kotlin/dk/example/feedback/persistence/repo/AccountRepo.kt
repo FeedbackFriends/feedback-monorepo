@@ -80,7 +80,7 @@ class AccountRepo {
         }.toList().map { it.toModel() }
     }
 
-    fun markRatingPrompted(accountId: String) {
+    fun markRatingAsPrompted(accountId: String) {
         val found =
             AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found with id: $accountId")
         found.apply {

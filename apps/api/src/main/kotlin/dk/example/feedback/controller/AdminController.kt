@@ -32,12 +32,13 @@ class AdminController(
     )
 
     data class MockIdTokenRequestDto(
-        val role: Role?
+        val role: Role?,
+        val id: String,
     )
 
     @PostMapping("/mock-id-token")
     fun mockIdToken(@RequestBody input: MockIdTokenRequestDto): MockTokenDto {
-        return adminService.getMockToken(role = input.role, uid = "mock_id")
+        return adminService.getMockToken(role = input.role, uid = input.id)
     }
 
     data class SendNotificationInput(

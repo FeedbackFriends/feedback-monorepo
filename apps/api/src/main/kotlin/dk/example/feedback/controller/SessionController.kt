@@ -1,6 +1,8 @@
 package dk.example.feedback.controller
 
 import dk.example.feedback.dto.SessionDto
+import dk.example.feedback.dto.UpdatedSessionDto
+import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.service.SessionService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
@@ -21,5 +23,13 @@ class SessionController(val sessionService: SessionService) {
         @AuthenticationPrincipal principal: Jwt
     ): SessionDto {
         return sessionService.getSession(jwt = principal)
+    }
+
+    @GetMapping("/real-time-updates")
+    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
+    fun getUpdatedSession(
+        @AuthenticationPrincipal principal: Jwt
+    ): UpdatedSessionDto {
+        return sessionService.getUpdatedSession(jwt = principal)
     }
 }

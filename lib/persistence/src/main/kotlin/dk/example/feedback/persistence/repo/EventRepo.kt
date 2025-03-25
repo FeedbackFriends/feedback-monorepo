@@ -53,7 +53,7 @@ class EventRepo {
     }
 
     fun pinCodeExists(pinCode: String): Boolean {
-        val optionalFoundPinCode = PinCodeDao.find { PinCodeTable.pinCode eq pinCode }.firstOrNull()
+        val optionalFoundPinCode = PinCodeDao.find { PinCodeTable.code eq pinCode }.firstOrNull()
         return optionalFoundPinCode?.pinCode?.value == pinCode
     }
 
@@ -111,7 +111,7 @@ class EventRepo {
     }
 
     fun getEventByPinCode(pinCode: String): EventEntity {
-        return PinCodeDao.find { PinCodeTable.pinCode eq pinCode }.firstOrNull()?.event?.toModel()
+        return PinCodeDao.find { PinCodeTable.code eq pinCode }.firstOrNull()?.event?.toModel()
             ?: throw Exception("Could not find event with pin code: $pinCode")
     }
 

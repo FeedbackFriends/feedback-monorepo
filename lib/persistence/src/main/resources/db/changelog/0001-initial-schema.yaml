@@ -67,7 +67,7 @@ databaseChangeLog:
                   name: agenda
                   type: varchar(255)
               - column:
-                  name: date
+                  name: start_date
                   type: timestamp with time zone
                   constraints:
                     nullable: false
@@ -199,7 +199,7 @@ databaseChangeLog:
             tableName: pin_code
             columns:
               - column:
-                  name: pin_code
+                  name: code
                   type: varchar(255)
                   constraints:
                     nullable: false
@@ -265,7 +265,7 @@ databaseChangeLog:
                   name: manager_id
                   type: varchar(255)
               - column:
-                  name: seen_by_manager
+                  name: seen_before
                   type: boolean
                   constraints:
                     nullable: false
@@ -275,36 +275,7 @@ databaseChangeLog:
                   constraints:
                     nullable: true
         - createTable:
-            tableName: team
-            columns:
-              - column:
-                  name: id
-                  type: uuid
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: name
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: manager_id
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: created_at
-                  type: timestamp with time zone
-                  constraints:
-                    nullable: false
-              - column:
-                  name: updated_at
-                  type: timestamp with time zone
-                  constraints:
-                    nullable: false
-        - createTable:
-            tableName: new_feedback
+            tableName: new_feedback_notification
             columns:
               - column:
                   name: event_id
@@ -323,17 +294,64 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: last_feedback_received
+                  name: last_feedback_at
                   type: timestamp with time zone
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:
-            baseTableName: team
-            baseColumnNames: manager_id
+            baseTableName: new_feedback_notification
+            baseColumnNames: event_id
+            referencedTableName: event
+            referencedColumnNames: id
+            constraintName: fk_new_feedback_notification_event_id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: new_feedback_notification
+            baseColumnNames: account_id
             referencedTableName: account
             referencedColumnNames: id
-            constraintName: fk_team_manager_id
+            constraintName: fk_new_feedback_notification_account_id
             onDelete: CASCADE
+        - createTable:
+            tableName: activity
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: event_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: new_feedback
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: seen_before
+                  type: boolean
+                  constraints:
+                    nullable: false
         #feedback foreign keys
         - addForeignKeyConstraint:
             baseTableName: feedback

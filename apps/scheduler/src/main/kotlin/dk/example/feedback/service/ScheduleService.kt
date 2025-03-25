@@ -2,9 +2,10 @@ package dk.example.feedback.service
 
 import dk.example.feedback.firebase.FeedbackReceivedNotification
 import dk.example.feedback.firebase.FirebaseService
-import dk.example.feedback.model.database.NewFeedbackEntity
+import dk.example.feedback.model.database.NewFeedbackNotificationEntity
+import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
-import dk.example.feedback.persistence.repo.NewFeedbackRepo
+import dk.example.feedback.persistence.repo.NewFeedbackNotificationRepo
 import java.time.Duration
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -12,8 +13,9 @@ import org.springframework.stereotype.Service
 @Service
 class ScheduleService(
     private val eventRepo: EventRepo,
-    private val newFeedbackRepo: NewFeedbackRepo,
+    private val newFeedbackNotificationRepo: NewFeedbackNotificationRepo,
     private val firebaseService: FirebaseService,
+    private val activityRepo: ActivityRepo,
 ) {
 
     @Scheduled(cron = "0 0 0 * * *", zone = "Europe/Copenhagen")
@@ -25,11 +27,10 @@ class ScheduleService(
     @Scheduled(fixedRate = 5000)
     fun pushNotificationScheduler() {
         val notificationsToPush = mutableListOf<FeedbackReceivedNotification>()
-        val notificationsToRemove = mutableListOf<NewFeedbackEntity>()
+        val notificationsToRemove = mutableListOf<NewFeedbackNotificationEntity>()
 
-        newFeedbackRepo.getFeedbackReceivedNotifications().forEach { notification ->
+        newFeedbackNotificationRepo.listAll().forEach { notification ->
             val fcmToken = notification.account.fcmToken
-
             if (fcmToken == null) {
                 notificationsToRemove += notification
             } else if (notification.shouldPush()) {
@@ -44,8 +45,13 @@ class ScheduleService(
         if (notificationsToPush.isNotEmpty()) {
             firebaseService.pushFeedbackReceivedNotifications(feedbackReceivedNotifications = notificationsToPush)
         }
-        if (notificationsToRemove.isNotEmpty()) {
-            newFeedbackRepo.removeAllNewFeedback()
+        for (notification in notificationsToRemove) {
+            newFeedbackNotificationRepo.removeAllForEvent(eventId = notification.event.id)
+            activityRepo.persistActivity(
+                eventId = notification.event.id,
+                accountId = notification.account.id,
+                newFeedback = notification.newFeedback
+            )
         }
     }
 }

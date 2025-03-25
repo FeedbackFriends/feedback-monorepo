@@ -1,7 +1,6 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.dto.FeedbackSessionDto
-import dk.example.feedback.dto.NewFeedbackDto
 import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.SubmitFeedbackResponseDto
@@ -12,9 +11,10 @@ import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.payloads.FeedbackInput
 import dk.example.feedback.persistence.repo.AccountRepo
+import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
-import dk.example.feedback.persistence.repo.NewFeedbackRepo
+import dk.example.feedback.persistence.repo.NewFeedbackNotificationRepo
 import java.util.*
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
@@ -24,7 +24,8 @@ class FeedbackService(
     val feedbackRepo: FeedbackRepo,
     val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
-    val newFeedbackRepo: NewFeedbackRepo,
+    val newFeedbackNotificationRepo: NewFeedbackNotificationRepo,
+    val activityRepo: ActivityRepo
 ) {
 
     fun startSession(pinCode: String, jwt: Jwt): FeedbackSessionDto {
@@ -72,11 +73,11 @@ class FeedbackService(
         eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = true)
         val shouldPresentRatingPrompt = persistedFeedback.totalFeedback() >= 3
         if (shouldPresentRatingPrompt) {
-            accountRepo.markRatingPrompted(accountId = accountId)
+            accountRepo.markRatingAsPrompted(accountId = accountId)
         }
-        newFeedbackRepo.persistNewFeedback(
+        newFeedbackNotificationRepo.persistNewFeedbackNotification(
             eventId = event.id,
-            accountId = accountId
+            accountId = event.manager.id
         )
         return SubmitFeedbackResponseDto(
             shouldPresentRatingPrompt = shouldPresentRatingPrompt,
@@ -86,16 +87,6 @@ class FeedbackService(
                 recentlyJoined = false
             )
         )
-    }
-
-    fun getNewFeedback(jwt: Jwt): List<NewFeedbackDto> {
-        newFeedbackRepo.removeNewFeedbackForAccount(accountId = jwt.getAccountId())
-        return newFeedbackRepo.getNewFeedbackForAccount(accountId = jwt.getAccountId()).map {
-            NewFeedbackDto(
-                event = it.event.toManagerEvent(pinCode = eventRepo.getPinCodeForEvent(it.event.id)),
-                newFeedback = it.newFeedback
-            )
-        }
     }
 
     private fun throwIfAccountAlreadyGivenFeedback(feedback: List<FeedbackEntity>, accountId: String, eventId: UUID) {

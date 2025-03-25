@@ -10,6 +10,7 @@ data class SessionDto(
 ) {
     data class ManagerDataDto(
         val managerEvents: List<ManagerEventDto>,
+        val activity: ActivityDto
     )
     data class AccountInfoDto(
         val name: String?,
@@ -17,3 +18,4 @@ data class SessionDto(
         val phoneNumber: String?
     )
 }
+

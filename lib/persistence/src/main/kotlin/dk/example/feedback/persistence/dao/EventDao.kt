@@ -14,7 +14,7 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
 
     var title by EventTable.title
     var agenda by EventTable.agenda
-    var date by EventTable.startTime
+    var date by EventTable.startDate
     var durationInMinutes by EventTable.durationInMinutes
     var location by EventTable.location
     var manager by AccountDao referencedOn EventTable.manager
