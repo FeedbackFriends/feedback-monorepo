@@ -189,7 +189,7 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
             )
         },
         feedbackSummary = feedbackSummary,
-        newFeedbackForEvent = feedback.filter { it.seenByManager }.totalFeedback(),
+        newFeedbackForEvent = feedback.filter { !it.seenByManager }.totalFeedback(),
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
     )
 }
