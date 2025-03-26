@@ -352,6 +352,20 @@ databaseChangeLog:
                   type: boolean
                   constraints:
                     nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: activity
+            baseColumnNames: event_id
+            referencedTableName: event
+            referencedColumnNames: id
+            constraintName: activity_event_id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: activity
+            baseColumnNames: account_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: activity_account_id
+            onDelete: CASCADE
         #feedback foreign keys
         - addForeignKeyConstraint:
             baseTableName: feedback
