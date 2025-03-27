@@ -5,7 +5,7 @@ import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.SubmitFeedbackResponseDto
 import dk.example.feedback.helpers.getAccountId
-import dk.example.feedback.helpers.totalFeedback
+import dk.example.feedback.helpers.totalUniqueFeedback
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
@@ -71,7 +71,7 @@ class FeedbackService(
             managerId = managerId,
         )
         eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = true)
-        val shouldPresentRatingPrompt = persistedFeedback.totalFeedback() >= 3
+        val shouldPresentRatingPrompt = persistedFeedback.totalUniqueFeedback() >= 3
         if (shouldPresentRatingPrompt) {
             accountRepo.markRatingAsPrompted(accountId = accountId)
         }

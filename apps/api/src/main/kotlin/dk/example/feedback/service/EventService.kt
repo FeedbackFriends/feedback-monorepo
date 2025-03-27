@@ -1,6 +1,6 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.dto.FeedbackSummaryDto
+import dk.example.feedback.dto.FeedbackBarDto
 import dk.example.feedback.dto.ManagerEventDto
 import dk.example.feedback.dto.ManagerQuestion
 import dk.example.feedback.dto.OwnerInfoDto
@@ -8,7 +8,7 @@ import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.QuestionFeedbackSummary
 import dk.example.feedback.helpers.getAccountId
-import dk.example.feedback.helpers.totalFeedback
+import dk.example.feedback.helpers.totalUniqueFeedback
 import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
@@ -151,10 +151,10 @@ class EventService(
 }
 
 fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
-    val totalFeedback = feedback.totalFeedback()
+    val totalFeedback = feedback.totalUniqueFeedback()
     val totalEmojiFeedback = feedback.count { it.feedbackType == FeedbackType.Emoji }
     val feedbackSummary = if (totalFeedback > 0) {
-        FeedbackSummaryDto(
+        FeedbackBarDto(
             totalFeedback = totalFeedback,
             verySadPercentage = calculatePercentage(feedback, Emoji.VerySad, totalEmojiFeedback),
             sadPercentage = calculatePercentage(feedback, Emoji.Sad, totalEmojiFeedback),
@@ -178,18 +178,40 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
                 questionText = question.questionText,
                 feedbackType = question.feedbackType,
                 feedbackSummary = if (questionFeedback.isEmpty()) null else QuestionFeedbackSummary(
-                    totalFeedback = questionFeedback.totalFeedback(),
+                    feedbackBar = FeedbackBarDto(
+                        totalFeedback = questionFeedback.totalUniqueFeedback(),
+                        verySadPercentage = calculatePercentage(
+                            questionFeedback,
+                            Emoji.VerySad,
+                            questionFeedback.totalUniqueFeedback()
+                        ),
+                        sadPercentage = calculatePercentage(
+                            questionFeedback,
+                            Emoji.Sad,
+                            questionFeedback.totalUniqueFeedback()
+                        ),
+                        happyPercentage = calculatePercentage(
+                            questionFeedback,
+                            Emoji.Happy,
+                            questionFeedback.totalUniqueFeedback()
+                        ),
+                        veryHappyPercentage = calculatePercentage(
+                            questionFeedback,
+                            Emoji.VeryHappy,
+                            questionFeedback.totalUniqueFeedback()
+                        )
+                    ),
                     verySadCount = questionFeedback.count { it.emoji == Emoji.VerySad },
                     sadCount = questionFeedback.count { it.emoji == Emoji.Sad },
                     happyCount = questionFeedback.count { it.emoji == Emoji.Happy },
-                    veryHappyCount = questionFeedback.count { it.emoji == Emoji.VeryHappy }
+                    veryHappyCount = questionFeedback.count { it.emoji == Emoji.VeryHappy },
+                    commentsCount = questionFeedback.count { it.comment != null }
                 ),
                 feedback = question.feedback,
-                newFeedbackForQuestion = questionFeedback.filter { it.seenByManager }.totalFeedback(),
             )
         },
-        feedbackSummary = feedbackSummary,
-        newFeedbackForEvent = feedback.filter { !it.seenByManager }.totalFeedback(),
+        feedbackBar = feedbackSummary,
+        newFeedbackForEvent = feedback.filter { !it.seenByManager }.totalUniqueFeedback(),
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
     )
 }

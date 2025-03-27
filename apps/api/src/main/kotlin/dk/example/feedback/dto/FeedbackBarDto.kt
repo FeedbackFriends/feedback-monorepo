@@ -1,6 +1,6 @@
 package dk.example.feedback.dto
 
-data class FeedbackSummaryDto(
+data class FeedbackBarDto(
     val totalFeedback: Int,
     val verySadPercentage: Double,
     val sadPercentage: Double,
