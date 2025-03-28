@@ -14,7 +14,7 @@ data class ManagerEventDto(
     val durationInMinutes: Int,
     val location : String?,
     val ownerInfo: OwnerInfoDto,
-    val feedbackBar: FeedbackBarDto?,
+    val feedbackSegmentationStats: FeedbackSegmentationStatsDto?,
     val questions: List<ManagerQuestion>,
     val newFeedbackForEvent: Int,
 )
@@ -24,11 +24,15 @@ data class ManagerQuestion(
     val questionText: String,
     val feedbackType: FeedbackType,
     val feedback: List<FeedbackEntity>,
-    val feedbackSummary: QuestionFeedbackSummary?,
+    val questionFeedbackSummary: QuestionFeedbackSummary?,
 )
 
 data class QuestionFeedbackSummary(
-    val feedbackBar: FeedbackBarDto,
+    val feedbackSegmentationStats: FeedbackSegmentationStatsDto,
+    val feedbackCountStats: FeedbackCountStats,
+)
+
+data class FeedbackCountStats(
     val verySadCount: Int,
     val sadCount: Int,
     val happyCount: Int,
