@@ -47,7 +47,7 @@ class AdminController(
         val newFeedback: Int,
     )
 
-    @PutMapping("/push-new-feedback-notification")
+    @PutMapping("/mock-new-feedback-notification")
     suspend fun sendNotification(
         @RequestBody input: SendNotificationInput,
     ) {
