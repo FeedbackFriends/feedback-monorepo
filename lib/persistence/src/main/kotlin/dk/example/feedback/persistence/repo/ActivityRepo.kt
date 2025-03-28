@@ -8,6 +8,7 @@ import dk.example.feedback.persistence.table.ActivityTable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.*
+import org.jetbrains.exposed.sql.and
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -39,6 +40,14 @@ class ActivityRepo {
 
     fun markAllAsSeen(accountId: String) {
         ActivityDao.find { ActivityTable.account eq accountId }.forEach {
+            it.seenByManager = true
+        }
+    }
+
+    fun markAsSeen(accountId: String, eventId: UUID) {
+        ActivityDao.find {
+            (ActivityTable.account eq accountId) and (ActivityTable.event eq eventId)
+        }.forEach {
             it.seenByManager = true
         }
     }

@@ -18,6 +18,7 @@ import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.exceptions.EventAlreadyJoinedException
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.payloads.EventInput
+import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import java.util.*
 import org.springframework.security.oauth2.jwt.Jwt
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service
 @Service
 class EventService(
     private val eventRepo: EventRepo,
+    private val activityRepo: ActivityRepo,
 ) {
 
     fun createEvent(eventInput: EventInput, jwt: Jwt): ManagerEventDto {
@@ -113,6 +115,7 @@ class EventService(
         val event = eventRepo.getEvent(eventId)
         jwt.verifyAccountHasId(event.manager.id)
         eventRepo.markEventAsSeen(eventId)
+        activityRepo.markAsSeen(accountId = jwt.getAccountId(), eventId = eventId)
     }
 
     private fun getPinCodeForEvent(eventId: UUID): String {
