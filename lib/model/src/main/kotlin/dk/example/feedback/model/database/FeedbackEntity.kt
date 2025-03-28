@@ -6,6 +6,7 @@ import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.enumerations.Opinion
 import dk.example.feedback.model.enumerations.ThumbsUpThumpsDown
 import dk.example.feedback.model.interfaces.Feedback
+import java.time.OffsetDateTime
 import java.util.*
 
 data class FeedbackEntity(
@@ -19,4 +20,5 @@ data class FeedbackEntity(
     override val questionId: UUID,
     val participantId: String?,
     val seenByManager: Boolean,
+    val createdAt: OffsetDateTime,
 ): Feedback

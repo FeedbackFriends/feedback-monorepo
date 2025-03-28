@@ -33,7 +33,8 @@ class FeedbackDao(id: EntityID<UUID>): CommonColumns<FeedbackEntity>(id, Feedbac
             questionId = question.id.value,
             id = id.value,
             participantId = participant?.id?.value,
-            seenByManager = seenByManager
+            seenByManager = seenByManager,
+            createdAt = dateCreated,
         )
     }
 }
