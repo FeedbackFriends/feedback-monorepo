@@ -32,7 +32,7 @@ class EventController(
         return eventService.createEvent(eventInput = eventInput, jwt = principal)
     }
 
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     @PutMapping("/{eventId}")
     fun updateEvent(
         @RequestBody eventInput: EventInput,
@@ -42,7 +42,7 @@ class EventController(
         return eventService.updateEvent(eventInput = eventInput, eventId = eventId, jwt = principal)
     }
 
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     @DeleteMapping("/{eventId}")
     fun deleteEvent(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
         return eventService.deleteEvent(eventId = eventId, jwt = principal)
@@ -56,7 +56,7 @@ class EventController(
 
     @Operation(summary = "Called when a manager navigates to event so new feedback is reset")
     @PutMapping("mark-as-seen/{eventId}")
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     fun markEventAsSeen(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
         return eventService.markEventAsSeen(eventId = eventId, jwt = principal)
     }

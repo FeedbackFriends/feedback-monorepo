@@ -33,13 +33,13 @@ class ActivityRepo {
             this.event = EventDao.findById(eventId) ?: throw Exception("Could not find event id: ${eventId}")
             this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.account = AccountDao.findById(accountId) ?: throw Exception("Could not find account id: ${accountId}")
-            this.seenBefore = false
+            this.seenByManager = false
         }
     }
 
     fun markAllAsSeen(accountId: String) {
         ActivityDao.find { ActivityTable.account eq accountId }.forEach {
-            it.seenBefore = true
+            it.seenByManager = true
         }
     }
 }

@@ -26,7 +26,7 @@ class SessionController(val sessionService: SessionService) {
     }
 
     @GetMapping("/real-time-updates")
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     fun getUpdatedSession(
         @AuthenticationPrincipal principal: Jwt
     ): UpdatedSessionDto {

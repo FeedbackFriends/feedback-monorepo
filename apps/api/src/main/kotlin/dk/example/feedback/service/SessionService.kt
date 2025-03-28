@@ -40,7 +40,7 @@ class SessionService(
         val participantEvents = eventService.getParticipantEvents(accountId = accountId)
         logger.info("Get session with role: $role")
         when (role) {
-            Role.Organizer -> {
+            Role.Manager -> {
                 activityService.movePendingNotificationsToActivityAndReturn(accountId = accountId)
                 val managerEvents = eventService.getManagerEvents(accountId)
                 val session = SessionDto(

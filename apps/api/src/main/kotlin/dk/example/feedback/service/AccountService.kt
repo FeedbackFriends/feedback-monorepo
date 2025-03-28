@@ -37,7 +37,7 @@ class AccountService(
                 )
             }
 
-            Role.Organizer, Role.Participant -> {
+            Role.Manager, Role.Participant -> {
                 val accountId = jwt.getAccountId()
                 accountRepo.createOrGetAccount(
                     accountId = accountId,

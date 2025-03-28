@@ -12,7 +12,7 @@ import dk.example.feedback.persistence.table.FeedbackTable.oneToTen
 import dk.example.feedback.persistence.table.FeedbackTable.opinion
 import dk.example.feedback.persistence.table.FeedbackTable.participant
 import dk.example.feedback.persistence.table.FeedbackTable.question
-import dk.example.feedback.persistence.table.FeedbackTable.seenBefore
+import dk.example.feedback.persistence.table.FeedbackTable.seenByManager
 import dk.example.feedback.persistence.table.FeedbackTable.thumbsUpThumpsDown
 import dk.example.feedback.persistence.table.FeedbackTable.type
 import org.jetbrains.exposed.sql.ReferenceOption
@@ -39,7 +39,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * @property question A foreign key reference to the associated question in [QuestionTable]. Deletion cascades.
  * @property manager A foreign key reference to the manager's account in [AccountTable]. Deletion cascades.
  * @property participant An optional foreign key reference to the participant's account in [AccountTable]. Deletion cascades.
- * @property seenBefore Boolean flag indicating whether the feedback has been seen by the manager. Defaults to false.
+ * @property seenByManager Boolean flag indicating whether the feedback has been seen by the manager. Defaults to false.
  */
 object FeedbackTable: CommonColumnsTbl("feedback") {
     val type = enumerationByName("type", 14, FeedbackType::class)
@@ -51,5 +51,5 @@ object FeedbackTable: CommonColumnsTbl("feedback") {
     val question = reference("question_id", QuestionTable, onDelete = ReferenceOption.CASCADE)
     val manager = reference(name = "manager_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
     val participant = optReference(name = "participant_id", AccountTable.id, onDelete = ReferenceOption.CASCADE).default(null)
-    val seenBefore = bool("seen_before")
+    val seenByManager = bool("seen_by_manager")
 }

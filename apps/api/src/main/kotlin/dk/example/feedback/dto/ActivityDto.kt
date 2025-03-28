@@ -14,5 +14,5 @@ data class ActivityItem(
     val eventTitle: String,
     val eventId: UUID,
     val newFeedbackCount: Int,
-    val seenBefore: Boolean,
+    val seenByManager: Boolean,
 )

@@ -24,15 +24,15 @@ data class ManagerQuestion(
     val questionText: String,
     val feedbackType: FeedbackType,
     val feedback: List<FeedbackEntity>,
-    val questionFeedbackSummary: QuestionFeedbackSummary?,
+    val questionFeedbackSummary: QuestionFeedbackSummaryDto?,
 )
 
-data class QuestionFeedbackSummary(
+data class QuestionFeedbackSummaryDto(
     val feedbackSegmentationStats: FeedbackSegmentationStatsDto,
-    val feedbackCountStats: FeedbackCountStats,
+    val feedbackCountStats: FeedbackCountStatsDto,
 )
 
-data class FeedbackCountStats(
+data class FeedbackCountStatsDto(
     val verySadCount: Int,
     val sadCount: Int,
     val happyCount: Int,

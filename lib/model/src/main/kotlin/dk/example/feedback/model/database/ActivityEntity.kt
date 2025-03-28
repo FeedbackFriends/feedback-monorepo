@@ -8,6 +8,6 @@ data class ActivityEntity(
     val createdAt: OffsetDateTime,
     val newFeedback: Int,
     val event: EventEntity,
-    val seenBefore: Boolean,
+    val seenByManager: Boolean,
     val account: AccountEntity
 ) 

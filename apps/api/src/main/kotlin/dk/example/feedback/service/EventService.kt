@@ -1,13 +1,13 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.dto.FeedbackCountStats
+import dk.example.feedback.dto.FeedbackCountStatsDto
 import dk.example.feedback.dto.FeedbackSegmentationStatsDto
 import dk.example.feedback.dto.ManagerEventDto
 import dk.example.feedback.dto.ManagerQuestion
 import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantQuestionDto
-import dk.example.feedback.dto.QuestionFeedbackSummary
+import dk.example.feedback.dto.QuestionFeedbackSummaryDto
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.totalUniqueFeedback
 import dk.example.feedback.helpers.verifyAccountHasId
@@ -178,7 +178,7 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
                 id = question.id,
                 questionText = question.questionText,
                 feedbackType = question.feedbackType,
-                questionFeedbackSummary = if (questionFeedback.isEmpty()) null else QuestionFeedbackSummary(
+                questionFeedbackSummary = if (questionFeedback.isEmpty()) null else QuestionFeedbackSummaryDto(
                     feedbackSegmentationStats = FeedbackSegmentationStatsDto(
                         totalFeedback = questionFeedback.totalUniqueFeedback(),
                         verySadPercentage = calculatePercentage(
@@ -202,7 +202,7 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
                             questionFeedback.totalUniqueFeedback()
                         )
                     ),
-                    feedbackCountStats = FeedbackCountStats(
+                    feedbackCountStats = FeedbackCountStatsDto(
                         verySadCount = questionFeedback.count { it.emoji == Emoji.VerySad },
                         sadCount = questionFeedback.count { it.emoji == Emoji.Sad },
                         happyCount = questionFeedback.count { it.emoji == Emoji.Happy },

@@ -34,12 +34,12 @@ class ActivityService(
                 eventTitle = it.event.title,
                 eventId = it.event.id,
                 newFeedbackCount = it.newFeedback,
-                seenBefore = it.seenBefore
+                seenByManager = it.seenByManager
             )
         }
         return ActivityDto(
             items = items,
-            unseenTotal = items.filter { !it.seenBefore }.size
+            unseenTotal = items.filter { !it.seenByManager }.size
         )
     }
 

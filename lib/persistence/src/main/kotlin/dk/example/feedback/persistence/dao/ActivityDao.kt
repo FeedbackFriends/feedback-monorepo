@@ -13,7 +13,7 @@ class ActivityDao(id: EntityID<UUID>) : Entity<UUID>(id) {
 
     var createdAt by ActivityTable.dateCreated
     var newFeedback by ActivityTable.newFeedback
-    var seenBefore by ActivityTable.seenBefore
+    var seenByManager by ActivityTable.seenByManager
     var event by EventDao referencedOn ActivityTable.event
     var account by AccountDao referencedOn ActivityTable.account
 
@@ -24,7 +24,7 @@ class ActivityDao(id: EntityID<UUID>) : Entity<UUID>(id) {
             newFeedback = this.newFeedback,
             event = this.event.toModel(),
             account = this.account.toModel(),
-            seenBefore = this.seenBefore
+            seenByManager = this.seenByManager
         )
     }
 }

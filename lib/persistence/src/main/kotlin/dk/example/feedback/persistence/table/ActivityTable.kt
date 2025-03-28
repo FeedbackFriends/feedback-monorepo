@@ -4,7 +4,7 @@ import dk.example.feedback.persistence.dao.utility.CommonColumnsTbl
 import dk.example.feedback.persistence.table.ActivityTable.account
 import dk.example.feedback.persistence.table.ActivityTable.event
 import dk.example.feedback.persistence.table.ActivityTable.newFeedback
-import dk.example.feedback.persistence.table.ActivityTable.seenBefore
+import dk.example.feedback.persistence.table.ActivityTable.seenByManager
 import org.jetbrains.exposed.sql.ReferenceOption
 
 /**
@@ -25,11 +25,11 @@ import org.jetbrains.exposed.sql.ReferenceOption
  *                   entries are automatically removed due to the CASCADE delete option.
  * @property newFeedback Integer representing the number of new feedback submissions
  *                      received for the event at the specified date.
- * @property seenBefore Boolean indicating whether the activity entry has been seen
+ * @property seenByManager Boolean indicating whether the activity entry has been seen
  */
 object ActivityTable : CommonColumnsTbl("activity") {
     val event = reference("event_id", EventTable.id, onDelete = ReferenceOption.CASCADE)
     val account = reference("account_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
     val newFeedback = integer("new_feedback")
-    val seenBefore = bool("seen_before")
+    val seenByManager = bool("seen_by_manager")
 }

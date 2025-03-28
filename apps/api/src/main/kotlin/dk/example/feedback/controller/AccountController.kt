@@ -50,7 +50,7 @@ class AccountController(
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
     fun modifyAccount(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: ModifyAccountInput,
@@ -65,7 +65,7 @@ class AccountController(
     }
 
     @PutMapping("/role")
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
     fun updateRole(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: UpdateRoleInput,
@@ -83,7 +83,7 @@ class AccountController(
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
     fun deleteAccount(
         @AuthenticationPrincipal principal: Jwt,
     ) {

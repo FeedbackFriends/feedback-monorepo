@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/activity")
 class ActivityController(val activityService: ActivityService) {
     @GetMapping("/mark-activity-as-seen")
-    @PreAuthorize("hasAuthority('${RoleConstants.ORGANIZER}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     fun markActivityAsSeen(
         @AuthenticationPrincipal principal: Jwt
     ) {
