@@ -160,7 +160,7 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
         durationInMinutes = durationInMinutes,
         location = location,
         pinCode = pinCode,
-        questions = questions.map { question ->
+        questions = questions.sortedBy { it.createdAt }.map { question ->
             ManagerQuestion(
                 id = question.id,
                 questionText = question.questionText,
