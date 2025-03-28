@@ -2,14 +2,14 @@ package dk.example.feedback.service
 
 import dk.example.feedback.dto.FeedbackCountStatsDto
 import dk.example.feedback.dto.FeedbackSegmentationStatsDto
+import dk.example.feedback.dto.FeedbackSummaryDto
 import dk.example.feedback.dto.ManagerEventDto
 import dk.example.feedback.dto.ManagerQuestion
 import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantQuestionDto
-import dk.example.feedback.dto.QuestionFeedbackSummaryDto
 import dk.example.feedback.helpers.getAccountId
-import dk.example.feedback.helpers.totalUniqueFeedback
+import dk.example.feedback.helpers.totalUniqueParticipants
 import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
@@ -152,18 +152,6 @@ class EventService(
 }
 
 fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
-    val totalFeedback = feedback.totalUniqueFeedback()
-    val totalEmojiFeedback = feedback.count { it.feedbackType == FeedbackType.Emoji }
-    val feedbackSummary = if (totalFeedback > 0) {
-        FeedbackSegmentationStatsDto(
-            totalFeedback = totalFeedback,
-            verySadPercentage = calculatePercentage(feedback, Emoji.VerySad, totalEmojiFeedback),
-            sadPercentage = calculatePercentage(feedback, Emoji.Sad, totalEmojiFeedback),
-            happyPercentage = calculatePercentage(feedback, Emoji.Happy, totalEmojiFeedback),
-            veryHappyPercentage = calculatePercentage(feedback, Emoji.VeryHappy, totalEmojiFeedback)
-        )
-    } else null
-
     return ManagerEventDto(
         id = id,
         title = title,
@@ -173,48 +161,21 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
         location = location,
         pinCode = pinCode,
         questions = questions.map { question ->
-            val questionFeedback = feedback.filter { it.questionId == question.id }
             ManagerQuestion(
                 id = question.id,
                 questionText = question.questionText,
                 feedbackType = question.feedbackType,
-                questionFeedbackSummary = if (questionFeedback.isEmpty()) null else QuestionFeedbackSummaryDto(
-                    feedbackSegmentationStats = FeedbackSegmentationStatsDto(
-                        totalFeedback = questionFeedback.totalUniqueFeedback(),
-                        verySadPercentage = calculatePercentage(
-                            questionFeedback,
-                            Emoji.VerySad,
-                            questionFeedback.totalUniqueFeedback()
-                        ),
-                        sadPercentage = calculatePercentage(
-                            questionFeedback,
-                            Emoji.Sad,
-                            questionFeedback.totalUniqueFeedback()
-                        ),
-                        happyPercentage = calculatePercentage(
-                            questionFeedback,
-                            Emoji.Happy,
-                            questionFeedback.totalUniqueFeedback()
-                        ),
-                        veryHappyPercentage = calculatePercentage(
-                            questionFeedback,
-                            Emoji.VeryHappy,
-                            questionFeedback.totalUniqueFeedback()
-                        )
-                    ),
-                    feedbackCountStats = FeedbackCountStatsDto(
-                        verySadCount = questionFeedback.count { it.emoji == Emoji.VerySad },
-                        sadCount = questionFeedback.count { it.emoji == Emoji.Sad },
-                        happyCount = questionFeedback.count { it.emoji == Emoji.Happy },
-                        veryHappyCount = questionFeedback.count { it.emoji == Emoji.VeryHappy },
-                        commentsCount = questionFeedback.count { it.comment != null }
-                    )
+                feedbackSummary = generateFeedbackSummary(
+                    uniqueParticipantFeedback = question.feedback.totalUniqueParticipants(),
+                    feedback = question.feedback
                 ),
                 feedback = question.feedback,
             )
         },
-        feedbackSegmentationStats = feedbackSummary,
-        unseenFeedback = feedback.filter { !it.seenByManager }.totalUniqueFeedback(),
+        feedbackSummary = generateFeedbackSummary(
+            uniqueParticipantFeedback = feedback.totalUniqueParticipants(),
+            feedback = feedback
+        ),
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
     )
 }
@@ -243,6 +204,33 @@ fun EventEntity.toParticipantEvent(
         ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber),
         recentlyJoined = recentlyJoined
     )
+}
+
+private fun generateFeedbackSummary(
+    uniqueParticipantFeedback: Int,
+    feedback: List<FeedbackEntity>
+): FeedbackSummaryDto? {
+    val totalEmojiFeedback = feedback.count { it.feedbackType == FeedbackType.Emoji }
+    val emojiFeedback = feedback.filter { it.feedbackType == FeedbackType.Emoji }
+    return if (uniqueParticipantFeedback > 0) {
+        FeedbackSummaryDto(
+            segmentationStats = FeedbackSegmentationStatsDto(
+                uniqueParticipantFeedback = uniqueParticipantFeedback,
+                verySadPercentage = calculatePercentage(feedback, Emoji.VerySad, totalEmojiFeedback),
+                sadPercentage = calculatePercentage(feedback, Emoji.Sad, totalEmojiFeedback),
+                happyPercentage = calculatePercentage(feedback, Emoji.Happy, totalEmojiFeedback),
+                veryHappyPercentage = calculatePercentage(feedback, Emoji.VeryHappy, totalEmojiFeedback)
+            ),
+            countStats = FeedbackCountStatsDto(
+                verySadCount = emojiFeedback.count { it.emoji == Emoji.VerySad },
+                sadCount = emojiFeedback.count { it.emoji == Emoji.Sad },
+                happyCount = emojiFeedback.count { it.emoji == Emoji.Happy },
+                veryHappyCount = emojiFeedback.count { it.emoji == Emoji.VeryHappy },
+                commentsCount = feedback.count { it.comment != null }
+            ),
+            unseenCount = feedback.filter { !it.seenByManager }.totalUniqueParticipants()
+        )
+    } else null
 }
 
 private fun calculatePercentage(
