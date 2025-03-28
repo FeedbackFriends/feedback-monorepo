@@ -12,10 +12,10 @@ data class FeedbackCountStatsDto(
     val happyCount: Int,
     val veryHappyCount: Int,
     val commentsCount: Int,
+    val uniqueParticipantFeedback: Int,
 )
 
 data class FeedbackSegmentationStatsDto(
-    val uniqueParticipantFeedback: Int,
     val verySadPercentage: Double,
     val sadPercentage: Double,
     val happyPercentage: Double,

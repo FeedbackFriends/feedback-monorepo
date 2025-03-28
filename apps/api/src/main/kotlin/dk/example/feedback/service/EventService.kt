@@ -215,13 +215,13 @@ private fun generateFeedbackSummary(
     return if (uniqueParticipantFeedback > 0) {
         FeedbackSummaryDto(
             segmentationStats = FeedbackSegmentationStatsDto(
-                uniqueParticipantFeedback = uniqueParticipantFeedback,
                 verySadPercentage = calculatePercentage(feedback, Emoji.VerySad, totalEmojiFeedback),
                 sadPercentage = calculatePercentage(feedback, Emoji.Sad, totalEmojiFeedback),
                 happyPercentage = calculatePercentage(feedback, Emoji.Happy, totalEmojiFeedback),
                 veryHappyPercentage = calculatePercentage(feedback, Emoji.VeryHappy, totalEmojiFeedback)
             ),
             countStats = FeedbackCountStatsDto(
+                uniqueParticipantFeedback = uniqueParticipantFeedback,
                 verySadCount = emojiFeedback.count { it.emoji == Emoji.VerySad },
                 sadCount = emojiFeedback.count { it.emoji == Emoji.Sad },
                 happyCount = emojiFeedback.count { it.emoji == Emoji.Happy },
