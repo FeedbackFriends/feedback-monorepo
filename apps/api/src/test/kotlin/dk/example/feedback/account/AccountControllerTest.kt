@@ -241,7 +241,7 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.questions[0].feedbackType").value("Emoji"))
             .andExpect(jsonPath("$.questions[1].questionText").value("What will you do today?"))
             .andExpect(jsonPath("$.questions[1].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.newFeedbackForEvent").value(0))
+            .andExpect(jsonPath("$.unseenFeedback").value(0))
             .andReturn()
 
         val eventId: String = objectMapper.readTree(createEventResponse.response.contentAsString)
@@ -265,7 +265,7 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.participantEvents").isArray)
             .andExpect(jsonPath("$.managerData").exists())
             .andExpect(jsonPath("$.managerData.managerEvents").isArray)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].newFeedbackForEvent").value(0))
+            .andExpect(jsonPath("$.managerData.managerEvents[0].unseenFeedback").value(0))
             .andExpect(jsonPath("$.managerData.managerEvents[0].title").value("Daily standup"))
             .andExpect(jsonPath("$.managerData.managerEvents[0].location").value("Copenhagen"))
             .andExpect(jsonPath("$.managerData.managerEvents[0].durationInMinutes").value(60))
@@ -333,7 +333,7 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.title").value("New title"))
             .andExpect(jsonPath("$.location").value("Copenhagen"))
             .andExpect(jsonPath("$.durationInMinutes").value(90))
-            .andExpect(jsonPath("$.newFeedbackForEvent").value(0))
+            .andExpect(jsonPath("$.unseenFeedback").value(0))
             .andExpect(jsonPath("$.questions").isArray)
             .andExpect(jsonPath("$.questions[1].questionText").value("What did you do yesterday?"))
             .andExpect(jsonPath("$.questions[1].feedbackType").value("Emoji"))
@@ -446,7 +446,7 @@ class AccountControllerTest(
 
         mockMvc.perform(getSessionRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].newFeedbackForEvent").value(newFeedback))
+            .andExpect(jsonPath("$.managerData.managerEvents[0].unseenFeedback").value(newFeedback))
     }
 
     suspend fun `Trigger resetNewFeedback for event and verify session`(userId: String, eventId: String) {

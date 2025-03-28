@@ -16,7 +16,7 @@ data class ManagerEventDto(
     val ownerInfo: OwnerInfoDto,
     val feedbackSegmentationStats: FeedbackSegmentationStatsDto?,
     val questions: List<ManagerQuestion>,
-    val newFeedbackForEvent: Int,
+    val unseenFeedback: Int,
 )
 
 data class ManagerQuestion(
