@@ -24,4 +24,5 @@ data class ManagerQuestion(
     val feedbackType: FeedbackType,
     val feedback: List<FeedbackEntity>,
     val feedbackSummary: FeedbackSummaryDto?,
+    val createdAt: OffsetDateTime,
 )

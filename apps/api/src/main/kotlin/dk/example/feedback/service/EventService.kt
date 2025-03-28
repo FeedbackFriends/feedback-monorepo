@@ -170,6 +170,7 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
                     feedback = question.feedback
                 ),
                 feedback = question.feedback,
+                createdAt = question.createdAt
             )
         },
         feedbackSummary = generateFeedbackSummary(
