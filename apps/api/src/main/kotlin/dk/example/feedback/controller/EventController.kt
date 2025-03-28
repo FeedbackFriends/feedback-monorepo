@@ -5,7 +5,6 @@ import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.service.EventService
-import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import java.util.*
 import org.springframework.security.access.prepost.PreAuthorize
@@ -26,7 +25,7 @@ class EventController(
     val eventService: EventService,
 ) {
 
-    @PreAuthorize("hasAuthority('Organizer')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     @PostMapping
     fun createEvent(@RequestBody eventInput: EventInput, @AuthenticationPrincipal principal: Jwt): ManagerEventDto {
         return eventService.createEvent(eventInput = eventInput, jwt = principal)
@@ -54,7 +53,6 @@ class EventController(
         return eventService.joinEvent(pinCode = pinCode, jwt = principal)
     }
 
-    @Operation(summary = "Called when a manager navigates to event so new feedback is reset")
     @PutMapping("mark-as-seen/{eventId}")
     @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     fun markEventAsSeen(@PathVariable eventId: UUID, @AuthenticationPrincipal principal: Jwt) {
