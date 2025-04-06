@@ -24,12 +24,23 @@ class SessionService(
         val newActivityItems =
             activityService.movePendingNotificationsToActivityAndReturn(accountId = jwt.getAccountId())
         logger.info("New feedback notifications: ${newActivityItems.size} for user: ${jwt.getAccountId()}")
-        return UpdatedSessionDto(
-            events = newActivityItems.map {
-                it.toManagerEvent(pinCode = eventRepo.getPinCodeForEvent(it.id))
-            },
-            activity = activityService.getActivity(accountId = jwt.getAccountId())
-        )
+        when (jwt.role()) {
+            Role.Manager -> {
+                return UpdatedSessionDto(
+                    updatedManagerEvents = newActivityItems.map {
+                        it.toManagerEvent(pinCode = eventRepo.getPinCodeForEvent(it.id))
+                    },
+                    activity = activityService.getActivity(accountId = jwt.getAccountId())
+                )
+            }
+
+            else -> {
+                return UpdatedSessionDto(
+                    updatedManagerEvents = null,
+                    activity = activityService.getActivity(accountId = jwt.getAccountId())
+                )
+            }
+        }
     }
 
     fun getSession(jwt: Jwt): SessionDto {
