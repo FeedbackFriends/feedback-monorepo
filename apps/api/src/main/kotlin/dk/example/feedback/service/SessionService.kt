@@ -30,14 +30,16 @@ class SessionService(
                     updatedManagerEvents = newActivityItems.map {
                         it.toManagerEvent(pinCode = eventRepo.getPinCodeForEvent(it.id))
                     },
-                    activity = activityService.getActivity(accountId = jwt.getAccountId())
+                    activity = activityService.getActivity(accountId = jwt.getAccountId()),
+                    recentlyUsedQuestions = eventService.getRecentlyUsedQuestions(accountId = jwt.getAccountId())
                 )
             }
 
             else -> {
                 return UpdatedSessionDto(
                     updatedManagerEvents = null,
-                    activity = activityService.getActivity(accountId = jwt.getAccountId())
+                    activity = activityService.getActivity(accountId = jwt.getAccountId()),
+                    recentlyUsedQuestions = eventService.getRecentlyUsedQuestions(accountId = jwt.getAccountId())
                 )
             }
         }
