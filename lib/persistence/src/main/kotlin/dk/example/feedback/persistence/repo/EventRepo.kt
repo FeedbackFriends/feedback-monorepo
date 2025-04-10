@@ -197,6 +197,15 @@ class EventRepo {
             ?: throw Exception("Could not find pin code for event id: $eventId")
     }
 
+    fun getRecentlyUsedQuestions(accountId: String): List<String> {
+        return QuestionDao
+            .all()
+            .filter { it.manager.id.value == accountId }
+            .map { it.questionText }
+            .distinct()
+            .sortedByDescending { it }
+    }
+
     private fun addQuestionsAndRemoveExisting(
         eventId: UUID,
         questions: List<Pair<String, FeedbackType>>,

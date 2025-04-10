@@ -64,7 +64,8 @@ class SessionService(
                     participantEvents = participantEvents,
                     managerData = SessionDto.ManagerDataDto(
                         managerEvents = managerEvents,
-                        activity = activityService.getActivity(accountId = accountId)
+                        activity = activityService.getActivity(accountId = accountId),
+                        recentlyUsedQuestions = eventService.getRecentlyUsedQuestions(accountId = accountId),
                     )
                 )
                 return session

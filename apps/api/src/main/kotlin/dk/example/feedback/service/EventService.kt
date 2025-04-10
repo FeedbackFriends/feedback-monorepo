@@ -97,6 +97,10 @@ class EventService(
         }
     }
 
+    fun getRecentlyUsedQuestions(accountId: String): List<String> {
+        return eventRepo.getRecentlyUsedQuestions(accountId)
+    }
+
     fun joinEvent(pinCode: String, jwt: Jwt): ParticipantEventDto {
         val accountId = jwt.getAccountId()
         val event = eventRepo.getEventByPinCode(pinCode)
