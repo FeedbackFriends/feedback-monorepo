@@ -1,6 +1,7 @@
 package dk.example.feedback.persistence.repo
 
 import dk.example.feedback.model.database.EventEntity
+import dk.example.feedback.model.database.QuestionEntity
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.EventDao
@@ -197,12 +198,12 @@ class EventRepo {
             ?: throw Exception("Could not find pin code for event id: $eventId")
     }
 
-    fun getRecentlyUsedQuestions(accountId: String): List<String> {
+    fun getRecentlyUsedQuestions(accountId: String): List<QuestionEntity> {
         return QuestionDao
             .all()
             .filter { it.manager.id.value == accountId }
             .sortedByDescending { it.dateCreated }
-            .map { it.questionText }
+            .map { it.toModel() }
             .distinct()
     }
 

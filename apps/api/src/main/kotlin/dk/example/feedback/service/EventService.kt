@@ -8,6 +8,7 @@ import dk.example.feedback.dto.ManagerQuestion
 import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantQuestionDto
+import dk.example.feedback.dto.SessionDto
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.totalUniqueParticipants
 import dk.example.feedback.helpers.verifyAccountHasId
@@ -97,8 +98,14 @@ class EventService(
         }
     }
 
-    fun getRecentlyUsedQuestions(accountId: String): List<String> {
-        return eventRepo.getRecentlyUsedQuestions(accountId)
+    fun getRecentlyUsedQuestions(accountId: String): List<SessionDto.RecentlyUsedQuestions> {
+        return eventRepo.getRecentlyUsedQuestions(accountId).map {
+            SessionDto.RecentlyUsedQuestions(
+                questionText = it.questionText,
+                feedbackType = it.feedbackType,
+                createdAt = it.createdAt,
+            )
+        }
     }
 
     fun joinEvent(pinCode: String, jwt: Jwt): ParticipantEventDto {
