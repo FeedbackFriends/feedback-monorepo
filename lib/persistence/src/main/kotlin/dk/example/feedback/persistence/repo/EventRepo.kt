@@ -204,7 +204,7 @@ class EventRepo {
             .filter { it.manager.id.value == accountId }
             .sortedByDescending { it.dateCreated }
             .map { it.toModel() }
-            .distinct()
+            .distinctBy { it.questionText }
     }
 
     private fun addQuestionsAndRemoveExisting(
