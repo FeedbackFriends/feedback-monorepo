@@ -37,6 +37,6 @@ object QuestionTable: CommonColumnsTbl("question") {
     val questionText = varchar("question_text", 255)
     val feedbackType = enumerationByName("feedback_type", 255, FeedbackType::class)
     val manager = reference("manager_id", AccountTable, onDelete = ReferenceOption.CASCADE)
-    val event = reference(name = "event_id", EventTable, onDelete = ReferenceOption.CASCADE)
+    val event = optReference(name = "event_id", EventTable, onDelete = ReferenceOption.SET_NULL)
     val index = integer("index")
 }

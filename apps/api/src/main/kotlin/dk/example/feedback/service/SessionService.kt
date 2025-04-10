@@ -31,7 +31,6 @@ class SessionService(
                         it.toManagerEvent(pinCode = eventRepo.getPinCodeForEvent(it.id))
                     },
                     activity = activityService.getActivity(accountId = jwt.getAccountId()),
-                    recentlyUsedQuestions = eventService.getRecentlyUsedQuestions(accountId = jwt.getAccountId())
                 )
             }
 
@@ -39,7 +38,6 @@ class SessionService(
                 return UpdatedSessionDto(
                     updatedManagerEvents = null,
                     activity = activityService.getActivity(accountId = jwt.getAccountId()),
-                    recentlyUsedQuestions = eventService.getRecentlyUsedQuestions(accountId = jwt.getAccountId())
                 )
             }
         }

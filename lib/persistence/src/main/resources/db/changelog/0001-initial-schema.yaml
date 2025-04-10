@@ -165,7 +165,7 @@ databaseChangeLog:
                   name: event_id
                   type: uuid
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: index
                   type: integer
@@ -193,7 +193,7 @@ databaseChangeLog:
             referencedTableName: event
             referencedColumnNames: id
             constraintName: fk_question_event_id
-            onDelete: CASCADE
+            onDelete: SET NULL
 
         - createTable:
             tableName: pin_code

@@ -18,7 +18,7 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
     var durationInMinutes by EventTable.durationInMinutes
     var location by EventTable.location
     var manager by AccountDao referencedOn EventTable.manager
-    val questions by QuestionDao referrersOn QuestionTable.event
+    val questions by QuestionDao optionalReferrersOn QuestionTable.event
 
     override fun toModel(): EventEntity {
         return EventEntity(

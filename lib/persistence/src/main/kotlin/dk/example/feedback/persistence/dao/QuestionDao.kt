@@ -14,7 +14,7 @@ class QuestionDao(id: EntityID<UUID>): CommonColumns<QuestionEntity>(id, Questio
 
     var questionText by QuestionTable.questionText
     var feedbackType by QuestionTable.feedbackType
-    var event by EventDao referencedOn QuestionTable.event
+    var event by EventDao optionalReferencedOn QuestionTable.event
     var index by QuestionTable.index
     val feedback by FeedbackDao referrersOn FeedbackTable.question
     var manager by AccountDao referencedOn QuestionTable.manager

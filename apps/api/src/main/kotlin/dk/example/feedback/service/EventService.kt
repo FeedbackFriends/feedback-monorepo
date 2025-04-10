@@ -1,5 +1,6 @@
 package dk.example.feedback.service
 
+import dk.example.feedback.dto.EventWrapperDto
 import dk.example.feedback.dto.FeedbackCountStatsDto
 import dk.example.feedback.dto.FeedbackSegmentationStatsDto
 import dk.example.feedback.dto.FeedbackSummaryDto
@@ -31,7 +32,7 @@ class EventService(
     private val activityRepo: ActivityRepo,
 ) {
 
-    fun createEvent(eventInput: EventInput, jwt: Jwt): ManagerEventDto {
+    fun createEvent(eventInput: EventInput, jwt: Jwt): EventWrapperDto {
         val generatedPinCode = generateUniquePinCode()
         val managerId = jwt.getAccountId()
         val eventEntity = eventRepo.persistEvent(
@@ -46,8 +47,11 @@ class EventService(
             },
             managerId = managerId
         )
-        return eventEntity.toManagerEvent(
+        return EventWrapperDto(
+            event = eventEntity.toManagerEvent(
             pinCode = generatedPinCode
+            ),
+            recentlyUsedQuestions = getRecentlyUsedQuestions(accountId = jwt.getAccountId())
         )
     }
 
@@ -57,7 +61,7 @@ class EventService(
         eventRepo.deleteEvent(eventId)
     }
 
-    fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): ManagerEventDto {
+    fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): EventWrapperDto {
         val event = eventRepo.getEvent(eventId)
         jwt.verifyAccountHasId(event.manager.id)
         if (event.feedback.isNotEmpty()) {
@@ -74,8 +78,11 @@ class EventService(
                 Pair(question.questionText, question.feedbackType)
             }
         )
-        return updatedEvent.toManagerEvent(
-            pinCode = getPinCodeForEvent(eventId)
+        return EventWrapperDto(
+            event = updatedEvent.toManagerEvent(
+                pinCode = getPinCodeForEvent(eventId)
+            ),
+            recentlyUsedQuestions = getRecentlyUsedQuestions(accountId = jwt.getAccountId())
         )
     }
 
