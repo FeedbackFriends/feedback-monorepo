@@ -201,9 +201,9 @@ class EventRepo {
         return QuestionDao
             .all()
             .filter { it.manager.id.value == accountId }
+            .sortedByDescending { it.dateCreated }
             .map { it.questionText }
             .distinct()
-            .sortedByDescending { it }
     }
 
     private fun addQuestionsAndRemoveExisting(
