@@ -23,7 +23,7 @@ data class SessionDto(
     data class RecentlyUsedQuestions(
         val questionText: String,
         val feedbackType: FeedbackType,
-        val createdAt: OffsetDateTime,
+        val updatedAt: OffsetDateTime,
     )
 }
 

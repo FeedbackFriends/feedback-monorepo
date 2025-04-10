@@ -103,7 +103,7 @@ class EventService(
             SessionDto.RecentlyUsedQuestions(
                 questionText = it.questionText,
                 feedbackType = it.feedbackType,
-                createdAt = it.createdAt,
+                updatedAt = it.updatedAt,
             )
         }
     }
