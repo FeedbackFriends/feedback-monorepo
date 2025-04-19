@@ -14,16 +14,23 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
 
 /**
- * Exposed table definition for user accounts.
+ * Table for storing user accounts.
  *
- * @property id Unique identifier for the account. This is a UID provided by Firebase Authentication.
- * @property name Optional name of the user. Non-null if the user is not anonymous.
+ * Each row represents a unique user, identified by a UID from Firebase Authentication. Stores user metadata and notification tokens.
+ *
+ * Relationships:
+ * - Referenced by events, feedback, and other tables as the account owner or participant.
+ * - Deleting an account cascades to related entries in dependent tables.
+ *
+ * Columns:
+ * @property id Unique account identifier (Firebase UID). Primary key.
+ * @property name Optional display name for the user.
  * @property fcmToken Optional Firebase Cloud Messaging token for push notifications.
- * @property email Optional email of the user. Non-null if the user is not anonymous.
- * @property phoneNumber Optional phone number of the user.
+ * @property email Optional email address.
+ * @property phoneNumber Optional phone number.
  * @property createdAt Timestamp when the account was created.
  * @property updatedAt Timestamp when the account was last updated.
- * @property ratingPrompted Boolean flag indicating whether the user has been prompted for an app rating.
+ * @property ratingPrompted Whether the user has been prompted for an app rating.
  */
 object AccountTable: IdTable<String>("account") {
 

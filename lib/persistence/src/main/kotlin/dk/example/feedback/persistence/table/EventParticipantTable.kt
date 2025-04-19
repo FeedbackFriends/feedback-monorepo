@@ -10,27 +10,20 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
 
 /**
- * Table definition for event participants.
+ * Table for managing event participants and their engagement.
  *
- * This table represents the many-to-many relationship between events and accounts,
- * tracking which participants are associated with which events. It includes metadata
- * about the participant's engagement with the event, specifically their feedback submission status.
+ * Represents the many-to-many relationship between events and accounts (participants).
+ * Tracks which users are invited to or have joined an event, and whether they submitted feedback.
  *
- * The table uses a composite primary key consisting of both the event and participant IDs,
- * ensuring that a participant can only be associated with an event once.
+ * Relationships:
+ * - References [EventTable] (event) and [AccountTable] (participant).
+ * - Deleting an event or participant cascades and removes corresponding entries.
  *
- * @property event Foreign key reference to the associated event from [EventTable].
- *                 When an event is deleted, all related participant entries are automatically
- *                 removed due to the CASCADE delete option.
- * @property participant Foreign key reference to the participant's account from [AccountTable].
- *                       When a participant is deleted, all their event associations are automatically
- *                       removed due to the CASCADE delete option.
- * @property feedbackSubmitted Boolean flag indicating whether the participant has submitted feedback
- *                            for the event. Defaults to false when a participant is first associated
- *                            with an event.
- * @property dateCreated Timestamp capturing when the participant entry was created.
- *                      Automatically set to the current time when a new participant is added
- *                      to an event.
+ * Columns:
+ * @property event Foreign key to [EventTable.id].
+ * @property participant Foreign key to [AccountTable.id].
+ * @property feedbackSubmitted Whether the participant submitted feedback for the event.
+ * @property dateCreated Timestamp when the participant was associated with the event.
  */
 object EventParticipantTable : Table("event_participant") {
     val event = reference("event_id", EventTable.id, onDelete = ReferenceOption.CASCADE)
@@ -39,5 +32,3 @@ object EventParticipantTable : Table("event_participant") {
     val dateCreated = timestampWithTimeZone("created_at").clientDefault { OffsetDateTime.now() }
     override val primaryKey = PrimaryKey(event, participant)
 }
-
-

@@ -8,24 +8,20 @@ import dk.example.feedback.persistence.table.ActivityTable.seenByManager
 import org.jetbrains.exposed.sql.ReferenceOption
 
 /**
- * Table definition for tracking activity feed entries.
+ * Table for archiving feedback activity per event.
  *
- * This table maintains a chronological record of feedback activity for each event.
- * It tracks the number of new feedback submissions at specific points in time,
- * allowing for activity monitoring and analytics.
+ * Each row represents a historical activity entry, recording the number of new feedback submissions for an event at a specific time.
+ * Used for analytics, reporting, and tracking feedback engagement over time.
  *
- * The table uses a composite primary key consisting of the event ID and createdAt,
- * ensuring unique activity entries for each event at each timestamp.
+ * Relationships:
+ * - References [EventTable] (event) and [AccountTable] (account).
+ * - Deleting an event or account cascades and removes corresponding activity entries.
  *
- * @property event Foreign key reference to the associated event from [EventTable].
- *                 When an event is deleted, all its activity feed entries are automatically
- *                 removed due to the CASCADE delete option.
- * @property account Foreign key reference to the account in [AccountTable] that
- *                   submitted the feedback. When an account is deleted, their
- *                   entries are automatically removed due to the CASCADE delete option.
- * @property newFeedback Integer representing the number of new feedback submissions
- *                      received for the event at the specified date.
- * @property seenByManager Boolean indicating whether the activity entry has been seen
+ * Columns:
+ * @property event Foreign key to [EventTable.id].
+ * @property account Foreign key to [AccountTable.id] for the feedback submitter.
+ * @property newFeedback Number of new feedback submissions at the recorded time.
+ * @property seenByManager Whether the event manager has seen this activity entry.
  */
 object ActivityTable : CommonColumnsTbl("activity") {
     val event = reference("event_id", EventTable.id, onDelete = ReferenceOption.CASCADE)

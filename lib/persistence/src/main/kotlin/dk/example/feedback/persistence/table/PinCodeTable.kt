@@ -8,20 +8,17 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
 
 /**
- * Table definition for pin codes used to access events.
+ * Table for managing event pin codes.
  *
- * This table manages the pin codes that are used to secure access to events.
- * Each pin code is uniquely associated with an event and serves as a security measure
- * to ensure only authorized participants can access the event.
+ * Each row links a unique pin code to an event, providing access control for participants.
  *
- * The table uses the pin code itself as the primary key, ensuring uniqueness across
- * all events in the system.
+ * Relationships:
+ * - References [EventTable] (event).
+ * - Deleting an event cascades and removes its pin codes.
  *
- * @property code The actual pin code string. Maximum length: 255 characters.
- *                This field serves as both the primary key and the access credential.
- * @property event A foreign key reference to the associated event in [EventTable].
- *                 When an event is deleted, all associated pin codes are automatically
- *                 deleted due to the CASCADE delete option.
+ * Columns:
+ * @property code The pin code string (primary key).
+ * @property event Foreign key to [EventTable.id].
  */
 object PinCodeTable : IdTable<String>("pin_code") {
     val code = varchar("code", 255)

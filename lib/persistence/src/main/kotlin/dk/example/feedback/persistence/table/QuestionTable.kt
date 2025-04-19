@@ -10,28 +10,20 @@ import dk.example.feedback.persistence.table.QuestionTable.questionText
 import org.jetbrains.exposed.sql.ReferenceOption
 
 /**
- * Table definition for questions used in feedback events.
+ * Table for storing feedback questions for events.
  *
- * This table stores the questions that managers can create for their events.
- * Each question is associated with a specific event and manager, and defines
- * the type of feedback that can be collected for it.
+ * Each row represents a question created by a manager for an event, specifying the type of feedback to collect.
  *
- * The table inherits common columns from [CommonColumnsTbl] including:
- * - `id`: Unique identifier for the question
- * - `created_at`: Timestamp when the question was created
- * - `updated_at`: Timestamp when the question was last modified
+ * Relationships:
+ * - References [AccountTable] (manager) and optionally [EventTable] (event).
+ * - Deleting a manager or event cascades and removes their questions.
  *
- * @property questionText The actual text of the question. Maximum length: 255 characters.
- * @property feedbackType The type of feedback that can be collected for this question,
- *                       represented by the [FeedbackType] enumeration.
- * @property manager A foreign key reference to the manager's account in [AccountTable].
- *                   When a manager is deleted, all their questions are automatically
- *                   deleted due to the CASCADE delete option.
- * @property event A foreign key reference to the associated event in [EventTable].
- *                 When an event is deleted, all its questions are automatically
- *                 deleted due to the CASCADE delete option.
- * @property index The position of the question in the event's question sequence.
- *                 Used for maintaining the order of questions within an event.
+ * Columns:
+ * @property questionText The question text.
+ * @property feedbackType The type of feedback ([FeedbackType]).
+ * @property manager Foreign key to [AccountTable.id] for the manager.
+ * @property event Optional foreign key to [EventTable.id].
+ * @property index The order of the question in the event.
  */
 object QuestionTable: CommonColumnsTbl("question") {
     val questionText = varchar("question_text", 255)

@@ -18,28 +18,26 @@ import dk.example.feedback.persistence.table.FeedbackTable.type
 import org.jetbrains.exposed.sql.ReferenceOption
 
 /**
- * Table definition for feedback entries in the system.
+ * Table for storing feedback entries.
  *
- * This table stores the details of feedback provided by accounts related to questions.
- * It supports various feedback forms including textual comments, emojis, thumbs up/thumbs down,
- * numeric ratings, and opinions. Each feedback entry must be associated with a question and a manager,
- * while participant association is optional.
+ * Each row represents a user's feedback on a specific question, supporting multiple feedback types (text, emoji, rating, etc).
+ * Feedback is linked to questions, managers, and optionally participants.
  *
- * The table inherits common columns from [CommonColumnsTbl] including:
- * - `id`: Unique identifier for the feedback entry
- * - `created_at`: Timestamp when the feedback was created
- * - `updated_at`: Timestamp when the feedback was last modified
+ * Relationships:
+ * - References [QuestionTable], [AccountTable] (manager), and optionally [AccountTable] (participant).
+ * - Deleting a question, manager, or participant cascades and removes corresponding feedback.
  *
- * @property type The type of feedback, represented by the [FeedbackType] enumeration. Required field.
- * @property comment An optional textual comment associated with the feedback. Maximum length: 255 characters.
- * @property emoji An optional emoji representing the feedback sentiment from the [Emoji] enumeration.
- * @property thumbsUpThumpsDown An optional feedback indicator using the [ThumbsUpThumpsDown] enumeration.
- * @property oneToTen An optional numerical rating on a scale from 1 to 10.
- * @property opinion An optional opinion feedback using the [Opinion] enumeration.
- * @property question A foreign key reference to the associated question in [QuestionTable]. Deletion cascades.
- * @property manager A foreign key reference to the manager's account in [AccountTable]. Deletion cascades.
- * @property participant An optional foreign key reference to the participant's account in [AccountTable]. Deletion cascades.
- * @property seenByManager Boolean flag indicating whether the feedback has been seen by the manager. Defaults to false.
+ * Columns:
+ * @property type The type of feedback ([FeedbackType]).
+ * @property comment Optional textual comment.
+ * @property emoji Optional emoji ([Emoji]).
+ * @property thumbsUpThumpsDown Optional thumbs up/down ([ThumbsUpThumpsDown]).
+ * @property oneToTen Optional numeric rating (1-10).
+ * @property opinion Optional opinion ([Opinion]).
+ * @property question Foreign key to [QuestionTable.id].
+ * @property manager Foreign key to [AccountTable.id] for the manager.
+ * @property participant Optional foreign key to [AccountTable.id] for the participant.
+ * @property seenByManager Whether the manager has seen this feedback.
  */
 object FeedbackTable: CommonColumnsTbl("feedback") {
     val type = enumerationByName("type", 14, FeedbackType::class)

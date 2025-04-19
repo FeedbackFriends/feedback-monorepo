@@ -22,12 +22,15 @@ feedback management and notifications.
 
 ## 📚 Documentation
 
-- [Architecture Overview](./docs/architecture.md)
-- [API Documentation](./docs/api_documentation.md)
-- [Database Schema](./docs/database_schema.md)
-- [Notification Flow](./docs/notification_flow.md)
-- [Development Guide](./docs/development.md)
-- [Deployment Guide](./docs/deployment.md)
+All technical documentation is in the [`docs/`](./docs/) folder. Start here:
+
+- [Architecture Overview](./docs/architecture.md) – System structure, main flows, and tech stack.
+- [Development Guide](./docs/development.md) – Local setup, project structure, and dev tasks.
+- [Deployment Guide](./docs/deployment.md) – How to deploy and required configuration.
+- [Contributing Guide](./docs/contributing.md) – How to contribute and code standards.
+- [Database Schema (ERD)](./docs/diagrams/database.puml) – Entity-relationship diagram of the database (PlantUML).
+- [Notification Flow](./docs/diagrams/notification_flow.puml) – How notifications and scheduling work.
+- [All Diagrams](./docs/diagrams/) – More PlantUML diagrams for architecture, flows, and models.
 
 ## 🔍 API Reference
 
@@ -44,11 +47,3 @@ The API is documented using OpenAPI 3.0.0 specification:
 - Automated CI/CD with Github Actions
 
 For detailed setup and development guidelines, see [Development Guide](./docs/development.md)
-
-## 📝 Contributing
-
-Please read our [Contributing Guide](./docs/contributing.md) before submitting pull requests.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
