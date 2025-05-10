@@ -1,4 +1,4 @@
-name: Build, Deploy, and Release API & Scheduler
+name: Deploy 🚀
 
 on:
   workflow_dispatch:
