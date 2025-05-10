@@ -30,8 +30,11 @@ class OpenApiConfig(private val feedbackConfig: FeedbackConfig) {
                     .title("Feedback API")
                     .version(feedbackConfig.version)
                     .description(
-                        "API documentation for Lets Grow application.\n" +
-                                "GitHub: https://github.com/FeedbackFriends/feedback-backend/commit/$commitHash"
+                        """
+                        API documentation for Lets Grow application.
+
+                        [Link to GitHub commit](https://github.com/FeedbackFriends/feedback-backend/commit/$commitHash)
+                        """.trimIndent()
                     )
             )
             .addSecurityItem(SecurityRequirement().addList(securitySchemeName))
