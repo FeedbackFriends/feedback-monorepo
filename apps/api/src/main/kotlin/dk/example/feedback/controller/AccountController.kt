@@ -83,7 +83,7 @@ class AccountController(
         accountService.linkFCMTokenToAccount(fcmToken = input.fcmToken, jwt = principal)
     }
 
-    @PutMapping("/logout")
+    @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     fun logout(
         @RequestBody input: LogoutInput,
