@@ -21,12 +21,16 @@ class OpenApiConfig(private val feedbackConfig: FeedbackConfig) {
     @Bean
     fun swagger(): OpenAPI {
         val securitySchemeName = "bearerAuth"
+        val (buildNumber, commitHash) = feedbackConfig.version.split("-", limit = 2).let {
+            it.first() to it.getOrElse(1) { "unknown" }
+        }
         return OpenAPI()
             .info(
                 io.swagger.v3.oas.models.info.Info()
                     .title("Feedback API")
                     .version(feedbackConfig.version)
-                    .description("API documentation for the Feedback service")
+                    .description("API documentation for Lets Grow application.")
+                    .summary("GitHub: https://github.com/FeedbackFriends/feedback-backend/commit/$commitHash")
             )
             .addSecurityItem(SecurityRequirement().addList(securitySchemeName))
             .components(
