@@ -29,7 +29,6 @@ class AdminService(
             email = "Mock@gmail.com",
             phoneNumber = "27630505",
             accountId = uid,
-            fcmToken = null
         )
 
         val createUserRequest = UserRecord.CreateRequest()

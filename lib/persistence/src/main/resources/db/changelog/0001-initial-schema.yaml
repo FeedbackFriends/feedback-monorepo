@@ -19,11 +19,6 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
-                  name: fcm_token
-                  type: varchar(255)
-                  constraints:
-                    nullable: true
-              - column:
                   name: email
                   type: varchar(255)
                   constraints:
@@ -311,6 +306,42 @@ databaseChangeLog:
             referencedTableName: account
             referencedColumnNames: id
             constraintName: fk_new_feedback_notification_account_id
+            onDelete: CASCADE
+        - createTable:
+            tableName: fcm_token
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: fcm_token
+            baseColumnNames: account_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: activity_account_id
             onDelete: CASCADE
         - createTable:
             tableName: activity

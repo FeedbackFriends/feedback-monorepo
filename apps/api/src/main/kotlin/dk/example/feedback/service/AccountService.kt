@@ -33,7 +33,6 @@ class AccountService(
                     name = null,
                     email = null,
                     phoneNumber = null,
-                    fcmToken = fcmToken,
                 )
             }
 
@@ -44,7 +43,6 @@ class AccountService(
                     name = name,
                     email = email,
                     phoneNumber = phoneNumber,
-                    fcmToken = fcmToken,
                 )
             }
         }
@@ -65,8 +63,16 @@ class AccountService(
         accountRepo.updateAccount(accountId = accountId, name = name, email = email, phoneNumber = phoneNumber)
     }
 
-    fun updateAccountFcmToken(fcmToken: String?, jwt: Jwt) {
-        accountRepo.updateFcmToken(accountId = jwt.getAccountId(), fcmToken = fcmToken)
+    fun linkFCMTokenToAccount(fcmToken: String, jwt: Jwt) {
+        accountRepo.upsertFcmToken(accountId = jwt.getAccountId(), fcmToken = fcmToken)
+    }
+
+    fun unlinkFCMTokenFromAccount(fcmToken: String, jwt: Jwt) {
+        jwt.verifyAccountHasId(jwt.getAccountId())
+        accountRepo.getAccount(accountId = jwt.getAccountId()).fcmTokens
+            .find { it == fcmToken }
+            ?: throw IllegalArgumentException("FCM token $fcmToken not found for account ${jwt.getAccountId()}")
+        accountRepo.deleteFcmToken(fcmToken = fcmToken)
     }
 
     fun deleteAccount(accountId: String, jwt: Jwt) {

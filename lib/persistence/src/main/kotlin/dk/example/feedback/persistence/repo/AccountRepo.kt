@@ -2,10 +2,14 @@ package dk.example.feedback.persistence.repo
 
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.persistence.dao.AccountDao
+import dk.example.feedback.persistence.dao.FCMTokenDao
 import dk.example.feedback.persistence.table.AccountTable
+import dk.example.feedback.persistence.table.FCMTokenTable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.or
+import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -22,7 +26,6 @@ class AccountRepo {
         email: String?,
         phoneNumber: String?,
         accountId: String,
-        fcmToken: String?
     ): AccountEntity {
         val existingAccount = AccountDao.findById(accountId)
         if (existingAccount != null) {
@@ -35,7 +38,6 @@ class AccountRepo {
             this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.ratingPrompted = false
-            this.fcmToken = fcmToken
         }.toModel()
     }
 
@@ -67,12 +69,18 @@ class AccountRepo {
             ?: throw NoSuchElementException("Account not found with id: $accountId")
     }
 
-    fun updateFcmToken(accountId: String, fcmToken: String?) {
-        val found =
-            AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found with id: $accountId")
-        found.apply {
-            this.fcmToken = fcmToken
+    fun upsertFcmToken(accountId: String, fcmToken: String) {
+        FCMTokenTable.insertIgnore {
+            it[value] = fcmToken
+            it[account] = accountId
         }
+        FCMTokenTable.update({ FCMTokenTable.value eq fcmToken }) {
+            it[account] = accountId
+        }
+    }
+
+    fun deleteFcmToken(fcmToken: String) {
+        FCMTokenDao.find { FCMTokenTable.value eq fcmToken }.forEach { it.delete() }
     }
     fun lookupAccount(input: String): List<AccountEntity> {
         return AccountDao.find {

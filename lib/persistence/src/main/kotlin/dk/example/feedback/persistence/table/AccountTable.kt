@@ -2,7 +2,6 @@ package dk.example.feedback.persistence.table
 
 import dk.example.feedback.persistence.table.AccountTable.createdAt
 import dk.example.feedback.persistence.table.AccountTable.email
-import dk.example.feedback.persistence.table.AccountTable.fcmToken
 import dk.example.feedback.persistence.table.AccountTable.id
 import dk.example.feedback.persistence.table.AccountTable.name
 import dk.example.feedback.persistence.table.AccountTable.phoneNumber
@@ -25,7 +24,6 @@ import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
  * Columns:
  * @property id Unique account identifier (Firebase UID). Primary key.
  * @property name Optional display name for the user.
- * @property fcmToken Optional Firebase Cloud Messaging token for push notifications.
  * @property email Optional email address.
  * @property phoneNumber Optional phone number.
  * @property createdAt Timestamp when the account was created.
@@ -38,10 +36,11 @@ object AccountTable: IdTable<String>("account") {
     override val primaryKey = PrimaryKey(id)
 
     val name = varchar("name", 255).nullable()
-    val fcmToken = varchar("fcm_token", 255).nullable()
     val email = varchar("email", 255).nullable()
     val phoneNumber = varchar("phone_number", 255).nullable()
     val createdAt = timestampWithTimeZone("created_at")
     val updatedAt = timestampWithTimeZone("updated_at")
     val ratingPrompted = bool("rating_prompted")
 }
+
+

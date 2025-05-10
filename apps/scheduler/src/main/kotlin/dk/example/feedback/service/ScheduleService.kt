@@ -30,16 +30,18 @@ class ScheduleService(
         val notificationsToRemove = mutableListOf<NewFeedbackNotificationEntity>()
 
         newFeedbackNotificationRepo.listAll().forEach { notification ->
-            val fcmToken = notification.account.fcmToken
-            if (fcmToken == null) {
+            val fcmTokens = notification.account.fcmTokens
+            if (fcmTokens.isEmpty()) {
                 notificationsToRemove += notification
             } else if (notification.shouldPush()) {
                 notificationsToRemove += notification
-                notificationsToPush += FeedbackReceivedNotification(
-                    fcmToken = fcmToken,
-                    newFeedback = notification.newFeedback,
-                    eventTitle = notification.event.title,
-                )
+                fcmTokens.forEach { fcmToken ->
+                    notificationsToPush += FeedbackReceivedNotification(
+                        fcmToken = fcmToken,
+                        newFeedback = notification.newFeedback,
+                        eventTitle = notification.event.title,
+                    )
+                }
             }
         }
         if (notificationsToPush.isNotEmpty()) {

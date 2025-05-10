@@ -5,8 +5,9 @@ import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.payloads.CreateAccountInput
+import dk.example.feedback.payloads.LinkFCMTokenToAccountInput
+import dk.example.feedback.payloads.LogoutInput
 import dk.example.feedback.payloads.ModifyAccountInput
-import dk.example.feedback.payloads.SetFcmTokenInput
 import dk.example.feedback.payloads.UpdateRoleInput
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.SessionService
@@ -75,11 +76,20 @@ class AccountController(
 
     @PutMapping("/fcm-token")
     @PreAuthorize("isAuthenticated()")
-    fun updateFcmToken(
-        @RequestBody input: SetFcmTokenInput,
+    fun linkFCMTokenToAccount(
+        @RequestBody input: LinkFCMTokenToAccountInput,
         @AuthenticationPrincipal principal: Jwt,
     ) {
-        accountService.updateAccountFcmToken(fcmToken = input.fcmToken, jwt = principal)
+        accountService.linkFCMTokenToAccount(fcmToken = input.fcmToken, jwt = principal)
+    }
+
+    @PutMapping("/logout")
+    @PreAuthorize("isAuthenticated()")
+    fun logout(
+        @RequestBody input: LogoutInput,
+        @AuthenticationPrincipal principal: Jwt,
+    ) {
+        accountService.unlinkFCMTokenFromAccount(fcmToken = input.fcmToken, jwt = principal)
     }
 
     @DeleteMapping
