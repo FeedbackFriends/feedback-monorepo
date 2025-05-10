@@ -29,8 +29,10 @@ class OpenApiConfig(private val feedbackConfig: FeedbackConfig) {
                 io.swagger.v3.oas.models.info.Info()
                     .title("Feedback API")
                     .version(feedbackConfig.version)
-                    .description("API documentation for Lets Grow application.")
-                    .summary("GitHub: https://github.com/FeedbackFriends/feedback-backend/commit/$commitHash")
+                    .description(
+                        "API documentation for Lets Grow application.\n" +
+                                "GitHub: https://github.com/FeedbackFriends/feedback-backend/commit/$commitHash"
+                    )
             )
             .addSecurityItem(SecurityRequirement().addList(securitySchemeName))
             .components(
