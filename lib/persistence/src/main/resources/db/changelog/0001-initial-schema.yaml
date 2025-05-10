@@ -341,7 +341,7 @@ databaseChangeLog:
             baseColumnNames: account_id
             referencedTableName: account
             referencedColumnNames: id
-            constraintName: activity_account_id
+            constraintName: fcm_token_account_id
             onDelete: CASCADE
         - createTable:
             tableName: activity
