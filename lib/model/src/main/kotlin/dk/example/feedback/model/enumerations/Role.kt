@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonValue
 
 object RoleConstants {
     const val MANAGER = "Manager"
-    const val ORGANIZER = "Organizer"
     const val PARTICIPANT = "Participant"
 }
 
@@ -23,7 +22,6 @@ sealed class Role(val value: String) {
             return when (value) {
                 RoleConstants.PARTICIPANT -> Participant
                 RoleConstants.MANAGER -> Manager
-                RoleConstants.ORGANIZER -> Manager
                 else -> null
             }
         }
