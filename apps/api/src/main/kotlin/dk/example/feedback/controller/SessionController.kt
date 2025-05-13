@@ -29,8 +29,17 @@ class SessionController(val sessionService: SessionService) {
     fun getUpdatedSession(
         @AuthenticationPrincipal principal: Jwt,
         @PathVariable feedbackSessionHash: UUID,
-    ): SessionDto? {
-        return sessionService.getUpdatedSession(jwt = principal, feedbackSessionHash = feedbackSessionHash)
+    ): UpdatedSessionResponse {
+        return UpdatedSessionResponse(
+            session = sessionService.getUpdatedSession(
+                jwt = principal,
+                feedbackSessionHash = feedbackSessionHash
+            )
+        )
     }
+
+    data class UpdatedSessionResponse(
+        val session: SessionDto?
+    )
 }
 
