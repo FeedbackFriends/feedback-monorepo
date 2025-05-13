@@ -39,6 +39,7 @@ class MockRepo {
                 it[ratingPrompted] = false
                 it[createdAt] = OffsetDateTime.now(UTC)
                 it[updatedAt] = OffsetDateTime.now(UTC)
+                it[feedbackSessionHash] = UUID.randomUUID()
             }
 
             for (i in 1..9) {
