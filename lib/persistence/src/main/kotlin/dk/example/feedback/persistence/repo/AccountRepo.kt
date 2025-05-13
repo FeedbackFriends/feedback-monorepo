@@ -6,6 +6,8 @@ import dk.example.feedback.persistence.dao.FCMTokenDao
 import dk.example.feedback.persistence.table.FCMTokenTable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import org.jetbrains.exposed.sql.insertIgnore
+import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -66,24 +68,21 @@ class AccountRepo {
     }
 
     fun upsertFcmToken(accountId: String, fcmToken: String) {
-        val existingFcmToken = FCMTokenDao.findById(fcmToken)
-        val account = AccountDao.findById(accountId)
+        val foundAccount = AccountDao.findById(accountId)
             ?: error("Account with id $accountId not found")
 
-        if (existingFcmToken == null) {
-            FCMTokenDao.new(fcmToken) {
-                this.value = fcmToken
-                this.account = account
-            }
-        } else {
-            existingFcmToken.apply {
-                this.account = account
-            }
+        FCMTokenTable.insertIgnore {
+            it[id] = fcmToken
+            it[account] = foundAccount.id
+        }
+
+        FCMTokenTable.update({ FCMTokenTable.id eq fcmToken }) {
+            it[account] = foundAccount.id
         }
     }
 
     fun deleteFcmToken(fcmToken: String) {
-        FCMTokenDao.find { FCMTokenTable.value eq fcmToken }.forEach { it.delete() }
+        FCMTokenDao.find { FCMTokenTable.id eq fcmToken }.forEach { it.delete() }
     }
 
     fun markRatingAsPrompted(accountId: String) {
