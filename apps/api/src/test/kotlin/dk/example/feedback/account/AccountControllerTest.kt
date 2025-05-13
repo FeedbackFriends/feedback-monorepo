@@ -14,8 +14,8 @@ import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.payloads.FeedbackInput
 import dk.example.feedback.payloads.ModifyAccountInput
 import dk.example.feedback.payloads.QuestionInput
-import dk.example.feedback.payloads.SendFeedbackInput
 import dk.example.feedback.payloads.StartFeedbackSessionInput
+import dk.example.feedback.payloads.SubmitFeedbackInput
 import dk.example.feedback.utils.FirebaseMockEngine
 import dk.example.feedback.utils.MockJwtFactory
 import dk.example.feedback.utils.TestConfig
@@ -412,7 +412,7 @@ class AccountControllerTest(
             startFeedbackSessionResponse.response.contentAsString,
             FeedbackSessionDto::class.java
         )
-        val feedbackInput: SendFeedbackInput = SendFeedbackInput(
+        val feedbackInput: SubmitFeedbackInput = SubmitFeedbackInput(
             feedback = sendFeedbackResponseDto.questions.map {
                 FeedbackInput(
                     comment = null,

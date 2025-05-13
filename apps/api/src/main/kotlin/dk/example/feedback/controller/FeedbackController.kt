@@ -2,8 +2,8 @@ package dk.example.feedback.controller
 
 import dk.example.feedback.dto.FeedbackSessionDto
 import dk.example.feedback.dto.SubmitFeedbackResponseDto
-import dk.example.feedback.payloads.SendFeedbackInput
 import dk.example.feedback.payloads.StartFeedbackSessionInput
+import dk.example.feedback.payloads.SubmitFeedbackInput
 import dk.example.feedback.service.FeedbackService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
@@ -30,11 +30,11 @@ class FeedbackController(val feedbackService: FeedbackService) {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/submit")
-    fun sendFeedback(
-        @RequestBody input: SendFeedbackInput,
+    fun submitFeedback(
+        @RequestBody input: SubmitFeedbackInput,
         @AuthenticationPrincipal principal: Jwt
     ): SubmitFeedbackResponseDto {
-        return feedbackService.sendFeedback(
+        return feedbackService.submitFeedback(
             feedbackInputList = input.feedback,
             pinCode = input.pinCode,
             jwt = principal

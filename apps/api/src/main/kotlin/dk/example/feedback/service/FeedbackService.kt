@@ -11,7 +11,6 @@ import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.payloads.FeedbackInput
 import dk.example.feedback.persistence.repo.AccountRepo
-import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
 import dk.example.feedback.persistence.repo.NewFeedbackNotificationRepo
@@ -25,7 +24,6 @@ class FeedbackService(
     val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
     val newFeedbackNotificationRepo: NewFeedbackNotificationRepo,
-    val activityRepo: ActivityRepo
 ) {
 
     fun startSession(pinCode: String, jwt: Jwt): FeedbackSessionDto {
@@ -54,7 +52,7 @@ class FeedbackService(
         )
     }
 
-    fun sendFeedback(
+    fun submitFeedback(
         feedbackInputList: List<FeedbackInput>,
         pinCode: String,
         jwt: Jwt
