@@ -52,6 +52,7 @@ class ScheduleService(
                         fcmToken = fcmToken,
                         newFeedback = notification.newFeedback,
                         eventTitle = notification.event.title,
+                        eventId = notification.event.id,
                     )
                 }
             } else {

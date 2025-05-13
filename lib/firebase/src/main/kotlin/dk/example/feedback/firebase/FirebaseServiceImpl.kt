@@ -60,6 +60,8 @@ class FirebaseServiceImpl : FirebaseService {
                             )
                             .build()
                     )
+                    .putData("eventId", it.eventId.toString())
+                    .putData("type", "FEEDBACK_RECEIVED")
                     .setToken(it.fcmToken)
                     .build()
             }

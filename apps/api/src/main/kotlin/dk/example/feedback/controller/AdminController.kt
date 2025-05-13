@@ -5,6 +5,7 @@ import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.model.enumerations.Role
 import dk.example.feedback.service.AdminService
 import io.swagger.v3.oas.annotations.tags.Tag
+import java.util.*
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -45,6 +46,7 @@ class AdminController(
         val fcmToken: String,
         val title: String,
         val newFeedback: Int,
+        val eventId: UUID
     )
 
     @PutMapping("/mock-new-feedback-notification")
@@ -56,7 +58,8 @@ class AdminController(
                 FeedbackReceivedNotification(
                     fcmToken = input.fcmToken,
                     newFeedback = input.newFeedback,
-                    eventTitle = input.title
+                    eventTitle = input.title,
+                    eventId = input.eventId
                 )
             )
         )

@@ -1,6 +1,7 @@
 package dk.example.feedback.firebase
 
 import dk.example.feedback.model.enumerations.Role
+import java.util.*
 
 interface FirebaseService {
     fun configure(configFilePath: String)
@@ -22,4 +23,5 @@ data class FeedbackReceivedNotification(
     val fcmToken: String,
     val newFeedback: Int,
     val eventTitle: String,
+    val eventId: UUID,
 )
