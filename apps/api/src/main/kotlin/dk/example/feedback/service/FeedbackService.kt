@@ -77,6 +77,7 @@ class FeedbackService(
             eventId = event.id,
             accountId = event.manager.id
         )
+        accountRepo.updateSessionHash(accountId = managerId)
         return SubmitFeedbackResponseDto(
             shouldPresentRatingPrompt = shouldPresentRatingPrompt,
             event = event.toParticipantEvent(

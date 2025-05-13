@@ -1,11 +1,10 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.dto.SessionDto
-import dk.example.feedback.dto.UpdatedSessionDto
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.role
 import dk.example.feedback.model.enumerations.Role
-import dk.example.feedback.persistence.repo.EventRepo
+import java.util.*
 import org.slf4j.LoggerFactory
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
@@ -14,33 +13,29 @@ import org.springframework.stereotype.Service
 class SessionService(
     val eventService: EventService,
     val accountService: AccountService,
-    val eventRepo: EventRepo,
     val activityService: ActivityService,
 ) {
 
     private val logger = LoggerFactory.getLogger(SessionService::class.java)
 
-    fun getUpdatedSession(jwt: Jwt): UpdatedSessionDto {
-        val newActivityItems =
-            activityService.movePendingNotificationsToActivityAndReturn(accountId = jwt.getAccountId())
-        logger.info("New feedback notifications: ${newActivityItems.size} for user: ${jwt.getAccountId()}")
-        when (jwt.role()) {
-            Role.Manager -> {
-                return UpdatedSessionDto(
-                    updatedManagerEvents = newActivityItems.map {
-                        it.toManagerEvent(pinCode = eventRepo.getPinCodeForEvent(it.id))
-                    },
-                    activity = activityService.getActivity(accountId = jwt.getAccountId()),
-                )
-            }
-
-            else -> {
-                return UpdatedSessionDto(
-                    updatedManagerEvents = null,
-                    activity = activityService.getActivity(accountId = jwt.getAccountId()),
-                )
-            }
+    fun getUpdatedSession(jwt: Jwt, feedbackSessionHash: UUID): SessionDto? {
+        val accountId = jwt.getAccountId()
+        val role = jwt.role()
+        val account = accountService.fetchAccount(accountId = accountId)
+            ?: throw Exception("Account not found for id: $accountId")
+        if (account.feedbackSessionHash == feedbackSessionHash) {
+            logger.info("Session hash is the same, no need to provide updated session")
+            return null
         }
+        return getSessionDto(
+            accountId = accountId,
+            role = role,
+            account = SessionDto.AccountInfoDto(
+                name = account.name,
+                email = account.email,
+                phoneNumber = account.phoneNumber,
+            )
+        )
     }
 
     fun getSession(jwt: Jwt): SessionDto {
@@ -48,19 +43,31 @@ class SessionService(
         val role = jwt.role()
         val account = accountService.fetchAccount(accountId = accountId)
             ?: throw Exception("Account not found for id: $accountId")
+        return getSessionDto(
+            accountId = accountId,
+            role = role,
+            account = SessionDto.AccountInfoDto(
+                name = account.name,
+                email = account.email,
+                phoneNumber = account.phoneNumber,
+            )
+        )
+    }
+
+    private fun getSessionDto(
+        accountId: String,
+        role: Role?,
+        account: SessionDto.AccountInfoDto,
+    ): SessionDto {
         val participantEvents = eventService.getParticipantEvents(accountId = accountId)
         logger.info("Get session with role: $role")
+        activityService.movePendingNotificationsToActivityAndReturn(accountId = accountId)
         when (role) {
             Role.Manager -> {
-                activityService.movePendingNotificationsToActivityAndReturn(accountId = accountId)
                 val managerEvents = eventService.getManagerEvents(accountId)
                 val session = SessionDto(
                     role = role,
-                    accountInfo = SessionDto.AccountInfoDto(
-                        name = account.name,
-                        email = account.email,
-                        phoneNumber = account.phoneNumber
-                    ),
+                    accountInfo = account,
                     participantEvents = participantEvents,
                     managerData = SessionDto.ManagerDataDto(
                         managerEvents = managerEvents,
@@ -74,11 +81,7 @@ class SessionService(
             Role.Participant -> {
                 return SessionDto(
                     role = role,
-                    accountInfo = SessionDto.AccountInfoDto(
-                        name = account.name,
-                        email = account.email,
-                        phoneNumber = account.phoneNumber
-                    ),
+                    accountInfo = account,
                     participantEvents = participantEvents,
                     managerData = null
                 )
@@ -86,11 +89,7 @@ class SessionService(
             null -> {
                 return SessionDto(
                     role = null,
-                    accountInfo = SessionDto.AccountInfoDto(
-                        name = account.name,
-                        email = account.email,
-                        phoneNumber = account.phoneNumber
-                    ),
+                    accountInfo = account,
                     participantEvents = participantEvents,
                     managerData = null
                 )

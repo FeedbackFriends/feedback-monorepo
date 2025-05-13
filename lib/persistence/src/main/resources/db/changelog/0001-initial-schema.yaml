@@ -14,6 +14,11 @@ databaseChangeLog:
                     unique: true
                     nullable: false
               - column:
+                  name: feedback_session_hash
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
                   name: name
                   type: varchar(255)
                   constraints:

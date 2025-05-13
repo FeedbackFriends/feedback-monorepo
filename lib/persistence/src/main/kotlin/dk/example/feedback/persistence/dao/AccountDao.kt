@@ -19,6 +19,7 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
     var phoneNumber by AccountTable.phoneNumber
     var createdAt by AccountTable.createdAt
     var updatedAt by AccountTable.updatedAt
+    var feedbackSessionHash by AccountTable.feedbackSessionHash
     var ratingPrompted by AccountTable.ratingPrompted
     val events by EventDao referrersOn EventTable.manager
     val questions by QuestionDao referrersOn QuestionTable.manager
@@ -31,6 +32,7 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
         fcmTokens = fcmTokens.map { it.id.value },
         phoneNumber = phoneNumber,
         ratingPrompted = ratingPrompted,
+        feedbackSessionHash = feedbackSessionHash,
     )
 }
 

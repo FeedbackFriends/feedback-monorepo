@@ -6,6 +6,7 @@ import dk.example.feedback.persistence.dao.FCMTokenDao
 import dk.example.feedback.persistence.table.FCMTokenTable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import java.util.*
 import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
@@ -36,6 +37,7 @@ class AccountRepo {
             this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.ratingPrompted = false
+            this.feedbackSessionHash = UUID.randomUUID()
         }.toModel()
     }
 
@@ -90,6 +92,14 @@ class AccountRepo {
             AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found with id: $accountId")
         found.apply {
             this.ratingPrompted = true
+        }
+    }
+
+    fun updateSessionHash(accountId: String) {
+        val found =
+            AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found with id: $accountId")
+        found.apply {
+            this.feedbackSessionHash = UUID.randomUUID()
         }
     }
 }

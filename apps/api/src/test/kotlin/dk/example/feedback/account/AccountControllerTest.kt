@@ -16,7 +16,6 @@ import dk.example.feedback.payloads.ModifyAccountInput
 import dk.example.feedback.payloads.QuestionInput
 import dk.example.feedback.payloads.StartFeedbackSessionInput
 import dk.example.feedback.payloads.SubmitFeedbackInput
-import dk.example.feedback.utils.FirebaseMockEngine
 import dk.example.feedback.utils.MockJwtFactory
 import dk.example.feedback.utils.TestConfig
 import java.time.OffsetDateTime
@@ -41,7 +40,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @Import(TestConfig::class, SecurityConfig::class)
 class AccountControllerTest(
     @Autowired val mockMvc: MockMvc,
-    @Autowired val firebaseService: FirebaseMockEngine
 
 ) {
     private val objectMapper = jacksonObjectMapper()
@@ -408,12 +406,12 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.ownerInfo.phoneNumber").value("New phone number"))
             .andReturn()
 
-        val sendFeedbackResponseDto = objectMapper.readValue(
+        val submitFeedbackResponseDto = objectMapper.readValue(
             startFeedbackSessionResponse.response.contentAsString,
             FeedbackSessionDto::class.java
         )
         val feedbackInput: SubmitFeedbackInput = SubmitFeedbackInput(
-            feedback = sendFeedbackResponseDto.questions.map {
+            feedback = submitFeedbackResponseDto.questions.map {
                 FeedbackInput(
                     comment = null,
                     emoji = emoji,

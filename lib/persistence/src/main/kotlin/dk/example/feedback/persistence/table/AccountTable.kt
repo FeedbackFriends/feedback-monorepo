@@ -41,6 +41,7 @@ object AccountTable: IdTable<String>("account") {
     val createdAt = timestampWithTimeZone("created_at")
     val updatedAt = timestampWithTimeZone("updated_at")
     val ratingPrompted = bool("rating_prompted")
+    val feedbackSessionHash = uuid("feedback_session_hash")
 }
 
 
