@@ -28,7 +28,7 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
         id = id.value,
         name = name,
         email = email,
-        fcmTokens = fcmTokens.map { it.value },
+        fcmTokens = fcmTokens.map { it.id.value },
         phoneNumber = phoneNumber,
         ratingPrompted = ratingPrompted,
     )

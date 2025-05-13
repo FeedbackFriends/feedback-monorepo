@@ -10,12 +10,12 @@ class FCMTokenDao(id: EntityID<String>) : Entity<String>(id) {
 
     companion object : EntityClass<String, FCMTokenDao>(FCMTokenTable)
 
-    var value by FCMTokenTable.value
+    var value by FCMTokenTable.id
     var account by AccountDao referencedOn FCMTokenTable.account
 
     fun toModel(): FCMTokenEntity {
         return FCMTokenEntity(
-            value = this.value,
+            value = this.id.value,
         )
     }
 }
