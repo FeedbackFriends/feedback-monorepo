@@ -32,7 +32,7 @@ class MockRepo {
                 return@transaction
             }
             AccountTable.insert {
-                it[id] = testId
+                it[id] = EntityID(testId, AccountTable)
                 it[email] = "test@email.dk"
                 it[name] = "Test Name"
                 it[phoneNumber] = "12345678"
@@ -49,7 +49,7 @@ class MockRepo {
                     it[agenda] = null
                     it[location] = "Test Location"
                     it[durationInMinutes] = 30
-                    it[manager] = testId
+                    it[manager] = EntityID(testId, AccountTable)
                     it[startDate] = OffsetDateTime.now(UTC)
                     it[lastUpdated] = OffsetDateTime.now(UTC)
                     it[dateCreated] = OffsetDateTime.now(UTC)
@@ -59,7 +59,7 @@ class MockRepo {
                     it[questionText] = "How was the event?"
                     it[event] = eventId
                     it[feedbackType] = FeedbackType.Emoji
-                    it[manager] = testId
+                    it[manager] = EntityID(testId, AccountTable)
                     it[index] = 0
                     it[lastUpdated] = OffsetDateTime.now(UTC)
                     it[dateCreated] = OffsetDateTime.now(UTC)
@@ -69,7 +69,7 @@ class MockRepo {
                     it[questionText] = "How was the food?"
                     it[event] = eventId
                     it[feedbackType] = FeedbackType.Emoji
-                    it[manager] = testId
+                    it[manager] = EntityID(testId, AccountTable)
                     it[index] = 1
                     it[lastUpdated] = OffsetDateTime.now(UTC)
                     it[dateCreated] = OffsetDateTime.now(UTC)
