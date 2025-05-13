@@ -46,6 +46,9 @@ class AccountService(
                 )
             }
         }
+        if (fcmToken != null) {
+            accountRepo.upsertFcmToken(accountId = jwt.getAccountId(), fcmToken = fcmToken)
+        }
     }
 
     fun fetchAccount(accountId: String): AccountEntity? {
