@@ -3,6 +3,7 @@ package dk.example.feedback.service
 import dk.example.feedback.dto.SessionDto
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.role
+import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.model.enumerations.Role
 import java.util.*
 import org.slf4j.LoggerFactory
@@ -30,11 +31,7 @@ class SessionService(
         return getSessionDto(
             accountId = accountId,
             role = role,
-            account = SessionDto.AccountInfoDto(
-                name = account.name,
-                email = account.email,
-                phoneNumber = account.phoneNumber,
-            )
+            account = account
         )
     }
 
@@ -46,33 +43,39 @@ class SessionService(
         return getSessionDto(
             accountId = accountId,
             role = role,
-            account = SessionDto.AccountInfoDto(
-                name = account.name,
-                email = account.email,
-                phoneNumber = account.phoneNumber,
-            )
+            account = account
         )
     }
 
     private fun getSessionDto(
         accountId: String,
         role: Role?,
-        account: SessionDto.AccountInfoDto,
+        account: AccountEntity,
     ): SessionDto {
         val participantEvents = eventService.getParticipantEvents(accountId = accountId)
         logger.info("Get session with role: $role")
         activityService.movePendingNotificationsToActivityAndReturn(accountId = accountId)
+        val accountDto = SessionDto.AccountInfoDto(
+            name = account.name,
+            email = account.email,
+            phoneNumber = account.phoneNumber,
+        )
         when (role) {
             Role.Manager -> {
                 val managerEvents = eventService.getManagerEvents(accountId)
                 val session = SessionDto(
                     role = role,
-                    accountInfo = account,
+                    accountInfo = SessionDto.AccountInfoDto(
+                        name = account.name,
+                        email = account.email,
+                        phoneNumber = account.phoneNumber,
+                    ),
                     participantEvents = participantEvents,
                     managerData = SessionDto.ManagerDataDto(
                         managerEvents = managerEvents,
                         activity = activityService.getActivity(accountId = accountId),
                         recentlyUsedQuestions = eventService.getRecentlyUsedQuestions(accountId = accountId),
+                        feedbackSessionHash = account.feedbackSessionHash
                     )
                 )
                 return session
@@ -81,7 +84,7 @@ class SessionService(
             Role.Participant -> {
                 return SessionDto(
                     role = role,
-                    accountInfo = account,
+                    accountInfo = accountDto,
                     participantEvents = participantEvents,
                     managerData = null
                 )
@@ -89,7 +92,7 @@ class SessionService(
             null -> {
                 return SessionDto(
                     role = null,
-                    accountInfo = account,
+                    accountInfo = accountDto,
                     participantEvents = participantEvents,
                     managerData = null
                 )

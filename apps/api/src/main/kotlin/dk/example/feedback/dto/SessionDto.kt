@@ -3,6 +3,7 @@ package dk.example.feedback.dto
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.enumerations.Role
 import java.time.OffsetDateTime
+import java.util.*
 
 data class SessionDto(
     val role: Role?,
@@ -14,6 +15,7 @@ data class SessionDto(
         val managerEvents: List<ManagerEventDto>,
         val activity: ActivityDto,
         val recentlyUsedQuestions: List<RecentlyUsedQuestions>,
+        val feedbackSessionHash: UUID
     )
     data class AccountInfoDto(
         val name: String?,
