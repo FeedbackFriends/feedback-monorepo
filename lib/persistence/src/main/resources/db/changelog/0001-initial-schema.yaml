@@ -311,12 +311,6 @@ databaseChangeLog:
             tableName: fcm_token
             columns:
               - column:
-                  name: id
-                  type: uuid
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
                   name: account_id
                   type: varchar(255)
                   constraints:
@@ -325,16 +319,7 @@ databaseChangeLog:
                   name: value
                   type: varchar(255)
                   constraints:
-                    nullable: false
-              - column:
-                  name: created_at
-                  type: timestamp with time zone
-                  constraints:
-                    nullable: false
-              - column:
-                  name: updated_at
-                  type: timestamp with time zone
-                  constraints:
+                    primaryKey: true
                     nullable: false
         - addForeignKeyConstraint:
             baseTableName: fcm_token

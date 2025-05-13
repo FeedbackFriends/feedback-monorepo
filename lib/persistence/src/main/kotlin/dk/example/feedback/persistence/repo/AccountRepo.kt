@@ -3,13 +3,9 @@ package dk.example.feedback.persistence.repo
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.FCMTokenDao
-import dk.example.feedback.persistence.table.AccountTable
 import dk.example.feedback.persistence.table.FCMTokenTable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
-import org.jetbrains.exposed.sql.insertIgnore
-import org.jetbrains.exposed.sql.or
-import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -70,22 +66,24 @@ class AccountRepo {
     }
 
     fun upsertFcmToken(accountId: String, fcmToken: String) {
-        FCMTokenTable.insertIgnore {
-            it[value] = fcmToken
-            it[account] = accountId
-        }
-        FCMTokenTable.update({ FCMTokenTable.value eq fcmToken }) {
-            it[account] = accountId
+        val existingFcmToken = FCMTokenDao.findById(fcmToken)
+        val account = AccountDao.findById(accountId)
+            ?: error("Account with id $accountId not found")
+
+        if (existingFcmToken == null) {
+            FCMTokenDao.new(fcmToken) {
+                this.value = fcmToken
+                this.account = account
+            }
+        } else {
+            existingFcmToken.apply {
+                this.account = account
+            }
         }
     }
 
     fun deleteFcmToken(fcmToken: String) {
         FCMTokenDao.find { FCMTokenTable.value eq fcmToken }.forEach { it.delete() }
-    }
-    fun lookupAccount(input: String): List<AccountEntity> {
-        return AccountDao.find {
-            (AccountTable.email like "%$input%") or (AccountTable.name like "%$input%") or (AccountTable.phoneNumber like "%$input%")
-        }.toList().map { it.toModel() }
     }
 
     fun markRatingAsPrompted(accountId: String) {
