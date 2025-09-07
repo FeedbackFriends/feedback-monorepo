@@ -136,7 +136,7 @@ class EventService(
         activityRepo.markAsSeen(accountId = jwt.getAccountId(), eventId = eventId)
     }
 
-    private fun getPinCodeForEvent(eventId: UUID): String {
+    private fun getPinCodeForEvent(eventId: UUID): String? {
         return eventRepo.getPinCodeForEvent(eventId)
     }
 
@@ -172,7 +172,7 @@ class EventService(
     }
 }
 
-fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
+fun EventEntity.toManagerEvent(pinCode: String?): ManagerEventDto {
     return ManagerEventDto(
         id = id,
         title = title,
@@ -202,7 +202,7 @@ fun EventEntity.toManagerEvent(pinCode: String): ManagerEventDto {
 }
 
 fun EventEntity.toParticipantEvent(
-    pinCode: String,
+    pinCode: String?,
     feedbackSubmitted: Boolean,
     recentlyJoined: Boolean
 ): ParticipantEventDto {

@@ -193,9 +193,8 @@ class EventRepo {
         }
     }
 
-    fun getPinCodeForEvent(eventId: UUID): String {
+    fun getPinCodeForEvent(eventId: UUID): String? {
         return PinCodeDao.find { PinCodeTable.event eq eventId }.firstOrNull()?.pinCode?.value
-            ?: throw Exception("Could not find pin code for event id: $eventId")
     }
 
     fun getRecentlyUsedQuestions(accountId: String): List<QuestionEntity> {
