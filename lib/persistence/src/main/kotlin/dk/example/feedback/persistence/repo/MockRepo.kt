@@ -51,7 +51,16 @@ class MockRepo {
                     it[location] = "Test Location"
                     it[durationInMinutes] = 30
                     it[manager] = EntityID(testId, AccountTable)
-                    it[startDate] = OffsetDateTime.now(UTC)
+                    it[startDate] = OffsetDateTime.of(
+                        2100,
+                        1,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        UTC
+                    )
                     it[lastUpdated] = OffsetDateTime.now(UTC)
                     it[dateCreated] = OffsetDateTime.now(UTC)
                 }
