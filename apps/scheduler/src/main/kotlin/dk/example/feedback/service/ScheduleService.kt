@@ -6,11 +6,11 @@ import dk.example.feedback.model.database.NewFeedbackNotificationEntity
 import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.NewFeedbackNotificationRepo
-import jakarta.annotation.PostConstruct
 import java.time.Duration
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import javax.annotation.PostConstruct
 
 @Service
 class ScheduleService(
