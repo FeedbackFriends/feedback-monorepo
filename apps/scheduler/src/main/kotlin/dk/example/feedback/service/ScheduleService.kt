@@ -23,13 +23,9 @@ class ScheduleService(
     private val logger = LoggerFactory.getLogger(ScheduleService::class.java)
     val cleanUpPinDuration = Duration.ofDays(7)
 
-    @Scheduled(cron = "0 0 0 * * *", zone = "Europe/Copenhagen")
+//    @Scheduled(cron = "0 0 0 * * *", zone = "Europe/Copenhagen")
+    @Scheduled(fixedRate = 60000)
     fun cleanUpPinsScheduler() {
-        eventRepo.cleanUpPinCodesWithStopTimeOlderThan(duration = cleanUpPinDuration)
-    }
-
-    @PostConstruct
-    fun onStartup() {
         eventRepo.cleanUpPinCodesWithStopTimeOlderThan(duration = cleanUpPinDuration)
     }
 
