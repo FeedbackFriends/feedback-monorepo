@@ -6,6 +6,7 @@ import dk.example.feedback.model.database.NewFeedbackNotificationEntity
 import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.NewFeedbackNotificationRepo
+import jakarta.annotation.PostConstruct
 import java.time.Duration
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
@@ -20,11 +21,16 @@ class ScheduleService(
 ) {
 
     private val logger = LoggerFactory.getLogger(ScheduleService::class.java)
+    val cleanUpPinDuration = Duration.ofDays(7)
 
     @Scheduled(cron = "0 0 0 * * *", zone = "Europe/Copenhagen")
     fun cleanUpPinsScheduler() {
-        val sevenDays = Duration.ofDays(7)
-        eventRepo.cleanUpPinCodesWithStopTimeOlderThan(duration = sevenDays)
+        eventRepo.cleanUpPinCodesWithStopTimeOlderThan(duration = cleanUpPinDuration)
+    }
+
+    @PostConstruct
+    fun onStartup() {
+        eventRepo.cleanUpPinCodesWithStopTimeOlderThan(duration = cleanUpPinDuration)
     }
 
     @Scheduled(fixedRate = 5000)
