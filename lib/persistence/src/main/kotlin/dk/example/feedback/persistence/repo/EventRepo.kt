@@ -3,6 +3,7 @@ package dk.example.feedback.persistence.repo
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.QuestionEntity
 import dk.example.feedback.model.enumerations.FeedbackType
+import dk.example.feedback.model.exceptions.PinCodeNotFoundException
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.EventDao
 import dk.example.feedback.persistence.dao.PinCodeDao
@@ -113,7 +114,7 @@ class EventRepo {
 
     fun getEventByPinCode(pinCode: String): EventEntity {
         return PinCodeDao.find { PinCodeTable.code eq pinCode }.firstOrNull()?.event?.toModel()
-            ?: throw Exception("Could not find event with pin code: $pinCode")
+            ?: throw PinCodeNotFoundException(pinCode = pinCode)
     }
 
     fun getEvent(eventId: UUID): EventEntity {

@@ -17,3 +17,8 @@ class EventAlreadyJoinedException(eventId: UUID, accountId: String) : DomainExce
     DomainCode.EVENT_ALREADY_JOINED,
     "User $accountId has already joined event $eventId"
 )
+
+class PinCodeNotFoundException(pinCode: String) : DomainException(
+    DomainCode.PINCODE_NOT_FOUND,
+    "Could not find any event with pincode $pinCode"
+)
