@@ -44,6 +44,25 @@ class MockRepo {
 
             for (i in 1..9) {
                 val eventId = UUID.randomUUID()
+                val startDateValue = if (i == 1) OffsetDateTime.of(
+                    2000,
+                    1,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    UTC
+                ) else OffsetDateTime.of(
+                    2100,
+                    1,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    UTC
+                )
                 EventTable.insert {
                     it[id] = EntityID(eventId, EventTable)
                     it[title] = eventTitles[i - 1]
@@ -51,16 +70,7 @@ class MockRepo {
                     it[location] = "Test Location"
                     it[durationInMinutes] = 30
                     it[manager] = EntityID(testId, AccountTable)
-                    it[startDate] = OffsetDateTime.of(
-                        2100,
-                        1,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        UTC
-                    )
+                    it[startDate] = startDateValue
                     it[lastUpdated] = OffsetDateTime.now(UTC)
                     it[dateCreated] = OffsetDateTime.now(UTC)
                 }
