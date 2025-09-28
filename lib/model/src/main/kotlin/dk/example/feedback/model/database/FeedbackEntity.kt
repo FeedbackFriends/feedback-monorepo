@@ -16,7 +16,7 @@ data class FeedbackEntity(
     override val emoji: Emoji? = null,
     override val thumbsUpThumpsDown: ThumbsUpThumpsDown? = null,
     override val opinion: Opinion? = null,
-    override val oneToTen: Int? = null,
+    override val zeroToTen: Int? = null,
     override val questionId: UUID,
     val participantId: String?,
     val seenByManager: Boolean,

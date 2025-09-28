@@ -12,6 +12,6 @@ interface Feedback {
     val emoji: Emoji?
     val thumbsUpThumpsDown: ThumbsUpThumpsDown?
     val opinion: Opinion?
-    val oneToTen: Int?
+    val zeroToTen: Int?
     val questionId: UUID
 }

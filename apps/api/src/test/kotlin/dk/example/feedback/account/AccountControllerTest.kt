@@ -417,7 +417,7 @@ class AccountControllerTest(
                     emoji = emoji,
                     thumbsUpThumpsDown = null,
                     opinion = null,
-                    oneToTen = null,
+                    zeroToTen = null,
                     questionId = it.id,
                     feedbackType = FeedbackType.Emoji
                 )

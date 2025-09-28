@@ -8,7 +8,7 @@ import dk.example.feedback.persistence.dao.utility.CommonColumnsTbl
 import dk.example.feedback.persistence.table.FeedbackTable.comment
 import dk.example.feedback.persistence.table.FeedbackTable.emoji
 import dk.example.feedback.persistence.table.FeedbackTable.manager
-import dk.example.feedback.persistence.table.FeedbackTable.oneToTen
+import dk.example.feedback.persistence.table.FeedbackTable.zeroToTen
 import dk.example.feedback.persistence.table.FeedbackTable.opinion
 import dk.example.feedback.persistence.table.FeedbackTable.participant
 import dk.example.feedback.persistence.table.FeedbackTable.question
@@ -32,7 +32,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * @property comment Optional textual comment.
  * @property emoji Optional emoji ([Emoji]).
  * @property thumbsUpThumpsDown Optional thumbs up/down ([ThumbsUpThumpsDown]).
- * @property oneToTen Optional numeric rating (1-10).
+ * @property zeroToTen Optional numeric rating (1-10).
  * @property opinion Optional opinion ([Opinion]).
  * @property question Foreign key to [QuestionTable.id].
  * @property manager Foreign key to [AccountTable.id] for the manager.
@@ -44,7 +44,7 @@ object FeedbackTable: CommonColumnsTbl("feedback") {
     val comment = varchar("comment", 255).nullable()
     val emoji = enumerationByName("emoji", 255, Emoji::class).nullable()
     val thumbsUpThumpsDown = enumerationByName("thumbs_up_thumps_down", 14, ThumbsUpThumpsDown::class).nullable()
-    val oneToTen = integer("zero_to_ten").nullable()
+    val zeroToTen = integer("zero_to_ten").nullable()
     val opinion = enumerationByName("opinion", 255, Opinion::class).nullable()
     val question = reference("question_id", QuestionTable, onDelete = ReferenceOption.CASCADE)
     val manager = reference(name = "manager_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)

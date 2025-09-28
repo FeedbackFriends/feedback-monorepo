@@ -12,7 +12,7 @@ data class FeedbackInput(
     override val emoji: Emoji?,
     override val thumbsUpThumpsDown: ThumbsUpThumpsDown?,
     override val opinion: Opinion?,
-    override val oneToTen: Int?,
+    override val zeroToTen: Int?,
     override val questionId: UUID,
     override val feedbackType: FeedbackType,
 ): Feedback

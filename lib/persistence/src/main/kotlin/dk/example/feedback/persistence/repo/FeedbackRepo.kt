@@ -32,7 +32,7 @@ class FeedbackRepo {
                 this.emoji = feedbackEntity.emoji
                 this.thumbsUpThumpsDown = feedbackEntity.thumbsUpThumpsDown
                 this.opinion = feedbackEntity.opinion
-                this.oneToTen = feedbackEntity.oneToTen
+                this.zeroToTen = feedbackEntity.zeroToTen
                 this.question = QuestionDao.findById(feedbackEntity.questionId)
                     ?: throw IllegalArgumentException("Question not found with id: ${feedbackEntity.questionId}")
                 this.manager = manager
@@ -49,7 +49,7 @@ class FeedbackRepo {
             FeedbackType.Emoji -> {
                 requireNotNull(emoji) { "Emoji is required for feedback type Emoji" }
                 check(thumbsUpThumpsDown == null) { "ThumbsUp/ThumpsDown is not required for feedback type Emoji" }
-                check(oneToTen == null) { "OneToTen is not required for feedback type Emoji" }
+                check(zeroToTen == null) { "OneToTen is not required for feedback type Emoji" }
                 check(opinion == null) { "Opinion is not required for feedback type Emoji" }
             }
 
@@ -57,14 +57,14 @@ class FeedbackRepo {
                 requireNotNull(comment) { "Comment is required for feedback type Comment" }
                 check(emoji == null) { "Emoji is not required for feedback type Comment" }
                 check(thumbsUpThumpsDown == null) { "ThumbsUp/ThumpsDown is not required for feedback type Comment" }
-                check(oneToTen == null) { "OneToTen is not required for feedback type Comment" }
+                check(zeroToTen == null) { "OneToTen is not required for feedback type Comment" }
                 check(opinion == null) { "Opinion is not required for feedback type Comment" }
             }
 
             FeedbackType.ThumpsUpThumpsDown -> {
                 requireNotNull(thumbsUpThumpsDown) { "ThumbsUp/ThumpsDown is required for feedback type ThumpsUpThumpsDown" }
                 check(emoji == null) { "Emoji is not required for feedback type ThumpsUpThumpsDown" }
-                check(oneToTen == null) { "OneToTen is not required for feedback type ThumpsUpThumpsDown" }
+                check(zeroToTen == null) { "OneToTen is not required for feedback type ThumpsUpThumpsDown" }
                 check(opinion == null) { "Opinion is not required for feedback type ThumpsUpThumpsDown" }
             }
 
@@ -72,11 +72,11 @@ class FeedbackRepo {
                 requireNotNull(opinion) { "Opinion is required for feedback type Opinion" }
                 check(emoji == null) { "Emoji is not required for feedback type Opinion" }
                 check(thumbsUpThumpsDown == null) { "ThumbsUp/ThumpsDown is not required for feedback type Opinion" }
-                check(oneToTen == null) { "OneToTen is not required for feedback type Opinion" }
+                check(zeroToTen == null) { "OneToTen is not required for feedback type Opinion" }
             }
 
             FeedbackType.OneToTen -> {
-                require(oneToTen in 1..10) { "OneToTen must be between 1 and 10 for feedback type OneToTen" }
+                require(zeroToTen in 1..10) { "OneToTen must be between 1 and 10 for feedback type OneToTen" }
                 check(emoji == null) { "Emoji is not required for feedback type OneToTen" }
                 check(thumbsUpThumpsDown == null) { "ThumbsUp/ThumpsDown is not required for feedback type OneToTen" }
                 check(opinion == null) { "Opinion is not required for feedback type OneToTen" }

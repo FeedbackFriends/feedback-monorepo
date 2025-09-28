@@ -15,7 +15,7 @@ class FeedbackDao(id: EntityID<UUID>): CommonColumns<FeedbackEntity>(id, Feedbac
     var comment by FeedbackTable.comment
     var emoji by FeedbackTable.emoji
     var thumbsUpThumpsDown by FeedbackTable.thumbsUpThumpsDown
-    var oneToTen by FeedbackTable.oneToTen
+    var zeroToTen by FeedbackTable.zeroToTen
     var opinion by FeedbackTable.opinion
     var question by QuestionDao referencedOn FeedbackTable.question
     var manager by AccountDao referencedOn FeedbackTable.manager
@@ -28,7 +28,7 @@ class FeedbackDao(id: EntityID<UUID>): CommonColumns<FeedbackEntity>(id, Feedbac
             comment = comment,
             emoji = emoji,
             thumbsUpThumpsDown = thumbsUpThumpsDown,
-            oneToTen = oneToTen,
+            zeroToTen = zeroToTen,
             opinion = opinion,
             questionId = question.id.value,
             id = id.value,
