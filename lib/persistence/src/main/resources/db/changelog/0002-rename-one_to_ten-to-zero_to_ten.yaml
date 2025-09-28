@@ -4,6 +4,7 @@ databaseChangeLog:
       author: nicolaidam
       preConditions:
         onFail: MARK_RAN
+        and:
           - columnExists:
               tableName: feedback
               columnName: one_to_ten
