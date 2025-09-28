@@ -1,4 +1,4 @@
-package dk.example.feedback.service.firebase
+package dk.example.feedback.firebase
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
@@ -10,9 +10,6 @@ import com.google.firebase.messaging.Aps
 import com.google.firebase.messaging.ApsAlert
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
-import dk.example.feedback.firebase.FeedbackReceivedNotification
-import dk.example.feedback.firebase.FirebaseService
-import dk.example.feedback.firebase.FirebaseUser
 import dk.example.feedback.model.enumerations.Role
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -30,7 +27,6 @@ class FirebaseServiceImpl : FirebaseService {
             val firebaseServiceAccount = FileInputStream(configFilePath)
             val options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(firebaseServiceAccount))
-                .setProjectId("feedback2-a4dd9") // TODO("Replace with your project ID")
                 .build()
             FirebaseApp.initializeApp(options)
             logger.info("FirebaseApp initialized successfully.")
