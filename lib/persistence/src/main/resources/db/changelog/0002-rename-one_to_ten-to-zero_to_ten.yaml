@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0002-rename-one_to_ten-to-zero_to_ten
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+          - columnExists:
+              tableName: feedback
+              columnName: one_to_ten
+      changes:
+        - renameColumn:
+            tableName: feedback
+            oldColumnName: one_to_ten
+            newColumnName: zero_to_ten
+            columnDataType: integer
+      rollback:
+        - renameColumn:
+            tableName: feedback
+            oldColumnName: zero_to_ten
+            newColumnName: one_to_ten
+            columnDataType: integer

@@ -44,7 +44,7 @@ object FeedbackTable: CommonColumnsTbl("feedback") {
     val comment = varchar("comment", 255).nullable()
     val emoji = enumerationByName("emoji", 255, Emoji::class).nullable()
     val thumbsUpThumpsDown = enumerationByName("thumbs_up_thumps_down", 14, ThumbsUpThumpsDown::class).nullable()
-    val oneToTen = integer("one_to_ten").nullable()
+    val oneToTen = integer("zero_to_ten").nullable()
     val opinion = enumerationByName("opinion", 255, Opinion::class).nullable()
     val question = reference("question_id", QuestionTable, onDelete = ReferenceOption.CASCADE)
     val manager = reference(name = "manager_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
