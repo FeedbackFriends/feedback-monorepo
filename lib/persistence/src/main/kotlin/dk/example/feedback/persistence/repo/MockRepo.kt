@@ -76,9 +76,19 @@ class MockRepo {
                 }
 
                 QuestionTable.insert {
-                    it[questionText] = "How was the event?"
+                    it[questionText] = "I am generally happy with my work life balance."
                     it[event] = eventId
-                    it[feedbackType] = FeedbackType.Emoji
+                    it[feedbackType] = FeedbackType.Opinion
+                    it[manager] = EntityID(testId, AccountTable)
+                    it[index] = 0
+                    it[lastUpdated] = OffsetDateTime.now(UTC)
+                    it[dateCreated] = OffsetDateTime.now(UTC)
+                }
+
+                QuestionTable.insert {
+                    it[questionText] = "Tell me how I can improve?"
+                    it[event] = eventId
+                    it[feedbackType] = FeedbackType.Comment
                     it[manager] = EntityID(testId, AccountTable)
                     it[index] = 0
                     it[lastUpdated] = OffsetDateTime.now(UTC)
@@ -89,6 +99,26 @@ class MockRepo {
                     it[questionText] = "How was the food?"
                     it[event] = eventId
                     it[feedbackType] = FeedbackType.Emoji
+                    it[manager] = EntityID(testId, AccountTable)
+                    it[index] = 1
+                    it[lastUpdated] = OffsetDateTime.now(UTC)
+                    it[dateCreated] = OffsetDateTime.now(UTC)
+                }
+
+                QuestionTable.insert {
+                    it[questionText] = "Do you want more feedbacksessions like this?"
+                    it[event] = eventId
+                    it[feedbackType] = FeedbackType.ThumpsUpThumpsDown
+                    it[manager] = EntityID(testId, AccountTable)
+                    it[index] = 1
+                    it[lastUpdated] = OffsetDateTime.now(UTC)
+                    it[dateCreated] = OffsetDateTime.now(UTC)
+                }
+
+                QuestionTable.insert {
+                    it[questionText] = "How happy are you from 0-10?"
+                    it[event] = eventId
+                    it[feedbackType] = FeedbackType.ZeroToTen
                     it[manager] = EntityID(testId, AccountTable)
                     it[index] = 1
                     it[lastUpdated] = OffsetDateTime.now(UTC)

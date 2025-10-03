@@ -1,21 +1,21 @@
 package dk.example.feedback.dto
 
-data class FeedbackSummaryDto(
-    val segmentationStats: FeedbackSegmentationStatsDto,
-    val countStats: FeedbackCountStatsDto,
+data class OverallFeedbackSummaryDto(
+    val segmentationStats: OverallFeedbackSegmentationStatsDto,
+    val countStats: OverallFeedbackCountStatsDto,
     val unseenCount: Int,
+    val totalUniqueParticipants: Int,
 )
 
-data class FeedbackCountStatsDto(
+data class OverallFeedbackCountStatsDto(
     val verySadCount: Int,
     val sadCount: Int,
     val happyCount: Int,
     val veryHappyCount: Int,
     val commentsCount: Int,
-    val uniqueParticipantFeedback: Int,
 )
 
-data class FeedbackSegmentationStatsDto(
+data class OverallFeedbackSegmentationStatsDto(
     val verySadPercentage: Double,
     val sadPercentage: Double,
     val happyPercentage: Double,

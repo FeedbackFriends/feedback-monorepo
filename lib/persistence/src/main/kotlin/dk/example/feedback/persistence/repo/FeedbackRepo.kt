@@ -75,7 +75,7 @@ class FeedbackRepo {
                 check(zeroToTen == null) { "OneToTen is not required for feedback type Opinion" }
             }
 
-            FeedbackType.OneToTen -> {
+            FeedbackType.ZeroToTen -> {
                 require(zeroToTen in 1..10) { "OneToTen must be between 1 and 10 for feedback type OneToTen" }
                 check(emoji == null) { "Emoji is not required for feedback type OneToTen" }
                 check(thumbsUpThumpsDown == null) { "ThumbsUp/ThumpsDown is not required for feedback type OneToTen" }
