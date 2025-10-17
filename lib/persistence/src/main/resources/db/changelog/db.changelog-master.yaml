@@ -14,3 +14,9 @@ databaseChangeLog:
   - include:
       file: 0002-rename-one_to_ten-to-zero_to_ten.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0003-update-feedback-type-length.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0004-update-thumps-up-thumps-down-length.yaml
+      relativeToChangelogFile: true

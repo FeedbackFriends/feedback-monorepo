@@ -3,8 +3,8 @@ package dk.example.feedback.dto
 data class OverallFeedbackSummaryDto(
     val segmentationStats: OverallFeedbackSegmentationStatsDto,
     val countStats: OverallFeedbackCountStatsDto,
-    val unseenCount: Int,
-    val totalUniqueParticipants: Int,
+    val unseenResponses: Int,
+    val responses: Int,
 )
 
 data class OverallFeedbackCountStatsDto(

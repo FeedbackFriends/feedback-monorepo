@@ -40,10 +40,10 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * @property seenByManager Whether the manager has seen this feedback.
  */
 object FeedbackTable: CommonColumnsTbl("feedback") {
-    val type = enumerationByName("type", 14, FeedbackType::class)
+    val type = enumerationByName("type", 255, FeedbackType::class)
     val comment = varchar("comment", 255).nullable()
     val emoji = enumerationByName("emoji", 255, Emoji::class).nullable()
-    val thumbsUpThumpsDown = enumerationByName("thumbs_up_thumps_down", 14, ThumbsUpThumpsDown::class).nullable()
+    val thumbsUpThumpsDown = enumerationByName("thumbs_up_thumps_down", 255, ThumbsUpThumpsDown::class).nullable()
     val zeroToTen = integer("zero_to_ten").nullable()
     val opinion = enumerationByName("opinion", 255, Opinion::class).nullable()
     val question = reference("question_id", QuestionTable, onDelete = ReferenceOption.CASCADE)

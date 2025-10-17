@@ -1,7 +1,6 @@
 package dk.example.feedback.dto
 
 data class QuestionFeedbackSummaryDto(
-    val unseenCount: Int,
     val emojiQuestionFeedbackSummary: EmojiQuestionFeedbackSummary? = null,
     val thumpsQuestionFeedbackSummary: ThumpsQuestionFeedbackSummary? = null,
     val opinionQuestionFeedbackSummary: OpinionQuestionFeedbackSummary? = null,
@@ -9,91 +8,55 @@ data class QuestionFeedbackSummaryDto(
 )
 
 data class ZeroToTenQuestionFeedbackSummary(
-    val zeroToTenFeedbackCountStats: ZeroToTenFeedbackCountStatsDto,
-    val zeroToTenFeedbackSegmentationStats: ZeroToTenFeedbackCountSegmentationStatsDto,
-)
-
-data class ZeroToTenFeedbackCountStatsDto(
-    val value0: Int,
-    val value1: Int,
-    val value2: Int,
-    val value3: Int,
-    val value4: Int,
-    val value5: Int,
-    val value6: Int,
-    val value7: Int,
-    val value8: Int,
-    val value9: Int,
-    val value10: Int,
-    val commentsCount: Int,
-)
-
-data class ZeroToTenFeedbackCountSegmentationStatsDto(
-    val value0Percentage: Double,
-    val value1Percentage: Double,
-    val value2Percentage: Double,
-    val value3Percentage: Double,
-    val value4Percentage: Double,
-    val value5Percentage: Double,
-    val value6Percentage: Double,
-    val value7Percentage: Double,
-    val value8Percentage: Double,
-    val value9Percentage: Double,
-    val value10Percentage: Double,
+    val countValue0: Int,
+    val countValue1: Int,
+    val countValue2: Int,
+    val countValue3: Int,
+    val countValue4: Int,
+    val countValue5: Int,
+    val countValue6: Int,
+    val countValue7: Int,
+    val countValue8: Int,
+    val countValue9: Int,
+    val countValue10: Int,
+    val percentageValue0: Double,
+    val percentageValue1: Double,
+    val percentageValue2: Double,
+    val percentageValue3: Double,
+    val percentageValue4: Double,
+    val percentageValue5: Double,
+    val percentageValue6: Double,
+    val percentageValue7: Double,
+    val percentageValue8: Double,
+    val percentageValue9: Double,
+    val percentageValue10: Double,
 )
 
 data class OpinionQuestionFeedbackSummary(
-    val opinionFeedbackCountStats: OpinionFeedbackCountStatsDto,
-    val opinionFeedbackSegmentationStats: OpinionFeedbackCountSegmentationStatsDto,
-)
-
-data class OpinionFeedbackCountStatsDto(
-    val stronglyAgree: Int,
-    val agree: Int,
-    val stronglyDisagree: Int,
-    val disagree: Int,
-    val commentsCount: Int,
-)
-
-data class OpinionFeedbackCountSegmentationStatsDto(
-    val stronglyAgreePercentage: Double,
-    val agreePercentage: Double,
-    val stronglyDisagreePercentage: Double,
-    val disagreePercentage: Double,
+    val countStronglyAgree: Int,
+    val countAgree: Int,
+    val countStronglyDisagree: Int,
+    val countDisagree: Int,
+    val percentageStronglyAgree: Double,
+    val percentageAgree: Double,
+    val percentageStronglyDisagree: Double,
+    val percentageDisagree: Double,
 )
 
 data class ThumpsQuestionFeedbackSummary(
-    val thumpsFeedbackCountStats: ThumpsFeedbackCountStatsDto,
-    val thumpsFeedbackSegmentationStats: ThumpsFeedbackCountSegmentationStatsDto,
-)
-
-data class ThumpsFeedbackCountStatsDto(
-    val upCount: Int,
-    val downCount: Int,
-    val commentsCount: Int,
-)
-
-data class ThumpsFeedbackCountSegmentationStatsDto(
-    val upPercentage: Double,
-    val downPercentage: Double,
+    val countUp: Int,
+    val countDown: Int,
+    val percentageUp: Double,
+    val percentageDown: Double,
 )
 
 data class EmojiQuestionFeedbackSummary(
-    val emojiFeedbackCountStats: EmojiFeedbackCountStatsDto,
-    val emojiFeedbackSegmentationStats: EmojiFeedbackSegmentationStatsDto,
-)
-
-data class EmojiFeedbackCountStatsDto(
-    val verySadCount: Int,
-    val sadCount: Int,
-    val happyCount: Int,
-    val veryHappyCount: Int,
-    val commentsCount: Int,
-)
-
-data class EmojiFeedbackSegmentationStatsDto(
-    val verySadPercentage: Double,
-    val sadPercentage: Double,
-    val happyPercentage: Double,
-    val veryHappyPercentage: Double,
+    val countVerySad: Int,
+    val countSad: Int,
+    val countHappy: Int,
+    val countVeryHappy: Int,
+    val percentageVerySad: Double,
+    val percentageSad: Double,
+    val percentageHappy: Double,
+    val percentageVeryHappy: Double,
 )
