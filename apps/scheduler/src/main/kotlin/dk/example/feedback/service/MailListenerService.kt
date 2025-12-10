@@ -1,5 +1,6 @@
 package dk.example.feedback.service
 
+import dk.example.feedback.FeedbackConfig
 import jakarta.mail.BodyPart
 import jakarta.mail.Folder
 import jakarta.mail.Message
@@ -28,7 +29,6 @@ import net.fortuna.ical4j.model.property.Organizer
 import net.fortuna.ical4j.model.property.Summary
 import org.eclipse.angus.mail.imap.IMAPFolder
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.InputStream
 import java.time.Instant
@@ -41,14 +41,11 @@ import kotlin.concurrent.thread
 
 @Service
 class MailListenerService(
-    @Value("\${mail.host}") private val host: String,
-    @Value("\${mail.port:993}") private val port: Int,
-    @Value("\${mail.username}") private val username: String,
-    @Value("\${mail.password}") private val password: String,
-    @Value("\${mail.folder:INBOX}") private val folderName: String,
+    private val feedbackConfig: FeedbackConfig,
 ) {
 
     private val logger = LoggerFactory.getLogger(MailListenerService::class.java)
+    private val mailSettings get() = feedbackConfig.mail
     private var store: Store? = null
     private var folder: IMAPFolder? = null
     @Volatile
@@ -71,17 +68,20 @@ class MailListenerService(
     }
 
     private fun connectAndListen() {
+        val settings = mailSettings
         val properties = Properties().apply {
             put("mail.store.protocol", "imaps")
-            put("mail.imaps.host", host)
-            put("mail.imaps.port", "$port")
+            put("mail.imaps.host", settings.host)
+            put("mail.imaps.port", "${settings.port}")
             put("mail.imaps.ssl.enable", "true")
         }
 
         val session = Session.getInstance(properties, null)
-        store = session.getStore("imaps").apply { connect(host, port, username, password) }
+        store = session.getStore("imaps").apply {
+            connect(settings.host, settings.port, settings.username, settings.password)
+        }
 
-        folder = (store?.getFolder(folderName) as? IMAPFolder)?.apply {
+        folder = (store?.getFolder(settings.folder) as? IMAPFolder)?.apply {
             open(Folder.READ_ONLY)
             addMessageCountListener(object : MessageCountAdapter() {
                 override fun messagesAdded(event: MessageCountEvent) {
@@ -90,7 +90,7 @@ class MailListenerService(
                     }
                 }
             })
-        } ?: throw MessagingException("Folder $folderName is not an IMAP folder")
+        } ?: throw MessagingException("Folder ${settings.folder} is not an IMAP folder")
 
         while (running && store?.isConnected == true) {
             try {
@@ -145,14 +145,23 @@ class MailListenerService(
     }
 
     private fun parseCalendarInvites(message: Message) {
-        val content = message.content
-        when (content) {
-            is Multipart -> parseMultipartInvites(content)
-            is String -> if (message.isMimeType("text/calendar")) {
-                content.byteInputStream().use { stream ->
+        when {
+            message.isMimeType("multipart/*") -> {
+                val content = message.content
+                if (content is Multipart) parseMultipartInvites(content)
+            }
+            message.isMimeType("text/calendar") -> {
+                message.inputStream.use { stream ->
                     logCalendarInvite(CalendarInviteParser.parse(stream))
                 }
             }
+            // Some providers hand back text/calendar as shared input streams without multipart.
+            message.contentType.contains("text/calendar", ignoreCase = true) -> {
+                message.inputStream.use { stream ->
+                    logCalendarInvite(CalendarInviteParser.parse(stream))
+                }
+            }
+            else -> logger.debug("No calendar content detected for subject={}", message.subject)
         }
     }
 
@@ -168,6 +177,8 @@ class MailListenerService(
                     .onFailure {
                         logger.warn("Failed to parse calendar invite from attachment {}", bodyPart.fileName, it)
                     }
+            } else {
+                logger.debug("Skipping non-calendar part at index={} type={}", index, bodyPart.contentType)
             }
         }
     }
@@ -188,8 +199,16 @@ class MailListenerService(
     }
 
     private fun BodyPart.isCalendarAttachment(): Boolean {
-        val isAttachment = disposition?.equals(Part.ATTACHMENT, ignoreCase = true) == true || fileName != null
-        return isAttachment && isMimeType("text/calendar")
+        val contentTypeLower = contentType.lowercase()
+        val hasCalendarMime = isMimeType("text/calendar") ||
+            contentTypeLower.contains("text/calendar") ||
+            contentTypeLower.contains("application/ics") ||
+            contentTypeLower.contains("application/calendar")
+        if (!hasCalendarMime && fileName?.lowercase()?.endsWith(".ics") != true) return false
+        // Accept both real attachments and inline calendar parts (some providers omit disposition/filename).
+        return disposition?.equals(Part.ATTACHMENT, ignoreCase = true) == true ||
+            fileName != null ||
+            hasCalendarMime
     }
 }
 
@@ -206,6 +225,7 @@ internal data class CalendarInvite(
 internal object CalendarInviteParser {
     private val builder = CalendarBuilder()
     private val timeZoneRegistry = TimeZoneRegistryFactory.getInstance().createRegistry()
+    private val ignoredAttendeeEmails = setOf("feedback@letsgrow.dk")
 
     fun parse(inputStream: InputStream): CalendarInvite {
         val calendar = builder.build(inputStream)
@@ -257,7 +277,14 @@ internal object CalendarInviteParser {
                     ?.removePrefix("MAILTO:")
                     ?.trim()
                     ?.takeIf { it.isNotEmpty() }
-            }.filterNot { email -> excludeEmail != null && email.equals(excludeEmail, ignoreCase = true) }
+            }.filterNot { email -> shouldIgnoreAttendee(email, excludeEmail) }
+
+    private fun shouldIgnoreAttendee(email: String, organizerEmail: String?): Boolean {
+        if (organizerEmail != null && email.equals(organizerEmail, ignoreCase = true)) {
+            return true
+        }
+        return ignoredAttendeeEmails.any { email.equals(it, ignoreCase = true) }
+    }
 
     private fun DtStart.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
         toOffsetDateTimeInternal(timeZoneRegistry)

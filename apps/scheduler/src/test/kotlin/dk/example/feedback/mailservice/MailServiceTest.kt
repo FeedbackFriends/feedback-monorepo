@@ -56,10 +56,7 @@ class MailServiceTest {
 
         assertThat(invite.title).isEqualTo("Cool møde")
         assertThat(invite.managerEmail).isEqualTo("nicolaidam96@gmail.com")
-        assertThat(invite.attendingEmails).containsExactly(
-            "contact@damofficial.com",
-            "feedback@letsgrow.dk",
-        )
+        assertThat(invite.attendingEmails).containsExactly("contact@damofficial.com")
         assertThat(invite.date).isEqualTo(expectedStart)
         assertThat(invite.durationInMinutes).isEqualTo(60)
         assertThat(invite.agenda).contains("Google Meet")

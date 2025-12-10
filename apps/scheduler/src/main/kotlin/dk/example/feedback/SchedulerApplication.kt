@@ -13,4 +13,3 @@ class SchedulerApplication
 fun main(args: Array<String>) {
     runApplication<SchedulerApplication>(*args)
 }
-

@@ -18,13 +18,13 @@ spring:
     console:
       enabled: true
       path: /h2-console
-mail:
-  host: ${IMAP_HOST:}
-  port: ${IMAP_PORT:}
-  username: ${IMAP_USERNAME:}
-  password: ${IMAP_PASSWORD:}
-  folder: ${IMAP_FOLDER:INBOX}
 feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
   firebase-config-path: ${FIREBASE_CONFIG_PATH}
   version: ${VERSION}
+  mail:
+    host: ${IMAP_HOST:}
+    port: ${IMAP_PORT:993}
+    username: ${IMAP_USERNAME:}
+    password: ${IMAP_PASSWORD:}
+    folder: ${IMAP_FOLDER:INBOX}
