@@ -25,6 +25,7 @@ dependencies {
 
     implementation(libs.bundles.jackson)
     implementation(libs.kotlin.reflect)
+    implementation(libs.ical4j)
 
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)

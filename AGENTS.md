@@ -9,9 +9,10 @@
 
 ## Build, Test, and Development Commands
 - `./gradlew clean build` – compile all modules and run the full test suite (warnings fail the build).
-- `./gradlew test` or `./gradlew :apps:api:test` – run all tests or scope to the API module; uses in-memory H2 by default.
-- `./gradlew :apps:api:bootRun` – start the API locally on 8080 (set `SPRING_DATASOURCE_URL`, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH` to target real services).
-- `./gradlew :apps:scheduler:bootRun` – start the scheduler service; shares the same env vars as the API.
+- `./gradlew test` or `./gradlew :api:test` – run all tests or scope to the API module; uses in-memory H2 by default.
+- `./gradlew :scheduler:test` or `./gradlew :scheduler:compileKotlin` – run scheduler tests or just compile the scheduler (useful for quick checks).
+- `./gradlew :api:bootRun` – start the API locally on 8080 (set `SPRING_DATASOURCE_URL`, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH` to target real services).
+- `./gradlew :scheduler:bootRun` – start the scheduler service; shares the same env vars as the API.
 - `./gradlew jibDockerBuild` (per app) builds a container image if Docker is available.
 
 ## Coding Style & Naming Conventions

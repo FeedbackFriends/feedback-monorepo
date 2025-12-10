@@ -10,17 +10,30 @@ import jakarta.mail.Session
 import jakarta.mail.Store
 import jakarta.mail.event.MessageCountAdapter
 import jakarta.mail.event.MessageCountEvent
+import net.fortuna.ical4j.data.CalendarBuilder
+import net.fortuna.ical4j.model.Parameter
+import net.fortuna.ical4j.model.Property
+import net.fortuna.ical4j.model.TimeZoneRegistry
+import net.fortuna.ical4j.model.TimeZoneRegistryFactory
+import net.fortuna.ical4j.model.component.VEvent
+import net.fortuna.ical4j.model.parameter.TzId
+import net.fortuna.ical4j.model.property.Attendee
+import net.fortuna.ical4j.model.property.DateProperty
+import net.fortuna.ical4j.model.property.Description
+import net.fortuna.ical4j.model.property.Duration
+import net.fortuna.ical4j.model.property.DtEnd
+import net.fortuna.ical4j.model.property.DtStart
+import net.fortuna.ical4j.model.property.Location
+import net.fortuna.ical4j.model.property.Organizer
+import net.fortuna.ical4j.model.property.Summary
 import org.eclipse.angus.mail.imap.IMAPFolder
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.InputStream
-import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.Instant
 import java.time.OffsetDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import java.time.ZoneOffset
 import java.util.Properties
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
@@ -161,11 +174,16 @@ class MailListenerService(
 
     private fun logCalendarInvite(invite: CalendarInvite) {
         logger.info(
-            "Calendar invite parsed date={} title={} description={} attendees={}",
-            invite.formattedStart(),
-            invite.summary.orEmpty(),
-            invite.description.orEmpty(),
-            invite.attendees.joinToString(),
+            "Parsed calendar invite: {}",
+            mapOf(
+                "title" to invite.title,
+                "agenda" to invite.agenda,
+                "date" to invite.date,
+                "durationMinutes" to invite.durationInMinutes,
+                "location" to invite.location,
+                "managerEmail" to invite.managerEmail,
+                "attendees" to invite.attendingEmails,
+            ),
         )
     }
 
@@ -176,97 +194,98 @@ class MailListenerService(
 }
 
 internal data class CalendarInvite(
-    val start: ZonedDateTime?,
-    val summary: String?,
-    val description: String?,
-    val attendees: List<String>,
-) {
-    fun formattedStart(): String = start?.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) ?: "unknown"
-}
+    val title: String,
+    val agenda: String?,
+    val date: OffsetDateTime,
+    val durationInMinutes: Int,
+    val location: String?,
+    val managerEmail: String,
+    val attendingEmails: List<String>,
+)
 
 internal object CalendarInviteParser {
-    private val localDateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss")
-    private val offsetDateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmssX")
+    private val builder = CalendarBuilder()
+    private val timeZoneRegistry = TimeZoneRegistryFactory.getInstance().createRegistry()
 
     fun parse(inputStream: InputStream): CalendarInvite {
-        val lines = inputStream.bufferedReader().use { reader ->
-            unfoldLines(reader.readLines())
-        }
-        var summary: String? = null
-        var description: String? = null
-        var start: ZonedDateTime? = null
-        val attendees = mutableListOf<String>()
+        val calendar = builder.build(inputStream)
+        val event = calendar.components
+            .filterIsInstance<VEvent>()
+            .firstOrNull() ?: throw IllegalArgumentException("No VEVENT found in calendar invite")
 
-        lines.forEach { line ->
-            when {
-                line.startsWith("SUMMARY", ignoreCase = true) -> summary = line.substringAfter(":", "").trim()
-                line.startsWith("DESCRIPTION", ignoreCase = true) -> {
-                    val raw = line.substringAfter(":", "")
-                    description = unescapeText(raw).trim()
-                }
-                line.startsWith("DTSTART", ignoreCase = true) -> {
-                    val meta = line.substringBefore(":", "")
-                    val value = line.substringAfter(":", "")
-                    start = parseStartDate(meta, value)
-                }
-                line.startsWith("ATTENDEE", ignoreCase = true) -> {
-                    val attendeeValue = line.substringAfter(":", "")
-                    extractEmail(attendeeValue)?.let { attendees += it }
-                }
-            }
-        }
+        val start = (event.getProperty(Property.DTSTART) as? DtStart)
+            ?.toOffsetDateTime(timeZoneRegistry)
+            ?: throw IllegalArgumentException("Missing DTSTART in calendar invite")
 
-        return CalendarInvite(start, summary, description, attendees)
+        val end = (event.getProperty(Property.DTEND) as? DtEnd)
+            ?.toOffsetDateTime(timeZoneRegistry)
+
+        val durationMinutes = (event.getProperty(Property.DURATION) as? Duration).toMinutes()
+            ?: end?.let { java.time.Duration.between(start, it).toMinutes().toInt() }
+            ?: 0
+
+        val organizerEmail = (event.getProperty(Property.ORGANIZER) as? Organizer).email()
+            ?: throw IllegalArgumentException("Missing organizer in calendar invite")
+
+        return CalendarInvite(
+            title = (event.getProperty(Property.SUMMARY) as? Summary)?.value.orEmpty(),
+            agenda = (event.getProperty(Property.DESCRIPTION) as? Description)?.value,
+            date = start,
+            durationInMinutes = durationMinutes,
+            location = (event.getProperty(Property.LOCATION) as? Location)?.value,
+            managerEmail = organizerEmail,
+            attendingEmails = event.attendeeEmails(excludeEmail = organizerEmail),
+        )
     }
 
-    private fun parseStartDate(meta: String, value: String): ZonedDateTime? {
-        val zoneId = meta.substringAfter("TZID=", "").takeIf { it.isNotBlank() }
-        return parseDateTime(value, zoneId)
+    private fun Duration?.toMinutes(): Int? = this?.duration?.let {
+        runCatching { java.time.Duration.from(it).toMinutes().toInt() }.getOrNull()
     }
 
-    private fun parseDateTime(value: String, zoneId: String?): ZonedDateTime? {
-        val zone = zoneId?.let { safeZone(it) } ?: ZoneId.systemDefault()
-        return when {
-            value.endsWith("Z") -> runCatching {
-                OffsetDateTime.parse(value, offsetDateTimeFormatter).atZoneSameInstant(zone)
-            }.getOrNull()
-            value.length == 8 -> runCatching {
-                LocalDate.parse(value, DateTimeFormatter.BASIC_ISO_DATE).atStartOfDay(zone)
-            }.getOrNull()
-            else -> runCatching {
-                LocalDateTime.parse(value, localDateTimeFormatter).atZone(zone)
-            }.getOrNull()
+    private fun Organizer?.email(): String? =
+        this?.calAddress?.schemeSpecificPart
+            ?.removePrefix("mailto:")
+            ?.removePrefix("MAILTO:")
+            ?.trim()
+            ?.takeIf { it.isNotEmpty() }
+
+    private fun VEvent.attendeeEmails(excludeEmail: String?): List<String> =
+        properties.getProperties<Attendee>(Property.ATTENDEE)
+            .mapNotNull { attendee ->
+                attendee.calAddress?.schemeSpecificPart
+                    ?.removePrefix("mailto:")
+                    ?.removePrefix("MAILTO:")
+                    ?.trim()
+                    ?.takeIf { it.isNotEmpty() }
+            }.filterNot { email -> excludeEmail != null && email.equals(excludeEmail, ignoreCase = true) }
+
+    private fun DtStart.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
+        toOffsetDateTimeInternal(timeZoneRegistry)
+
+    private fun DtEnd.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
+        toOffsetDateTimeInternal(timeZoneRegistry)
+
+    private fun DtStart.toOffsetDateTimeInternal(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
+        (this as DateProperty).toOffsetDateTime(timeZoneRegistry)
+
+    private fun DtEnd.toOffsetDateTimeInternal(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
+        (this as DateProperty).toOffsetDateTime(timeZoneRegistry)
+
+    private fun DateProperty.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? {
+        val zone = timeZone?.let { tz ->
+            runCatching { tz.toZoneId() }.getOrNull()
+                ?: ZoneOffset.ofTotalSeconds(tz.getOffset(date?.time ?: System.currentTimeMillis()) / 1000)
         }
-    }
-
-    private fun safeZone(zoneId: String): ZoneId =
-        runCatching { ZoneId.of(zoneId) }.getOrDefault(ZoneId.systemDefault())
-
-    private fun extractEmail(attendeeValue: String): String? {
-        val mailtoIndex = attendeeValue.lowercase().indexOf("mailto:")
-        val email = if (mailtoIndex >= 0) {
-            attendeeValue.substring(mailtoIndex + "mailto:".length)
-        } else {
-            attendeeValue
-        }
-        return email.trim().takeIf { it.isNotBlank() }
-    }
-
-    private fun unescapeText(value: String): String =
-        value.replace("\\n", "\n").replace("\\,", ",")
-
-    private fun unfoldLines(lines: List<String>): List<String> {
-        val unfolded = mutableListOf<String>()
-        lines.forEach { raw ->
-            val line = raw.trimEnd('\r')
-            if (line.startsWith(" ") || line.startsWith("\t")) {
-                if (unfolded.isNotEmpty()) {
-                    unfolded[unfolded.lastIndex] = unfolded.last() + line.trimStart()
+            ?: (parameters.getParameter(Parameter.TZID) as? TzId)
+                ?.value
+                ?.let { zoneId ->
+                    timeZoneRegistry.getTimeZone(zoneId)?.let { tz ->
+                        runCatching { tz.toZoneId() }.getOrNull()
+                    }
                 }
-            } else {
-                unfolded.add(line)
-            }
-        }
-        return unfolded
+            ?: ZoneOffset.UTC
+        val dateValue = date ?: return null
+        val instant = Instant.ofEpochMilli(dateValue.time)
+        return instant.atZone(zone).toOffsetDateTime()
     }
 }

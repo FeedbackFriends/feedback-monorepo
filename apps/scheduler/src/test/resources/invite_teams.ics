@@ -1,0 +1,162 @@
+BEGIN:VCALENDAR
+METHOD:REQUEST
+PRODID:Microsoft Exchange Server 2010
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:Romance Standard Time
+BEGIN:STANDARD
+DTSTART:16010101T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+ORGANIZER;CN=Torben Weihe Dam:mailto:twd@tdcnet.dk
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Dorte Lind
+ egaard Madsen:mailto:dlm@tdcnet.dk
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Nicolai:ma
+ ilto:nicolaidam96@gmail.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Nabyendu G
+ hosh:mailto:nabg@nuuday.dk
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Harish Tri
+ pathi:mailto:HTR@nuuday.dk
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Sanjit Das
+ :mailto:sjjd@nuuday.dk
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Michael Fr
+ ost:mailto:MIF@nuuday.dk
+ATTACH:CID:E45004254ABBF649BA7F2751A1C16631@eurprd03.prod.outlook.com
+DESCRIPTION;LANGUAGE=da-DK:Hi all\nLet us see what is missing\, if anything
+  ?\nBR Torben\n\nFra: Dorte Lindegaard Madsen dlm@tdcnet.dk<mailto:dlm@tdc
+ net.dk>\nSendt: 8. oktober 2025 14:50\nTil: Nicolai Wium NIWI@nuuday.dk<ma
+ ilto:NIWI@nuuday.dk>\; Nabyendu Ghosh nabg@nuuday.dk<mailto:nabg@nuuday.dk
+ >\; Harish Tripathi HTR@nuuday.dk<mailto:HTR@nuuday.dk>\; Sanjit Das sjjd@
+ nuuday.dk<mailto:sjjd@nuuday.dk>\; Torben Weihe Dam twd@tdcnet.dk<mailto:t
+ wd@tdcnet.dk>\nCc: Michael Frost MIF@nuuday.dk<mailto:MIF@nuuday.dk>\nEmne
+ : SV: 17538 - BLR 110179 / SR 110279 POI events must be resend/if changed(
+ Rettet) - FOM-3193\n\nHi all\n\nNow I have tested below orders successfull
+ y. But I think we need a meeting to agree on how to complete the test.\n\n
+ In most cases I have got more updates at 3806 task but I expect that´s du
+ e to vlan are forced changed by Peter Byg and that´s actually a bit diffi
+ cult to do.\n•       EB600085 102131385  - create eBSA – POI inner VLA
+ N-ID: 2807/2808 POI outer VLAN-ID: 1102 POI: HB704030\n•       EF101492 
+ 102121739 – create fBSA - POI inner VLAN: 2151/1101 POI outer VLAN: 3002
+  POI: HB705540\n•       EF 104164 102129493 – create fBSA : POI inner 
+ VLAN-ID: 2795/2797 POI outer VLAN-ID: 1102 POI: HB704030\n•       EF1041
+ 69 102129499 – change fBSA: POI inner VLAN-ID: 3798/3799 POI outer VLAN-
+ ID: 1103 POI: HB704030 change order itself allocate new vlan different fro
+ m original create order: POI inner VLAN-ID: 2796 POI outer VLAN-ID: 1102 P
+ OI: HB704030\n•       ER101536 102129506 - create EWII fBSA – inner vl
+ an updated twice from 2949 to 2952 at 6.10.25 and again to 2953 at 7.10.25
+ .  .\nI need help to complete remaining testcases if needed:\n•       Ch
+ ange order in general to test 5604. Only succeeded in creating a fBSA chan
+ ge order having 3806 POI allocation task.\n•       I need some help to c
+ reate a VULA order as the addresses I have got for test doesn´t work. Pls
+ . let me know which ISP to use and if someone have an address working\, th
+ en pls. let me know.\n\nHere is an example of event overview\n\nAnd how th
+ e vlan info looks like in the updated task-status-change-event for 3806\n\
+ n[X]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIn general Vlan info also looks the 
+ same in CU orderlines as vlan changes has been updated\n20        A       
+ POI INNER VLAN-ID               061070000\n21   T   A  1  2953            
+                                   061070000\n22        A       POI OUTER V
+ LAN-ID:             061080000\n23   T   A  1  102                         
+                        061080000\n24        A       FYSISK POI:           
+                     061090000\n25   T   A  1  HB705601                    
+               061090000\n\n/Dorte\nFra: Dorte Lindegaard Madsen\nSendt: 29
+ . september 2025 13:44\nTil: Nicolai Wium <NIWI@nuuday.dk<mailto:NIWI@nuud
+ ay.dk>>\; Nabyendu Ghosh <nabg@nuuday.dk<mailto:nabg@nuuday.dk>>\; Harish 
+ Tripathi <HTR@nuuday.dk<mailto:HTR@nuuday.dk>>\; Sanjit Das <sjjd@nuuday.d
+ k<mailto:sjjd@nuuday.dk>>\; Torben Weihe Dam <twd@tdcnet.dk<mailto:twd@tdc
+ net.dk>>\nCc: Michael Frost <MIF@nuuday.dk<mailto:MIF@nuuday.dk>>\nEmne: S
+ V: 17538 - BLR 110179 / SR 110279 POI events must be resend/if changed(Ret
+ tet) - FOM-3193\n\nHi Nicolai\n\nNow I have created the change order direc
+ tly in CU and still no POI allocation task at the change order\n102129850 
+ ER 10 15 37 adding 32 MAC addresses\n102129850 ER 10 15 37   4050 Dato til
+  Tot   HR   OIMO   011225\n102129850 ER 10 15 37   5604 Complex Change HR 
+   TDCNET 011225 0540-0640\n102129850 ER 10 15 37    998 Fiktiv Booking HR 
+   FRUKK  011225 0800-1500\n\n\n/Dorte\n\nFra: Nicolai Wium <NIWI@nuuday.dk
+ <mailto:NIWI@nuuday.dk>>\nSendt: 29. september 2025 09:39\nTil: Nabyendu G
+ hosh <nabg@nuuday.dk<mailto:nabg@nuuday.dk>>\; Dorte Lindegaard Madsen <dl
+ m@tdcnet.dk<mailto:dlm@tdcnet.dk>>\; Harish Tripathi <HTR@nuuday.dk<mailto
+ :HTR@nuuday.dk>>\; Sanjit Das <sjjd@nuuday.dk<mailto:sjjd@nuuday.dk>>\; To
+ rben Weihe Dam <twd@tdcnet.dk<mailto:twd@tdcnet.dk>>\nCc: Michael Frost <M
+ IF@nuuday.dk<mailto:MIF@nuuday.dk>>\nEmne: RE: 17538 - BLR 110179 / SR 110
+ 279 POI events must be resend/if changed(Rettet) - FOM-3193\n\n\nIf you us
+ e OPAK it should add it\, but Columbine might be different.\n\n/Nicolai\n\
+ nFrom: Nabyendu Ghosh <nabg@nuuday.dk<mailto:nabg@nuuday.dk>>\nSent: 26. s
+ eptember 2025 16:06\nTo: Dorte Lindegaard Madsen <dlm@tdcnet.dk<mailto:dlm
+ @tdcnet.dk>>\; Nicolai Wium <NIWI@nuuday.dk<mailto:NIWI@nuuday.dk>>\; Hari
+ sh Tripathi <HTR@nuuday.dk<mailto:HTR@nuuday.dk>>\; Sanjit Das <sjjd@nuuda
+ y.dk<mailto:sjjd@nuuday.dk>>\; Torben Weihe Dam <twd@tdcnet.dk<mailto:twd@
+ tdcnet.dk>>\nCc: Michael Frost <MIF@nuuday.dk<mailto:MIF@nuuday.dk>>\nSubj
+ ect: RE: 17538 - BLR 110179 / SR 110279 POI events must be resend/if chang
+ ed(Rettet) - FOM-3193\n\n\nThanks Dorte.\n\nHi @Nicolai Wium<mailto:NIWI@n
+ uuday.dk>\,\n\nCould you please have a look at the below order: 102129519\
+ n\nHere even after adding 32 mac address as part of change order\, 06 107 
+ 00\, 06 108 00 and 06 109 00 is not added on change order line.\n\n\nThank
+ s & Regards\nNabyendu Ghosh\n\n\n_________________________________________
+ _______________________________________\nMicrosoft Teams Har du brug for h
+ jælp?<https://aka.ms/JoinTeamsMeeting?omkt=da-DK>\nDeltag i mødet nu<htt
+ ps://teams.microsoft.com/l/meetup-join/19%3ameeting_NjM2NjcyNDItZWZhNi00Nz
+ I1LWI3ZjAtNmY4M2UxYTczMWVh%40thread.v2/0?context=%7b%22Tid%22%3a%22e8dcf6e
+ 6-3acc-4af9-9cb2-77f688cb688b%22%2c%22Oid%22%3a%22da73ce42-e9ca-4400-8c80-
+ 90c9c9adb960%22%7d>\nMøde-id: 342 999 820 569\nAdgangskode: 7sn2Fy3b\n[X]
+ \nTilmeld dig på en enhed til videomøder\nLejernøgle: tdcnet@m.webex.co
+ m\nVideo-id: 127 715 337 9\nFlere oplysninger<https://www.webex.com/msteam
+ s?confid=1277153379&tenantkey=tdcnet&domain=m.webex.com>\nFor arrangører:
+  Mødeindstillinger<https://teams.microsoft.com/meetingOptions/?organizerI
+ d=da73ce42-e9ca-4400-8c80-90c9c9adb960&tenantId=e8dcf6e6-3acc-4af9-9cb2-77
+ f688cb688b&threadId=19_meeting_NjM2NjcyNDItZWZhNi00NzI1LWI3ZjAtNmY4M2UxYTc
+ zMWVh@thread.v2&messageId=0&language=da-DK>\n_____________________________
+ ___________________________________________________\n\n\n
+UID:040000008200E00074C5B7101A82E0080000000020DF0252C639DC01000000000000000
+ 010000000705D305E96FEEF4E8A053C421FDCA07F
+SUMMARY;LANGUAGE=da-DK:17538 - BLR 110179 / SR 110279 POI events must be re
+ send/if changed(Rettet) - FOM-3193
+DTSTART;TZID=Romance Standard Time:20251027T093000
+DTEND;TZID=Romance Standard Time:20251027T100000
+CLASS:PUBLIC
+PRIORITY:5
+DTSTAMP:20251010T071935Z
+TRANSP:OPAQUE
+STATUS:CONFIRMED
+SEQUENCE:0
+LOCATION;LANGUAGE=da-DK:Microsoft Teams-møde
+X-MICROSOFT-CDO-APPT-SEQUENCE:0
+X-MICROSOFT-CDO-OWNERAPPTID:-1712674839
+X-MICROSOFT-CDO-BUSYSTATUS:TENTATIVE
+X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-CDO-INSTTYPE:0
+X-MICROSOFT-SKYPETEAMSMEETINGURL:https://teams.microsoft.com/l/meetup-join/
+ 19%3ameeting_NjM2NjcyNDItZWZhNi00NzI1LWI3ZjAtNmY4M2UxYTczMWVh%40thread.v2/
+ 0?context=%7b%22Tid%22%3a%22e8dcf6e6-3acc-4af9-9cb2-77f688cb688b%22%2c%22O
+ id%22%3a%22da73ce42-e9ca-4400-8c80-90c9c9adb960%22%7d
+X-MICROSOFT-SCHEDULINGSERVICEUPDATEURL:https://api.scheduler.teams.microsof
+ t.com/teams/e8dcf6e6-3acc-4af9-9cb2-77f688cb688b/da73ce42-e9ca-4400-8c80-9
+ 0c9c9adb960/19_meeting_NjM2NjcyNDItZWZhNi00NzI1LWI3ZjAtNmY4M2UxYTczMWVh@th
+ read.v2/0
+X-MICROSOFT-SKYPETEAMSPROPERTIES:{"cid":"19:meeting_NjM2NjcyNDItZWZhNi00NzI
+ 1LWI3ZjAtNmY4M2UxYTczMWVh@thread.v2"\,"private":true\,"type":0\,"mid":0\,"
+ rid":0\,"uid":null}
+X-MICROSOFT-DONOTFORWARDMEETING:FALSE
+X-MICROSOFT-DISALLOW-COUNTER:FALSE
+X-MICROSOFT-REQUESTEDATTENDANCEMODE:DEFAULT
+X-MICROSOFT-ISRESPONSEREQUESTED:TRUE
+X-MICROSOFT-LOCATIONS:[ { "DisplayName" : "Microsoft Teams-møde"\, "Locati
+ onAnnotation" : ""\, "LocationSource" : 0\, "Unresolved" : false\, "Locati
+ onUri" : "" } ]
+BEGIN:VALARM
+DESCRIPTION:REMINDER
+TRIGGER;RELATED=START:-PT15M
+ACTION:DISPLAY
+END:VALARM
+END:VEVENT
+END:VCALENDAR

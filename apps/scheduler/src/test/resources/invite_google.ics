@@ -1,0 +1,57 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Europe/Copenhagen
+X-LIC-LOCATION:Europe/Copenhagen
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:GMT+2
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:GMT+1
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Copenhagen:20251211T103000
+DTEND;TZID=Europe/Copenhagen:20251211T113000
+DTSTAMP:20251210T192726Z
+ORGANIZER;CN=Nicolai Dam:mailto:nicolaidam96@gmail.com
+UID:7f6jsda5fq8nnhogk4epaollip@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=TRUE
+ ;CN=Nicolai Dam;X-NUM-GUESTS=0:mailto:nicolaidam96@gmail.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=contact@damofficial.com;X-NUM-GUESTS=0:mailto:contact@damofficial.c
+ om
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=feedback@letsgrow.dk;X-NUM-GUESTS=0:mailto:feedback@letsgrow.dk
+X-GOOGLE-CONFERENCE:https://meet.google.com/hmz-wghi-sqr
+X-MICROSOFT-CDO-OWNERAPPTID:674115295
+CREATED:20251210T192723Z
+DESCRIPTION:-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~::~:~::-\nDeltag via Google Meet: https://meet.google.com/h
+ mz-wghi-sqr\n\nFå flere oplysninger om Meet på: https://support.google.com/
+ a/users/answer/9282720\n\nRediger ikke dette afsnit.\n-::~:~::~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-
+LAST-MODIFIED:20251210T192723Z
+LOCATION:https://meet.google.com/hmz-wghi-sqr
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Cool møde
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:This is an event reminder
+TRIGGER:-P0DT0H30M0S
+END:VALARM
+END:VEVENT
+END:VCALENDAR
