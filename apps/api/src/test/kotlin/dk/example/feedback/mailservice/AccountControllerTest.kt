@@ -1,4 +1,4 @@
-package dk.example.feedback.account
+package dk.example.feedback.mailservice
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule

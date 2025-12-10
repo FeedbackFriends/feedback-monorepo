@@ -1,0 +1,74 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Europe/Oslo
+X-LIC-LOCATION:Europe/Oslo
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:GMT+2
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:GMT+1
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Oslo:20251016T100000
+DTEND;TZID=Europe/Oslo:20251016T110000
+DTSTAMP:20250929T060952Z
+ORGANIZER;CN=Visma Learn:mailto:visma.com_43d5pqqnaqi5p0co1d5nt0317g@group.
+ calendar.google.com
+UID:30cef9csl9j9t2c34pngtgkncf@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=Nicolai Dam;X-NUM-GUESTS=0:mailto:nicolai.dam@visma.com
+X-MICROSOFT-CDO-OWNERAPPTID:-1607790808
+CREATED:20250916T091136Z
+DESCRIPTION:<p dir="ltr">Welcome to <a href="https://space.visma.com/pages/
+ 1h2cvu8gp63bdf2rbn/VismaTalks/1hkgi27mao5hup6sb4" target="_blank"><u><u><u>
+ <u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u><u>
+ <u><u><u>Visma Talks</u></u></u></u></u></u></u></u></u></u></u></u></u></u
+ ></u></u></u></u></u></u></u></u></u></u></u></u></u></u></u></u></u></a>! 
+ 💬</p><p>Topic 📑 AI-Driven Sales &amp\; Marketing: <b>Lessons learned from
+  Appical</b></p><p><strong>Join us for a first-hand look at how Appical is 
+ using AI to transform sales and marketing.</strong><br>Managing Director<a 
+ href="https://www.linkedin.com/in/wietskevanhees/" target="_blank"> <strong
+ >Wietske van Hees</strong></a> will share how her team experiments with AI 
+ to drive smarter prospecting\, personalized outreach\, and automated proces
+ ses that deliver measurable results.  </p><p><a href="https://www.appical.c
+ om/" target="_blank">Appical </a>has been experimenting with AI not just to
+  improve efficiency but to drive measurable impact across sales and marketi
+ ng. At their flagship event\, Onboard Amsterdam\, the team combined multipl
+ e AI tools: Clay\, HeyReach\, ChatGPT - to experiment with smart prospectin
+ g\, personalized outreach\, and automated marketing processes. The results 
+ showed how AI can maximize the funnel and create meaningful engagement\, ev
+ en when scaling events was previously under scrutiny.</p><p>In this session
+ \, Wietske will share:</p><ul><li><p>An introduction to Appical and her rol
+ e as MD</p></li><li><p>How sales and marketing teams are structured and ena
+ bled with AI</p></li><li><p>Key tools (Clay\, Apollo\, HeyReach) and use ca
+ ses delivering the biggest wins</p></li><li><p>Lessons learned from integra
+ ting AI into daily work</p></li></ul><p></p><p><br></p>\n\n-::~:~::~:~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-\nWa
+ tch Google Meet live stream: https://stream.meet.google.com/stream/0c267ab4
+ -01ef-4b35-87d3-658a640234c4\n\nLearn more about Meet at: https://support.g
+ oogle.com/a/users/answer/9282720\n\nPlease do not edit this section.\n-::~:
+ ~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:
+ :~:~::-
+LAST-MODIFIED:20250929T060949Z
+LOCATION:https://stream.meet.google.com/stream/0c267ab4-01ef-4b35-87d3-658a
+ 640234c4
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:[Live stream] Visma Talk: AI-Driven Sales & Marketing: Lessons from
+  Appical’s MD
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
