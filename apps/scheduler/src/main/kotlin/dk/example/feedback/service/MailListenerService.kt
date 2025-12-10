@@ -3,12 +3,10 @@ package dk.example.feedback.service
 import jakarta.mail.Folder
 import jakarta.mail.Message
 import jakarta.mail.MessagingException
-import jakarta.mail.Multipart
 import jakarta.mail.Session
 import jakarta.mail.Store
 import jakarta.mail.event.MessageCountAdapter
 import jakarta.mail.event.MessageCountEvent
-import jakarta.mail.internet.MimeMultipart
 import org.eclipse.angus.mail.imap.IMAPFolder
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -66,10 +64,9 @@ class MailListenerService(
                 override fun messagesAdded(event: MessageCountEvent) {
                     event.messages.forEach { message ->
                         logger.info(
-                            "Received email from={} subject={} body={}",
+                            "Received email from={} subject={}",
                             message.from?.joinToString(),
                             message.subject,
-                            extractText(message)
                         )
                     }
                 }
@@ -84,32 +81,6 @@ class MailListenerService(
                 break
             }
         }
-    }
-
-    private fun extractText(message: Message): String {
-        return try {
-            when (val content = message.content) {
-                is String -> content
-                is Multipart -> extractTextFromMultipart(content)
-                else -> content?.toString() ?: ""
-            }
-        } catch (ex: Exception) {
-            logger.warn("Failed to read email body", ex)
-            ""
-        }
-    }
-
-    private fun extractTextFromMultipart(multipart: Multipart): String {
-        val builder = StringBuilder()
-        for (i in 0 until multipart.count) {
-            val part = multipart.getBodyPart(i)
-            when (val content = part.content) {
-                is String -> builder.appendLine(content)
-                is MimeMultipart -> builder.appendLine(extractTextFromMultipart(content))
-                is Multipart -> builder.appendLine(extractTextFromMultipart(content))
-            }
-        }
-        return builder.toString().trim()
     }
 
     private fun closeResources() {
