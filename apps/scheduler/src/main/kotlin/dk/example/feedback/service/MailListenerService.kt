@@ -1,6 +1,9 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.FeedbackConfig
+import dk.example.feedback.persistence.pincodegenerator.PinCodeGenerator
+import dk.example.feedback.persistence.repo.AccountRepo
+import dk.example.feedback.persistence.repo.EventRepo
 import jakarta.mail.BodyPart
 import jakarta.mail.Folder
 import jakarta.mail.Message
@@ -11,37 +14,19 @@ import jakarta.mail.Session
 import jakarta.mail.Store
 import jakarta.mail.event.MessageCountAdapter
 import jakarta.mail.event.MessageCountEvent
-import net.fortuna.ical4j.data.CalendarBuilder
-import net.fortuna.ical4j.model.Parameter
-import net.fortuna.ical4j.model.Property
-import net.fortuna.ical4j.model.TimeZoneRegistry
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory
-import net.fortuna.ical4j.model.component.VEvent
-import net.fortuna.ical4j.model.parameter.TzId
-import net.fortuna.ical4j.model.property.Attendee
-import net.fortuna.ical4j.model.property.DateProperty
-import net.fortuna.ical4j.model.property.Description
-import net.fortuna.ical4j.model.property.Duration
-import net.fortuna.ical4j.model.property.DtEnd
-import net.fortuna.ical4j.model.property.DtStart
-import net.fortuna.ical4j.model.property.Location
-import net.fortuna.ical4j.model.property.Organizer
-import net.fortuna.ical4j.model.property.Summary
 import org.eclipse.angus.mail.imap.IMAPFolder
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.io.InputStream
-import java.time.Instant
 import java.time.OffsetDateTime
-import java.time.ZoneOffset
 import java.util.Properties
 import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 import kotlin.concurrent.thread
 
 @Service
 class MailListenerService(
     private val feedbackConfig: FeedbackConfig,
+    private val eventRepo: EventRepo,
+    private val accountRepo: AccountRepo,
 ) {
 
     private val logger = LoggerFactory.getLogger(MailListenerService::class.java)
@@ -102,6 +87,25 @@ class MailListenerService(
         }
     }
 
+    private fun persistsEvent(calendarInvite: CalendarInvite) {
+        val generatedPincode = PinCodeGenerator(eventRepo = eventRepo).generate()
+        val account = accountRepo.getAccountFromEmail(emailInput = calendarInvite.managerEmail)
+        if (account == null) {
+            logger.warn("Mail listener does not exist so event will not be persisted")
+            return
+        }
+        eventRepo.persistEvent(
+            title = calendarInvite.title,
+            agenda = calendarInvite.agenda,
+            date = calendarInvite.date,
+            location = calendarInvite.location,
+            durationInMinutes = calendarInvite.durationInMinutes,
+            generatedPinCode = generatedPincode,
+            questions = emptyList(),
+            managerId = calendarInvite.managerEmail
+        )
+    }
+
     private fun closeResources() {
         try {
             folder?.close()
@@ -126,12 +130,6 @@ class MailListenerService(
         }
     }
 
-    @PreDestroy
-    fun shutdown() {
-        running = false
-        closeResources()
-    }
-
     private fun processMessage(message: Message) {
         logger.info(
             "Received email from={} subject={}",
@@ -152,13 +150,13 @@ class MailListenerService(
             }
             message.isMimeType("text/calendar") -> {
                 message.inputStream.use { stream ->
-                    logCalendarInvite(CalendarInviteParser.parse(stream))
+                    persistsEvent(CalendarInviteParser.parse(stream))
                 }
             }
             // Some providers hand back text/calendar as shared input streams without multipart.
             message.contentType.contains("text/calendar", ignoreCase = true) -> {
                 message.inputStream.use { stream ->
-                    logCalendarInvite(CalendarInviteParser.parse(stream))
+                    persistsEvent(CalendarInviteParser.parse(stream))
                 }
             }
             else -> logger.debug("No calendar content detected for subject={}", message.subject)
@@ -173,29 +171,15 @@ class MailListenerService(
                     bodyPart.inputStream.use { stream ->
                         CalendarInviteParser.parse(stream)
                     }
-                }.onSuccess { invite -> logCalendarInvite(invite) }
-                    .onFailure {
-                        logger.warn("Failed to parse calendar invite from attachment {}", bodyPart.fileName, it)
-                    }
+                }.onSuccess { invite ->
+                    persistsEvent(invite)
+                }.onFailure {
+                    logger.warn("Failed to parse calendar invite from attachment {}", bodyPart.fileName, it)
+                }
             } else {
                 logger.debug("Skipping non-calendar part at index={} type={}", index, bodyPart.contentType)
             }
         }
-    }
-
-    private fun logCalendarInvite(invite: CalendarInvite) {
-        logger.info(
-            "Parsed calendar invite: {}",
-            mapOf(
-                "title" to invite.title,
-                "agenda" to invite.agenda,
-                "date" to invite.date,
-                "durationMinutes" to invite.durationInMinutes,
-                "location" to invite.location,
-                "managerEmail" to invite.managerEmail,
-                "attendees" to invite.attendingEmails,
-            ),
-        )
     }
 
     private fun BodyPart.isCalendarAttachment(): Boolean {
@@ -212,7 +196,7 @@ class MailListenerService(
     }
 }
 
-internal data class CalendarInvite(
+data class CalendarInvite(
     val title: String,
     val agenda: String?,
     val date: OffsetDateTime,
@@ -222,97 +206,3 @@ internal data class CalendarInvite(
     val attendingEmails: List<String>,
 )
 
-internal object CalendarInviteParser {
-    private val builder = CalendarBuilder()
-    private val timeZoneRegistry = TimeZoneRegistryFactory.getInstance().createRegistry()
-    private val ignoredAttendeeEmails = setOf("feedback@letsgrow.dk")
-
-    fun parse(inputStream: InputStream): CalendarInvite {
-        val calendar = builder.build(inputStream)
-        val event = calendar.components
-            .filterIsInstance<VEvent>()
-            .firstOrNull() ?: throw IllegalArgumentException("No VEVENT found in calendar invite")
-
-        val start = (event.getProperty(Property.DTSTART) as? DtStart)
-            ?.toOffsetDateTime(timeZoneRegistry)
-            ?: throw IllegalArgumentException("Missing DTSTART in calendar invite")
-
-        val end = (event.getProperty(Property.DTEND) as? DtEnd)
-            ?.toOffsetDateTime(timeZoneRegistry)
-
-        val durationMinutes = (event.getProperty(Property.DURATION) as? Duration).toMinutes()
-            ?: end?.let { java.time.Duration.between(start, it).toMinutes().toInt() }
-            ?: 0
-
-        val organizerEmail = (event.getProperty(Property.ORGANIZER) as? Organizer).email()
-            ?: throw IllegalArgumentException("Missing organizer in calendar invite")
-
-        return CalendarInvite(
-            title = (event.getProperty(Property.SUMMARY) as? Summary)?.value.orEmpty(),
-            agenda = (event.getProperty(Property.DESCRIPTION) as? Description)?.value,
-            date = start,
-            durationInMinutes = durationMinutes,
-            location = (event.getProperty(Property.LOCATION) as? Location)?.value,
-            managerEmail = organizerEmail,
-            attendingEmails = event.attendeeEmails(excludeEmail = organizerEmail),
-        )
-    }
-
-    private fun Duration?.toMinutes(): Int? = this?.duration?.let {
-        runCatching { java.time.Duration.from(it).toMinutes().toInt() }.getOrNull()
-    }
-
-    private fun Organizer?.email(): String? =
-        this?.calAddress?.schemeSpecificPart
-            ?.removePrefix("mailto:")
-            ?.removePrefix("MAILTO:")
-            ?.trim()
-            ?.takeIf { it.isNotEmpty() }
-
-    private fun VEvent.attendeeEmails(excludeEmail: String?): List<String> =
-        properties.getProperties<Attendee>(Property.ATTENDEE)
-            .mapNotNull { attendee ->
-                attendee.calAddress?.schemeSpecificPart
-                    ?.removePrefix("mailto:")
-                    ?.removePrefix("MAILTO:")
-                    ?.trim()
-                    ?.takeIf { it.isNotEmpty() }
-            }.filterNot { email -> shouldIgnoreAttendee(email, excludeEmail) }
-
-    private fun shouldIgnoreAttendee(email: String, organizerEmail: String?): Boolean {
-        if (organizerEmail != null && email.equals(organizerEmail, ignoreCase = true)) {
-            return true
-        }
-        return ignoredAttendeeEmails.any { email.equals(it, ignoreCase = true) }
-    }
-
-    private fun DtStart.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
-        toOffsetDateTimeInternal(timeZoneRegistry)
-
-    private fun DtEnd.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
-        toOffsetDateTimeInternal(timeZoneRegistry)
-
-    private fun DtStart.toOffsetDateTimeInternal(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
-        (this as DateProperty).toOffsetDateTime(timeZoneRegistry)
-
-    private fun DtEnd.toOffsetDateTimeInternal(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
-        (this as DateProperty).toOffsetDateTime(timeZoneRegistry)
-
-    private fun DateProperty.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? {
-        val zone = timeZone?.let { tz ->
-            runCatching { tz.toZoneId() }.getOrNull()
-                ?: ZoneOffset.ofTotalSeconds(tz.getOffset(date?.time ?: System.currentTimeMillis()) / 1000)
-        }
-            ?: (parameters.getParameter(Parameter.TZID) as? TzId)
-                ?.value
-                ?.let { zoneId ->
-                    timeZoneRegistry.getTimeZone(zoneId)?.let { tz ->
-                        runCatching { tz.toZoneId() }.getOrNull()
-                    }
-                }
-            ?: ZoneOffset.UTC
-        val dateValue = date ?: return null
-        val instant = Instant.ofEpochMilli(dateValue.time)
-        return instant.atZone(zone).toOffsetDateTime()
-    }
-}

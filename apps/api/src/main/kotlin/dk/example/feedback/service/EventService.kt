@@ -27,6 +27,7 @@ import dk.example.feedback.model.enumerations.ThumbsUpThumpsDown
 import dk.example.feedback.model.exceptions.EventAlreadyJoinedException
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.payloads.EventInput
+import dk.example.feedback.persistence.pincodegenerator.PinCodeGenerator
 import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import java.util.*
@@ -40,7 +41,7 @@ class EventService(
 ) {
 
     fun createEvent(eventInput: EventInput, jwt: Jwt): EventWrapperDto {
-        val generatedPinCode = generateUniquePinCode()
+        val generatedPinCode = PinCodeGenerator(eventRepo = eventRepo).generate()
         val managerId = jwt.getAccountId()
         val eventEntity = eventRepo.persistEvent(
             title = eventInput.title,
@@ -145,14 +146,6 @@ class EventService(
 
     private fun getPinCodeForEvent(eventId: UUID): String? {
         return eventRepo.getPinCodeForEvent(eventId)
-    }
-
-    private fun generateUniquePinCode(): String {
-        repeat(10) {
-            val pinCode = (1000..9999).random().toString()
-            if (!eventRepo.pinCodeExists(pinCode)) return pinCode
-        }
-        throw IllegalStateException("Failed to generate a unique pin code after multiple attempts")
     }
 
     private fun throwIfAccountIsManager(event: EventEntity, accountId: String) {

@@ -3,6 +3,7 @@ package dk.example.feedback.persistence.repo
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.FCMTokenDao
+import dk.example.feedback.persistence.table.AccountTable.email
 import dk.example.feedback.persistence.table.FCMTokenTable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -67,6 +68,11 @@ class AccountRepo {
         logger.info("Get account with id: $accountId")
         return AccountDao.findById(accountId)?.toModel()
             ?: throw NoSuchElementException("Account not found with id: $accountId")
+    }
+
+    fun getAccountFromEmail(emailInput: String): AccountEntity? {
+        logger.info("Trying to find account with email: $emailInput")
+        return AccountDao.find { email eq emailInput }.firstOrNull()?.toModel()
     }
 
     fun upsertFcmToken(accountId: String, fcmToken: String) {
