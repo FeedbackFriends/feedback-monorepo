@@ -1,8 +1,10 @@
 HELP.md
 
-# Ignore everything in the logs directory
+# Ignore runtime logs and secrets
 firebase_config.json
 logs/*
+LOG_DIR_IS_UNDEFINED/
+*.log
 .DS_Store
 .gradle
 build/
