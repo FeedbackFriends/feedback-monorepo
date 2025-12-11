@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0005-add-mail-listener-flag
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          columnExists:
+            tableName: event
+            columnName: created_from_mail_listener
+      changes:
+        - addColumn:
+            tableName: event
+            columns:
+              - column:
+                  name: created_from_mail_listener
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropColumn:
+            tableName: event
+            columnName: created_from_mail_listener
