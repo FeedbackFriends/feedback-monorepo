@@ -17,6 +17,7 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
     var date by EventTable.startDate
     var durationInMinutes by EventTable.durationInMinutes
     var location by EventTable.location
+    var createdFromMailListener by EventTable.createdFromMailListener
     var manager by AccountDao referencedOn EventTable.manager
     val questions by QuestionDao optionalReferrersOn QuestionTable.event
 
@@ -28,6 +29,7 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
             date = date,
             durationInMinutes = durationInMinutes,
             location = location,
+            createdFromMailListener = createdFromMailListener,
             createdAt = dateCreated,
             updatedAt = lastUpdate,
             feedback = questions.flatMap { it.feedback }.map { it.toModel() },
@@ -36,5 +38,4 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
         )
     }
 }
-
 

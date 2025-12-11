@@ -102,7 +102,8 @@ class MailListenerService(
             durationInMinutes = calendarInvite.durationInMinutes,
             generatedPinCode = generatedPincode,
             questions = emptyList(),
-            managerId = calendarInvite.managerEmail
+            managerId = calendarInvite.managerEmail,
+            createdFromMailListener = true,
         )
     }
 
@@ -205,4 +206,3 @@ data class CalendarInvite(
     val managerEmail: String,
     val attendingEmails: List<String>,
 )
-

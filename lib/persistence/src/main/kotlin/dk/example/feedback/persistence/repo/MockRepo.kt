@@ -73,6 +73,7 @@ class MockRepo {
                     it[startDate] = startDateValue
                     it[lastUpdated] = OffsetDateTime.now(UTC)
                     it[dateCreated] = OffsetDateTime.now(UTC)
+                    it[createdFromMailListener] = false
                 }
 
                 QuestionTable.insert {

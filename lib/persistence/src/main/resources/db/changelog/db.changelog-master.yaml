@@ -20,3 +20,6 @@ databaseChangeLog:
   - include:
       file: 0004-update-thumps-up-thumps-down-length.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0005-add-mail-listener-flag.yaml
+      relativeToChangelogFile: true

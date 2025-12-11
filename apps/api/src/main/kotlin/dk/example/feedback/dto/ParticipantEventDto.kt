@@ -11,9 +11,9 @@ data class ParticipantEventDto (
     val pinCode: String?,
     val durationInMinutes: Int,
     val location: String?,
+    val createdFromMailListener: Boolean,
     val ownerInfo: OwnerInfoDto,
     val questions: List<ParticipantQuestionDto>,
     val feedbackSubmited: Boolean,
     val recentlyJoined: Boolean,
 )
-

@@ -67,7 +67,8 @@ class EventRepo {
         durationInMinutes: Int,
         generatedPinCode: String,
         questions: List<Pair<String, FeedbackType>>,
-        managerId: String
+        managerId: String,
+        createdFromMailListener: Boolean = false,
     ): EventEntity {
 
         val managerAccount = AccountDao.findById(managerId) ?: throw Exception("Could not find manager id: $managerId")
@@ -78,6 +79,7 @@ class EventRepo {
             this.location = location
             this.durationInMinutes = durationInMinutes
             this.manager = managerAccount
+            this.createdFromMailListener = createdFromMailListener
         }
         PinCodeDao.new(id = generatedPinCode) {
             this.event = createdEvent

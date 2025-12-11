@@ -9,13 +9,12 @@ data class EventEntity(
     val agenda: String?,
     val date: OffsetDateTime,
     val durationInMinutes: Int,
-    val location : String?,
+    val location: String?,
+    val createdFromMailListener: Boolean,
     val createdAt: OffsetDateTime,
     val updatedAt: OffsetDateTime,
     val questions: List<QuestionEntity>,
     val feedback: List<FeedbackEntity>,
     val manager: AccountEntity,
 )
-
-
 

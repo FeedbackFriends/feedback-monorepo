@@ -180,6 +180,7 @@ fun EventEntity.toManagerEvent(pinCode: String?): ManagerEventDto {
         date = date,
         durationInMinutes = durationInMinutes,
         location = location,
+        createdFromMailListener = createdFromMailListener,
         pinCode = pinCode,
         questions = questions.sortedBy { it.createdAt }.map { question ->
             ManagerQuestion(
@@ -213,6 +214,7 @@ fun EventEntity.toParticipantEvent(
         date = date,
         durationInMinutes = durationInMinutes,
         location = location,
+        createdFromMailListener = createdFromMailListener,
         pinCode = pinCode,
         questions = questions.map { question ->
             ParticipantQuestionDto(

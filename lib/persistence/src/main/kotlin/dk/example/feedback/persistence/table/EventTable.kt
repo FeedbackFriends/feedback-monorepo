@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
  * @property durationInMinutes Duration of the event in minutes.
  * @property location Optional location (physical or virtual).
  * @property manager Foreign key to [AccountTable.id] for the event organizer.
+ * @property createdFromMailListener Flag indicating if the event originated from the mail listener.
  */
 object EventTable: CommonColumnsTbl("event") {
     val title = varchar("title", 255)
@@ -34,5 +35,6 @@ object EventTable: CommonColumnsTbl("event") {
     val startDate = timestampWithTimeZone("start_date")
     val durationInMinutes = integer("duration_in_minutes")
     val location = varchar("location", 255).nullable().default(null)
+    val createdFromMailListener = bool("created_from_mail_listener").default(false)
     val manager = reference("manager_id", AccountTable, onDelete = ReferenceOption.CASCADE)
 }
