@@ -173,6 +173,7 @@ class EventService(
 }
 
 fun EventEntity.toManagerEvent(pinCode: String?): ManagerEventDto {
+    val isDraft = questions.isEmpty()
     return ManagerEventDto(
         id = id,
         title = title,
@@ -180,7 +181,7 @@ fun EventEntity.toManagerEvent(pinCode: String?): ManagerEventDto {
         date = date,
         durationInMinutes = durationInMinutes,
         location = location,
-        createdFromMailListener = createdFromMailListener,
+        isDraft = isDraft,
         pinCode = pinCode,
         questions = questions.sortedBy { it.createdAt }.map { question ->
             ManagerQuestion(

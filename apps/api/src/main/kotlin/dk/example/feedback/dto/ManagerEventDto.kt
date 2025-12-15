@@ -13,7 +13,7 @@ data class ManagerEventDto(
     val pinCode: String?,
     val durationInMinutes: Int,
     val location: String?,
-    val createdFromMailListener: Boolean,
+    val isDraft: Boolean,
     val ownerInfo: OwnerInfoDto,
     val overallFeedbackSummary: OverallFeedbackSummaryDto?,
     val questions: List<ManagerQuestion>,
