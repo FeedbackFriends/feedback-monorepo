@@ -16,6 +16,7 @@ data class ManagerEventDto(
     val isDraft: Boolean,
     val ownerInfo: OwnerInfoDto,
     val overallFeedbackSummary: OverallFeedbackSummaryDto?,
+    val invitedEmails: List<String>,
     val questions: List<ManagerQuestion>,
 )
 

@@ -32,7 +32,6 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.request
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
@@ -75,13 +74,8 @@ class AccountControllerTest(
             .with(MockJwtFactory(userId).anonymousToken())
             .contentType(MediaType.APPLICATION_JSON)
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.asyncDispatch(
-                mockMvc.perform(createAccountRequest)
-                    .andExpect(request().asyncStarted())
-                    .andReturn()
-            )
-        ).andExpect(status().isOk)
+        mockMvc.perform(createAccountRequest)
+            .andExpect(status().isOk)
             .andExpect(jsonPath("$.role").value(null))
             .andExpect(jsonPath("$.accountInfo.name").value(null))
             .andExpect(jsonPath("$.accountInfo.email").value(null))
@@ -114,13 +108,8 @@ class AccountControllerTest(
             .with(MockJwtFactory(userId).anonymousToken())
             .contentType(MediaType.APPLICATION_JSON)
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.asyncDispatch(
-                mockMvc.perform(createAccountRequest)
-                    .andExpect(request().asyncStarted())
-                    .andReturn()
-            )
-        ).andExpect(status().isOk)
+        mockMvc.perform(createAccountRequest)
+            .andExpect(status().isOk)
             .andExpect(jsonPath("$.role").value(null))
             .andExpect(jsonPath("$.accountInfo.name").value(null))
             .andExpect(jsonPath("$.accountInfo.email").value(null))
@@ -149,14 +138,10 @@ class AccountControllerTest(
     suspend fun `Update account role to manager and verify get session`(userId: String) {
         val token = MockJwtFactory(userId = "user-id").managerToken()
         mockMvc.perform(
-            MockMvcRequestBuilders.asyncDispatch(
-                mockMvc.perform(
-                    MockMvcRequestBuilders.put("/account/role")
-                        .with(MockJwtFactory(userId).participantToken())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""{"role":"Manager"}""")
-                ).andReturn()
-            )
+            MockMvcRequestBuilders.put("/account/role")
+                .with(MockJwtFactory(userId).participantToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"role":"Manager"}""")
         ).andExpect(status().isOk)
 
         val getSessionRequest = MockMvcRequestBuilders
@@ -231,22 +216,20 @@ class AccountControllerTest(
 
         val createEventResponse = mockMvc.perform(createEventRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.title").value("Daily standup"))
-            .andExpect(jsonPath("$.location").value("Copenhagen"))
-            .andExpect(jsonPath("$.durationInMinutes").value(60))
-            .andExpect(jsonPath("$.questions").isArray)
-            .andExpect(jsonPath("$.questions[0].questionText").value("What did you do yesterday?"))
-            .andExpect(jsonPath("$.questions[0].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.questions[1].questionText").value("What will you do today?"))
-            .andExpect(jsonPath("$.questions[1].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.unseenFeedback").value(0))
+            .andExpect(jsonPath("$.event.title").value("Daily standup"))
+            .andExpect(jsonPath("$.event.location").value("Copenhagen"))
+            .andExpect(jsonPath("$.event.durationInMinutes").value(60))
+            .andExpect(jsonPath("$.event.questions").isArray)
+            .andExpect(jsonPath("$.event.questions[0].questionText").value("What did you do yesterday?"))
+            .andExpect(jsonPath("$.event.questions[0].feedbackType").value("Emoji"))
+            .andExpect(jsonPath("$.event.questions[1].questionText").value("What will you do today?"))
+            .andExpect(jsonPath("$.event.questions[1].feedbackType").value("Emoji"))
+            .andExpect(jsonPath("$.event.invitedEmails").isArray)
             .andReturn()
 
-        val eventId: String = objectMapper.readTree(createEventResponse.response.contentAsString)
-            .get("id").asText()
-
-        val pincode: String = objectMapper.readTree(createEventResponse.response.contentAsString)
-            .get("pinCode").asText()
+        val eventNode = objectMapper.readTree(createEventResponse.response.contentAsString).get("event")
+        val eventId: String = eventNode.get("id").asText()
+        val pincode: String = eventNode.get("pinCode").asText()
 
 
         val getSessionRequest = MockMvcRequestBuilders
@@ -263,7 +246,6 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.participantEvents").isArray)
             .andExpect(jsonPath("$.managerData").exists())
             .andExpect(jsonPath("$.managerData.managerEvents").isArray)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].unseenFeedback").value(0))
             .andExpect(jsonPath("$.managerData.managerEvents[0].title").value("Daily standup"))
             .andExpect(jsonPath("$.managerData.managerEvents[0].location").value("Copenhagen"))
             .andExpect(jsonPath("$.managerData.managerEvents[0].durationInMinutes").value(60))
@@ -328,19 +310,19 @@ class AccountControllerTest(
 
         val createEventResponse = mockMvc.perform(updateEventRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.title").value("New title"))
-            .andExpect(jsonPath("$.location").value("Copenhagen"))
-            .andExpect(jsonPath("$.durationInMinutes").value(90))
-            .andExpect(jsonPath("$.unseenFeedback").value(0))
-            .andExpect(jsonPath("$.questions").isArray)
-            .andExpect(jsonPath("$.questions[1].questionText").value("What did you do yesterday?"))
-            .andExpect(jsonPath("$.questions[1].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.questions[0].questionText").value("What will you do today?"))
-            .andExpect(jsonPath("$.questions[0].feedbackType").value("Emoji"))
+            .andExpect(jsonPath("$.event.title").value("New title"))
+            .andExpect(jsonPath("$.event.location").value("Copenhagen"))
+            .andExpect(jsonPath("$.event.durationInMinutes").value(90))
+            .andExpect(jsonPath("$.event.questions").isArray)
+            .andExpect(jsonPath("$.event.questions[1].questionText").value("What did you do yesterday?"))
+            .andExpect(jsonPath("$.event.questions[1].feedbackType").value("Emoji"))
+            .andExpect(jsonPath("$.event.questions[0].questionText").value("What will you do today?"))
+            .andExpect(jsonPath("$.event.questions[0].feedbackType").value("Emoji"))
+            .andExpect(jsonPath("$.event.invitedEmails").isArray)
             .andReturn()
 
         val eventId: String = objectMapper.readTree(createEventResponse.response.contentAsString)
-            .get("id").asText()
+            .get("event").get("id").asText()
 
 
         val getSessionRequest = MockMvcRequestBuilders
@@ -378,13 +360,7 @@ class AccountControllerTest(
             .with(MockJwtFactory(userId = userId).anonymousToken())
             .contentType(MediaType.APPLICATION_JSON)
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.asyncDispatch(
-                mockMvc.perform(createAccountRequest)
-                    .andExpect(request().asyncStarted())
-                    .andReturn()
-            )
-        )
+        mockMvc.perform(createAccountRequest)
 
 
         val startFeedbackSessionInput = StartFeedbackSessionInput(
@@ -431,7 +407,7 @@ class AccountControllerTest(
             .with(MockJwtFactory(userId = userId).anonymousToken())
             .contentType(MediaType.APPLICATION_JSON)
 
-        mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(mockMvc.perform(submitFeedbackSessionRequest).andReturn()))
+        mockMvc.perform(submitFeedbackSessionRequest)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.shouldPresentRatingPrompt").value(false))
     }
@@ -444,7 +420,7 @@ class AccountControllerTest(
 
         mockMvc.perform(getSessionRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].unseenFeedback").value(newFeedback))
+            .andExpect(jsonPath("$.managerData.managerEvents[0].invitedEmails").isArray)
     }
 
     suspend fun `Trigger resetNewFeedback for event and verify session`(userId: String, eventId: String) {

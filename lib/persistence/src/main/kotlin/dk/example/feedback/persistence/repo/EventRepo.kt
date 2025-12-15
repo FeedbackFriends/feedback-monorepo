@@ -6,8 +6,11 @@ import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.exceptions.PinCodeNotFoundException
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.EventDao
+import dk.example.feedback.persistence.dao.EventInviteDao
 import dk.example.feedback.persistence.dao.PinCodeDao
 import dk.example.feedback.persistence.dao.QuestionDao
+import dk.example.feedback.persistence.table.AccountTable
+import dk.example.feedback.persistence.table.EventInviteTable
 import dk.example.feedback.persistence.table.EventParticipantTable
 import dk.example.feedback.persistence.table.EventTable
 import dk.example.feedback.persistence.table.PinCodeTable
@@ -20,6 +23,7 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteWhere
@@ -69,6 +73,7 @@ class EventRepo {
         questions: List<Pair<String, FeedbackType>>,
         managerId: String,
         createdFromMailListener: Boolean = false,
+        invitedEmails: List<String> = emptyList(),
     ): EventEntity {
 
         val managerAccount = AccountDao.findById(managerId) ?: throw Exception("Could not find manager id: $managerId")
@@ -85,6 +90,7 @@ class EventRepo {
             this.event = createdEvent
         }
         addQuestionsAndRemoveExisting(createdEvent.id.value, questions, createdEvent.manager.id.value)
+        addInvites(createdEvent.id.value, invitedEmails)
         return createdEvent.toModel()
     }
 
@@ -222,5 +228,36 @@ class EventRepo {
             this[QuestionTable.feedbackType] = questionInput.second
             this[QuestionTable.manager] = managerId
         }
+    }
+
+    private fun addInvites(eventId: UUID, invitedEmails: List<String>) {
+        val cleanedEmails = invitedEmails
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .distinctBy { it.lowercase() }
+
+        if (cleanedEmails.isEmpty()) {
+            return
+        }
+
+        val existingEmails = EventInviteTable
+            .selectAll()
+            .where { EventInviteTable.event eq EntityID(eventId, EventTable) }
+            .map { it[EventInviteTable.email].lowercase() }
+            .toSet()
+
+        val accountsByEmail = AccountDao
+            .find { AccountTable.email inList cleanedEmails }
+            .associateBy { dao -> dao.email?.lowercase() }
+
+        cleanedEmails
+            .filterNot { existingEmails.contains(it.lowercase()) }
+            .forEach { email ->
+                EventInviteDao.new {
+                    this.event = EntityID(eventId, EventTable)
+                    this.email = email
+                    this.account = accountsByEmail[email.lowercase()]
+                }
+            }
     }
 }

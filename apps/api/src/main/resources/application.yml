@@ -34,7 +34,7 @@ spring:
     show-sql: ${SHOW_EXPOSED_SQL:false}
     generate-ddl: false
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:devDb;DATABASE_TO_UPPER=false}
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:devDb;MODE=PostgreSQL;DATABASE_TO_UPPER=false}
     username: ${SPRING_DATASOURCE_USERNAME:sa}
     password: ${SPRING_DATASOURCE_PASSWORD:''}
   h2:

@@ -183,6 +183,7 @@ fun EventEntity.toManagerEvent(pinCode: String?): ManagerEventDto {
         location = location,
         isDraft = isDraft,
         pinCode = pinCode,
+        invitedEmails = invites.sortedBy { it.createdAt }.map { it.email },
         questions = questions.sortedBy { it.createdAt }.map { question ->
             ManagerQuestion(
                 id = question.id,

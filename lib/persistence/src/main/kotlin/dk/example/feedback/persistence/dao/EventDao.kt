@@ -3,6 +3,7 @@ package dk.example.feedback.persistence.dao
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.persistence.dao.utility.BaseCompanion
 import dk.example.feedback.persistence.dao.utility.CommonColumns
+import dk.example.feedback.persistence.table.EventInviteTable
 import dk.example.feedback.persistence.table.EventTable
 import dk.example.feedback.persistence.table.QuestionTable
 import java.util.*
@@ -20,6 +21,7 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
     var createdFromMailListener by EventTable.createdFromMailListener
     var manager by AccountDao referencedOn EventTable.manager
     val questions by QuestionDao optionalReferrersOn QuestionTable.event
+    val invites by EventInviteDao referrersOn EventInviteTable.event
 
     override fun toModel(): EventEntity {
         return EventEntity(
@@ -35,7 +37,7 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
             feedback = questions.flatMap { it.feedback }.map { it.toModel() },
             questions = questions.map { it.toModel() },
             manager = manager.toModel(),
+            invites = invites.map { it.toModel() },
         )
     }
 }
-

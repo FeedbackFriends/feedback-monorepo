@@ -104,6 +104,7 @@ class MailListenerService(
             questions = emptyList(),
             managerId = calendarInvite.managerEmail,
             createdFromMailListener = true,
+            invitedEmails = calendarInvite.attendingEmails,
         )
     }
 

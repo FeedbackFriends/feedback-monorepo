@@ -16,5 +16,5 @@ data class EventEntity(
     val questions: List<QuestionEntity>,
     val feedback: List<FeedbackEntity>,
     val manager: AccountEntity,
+    val invites: List<EventInviteEntity>,
 )
-
