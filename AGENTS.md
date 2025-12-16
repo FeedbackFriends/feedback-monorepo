@@ -20,6 +20,12 @@
 - Keep package structure by layer (`config/`, `controller/`, `service/`, `persistence/`).
 - Use meaningful request/response DTO names (`*Input`, `*Dto`) and snake-free JSON via Jackson config.
 - Enable logging via existing interceptors; avoid committing secrets or Firebase config files.
+- Controllers stay thin and delegate to services; services map domain to DTOs and push persistence through repos (keep concerns separated).
+- Constructor injection with `val` deps is the norm; keep helper/guard logic in extensions (e.g., JWT helpers) for readability.
+- Favor straight-line flows with guard clauses/exceptions over clever abstractions—simple and explicit beats smart.
+- Use data classes with explicit nullability and trailing commas; convert collections with `map`/`filter` instead of in-place mutation.
+- Log notable state changes with `LoggerFactory`, but keep noise low; warnings are treated as errors during compilation.
+- Tests lean on JUnit5 + MockMvc integration flows with scenario-style backtick names; H2 in-memory defaults keep them fast and repeatable.
 
 ## Testing Guidelines
 - Primary framework: JUnit 5 with `spring-boot-starter-test`; H2 in-memory DB is the default test datasource.
