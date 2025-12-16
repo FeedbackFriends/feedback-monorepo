@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0009-expand-event-text-columns
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        and:
+          - tableExists:
+              tableName: event
+          - columnExists:
+              tableName: event
+              columnName: title
+      changes:
+        - modifyDataType:
+            tableName: event
+            columnName: title
+            newDataType: text
+        - modifyDataType:
+            tableName: event
+            columnName: agenda
+            newDataType: text
+        - modifyDataType:
+            tableName: event
+            columnName: location
+            newDataType: text
+      rollback:
+        - modifyDataType:
+            tableName: event
+            columnName: title
+            newDataType: varchar(255)
+        - modifyDataType:
+            tableName: event
+            columnName: agenda
+            newDataType: varchar(255)
+        - modifyDataType:
+            tableName: event
+            columnName: location
+            newDataType: varchar(255)

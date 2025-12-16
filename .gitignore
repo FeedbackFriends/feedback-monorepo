@@ -43,3 +43,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Tooling artifacts
+.codex/
+.specify/

@@ -17,41 +17,83 @@ import jakarta.mail.event.MessageCountAdapter
 import jakarta.mail.event.MessageCountEvent
 import org.eclipse.angus.mail.imap.IMAPFolder
 import org.slf4j.LoggerFactory
+import org.springframework.context.SmartLifecycle
 import org.springframework.stereotype.Service
 import java.time.OffsetDateTime
 import java.util.Properties
-import javax.annotation.PostConstruct
-import kotlin.concurrent.thread
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
+import java.util.concurrent.atomic.AtomicBoolean
 
 @Service
 class MailListenerService(
     private val feedbackConfig: FeedbackConfig,
     private val eventRepo: EventRepo,
     private val accountRepo: AccountRepo,
-) {
+    private val pinCodeGenerator: PinCodeGenerator = PinCodeGenerator(eventRepo),
+) : SmartLifecycle {
 
     private val logger = LoggerFactory.getLogger(MailListenerService::class.java)
     private val mailSettings get() = feedbackConfig.mail
-    private var store: Store? = null
-    private var folder: IMAPFolder? = null
-    @Volatile
-    private var running = true
+    private val running = AtomicBoolean(false)
+    private val executor = Executors.newSingleThreadExecutor { runnable ->
+        Thread(runnable, "imap-listener").apply { isDaemon = true }
+    }
+    @Volatile private var listenerFuture: Future<*>? = null
+    @Volatile private var store: Store? = null
+    @Volatile private var folder: IMAPFolder? = null
 
-    @PostConstruct
-    fun startListener() {
+    override fun start() {
+        if (!running.compareAndSet(false, true)) return
+
         logger.info("Starting IMAP listener for host={} folder={}", mailSettings.host, mailSettings.folder)
-        thread(name = "imap-listener", isDaemon = true) {
-            while (running) {
-                try {
-                    connectAndListen()
-                } catch (ex: Exception) {
-                    logger.warn("IMAP listener error, retrying in 10 seconds", ex)
-                    sleepWithCatch(10_000L)
-                } finally {
-                    closeResources()
-                }
+        listenerFuture = executor.submit { listenLoop() }
+    }
+
+    override fun stop() {
+        stop { }
+    }
+
+    override fun stop(callback: Runnable) {
+        if (running.compareAndSet(true, false)) {
+            logger.info("Stopping IMAP listener")
+            listenerFuture?.cancel(true)
+            closeResources()
+        }
+        callback.run()
+    }
+
+    override fun isRunning(): Boolean = running.get()
+    override fun isAutoStartup(): Boolean = true
+    override fun getPhase(): Int = 0
+
+    private fun listenLoop() {
+        var attempt = 0
+        while (running.get()) {
+            try {
+                connectAndListen()
+                attempt = 0
+            } catch (ex: Exception) {
+                attempt++
+                val delay = reconnectDelayFor(attempt)
+                logger.warn(
+                    "IMAP listener error (attempt={}): {}; reconnecting in {} ms",
+                    attempt,
+                    ex.message,
+                    delay,
+                    ex,
+                )
+                sleepWithCatch(delay)
+            } finally {
+                closeResources()
             }
         }
+    }
+
+    private fun reconnectDelayFor(attempt: Int): Long = when {
+        attempt <= 1 -> 1_000L
+        attempt == 2 -> 5_000L
+        else -> 10_000L
     }
 
     private fun connectAndListen() {
@@ -81,28 +123,39 @@ class MailListenerService(
         } ?: throw MessagingException("Folder ${settings.folder} is not an IMAP folder")
         logger.info("IMAP folder {} opened; waiting for new messages", settings.folder)
 
-        while (running && store?.isConnected == true) {
+        while (running.get() && store?.isConnected == true) {
             try {
                 folder?.idle()
             } catch (ex: MessagingException) {
-                logger.warn("IMAP idle interrupted, reconnecting", ex)
+                if (running.get()) {
+                    logger.warn("IMAP idle interrupted, reconnecting", ex)
+                } else {
+                    logger.info("IMAP idle interrupted due to shutdown request")
+                }
                 break
             }
         }
     }
 
-    private fun persistsEvent(calendarInvite: CalendarInvite) {
-        val generatedPincode = PinCodeGenerator(eventRepo = eventRepo).generate()
+    private fun persistEvent(calendarInvite: CalendarInvite, metadata: MessageMetadata) {
+        val generatedPincode = pinCodeGenerator.generate()
         val account = accountRepo.getAccountFromEmail(emailInput = calendarInvite.managerEmail)
         if (account == null) {
-            logger.warn("Mail listener does not exist so event will not be persisted")
+            logger.warn(
+                "No account found for managerEmail={}, skipping invite subject={} messageId={}",
+                calendarInvite.managerEmail,
+                metadata.subject,
+                metadata.messageId,
+            )
             return
         }
         logger.info(
-            "Persisting event from calendar invite title={} date={} managerEmail={}",
+            "Persisting event from calendar invite title={} date={} managerEmail={} subject={} messageId={}",
             calendarInvite.title,
             calendarInvite.date,
             calendarInvite.managerEmail,
+            metadata.subject,
+            metadata.messageId,
         )
         runCatching {
             eventRepo.persistEvent(
@@ -120,20 +173,24 @@ class MailListenerService(
             )
         }.onSuccess { event ->
             logger.info(
-                "Event persisted id={} titleLength={} agendaLength={} locationLength={}",
+                "Event persisted id={} titleLength={} agendaLength={} locationLength={} subject={} messageId={}",
                 event.id,
                 calendarInvite.title.length,
                 calendarInvite.agenda?.length ?: 0,
                 calendarInvite.location?.length ?: 0,
+                metadata.subject,
+                metadata.messageId,
             )
         }.onFailure { ex ->
             logger.warn(
-                "Failed to persist calendar invite titleLength={} agendaLength={} locationLength={} provider={} managerEmail={}",
+                "Failed to persist calendar invite titleLength={} agendaLength={} locationLength={} provider={} managerEmail={} subject={} messageId={}",
                 calendarInvite.title.length,
                 calendarInvite.agenda?.length ?: 0,
                 calendarInvite.location?.length ?: 0,
                 calendarInvite.calendarProvider,
                 calendarInvite.managerEmail,
+                metadata.subject,
+                metadata.messageId,
                 ex,
             )
             throw ex
@@ -143,14 +200,16 @@ class MailListenerService(
     private fun closeResources() {
         try {
             folder?.close()
-        } catch (_: Exception) {
+        } catch (ex: Exception) {
+            logger.debug("Failed closing IMAP folder", ex)
         } finally {
             folder = null
         }
 
         try {
             store?.close()
-        } catch (_: Exception) {
+        } catch (ex: Exception) {
+            logger.debug("Failed closing IMAP store", ex)
         } finally {
             store = null
             logger.info("Disconnected from IMAP store and cleared folder references")
@@ -166,39 +225,51 @@ class MailListenerService(
     }
 
     private fun processMessage(message: Message) {
+        val metadata = message.toMetadata()
         logger.info(
-            "Received email from={} subject={}",
-            message.from?.joinToString(),
-            message.subject,
+            "Received email id={} from={} subject={}",
+            metadata.messageId,
+            metadata.from,
+            metadata.subject,
         )
-        runCatching { parseCalendarInvites(message) }
+        runCatching { parseCalendarInvites(message, metadata) }
             .onFailure {
-                logger.warn("Failed to parse calendar invites for subject={}", message.subject, it)
+                logger.warn(
+                    "Failed to parse calendar invites for subject={} messageId={}",
+                    metadata.subject,
+                    metadata.messageId,
+                    it,
+                )
             }
     }
 
-    private fun parseCalendarInvites(message: Message) {
+    private fun parseCalendarInvites(message: Message, metadata: MessageMetadata) {
         when {
             message.isMimeType("multipart/*") -> {
                 val content = message.content
-                if (content is Multipart) parseMultipartInvites(content)
+                if (content is Multipart) parseMultipartInvites(content, metadata)
             }
             message.isMimeType("text/calendar") -> {
                 message.inputStream.use { stream ->
-                    persistsEvent(CalendarInviteParser.parse(stream))
+                    persistEvent(CalendarInviteParser.parse(stream), metadata)
                 }
             }
             // Some providers hand back text/calendar as shared input streams without multipart.
             message.contentType.contains("text/calendar", ignoreCase = true) -> {
                 message.inputStream.use { stream ->
-                    persistsEvent(CalendarInviteParser.parse(stream))
+                    persistEvent(CalendarInviteParser.parse(stream), metadata)
                 }
             }
-            else -> logger.debug("No calendar content detected for subject={}", message.subject)
+            else -> logger.debug(
+                "No calendar content detected for subject={} type={} messageId={}",
+                metadata.subject,
+                message.contentType,
+                metadata.messageId,
+            )
         }
     }
 
-    private fun parseMultipartInvites(multipart: Multipart) {
+    private fun parseMultipartInvites(multipart: Multipart, metadata: MessageMetadata) {
         repeat(multipart.count) { index ->
             val bodyPart = multipart.getBodyPart(index)
             if (bodyPart.isCalendarAttachment()) {
@@ -207,12 +278,27 @@ class MailListenerService(
                         CalendarInviteParser.parse(stream)
                     }
                 }.onSuccess { invite ->
-                    persistsEvent(invite)
+                    persistEvent(invite, metadata)
                 }.onFailure {
-                    logger.warn("Failed to parse calendar invite from attachment {}", bodyPart.fileName, it)
+                    logger.warn(
+                        "Failed to parse calendar invite from attachment {} subject={} messageId={}",
+                        bodyPart.fileName,
+                        metadata.subject,
+                        metadata.messageId,
+                        it,
+                    )
                 }
+            } else if (bodyPart.isMimeType("multipart/*") && bodyPart.content is Multipart) {
+                parseMultipartInvites(bodyPart.content as Multipart, metadata)
             } else {
-                logger.debug("Skipping non-calendar part at index={} type={}", index, bodyPart.contentType)
+                logger.debug(
+                    "Skipping non-calendar part at index={} type={} disposition={} fileName={} messageId={}",
+                    index,
+                    bodyPart.contentType,
+                    bodyPart.disposition,
+                    bodyPart.fileName,
+                    metadata.messageId,
+                )
             }
         }
     }
@@ -229,6 +315,12 @@ class MailListenerService(
             fileName != null ||
             hasCalendarMime
     }
+
+    private fun Message.toMetadata(): MessageMetadata = MessageMetadata(
+        subject = runCatching { subject }.getOrNull(),
+        from = runCatching { from?.joinToString() }.getOrNull(),
+        messageId = runCatching { getHeader("Message-ID")?.firstOrNull() }.getOrNull(),
+    )
 }
 
 data class CalendarInvite(
@@ -240,4 +332,10 @@ data class CalendarInvite(
     val managerEmail: String,
     val attendingEmails: List<String>,
     val calendarProvider: CalendarProvider?,
+)
+
+data class MessageMetadata(
+    val subject: String?,
+    val from: String?,
+    val messageId: String?,
 )
