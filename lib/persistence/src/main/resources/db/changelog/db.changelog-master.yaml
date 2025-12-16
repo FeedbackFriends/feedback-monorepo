@@ -29,3 +29,9 @@ databaseChangeLog:
   - include:
       file: 0007-rename-fcm-token-column.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0008-add-calendar-provider-column.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0009-expand-event-text-columns.yaml
+      relativeToChangelogFile: true

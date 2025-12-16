@@ -1,6 +1,7 @@
 package dk.example.feedback.mailservice
 
 import dk.example.feedback.service.CalendarInviteParser
+import dk.example.feedback.model.enumerations.CalendarProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.InputStream
@@ -24,6 +25,7 @@ class MailServiceTest {
         assertThat(invite.durationInMinutes).isEqualTo(60)
         assertThat(invite.agenda).contains("Welcome to")
         assertThat(invite.location).contains("stream")
+        assertThat(invite.calendarProvider).isEqualTo(CalendarProvider.GOOGLE)
     }
 
     @Test
@@ -44,6 +46,7 @@ class MailServiceTest {
         assertThat(invite.durationInMinutes).isEqualTo(15)
         assertThat(invite.agenda).contains("Google Meet")
         assertThat(invite.location).contains("meet.google.com")
+        assertThat(invite.calendarProvider).isEqualTo(CalendarProvider.GOOGLE)
     }
 
     @Test
@@ -61,6 +64,7 @@ class MailServiceTest {
         assertThat(invite.durationInMinutes).isEqualTo(60)
         assertThat(invite.agenda).contains("Google Meet")
         assertThat(invite.location).contains("meet.google.com")
+        assertThat(invite.calendarProvider).isEqualTo(CalendarProvider.GOOGLE)
     }
 
     @Test
@@ -83,6 +87,30 @@ class MailServiceTest {
         assertThat(invite.durationInMinutes).isEqualTo(30)
         assertThat(invite.location).contains("Microsoft Teams")
         assertThat(invite.agenda).contains("Let us see what is missing")
+        assertThat(invite.calendarProvider).isEqualTo(CalendarProvider.MICROSOFT)
+    }
+
+    @Test
+    fun `parses apple invite`() {
+        val invite = CalendarInviteParser.parse(resource("invite_apple.ics"))
+
+        val expectedStart = LocalDateTime.of(2025, 12, 24, 12, 0)
+            .atZone(ZoneId.of("Europe/Copenhagen"))
+            .toOffsetDateTime()
+
+        assertThat(invite.date).isEqualTo(expectedStart)
+        assertThat(invite.title).isEqualTo("Apple Sync")
+        assertThat(invite.managerEmail).isEqualTo("organizer@apple.com")
+        assertThat(invite.attendingEmails).containsExactly("invitee@example.com")
+        assertThat(invite.location).isEqualTo("Apple Park")
+        assertThat(invite.calendarProvider).isEqualTo(CalendarProvider.APPLE)
+    }
+
+    @Test
+    fun `parses zoom invite`() {
+        val invite = CalendarInviteParser.parse(resource("invite_zoom.ics"))
+
+        assertThat(invite.calendarProvider).isEqualTo(CalendarProvider.ZOOM)
     }
 
     private fun resource(name: String): InputStream =

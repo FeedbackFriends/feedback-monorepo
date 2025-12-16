@@ -1,6 +1,7 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.FeedbackConfig
+import dk.example.feedback.model.enumerations.CalendarProvider
 import dk.example.feedback.persistence.pincodegenerator.PinCodeGenerator
 import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.EventRepo
@@ -38,6 +39,7 @@ class MailListenerService(
 
     @PostConstruct
     fun startListener() {
+        logger.info("Starting IMAP listener for host={} folder={}", mailSettings.host, mailSettings.folder)
         thread(name = "imap-listener", isDaemon = true) {
             while (running) {
                 try {
@@ -65,6 +67,7 @@ class MailListenerService(
         store = session.getStore("imaps").apply {
             connect(settings.host, settings.port, settings.username, settings.password)
         }
+        logger.info("Connected to IMAP host={} port={} folder={}", settings.host, settings.port, settings.folder)
 
         folder = (store?.getFolder(settings.folder) as? IMAPFolder)?.apply {
             open(Folder.READ_ONLY)
@@ -76,6 +79,7 @@ class MailListenerService(
                 }
             })
         } ?: throw MessagingException("Folder ${settings.folder} is not an IMAP folder")
+        logger.info("IMAP folder {} opened; waiting for new messages", settings.folder)
 
         while (running && store?.isConnected == true) {
             try {
@@ -94,18 +98,46 @@ class MailListenerService(
             logger.warn("Mail listener does not exist so event will not be persisted")
             return
         }
-        eventRepo.persistEvent(
-            title = calendarInvite.title,
-            agenda = calendarInvite.agenda,
-            date = calendarInvite.date,
-            location = calendarInvite.location,
-            durationInMinutes = calendarInvite.durationInMinutes,
-            generatedPinCode = generatedPincode,
-            questions = emptyList(),
-            managerId = calendarInvite.managerEmail,
-            createdFromMailListener = true,
-            invitedEmails = calendarInvite.attendingEmails,
+        logger.info(
+            "Persisting event from calendar invite title={} date={} managerEmail={}",
+            calendarInvite.title,
+            calendarInvite.date,
+            calendarInvite.managerEmail,
         )
+        runCatching {
+            eventRepo.persistEvent(
+                title = calendarInvite.title,
+                agenda = calendarInvite.agenda,
+                date = calendarInvite.date,
+                location = calendarInvite.location,
+                durationInMinutes = calendarInvite.durationInMinutes,
+                generatedPinCode = generatedPincode,
+                questions = emptyList(),
+                managerId = account.id,
+                createdFromMailListener = true,
+                invitedEmails = calendarInvite.attendingEmails,
+                calendarProvider = calendarInvite.calendarProvider,
+            )
+        }.onSuccess { event ->
+            logger.info(
+                "Event persisted id={} titleLength={} agendaLength={} locationLength={}",
+                event.id,
+                calendarInvite.title.length,
+                calendarInvite.agenda?.length ?: 0,
+                calendarInvite.location?.length ?: 0,
+            )
+        }.onFailure { ex ->
+            logger.warn(
+                "Failed to persist calendar invite titleLength={} agendaLength={} locationLength={} provider={} managerEmail={}",
+                calendarInvite.title.length,
+                calendarInvite.agenda?.length ?: 0,
+                calendarInvite.location?.length ?: 0,
+                calendarInvite.calendarProvider,
+                calendarInvite.managerEmail,
+                ex,
+            )
+            throw ex
+        }
     }
 
     private fun closeResources() {
@@ -121,6 +153,7 @@ class MailListenerService(
         } catch (_: Exception) {
         } finally {
             store = null
+            logger.info("Disconnected from IMAP store and cleared folder references")
         }
     }
 
@@ -206,4 +239,5 @@ data class CalendarInvite(
     val location: String?,
     val managerEmail: String,
     val attendingEmails: List<String>,
+    val calendarProvider: CalendarProvider?,
 )

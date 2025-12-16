@@ -1,5 +1,6 @@
 package dk.example.feedback.model.database
 
+import dk.example.feedback.model.enumerations.CalendarProvider
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -10,6 +11,7 @@ data class EventEntity(
     val date: OffsetDateTime,
     val durationInMinutes: Int,
     val location: String?,
+    val calendarProvider: CalendarProvider?,
     val createdFromMailListener: Boolean,
     val createdAt: OffsetDateTime,
     val updatedAt: OffsetDateTime,

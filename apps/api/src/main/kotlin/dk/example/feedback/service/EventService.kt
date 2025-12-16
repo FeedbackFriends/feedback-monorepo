@@ -181,6 +181,7 @@ fun EventEntity.toManagerEvent(pinCode: String?): ManagerEventDto {
         date = date,
         durationInMinutes = durationInMinutes,
         location = location,
+        calendarProvider = calendarProvider,
         isDraft = isDraft,
         pinCode = pinCode,
         invitedEmails = invites.sortedBy { it.createdAt }.map { it.email },

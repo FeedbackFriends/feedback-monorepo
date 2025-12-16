@@ -1,6 +1,7 @@
 package dk.example.feedback.dto
 
 import dk.example.feedback.model.database.FeedbackEntity
+import dk.example.feedback.model.enumerations.CalendarProvider
 import dk.example.feedback.model.enumerations.FeedbackType
 import java.time.OffsetDateTime
 import java.util.*
@@ -13,6 +14,7 @@ data class ManagerEventDto(
     val pinCode: String?,
     val durationInMinutes: Int,
     val location: String?,
+    val calendarProvider: CalendarProvider?,
     val isDraft: Boolean,
     val ownerInfo: OwnerInfoDto,
     val overallFeedbackSummary: OverallFeedbackSummaryDto?,

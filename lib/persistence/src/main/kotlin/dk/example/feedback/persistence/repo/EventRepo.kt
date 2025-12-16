@@ -2,6 +2,7 @@ package dk.example.feedback.persistence.repo
 
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.QuestionEntity
+import dk.example.feedback.model.enumerations.CalendarProvider
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.exceptions.PinCodeNotFoundException
 import dk.example.feedback.persistence.dao.AccountDao
@@ -74,6 +75,7 @@ class EventRepo {
         managerId: String,
         createdFromMailListener: Boolean = false,
         invitedEmails: List<String> = emptyList(),
+        calendarProvider: CalendarProvider? = null,
     ): EventEntity {
 
         val managerAccount = AccountDao.findById(managerId) ?: throw Exception("Could not find manager id: $managerId")
@@ -85,6 +87,7 @@ class EventRepo {
             this.durationInMinutes = durationInMinutes
             this.manager = managerAccount
             this.createdFromMailListener = createdFromMailListener
+            this.calendarProvider = calendarProvider
         }
         PinCodeDao.new(id = generatedPinCode) {
             this.event = createdEvent

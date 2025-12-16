@@ -1,5 +1,6 @@
 package dk.example.feedback.persistence.table
 
+import dk.example.feedback.model.enumerations.CalendarProvider
 import dk.example.feedback.persistence.dao.utility.CommonColumnsTbl
 import dk.example.feedback.persistence.table.EventTable.agenda
 import dk.example.feedback.persistence.table.EventTable.durationInMinutes
@@ -30,11 +31,12 @@ import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
  * @property createdFromMailListener Flag indicating if the event originated from the mail listener.
  */
 object EventTable: CommonColumnsTbl("event") {
-    val title = varchar("title", 255)
-    val agenda = varchar("agenda", 255).nullable()
+    val title = text("title")
+    val agenda = text("agenda").nullable()
     val startDate = timestampWithTimeZone("start_date")
     val durationInMinutes = integer("duration_in_minutes")
-    val location = varchar("location", 255).nullable().default(null)
+    val location = text("location").nullable().default(null)
     val createdFromMailListener = bool("created_from_mail_listener").default(false)
     val manager = reference("manager_id", AccountTable, onDelete = ReferenceOption.CASCADE)
+    val calendarProvider = enumerationByName("calendar_provider", 255, CalendarProvider::class).nullable()
 }

@@ -1,5 +1,6 @@
 package dk.example.feedback.service
 
+import dk.example.feedback.model.enumerations.CalendarProvider
 import net.fortuna.ical4j.data.CalendarBuilder
 import net.fortuna.ical4j.model.Parameter
 import net.fortuna.ical4j.model.Property
@@ -32,6 +33,9 @@ internal object CalendarInviteParser {
             .filterIsInstance<VEvent>()
             .firstOrNull() ?: throw IllegalArgumentException("No VEVENT found in calendar invite")
 
+        val prodId = calendar.getProperty<Property>(Property.PRODID)?.value
+        val calendarProvider = CalendarProvider.fromProdId(prodId)
+
         val start = (event.getProperty(Property.DTSTART) as? DtStart)
             ?.toOffsetDateTime(timeZoneRegistry)
             ?: throw IllegalArgumentException("Missing DTSTART in calendar invite")
@@ -54,6 +58,7 @@ internal object CalendarInviteParser {
             location = (event.getProperty(Property.LOCATION) as? Location)?.value,
             managerEmail = organizerEmail,
             attendingEmails = event.attendeeEmails(excludeEmail = organizerEmail),
+            calendarProvider = calendarProvider,
         )
     }
 
