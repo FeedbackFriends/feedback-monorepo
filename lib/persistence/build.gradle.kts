@@ -5,7 +5,9 @@ dependencies {
     runtimeOnly(libs.postgresql)
     implementation(libs.bundles.exposed)
 }
-
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks.bootJar {
+    enabled = false
+}
+tasks.bootRun {
+    enabled = false
 }

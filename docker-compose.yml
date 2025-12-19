@@ -1,0 +1,47 @@
+services:
+  api:
+    image: nicolaidam/feedback-api:${VERSION}
+    container_name: ${API_CONTAINER_NAME:-feedback-api}
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - config:/config
+      - logs:/logs
+      - ./firebase_config.json:/app/firebase_config.json:ro
+    networks:
+      - feedback-network
+    restart: unless-stopped
+    ports:
+      - "${API_PORT}:8080"
+
+  scheduler:
+    image: nicolaidam/feedback-scheduler:${VERSION}
+    container_name: ${SCHEDULER_CONTAINER_NAME:-feedback-scheduler}
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - config:/config
+      - logs:/logs
+      - ./firebase_config.json:/app/firebase_config.json:ro
+    networks:
+      - feedback-network
+    restart: unless-stopped
+
+networks:
+  feedback-network:
+    name: ${FEEDBACK_NETWORK:-feedback-network}
+    external: true
+
+volumes:
+  config:
+    name: ${CONFIG_VOLUME:-feedback-config}
+  logs:
+    name: ${LOGS_VOLUME:-feedback-logs}

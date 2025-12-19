@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.spring.security.test)
     implementation(libs.springboot.oauth2.resource.server)
 
-    implementation(enforcedPlatform(libs.springboot.dependencies))
+//    implementation(enforcedPlatform(libs.springboot.dependencies))
 
     implementation(libs.bundles.jackson)
     implementation(libs.kotlin.reflect)

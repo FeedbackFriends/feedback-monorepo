@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/api.DockerFile
+    image: nicolaidam/feedback-api:${VERSION}
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: ./docker/scheduler.DockerFile
+    image: nicolaidam/feedback-scheduler:${VERSION}
