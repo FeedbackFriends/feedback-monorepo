@@ -63,10 +63,11 @@ jobs:
         run: |
           echo "Deploying version ${{ env.FULL_VERSION }} to Debian server"
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" scp -o StrictHostKeyChecking=no \
-            docker-compose.yml ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }}:/home/debian/config/docker-compose.yml
+            docker-compose.yml ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }}:/tmp/docker-compose.yml
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
             ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
             set -e
+            sudo mv /tmp/docker-compose.yml /home/debian/config/docker-compose.yml
             cd /home/debian/config
             sudo sed -i "s/^VERSION=.*/VERSION=${{ env.FULL_VERSION }}/" .env
             docker image prune -af
