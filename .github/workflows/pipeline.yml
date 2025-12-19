@@ -68,8 +68,8 @@ jobs:
             cd /home/debian/config
             sudo sed -i "s/^VERSION=.*/VERSION=${{ env.FULL_VERSION }}/" .env
             docker image prune -af
-            docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose -f docker-compose.yml pull
+            docker compose -f docker-compose.yml up -d --remove-orphans
             docker image prune -f
           EOF
 
