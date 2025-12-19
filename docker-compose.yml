@@ -11,7 +11,7 @@ services:
       FIREBASE_CONFIG_PATH: ${FIREBASE_CONFIG_PATH}
       LOG_PATH: ${LOG_PATH}
     volumes:
-      - logs:${LOG_DIR}
+      - logs:${LOG_PATH}
       - ./firebase_config.json:${FIREBASE_CONFIG_PATH}:ro
     ports:
       - "${API_PORT}:8080"
@@ -30,7 +30,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       FIREBASE_CONFIG_PATH: ${FIREBASE_CONFIG_PATH}
     volumes:
-      - logs:${LOG_DIR}
+      - logs:${LOG_PATH}
       - ./firebase_config.json:${FIREBASE_CONFIG_PATH}:ro
     networks:
       - feedback-network
