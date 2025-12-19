@@ -62,6 +62,8 @@ jobs:
       - name: Deploy to Debian server
         run: |
           echo "Deploying version ${{ env.FULL_VERSION }} to Debian server"
+          sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" scp -o StrictHostKeyChecking=no \
+            docker-compose.yml ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }}:/home/debian/config/docker-compose.yml
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
             ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
             set -e
