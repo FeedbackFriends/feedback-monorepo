@@ -49,7 +49,7 @@ jib {
         image = "eclipse-temurin:21-jdk"
     }
     to {
-        image = "nicolaidam/feedback-scheduler:${System.getenv("VERSION") ?: "local"}"
+        image = "nicolaidam/feedback-api:${System.getenv("VERSION") ?: "local"}"
         auth {
             username = System.getenv("DOCKER_USERNAME")
             password = System.getenv("DOCKER_PASSWORD")
