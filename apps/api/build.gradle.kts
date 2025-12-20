@@ -41,11 +41,11 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
+//dockerClient {
+//    executable = "/usr/local/bin/docker"
+//}
 jib {
-    dockerClient {
-        executable = "/usr/local/bin/docker"
-    }
+
     from {
         image = "eclipse-temurin:21-jdk"
     }

@@ -13,7 +13,8 @@
 - `./gradlew :scheduler:test` or `./gradlew :scheduler:compileKotlin` – run scheduler tests or just compile the scheduler (useful for quick checks).
 - `./gradlew :api:bootRun` – start the API locally on 8080 (set `SPRING_DATASOURCE_URL`, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH` to target real services).
 - `./gradlew :scheduler:bootRun` – start the scheduler service; shares the same env vars as the API.
-- `./gradlew jibDockerBuild` (per app) builds a container image if Docker is available.
+
+- `docker compose up -d --build` – build and run the applications via Docker Compose.
 
 ## Coding Style & Naming Conventions
 - Kotlin 1.9+, JVM 21 toolchain; prefer idiomatic Kotlin (null-safety, data classes for payloads) and 4-space indentation.
