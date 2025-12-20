@@ -55,6 +55,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          VERSION: ${{ env.FULL_VERSION }}
         run: |
           ./gradlew :api:jib 
           ./gradlew :scheduler:jib 
