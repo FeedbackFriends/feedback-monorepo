@@ -56,8 +56,8 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          ./gradlew :api:jib --image=nicolaidam/feedback-api:${FULL_VERSION}
-          ./gradlew :scheduler:jib --image=nicolaidam/feedback-scheduler:${FULL_VERSION}
+          ./gradlew :api:jib 
+          ./gradlew :scheduler:jib 
 
       - name: Deploy to Debian server
         run: |

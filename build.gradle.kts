@@ -6,7 +6,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version libs.versions.kotlin
     kotlin("plugin.spring") version libs.versions.kotlin
-	id("com.google.cloud.tools.jib") version "3.4.4"
+	id("com.google.cloud.tools.jib") version libs.versions.jib
 	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 }
 

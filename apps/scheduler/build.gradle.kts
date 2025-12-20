@@ -40,6 +40,9 @@ tasks.withType<Test> {
 //    executable = "/usr/local/bin/docker"
 //}
 jib {
+    to {
+        image = "nicolaidam/feedback-scheduler:${System.getenv("VERSION")}"
+    }
     from {
         image = "eclipse-temurin:21-jdk"
     }

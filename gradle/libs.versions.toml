@@ -11,7 +11,7 @@ liquibase = "4.31.0"
 postgresql = "42.7.5"
 h2 = "2.3.232"
 tools-core = "1.0.0-alpha11"
-jib = "3.4.4"
+jib = "3.5.2"
 ical4j = "3.2.14"
 
 [libraries]
