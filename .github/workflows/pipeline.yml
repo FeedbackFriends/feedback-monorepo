@@ -57,8 +57,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           VERSION: ${{ env.FULL_VERSION }}
         run: |
-          ./gradlew :api:jib 
-          ./gradlew :scheduler:jib 
+          ./gradlew :api:jib :scheduler:jib 
 
       - name: Deploy to Debian server
         run: |
@@ -81,7 +80,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "${{ env.FULL_VERSION }}" -m "Release ${FULL_VERSION}"
+          git tag -a "${{ env.FULL_VERSION }}" -m "Release ${{ env.FULL_VERSION }}"
           git push origin "${{ env.FULL_VERSION }}"
 
       - name: Create GitHub Release
