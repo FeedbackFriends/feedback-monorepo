@@ -47,3 +47,5 @@ out/
 # Tooling artifacts
 .codex/
 .specify/
+
+.env
