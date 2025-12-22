@@ -39,7 +39,7 @@ jobs:
         env:
           VERSION: ${{ env.FULL_VERSION }}
         run: |
-          ./gradlew :api:generateOpenApiDocs -Pversion=${VERSION}
+          ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
