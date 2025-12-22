@@ -15,26 +15,19 @@ dependencies {
     implementation(libs.springboot.web)
     implementation(libs.springboot.actuator)
     implementation(libs.springboot.security)
-    implementation(libs.spring.security.test)
     implementation(libs.springboot.oauth2.resource.server)
     implementation(enforcedPlatform(libs.springboot.dependencies))
     implementation(libs.bundles.jackson)
     implementation(libs.kotlin.reflect)
     implementation(libs.springdoc.openapi.starter.webmvc)
     implementation(libs.firebase)
-    implementation(libs.jackson.module.kotlin)
-
-    // TODO: Remove
-    implementation(libs.junit.jupiter.api)
-    implementation(libs.springboot.test)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.springboot.test)
     testImplementation(libs.h2database)
     implementation(libs.liquibase)
-    testImplementation(libs.bundles.exposed)
     testImplementation(libs.spring.security.test)
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+    testImplementation(libs.kotlinx.coroutines.test)
 
 }
 
