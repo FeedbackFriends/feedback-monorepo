@@ -1,6 +1,6 @@
 [versions]
 springboot = "3.4.2"
-kotlin = "2.0.10"
+kotlin = "2.3.0"
 jackson = "2.16.1"
 okhttp = "4.12.0"
 junit-jupiter = "5.10.1"
@@ -57,7 +57,7 @@ postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" 
 h2database = { module = "com.h2database:h2", version.ref = "h2" }
 
 micrometer-registry-prometheus = "io.micrometer:micrometer-registry-prometheus:1.12.1"
-kotlinx-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
+kotlinx-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2"
 apm-agent-attach = "co.elastic.apm:apm-agent-attach:1.45.0"
 kotlin-mustache = "net.pwall.mustache:kotlin-mustache:0.11"
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
