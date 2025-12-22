@@ -12,23 +12,28 @@ import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springdoc.core.customizers.OpenApiCustomizer
+import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.beans.factory.ObjectProvider
 
 @Configuration
-class OpenApiConfig(private val feedbackConfig: FeedbackConfig) {
+class OpenApiConfig(
+    private val buildPropertiesProvider: ObjectProvider<BuildProperties>,
+) {
 
     @Bean
     fun swagger(): OpenAPI {
         val securitySchemeName = "bearerAuth"
-        val (buildNumber, commitHash) = feedbackConfig.version.split("-", limit = 2).let {
+        val version = buildPropertiesProvider.getIfAvailable()?.version ?: "dev"
+        val (_, commitHash) = version.split("-", limit = 2).let {
             it.first() to it.getOrElse(1) { "unknown" }
         }
         return OpenAPI()
             .info(
                 io.swagger.v3.oas.models.info.Info()
                     .title("Feedback API")
-                    .version(feedbackConfig.version)
+                    .version(version)
                     .description(
                         """
                         API documentation for Lets Grow application.
@@ -82,5 +87,3 @@ class OpenApiConfig(private val feedbackConfig: FeedbackConfig) {
         }
     }
 }
-
-

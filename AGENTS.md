@@ -15,7 +15,7 @@
 - `./gradlew :scheduler:bootRun` – start the scheduler service; shares the same env vars as the API.
 - `./gradlew :api:jibDockerBuild --no-configuration-cache` – Build docker image locally for api
 - `./gradlew :scheduler:jibDockerBuild --no-configuration-cache` – Build docker image locally for scheduler
-- `docker compose up -d --build` – build and run the applications via Docker Compose.
+- `docker compose up -d` – build and run the applications via Docker Compose.
 
 ## Coding Style & Naming Conventions
 - Kotlin 1.9+, JVM 21 toolchain; prefer idiomatic Kotlin (null-safety, data classes for payloads) and 4-space indentation.

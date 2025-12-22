@@ -17,7 +17,7 @@ Kotlin + Spring Boot services powering the LetsGrow feedback platform. Provides 
 ## Prerequisites
 - JDK 21 (toolchain); Kotlin 1.9; Gradle wrapper included.
 - Docker (optional) for running Postgres locally.
-- Environment: `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` for Postgres, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH`, `VERSION` (e.g., `0.0.5`), optional `SHOW_EXPOSED_SQL=true`.
+- Environment: `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` for Postgres, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH`, optional `SHOW_EXPOSED_SQL=true`. Base version is set in `gradle.properties` (CI appends build metadata).
 
 ## Quick Start (API)
 ```bash
@@ -34,6 +34,34 @@ Scheduler service:
 ```bash
 ./gradlew :apps:scheduler:bootRun
 ```
+
+## Docker Compose
+The Compose setup runs both services from prebuilt images. Image tags come from the `VERSION` env var, so keep `VERSION=local` in `.env` for local runs and let CI set the real value when deploying.
+
+```bash
+docker compose up -d
+```
+
+Local Jib builds:
+- Jib tags images with `project.version`. For local builds, set `VERSION=local` in `.env` and build with `-Pversion=local` so Compose and Jib use the same tag.
+
+```bash
+./gradlew :api:jibDockerBuild :scheduler:jibDockerBuild --no-configuration-cache
+docker compose up -d
+```
+
+CI behavior:
+- CI injects a real version (run number + short SHA) via `-Pversion=...`, and Jib tags images with that value.
+- `docker-compose.yml` consumes `VERSION` to pull the matching tag during deploy.
+
+## CI Pipeline (GitHub Actions)
+The deploy workflow runs in this order:
+- Compute versions (`FULL_VERSION=run_number-short_sha`) and align `DOCKER_TAG` with it.
+- Set up JDK 21.
+- Generate and sync OpenAPI spec to `feedback-openapi` if changed.
+- Build and push Docker images with Jib using `-Pversion=${FULL_VERSION}`.
+- Deploy via Docker Compose to the Debian host using the same tag.
+- Create a git tag and GitHub release for `FULL_VERSION`.
 
 ## Build, Test, and Tooling
 - `./gradlew clean build` – compile all modules and run tests (warnings fail build).
