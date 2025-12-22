@@ -53,15 +53,17 @@ docker compose up -d
 CI behavior:
 - CI injects a real version (run number + short SHA) via `-Pversion=...`, and Jib tags images with that value.
 - `docker-compose.yml` consumes `VERSION` to pull the matching tag during deploy.
+- Actuator health ports are bound to `127.0.0.1` (`8090` for API, `8091` for scheduler) for private health checks.
 
 ## CI Pipeline (GitHub Actions)
 The deploy workflow runs in this order:
 - Compute versions (`FULL_VERSION=run_number-short_sha`) and align `DOCKER_TAG` with it.
-- Set up JDK 21.
-- Generate and sync OpenAPI spec to `feedback-openapi` if changed.
-- Build and push Docker images with Jib using `-Pversion=${FULL_VERSION}`.
-- Deploy via Docker Compose to the Debian host using the same tag.
-- Create a git tag and GitHub release for `FULL_VERSION`.
+  - Set up JDK 21.
+  - Generate and sync OpenAPI spec to `feedback-openapi` if changed.
+  - Build and push Docker images with Jib using `-Pversion=${FULL_VERSION}`.
+  - Deploy via Docker Compose to the Debian host using the same tag.
+  - Run post-deploy health checks over SSH against private actuator ports (API `8090`, scheduler `8091`).
+  - Create a git tag and GitHub release for `FULL_VERSION`.
 
 ## Build, Test, and Tooling
 - `./gradlew clean build` – compile all modules and run tests (warnings fail build).
