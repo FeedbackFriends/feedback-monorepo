@@ -35,7 +35,7 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
-      - name: Update OpenAPI and sync with feedback-openapi repo
+      - name: Generate OpenAPI spec
         env:
           VERSION: ${{ env.FULL_VERSION }}
         run: |
