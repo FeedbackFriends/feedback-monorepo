@@ -2,6 +2,16 @@ server:
   port: 8080
   shutdown: graceful
   max-http-request-header-size: 16KB
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
 spring:
   jpa:
     open-in-view: false
