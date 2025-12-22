@@ -4,7 +4,14 @@ dependencies {
     implementation(libs.springboot.web)
     implementation(libs.springboot.actuator)
     implementation(libs.springboot.security)
-    implementation(libs.spring.security.test)
     implementation(libs.firebase)
     implementation(projects.model)
+}
+
+tasks.bootJar {
+    enabled = false
+}
+
+tasks.bootRun {
+    enabled = false
 }

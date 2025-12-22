@@ -32,6 +32,14 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+tasks.bootJar {
+	enabled = false
+}
+
+tasks.bootRun {
+	enabled = false
+}
+
 if (hasProperty("buildScan")) {
 	extensions.findByName("buildScan")?.withGroovyBuilder {
 		setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
