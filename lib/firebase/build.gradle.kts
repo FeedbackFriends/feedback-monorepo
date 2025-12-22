@@ -7,3 +7,11 @@ dependencies {
     implementation(libs.firebase)
     implementation(projects.model)
 }
+
+tasks.bootJar {
+    enabled = false
+}
+
+tasks.bootRun {
+    enabled = false
+}
