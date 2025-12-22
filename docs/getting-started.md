@@ -18,8 +18,8 @@
    export SPRING_DATASOURCE_PASSWORD=secret
    export FIREBASE_API_KEY=...
    export FIREBASE_CONFIG_PATH=./firebase_config.json
-   export VERSION=0.0.5
    ```
+   Base version is set in `gradle.properties` (CI appends build metadata).
 
 ## Running Services
 - API service:

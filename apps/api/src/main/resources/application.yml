@@ -49,7 +49,7 @@ springdoc:
 feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
   firebase-config-path: ${FIREBASE_CONFIG_PATH}
-  version: ${VERSION}
+
   mail:
     host: ${IMAP_HOST:}
     port: ${IMAP_PORT:993}

@@ -18,11 +18,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compute FULL_VERSION
+      - name: Compute versions
         run: |
+          BASE_VERSION="${BUILD_NUMBER}"
           SHORT_SHA=${GITHUB_SHA:0:7}
-          FULL_VERSION="${BUILD_NUMBER}-${SHORT_SHA}"
+          FULL_VERSION="${BASE_VERSION}-${SHORT_SHA}"
+          # Keep Docker tags aligned with release versions for traceability.
+          DOCKER_TAG="${FULL_VERSION}"
+          echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_ENV
           echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
+          echo "DOCKER_TAG=$DOCKER_TAG" >> $GITHUB_ENV
 
       - name: Set up JDK environment
         uses: actions/setup-java@v4
@@ -34,7 +39,7 @@ jobs:
         env:
           VERSION: ${{ env.FULL_VERSION }}
         run: |
-          ./gradlew :api:generateOpenApiDocs -Pversion=${VERSION}
+          ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -55,21 +60,24 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          VERSION: ${{ env.FULL_VERSION }}
         run: |
-          ./gradlew :api:jib :scheduler:jib 
+          ./gradlew :api:jib :scheduler:jib --no-configuration-cache -Pversion=${FULL_VERSION}
 
       - name: Deploy to Debian server
         run: |
-          echo "Deploying version ${{ env.FULL_VERSION }} to Debian server"
+          DOCKER_COMPOSE_TMP=$(mktemp)
+          sed \
+            -e "s|\\(nicolaidam/feedback-api:\\)[^ ]*|\\1${{ env.DOCKER_TAG }}|" \
+            -e "s|\\(nicolaidam/feedback-scheduler:\\)[^ ]*|\\1${{ env.DOCKER_TAG }}|" \
+            docker-compose.yml > "$DOCKER_COMPOSE_TMP"
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" scp -o StrictHostKeyChecking=no \
-            docker-compose.yml ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }}:/tmp/docker-compose.yml
+            "$DOCKER_COMPOSE_TMP" ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }}:/tmp/docker-compose.yml
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
             ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
             set -e
             sudo mv /tmp/docker-compose.yml /home/debian/config/docker-compose.yml
             cd /home/debian/config
-            sudo sed -i "s/^VERSION=.*/VERSION=${{ env.FULL_VERSION }}/" .env
+            sudo sed -i '/^VERSION=/d' .env
             docker image prune -af
             docker compose -f docker-compose.yml pull
             docker compose -f docker-compose.yml up -d --remove-orphans

@@ -36,15 +36,18 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-//dockerClient {
-//    executable = "/usr/local/bin/docker"
-//}
+
+// Generate build metadata so Spring can read the build version at runtime.
+springBoot {
+    buildInfo()
+}
+
 jib {
     from {
         image = "eclipse-temurin:21-jdk"
     }
     to {
-        image = "nicolaidam/feedback-scheduler:${System.getenv("VERSION") ?: "local"}"
+        image = "nicolaidam/feedback-scheduler:${project.version}"
         auth {
             username = System.getenv("DOCKER_USERNAME")
             password = System.getenv("DOCKER_PASSWORD")
