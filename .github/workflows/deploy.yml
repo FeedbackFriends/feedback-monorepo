@@ -71,49 +71,17 @@ jobs:
 
       - name: Post-deploy health check (API)
         run: |
-          set -euo pipefail
-          attempts=10
-          delay=6
-          for i in $(seq 1 "$attempts"); do
-            echo "Health check attempt $i/$attempts..."
-            response=$(
-              sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
-                ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} \
-                "curl -fsS --connect-timeout 3 --max-time 8 http://localhost:8090/actuator/health" || true
-            )
-            if echo "$response" | grep -Eq '"status"[[:space:]]*:[[:space:]]*"UP"'; then
-              echo "Health check OK"
-              exit 0
-            fi
-            echo "Health check not ready: ${response:-no response}"
-            sleep "$delay"
-            delay=$((delay + 4))
-          done
-          echo "Health check failed after $attempts attempts"
-          exit 1
+          sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} \
+            "curl -fsS --connect-timeout 3 --max-time 8 --retry 8 --retry-connrefused --retry-delay 5 \
+            http://localhost:8090/actuator/health | grep -q '\"status\":\"UP\"'"
 
       - name: Post-deploy health check (Scheduler)
         run: |
-          set -euo pipefail
-          attempts=10
-          delay=6
-          for i in $(seq 1 "$attempts"); do
-            echo "Health check attempt $i/$attempts..."
-            response=$(
-              sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
-                ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} \
-                "curl -fsS --connect-timeout 3 --max-time 8 http://localhost:8091/actuator/health" || true
-            )
-            if echo "$response" | grep -Eq '"status"[[:space:]]*:[[:space:]]*"UP"'; then
-              echo "Health check OK"
-              exit 0
-            fi
-            echo "Health check not ready: ${response:-no response}"
-            sleep "$delay"
-            delay=$((delay + 4))
-          done
-          echo "Health check failed after $attempts attempts"
-          exit 1
+          sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} \
+            "curl -fsS --connect-timeout 3 --max-time 8 --retry 8 --retry-connrefused --retry-delay 5 \
+            http://localhost:8091/actuator/health | grep -q '\"status\":\"UP\"'"
 
       - name: Create and Push Git Tag
         run: |
