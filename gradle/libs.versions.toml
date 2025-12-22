@@ -1,10 +1,10 @@
 [versions]
-springboot = "3.4.2"
+springboot = "4.0.1"
 kotlin = "2.0.10"
 jackson = "2.16.1"
 okhttp = "4.12.0"
 junit-jupiter = "5.10.1"
-spring-security = "6.4.2"
+spring-security = "7.0.2"
 exposed = "0.61.0"
 firebase = "9.4.3"
 liquibase = "4.31.0"
@@ -31,8 +31,8 @@ springboot-configuration-processor = { module = "org.springframework.boot:spring
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose", version.ref = "spring-security" }
 spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "spring-security" }
 
-spring-retry = "org.springframework.retry:spring-retry:2.0.5"
-spring-aspects = "org.springframework:spring-aspects:6.1.2"
+spring-retry = "org.springframework.retry:spring-retry:2.0.12"
+spring-aspects = "org.springframework:spring-aspects:7.0.2"
 
 springdoc-openapi-starter-webmvc = "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0"
 ical4j = { module = "org.mnode.ical4j:ical4j", version.ref = "ical4j" }
