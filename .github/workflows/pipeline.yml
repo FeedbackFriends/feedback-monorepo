@@ -41,21 +41,6 @@ jobs:
         run: |
           ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
 
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git clone https://x-access-token:${{ secrets.FEEDBACK_OPENAPI_PAT }}@github.com/FeedbackFriends/feedback-openapi.git feedback-openapi
-          cp apps/api/build/openapi.yaml feedback-openapi/openapi.yaml
-          cd feedback-openapi
-
-          git add openapi.yaml
-          if git diff --cached --quiet; then
-            echo "No changes detected in OpenAPI spec."
-          else
-            git commit -m "Update OpenAPI spec for version ${VERSION}"
-            git push origin main
-          fi
-
       - name: Build and publish Docker images with Jib
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
