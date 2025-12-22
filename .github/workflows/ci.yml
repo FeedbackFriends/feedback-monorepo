@@ -2,7 +2,6 @@ name: CI ✅
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, labeled]
 
 permissions:
   contents: read
@@ -10,7 +9,6 @@ permissions:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.labels.*.name, 'ci')
 
     steps:
       - name: Checkout repository
