@@ -61,7 +61,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          ./gradlew :api:jib :scheduler:jib -Pversion=${FULL_VERSION}
+          ./gradlew :api:jib :scheduler:jib --no-configuration-cache -Pversion=${FULL_VERSION}
 
       - name: Deploy to Debian server
         run: |
