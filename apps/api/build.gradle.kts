@@ -23,7 +23,6 @@ dependencies {
     implementation(libs.springdoc.openapi.starter.webmvc)
     implementation(libs.firebase)
 
-    runtimeOnly(libs.h2database)
     runtimeOnly(libs.liquibase.core)
     runtimeOnly(libs.postgres)
 
