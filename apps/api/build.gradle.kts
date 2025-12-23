@@ -30,6 +30,7 @@ dependencies {
     testImplementation(libs.springboot.testcontainers)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.kotlin.test.junit5)
+    testRuntimeOnly(libs.h2)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 

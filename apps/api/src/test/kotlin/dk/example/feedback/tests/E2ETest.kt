@@ -1,4 +1,4 @@
-package dk.example.feedback.mailservice
+package dk.example.feedback.tests
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(TestConfig::class, SecurityConfig::class)
-class AccountControllerTest(
+class E2ETest(
     @Autowired val mockMvc: MockMvc,
 
 ) {
