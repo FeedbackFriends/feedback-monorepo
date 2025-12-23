@@ -1,30 +1,23 @@
 plugins {
     alias(libs.plugins.jib)
+    alias(libs.plugins.openapi)
+    kotlin("plugin.spring") version libs.versions.kotlin
+    alias(libs.plugins.springboot)
+    alias(libs.plugins.spring.dependencies)
 }
 
 dependencies {
     implementation(projects.persistence)
     implementation(projects.model)
     implementation(projects.firebase)
-
-    implementation(libs.springboot.data.jpa)
-    implementation(libs.springboot.mail)
-    implementation(libs.springboot.web)
-    implementation(libs.springboot.actuator)
-
-    developmentOnly(libs.springboot.devtools)
-    testImplementation(libs.springboot.test)
-
-
-//    implementation(enforcedPlatform(libs.springboot.dependencies))
-
+    // Spring Boot dependencies
+    implementation(libs.springboot.starter)
+    implementation(libs.springboot.starter.validation)
+    implementation(libs.springboot.starter.web)
     implementation(libs.bundles.jackson)
-    implementation(libs.kotlin.reflect)
     implementation(libs.ical4j)
-
-    testImplementation(libs.junit.jupiter.api)
-    testRuntimeOnly(libs.junit.jupiter.engine)
     implementation(libs.firebase)
+    implementation(libs.springboot.mail)
 }
 
 tasks.withType<Test> {

@@ -1,34 +1,29 @@
 plugins {
     alias(libs.plugins.jib)
-    id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
+    alias(libs.plugins.openapi)
+    kotlin("plugin.spring") version libs.versions.kotlin
+    alias(libs.plugins.springboot)
+    alias(libs.plugins.spring.dependencies)
 }
 
 dependencies {
-
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    developmentOnly(libs.springboot.devtools)
-
     implementation(projects.persistence)
     implementation(projects.model)
     implementation(projects.firebase)
-    implementation(libs.springboot.data.jpa)
-    implementation(libs.springboot.web)
-    implementation(libs.springboot.actuator)
+
+    // Spring Boot dependencies
+    implementation(libs.springboot.starter)
+    implementation(libs.springboot.starter.validation)
+    implementation(libs.springboot.starter.web)
     implementation(libs.springboot.security)
     implementation(libs.springboot.oauth2.resource.server)
-    implementation(enforcedPlatform(libs.springboot.dependencies))
+
+    // Springdoc for swagger docs supporting Spring Web MVC
+    implementation(libs.springdoc.openapi.starter.webmvc)
+
     implementation(libs.bundles.jackson)
-    implementation(libs.kotlin.reflect)
     implementation(libs.springdoc.openapi.starter.webmvc)
     implementation(libs.firebase)
-
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.springboot.test)
-    testImplementation(libs.h2database)
-    implementation(libs.liquibase)
-    testImplementation(libs.spring.security.test)
-    testImplementation(libs.kotlinx.coroutines.test)
-
 }
 
 tasks.withType<Test> {

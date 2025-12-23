@@ -46,21 +46,25 @@ class SecurityConfig {
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers(AntPathRequestMatcher("/actuator/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/admin/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/v3/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/swagger-ui/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/webjars/**")).permitAll()
-                    .requestMatchers(AntPathRequestMatcher("/**")).authenticated()
-                    // The actuator endpoints runs on a different port, and must never be exposed to the internet,
-                    // security is disabled for management, because kubernetes will invoke the health endpoint
+                    .requestMatchers("/actuator/**").permitAll()
+                    .requestMatchers("/admin/**").permitAll()
+                    .requestMatchers("/").permitAll()
+                    .requestMatchers("/v3/**").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/webjars/**").permitAll()
+
+                    // actuator on management port
                     .requestMatchers(ManagementPortMatcher(managementPort)).permitAll()
-            }.oauth2ResourceServer { resourceServer ->
-                resourceServer.jwt { serverConfigurer ->
-                    serverConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter())
+
+                    // everything else requires auth
+                    .anyRequest().authenticated()
+            }
+            .oauth2ResourceServer { resourceServer ->
+                resourceServer.jwt { jwt ->
+                    jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
                 }
             }
+
         return http.build()
     }
 
