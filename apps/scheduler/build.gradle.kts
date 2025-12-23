@@ -6,17 +6,21 @@ plugins {
 }
 
 dependencies {
+
     implementation(projects.persistence)
     implementation(projects.model)
     implementation(projects.firebase)
-    // Spring Boot dependencies
+
     implementation(libs.springboot.starter)
     implementation(libs.springboot.starter.validation)
     implementation(libs.springboot.starter.web)
-    implementation(libs.bundles.jackson)
-    implementation(libs.ical4j)
-    implementation(libs.firebase)
     implementation(libs.springboot.mail)
+
+    implementation(libs.bundles.jackson)
+
+    implementation(libs.ical4j)
+
+    implementation(libs.firebase)
 
     testImplementation(libs.springboot.starter.test)
     testImplementation(libs.springboot.testcontainers)

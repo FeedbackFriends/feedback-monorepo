@@ -5,16 +5,15 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.model)
+
     implementation(libs.jackson.module.kotlin)
-//    implementation(libs.springboot.web)
 
     implementation(libs.springboot.starter)
     implementation(libs.springboot.starter.validation)
     implementation(libs.springboot.starter.web)
 
-
     implementation(libs.firebase)
-    implementation(projects.model)
 }
 
 tasks.bootJar {

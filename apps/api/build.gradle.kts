@@ -11,14 +11,12 @@ dependencies {
     implementation(projects.model)
     implementation(projects.firebase)
 
-    // Spring Boot dependencies
     implementation(libs.springboot.starter)
     implementation(libs.springboot.starter.validation)
     implementation(libs.springboot.starter.web)
     implementation(libs.springboot.security)
     implementation(libs.springboot.oauth2.resource.server)
 
-    // Springdoc for swagger docs supporting Spring Web MVC
     implementation(libs.springdoc.openapi.starter.webmvc)
 
     implementation(libs.bundles.jackson)
