@@ -22,14 +22,13 @@ class TestConfig {
             val parts = token.split('.', limit = 2)
             val userId = parts.firstOrNull()?.ifBlank { "unknown" } ?: "unknown"
             val role = parts.getOrNull(1)?.ifBlank { null }
-            val roles = role?.let { listOf(it) } ?: emptyList()
             val now = Instant.now()
 
             Jwt.withTokenValue(token)
                 .header("alg", "none")
                 .subject(userId)
                 .claim("sub", userId)
-                .claim("role", roles)
+                .claim("role", role)
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(3600))
                 .build()

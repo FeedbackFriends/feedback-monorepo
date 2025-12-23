@@ -71,7 +71,8 @@ class SecurityConfig {
     fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
         val converter = JwtAuthenticationConverter()
         converter.setJwtGrantedAuthoritiesConverter { jwt ->
-            val roles = jwt.getClaimAsStringList("role") ?: emptyList()
+            val role = jwt.getClaimAsString("role")
+            val roles = role?.let { listOf(it) } ?: emptyList()
             logger.debug("Extracted roles: {}", roles)
             roles.map { SimpleGrantedAuthority(it) }
         }
