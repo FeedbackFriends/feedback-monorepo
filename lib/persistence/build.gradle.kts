@@ -5,9 +5,6 @@ plugins {
 
 dependencies {
     implementation(projects.model)
-    runtimeOnly(libs.h2database)
-    runtimeOnly(libs.liquibase.core)
-    runtimeOnly(libs.postgres)
     implementation(libs.exposed.springboot.starter)
     implementation(libs.exposed.javatime)
 }

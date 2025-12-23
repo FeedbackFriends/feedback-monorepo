@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.jib)
-    alias(libs.plugins.openapi)
     kotlin("plugin.spring") version libs.versions.kotlin
     alias(libs.plugins.springboot)
     alias(libs.plugins.spring.dependencies)
@@ -18,6 +17,12 @@ dependencies {
     implementation(libs.ical4j)
     implementation(libs.firebase)
     implementation(libs.springboot.mail)
+
+    testImplementation(libs.springboot.starter.test)
+    testImplementation(libs.springboot.testcontainers)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.kotlin.test.junit5)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.withType<Test> {
