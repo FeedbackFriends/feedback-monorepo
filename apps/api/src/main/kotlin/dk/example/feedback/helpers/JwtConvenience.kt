@@ -14,6 +14,6 @@ fun Jwt.verifyAccountHasId(id: String) {
 }
 
 fun Jwt.role(): Role? {
-    val roleValue = this.claims["role"] as? String ?: return null
-    return Role.fromString(roleValue)
+    val roleClaim = this.claims["role"] as? String ?: return null
+    return Role.fromString(roleClaim)
 }

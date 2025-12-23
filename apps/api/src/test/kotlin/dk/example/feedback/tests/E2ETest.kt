@@ -1,11 +1,10 @@
-package dk.example.feedback.mailservice
+package dk.example.feedback.tests
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import dk.example.feedback.config.SecurityConfig
 import dk.example.feedback.dto.FeedbackSessionDto
-import dk.example.feedback.helpers.role
 import dk.example.feedback.model.enumerations.Emoji
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.enumerations.Role
@@ -19,16 +18,13 @@ import dk.example.feedback.payloads.SubmitFeedbackInput
 import dk.example.feedback.utils.MockJwtFactory
 import dk.example.feedback.utils.TestConfig
 import java.time.OffsetDateTime
-import kotlinx.coroutines.test.runTest
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.oauth2.jwt.Jwt
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -37,7 +33,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(TestConfig::class, SecurityConfig::class)
-class AccountControllerTest(
+class E2ETest(
     @Autowired val mockMvc: MockMvc,
 
 ) {
@@ -46,7 +42,7 @@ class AccountControllerTest(
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
     @Test
-    fun integration() = runTest {
+    fun integration()  {
         val user1 = "User1"
         `Create anonymous account and verify get session`(userId = user1)
         `Upgrade account to participant role and verify get session`(userId = user1)
@@ -65,62 +61,62 @@ class AccountControllerTest(
 //        ``()
     }
 
-    suspend fun `Create anonymous account and verify get session`(userId: String) {
+    fun `Create anonymous account and verify get session`(userId: String) {
         val createUserInput = CreateAccountInput(requestedRole = null, fcmToken = null)
 
         val createAccountRequest = MockMvcRequestBuilders
             .post("/account")
             .content(objectMapper.writeValueAsString(createUserInput))
-            .with(MockJwtFactory(userId).anonymousToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).anonymousToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(createAccountRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(null))
-            .andExpect(jsonPath("$.accountInfo.name").value(null))
-            .andExpect(jsonPath("$.accountInfo.email").value(null))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(null))
+            .andExpect(jsonPath("$.role").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
             .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").value(null))
+            .andExpect(jsonPath("$.managerData").value(nullValue()))
 
         val getSessionRequest = MockMvcRequestBuilders
             .get("/session")
-            .with(MockJwtFactory(userId).anonymousToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).anonymousToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
 
         mockMvc.perform(getSessionRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(null))
-            .andExpect(jsonPath("$.accountInfo.name").value(null))
-            .andExpect(jsonPath("$.accountInfo.email").value(null))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(null))
+            .andExpect(jsonPath("$.role").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
             .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").value(null))
+            .andExpect(jsonPath("$.managerData").value(nullValue()))
     }
 
-    suspend fun `Upgrade account to participant role and verify get session`(userId: String) {
+    fun `Upgrade account to participant role and verify get session`(userId: String) {
         val createUserInput = CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)
 
         val createAccountRequest = MockMvcRequestBuilders
             .post("/account")
             .content(objectMapper.writeValueAsString(createUserInput))
-            .with(MockJwtFactory(userId).anonymousToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).anonymousToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(createAccountRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(null))
-            .andExpect(jsonPath("$.accountInfo.name").value(null))
-            .andExpect(jsonPath("$.accountInfo.email").value(null))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(null))
+            .andExpect(jsonPath("$.role").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
             .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").value(null))
+            .andExpect(jsonPath("$.managerData").value(nullValue()))
         // TODO: remove response from create account endpoint
 
         val getSessionRequest = MockMvcRequestBuilders
             .get("/session")
-            .with(MockJwtFactory(userId).participantToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).participantToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
 
@@ -128,38 +124,37 @@ class AccountControllerTest(
         mockMvc.perform(getSessionRequest)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.role").value(Role.Participant.toString()))
-            .andExpect(jsonPath("$.accountInfo.name").value(null))
-            .andExpect(jsonPath("$.accountInfo.email").value(null))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(null))
+            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
             .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").value(null))
+            .andExpect(jsonPath("$.managerData").value(nullValue()))
     }
 
-    suspend fun `Update account role to manager and verify get session`(userId: String) {
-        val token = MockJwtFactory(userId = "user-id").managerToken()
+    fun `Update account role to manager and verify get session`(userId: String) {
         mockMvc.perform(
             MockMvcRequestBuilders.put("/account/role")
-                .with(MockJwtFactory(userId).participantToken())
+                .header("Authorization", "Bearer ${MockJwtFactory(userId).participantToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""{"role":"Manager"}""")
         ).andExpect(status().isOk)
 
         val getSessionRequest = MockMvcRequestBuilders
             .get("/session")
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(getSessionRequest)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
-            .andExpect(jsonPath("$.accountInfo.name").value(null))
-            .andExpect(jsonPath("$.accountInfo.email").value(null))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(null))
+            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
+            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
             .andExpect(jsonPath("$.participantEvents").isEmpty)
             .andExpect(jsonPath("$.managerData").exists())
     }
 
-    suspend fun `Modify account and verify get session`(userId: String) {
+    fun `Modify account and verify get session`(userId: String) {
         val modifyAccountInput = ModifyAccountInput(
             name = "New name",
             email = "New email",
@@ -169,14 +164,14 @@ class AccountControllerTest(
         val updateAccountRequest = MockMvcRequestBuilders
             .put("/account")
             .content(objectMapper.writeValueAsString(modifyAccountInput))
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(updateAccountRequest).andExpect(status().isOk)
 
         val getSessionRequest = MockMvcRequestBuilders
             .get("/session")
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(getSessionRequest)
@@ -189,7 +184,7 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.managerData").exists())
     }
 
-    suspend fun `Create event and verify session`(userId: String): Pair<String, String> {
+    fun `Create event and verify session`(userId: String): Pair<String, String> {
         val createEventInput = EventInput(
             title = "Daily standup",
             agenda = null,
@@ -211,7 +206,7 @@ class AccountControllerTest(
         val createEventRequest = MockMvcRequestBuilders
             .post("/event")
             .content(objectMapper.writeValueAsString(createEventInput))
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         val createEventResponse = mockMvc.perform(createEventRequest)
@@ -234,7 +229,7 @@ class AccountControllerTest(
 
         val getSessionRequest = MockMvcRequestBuilders
             .get("/session")
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(getSessionRequest)
@@ -258,17 +253,17 @@ class AccountControllerTest(
 
     }
 
-    suspend fun `Delete event and verify session`(userId: String, eventId: String) {
+    fun `Delete event and verify session`(userId: String, eventId: String) {
         val deleteEventRequest = MockMvcRequestBuilders
             .delete("/event/${eventId}")
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(deleteEventRequest).andExpect(status().isOk)
 
         val getSessionRequest = MockMvcRequestBuilders
             .get("/session")
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(getSessionRequest)
@@ -283,7 +278,7 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.managerData.managerEvents").isEmpty)
     }
 
-    suspend fun `Update event and verify session`(userId: String, eventId: String): String {
+    fun `Update event and verify session`(userId: String, eventId: String): String {
         val updateEventInput = EventInput(
             title = "New title",
             agenda = null,
@@ -305,7 +300,7 @@ class AccountControllerTest(
         val updateEventRequest = MockMvcRequestBuilders
             .put("/event/${eventId}")
             .content(objectMapper.writeValueAsString(updateEventInput))
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         val createEventResponse = mockMvc.perform(updateEventRequest)
@@ -327,7 +322,7 @@ class AccountControllerTest(
 
         val getSessionRequest = MockMvcRequestBuilders
             .get("/session")
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(getSessionRequest)
@@ -350,14 +345,14 @@ class AccountControllerTest(
         return eventId
     }
 
-    suspend fun `Submit emoji feedback to event`(pinCode: String, emoji: Emoji, userId: String) {
+    fun `Submit emoji feedback to event`(pinCode: String, emoji: Emoji, userId: String) {
 
         val createUserInput = CreateAccountInput(requestedRole = null, fcmToken = null)
 
         val createAccountRequest = MockMvcRequestBuilders
             .post("/account")
             .content(objectMapper.writeValueAsString(createUserInput))
-            .with(MockJwtFactory(userId = userId).anonymousToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId = userId).anonymousToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(createAccountRequest)
@@ -370,13 +365,13 @@ class AccountControllerTest(
         val startFeedbackSessionRequest = MockMvcRequestBuilders
             .post("/feedback/start")
             .content(objectMapper.writeValueAsString(startFeedbackSessionInput))
-            .with(MockJwtFactory(userId = userId).anonymousToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId = userId).anonymousToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         val startFeedbackSessionResponse = mockMvc.perform(startFeedbackSessionRequest)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.title").value("New title"))
-            .andExpect(jsonPath("$.agenda").value(null))
+            .andExpect(jsonPath("$.agenda").value(nullValue()))
             .andExpect(jsonPath("$.ownerInfo.name").value("New name"))
             .andExpect(jsonPath("$.ownerInfo.email").value("New email"))
             .andExpect(jsonPath("$.ownerInfo.phoneNumber").value("New phone number"))
@@ -404,7 +399,7 @@ class AccountControllerTest(
         val submitFeedbackSessionRequest = MockMvcRequestBuilders
             .post("/feedback/submit")
             .content(objectMapper.writeValueAsString(feedbackInput))
-            .with(MockJwtFactory(userId = userId).anonymousToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId = userId).anonymousToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(submitFeedbackSessionRequest)
@@ -412,10 +407,10 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.shouldPresentRatingPrompt").value(false))
     }
 
-    suspend fun `Verify event has new feedback`(userId: String, newFeedback: Int) {
+    fun `Verify event has new feedback`(userId: String, newFeedback: Int) {
         val getSessionRequest = MockMvcRequestBuilders
             .get("/session")
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(getSessionRequest)
@@ -423,22 +418,13 @@ class AccountControllerTest(
             .andExpect(jsonPath("$.managerData.managerEvents[0].invitedEmails").isArray)
     }
 
-    suspend fun `Trigger resetNewFeedback for event and verify session`(userId: String, eventId: String) {
+    fun `Trigger resetNewFeedback for event and verify session`(userId: String, eventId: String) {
         val getSessionRequest = MockMvcRequestBuilders
             .put("/event/resetNewFeedback/${eventId}")
-            .with(MockJwtFactory(userId).managerToken())
+            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
             .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(getSessionRequest)
             .andExpect(status().isOk)
-    }
-}
-
-
-fun jwtWithRole(token: Jwt): SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor {
-    return SecurityMockMvcRequestPostProcessors.jwt().jwt(token).apply {
-        token.role()?.let { role ->
-            authorities(SimpleGrantedAuthority(role.value))
-        }
     }
 }
