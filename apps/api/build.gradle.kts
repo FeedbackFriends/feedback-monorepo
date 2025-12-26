@@ -22,6 +22,8 @@ dependencies {
     implementation(libs.bundles.jackson)
     implementation(libs.springdoc.openapi.starter.webmvc)
     implementation(libs.firebase)
+    implementation(libs.sentry.spring.boot.starter)
+    implementation(libs.sentry.logback)
 
     runtimeOnly(libs.liquibase.core)
     runtimeOnly(libs.postgres)

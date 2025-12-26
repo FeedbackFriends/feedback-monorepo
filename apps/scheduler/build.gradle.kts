@@ -18,6 +18,8 @@ dependencies {
     implementation(libs.bundles.jackson)
 
     implementation(libs.firebase)
+    implementation(libs.sentry.spring.boot.starter)
+    implementation(libs.sentry.logback)
 
     runtimeOnly(libs.postgres)
 

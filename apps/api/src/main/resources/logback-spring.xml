@@ -29,10 +29,16 @@
         </encoder>
     </appender>
 
+    <appender name="SENTRY" class="io.sentry.logback.SentryAppender">
+        <minimumEventLevel>WARN</minimumEventLevel>
+        <minimumBreadcrumbLevel>INFO</minimumBreadcrumbLevel>
+    </appender>
+
     <!-- Root logger configuration -->
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ROLLING_FILE" />
+        <appender-ref ref="SENTRY" />
     </root>
 
     <!-- Specific logger settings -->

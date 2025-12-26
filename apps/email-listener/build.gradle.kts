@@ -12,6 +12,8 @@ dependencies {
 
     implementation(libs.springboot.starter)
     implementation(libs.springboot.mail)
+    implementation(libs.sentry.spring.boot.starter)
+    implementation(libs.sentry.logback)
 
     runtimeOnly(libs.postgres)
 

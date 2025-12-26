@@ -37,3 +37,10 @@ feedback:
     username: ${IMAP_USERNAME:}
     password: ${IMAP_PASSWORD:}
     folder: ${IMAP_FOLDER:INBOX}
+sentry:
+  dsn: ${SENTRY_DSN:}
+  environment: ${SENTRY_ENVIRONMENT:local}
+  release: ${SENTRY_RELEASE:}
+  traces-sample-rate: ${SENTRY_TRACES_SAMPLE_RATE:0.0}
+  send-default-pii: false
+  in-app-packages: dk.example.feedback

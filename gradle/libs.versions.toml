@@ -14,6 +14,7 @@ openapi = "1.9.0"
 firebase = "9.7.0"
 ical4j = "4.2.2"
 h2 = "2.3.232"
+sentry = "7.10.0"
 
 [libraries]
 
@@ -40,6 +41,8 @@ springboot-testcontainers = { module = "org.springframework.boot:spring-boot-tes
 springboot-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "springboot" }
 springboot-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "springboot" }
 springboot-mail = { module = "org.springframework.boot:spring-boot-starter-mail", version.ref = "springboot" }
+sentry-spring-boot-starter = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry" }
+sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
 #springboot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 #springboot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 #springboot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
