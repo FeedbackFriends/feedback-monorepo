@@ -26,8 +26,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-url: ${FIREBASE_JWK_SET_URL}
-          issuer-uri: ${FIREBASE_ISSUER_URI}
+          jwk-set-url: ${JWT_JWK_SET_URL}
+          issuer-uri: ${JWT_ISSUER_URI}
   liquibase:
     enabled: true
   exposed:
