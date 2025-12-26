@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Apple Inc.//Mac OS X 10.15.7//EN
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:apple-test-123
+DTSTART;TZID=Europe/Copenhagen:20251224T120000
+DTEND;TZID=Europe/Copenhagen:20251224T130000
+SUMMARY:Apple Sync
+DESCRIPTION:Calendar invite generated from Apple Calendar
+LOCATION:Apple Park
+ORGANIZER;CN=Apple Organizer:mailto:organizer@apple.com
+ATTENDEE;CN=Invitee One:mailto:invitee@example.com
+END:VEVENT
+END:VCALENDAR

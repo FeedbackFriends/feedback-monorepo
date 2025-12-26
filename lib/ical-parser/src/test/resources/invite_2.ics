@@ -1,0 +1,53 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Europe/Oslo
+X-LIC-LOCATION:Europe/Oslo
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:GMT+2
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:GMT+1
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Oslo:20251210T101500
+DTEND;TZID=Europe/Oslo:20251210T103000
+DTSTAMP:20251209T141457Z
+ORGANIZER;CN=Lennart Kristensen:mailto:lennart.kristensen@visma.com
+UID:7mde1oilphabviufskc05nh9q4@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=TRUE
+ ;CN=Lennart Kristensen;X-NUM-GUESTS=0:mailto:lennart.kristensen@visma.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=Nicolai Dam;X-NUM-GUESTS=0:mailto:nicolai.dam@visma.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=Jacob Nordfalk;X-NUM-GUESTS=0:mailto:jacob.nordfalk@visma.com
+X-GOOGLE-CONFERENCE:https://meet.google.com/qbm-nosy-edu
+X-MICROSOFT-CDO-OWNERAPPTID:-1673333398
+CREATED:20251208T144331Z
+DESCRIPTION:-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~::~:~::-\nJoin with Google Meet: https://meet.google.com/qb
+ m-nosy-edu\nOr dial: (DK) +45 70 71 46 94 PIN: 376327858#\nMore phone numbe
+ rs: https://tel.meet/qbm-nosy-edu?pin=7355605201292&hs=7\n\nLearn more abou
+ t Meet at: https://support.google.com/a/users/answer/9282720\n\nPlease do n
+ ot edit this section.\n-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-
+LAST-MODIFIED:20251209T141456Z
+LOCATION:https://meet.google.com/qbm-nosy-edu
+SEQUENCE:1
+STATUS:CONFIRMED
+SUMMARY:Gennemgå previousVoucherIdSuggestion
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
