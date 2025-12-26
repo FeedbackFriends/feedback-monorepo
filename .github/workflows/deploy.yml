@@ -46,7 +46,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          ./gradlew :api:jib :scheduler:jib --no-configuration-cache -Pversion=${FULL_VERSION}
+          ./gradlew :api:jib :scheduler:jib :email-listener:jib --no-configuration-cache -Pversion=${FULL_VERSION}
 
       - name: Deploy to Debian server
         run: |
@@ -54,6 +54,7 @@ jobs:
           sed \
             -e "s|\\(nicolaidam/feedback-api:\\)[^ ]*|\\1${{ env.DOCKER_TAG }}|" \
             -e "s|\\(nicolaidam/feedback-scheduler:\\)[^ ]*|\\1${{ env.DOCKER_TAG }}|" \
+            -e "s|\\(nicolaidam/feedback-email-listener:\\)[^ ]*|\\1${{ env.DOCKER_TAG }}|" \
             docker-compose.yml > "$DOCKER_COMPOSE_TMP"
           sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" scp -o StrictHostKeyChecking=no \
             "$DOCKER_COMPOSE_TMP" ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }}:/tmp/docker-compose.yml

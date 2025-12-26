@@ -44,9 +44,9 @@ springBoot {
 }
 
 jib {
-    from {
-        image = "eclipse-temurin:21-jdk"
-    }
+//    from {
+//        image = "eclipse-temurin:21-jdk"
+//    }
     to {
         image = "nicolaidam/feedback-api:${project.version}"
         auth {

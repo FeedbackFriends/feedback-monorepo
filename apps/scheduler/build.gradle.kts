@@ -14,13 +14,12 @@ dependencies {
     implementation(libs.springboot.starter)
     implementation(libs.springboot.starter.validation)
     implementation(libs.springboot.starter.web)
-    implementation(libs.springboot.mail)
 
     implementation(libs.bundles.jackson)
 
-    implementation(libs.ical4j)
-
     implementation(libs.firebase)
+
+    runtimeOnly(libs.postgres)
 
     testImplementation(libs.springboot.starter.test)
     testImplementation(libs.springboot.testcontainers)
@@ -40,9 +39,9 @@ springBoot {
 }
 
 jib {
-    from {
-        image = "eclipse-temurin:21-jdk"
-    }
+//    from {
+//        image = "eclipse-temurin:21-jdk"
+//    }
     to {
         image = "nicolaidam/feedback-scheduler:${project.version}"
         auth {

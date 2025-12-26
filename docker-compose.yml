@@ -15,7 +15,6 @@ services:
       - ./firebase_config.json:${FIREBASE_CONFIG_PATH}:ro
     ports:
       - "${API_PORT}:8080"
-      - "127.0.0.1:8090:8090"
     networks:
       - feedback-network
     restart: unless-stopped
@@ -30,16 +29,35 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       FIREBASE_CONFIG_PATH: ${FIREBASE_CONFIG_PATH}
+      LOG_PATH: ${LOG_PATH}
     volumes:
       - logs:${LOG_PATH}
       - ./firebase_config.json:${FIREBASE_CONFIG_PATH}:ro
-    ports:
-      - "127.0.0.1:8091:8091"
+    networks:
+      - feedback-network
+    restart: unless-stopped
+
+  email-listener:
+    image: nicolaidam/feedback-email-listener:${VERSION}
+    container_name: email-listener
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      IMAP_HOST: ${IMAP_HOST}
+      IMAP_PORT: ${IMAP_PORT}
+      IMAP_USERNAME: ${IMAP_USERNAME}
+      IMAP_PASSWORD: ${IMAP_PASSWORD}
+      IMAP_FOLDER: ${IMAP_FOLDER}
+      LOG_PATH: ${LOG_PATH}
+    volumes:
+      - logs:${LOG_PATH}
     networks:
       - feedback-network
     restart: unless-stopped
 volumes:
-  config:
   logs:
 
 networks:
