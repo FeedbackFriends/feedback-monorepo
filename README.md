@@ -20,10 +20,12 @@ Kotlin + Spring Boot services powering the LetsGrow feedback platform. Provides 
 - JDK 21 (toolchain); Kotlin 1.9; Gradle wrapper included.
 - Docker (optional) for running Postgres locally.
 - Environment: `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` for Postgres, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH`, optional `SHOW_EXPOSED_SQL=true`. Email listener needs `IMAP_HOST`, `IMAP_PORT`, `IMAP_USERNAME`, `IMAP_PASSWORD`, and `IMAP_FOLDER`. Base version is set in `gradle.properties` (CI appends build metadata).
+- Secrets: copy `.env.example` and `firebase_config.json.example` to `.env` and `firebase_config.json`, then fill in real values. Keep those files out of git.
 
 ## Quick Start (API)
 ```bash
 cp firebase_config.json.example firebase_config.json   # if provided
+cp .env.example .env                                   # add env vars for local runs
 ./gradlew :apps:api:bootRun                            # starts on :8080, H2 in-memory by default
 # or point to Postgres
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/feedback \

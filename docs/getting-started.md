@@ -11,7 +11,12 @@
    ```bash
    docker run --name feedback-db -e POSTGRES_DB=feedback -e POSTGRES_USER=feedback -e POSTGRES_PASSWORD=secret -p 5432:5432 -d postgres:16
    ```
-3. Set environment variables (H2 defaults work if you skip Postgres):
+3. Copy example configs and fill in real values:
+   ```bash
+   cp .env.example .env
+   cp firebase_config.json.example firebase_config.json
+   ```
+4. Set environment variables (H2 defaults work if you skip Postgres):
    ```bash
    export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/feedback
    export SPRING_DATASOURCE_USERNAME=feedback
