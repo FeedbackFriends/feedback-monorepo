@@ -17,6 +17,7 @@ import net.fortuna.ical4j.model.property.DtStart
 import net.fortuna.ical4j.model.property.Location
 import net.fortuna.ical4j.model.property.Organizer
 import net.fortuna.ical4j.model.property.Summary
+import net.fortuna.ical4j.util.CompatibilityHints
 import java.io.InputStream
 import java.time.Instant
 import java.time.OffsetDateTime
@@ -28,6 +29,8 @@ object CalendarInviteParser {
     private val ignoredAttendeeEmails = setOf("feedback@letsgrow.dk")
 
     fun parse(inputStream: InputStream): CalendarInvite {
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true)
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true)
         val calendar = builder.build(inputStream)
         val event = calendar.components
             .filterIsInstance<VEvent>()
