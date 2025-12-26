@@ -3,25 +3,25 @@ package dk.example.feedback.ical
 import dk.example.feedback.model.enumerations.CalendarProvider
 import net.fortuna.ical4j.data.CalendarBuilder
 import net.fortuna.ical4j.model.Parameter
-import net.fortuna.ical4j.model.Property
 import net.fortuna.ical4j.model.TimeZoneRegistry
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory
+import net.fortuna.ical4j.model.TemporalAdapter
+import net.fortuna.ical4j.model.component.CalendarComponent
 import net.fortuna.ical4j.model.component.VEvent
 import net.fortuna.ical4j.model.parameter.TzId
-import net.fortuna.ical4j.model.property.Attendee
 import net.fortuna.ical4j.model.property.DateProperty
-import net.fortuna.ical4j.model.property.Description
 import net.fortuna.ical4j.model.property.Duration
-import net.fortuna.ical4j.model.property.DtEnd
-import net.fortuna.ical4j.model.property.DtStart
-import net.fortuna.ical4j.model.property.Location
 import net.fortuna.ical4j.model.property.Organizer
-import net.fortuna.ical4j.model.property.Summary
 import net.fortuna.ical4j.util.CompatibilityHints
 import java.io.InputStream
 import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.temporal.Temporal
 
 object CalendarInviteParser {
     private val builder = CalendarBuilder()
@@ -32,33 +32,35 @@ object CalendarInviteParser {
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true)
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true)
         val calendar = builder.build(inputStream)
-        val event = calendar.components
+        val event = calendar.getComponents<CalendarComponent>()
             .filterIsInstance<VEvent>()
             .firstOrNull() ?: throw IllegalArgumentException("No VEVENT found in calendar invite")
 
-        val prodId = calendar.getProperty<Property>(Property.PRODID)?.value
+        val prodId = calendar.getProperty<net.fortuna.ical4j.model.Property>(net.fortuna.ical4j.model.Property.PRODID)
+            .orElse(null)
+            ?.value
         val calendarProvider = CalendarProvider.fromProdId(prodId)
 
-        val start = (event.getProperty(Property.DTSTART) as? DtStart)
+        val start = event.getDateTimeStart<Temporal>()
             ?.toOffsetDateTime(timeZoneRegistry)
             ?: throw IllegalArgumentException("Missing DTSTART in calendar invite")
 
-        val end = (event.getProperty(Property.DTEND) as? DtEnd)
+        val end = event.getDateTimeEnd<Temporal>()
             ?.toOffsetDateTime(timeZoneRegistry)
 
-        val durationMinutes = (event.getProperty(Property.DURATION) as? Duration).toMinutes()
+        val durationMinutes = event.getDuration().toMinutes()
             ?: end?.let { java.time.Duration.between(start, it).toMinutes().toInt() }
             ?: 0
 
-        val organizerEmail = (event.getProperty(Property.ORGANIZER) as? Organizer).email()
+        val organizerEmail = event.getOrganizer().email()
             ?: throw IllegalArgumentException("Missing organizer in calendar invite")
 
         return CalendarInvite(
-            title = (event.getProperty(Property.SUMMARY) as? Summary)?.value.orEmpty(),
-            agenda = (event.getProperty(Property.DESCRIPTION) as? Description)?.value,
+            title = event.getSummary()?.value.orEmpty(),
+            agenda = event.getDescription()?.value,
             date = start,
             durationInMinutes = durationMinutes,
-            location = (event.getProperty(Property.LOCATION) as? Location)?.value,
+            location = event.getLocation()?.value,
             managerEmail = organizerEmail,
             attendingEmails = event.attendeeEmails(excludeEmail = organizerEmail),
             calendarProvider = calendarProvider,
@@ -77,7 +79,7 @@ object CalendarInviteParser {
             ?.takeIf { it.isNotEmpty() }
 
     private fun VEvent.attendeeEmails(excludeEmail: String?): List<String> =
-        properties.getProperties<Attendee>(Property.ATTENDEE)
+        getAttendees()
             .mapNotNull { attendee ->
                 attendee.calAddress?.schemeSpecificPart
                     ?.removePrefix("mailto:")
@@ -93,34 +95,24 @@ object CalendarInviteParser {
         return ignoredAttendeeEmails.any { email.equals(it, ignoreCase = true) }
     }
 
-    private fun DtStart.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
-        toOffsetDateTimeInternal(timeZoneRegistry)
-
-    private fun DtEnd.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
-        toOffsetDateTimeInternal(timeZoneRegistry)
-
-    private fun DtStart.toOffsetDateTimeInternal(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
-        (this as DateProperty).toOffsetDateTime(timeZoneRegistry)
-
-    private fun DtEnd.toOffsetDateTimeInternal(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? =
-        (this as DateProperty).toOffsetDateTime(timeZoneRegistry)
-
-    private fun DateProperty.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? {
-        val zone = timeZone?.let { tz ->
-            runCatching { tz.toZoneId() }.getOrNull()
-                ?: ZoneOffset.ofTotalSeconds(tz.getOffset(date?.time ?: System.currentTimeMillis()) / 1000)
+    private fun <T : Temporal> DateProperty<T>.toOffsetDateTime(timeZoneRegistry: TimeZoneRegistry): OffsetDateTime? {
+        val temporal = date ?: return null
+        return when (temporal) {
+            is OffsetDateTime -> temporal
+            is ZonedDateTime -> temporal.toOffsetDateTime()
+            is LocalDateTime -> temporal.atZone(resolveZoneId(timeZoneRegistry)).toOffsetDateTime()
+            is LocalDate -> temporal.atStartOfDay(resolveZoneId(timeZoneRegistry)).toOffsetDateTime()
+            is Instant -> temporal.atZone(resolveZoneId(timeZoneRegistry)).toOffsetDateTime()
+            else -> runCatching {
+                TemporalAdapter.toLocalTime(temporal, resolveZoneId(timeZoneRegistry)).toOffsetDateTime()
+            }.getOrNull()
         }
-            ?: (parameters.getParameter(Parameter.TZID) as? TzId)
-                ?.value
-                ?.let { zoneId ->
-                    timeZoneRegistry.getTimeZone(zoneId)?.let { tz ->
-                        runCatching { tz.toZoneId() }.getOrNull()
-                    }
-                }
-            ?: ZoneOffset.UTC
-        val dateValue = date ?: return null
-        val instant = Instant.ofEpochMilli(dateValue.time)
-        return instant.atZone(zone).toOffsetDateTime()
+    }
+
+    private fun DateProperty<*>.resolveZoneId(timeZoneRegistry: TimeZoneRegistry): ZoneId {
+        val tzId = getParameter<TzId>(Parameter.TZID).orElse(null)
+        val registryZone = tzId?.value?.let { id -> timeZoneRegistry.getTimeZone(id)?.toZoneId() }
+        return registryZone ?: ZoneOffset.UTC
     }
 }
 

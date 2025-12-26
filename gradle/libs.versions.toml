@@ -12,8 +12,7 @@ testcontainers = "1.21.4"
 jib = "3.5.2"
 openapi = "1.9.0"
 firebase = "9.7.0"
-ical4j = "3.2.14"
-#ical4jtodo: "4.2.2"
+ical4j = "4.2.2"
 h2 = "2.3.232"
 
 [libraries]
