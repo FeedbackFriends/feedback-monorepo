@@ -5,6 +5,13 @@ spring:
         jwt:
           issuer-uri: ""
           jwk-set-url: ""
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: false
+server:
+  port: 8080
 
 feedback:
   features:
