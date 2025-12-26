@@ -30,13 +30,17 @@
   ```bash
   ./gradlew :apps:scheduler:bootRun
   ```
+- Email listener service:
+  ```bash
+  ./gradlew :apps:email-listener:bootRun
+  ```
 - Swagger UI lives at `/` locally; OpenAPI YAML at `/v3/api-docs.yaml`.
 
 ## Tests and Tooling
 - Run all tests: `./gradlew test`
 - Scope to API tests: `./gradlew :apps:api:test`
 - Build everything (fail on warnings): `./gradlew clean build`
-- Docker image (per app): `./gradlew :apps:api:jibDockerBuild`
+- Docker image (per app): `./gradlew :apps:email-listener:jibDockerBuild`
 
 ## Database & Migrations
 - Liquibase change sets live in `lib/persistence/src/main/resources/db/changelog/` and run automatically on startup (unless disabled).

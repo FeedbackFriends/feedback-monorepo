@@ -1,6 +1,5 @@
-package dk.example.feedback.mailservice
+package dk.example.feedback.ical
 
-import dk.example.feedback.service.CalendarInviteParser
 import dk.example.feedback.model.enumerations.CalendarProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

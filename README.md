@@ -9,15 +9,17 @@ Kotlin + Spring Boot services powering the LetsGrow feedback platform. Provides 
 ## Project Layout
 - `apps/api` – main REST API (controllers, services, configs, resources).
 - `apps/scheduler` – background jobs (reminders/notifications).
+- `apps/email-listener` – IMAP listener for calendar invites.
 - `lib/model` – shared entities/DTOs/enums and Jackson config.
 - `lib/persistence` – Exposed DAOs/repos and Liquibase change sets in `src/main/resources/db/changelog/`.
 - `lib/firebase` – Firebase client wrapper.
+- `lib/ical-parser` – iCal parsing utilities for calendar invites.
 - `docs/` – quick reference and diagrams (`docs/diagrams` PlantUML).
 
 ## Prerequisites
 - JDK 21 (toolchain); Kotlin 1.9; Gradle wrapper included.
 - Docker (optional) for running Postgres locally.
-- Environment: `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` for Postgres, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH`, optional `SHOW_EXPOSED_SQL=true`. Base version is set in `gradle.properties` (CI appends build metadata).
+- Environment: `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` for Postgres, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH`, optional `SHOW_EXPOSED_SQL=true`. Email listener needs `IMAP_HOST`, `IMAP_PORT`, `IMAP_USERNAME`, `IMAP_PASSWORD`, and `IMAP_FOLDER`. Base version is set in `gradle.properties` (CI appends build metadata).
 
 ## Quick Start (API)
 ```bash
@@ -35,8 +37,14 @@ Scheduler service:
 ./gradlew :apps:scheduler:bootRun
 ```
 
+Email listener service:
+```bash
+./gradlew :apps:email-listener:bootRun
+```
+
 ## Docker Compose
 The Compose setup runs both services from prebuilt images. Image tags come from the `VERSION` env var, so keep `VERSION=local` in `.env` for local runs and let CI set the real value when deploying.
+Ensure `.env` includes `IMAP_HOST`, `IMAP_PORT`, `IMAP_USERNAME`, `IMAP_PASSWORD`, and `IMAP_FOLDER` for the email listener.
 
 ```bash
 docker compose up -d
@@ -46,14 +54,13 @@ Local Jib builds:
 - Jib tags images with `project.version`. For local builds, set `VERSION=local` in `.env` and build with `-Pversion=local` so Compose and Jib use the same tag.
 
 ```bash
-./gradlew :api:jibDockerBuild :scheduler:jibDockerBuild --no-configuration-cache
+./gradlew :api:jibDockerBuild :scheduler:jibDockerBuild :email-listener:jibDockerBuild --no-configuration-cache
 docker compose up -d
 ```
 
 CI behavior:
 - CI injects a real version (run number + short SHA) via `-Pversion=...`, and Jib tags images with that value.
 - `docker-compose.yml` consumes `VERSION` to pull the matching tag during deploy.
-- Actuator health ports are bound to `127.0.0.1` (`8090` for API, `8091` for scheduler) for private health checks.
 
 ## CI Pipeline (GitHub Actions)
 The deploy workflow runs in this order:

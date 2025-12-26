@@ -1,7 +1,8 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.FeedbackConfig
-import dk.example.feedback.model.enumerations.CalendarProvider
+import dk.example.feedback.mail.MailListenerProperties
+import dk.example.feedback.ical.CalendarInvite
+import dk.example.feedback.ical.CalendarInviteParser
 import dk.example.feedback.persistence.pincodegenerator.PinCodeGenerator
 import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.EventRepo
@@ -19,7 +20,6 @@ import org.eclipse.angus.mail.imap.IMAPFolder
 import org.slf4j.LoggerFactory
 import org.springframework.context.SmartLifecycle
 import org.springframework.stereotype.Service
-import java.time.OffsetDateTime
 import java.util.Properties
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
@@ -27,17 +27,20 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 @Service
 class MailListenerService(
-    private val feedbackConfig: FeedbackConfig,
+    private val mailListenerProperties: MailListenerProperties,
     private val eventRepo: EventRepo,
     private val accountRepo: AccountRepo,
     private val pinCodeGenerator: PinCodeGenerator = PinCodeGenerator(eventRepo),
 ) : SmartLifecycle {
 
     private val logger = LoggerFactory.getLogger(MailListenerService::class.java)
-    private val mailSettings get() = feedbackConfig.mail
+    private val mailSettings get() = mailListenerProperties
     private val running = AtomicBoolean(false)
     private val executor = Executors.newSingleThreadExecutor { runnable ->
-        Thread(runnable, "imap-listener").apply { isDaemon = true }
+        Thread(runnable, "imap-listener").apply {
+            // Non-daemon so the non-web Spring app stays alive while listening.
+            isDaemon = false
+        }
     }
     @Volatile private var listenerFuture: Future<*>? = null
     @Volatile private var store: Store? = null
@@ -59,6 +62,7 @@ class MailListenerService(
             logger.info("Stopping IMAP listener")
             listenerFuture?.cancel(true)
             closeResources()
+            executor.shutdownNow()
         }
         callback.run()
     }
@@ -322,17 +326,6 @@ class MailListenerService(
         messageId = runCatching { getHeader("Message-ID")?.firstOrNull() }.getOrNull(),
     )
 }
-
-data class CalendarInvite(
-    val title: String,
-    val agenda: String?,
-    val date: OffsetDateTime,
-    val durationInMinutes: Int,
-    val location: String?,
-    val managerEmail: String,
-    val attendingEmails: List<String>,
-    val calendarProvider: CalendarProvider?,
-)
 
 data class MessageMetadata(
     val subject: String?,

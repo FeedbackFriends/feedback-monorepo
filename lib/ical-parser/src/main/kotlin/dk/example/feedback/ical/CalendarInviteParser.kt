@@ -1,4 +1,4 @@
-package dk.example.feedback.service
+package dk.example.feedback.ical
 
 import dk.example.feedback.model.enumerations.CalendarProvider
 import net.fortuna.ical4j.data.CalendarBuilder
@@ -17,17 +17,20 @@ import net.fortuna.ical4j.model.property.DtStart
 import net.fortuna.ical4j.model.property.Location
 import net.fortuna.ical4j.model.property.Organizer
 import net.fortuna.ical4j.model.property.Summary
+import net.fortuna.ical4j.util.CompatibilityHints
 import java.io.InputStream
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
-internal object CalendarInviteParser {
+object CalendarInviteParser {
     private val builder = CalendarBuilder()
     private val timeZoneRegistry = TimeZoneRegistryFactory.getInstance().createRegistry()
     private val ignoredAttendeeEmails = setOf("feedback@letsgrow.dk")
 
     fun parse(inputStream: InputStream): CalendarInvite {
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true)
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true)
         val calendar = builder.build(inputStream)
         val event = calendar.components
             .filterIsInstance<VEvent>()
@@ -120,3 +123,14 @@ internal object CalendarInviteParser {
         return instant.atZone(zone).toOffsetDateTime()
     }
 }
+
+data class CalendarInvite(
+    val title: String,
+    val agenda: String?,
+    val date: OffsetDateTime,
+    val durationInMinutes: Int,
+    val location: String?,
+    val managerEmail: String,
+    val attendingEmails: List<String>,
+    val calendarProvider: CalendarProvider?,
+)
