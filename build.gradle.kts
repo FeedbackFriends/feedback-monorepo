@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version libs.versions.kotlin
+    id("org.owasp.dependencycheck") version "9.0.10"
 }
 
 repositories {
@@ -15,4 +16,13 @@ kotlin {
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.owasp.dependencycheck")
+}
+
+dependencyCheck {
+    failBuildOnCVSS = 7.0f
+    formats = listOf("HTML", "SARIF")
+    nvd {
+        apiKey = System.getenv("NVD_API_KEY")
+    }
 }
