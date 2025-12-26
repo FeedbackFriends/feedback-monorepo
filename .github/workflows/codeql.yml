@@ -31,8 +31,5 @@ jobs:
         with:
           languages: java-kotlin
 
-      - name: Build for analysis
-        run: ./gradlew clean build -x test
-
       - name: Run CodeQL analysis
         uses: github/codeql-action/analyze@v3
