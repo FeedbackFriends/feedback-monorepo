@@ -21,10 +21,8 @@ dependencies {
 
     implementation(libs.bundles.jackson)
     implementation(libs.springdoc.openapi.starter.webmvc)
-    implementation(libs.firebase)
     implementation(libs.sentry.spring.boot.starter)
     implementation(libs.sentry.logback)
-
     runtimeOnly(libs.liquibase.core)
     runtimeOnly(libs.postgres)
 
@@ -58,5 +56,5 @@ jib {
 openApi {
     apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
     outputFileName.set("openapi.yaml")
-    waitTimeInSeconds.set(15)
+    waitTimeInSeconds.set(60)
 }

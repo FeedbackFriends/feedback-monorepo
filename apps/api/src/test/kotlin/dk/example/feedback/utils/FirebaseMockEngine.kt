@@ -1,11 +1,12 @@
 package dk.example.feedback.utils
 
 import dk.example.feedback.firebase.FeedbackReceivedNotification
+import dk.example.feedback.firebase.FirebaseAdminService
 import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.firebase.FirebaseUser
 import dk.example.feedback.model.enumerations.Role
 
-class FirebaseMockEngine(userId: String) : FirebaseService {
+class FirebaseMockEngine(userId: String) : FirebaseService, FirebaseAdminService {
 
 
     private var user: FirebaseUser? = FirebaseUser(
@@ -45,6 +46,12 @@ class FirebaseMockEngine(userId: String) : FirebaseService {
         println("🚀 Before setting role: Current role = $role, New role = $requestedRole")
         role = requestedRole
         println("✅ After setting role: Current role = $role")
+    }
+
+    override fun createUserIfMissing(uid: String, email: String, displayName: String) {}
+
+    override fun createCustomToken(uid: String): String {
+        return "mock-custom-token-$uid"
     }
 
 //    suspend fun getToken(): SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor {
