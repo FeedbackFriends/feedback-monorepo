@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class FirebaseServiceImpl : FirebaseService {
+class FirebaseServiceImpl : FirebaseService, FirebaseAdminService {
 
     private val logger = LoggerFactory.getLogger(FirebaseServiceImpl::class.java)
 
@@ -99,5 +99,23 @@ class FirebaseServiceImpl : FirebaseService {
             logger.error("Failed to set role for user $userId", e)
             throw RuntimeException("Failed to set role", e)
         }
+    }
+
+    override fun createUserIfMissing(uid: String, email: String, displayName: String) {
+        val createUserRequest = UserRecord.CreateRequest()
+            .setUid(uid)
+            .setEmail(email)
+            .setDisplayName(displayName)
+
+        try {
+            logger.debug("Firebase: Creating user")
+            FirebaseAuth.getInstance().createUser(createUserRequest)
+        } catch (e: Exception) {
+            logger.debug("Firebase: User already exists so will sign in")
+        }
+    }
+
+    override fun createCustomToken(uid: String): String {
+        return FirebaseAuth.getInstance().createCustomTokenAsync(uid).get()
     }
 }
