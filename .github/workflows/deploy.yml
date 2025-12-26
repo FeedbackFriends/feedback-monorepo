@@ -38,6 +38,7 @@ jobs:
       - name: Generate OpenAPI spec
         env:
           VERSION: ${{ env.FULL_VERSION }}
+          SPRING_PROFILES_ACTIVE: openapi
         run: |
           ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
 

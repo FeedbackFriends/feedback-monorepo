@@ -1,0 +1,16 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ""
+          jwk-set-url: ""
+
+feedback:
+  features:
+    security:
+      enabled: false
+    bootstrap:
+      enabled: false
+  firebase-api-key: "openapi"
+  firebase-config-path: "/tmp/firebase-config.json"

@@ -5,9 +5,15 @@ import dk.example.feedback.persistence.repo.MockRepo
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
 
 @Component
+@ConditionalOnProperty(
+    name = ["feedback.features.bootstrap.enabled"],
+    havingValue = "true",
+    matchIfMissing = true,
+)
 class FeedbackInitializer(
     private val mockRepo: MockRepo,
     private val feedbackConfig: FeedbackConfig,
