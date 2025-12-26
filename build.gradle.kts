@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.closureOf
+
 plugins {
     kotlin("jvm") version libs.versions.kotlin
     id("org.owasp.dependencycheck") version "9.0.10"
@@ -22,7 +24,7 @@ subprojects {
 dependencyCheck {
     failBuildOnCVSS = 7.0f
     formats = listOf("HTML", "SARIF")
-    nvd {
+    nvd(closureOf<org.owasp.dependencycheck.gradle.extension.NvdExtension> {
         apiKey = System.getenv("NVD_API_KEY")
-    }
+    })
 }
