@@ -6,23 +6,15 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.util.matcher.RequestMatcher
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
 @Configuration
-@ConditionalOnProperty(
-    name = ["feedback.features.security.enabled"],
-    havingValue = "true",
-    matchIfMissing = true,
-)
-@EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfig {
 
@@ -40,6 +32,11 @@ class SecurityConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(
+        name = ["feedback.features.security.enabled"],
+        havingValue = "true",
+        matchIfMissing = true,
+    )
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .cors { it.configurationSource(corsConfigurationSource()) }
@@ -60,6 +57,19 @@ class SecurityConfig {
                     jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
                 }
             }
+
+        return http.build()
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+        name = ["feedback.features.security.enabled"],
+        havingValue = "false",
+    )
+    fun permissiveFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http
+            .csrf { it.disable() }
+            .authorizeHttpRequests { it.anyRequest().permitAll() }
 
         return http.build()
     }
