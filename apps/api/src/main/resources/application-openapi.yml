@@ -21,7 +21,7 @@ springdoc:
   swagger-ui:
     enabled: false
 server:
-  port: 8080
+  port: 0
 management:
   server:
     port: -1

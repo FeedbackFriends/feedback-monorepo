@@ -17,7 +17,7 @@
 - `./gradlew :email-listener:bootRun` – start the email listener; configure `IMAP_HOST`, `IMAP_PORT`, `IMAP_USERNAME`, `IMAP_PASSWORD`, `IMAP_FOLDER`.
 - `./gradlew  --no-daemon :api:jibDockerBuild :scheduler:jibDockerBuild :email-listener:jibDockerBuild --no-configuration-cache` – Build docker images locally
 - `docker compose up -d --remove-orphans` – build and run the applications via Docker Compose.
-
+- `SPRING_PROFILES_ACTIVE=openapi ./gradlew :api:generateOpenApiDocs --no-configuration-cache` - generate openapi spec
 ## Coding Style & Naming Conventions
 - Kotlin 1.9+, JVM 21 toolchain; prefer idiomatic Kotlin (null-safety, data classes for payloads) and 4-space indentation.
 - Keep package structure by layer (`config/`, `controller/`, `service/`, `persistence/`).
