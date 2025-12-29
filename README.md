@@ -1,6 +1,5 @@
 # Feedback Backend
 
-[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0.0-green.svg)](https://github.com/FeedbackFriends/feedback-openapi/blob/main/openapi.yaml)
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.9.0-blue.svg)](https://kotlinlang.org)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
 
@@ -79,7 +78,7 @@ The deploy workflow runs in this order:
 - `./gradlew test` or `./gradlew :apps:api:test` – run full or scoped tests (uses H2).
 - `./gradlew jibDockerBuild` (per app) – build a Docker image if Docker is available.
 
-OpenAPI: auto-generated via Springdoc plugin; visit `/` locally for Swagger UI or use the shared spec at [feedback-openapi](https://github.com/FeedbackFriends/feedback-openapi/blob/main/openapi.yaml).
+OpenAPI: auto-generated via Springdoc plugin; Swagger UI is served at `/` and the spec at `/v3/api-docs` in this service.
 
 ## Documentation
 - [Getting Started](./docs/getting-started.md) – setup, environment, and common tasks.

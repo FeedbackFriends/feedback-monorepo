@@ -43,10 +43,9 @@ class SecurityConfig {
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/actuator/**").permitAll()
-                    .requestMatchers("/admin/**").permitAll()
+                    .requestMatchers("/actuator/health").permitAll()
                     .requestMatchers("/").permitAll()
-                    .requestMatchers("/v3/**").permitAll()
+                    .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/webjars/**").permitAll()
                     // everything else requires auth
