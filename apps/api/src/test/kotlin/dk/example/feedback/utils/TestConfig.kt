@@ -1,5 +1,6 @@
 package dk.example.feedback.utils
 
+import dk.example.feedback.firebase.FirebaseAdminService
 import dk.example.feedback.firebase.FirebaseService
 import java.time.Instant
 import org.springframework.boot.test.context.TestConfiguration
@@ -14,6 +15,11 @@ class TestConfig {
         return FirebaseMockEngine(
             userId = "mock_id_unit_tests"
         )
+    }
+
+    @Bean
+    fun firebaseAdminService(firebaseService: FirebaseService): FirebaseAdminService {
+        return firebaseService as FirebaseAdminService
     }
 
     @Bean
