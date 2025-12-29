@@ -50,26 +50,13 @@ jobs:
           ./gradlew :api:jib :scheduler:jib :email-listener:jib --no-configuration-cache -Pversion=${FULL_VERSION}
 
       - name: Deploy to Debian server
+        env:
+          DOCKER_TAG: ${{ env.DOCKER_TAG }}
+          REMOTE_USER: ${{ secrets.DEBIAN_USER }}
+          REMOTE_HOST: ${{ secrets.DEBIAN_IP }}
+          DEBIAN_PASSWORD: ${{ secrets.DEBIAN_PASSWORD }}
         run: |
-          DOCKER_COMPOSE_TMP=$(mktemp)
-          sed \
-            -e "s|\\(nicolaidam/feedback-api:\\)[^ ]*|\\1${{ env.DOCKER_TAG }}|" \
-            -e "s|\\(nicolaidam/feedback-scheduler:\\)[^ ]*|\\1${{ env.DOCKER_TAG }}|" \
-            -e "s|\\(nicolaidam/feedback-email-listener:\\)[^ ]*|\\1${{ env.DOCKER_TAG }}|" \
-            docker-compose.yml > "$DOCKER_COMPOSE_TMP"
-          sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" scp -o StrictHostKeyChecking=no \
-            "$DOCKER_COMPOSE_TMP" ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }}:/tmp/docker-compose.yml
-          sshpass -p "${{ secrets.DEBIAN_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
-            ${{ secrets.DEBIAN_USER }}@${{ secrets.DEBIAN_IP }} << EOF
-            set -e
-            sudo mv /tmp/docker-compose.yml /home/debian/config/docker-compose.yml
-            cd /home/debian/config
-            sudo sed -i '/^VERSION=/d' .env
-            docker image prune -af
-            docker compose -f docker-compose.yml pull
-            docker compose -f docker-compose.yml up -d --remove-orphans
-            docker image prune -f
-          EOF
+          infra/scripts/deploy-remote.sh
 
       - name: Create and Push Git Tag
         run: |
