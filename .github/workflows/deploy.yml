@@ -41,6 +41,7 @@ jobs:
           SPRING_PROFILES_ACTIVE: openapi
         run: |
           ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
+        working-directory: backend
 
       - name: Build and publish Docker images with Jib
         env:
@@ -48,6 +49,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           ./gradlew :api:jib :scheduler:jib :email-listener:jib --no-configuration-cache -Pversion=${FULL_VERSION}
+        working-directory: backend
 
       - name: Deploy to Debian server
         env:
