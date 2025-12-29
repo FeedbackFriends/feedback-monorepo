@@ -1,0 +1,25 @@
+server {
+    listen 80;
+    server_name letsgrow.dk www.letsgrow.dk;
+
+    # Redirect all HTTP requests to HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl; # HTTPS traffic
+    server_name letsgrow.dk www.letsgrow.dk;
+
+    ssl_certificate /etc/letsencrypt/live/letsgrow.dk/fullchain.pem; # Certbot-managed SSL certificate
+    ssl_certificate_key /etc/letsencrypt/live/letsgrow.dk/privkey.pem; # Certbot-managed private key
+    include /etc/letsencrypt/options-ssl-nginx.conf; # Additional SSL settings
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # Secure Diffie-Hellman parameters
+
+    root /var/www/letsgrow.dk/dist; # Point to the React dist folder
+    index index.html;
+
+    location / {
+        try_files $uri /index.html; # React handles client-side routing
+    }
+}
+

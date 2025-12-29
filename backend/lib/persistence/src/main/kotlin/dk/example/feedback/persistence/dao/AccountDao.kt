@@ -1,0 +1,40 @@
+package dk.example.feedback.persistence.dao
+
+import dk.example.feedback.model.database.AccountEntity
+import dk.example.feedback.persistence.table.AccountTable
+import dk.example.feedback.persistence.table.EventTable
+import dk.example.feedback.persistence.table.FCMTokenTable
+import dk.example.feedback.persistence.table.QuestionTable
+import org.jetbrains.exposed.dao.Entity
+import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+
+
+class AccountDao(id: EntityID<String>): Entity<String>(id){
+
+    companion object : EntityClass<String, AccountDao>(AccountTable)
+
+    var name by AccountTable.name
+    var email by AccountTable.email
+    var phoneNumber by AccountTable.phoneNumber
+    var createdAt by AccountTable.createdAt
+    var updatedAt by AccountTable.updatedAt
+    var feedbackSessionHash by AccountTable.feedbackSessionHash
+    var ratingPrompted by AccountTable.ratingPrompted
+    val events by EventDao referrersOn EventTable.manager
+    val questions by QuestionDao referrersOn QuestionTable.manager
+    val fcmTokens by FCMTokenDao referrersOn FCMTokenTable.account
+
+    fun toModel() = AccountEntity(
+        id = id.value,
+        name = name,
+        email = email,
+        fcmTokens = fcmTokens.map { it.id.value },
+        phoneNumber = phoneNumber,
+        ratingPrompted = ratingPrompted,
+        feedbackSessionHash = feedbackSessionHash,
+    )
+}
+
+
+

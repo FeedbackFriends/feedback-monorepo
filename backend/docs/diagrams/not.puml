@@ -1,0 +1,21 @@
+
+ NewFeedbackNotificationTable acts as a notification queue for new feedback on events.
+ When a participant submits feedback for an event, an entry is created or updated in NewFeedbackNotificationTable.
+
+ Notification lifecycle:
+ 1. When feedback is submitted:
+    - If no entry exists for the event, a new entry is created with newFeedback = 1 and lastFeedbackAt set to now.
+    - If an entry exists, newFeedback is incremented and lastFeedbackAt is updated.
+ 2. Event owners/managers are notified (push/email) about new feedback, either immediately or in scheduled batches.
+ 3. When the owner checks feedback (or a scheduled job runs):
+    - The notification entry is removed from NewFeedbackNotificationTable.
+    - A historical record is written to ActivityTable for analytics and tracking.
+
+ Scheduling:
+ - A scheduled task (e.g., every 10 minutes) checks for unprocessed notifications and triggers reminders for event owners.
+ - The system ensures owners are not spammed by batching notifications and using lastFeedbackAt to determine freshness.
+
+ Deletion:
+ - When an event or account is deleted, related notification entries are automatically removed (CASCADE).
+
+ See also: ActivityTable (historical tracking), FeedbackTable (individual feedback records).

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0003-update-feedback-type-length
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        and:
+          - columnExists:
+              tableName: feedback
+              columnName: type
+      changes:
+        - modifyDataType:
+            tableName: feedback
+            columnName: type
+            newDataType: varchar(255)
+      rollback:
+        - modifyDataType:
+            tableName: feedback
+            columnName: type
+            newDataType: varchar(14)

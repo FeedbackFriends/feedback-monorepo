@@ -1,0 +1,42 @@
+<configuration>
+    <property name="LOG_PATH" value="${LOG_PATH}" />
+
+    <!-- Define a Rolling File Appender -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Specify log file location -->
+        <file>${LOG_PATH}/application.log</file>
+        <!-- Create directory dynamically -->
+        <prerequisites>
+            <property name="DIRS_EXIST" value="${LOG_PATH}" />
+        </prerequisites>
+
+        <!-- Rolling policy for managing log files -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/application-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Console Appender for console output -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root logger configuration -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ROLLING_FILE" />
+    </root>
+
+    <!-- Specific logger settings -->
+    <logger name="org.springframework" level="INFO" />
+    <logger name="dk.example.feedback" level="DEBUG" />
+
+</configuration>

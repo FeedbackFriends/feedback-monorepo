@@ -1,0 +1,9 @@
+package dk.example.feedback.helpers
+
+import dk.example.feedback.model.database.FeedbackEntity
+
+fun List<FeedbackEntity>.participantResponses(): Int {
+    return this
+        .distinctBy { it.participantId }
+        .size
+}
