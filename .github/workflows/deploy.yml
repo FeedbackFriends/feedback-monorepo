@@ -97,4 +97,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ env.FULL_VERSION }}" apps/api/build/openapi.yaml --clobber
+          gh release upload "${{ env.FULL_VERSION }}" backend/apps/api/build/openapi.yaml --clobber
