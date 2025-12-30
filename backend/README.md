@@ -48,7 +48,7 @@ The Compose setup runs both services from prebuilt images. Image tags come from 
 Ensure `.env` includes `IMAP_HOST`, `IMAP_PORT`, `IMAP_USERNAME`, `IMAP_PASSWORD`, and `IMAP_FOLDER` for the email listener.
 
 ```bash
-docker compose up -d
+docker compose -f infra/docker-compose.yml up -d
 ```
 
 Local Jib builds:
@@ -56,12 +56,12 @@ Local Jib builds:
 
 ```bash
 ./gradlew :api:jibDockerBuild :scheduler:jibDockerBuild :email-listener:jibDockerBuild --no-configuration-cache
-docker compose up -d
+docker compose -f infra/docker-compose.yml up -d
 ```
 
 CI behavior:
 - CI injects a real version (run number + short SHA) via `-Pversion=...`, and Jib tags images with that value.
-- `docker-compose.yml` consumes `VERSION` to pull the matching tag during deploy.
+- `infra/docker-compose.yml` consumes `VERSION` to pull the matching tag during deploy.
 
 ## CI Pipeline (GitHub Actions)
 The deploy workflow runs in this order:

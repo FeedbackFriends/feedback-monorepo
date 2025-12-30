@@ -9,7 +9,7 @@ REMOTE_HOST=${REMOTE_HOST:-127.0.0.1}
 REMOTE_CONFIG_DIR=${REMOTE_CONFIG_DIR:-/home/debian/config}
 TMP_COMPOSE=${TMP_COMPOSE:-/tmp/docker-compose.yml}
 NGINX_TAR=${NGINX_TAR:-/tmp/nginx.tar.gz}
-COMPOSE_FILE=${COMPOSE_FILE:-backend/docker-compose.yml}
+COMPOSE_FILE=${COMPOSE_FILE:-infra/docker-compose.yml}
 APPLY_FIREWALL=${APPLY_FIREWALL:-0}
 FIREWALL_TMP=${FIREWALL_TMP:-/tmp/apply-ufw.sh}
 SSH_OPTS=${SSH_OPTS:-}
@@ -53,6 +53,8 @@ cd ${REMOTE_CONFIG_DIR}
 sudo sed -i '/^VERSION=/d' .env
 export VERSION="${DOCKER_TAG}"
 docker network create feedback-network >/dev/null 2>&1 || true
+export ENV_FILE="${REMOTE_CONFIG_DIR}/.env"
+export FIREBASE_CONFIG_FILE="${REMOTE_CONFIG_DIR}/firebase_config.json"
 docker image prune -af
 docker compose -f docker-compose.yml pull
 docker compose -f docker-compose.yml up -d --remove-orphans
@@ -82,6 +84,8 @@ cd ${REMOTE_CONFIG_DIR}
 sudo sed -i '/^VERSION=/d' .env
 export VERSION="${DOCKER_TAG}"
 docker network create feedback-network >/dev/null 2>&1 || true
+export ENV_FILE="${REMOTE_CONFIG_DIR}/.env"
+export FIREBASE_CONFIG_FILE="${REMOTE_CONFIG_DIR}/firebase_config.json"
 docker image prune -af
 docker compose -f docker-compose.yml pull
 docker compose -f docker-compose.yml up -d --remove-orphans

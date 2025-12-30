@@ -3,7 +3,7 @@ services:
     image: nicolaidam/feedback-api:${VERSION}
     container_name: api
     env_file:
-      - .env
+      - ${ENV_FILE:?ENV_FILE must point to the root .env}
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
@@ -12,7 +12,7 @@ services:
       LOG_PATH: ${LOG_PATH}
     volumes:
       - logs:${LOG_PATH}
-      - ./firebase_config.json:${FIREBASE_CONFIG_PATH}:ro
+      - ${FIREBASE_CONFIG_FILE:?FIREBASE_CONFIG_FILE must point to root firebase_config.json}:${FIREBASE_CONFIG_PATH}:ro
     ports:
       - "${API_PORT}:8080"
     networks:
@@ -23,7 +23,7 @@ services:
     image: nicolaidam/feedback-scheduler:${VERSION}
     container_name: scheduler
     env_file:
-      - .env
+      - ${ENV_FILE:?ENV_FILE must point to the root .env}
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
@@ -32,7 +32,7 @@ services:
       LOG_PATH: ${LOG_PATH}
     volumes:
       - logs:${LOG_PATH}
-      - ./firebase_config.json:${FIREBASE_CONFIG_PATH}:ro
+      - ${FIREBASE_CONFIG_FILE:?FIREBASE_CONFIG_FILE must point to root firebase_config.json}:${FIREBASE_CONFIG_PATH}:ro
     networks:
       - feedback-network
     restart: unless-stopped
@@ -41,7 +41,7 @@ services:
     image: nicolaidam/feedback-email-listener:${VERSION}
     container_name: email-listener
     env_file:
-      - .env
+      - ${ENV_FILE:?ENV_FILE must point to the root .env}
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
@@ -54,6 +54,15 @@ services:
       LOG_PATH: ${LOG_PATH}
     volumes:
       - logs:${LOG_PATH}
+    networks:
+      - feedback-network
+    restart: unless-stopped
+
+  web:
+    image: nicolaidam/feedback-web:${VERSION}
+    container_name: web
+    ports:
+      - "8081:80"
     networks:
       - feedback-network
     restart: unless-stopped
