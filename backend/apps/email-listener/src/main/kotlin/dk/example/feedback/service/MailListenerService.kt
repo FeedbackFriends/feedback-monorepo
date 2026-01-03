@@ -229,6 +229,10 @@ class MailListenerService(
     }
 
     private fun processMessage(message: Message) {
+        if (message.folder?.isOpen != true) {
+            logger.debug("Skipping message because folder is closed")
+            return
+        }
         val metadata = message.toMetadata()
         logger.info(
             "Received email id={} from={} subject={}",
@@ -238,12 +242,20 @@ class MailListenerService(
         )
         runCatching { parseCalendarInvites(message, metadata) }
             .onFailure {
-                logger.warn(
-                    "Failed to parse calendar invites for subject={} messageId={}",
-                    metadata.subject,
-                    metadata.messageId,
-                    it,
-                )
+                if (it.isFolderClosedFailure()) {
+                    logger.info(
+                        "Skipping calendar invite parsing because folder closed subject={} messageId={}",
+                        metadata.subject,
+                        metadata.messageId,
+                    )
+                } else {
+                    logger.warn(
+                        "Failed to parse calendar invites for subject={} messageId={}",
+                        metadata.subject,
+                        metadata.messageId,
+                        it,
+                    )
+                }
             }
     }
 
@@ -325,6 +337,11 @@ class MailListenerService(
         from = runCatching { from?.joinToString() }.getOrNull(),
         messageId = runCatching { getHeader("Message-ID")?.firstOrNull() }.getOrNull(),
     )
+
+    private fun Throwable.isFolderClosedFailure(): Boolean {
+        if (this is jakarta.mail.FolderClosedException) return true
+        return cause?.isFolderClosedFailure() == true
+    }
 }
 
 data class MessageMetadata(
