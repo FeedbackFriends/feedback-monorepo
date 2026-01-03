@@ -29,10 +29,5 @@ management:
     enabled-by-default: false
 
 feedback:
-  features:
-    security:
-      enabled: false
-    bootstrap:
-      enabled: false
   firebase-api-key: "openapi"
   firebase-config-path: "/tmp/firebase-config.json"

@@ -3,7 +3,6 @@ package dk.example.feedback.config
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -32,11 +31,6 @@ class SecurityConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(
-        name = ["feedback.features.security.enabled"],
-        havingValue = "true",
-        matchIfMissing = true,
-    )
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .cors { it.configurationSource(corsConfigurationSource()) }
@@ -56,19 +50,6 @@ class SecurityConfig {
                     jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
                 }
             }
-
-        return http.build()
-    }
-
-    @Bean
-    @ConditionalOnProperty(
-        name = ["feedback.features.security.enabled"],
-        havingValue = "false",
-    )
-    fun permissiveFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http
-            .csrf { it.disable() }
-            .authorizeHttpRequests { it.anyRequest().permitAll() }
 
         return http.build()
     }
