@@ -176,6 +176,7 @@ class MailListenerService(
                 calendarProvider = calendarInvite.calendarProvider,
             )
         }.onSuccess { event ->
+            accountRepo.updateSessionHash(accountId = account.id)
             logger.info(
                 "Event persisted id={} titleLength={} agendaLength={} locationLength={} subject={} messageId={}",
                 event.id,
