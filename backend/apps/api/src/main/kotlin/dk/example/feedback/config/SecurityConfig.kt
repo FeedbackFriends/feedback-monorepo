@@ -42,6 +42,7 @@ class SecurityConfig {
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/webjars/**").permitAll()
+                    .requestMatchers("/admin/**").permitAll()
                     // everything else requires auth
                     .anyRequest().authenticated()
             }
