@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0010-add-calendar-event-id
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          columnExists:
+            tableName: event
+            columnName: calendar_event_id
+      changes:
+        - addColumn:
+            tableName: event
+            columns:
+              - column:
+                  name: calendar_event_id
+                  type: text
+        - addUniqueConstraint:
+            tableName: event
+            columnNames: manager_id, calendar_event_id
+            constraintName: uq_event_manager_calendar_id
+      rollback:
+        - dropUniqueConstraint:
+            tableName: event
+            constraintName: uq_event_manager_calendar_id
+        - dropColumn:
+            tableName: event
+            columnName: calendar_event_id
