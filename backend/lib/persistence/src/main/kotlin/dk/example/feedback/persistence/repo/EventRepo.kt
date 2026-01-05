@@ -76,6 +76,7 @@ class EventRepo {
         createdFromMailListener: Boolean = false,
         invitedEmails: List<String> = emptyList(),
         calendarProvider: CalendarProvider? = null,
+        calendarEventId: String? = null,
     ): EventEntity {
 
         val managerAccount = AccountDao.findById(managerId) ?: throw Exception("Could not find manager id: $managerId")
@@ -88,6 +89,7 @@ class EventRepo {
             this.manager = managerAccount
             this.createdFromMailListener = createdFromMailListener
             this.calendarProvider = calendarProvider
+            this.calendarEventId = calendarEventId
         }
         PinCodeDao.new(id = generatedPinCode) {
             this.event = createdEvent
@@ -95,6 +97,39 @@ class EventRepo {
         addQuestionsAndRemoveExisting(createdEvent.id.value, questions, createdEvent.manager.id.value)
         addInvites(createdEvent.id.value, invitedEmails)
         return createdEvent.toModel()
+    }
+
+    fun getEventByCalendarEventId(managerId: String, calendarEventId: String): EventEntity? {
+        return EventDao
+            .find { (EventTable.manager eq managerId) and (EventTable.calendarEventId eq calendarEventId) }
+            .firstOrNull()
+            ?.toModel()
+    }
+
+    fun updateEventFromMailListener(
+        eventId: UUID,
+        title: String,
+        agenda: String?,
+        date: OffsetDateTime,
+        location: String?,
+        durationInMinutes: Int,
+        invitedEmails: List<String>,
+        calendarProvider: CalendarProvider?,
+        calendarEventId: String?,
+    ): EventEntity {
+        val foundEvent = EventDao.findById(eventId) ?: throw Exception("Could not find event id: $eventId")
+        foundEvent.apply {
+            this.title = title
+            this.agenda = agenda
+            this.date = date
+            this.location = location
+            this.durationInMinutes = durationInMinutes
+            this.calendarProvider = calendarProvider
+            this.calendarEventId = calendarEventId
+            this.createdFromMailListener = true
+        }
+        addInvites(eventId, invitedEmails)
+        return foundEvent.toModel()
     }
 
     fun deleteEvent(eventId: UUID) {

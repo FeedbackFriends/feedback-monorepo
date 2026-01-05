@@ -54,7 +54,6 @@ object CalendarInviteParser {
 
         val organizerEmail = event.getOrganizer().email()
             ?: throw IllegalArgumentException("Missing organizer in calendar invite")
-
         return CalendarInvite(
             title = event.getSummary()?.value.orEmpty(),
             agenda = event.getDescription()?.value,
@@ -64,6 +63,7 @@ object CalendarInviteParser {
             managerEmail = organizerEmail,
             attendingEmails = event.attendeeEmails(excludeEmail = organizerEmail),
             calendarProvider = calendarProvider,
+            calendarEventId = event.uid?.toString(),
         )
     }
 
@@ -125,4 +125,5 @@ data class CalendarInvite(
     val managerEmail: String,
     val attendingEmails: List<String>,
     val calendarProvider: CalendarProvider?,
+    val calendarEventId: String?,
 )

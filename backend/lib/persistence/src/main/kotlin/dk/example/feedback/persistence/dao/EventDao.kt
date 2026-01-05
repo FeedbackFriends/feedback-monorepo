@@ -20,6 +20,7 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
     var location by EventTable.location
     var createdFromMailListener by EventTable.createdFromMailListener
     var calendarProvider by EventTable.calendarProvider
+    var calendarEventId by EventTable.calendarEventId
     var manager by AccountDao referencedOn EventTable.manager
     val questions by QuestionDao optionalReferrersOn QuestionTable.event
     val invites by EventInviteDao referrersOn EventInviteTable.event
@@ -33,6 +34,7 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
             durationInMinutes = durationInMinutes,
             location = location,
             calendarProvider = calendarProvider,
+            calendarEventId = calendarEventId,
             createdFromMailListener = createdFromMailListener,
             createdAt = dateCreated,
             updatedAt = lastUpdate,

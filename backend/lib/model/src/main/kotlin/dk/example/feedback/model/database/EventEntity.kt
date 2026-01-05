@@ -12,6 +12,7 @@ data class EventEntity(
     val durationInMinutes: Int,
     val location: String?,
     val calendarProvider: CalendarProvider?,
+    val calendarEventId: String?,
     val createdFromMailListener: Boolean,
     val createdAt: OffsetDateTime,
     val updatedAt: OffsetDateTime,

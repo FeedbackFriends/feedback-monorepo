@@ -142,7 +142,6 @@ class MailListenerService(
     }
 
     private fun persistEvent(calendarInvite: CalendarInvite, metadata: MessageMetadata) {
-        val generatedPincode = pinCodeGenerator.generate()
         val account = accountRepo.getAccountFromEmail(emailInput = calendarInvite.managerEmail)
         if (account == null) {
             logger.warn(
@@ -153,11 +152,73 @@ class MailListenerService(
             )
             return
         }
+        val calendarEventId = calendarInvite.calendarEventId
+        if (calendarEventId == null) {
+            logger.debug(
+                "Calendar invite missing UID, cannot de-duplicate subject={} messageId={}",
+                metadata.subject,
+                metadata.messageId,
+            )
+        }
+        val existingEvent = calendarEventId?.let { eventRepo.getEventByCalendarEventId(account.id, it) }
+        if (existingEvent != null) {
+            logger.info(
+                "Updating event from calendar invite id={} title={} date={} managerEmail={} calendarEventId={} subject={} messageId={}",
+                existingEvent.id,
+                calendarInvite.title,
+                calendarInvite.date,
+                calendarInvite.managerEmail,
+                calendarEventId,
+                metadata.subject,
+                metadata.messageId,
+            )
+            runCatching {
+                eventRepo.updateEventFromMailListener(
+                    eventId = existingEvent.id,
+                    title = calendarInvite.title,
+                    agenda = calendarInvite.agenda,
+                    date = calendarInvite.date,
+                    location = calendarInvite.location,
+                    durationInMinutes = calendarInvite.durationInMinutes,
+                    invitedEmails = calendarInvite.attendingEmails,
+                    calendarProvider = calendarInvite.calendarProvider,
+                    calendarEventId = calendarEventId,
+                )
+            }.onSuccess { event ->
+                accountRepo.updateSessionHash(accountId = account.id)
+                logger.info(
+                    "Event updated id={} titleLength={} agendaLength={} locationLength={} subject={} messageId={}",
+                    event.id,
+                    calendarInvite.title.length,
+                    calendarInvite.agenda?.length ?: 0,
+                    calendarInvite.location?.length ?: 0,
+                    metadata.subject,
+                    metadata.messageId,
+                )
+            }.onFailure { ex ->
+                logger.warn(
+                    "Failed to update calendar invite titleLength={} agendaLength={} locationLength={} provider={} managerEmail={} subject={} messageId={}",
+                    calendarInvite.title.length,
+                    calendarInvite.agenda?.length ?: 0,
+                    calendarInvite.location?.length ?: 0,
+                    calendarInvite.calendarProvider,
+                    calendarInvite.managerEmail,
+                    metadata.subject,
+                    metadata.messageId,
+                    ex,
+                )
+                throw ex
+            }
+            return
+        }
+
+        val generatedPincode = pinCodeGenerator.generate()
         logger.info(
-            "Persisting event from calendar invite title={} date={} managerEmail={} subject={} messageId={}",
+            "Persisting event from calendar invite title={} date={} managerEmail={} calendarEventId={} subject={} messageId={}",
             calendarInvite.title,
             calendarInvite.date,
             calendarInvite.managerEmail,
+            calendarEventId,
             metadata.subject,
             metadata.messageId,
         )
@@ -174,6 +235,7 @@ class MailListenerService(
                 createdFromMailListener = true,
                 invitedEmails = calendarInvite.attendingEmails,
                 calendarProvider = calendarInvite.calendarProvider,
+                calendarEventId = calendarEventId,
             )
         }.onSuccess { event ->
             accountRepo.updateSessionHash(accountId = account.id)

@@ -39,4 +39,5 @@ object EventTable: CommonColumnsTbl("event") {
     val createdFromMailListener = bool("created_from_mail_listener").default(false)
     val manager = reference("manager_id", AccountTable, onDelete = ReferenceOption.CASCADE)
     val calendarProvider = enumerationByName("calendar_provider", 255, CalendarProvider::class).nullable()
+    val calendarEventId = text("calendar_event_id").nullable()
 }
