@@ -55,15 +55,10 @@ docker compose -f infra/docker-compose.yml up -d
 
 CI behavior:
 - CI injects a real version (run number + short SHA) via `-Pversion=...`, and Jib tags images with that value.
-- `infra/docker-compose.yml` consumes `API_VERSION`, `SCHEDULER_VERSION`, and `WEB_VERSION` so CI can also redeploy web independently.
+- `infra/docker-compose.yml` consumes `API_VERSION`, `SCHEDULER_VERSION`, and `WEB_VERSION`, with web deploys updating only `WEB_VERSION`.
 
 ## CI Pipeline (GitHub Actions)
-The backend deploy workflow runs in this order:
-- Compute versions (`FULL_VERSION=run_number-short_sha`) and align `DOCKER_TAG` with it.
-  - Set up JDK 21.
-  - Build and push Docker images with Jib using `-Pversion=${FULL_VERSION}`.
-  - Deploy only `api` and `scheduler` via Docker Compose to the Debian host using the same tag.
-  - Create a git tag and GitHub release for `FULL_VERSION`.
+The deploy workflow computes `FULL_VERSION=run_number-short_sha`, builds and pushes the web image, then deploys only `web` via Docker Compose on the Debian host.
 
 ## Build, Test, and Tooling
 - `./gradlew clean build` – compile all modules and run tests (warnings fail build).

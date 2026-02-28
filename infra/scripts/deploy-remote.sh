@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Deploys docker-compose on the remote Debian host.
-# Shared by the backend and web GitHub Actions deploy workflows.
+# Shared by the web GitHub Actions deploy workflow.
 
 REMOTE_USER=${REMOTE_USER:-debian}
 REMOTE_HOST=${REMOTE_HOST:-127.0.0.1}
