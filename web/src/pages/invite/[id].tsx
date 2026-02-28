@@ -31,7 +31,7 @@ function InvitePage() {
                 {/* Step 1 */}
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow-md">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#27AB85] text-white flex items-center justify-center font-bold shadow-md">
                       1
                     </div>
                     <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Download Let's Grow</h2>
@@ -41,7 +41,7 @@ function InvitePage() {
                       Get started by downloading Let's Grow from the App Store
                     </p>
                     <Button 
-                      className="bg-gradient-to-b from-[#34AC76] to-[#159056] hover:opacity-90 text-white rounded-full font-medium px-8"
+                      className="bg-gradient-to-b from-[#37B791] to-[#27AB85] hover:opacity-90 text-white rounded-full font-medium px-8"
                       onClick={() => window.open(appStoreUrl, '_blank')}
                     >
                       Download on App Store
@@ -54,7 +54,7 @@ function InvitePage() {
                 {/* Step 2 */}
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow-md">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#27AB85] text-white flex items-center justify-center font-bold shadow-md">
                       2
                     </div>
                     <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Join the Event</h2>
@@ -65,7 +65,7 @@ function InvitePage() {
                         After installing the app, tap below to join the event
                       </p>
                       <Button 
-                        className="w-auto rounded-full bg-gradient-to-b from-[#34AC76] to-[#159056] hover:opacity-90 text-white font-medium px-8"
+                        className="w-auto rounded-full bg-gradient-to-b from-[#37B791] to-[#27AB85] hover:opacity-90 text-white font-medium px-8"
                         onClick={() => window.location.href = deepLink}
                       >
                         Join Event

@@ -1,44 +1,50 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion } from "framer-motion"
+import { ArrowRight } from "lucide-react"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import {
+  earlyAccessButtonClass,
+  earlyAccessLabel,
+  earlyAccessUrl,
+} from "@/lib/letsgrow"
 
 function ScreenshotsSection() {
-  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
-
-  // Array of screenshot numbers to try loading
-  const screenshotNumbers = [1, 2, 3, 4, 5, 6];
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
+  const screenshotNumbers = [1, 2, 3, 4, 5, 6]
 
   const handleImageError = (index: number) => {
-    setImageErrors(prev => new Set(prev).add(index));
-  };
+    setImageErrors((prev) => new Set(prev).add(index))
+  }
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.8, ease: "easeOut" }
-  };
+    transition: { duration: 0.8, ease: "easeOut" },
+  }
 
   const stagger = {
     animate: {
       transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
   const scaleOnHover = {
     initial: { scale: 1 },
-    whileHover: { 
+    whileHover: {
       scale: 1.02,
-      transition: { duration: 0.3, ease: "easeOut" }
+      transition: { duration: 0.3, ease: "easeOut" },
     },
-    whileTap: { scale: 0.98 }
-  };
+    whileTap: { scale: 0.98 },
+  }
 
-  // Filter out images that failed to load
-  const availableScreenshots = screenshotNumbers.filter(num => !imageErrors.has(num));
+  const availableScreenshots = screenshotNumbers.filter(
+    (num) => !imageErrors.has(num)
+  )
 
   if (availableScreenshots.length === 0) {
-    return null; // Don't render section if no images are available
+    return null
   }
 
   return (
@@ -50,68 +56,68 @@ function ScreenshotsSection() {
         viewport={{ once: true, margin: "-100px" }}
         variants={stagger}
       >
-        {/* Section Header */}
         <motion.div className="text-center space-y-4" variants={fadeInUp}>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-[#4A4D69] from-0% via-[#282A47] via-50% to-[#282A47] to-100%">
-            Experience Lets Grow
+          <span className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+            Produktet i praksis
+          </span>
+          <h2 className="bg-gradient-to-b from-[#4A4D69] from-0% via-[#282A47] via-50% to-[#282A47] to-100% bg-clip-text text-3xl font-bold text-transparent sm:text-4xl lg:text-5xl">
+            Se hvordan feedbacken bliver en enkel vane efter faste møder
           </h2>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            A interface designed to make feedback seamless and engaging.
+          <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg">
+            Lets Grow er bygget til korte svar og tydelige signaler lige efter
+            mødet. Det gør det lettere for deltagerne at give feedback og
+            lettere for mødeejeren at følge udviklingen over tid.
           </p>
         </motion.div>
 
-        {/* Screenshots Grid */}
-        <motion.div 
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 max-w-[1400px] mx-auto"
+        <motion.div
+          className="grid max-w-[1400px] grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
           variants={stagger}
         >
           {availableScreenshots.map((num) => (
             <motion.div
               key={num}
-              className="relative group"
+              className="group relative"
               variants={fadeInUp}
               {...scaleOnHover}
             >
-              <div className="relative overflow-hidden rounded-xl shadow-md bg-gradient-to-br from-gray-100 to-gray-200 w-full">
+              <div className="relative w-full overflow-hidden rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-md">
                 <img
                   src={`/appstore_${num}.jpg`}
-                  alt={`Let's Grow App Screenshot ${num}`}
-                  className="w-full h-auto object-cover transition-all duration-300 group-hover:brightness-103"
+                  alt={`Lets Grow skærmbillede ${num}`}
+                  className="h-auto w-full object-cover transition-all duration-300 group-hover:brightness-105"
                   onError={() => handleImageError(num)}
                   loading="lazy"
                 />
-                
-                {/* Overlay for better visual appeal */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                {/* Subtle border enhancement */}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="absolute inset-0 rounded-xl ring-1 ring-black/5 ring-inset" />
               </div>
-              
-              {/* Floating shadow effect */}
-              <div className="absolute inset-0 rounded-xl shadow-xl opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10 blur-lg bg-emerald-500/20" />
+
+              <div className="absolute inset-0 -z-10 rounded-xl bg-[#27AB85]/20 opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-30 shadow-xl" />
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Call to Action */}
-        <motion.div className="text-center pt-8" variants={fadeInUp}>
-          <motion.div
-            className="inline-block cursor-pointer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.open("https://apps.apple.com/app/id6742420307", "_blank")}
+        <motion.div className="text-center pt-6" variants={fadeInUp}>
+          <Button
+            asChild
+            size="lg"
+            className={`${earlyAccessButtonClass} h-12 rounded-full px-6`}
           >
-            <img 
-              src="/appstore.png" 
-              alt="Download on the App Store" 
-              className="h-14 w-auto transition-opacity duration-200 hover:opacity-80"
-            />
-          </motion.div>
+            <a
+              href={earlyAccessUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {earlyAccessLabel}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </a>
+          </Button>
         </motion.div>
       </motion.div>
     </section>
-  );
+  )
 }
 
-export default ScreenshotsSection;
+export default ScreenshotsSection

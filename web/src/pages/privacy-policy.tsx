@@ -100,7 +100,7 @@ function PrivacyPolicyPage() {
                   <li>Opt-out of data collection</li>
                 </ul>
                 <p className="text-muted-foreground mt-2">
-                  Please contact us via email at <a href="mailto:nicolaidam96@gmail.com" className="text-emerald-600 hover:underline">nicolaidam96@gmail.com</a> if you wish to exercise these rights.
+                  Please contact us via email at <a href="mailto:nicolaidam96@gmail.com" className="text-primary hover:underline">nicolaidam96@gmail.com</a> if you wish to exercise these rights.
                 </p>
               </div>
             </section>

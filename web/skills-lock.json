@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "skills": {
+    "launch-strategy": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "1f3a7cf352d31452b8ee30027d24839d251b2eff8888f9598238cd471b50e8e7"
+    },
+    "marketing-ideas": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "6c933ae957910f652d4c287c09f6235763157baa860cb3bab5b162b17751f8bb"
+    },
+    "product-marketing-context": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "computedHash": "e14cfdd2544888373d85ba4afe548dd21df1a0730485e213b5c79bb2df4f7289"
+    }
+  }
+}
