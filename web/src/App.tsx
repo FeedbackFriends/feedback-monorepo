@@ -1,6 +1,6 @@
 import "./App.css"
 import { motion, type Variants } from "framer-motion"
-import { type MouseEvent, useState } from "react"
+import { type MouseEvent, useEffect, useRef, useState } from "react"
 import {
   ArrowRight,
   CalendarDays,
@@ -110,21 +110,21 @@ const workflowSteps: FeatureCard[] = [
     icon: CalendarDays,
   },
   {
-    title: "Tilpas spørgsmål til mødet",
+    title: "Tilføj feedback@letsgrow.dk som mødedeltager",
     description:
-      "Mødeholderen kan bruge en eksisterende spørgeskabelon eller lave sin egen, så spørgsmålene passer til fx teammøder, 1:1s eller reviews.",
+      "Inviter feedback@letsgrow.dk til møder, og vælg en møde template du har lavet på forhånd tilpasset til mødets type.",
     icon: Sparkles,
   },
   {
-    title: "Indsaml korte svar efter mødet",
+    title: "Indsaml svar efter mødet helt automatisk",
     description:
-      "Efter mødet giver deltagerne feedback i en mobilapp, der er gjort så nem og friktionsfri som muligt, med 2-3 korte spørgsmål mens oplevelsen stadig står klart.",
+      "Efter mødet giver deltagerne feedback i en mobilapp, der er gjort så nem og friktionsfri som muligt.",
     icon: MessageSquareText,
   },
   {
     title: "Se feedbacken og tag handling",
     description:
-      "Mødeholderen kan se, hvad deltagerne faktisk oplever, reagere på konkrete input og følge, om mødetilfredsheden bliver bedre over tid.",
+      "Mødeholderen får inputs fra mødedeltagere, og kan følge med i om mødetilfredsheden bliver bedre eller dårligere over tid.",
     icon: LineChart,
   },
 ]
@@ -207,6 +207,30 @@ const faqItems: FaqItem[] = [
 
 function App() {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
+  const [showMobileStickyCta, setShowMobileStickyCta] = useState(false)
+  const heroSectionRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    const heroSection = heroSectionRef.current
+    if (!heroSection) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowMobileStickyCta(!entry.isIntersecting)
+      },
+      {
+        threshold: 0.2,
+      }
+    )
+
+    observer.observe(heroSection)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   const scrollToSection = (
     event: MouseEvent<HTMLAnchorElement>,
@@ -263,11 +287,14 @@ function App() {
     <div className="relative min-h-screen overflow-hidden bg-background">
       <Background />
 
-      <div className="relative">
+      <div className="relative pb-28 sm:pb-0">
         <Navbar />
 
         <main>
-          <section className="container flex min-h-screen items-center py-12 sm:py-16">
+          <section
+            ref={heroSectionRef}
+            className="container flex min-h-screen items-center py-12 sm:py-16"
+          >
             <div className="grid w-full items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
               <motion.div
                 className="space-y-8"
@@ -540,21 +567,6 @@ function App() {
                   )
                 })}
               </motion.div>
-
-              <motion.div
-                className="mt-8 rounded-[1.5rem] border border-[#DCE3F4] bg-[#EEF1F5] px-6 py-5 shadow-[0_18px_40px_-35px_rgba(40,42,71,0.16)]"
-                variants={fadeInUp}
-              >
-                <div className="text-xs font-semibold uppercase tracking-[0.22em] text-[#4F5563]">
-                  Kort fortalt
-                </div>
-                <p className="mt-2 max-w-3xl text-base leading-7 text-[#3F4654] sm:text-lg">
-                  I beholder jeres nuværende værktøjer, deltagerne giver få
-                  svar, og mødeholderen får både konkrete input at handle på og
-                  et klart billede af, om mødet udvikler sig i den rigtige
-                  retning.
-                </p>
-              </motion.div>
             </motion.div>
           </section>
 
@@ -573,9 +585,9 @@ function App() {
                   Et klart billede af om jeres møder faktisk bliver bedre
                 </h2>
                 <p className="text-lg leading-8 text-muted-foreground">
-                  Fokus for launch er enkelt: gøre møder mere målbare og nemmere
-                  at forbedre. Ikke et HR-værktøj og ikke en bred
-                  surveyplatform.
+                  Vi starter ét sted: at gøre møder lettere at følge op på og
+                  lettere at forbedre over tid. Det er hverken et HR-værktøj
+                  eller en klassisk surveyplatform.
                 </p>
               </motion.div>
 
@@ -626,10 +638,6 @@ function App() {
                 <h2 className="text-3xl font-bold text-[#282A47] sm:text-4xl">
                   Det spørger folk typisk om
                 </h2>
-                <p className="text-lg leading-8 text-muted-foreground">
-                  De mest almindelige spørgsmål handler om workflow, tidsforbrug
-                  og hvilke møder det giver mening at starte med.
-                </p>
               </motion.div>
 
               <motion.div
@@ -758,6 +766,41 @@ function App() {
         </main>
 
         <Footer />
+      </div>
+
+      <div
+        className={`mobile-cta-safe fixed inset-x-0 bottom-0 z-40 border-t border-white/70 bg-white/88 backdrop-blur-xl transition-transform duration-300 sm:hidden ${
+          showMobileStickyCta
+            ? "translate-y-0"
+            : "pointer-events-none translate-y-full"
+        }`}
+      >
+        <div className="container py-3">
+          <div className="flex items-center gap-3 rounded-[1.5rem] border border-[#DCE3F4] bg-white/90 p-3 shadow-[0_18px_40px_-30px_rgba(40,42,71,0.5)]">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-[#282A47]">
+                Test Lets Grow gratis
+              </p>
+              <p className="text-xs leading-5 text-muted-foreground">
+                Få tidlig adgang og vær blandt de første teams.
+              </p>
+            </div>
+
+            <Button
+              asChild
+              className={`${earlyAccessButtonClass} h-11 shrink-0 rounded-full px-5 text-sm`}
+            >
+              <a
+                href={earlyAccessUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {earlyAccessLabel}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   )
