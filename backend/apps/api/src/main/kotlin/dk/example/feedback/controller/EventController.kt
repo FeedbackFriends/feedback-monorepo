@@ -59,4 +59,3 @@ class EventController(
         return eventService.markEventAsSeen(eventId = eventId, jwt = principal)
     }
 }
-

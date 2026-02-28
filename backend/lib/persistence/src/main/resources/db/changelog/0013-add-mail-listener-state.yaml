@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0013-add-mail-listener-state
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: mail_listener_state
+      changes:
+        - createTable:
+            tableName: mail_listener_state
+            columns:
+              - column:
+                  name: mailbox_id
+                  type: varchar(512)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: last_processed_uid
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: mail_listener_state

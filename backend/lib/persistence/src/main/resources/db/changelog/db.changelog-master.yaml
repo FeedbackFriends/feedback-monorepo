@@ -38,3 +38,24 @@ databaseChangeLog:
   - include:
       file: 0010-add-calendar-event-id.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0011-add-unique-account-email.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0012-drop-event-invite-account-id.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0013-add-mail-listener-state.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0014-add-mail-listener-message-id.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0015-add-zoho-processed-message.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0016-add-zoho-processed-message-details.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0017-add-zoho-archive-status.yaml
+      relativeToChangelogFile: true

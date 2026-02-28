@@ -1,10 +1,12 @@
 package dk.example.feedback.persistence.repo
 
+import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.QuestionEntity
 import dk.example.feedback.model.enumerations.CalendarProvider
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.exceptions.PinCodeNotFoundException
+import dk.example.feedback.model.helpers.normalizedEmail
 import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.EventDao
 import dk.example.feedback.persistence.dao.EventInviteDao
@@ -56,7 +58,6 @@ class EventRepo {
                 deletedPinCodes.add(eventDao.id.value.toString())
             }
         }
-        logger.info("Deleted pin codes: $deletedPinCodes")
     }
 
     fun pinCodeExists(pinCode: String): Boolean {
@@ -95,7 +96,7 @@ class EventRepo {
             this.event = createdEvent
         }
         addQuestionsAndRemoveExisting(createdEvent.id.value, questions, createdEvent.manager.id.value)
-        addInvites(createdEvent.id.value, invitedEmails)
+        addInvites(createdEvent.id.value, managerId, invitedEmails)
         return createdEvent.toModel()
     }
 
@@ -128,7 +129,7 @@ class EventRepo {
             this.calendarEventId = calendarEventId
             this.createdFromMailListener = true
         }
-        addInvites(eventId, invitedEmails)
+        addInvites(eventId, foundEvent.manager.id.value, invitedEmails)
         return foundEvent.toModel()
     }
 
@@ -145,6 +146,7 @@ class EventRepo {
         location: String?,
         durationInMinutes: Int,
         questions: List<Pair<String, FeedbackType>>,
+        invitedEmails: List<String>,
     ): EventEntity {
         val foundEvent = EventDao.findById(eventId) ?: throw Exception("Could not find event id: ${eventId}")
         foundEvent.apply {
@@ -155,6 +157,7 @@ class EventRepo {
             this.durationInMinutes = durationInMinutes
         }
         addQuestionsAndRemoveExisting(eventId, questions, foundEvent.manager.id.value)
+        replaceInvites(eventId, foundEvent.manager.id.value, invitedEmails)
         return foundEvent.toModel()
     }
 
@@ -169,6 +172,76 @@ class EventRepo {
 
     fun getManagerEvents(managerId: String): List<EventEntity> {
         return EventDao.find { EventTable.manager eq managerId }.map { it.toModel() }
+    }
+
+    fun getParticipantsForEvent(eventId: UUID, managerId: String): List<AccountEntity> {
+        val participantIds = EventParticipantTable
+            .selectAll()
+            .where { EventParticipantTable.event eq eventId }
+            .map { it[EventParticipantTable.participant].value }
+            .filterNot { it == managerId }
+
+        if (participantIds.isEmpty()) {
+            return emptyList()
+        }
+
+        val accountsById = AccountDao
+            .find { AccountTable.id inList participantIds }
+            .associateBy { it.id.value }
+
+        return participantIds.mapNotNull { accountsById[it]?.toModel() }
+    }
+
+    fun isEmailInvited(eventId: UUID, email: String): Boolean {
+        val normalizedEmail = email.normalizedEmail() ?: return false
+        return EventInviteTable
+            .selectAll()
+            .where { EventInviteTable.event eq EntityID(eventId, EventTable) }
+            .any { row -> row[EventInviteTable.email] == normalizedEmail }
+    }
+
+    fun isParticipant(eventId: UUID, accountId: String): Boolean {
+        return EventParticipantTable
+            .selectAll()
+            .where { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
+            .limit(1)
+            .firstOrNull() != null
+    }
+
+    fun joinInvitedEventsForEmail(accountId: String, email: String) {
+        val normalizedEmail = email.normalizedEmail() ?: return
+        val eventIds = EventInviteTable
+            .selectAll()
+            .mapNotNull { row ->
+                if (row[EventInviteTable.email] == normalizedEmail) {
+                    row[EventInviteTable.event].value
+                } else {
+                    null
+                }
+            }
+            .distinct()
+
+        eventIds.forEach { eventId ->
+            val event = getEvent(eventId)
+            if (event.manager.id != accountId) {
+                updateOrCreateParticipant(eventId = eventId, accountId = accountId, feedbackSubmitted = false)
+            }
+        }
+
+        if (eventIds.isNotEmpty()) {
+            EventInviteDao
+                .find { EventInviteTable.event inList eventIds }
+                .filter { it.email == normalizedEmail }
+                .forEach { it.delete() }
+        }
+    }
+
+    fun removeInviteForEmail(eventId: UUID, email: String) {
+        val normalizedEmail = email.normalizedEmail() ?: return
+        EventInviteDao
+            .find { EventInviteTable.event eq EntityID(eventId, EventTable) }
+            .filter { it.email == normalizedEmail }
+            .forEach { it.delete() }
     }
 
     data class ParticipantEventsWithRecentlyJoined(
@@ -268,12 +341,8 @@ class EventRepo {
         }
     }
 
-    private fun addInvites(eventId: UUID, invitedEmails: List<String>) {
-        val cleanedEmails = invitedEmails
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
-            .distinctBy { it.lowercase() }
-
+    private fun addInvites(eventId: UUID, managerId: String, invitedEmails: List<String>) {
+        val cleanedEmails = cleanInvitedEmails(invitedEmails)
         if (cleanedEmails.isEmpty()) {
             return
         }
@@ -281,21 +350,111 @@ class EventRepo {
         val existingEmails = EventInviteTable
             .selectAll()
             .where { EventInviteTable.event eq EntityID(eventId, EventTable) }
-            .map { it[EventInviteTable.email].lowercase() }
+            .map { it[EventInviteTable.email] }
             .toSet()
 
-        val accountsByEmail = AccountDao
-            .find { AccountTable.email inList cleanedEmails }
-            .associateBy { dao -> dao.email?.lowercase() }
+        val accountsByEmail = lookupAccountsByEmail(cleanedEmails)
+        val accountEmails = accountsByEmail.keys
 
         cleanedEmails
-            .filterNot { existingEmails.contains(it.lowercase()) }
+            .filterNot { accountEmails.contains(it) }
+            .filterNot { existingEmails.contains(it) }
             .forEach { email ->
                 EventInviteDao.new {
                     this.event = EntityID(eventId, EventTable)
                     this.email = email
-                    this.account = accountsByEmail[email.lowercase()]
                 }
             }
+
+        joinParticipantsAndClearInvites(eventId, managerId, accountsByEmail)
+    }
+
+    private fun replaceInvites(eventId: UUID, managerId: String, invitedEmails: List<String>) {
+        val cleanedEmails = cleanInvitedEmails(invitedEmails)
+        val eventEntityId = EntityID(eventId, EventTable)
+        val existingInvites = EventInviteDao.find { EventInviteTable.event eq eventEntityId }.toList()
+
+        if (cleanedEmails.isEmpty()) {
+            existingInvites.forEach { it.delete() }
+            return
+        }
+
+        val accountsByEmail = lookupAccountsByEmail(cleanedEmails)
+        val accountEmails = accountsByEmail.keys
+        val cleanedSet = cleanedEmails.toSet()
+
+        existingInvites
+            .filter { invite ->
+                val inviteEmail = invite.email
+                !cleanedSet.contains(inviteEmail) || accountEmails.contains(inviteEmail)
+            }
+            .forEach { it.delete() }
+
+        val remainingInvites = existingInvites.filter { invite ->
+            val inviteEmail = invite.email
+            cleanedSet.contains(inviteEmail) && !accountEmails.contains(inviteEmail)
+        }
+
+        val existingInvitesEmails = remainingInvites.map { it.email }.toSet()
+        val emailsToAdd = cleanedEmails
+            .filterNot { accountEmails.contains(it) }
+            .filterNot { existingInvitesEmails.contains(it) }
+
+        emailsToAdd.forEach { email ->
+            EventInviteDao.new {
+                this.event = eventEntityId
+                this.email = email
+            }
+        }
+
+        joinParticipantsAndClearInvites(eventId, managerId, accountsByEmail)
+    }
+
+    private fun cleanInvitedEmails(invitedEmails: List<String>): List<String> {
+        return invitedEmails
+            .mapNotNull { it.normalizedEmail() }
+            .filter { it.isNotEmpty() }
+            .distinct()
+    }
+
+
+    private fun lookupAccountsByEmail(invitedEmails: List<String>): Map<String, AccountDao> {
+        if (invitedEmails.isEmpty()) {
+            return emptyMap()
+        }
+        return AccountDao
+            .find { AccountTable.email inList invitedEmails }
+            .mapNotNull { dao ->
+                val email = dao.email ?: return@mapNotNull null
+                email to dao
+            }
+            .toMap()
+    }
+
+    private fun joinParticipantsAndClearInvites(
+        eventId: UUID,
+        managerId: String,
+        accountsByEmail: Map<String, AccountDao>
+    ) {
+        if (accountsByEmail.isEmpty()) {
+            return
+        }
+
+        val accountEmails = accountsByEmail.keys
+        EventInviteDao
+            .find { EventInviteTable.event eq EntityID(eventId, EventTable) }
+            .filter { accountEmails.contains(it.email) }
+            .forEach { it.delete() }
+
+        accountsByEmail.values.forEach { account ->
+            if (account.id.value == managerId) {
+                return@forEach
+            }
+            updateOrCreateParticipant(
+                eventId = eventId,
+                accountId = account.id.value,
+                feedbackSubmitted = false
+            )
+        }
     }
 }

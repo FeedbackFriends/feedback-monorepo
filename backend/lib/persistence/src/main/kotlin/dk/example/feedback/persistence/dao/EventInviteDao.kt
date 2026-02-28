@@ -13,13 +13,11 @@ class EventInviteDao(id: EntityID<UUID>) : CommonColumns<EventInviteEntity>(id, 
 
     var event by EventInviteTable.event
     var email by EventInviteTable.email
-    var account by AccountDao optionalReferencedOn EventInviteTable.account
 
     override fun toModel(): EventInviteEntity {
         return EventInviteEntity(
             id = id.value,
             email = email,
-            accountId = account?.id?.value,
             createdAt = dateCreated,
             updatedAt = lastUpdate,
         )

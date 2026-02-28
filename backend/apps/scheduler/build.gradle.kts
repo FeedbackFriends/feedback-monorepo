@@ -10,6 +10,7 @@ dependencies {
     implementation(projects.persistence)
     implementation(projects.model)
     implementation(projects.firebase)
+    implementation(projects.icalParser)
 
     implementation(libs.springboot.starter)
     implementation(libs.springboot.starter.validation)
@@ -19,6 +20,7 @@ dependencies {
 
     implementation(libs.firebase)
 
+    runtimeOnly(libs.liquibase.core)
     runtimeOnly(libs.postgres)
 
     testImplementation(libs.springboot.starter.test)

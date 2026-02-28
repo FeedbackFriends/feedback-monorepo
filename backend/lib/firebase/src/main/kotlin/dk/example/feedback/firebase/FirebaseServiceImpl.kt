@@ -81,12 +81,18 @@ class FirebaseServiceImpl : FirebaseService, FirebaseAdminService {
     }
 
     override fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?) {
-        FirebaseAuth.getInstance().updateUser(
-            UserRecord.UpdateRequest(userId)
-                .takeIf { email != null }?.setEmail(email)
-                .takeIf { displayName != null }?.setDisplayName(displayName)
-                .takeIf { phoneNumber != null }?.setPhoneNumber(phoneNumber)
-        )
+        val updateRequest = UserRecord.UpdateRequest(userId).apply {
+            if (email != null) {
+                setEmail(email)
+            }
+            if (displayName != null) {
+                setDisplayName(displayName)
+            }
+            if (phoneNumber != null) {
+                setPhoneNumber(phoneNumber)
+            }
+        }
+        FirebaseAuth.getInstance().updateUser(updateRequest)
     }
 
     override fun setRole(userId: String, requestedRole: Role?) {

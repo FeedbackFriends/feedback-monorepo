@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0017-add-zoho-archive-status
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        tableExists:
+          tableName: zoho_processed_message
+      changes:
+        - addColumn:
+            tableName: zoho_processed_message
+            columns:
+              - column:
+                  name: archive_status
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: archive_message
+                  type: text
+                  constraints:
+                    nullable: true
+              - column:
+                  name: archived_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropColumn:
+            tableName: zoho_processed_message
+            columns:
+              - column:
+                  name: archived_at
+              - column:
+                  name: archive_message
+              - column:
+                  name: archive_status

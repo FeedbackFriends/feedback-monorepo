@@ -9,10 +9,21 @@ data class FeedbackConfig(
     val mail: MailSettings,
 ) {
     data class MailSettings(
-        val host: String,
-        val port: Int = 993,
-        val username: String,
-        val password: String,
-        val folder: String = "INBOX",
+        val enabled: Boolean = true,
+        val pollIntervalMs: Long = 10_000,
+        val apiBaseUrl: String = "https://mail.zoho.eu/api",
+        val accountId: String = "",
+        val folderId: String = "",
+        val pageSize: Int = 50,
+        val maxPagesPerPoll: Int = 20,
+        val mailboxAddress: String? = null,
+        val oauth: OAuthSettings = OAuthSettings(),
+    )
+
+    data class OAuthSettings(
+        val refreshToken: String? = null,
+        val clientId: String? = null,
+        val clientSecret: String? = null,
+        val tokenUrl: String = "https://accounts.zoho.eu/oauth/v2/token",
     )
 }

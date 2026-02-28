@@ -29,31 +29,15 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       FIREBASE_CONFIG_PATH: ${FIREBASE_CONFIG_PATH}
+      ZOHO_ACCOUNT_ID: ${ZOHO_ACCOUNT_ID}
+      ZOHO_FOLDER_ID: ${ZOHO_FOLDER_ID}
+      ZOHO_OAUTH_REFRESH_TOKEN: ${ZOHO_OAUTH_REFRESH_TOKEN}
+      ZOHO_CLIENT_ID: ${ZOHO_CLIENT_ID}
+      ZOHO_CLIENT_SECRET: ${ZOHO_CLIENT_SECRET}
       LOG_PATH: ${LOG_PATH}
     volumes:
       - logs:${LOG_PATH}
       - ${FIREBASE_CONFIG_FILE:?FIREBASE_CONFIG_FILE must point to root firebase_config.json}:${FIREBASE_CONFIG_PATH}:ro
-    networks:
-      - feedback-network
-    restart: unless-stopped
-
-  email-listener:
-    image: nicolaidam/feedback-email-listener:${VERSION}
-    container_name: email-listener
-    env_file:
-      - ${ENV_FILE:?ENV_FILE must point to the root .env}
-    environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      IMAP_HOST: ${IMAP_HOST}
-      IMAP_PORT: ${IMAP_PORT}
-      IMAP_USERNAME: ${IMAP_USERNAME}
-      IMAP_PASSWORD: ${IMAP_PASSWORD}
-      IMAP_FOLDER: ${IMAP_FOLDER}
-      LOG_PATH: ${LOG_PATH}
-    volumes:
-      - logs:${LOG_PATH}
     networks:
       - feedback-network
     restart: unless-stopped

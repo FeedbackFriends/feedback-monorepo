@@ -8,7 +8,6 @@ Kotlin + Spring Boot services powering the LetsGrow feedback platform. Provides 
 ## Project Layout
 - `apps/api` – main REST API (controllers, services, configs, resources).
 - `apps/scheduler` – background jobs (reminders/notifications).
-- `apps/email-listener` – IMAP listener for calendar invites.
 - `lib/model` – shared entities/DTOs/enums and Jackson config.
 - `lib/persistence` – Exposed DAOs/repos and Liquibase change sets in `src/main/resources/db/changelog/`.
 - `lib/firebase` – Firebase client wrapper.
@@ -18,7 +17,7 @@ Kotlin + Spring Boot services powering the LetsGrow feedback platform. Provides 
 ## Prerequisites
 - JDK 21 (toolchain); Kotlin 1.9; Gradle wrapper included.
 - Docker (optional) for running Postgres locally.
-- Environment: `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` for Postgres, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH`, optional `SHOW_EXPOSED_SQL=true`. Email listener needs `IMAP_HOST`, `IMAP_PORT`, `IMAP_USERNAME`, `IMAP_PASSWORD`, and `IMAP_FOLDER`. Base version is set in `gradle.properties` (CI appends build metadata).
+- Environment: `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` for Postgres, `FIREBASE_API_KEY`, `FIREBASE_CONFIG_PATH`, optional `SHOW_EXPOSED_SQL=true`. Scheduler mail polling uses `ZOHO_ACCOUNT_ID`, `ZOHO_FOLDER_ID`, plus OAuth refresh token + client credentials. Base version is set in `gradle.properties` (CI appends build metadata).
 - Secrets: copy `.env.example` and `firebase_config.json.example` to `.env` and `firebase_config.json`, then fill in real values. Keep those files out of git.
 
 ## Quick Start (API)
@@ -38,14 +37,9 @@ Scheduler service:
 ./gradlew :apps:scheduler:bootRun
 ```
 
-Email listener service:
-```bash
-./gradlew :apps:email-listener:bootRun
-```
-
 ## Docker Compose
 The Compose setup runs both services from prebuilt images. Image tags come from the `VERSION` env var, so keep `VERSION=local` in `.env` for local runs and let CI set the real value when deploying.
-Ensure `.env` includes `IMAP_HOST`, `IMAP_PORT`, `IMAP_USERNAME`, `IMAP_PASSWORD`, and `IMAP_FOLDER` for the email listener.
+Ensure `.env` includes `ZOHO_ACCOUNT_ID`, `ZOHO_FOLDER_ID`, and OAuth settings for the scheduler mail poller.
 
 ```bash
 docker compose -f infra/docker-compose.yml up -d
@@ -55,7 +49,7 @@ Local Jib builds:
 - Jib tags images with `project.version`. For local builds, set `VERSION=local` in `.env` and build with `-Pversion=local` so Compose and Jib use the same tag.
 
 ```bash
-./gradlew :api:jibDockerBuild :scheduler:jibDockerBuild :email-listener:jibDockerBuild --no-configuration-cache
+./gradlew :api:jibDockerBuild :scheduler:jibDockerBuild --no-configuration-cache
 docker compose -f infra/docker-compose.yml up -d
 ```
 

@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0014-add-mail-listener-message-id
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        tableExists:
+          tableName: mail_listener_state
+      changes:
+        - addColumn:
+            tableName: mail_listener_state
+            columns:
+              - column:
+                  name: last_processed_message_id
+                  type: varchar(512)
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropColumn:
+            tableName: mail_listener_state
+            columnName: last_processed_message_id

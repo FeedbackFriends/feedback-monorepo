@@ -19,6 +19,7 @@ data class ManagerEventDto(
     val ownerInfo: OwnerInfoDto,
     val overallFeedbackSummary: OverallFeedbackSummaryDto?,
     val invitedEmails: List<String>,
+    val participants: List<ParticipantSummaryDto>,
     val questions: List<ManagerQuestion>,
 )
 

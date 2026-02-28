@@ -28,4 +28,3 @@ data class SessionDto(
         val updatedAt: OffsetDateTime,
     )
 }
-

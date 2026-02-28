@@ -11,6 +11,7 @@ import dk.example.feedback.dto.OverallFeedbackSegmentationStatsDto
 import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantQuestionDto
+import dk.example.feedback.dto.ParticipantSummaryDto
 import dk.example.feedback.dto.QuestionFeedbackSummaryDto
 import dk.example.feedback.dto.SessionDto
 import dk.example.feedback.dto.ThumpsQuestionFeedbackSummary
@@ -18,7 +19,9 @@ import dk.example.feedback.dto.ZeroToTenQuestionFeedbackSummary
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.participantResponses
 import dk.example.feedback.helpers.verifyAccountHasId
+import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.model.database.EventEntity
+import dk.example.feedback.model.helpers.normalizedEmail
 import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.enumerations.Emoji
 import dk.example.feedback.model.enumerations.FeedbackType
@@ -38,11 +41,14 @@ import org.springframework.stereotype.Service
 class EventService(
     private val eventRepo: EventRepo,
     private val activityRepo: ActivityRepo,
+    private val accountService: AccountService,
 ) {
 
     fun createEvent(eventInput: EventInput, jwt: Jwt): EventWrapperDto {
         val generatedPinCode = PinCodeGenerator(eventRepo = eventRepo).generate()
         val managerId = jwt.getAccountId()
+        val managerEmail = accountService.fetchAccount(managerId)?.email
+        val invitedEmails = filterInvitedEmails(eventInput.invitedEmails, managerEmail)
         val eventEntity = eventRepo.persistEvent(
             title = eventInput.title,
             agenda = eventInput.agenda,
@@ -53,11 +59,14 @@ class EventService(
             questions = eventInput.questions.map { question ->
                 Pair(question.questionText, question.feedbackType)
             },
-            managerId = managerId
+            managerId = managerId,
+            invitedEmails = invitedEmails,
         )
+        val participants = eventRepo.getParticipantsForEvent(eventEntity.id, managerId)
         return EventWrapperDto(
             event = eventEntity.toManagerEvent(
-            pinCode = generatedPinCode
+                pinCode = generatedPinCode,
+                participants = participants
             ),
             recentlyUsedQuestions = getRecentlyUsedQuestions(accountId = jwt.getAccountId())
         )
@@ -75,6 +84,7 @@ class EventService(
         if (event.feedback.isNotEmpty()) {
             throw IllegalArgumentException("Cannot update event with feedback")
         }
+        val invitedEmails = filterInvitedEmails(eventInput.invitedEmails, event.manager.email)
         val updatedEvent = eventRepo.updateEvent(
             eventId = eventId,
             title = eventInput.title,
@@ -84,11 +94,14 @@ class EventService(
             durationInMinutes = eventInput.durationInMinutes,
             questions = eventInput.questions.map { question ->
                 Pair(question.questionText, question.feedbackType)
-            }
+            },
+            invitedEmails = invitedEmails,
         )
+        val participants = eventRepo.getParticipantsForEvent(updatedEvent.id, event.manager.id)
         return EventWrapperDto(
             event = updatedEvent.toManagerEvent(
-                pinCode = getPinCodeForEvent(eventId)
+                pinCode = getPinCodeForEvent(eventId),
+                participants = participants
             ),
             recentlyUsedQuestions = getRecentlyUsedQuestions(accountId = jwt.getAccountId())
         )
@@ -96,7 +109,11 @@ class EventService(
 
     fun getManagerEvents(managerId: String): List<ManagerEventDto> {
         return eventRepo.getManagerEvents(managerId).map {
-            it.toManagerEvent(pinCode = getPinCodeForEvent(eventId = it.id))
+            val participants = eventRepo.getParticipantsForEvent(it.id, managerId)
+            it.toManagerEvent(
+                pinCode = getPinCodeForEvent(eventId = it.id),
+                participants = participants
+            )
         }
     }
 
@@ -130,6 +147,10 @@ class EventService(
         throwIfAccountAlreadyJoinedEvent(event, accountId)
         throwIfFeedbackAlreadySubmitted(event, accountId)
         eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = false)
+        val accountEmail = accountService.fetchAccount(accountId)?.email
+        if (accountEmail != null) {
+            eventRepo.removeInviteForEmail(eventId = event.id, email = accountEmail)
+        }
         return event.toParticipantEvent(
             pinCode = getPinCodeForEvent(event.id),
             feedbackSubmitted = false,
@@ -170,9 +191,23 @@ class EventService(
             throw EventAlreadyJoinedException(eventId = event.id, accountId = accountId)
         }
     }
+
+    private fun filterInvitedEmails(invitedEmails: List<String>, managerEmail: String?): List<String> {
+        if (invitedEmails.isEmpty()) {
+            return emptyList()
+        }
+        val managerEmailNormalized = managerEmail?.trim()?.takeIf { it.isNotEmpty() }
+        return invitedEmails.filterNot { email ->
+            val normalizedEmail = email.normalizedEmail()
+            if (normalizedEmail == null) {
+                return@filterNot true
+            }
+            managerEmailNormalized != null && normalizedEmail == managerEmailNormalized
+        }
+    }
 }
 
-fun EventEntity.toManagerEvent(pinCode: String?): ManagerEventDto {
+fun EventEntity.toManagerEvent(pinCode: String?, participants: List<AccountEntity>): ManagerEventDto {
     val isDraft = questions.isEmpty()
     return ManagerEventDto(
         id = id,
@@ -185,6 +220,13 @@ fun EventEntity.toManagerEvent(pinCode: String?): ManagerEventDto {
         isDraft = isDraft,
         pinCode = pinCode,
         invitedEmails = invites.sortedBy { it.createdAt }.map { it.email },
+        participants = participants.map {
+            ParticipantSummaryDto(
+                name = it.name,
+                email = it.email,
+                phoneNumber = it.phoneNumber,
+            )
+        },
         questions = questions.sortedBy { it.createdAt }.map { question ->
             ManagerQuestion(
                 id = question.id,
@@ -231,6 +273,7 @@ fun EventEntity.toParticipantEvent(
         recentlyJoined = recentlyJoined
     )
 }
+
 
 private fun generateOverallFeedbackSummary(
     participantResponses: Int,

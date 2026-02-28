@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0012-drop-event-invite-account-id
+      author: codex
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: event_invite
+            constraintName: fk_event_invite_account_id
+        - dropColumn:
+            tableName: event_invite
+            columnName: account_id

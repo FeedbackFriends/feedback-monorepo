@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0015-add-zoho-processed-message
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: zoho_processed_message
+      changes:
+        - createTable:
+            tableName: zoho_processed_message
+            columns:
+              - column:
+                  name: message_id
+                  type: varchar(512)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: mailbox_id
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: received_time
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: processed_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropTable:
+            tableName: zoho_processed_message

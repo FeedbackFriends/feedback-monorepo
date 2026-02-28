@@ -32,8 +32,16 @@ feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
   firebase-config-path: ${FIREBASE_CONFIG_PATH}
   mail:
-    host: ${IMAP_HOST:}
-    port: ${IMAP_PORT:993}
-    username: ${IMAP_USERNAME:}
-    password: ${IMAP_PASSWORD:}
-    folder: ${IMAP_FOLDER:INBOX}
+    enabled: ${ZOHO_MAIL_ENABLED:true}
+    poll-interval-ms: ${ZOHO_POLL_INTERVAL_MS:10000}
+    api-base-url: ${ZOHO_API_BASE_URL:https://mail.zoho.eu/api}
+    account-id: ${ZOHO_ACCOUNT_ID:}
+    folder-id: ${ZOHO_FOLDER_ID:}
+    page-size: ${ZOHO_PAGE_SIZE:50}
+    max-pages-per-poll: ${ZOHO_MAX_PAGES_PER_POLL:20}
+    mailbox-address: ${ZOHO_MAILBOX_ADDRESS:}
+    oauth:
+      refresh-token: ${ZOHO_OAUTH_REFRESH_TOKEN:}
+      client-id: ${ZOHO_CLIENT_ID:}
+      client-secret: ${ZOHO_CLIENT_SECRET:}
+      token-url: ${ZOHO_TOKEN_URL:https://accounts.zoho.eu/oauth/v2/token}

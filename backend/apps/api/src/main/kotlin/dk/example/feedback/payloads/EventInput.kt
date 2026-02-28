@@ -8,5 +8,6 @@ data class EventInput(
     val date: OffsetDateTime,
     val durationInMinutes: Int,
     val location: String?,
+    val invitedEmails: List<String> = emptyList(),
     val questions: List<QuestionInput>
 )

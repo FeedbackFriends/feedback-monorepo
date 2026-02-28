@@ -18,6 +18,7 @@ import dk.example.feedback.payloads.SubmitFeedbackInput
 import dk.example.feedback.utils.MockJwtFactory
 import dk.example.feedback.utils.TestConfig
 import java.time.OffsetDateTime
+import org.hamcrest.Matchers.hasItem
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -59,6 +60,130 @@ class E2ETest(
 //        `Verify event has new feedback`(userId = user1, newFeedback = 0)
 //        `A third user joins the event, verify session`()
 //        ``()
+    }
+
+    @Test
+    fun `Invited existing account auto joins on event create`() {
+        val managerId = "ManagerAutoJoin1"
+        val inviteeId = "InviteeAutoJoin1"
+        val inviteeEmail = "Invitee1@Example.com"
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/account")
+                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Manager, fcmToken = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/account")
+                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/account")
+                .content(objectMapper.writeValueAsString(ModifyAccountInput(name = null, email = inviteeEmail, phoneNumber = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+
+        val createEventInput = EventInput(
+            title = "Auto-join Event",
+            agenda = null,
+            date = OffsetDateTime.parse("2025-03-12T09:00:00+00:00"),
+            durationInMinutes = 30,
+            location = "Copenhagen",
+            invitedEmails = listOf(inviteeEmail),
+            questions = listOf(
+                QuestionInput(
+                    questionText = "Question?",
+                    feedbackType = FeedbackType.Emoji
+                )
+            ),
+        )
+
+        val createEventResponse = mockMvc.perform(
+            MockMvcRequestBuilders.post("/event")
+                .content(objectMapper.writeValueAsString(createEventInput))
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+            .andReturn()
+
+        val eventId = objectMapper.readTree(createEventResponse.response.contentAsString)
+            .get("event").get("id").asText()
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/session")
+                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.participantEvents[*].id").value(hasItem(eventId)))
+    }
+
+    @Test
+    fun `Invited email joins after account creation`() {
+        val managerId = "ManagerAutoJoin2"
+        val inviteeId = "InviteeAutoJoin2"
+        val inviteeEmail = "latecomer@example.com"
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/account")
+                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Manager, fcmToken = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+
+        val createEventInput = EventInput(
+            title = "Late join Event",
+            agenda = null,
+            date = OffsetDateTime.parse("2025-03-13T09:00:00+00:00"),
+            durationInMinutes = 45,
+            location = "Copenhagen",
+            invitedEmails = listOf(inviteeEmail),
+            questions = listOf(
+                QuestionInput(
+                    questionText = "Question?",
+                    feedbackType = FeedbackType.Emoji
+                )
+            ),
+        )
+
+        val createEventResponse = mockMvc.perform(
+            MockMvcRequestBuilders.post("/event")
+                .content(objectMapper.writeValueAsString(createEventInput))
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+            .andReturn()
+
+        val eventId = objectMapper.readTree(createEventResponse.response.contentAsString)
+            .get("event").get("id").asText()
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/account")
+                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/account")
+                .content(objectMapper.writeValueAsString(ModifyAccountInput(name = null, email = inviteeEmail, phoneNumber = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/session")
+                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.participantEvents[*].id").value(hasItem(eventId)))
     }
 
     fun `Create anonymous account and verify get session`(userId: String) {
@@ -178,7 +303,7 @@ class E2ETest(
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
             .andExpect(jsonPath("$.accountInfo.name").value("New name"))
-            .andExpect(jsonPath("$.accountInfo.email").value("New email"))
+            .andExpect(jsonPath("$.accountInfo.email").value("new email"))
             .andExpect(jsonPath("$.accountInfo.phoneNumber").value("New phone number"))
             .andExpect(jsonPath("$.participantEvents").isEmpty)
             .andExpect(jsonPath("$.managerData").exists())
@@ -220,6 +345,7 @@ class E2ETest(
             .andExpect(jsonPath("$.event.questions[1].questionText").value("What will you do today?"))
             .andExpect(jsonPath("$.event.questions[1].feedbackType").value("Emoji"))
             .andExpect(jsonPath("$.event.invitedEmails").isArray)
+            .andExpect(jsonPath("$.event.participants").isArray)
             .andReturn()
 
         val eventNode = objectMapper.readTree(createEventResponse.response.contentAsString).get("event")
@@ -236,7 +362,7 @@ class E2ETest(
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
             .andExpect(jsonPath("$.accountInfo.name").value("New name"))
-            .andExpect(jsonPath("$.accountInfo.email").value("New email"))
+            .andExpect(jsonPath("$.accountInfo.email").value("new email"))
             .andExpect(jsonPath("$.accountInfo.phoneNumber").value("New phone number"))
             .andExpect(jsonPath("$.participantEvents").isArray)
             .andExpect(jsonPath("$.managerData").exists())
@@ -270,7 +396,7 @@ class E2ETest(
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
             .andExpect(jsonPath("$.accountInfo.name").value("New name"))
-            .andExpect(jsonPath("$.accountInfo.email").value("New email"))
+            .andExpect(jsonPath("$.accountInfo.email").value("new email"))
             .andExpect(jsonPath("$.accountInfo.phoneNumber").value("New phone number"))
             .andExpect(jsonPath("$.participantEvents").isArray)
             .andExpect(jsonPath("$.managerData").exists())
@@ -314,6 +440,7 @@ class E2ETest(
             .andExpect(jsonPath("$.event.questions[0].questionText").value("What will you do today?"))
             .andExpect(jsonPath("$.event.questions[0].feedbackType").value("Emoji"))
             .andExpect(jsonPath("$.event.invitedEmails").isArray)
+            .andExpect(jsonPath("$.event.participants").isArray)
             .andReturn()
 
         val eventId: String = objectMapper.readTree(createEventResponse.response.contentAsString)
@@ -329,7 +456,7 @@ class E2ETest(
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
             .andExpect(jsonPath("$.accountInfo.name").value("New name"))
-            .andExpect(jsonPath("$.accountInfo.email").value("New email"))
+            .andExpect(jsonPath("$.accountInfo.email").value("new email"))
             .andExpect(jsonPath("$.accountInfo.phoneNumber").value("New phone number"))
             .andExpect(jsonPath("$.participantEvents").isArray)
             .andExpect(jsonPath("$.managerData").exists())
@@ -373,7 +500,7 @@ class E2ETest(
             .andExpect(jsonPath("$.title").value("New title"))
             .andExpect(jsonPath("$.agenda").value(nullValue()))
             .andExpect(jsonPath("$.ownerInfo.name").value("New name"))
-            .andExpect(jsonPath("$.ownerInfo.email").value("New email"))
+            .andExpect(jsonPath("$.ownerInfo.email").value("new email"))
             .andExpect(jsonPath("$.ownerInfo.phoneNumber").value("New phone number"))
             .andReturn()
 
@@ -416,6 +543,7 @@ class E2ETest(
         mockMvc.perform(getSessionRequest)
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.managerData.managerEvents[0].invitedEmails").isArray)
+            .andExpect(jsonPath("$.managerData.managerEvents[0].participants").isArray)
     }
 
     fun `Trigger resetNewFeedback for event and verify session`(userId: String, eventId: String) {

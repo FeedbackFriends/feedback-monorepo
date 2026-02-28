@@ -11,6 +11,7 @@ import dk.example.feedback.payloads.ModifyAccountInput
 import dk.example.feedback.payloads.UpdateRoleInput
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.SessionService
+import dk.example.feedback.model.helpers.normalizedEmail
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -39,10 +40,21 @@ class AccountController(
     ): SessionDto {
         firebaseService.setRole(userId = principal.getAccountId(), requestedRole = input.requestedRole)
         val user = firebaseService.getUser(principal.getAccountId())
+        val normalizedEmail = user.email.normalizedEmail()
+        normalizedEmail
+            ?.takeIf { it != user.email }
+            ?.let { normalizedEmail ->
+                firebaseService.updateUser(
+                    userId = principal.getAccountId(),
+                    email = normalizedEmail,
+                    displayName = user.displayName,
+                    phoneNumber = user.phoneNumber
+                )
+            }
         accountService.createAccount(
             requestedRole = input.requestedRole,
             name = user.displayName,
-            email = user.email,
+            email = normalizedEmail,
             phoneNumber = user.phoneNumber,
             jwt = principal,
             fcmToken = input.fcmToken
@@ -56,10 +68,20 @@ class AccountController(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: ModifyAccountInput,
     ) {
+        val normalizedEmail = input.email.normalizedEmail()
+        val existingEmail = accountService.fetchAccount(principal.getAccountId())?.email
+        if (normalizedEmail != null) {
+            firebaseService.updateUser(
+                userId = principal.getAccountId(),
+                email = normalizedEmail,
+                displayName = input.name,
+                phoneNumber = input.phoneNumber
+            )
+        }
         accountService.updateAccount(
             accountId = principal.getAccountId(),
             name = input.name,
-            email = input.email,
+            email = normalizedEmail ?: existingEmail,
             phoneNumber = input.phoneNumber,
             jwt = principal
         )

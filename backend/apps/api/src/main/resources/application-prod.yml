@@ -1,3 +1,5 @@
 springdoc:
   api-docs:
     enabled: ${SPRING_DOC_API_DOCS_ENABLED:false}
+  swagger-ui:
+    enabled: ${SPRING_DOC_SWAGGER_UI_ENABLED:false}

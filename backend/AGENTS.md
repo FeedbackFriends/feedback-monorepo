@@ -3,7 +3,6 @@
 ## Project Structure & Modules
 - `apps/api` – Spring Boot REST API (controllers, services, config) with resources in `src/main/resources/application.yml`.
 - `apps/scheduler` – background jobs and notification scheduling; config mirrors the API under `src/main/resources/`.
-- `apps/email-listener` – IMAP listener for calendar invites; config lives in `src/main/resources/application.yml`.
 - `lib/model` – shared DTOs, enums, and Jackson config; `lib/firebase` – Firebase client wrapper; `lib/ical-parser` – iCal parsing utilities; `lib/persistence` – Exposed DAO/repo layer plus Liquibase change sets in `src/main/resources/db/changelog/`.
 - Tests live in `apps/api/src/test/kotlin` (API/integration utilities) and `lib/persistence/src/test/kotlin` (DAO/DB coverage).
 - Diagrams for architecture live in `docs/diagrams/` (PlantUML).
@@ -13,8 +12,7 @@
 - `./gradlew test` – run all tests
 - `./gradlew :scheduler:test` or `./gradlew :scheduler:compileKotlin` – run scheduler tests or just compile the scheduler (useful for quick checks).
 - `./gradlew :scheduler:bootRun` – start the scheduler service; shares the same env vars as the API.
-- `./gradlew :email-listener:bootRun` – start the email listener; configure `IMAP_HOST`, `IMAP_PORT`, `IMAP_USERNAME`, `IMAP_PASSWORD`, `IMAP_FOLDER`.
-- `./gradlew  --no-daemon :api:jibDockerBuild :scheduler:jibDockerBuild :email-listener:jibDockerBuild --no-configuration-cache` – Build docker images locally
+- `./gradlew  --no-daemon :api:jibDockerBuild :scheduler:jibDockerBuild --no-configuration-cache` – Build docker images locally
 - `docker compose -f ../infra/docker-compos****e.yml up -d --remove-orphans` – build and run the applications via Docker Compose (from this repo root; or run `docker compose -f infra/docker-compose.yml ...` from the monorepo root).
 - `SPRING_PROFILES_ACTIVE=openapi ./gradlew :api:generateOpenApiDocs --no-configuration-cache` - generate openapi spec
 - Local env vars live in `../.env` (monorepo root); source it or export needed variables before running services.

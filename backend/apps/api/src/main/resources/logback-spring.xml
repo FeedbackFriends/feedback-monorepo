@@ -5,11 +5,6 @@
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- Specify log file location -->
         <file>${LOG_PATH}/application.log</file>
-        <!-- Create directory dynamically -->
-        <prerequisites>
-            <property name="DIRS_EXIST" value="${LOG_PATH}" />
-        </prerequisites>
-
         <!-- Rolling policy for managing log files -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/application-%d{yyyy-MM-dd}.log</fileNamePattern>

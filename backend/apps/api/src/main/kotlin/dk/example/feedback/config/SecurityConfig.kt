@@ -3,6 +3,7 @@ package dk.example.feedback.config
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -15,6 +16,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableMethodSecurity
+@Profile("!openapi")
 class SecurityConfig {
 
     private val logger = LoggerFactory.getLogger(SecurityConfig::class.java)
@@ -39,7 +41,7 @@ class SecurityConfig {
                 it
                     .requestMatchers("/actuator/health").permitAll()
                     .requestMatchers("/").permitAll()
-                    .requestMatchers("/v3/api-docs/**").permitAll()
+                    .requestMatchers("/v3/api-docs", "/v3/api-docs.yaml", "/v3/api-docs/**").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/webjars/**").permitAll()
                     .requestMatchers("/admin/**").permitAll()

@@ -23,8 +23,19 @@
    export SPRING_DATASOURCE_PASSWORD=secret
    export FIREBASE_API_KEY=...
    export FIREBASE_CONFIG_PATH=./firebase_config.json
+   export ZOHO_ACCOUNT_ID=...
+   export ZOHO_FOLDER_ID=...
+   export ZOHO_OAUTH_REFRESH_TOKEN=...
+   export ZOHO_CLIENT_ID=...
+   export ZOHO_CLIENT_SECRET=...
    ```
    Base version is set in `gradle.properties` (CI appends build metadata).
+
+   Zoho OAuth scopes for Self Client: use `ZohoMail.messages.READ` for the scheduler runtime.
+   If Zoho rejects multiple scopes in a Self Client grant, obtain `ZOHO_ACCOUNT_ID` and `ZOHO_FOLDER_ID`
+   with one-off access tokens using `ZohoMail.accounts.READ` and `ZohoMail.folders.READ`, then switch
+   the refresh token to `ZohoMail.messages.READ` for production. ZohoMail.attachments.READ cannot be
+   combined in a Self Client grant; attachments are still accessed via the message APIs.
 
 ## Running Services
 - API service:
@@ -35,17 +46,13 @@
   ```bash
   ./gradlew :apps:scheduler:bootRun
   ```
-- Email listener service:
-  ```bash
-  ./gradlew :apps:email-listener:bootRun
-  ```
 - Swagger UI lives at `/` locally; OpenAPI YAML at `/v3/api-docs.yaml`.
 
 ## Tests and Tooling
 - Run all tests: `./gradlew test`
 - Scope to API tests: `./gradlew :apps:api:test`
 - Build everything (fail on warnings): `./gradlew clean build`
-- Docker image (per app): `./gradlew :apps:email-listener:jibDockerBuild`
+- Docker image (per app): `./gradlew :apps:scheduler:jibDockerBuild`
 
 ## Database & Migrations
 - Liquibase change sets live in `lib/persistence/src/main/resources/db/changelog/` and run automatically on startup (unless disabled).
@@ -55,3 +62,8 @@
 - **Missing Firebase config**: ensure `FIREBASE_CONFIG_PATH` points to a valid service account JSON.
 - **Connection refused to Postgres**: verify the container is running and `SPRING_DATASOURCE_URL` matches the host/port.
 - **Ports in use**: change `server.port` in `apps/api/src/main/resources/application.yml` or via `--server.port=8081`.
+
+## Zoho Mail Processing Status
+Scheduler outcomes are stored in `zoho_processed_message`:
+- `status` (`CLAIMED`, `SUCCESS`, `SKIPPED`, `FAILED`) tracks processing results.
+- `archive_status` (`SUCCESS`, `FAILED`) tracks archiving attempts after processing.

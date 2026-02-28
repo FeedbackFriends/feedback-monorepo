@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0016-add-zoho-processed-message-details
+      author: nicolaidam
+      preConditions:
+        onFail: MARK_RAN
+        tableExists:
+          tableName: zoho_processed_message
+      changes:
+        - addColumn:
+            tableName: zoho_processed_message
+            columns:
+              - column:
+                  name: subject
+                  type: varchar(512)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: from_address
+                  type: varchar(512)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: has_attachment
+                  type: boolean
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status_message
+                  type: text
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropColumn:
+            tableName: zoho_processed_message
+            columns:
+              - column:
+                  name: status_message
+              - column:
+                  name: status
+              - column:
+                  name: has_attachment
+              - column:
+                  name: from_address
+              - column:
+                  name: subject
