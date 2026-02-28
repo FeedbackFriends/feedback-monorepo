@@ -4,8 +4,10 @@ import Footer from '@/components/layout/Footer'
 
 function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-background overflow-hidden relative">
-      <Background />
+    <div className="relative min-h-screen bg-background">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <Background />
+      </div>
       
       <div className="relative">
         <Navbar />

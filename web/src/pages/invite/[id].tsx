@@ -11,8 +11,10 @@ function InvitePage() {
   const deepLink = `letsgrow://invite?pin_code=${id}`
 
   return (
-    <div className="min-h-screen bg-background overflow-hidden relative">
-      <Background />
+    <div className="relative min-h-screen bg-background">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <Background />
+      </div>
       
       {/* Content */}
       <div className="relative">

@@ -284,8 +284,10 @@ function App() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background">
-      <Background />
+    <div className="relative min-h-screen bg-background">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <Background />
+      </div>
 
       <div className="relative pb-28 sm:pb-0">
         <Navbar />
