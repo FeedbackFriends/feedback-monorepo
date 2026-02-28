@@ -1,91 +1,34 @@
-name: Deploy Backend 🚀
+name: Deploy 🚀
 
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-  packages: write
-
 jobs:
-  build-and-deploy-backend:
+  compute-version:
     runs-on: ubuntu-latest
-
-    env:
-      BUILD_NUMBER: ${{ github.run_number }}
-
+    outputs:
+      full_version: ${{ steps.version.outputs.full_version }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Compute versions
+      - name: Compute shared version
+        id: version
         run: |
-          BASE_VERSION="${BUILD_NUMBER}"
+          BASE_VERSION="${{ github.run_number }}"
           SHORT_SHA=${GITHUB_SHA:0:7}
           FULL_VERSION="${BASE_VERSION}-${SHORT_SHA}"
-          # Keep Docker tags aligned with release versions for traceability.
-          DOCKER_TAG="${FULL_VERSION}"
-          echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_ENV
-          echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
-          echo "DOCKER_TAG=$DOCKER_TAG" >> $GITHUB_ENV
+          echo "full_version=${FULL_VERSION}" >> "$GITHUB_OUTPUT"
 
-      - name: Set up JDK environment
-        uses: actions/setup-java@v4
-        with:
-          java-version: "21"
-          distribution: "temurin"
+  deploy-backend:
+    needs: compute-version
+    uses: ./.github/workflows/deploy-backend.yml
+    with:
+      full_version: ${{ needs.compute-version.outputs.full_version }}
+    secrets: inherit
 
-      - name: Generate OpenAPI spec
-        env:
-          VERSION: ${{ env.FULL_VERSION }}
-          SPRING_PROFILES_ACTIVE: openapi
-        run: |
-          ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
-        working-directory: backend
-
-      - name: Build and publish Docker images with Jib
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          ./gradlew :api:jib :scheduler:jib :email-listener:jib --no-configuration-cache -Pversion=${FULL_VERSION}
-        working-directory: backend
-
-      - name: Deploy backend to Debian server
-        env:
-          DOCKER_TAG: ${{ env.DOCKER_TAG }}
-          API_DOCKER_TAG: ${{ env.DOCKER_TAG }}
-          SCHEDULER_DOCKER_TAG: ${{ env.DOCKER_TAG }}
-          DEPLOY_SERVICES: "api scheduler"
-          FULL_DEPLOY: "0"
-          REMOTE_USER: ${{ secrets.DEBIAN_USER }}
-          REMOTE_HOST: ${{ secrets.DEBIAN_IP }}
-          DEBIAN_PASSWORD: ${{ secrets.DEBIAN_PASSWORD }}
-        run: |
-          infra/scripts/deploy-remote.sh
-
-      - name: Create and Push Git Tag
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "${{ env.FULL_VERSION }}" -m "Release ${{ env.FULL_VERSION }}"
-          git push origin "${{ env.FULL_VERSION }}"
-
-      - name: Create GitHub Release
-        run: |
-          API_JSON=$(jq -n \
-            --arg tag_name "${{ env.FULL_VERSION }}" \
-            --arg name "Release ${{ env.FULL_VERSION }}" \
-            '{ tag_name: $tag_name, name: $name, generate_release_notes: true, draft: false, prerelease: false }')
-
-          curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "$API_JSON" \
-            "https://api.github.com/repos/${{ github.repository }}/releases"
-
-      - name: Upload OpenAPI spec to GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release upload "${{ env.FULL_VERSION }}" backend/apps/api/build/openapi.yaml --clobber
+  deploy-frontend:
+    needs:
+      - compute-version
+      - deploy-backend
+    uses: ./.github/workflows/deploy-frontend.yml
+    with:
+      full_version: ${{ needs.compute-version.outputs.full_version }}
+    secrets: inherit

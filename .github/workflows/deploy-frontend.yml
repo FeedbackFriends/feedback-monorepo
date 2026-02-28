@@ -1,6 +1,11 @@
-name: Deploy Web 🚀
+name: Deploy Frontend 🚀
 
 on:
+  workflow_call:
+    inputs:
+      full_version:
+        required: false
+        type: string
   workflow_dispatch:
 
 permissions:
@@ -8,7 +13,7 @@ permissions:
   packages: write
 
 jobs:
-  build-and-deploy-web:
+  build-and-deploy-frontend:
     runs-on: ubuntu-latest
 
     env:
@@ -20,9 +25,14 @@ jobs:
 
       - name: Compute versions
         run: |
-          BASE_VERSION="${BUILD_NUMBER}"
-          SHORT_SHA=${GITHUB_SHA:0:7}
-          FULL_VERSION="${BASE_VERSION}-${SHORT_SHA}"
+          REQUESTED_VERSION="${{ inputs.full_version }}"
+          if [[ -n "${REQUESTED_VERSION}" ]]; then
+            FULL_VERSION="${REQUESTED_VERSION}"
+          else
+            BASE_VERSION="${BUILD_NUMBER}"
+            SHORT_SHA=${GITHUB_SHA:0:7}
+            FULL_VERSION="${BASE_VERSION}-${SHORT_SHA}"
+          fi
           DOCKER_TAG="${FULL_VERSION}"
           echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
           echo "DOCKER_TAG=$DOCKER_TAG" >> $GITHUB_ENV
@@ -33,13 +43,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and publish web image
+      - name: Build and publish frontend image
         env:
           DOCKER_TAG: ${{ env.DOCKER_TAG }}
         run: |
           infra/scripts/build-and-push-web.sh
 
-      - name: Deploy web to Debian server
+      - name: Deploy frontend to Debian server
         env:
           DOCKER_TAG: ${{ env.DOCKER_TAG }}
           WEB_DOCKER_TAG: ${{ env.DOCKER_TAG }}
