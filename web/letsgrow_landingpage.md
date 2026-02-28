@@ -213,7 +213,7 @@ State who the product is for, what it improves, and why it matters.
 
 #### Example Danish Hero Directions
 
-- `Gør jeres faste møder bedre, uge for uge`
+- `Gør jeres møder bedre, uge for uge`
 - `Få enkel feedback efter hvert møde og se, om kvaliteten stiger`
 - `Bedre teammøder starter med en lille vane`
 
@@ -322,7 +322,7 @@ The Danish website should sound simple, concrete, calm, and useful.
 
 ### Approved Danish Copy Examples
 
-- `Gør jeres faste møder bedre, uge for uge`
+- `Gør jeres møder bedre, uge for uge`
 - `Få enkel feedback efter hvert møde og se, om kvaliteten stiger`
 - `Bedre teammøder starter med en lille vane`
 - `Se om jeres ugentlige møder faktisk bliver bedre`
