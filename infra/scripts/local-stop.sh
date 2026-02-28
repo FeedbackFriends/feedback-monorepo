@@ -17,7 +17,9 @@ set +a
 
 echo "Stopping services with Docker Compose..."
 (cd "${ROOT_DIR}" \
-  && VERSION="${VERSION}" \
+  && API_VERSION="${VERSION}" \
+  && SCHEDULER_VERSION="${VERSION}" \
+  && WEB_VERSION="${VERSION}" \
   ENV_FILE="${ENV_FILE}" \
   FIREBASE_CONFIG_FILE="${ROOT_DIR}/firebase_config.json" \
   docker compose -f infra/docker-compose.yml down)

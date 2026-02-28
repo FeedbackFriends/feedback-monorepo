@@ -38,7 +38,7 @@ Scheduler service:
 ```
 
 ## Docker Compose
-The Compose setup runs both services from prebuilt images. Image tags come from the `VERSION` env var, so keep `VERSION=local` in `.env` for local runs and let CI set the real value when deploying.
+The Compose setup runs both services from prebuilt images. Local helper scripts derive per-service image tags from `VERSION=local` in `.env`, while CI sets real tags during deploys.
 Ensure `.env` includes `ZOHO_ACCOUNT_ID`, `ZOHO_FOLDER_ID`, and OAuth settings for the scheduler mail poller.
 
 ```bash
@@ -46,7 +46,7 @@ docker compose -f infra/docker-compose.yml up -d
 ```
 
 Local Jib builds:
-- Jib tags images with `project.version`. For local builds, set `VERSION=local` in `.env` and build with `-Pversion=local` so Compose and Jib use the same tag.
+- Jib tags images with `project.version`. For local builds, set `VERSION=local` in `.env` and build with `-Pversion=local` so the helper scripts can pass the same tag to Compose.
 
 ```bash
 ./gradlew :api:jibDockerBuild :scheduler:jibDockerBuild --no-configuration-cache
@@ -55,16 +55,14 @@ docker compose -f infra/docker-compose.yml up -d
 
 CI behavior:
 - CI injects a real version (run number + short SHA) via `-Pversion=...`, and Jib tags images with that value.
-- `infra/docker-compose.yml` consumes `VERSION` to pull the matching tag during deploy.
+- `infra/docker-compose.yml` consumes `API_VERSION`, `SCHEDULER_VERSION`, and `WEB_VERSION` so CI can also redeploy web independently.
 
 ## CI Pipeline (GitHub Actions)
-The deploy workflow runs in this order:
+The backend deploy workflow runs in this order:
 - Compute versions (`FULL_VERSION=run_number-short_sha`) and align `DOCKER_TAG` with it.
   - Set up JDK 21.
-  - Generate and sync OpenAPI spec to `feedback-openapi` if changed.
   - Build and push Docker images with Jib using `-Pversion=${FULL_VERSION}`.
-  - Deploy via Docker Compose to the Debian host using the same tag.
-  - Run post-deploy health checks over SSH against private actuator ports (API `8090`, scheduler `8091`).
+  - Deploy only `api` and `scheduler` via Docker Compose to the Debian host using the same tag.
   - Create a git tag and GitHub release for `FULL_VERSION`.
 
 ## Build, Test, and Tooling

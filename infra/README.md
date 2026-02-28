@@ -2,7 +2,7 @@
 
 This folder mirrors server-side infra configs so the repo can be moved or rebuilt on a new host.
 
-Deployment steps are mirrored from `.github/workflows/deploy.yml`.
+Deployment steps are mirrored from `.github/workflows/deploy.yml` and `.github/workflows/deploy-web.yml`.
 The deploy script syncs `infra/nginx/` to the server and uses `infra/docker-compose.yml`.
 
 ### Prerequisites

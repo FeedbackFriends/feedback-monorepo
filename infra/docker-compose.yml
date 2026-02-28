@@ -1,6 +1,6 @@
 services:
   api:
-    image: nicolaidam/feedback-api:${VERSION}
+    image: nicolaidam/feedback-api:${API_VERSION:?API_VERSION must be set}
     container_name: api
     env_file:
       - ${ENV_FILE:?ENV_FILE must point to the root .env}
@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
 
   scheduler:
-    image: nicolaidam/feedback-scheduler:${VERSION}
+    image: nicolaidam/feedback-scheduler:${SCHEDULER_VERSION:?SCHEDULER_VERSION must be set}
     container_name: scheduler
     env_file:
       - ${ENV_FILE:?ENV_FILE must point to the root .env}
@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
 
   web:
-    image: nicolaidam/feedback-web:${VERSION}
+    image: nicolaidam/feedback-web:${WEB_VERSION:?WEB_VERSION must be set}
     container_name: web
     ports:
       - "8081:80"
