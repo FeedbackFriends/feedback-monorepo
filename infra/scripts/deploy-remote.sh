@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Deploys docker-compose on the remote Debian host.
-# Shared by the backend and web GitHub Actions deploy workflows.
+# Shared by the backend and frontend GitHub Actions deploy workflows.
 
 REMOTE_USER=${REMOTE_USER:-debian}
 REMOTE_HOST=${REMOTE_HOST:-127.0.0.1}
@@ -107,6 +107,10 @@ fi
 set -a
 source .env
 set +a
+LEGACY_VERSION="\${VERSION:-}"
+export API_VERSION="\${API_VERSION:-\${API_DOCKER_TAG:-\${LEGACY_VERSION:-}}}"
+export SCHEDULER_VERSION="\${SCHEDULER_VERSION:-\${SCHEDULER_DOCKER_TAG:-\${LEGACY_VERSION:-}}}"
+export WEB_VERSION="\${WEB_VERSION:-\${WEB_DOCKER_TAG:-\${LEGACY_VERSION:-}}}"
 docker network create feedback-network >/dev/null 2>&1 || true
 export ENV_FILE="${REMOTE_CONFIG_DIR}/.env"
 export FIREBASE_CONFIG_FILE="${REMOTE_CONFIG_DIR}/firebase_config.json"
