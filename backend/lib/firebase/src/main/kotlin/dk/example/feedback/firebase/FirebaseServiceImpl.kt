@@ -13,6 +13,7 @@ import com.google.firebase.messaging.Message
 import dk.example.feedback.model.enumerations.Role
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.io.InputStream
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -23,18 +24,28 @@ class FirebaseServiceImpl : FirebaseService, FirebaseAdminService {
 
     override fun configure(configFilePath: String) {
         try {
-            logger.info("Initializing FirebaseApp: Getting config file from path: ${configFilePath}")
-            val firebaseServiceAccount = FileInputStream(configFilePath)
-            val options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(firebaseServiceAccount))
-                .build()
-            FirebaseApp.initializeApp(options)
-            logger.info("FirebaseApp initialized successfully.")
+            logger.info("Initializing FirebaseApp from config file path: {}", configFilePath)
+            FileInputStream(configFilePath).use { firebaseServiceAccount ->
+                initializeApp(firebaseServiceAccount)
+            }
         } catch (e: FileNotFoundException) {
             logger.error("Firebase configuration file not found at path: ${configFilePath}", e)
         } catch (e: Exception) {
             logger.error("Failed to initialize FirebaseApp", e)
         }
+    }
+
+    private fun initializeApp(firebaseServiceAccount: InputStream) {
+        if (FirebaseApp.getApps().isNotEmpty()) {
+            logger.info("FirebaseApp already initialized, skipping reconfiguration.")
+            return
+        }
+
+        val options = FirebaseOptions.builder()
+            .setCredentials(GoogleCredentials.fromStream(firebaseServiceAccount))
+            .build()
+        FirebaseApp.initializeApp(options)
+        logger.info("FirebaseApp initialized successfully.")
     }
 
     override fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
@@ -67,7 +78,6 @@ class FirebaseServiceImpl : FirebaseService, FirebaseAdminService {
     override fun getUser(userId: String): FirebaseUser {
 
         val userRecord = FirebaseAuth.getInstance().getUser(userId)
-        // if email is null (user is anonymous) then return null
         return FirebaseUser(
             displayName = userRecord.displayName,
             phoneNumber = userRecord.phoneNumber,

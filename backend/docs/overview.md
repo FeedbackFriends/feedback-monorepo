@@ -23,5 +23,5 @@
 
 ## Local Development Tips
 - Use H2 for quick iteration; switch to Postgres via `SPRING_DATASOURCE_URL` env.
-- OpenAPI docs live at `/` (Swagger UI) and `/v3/api-docs.yaml`; regenerate spec with `./gradlew :apps:api:openApiGenerate` if you add endpoints.
+- OpenAPI docs live at `/` (Swagger UI) and `/v3/api-docs.yaml`; regenerate spec with `./gradlew :api:generateOpenApiDocs` if you add endpoints.
 - Keep DTOs in `model`, business logic in `service`, and database details in `persistence` to maintain module boundaries.

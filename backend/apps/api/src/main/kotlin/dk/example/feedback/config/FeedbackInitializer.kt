@@ -18,7 +18,11 @@ class FeedbackInitializer(
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         insertMockData()
-        firebaseService.configure(configFilePath = feedbackConfig.firebaseConfigPath)
+        if (feedbackConfig.firebaseConfigPath.isNotBlank()) {
+            firebaseService.configure(configFilePath = feedbackConfig.firebaseConfigPath)
+        } else {
+            logger.warn("Skipping Firebase initialization because no Firebase config path was provided.")
+        }
     }
 
     private fun insertMockData() {

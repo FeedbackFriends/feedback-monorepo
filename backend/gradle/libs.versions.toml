@@ -9,7 +9,6 @@ springboot = "3.5.9"
 springDependencyPlugin = "1.1.7"
 springdoc = "2.8.14"
 testcontainers = "1.21.4"
-jib = "3.5.2"
 openapi = "1.9.0"
 firebase = "9.7.0"
 ical4j = "4.2.2"
@@ -33,6 +32,7 @@ liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "liqui
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 
 springboot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "springboot" }
+springboot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springboot" }
 springboot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springboot" }
 springboot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "springboot" }
 springboot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springboot" }
@@ -57,7 +57,6 @@ springdoc-openapi-starter-webmvc = { module = "org.springdoc:springdoc-openapi-s
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springboot" }
 spring-dependencies = { id = "io.spring.dependency-management", version.ref = "springDependencyPlugin" }
-jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
 openapi = { id = "org.springdoc.openapi-gradle-plugin", version.ref = "openapi" }
 
 [bundles]

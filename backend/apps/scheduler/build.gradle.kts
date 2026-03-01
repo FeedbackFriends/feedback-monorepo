@@ -1,5 +1,4 @@
 plugins {
-    alias(libs.plugins.jib)
     kotlin("plugin.spring") version libs.versions.kotlin
     alias(libs.plugins.springboot)
     alias(libs.plugins.spring.dependencies)
@@ -13,6 +12,7 @@ dependencies {
     implementation(projects.icalParser)
 
     implementation(libs.springboot.starter)
+    implementation(libs.springboot.starter.actuator)
     implementation(libs.springboot.starter.validation)
     implementation(libs.springboot.starter.web)
 
@@ -38,14 +38,4 @@ tasks.withType<Test> {
 // Generate build metadata so Spring can read the build version at runtime.
 springBoot {
     buildInfo()
-}
-
-jib {
-    to {
-        image = "nicolaidam/feedback-scheduler:${project.version}"
-        auth {
-            username = System.getenv("DOCKER_USERNAME")
-            password = System.getenv("DOCKER_PASSWORD")
-        }
-    }
 }

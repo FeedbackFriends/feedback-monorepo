@@ -1,0 +1,89 @@
+name: feedback
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: feedback
+      POSTGRES_USER: feedback
+      POSTGRES_PASSWORD: feedback
+    ports:
+      - "${DB_HOST_PORT:-5432}:5432"
+    volumes:
+      - feedback-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U feedback -d feedback"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/apps/api/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: "8080"
+      MANAGEMENT_SERVER_PORT: "8090"
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DOC_API_DOCS_ENABLED: "true"
+      SPRING_DOC_SWAGGER_UI_ENABLED: "true"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/feedback
+      SPRING_DATASOURCE_USERNAME: feedback
+      SPRING_DATASOURCE_PASSWORD: feedback
+      FIREBASE_CONFIG_PATH: /app/secrets/firebase_config.json
+    volumes:
+      - ./firebase_config.json:/app/secrets/firebase_config.json:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${API_HOST_PORT:-18080}:8080"
+      - "${API_MANAGEMENT_HOST_PORT:-18090}:8090"
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: backend/apps/scheduler/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: "8080"
+      MANAGEMENT_SERVER_PORT: "8091"
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_LIQUIBASE_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/feedback
+      SPRING_DATASOURCE_USERNAME: feedback
+      SPRING_DATASOURCE_PASSWORD: feedback
+      FIREBASE_CONFIG_PATH: /app/secrets/firebase_config.json
+    volumes:
+      - ./firebase_config.json:/app/secrets/firebase_config.json:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${SCHEDULER_MANAGEMENT_HOST_PORT:-18091}:8091"
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL: ${NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL:-}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL: ${NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL:-}
+    depends_on:
+      - api
+    ports:
+      - "${WEB_HOST_PORT:-3000}:3000"
+
+volumes:
+  feedback-postgres:

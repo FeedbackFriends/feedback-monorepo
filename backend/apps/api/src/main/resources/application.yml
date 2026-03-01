@@ -1,10 +1,10 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
   shutdown: graceful
   max-http-request-header-size: 16KB
 management:
   server:
-    port: 8090
+    port: ${MANAGEMENT_SERVER_PORT:${PORT:8090}}
   info:
     env:
       enabled: true
@@ -50,4 +50,4 @@ springdoc:
   default-produces-media-type: application/json
 feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
-  firebase-config-path: ${FIREBASE_CONFIG_PATH}
+  firebase-config-path: ${FIREBASE_CONFIG_PATH:}

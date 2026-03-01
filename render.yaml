@@ -1,0 +1,124 @@
+# Render Blueprint for the feedback monorepo.
+# Configure Render to use this file as the Blueprint path: render.yaml
+#
+# This Blueprint assumes:
+# - the frontend runs as a Docker-based Next.js web service
+# - the API runs as a Docker-based Spring Boot web service
+# - the Zoho mail poller runs as a Docker-based background worker
+# - the Postgres database is provisioned in Render
+#
+# Notes:
+# - Set secret values in Render for all env vars with sync: false.
+# - Add a secret file named firebase_config.json to the API and worker,
+#   mounted at /etc/secrets/firebase_config.json.
+
+services:
+  - type: web
+    name: feedback-api
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    dockerContext: .
+    dockerfilePath: backend/apps/api/Dockerfile
+    autoDeployTrigger: checksPass
+    healthCheckPath: /actuator/health
+    domains:
+      - api.letsgrow.dk
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SHOW_EXPOSED_SQL
+        value: "false"
+      - key: FIREBASE_CONFIG_PATH
+        value: /etc/secrets/firebase_config.json
+      - key: DATABASE_URL
+        fromDatabase:
+          name: feedback-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: feedback-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: feedback-db
+          property: password
+      - key: JWT_JWK_SET_URL
+        sync: false
+      - key: JWT_ISSUER_URI
+        sync: false
+      - key: FIREBASE_API_KEY
+        sync: false
+
+  - type: worker
+    name: feedback-scheduler
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    dockerContext: .
+    dockerfilePath: backend/apps/scheduler/Dockerfile
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_LIQUIBASE_ENABLED
+        value: "false"
+      - key: FIREBASE_CONFIG_PATH
+        value: /etc/secrets/firebase_config.json
+      - key: ZOHO_MAIL_ENABLED
+        value: "true"
+      - key: ZOHO_POLL_INTERVAL_MS
+        value: "10000"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: feedback-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: feedback-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: feedback-db
+          property: password
+      - key: FIREBASE_API_KEY
+        sync: false
+      - key: ZOHO_ACCOUNT_ID
+        sync: false
+      - key: ZOHO_FOLDER_ID
+        sync: false
+      - key: ZOHO_MAILBOX_ADDRESS
+        sync: false
+      - key: ZOHO_OAUTH_REFRESH_TOKEN
+        sync: false
+      - key: ZOHO_CLIENT_ID
+        sync: false
+      - key: ZOHO_CLIENT_SECRET
+        sync: false
+
+  - type: web
+    name: feedback-web
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    dockerContext: ./web
+    dockerfilePath: ./web/Dockerfile
+    autoDeployTrigger: checksPass
+    domains:
+      - letsgrow.dk
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL
+        sync: false
+
+databases:
+  - name: feedback-db
+    region: frankfurt
+    plan: basic-1gb
+    postgresMajorVersion: "17"
+    databaseName: feedback
+    user: feedback
+    ipAllowList: []
