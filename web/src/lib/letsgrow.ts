@@ -1,7 +1,7 @@
 // Replace the fallback URL with the live Typeform URL, or set it via
-// VITE_LETSGROW_EARLY_ACCESS_URL for each environment.
+// NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL for each environment.
 export const earlyAccessUrl =
-  import.meta.env.VITE_LETSGROW_EARLY_ACCESS_URL ??
+  process.env.NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL ??
   "https://form.typeform.com/to/RSs7TZAj"
 
 export const earlyAccessLabel = "Få tidlig adgang"

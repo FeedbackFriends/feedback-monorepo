@@ -2,7 +2,7 @@ import { HTMLAttributes } from "react"
 import { Card, CardContent } from "./card"
 import { cn } from "@/lib/utils"
 
-export interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
+interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   contentClassName?: string
 }
 

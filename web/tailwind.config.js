@@ -4,9 +4,9 @@ import animate from "tailwindcss-animate"
 export default {
     darkMode: ["class"],
     content: [
-        './pages/**/*.{ts,tsx}',
-        './components/**/*.{ts,tsx}',
-        './app/**/*.{ts,tsx}',
+        './src/app/**/*.{ts,tsx}',
+        './src/components/**/*.{ts,tsx}',
+        './src/lib/**/*.{ts,tsx}',
         './src/**/*.{ts,tsx}',
     ],
     prefix: "",
@@ -74,11 +74,10 @@ export default {
                 "accordion-up": "accordion-up 0.2s ease-out",
             },
             fontFamily: {
-                sans: ['Montserrat', 'system-ui', 'sans-serif'],
-                montserrat: ['Montserrat', 'system-ui', 'sans-serif'],
+                sans: ['var(--font-montserrat)', 'Montserrat', 'system-ui', 'sans-serif'],
+                montserrat: ['var(--font-montserrat)', 'Montserrat', 'system-ui', 'sans-serif'],
             },
         },
     },
     plugins: [animate],
 }
-

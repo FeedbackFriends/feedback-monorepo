@@ -1,7 +1,7 @@
+'use client'
+
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import LetsGrowIcon from '@/assets/icon_transparent.png'
-import Headline from '@/assets/headline4.png'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
   earlyAccessButtonClass,
@@ -35,16 +35,16 @@ function Navbar() {
     >
       <div className="container flex h-16 items-center justify-between gap-4">
         <div className="flex gap-6 md:gap-10">
-          <Link to="/" className="flex items-center space-x-4">
+          <Link href="/" className="flex items-center space-x-4">
             <img
-              src={LetsGrowIcon}
+              src="/branding/icon_transparent.png"
               alt="Lets Grow Icon"
               className="h-8 object-contain"
               style={{ maxWidth: '3rem' }}
             />
 
             <img
-              src={Headline}
+              src="/branding/headline4.png"
               alt="Headline"
               className="h-10 object-contain"
             />
@@ -68,4 +68,4 @@ function Navbar() {
   )
 }
 
-export default Navbar 
+export default Navbar

@@ -43,6 +43,7 @@ out/
 
 ### VS Code ###
 .vscode/
+.next/
 
 # Tooling artifacts
 .codex/
