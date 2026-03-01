@@ -58,13 +58,12 @@ CI behavior:
 - `infra/docker-compose.yml` consumes `API_VERSION`, `SCHEDULER_VERSION`, and `WEB_VERSION` so CI can also redeploy web independently.
 
 ## CI Pipeline (GitHub Actions)
-The deploy setup uses a top-level `deploy.yml` workflow that orchestrates the reusable backend and frontend workflows with a shared version.
-
-The backend deploy workflow runs in this order:
+The deploy workflow runs in this order:
 - Compute versions (`FULL_VERSION=run_number-short_sha`) and align `DOCKER_TAG` with it.
   - Set up JDK 21.
   - Build and push Docker images with Jib using `-Pversion=${FULL_VERSION}`.
-  - Deploy only `api` and `scheduler` via Docker Compose to the Debian host using the same tag.
+  - Build and push the frontend image using the same tag.
+  - Deploy backend and frontend together via Docker Compose to the Debian host using the same tag.
   - Create a git tag and GitHub release for `FULL_VERSION`.
 
 ## Build, Test, and Tooling
