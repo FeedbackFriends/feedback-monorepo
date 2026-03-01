@@ -306,7 +306,7 @@ function App() {
               >
                 <motion.div className="space-y-7" variants={fadeInUp}>
                   <h1 className="max-w-3xl pb-1 text-4xl font-bold leading-[1.08] text-transparent bg-clip-text bg-gradient-to-b from-[#4A4D69] via-[#282A47] to-[#1F2140] sm:text-5xl lg:text-6xl">
-                    Gør jeres møder bedre, uge for uge
+                    Gør jeres faste møder bedre, uge for uge
                   </h1>
                   <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
                     Lets Grow hjælper team leads, scrum masters og
