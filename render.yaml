@@ -11,12 +11,16 @@
 # - Set secret values in Render for all env vars with sync: false.
 # - Add a secret file named firebase_config.json to the API and worker,
 #   mounted at /etc/secrets/firebase_config.json.
+# - Cost-optimized setup:
+#   - API and frontend use Render's free web-service tier.
+#   - The scheduler stays on starter because Render does not offer free workers.
+#   - The database uses basic-256mb, the cheapest non-expiring Postgres tier.
 
 services:
   - type: web
     name: feedback-api
     runtime: docker
-    plan: starter
+    plan: free
     region: frankfurt
     dockerContext: .
     dockerfilePath: backend/apps/api/Dockerfile
@@ -99,7 +103,7 @@ services:
   - type: web
     name: feedback-web
     runtime: docker
-    plan: starter
+    plan: free
     region: frankfurt
     dockerContext: ./web
     dockerfilePath: ./web/Dockerfile
@@ -117,7 +121,7 @@ services:
 databases:
   - name: feedback-db
     region: frankfurt
-    plan: basic-1gb
+    plan: basic-256mb
     postgresMajorVersion: "17"
     databaseName: feedback
     user: feedback
