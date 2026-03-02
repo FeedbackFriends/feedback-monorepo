@@ -7,6 +7,14 @@ databaseChangeLog:
       name: uuid
       value: "random_uuid()"
       dbms: h2
+  - property:
+      name: calendarEventIdType
+      value: "text"
+      dbms: postgresql
+  - property:
+      name: calendarEventIdType
+      value: "varchar(1024)"
+      dbms: h2
 
   - include:
       file: 0001-initial-schema.yaml
