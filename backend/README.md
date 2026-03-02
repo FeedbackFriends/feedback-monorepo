@@ -31,12 +31,12 @@ For local Postgres:
 
 
 ## Deployment
-Production deployment is defined in [../render.yaml](../render.yaml).
+Production deployment is defined in [../render.yaml](../infra/render.yaml).
 
 Render-specific assets:
 - API Dockerfile: [./apps/api/Dockerfile](./apps/api/Dockerfile)
 - Scheduler Dockerfile: [./apps/scheduler/Dockerfile](./apps/scheduler/Dockerfile)
-- Render setup notes: [../render/README.md](../render/README.md)
+- Render setup notes: [../render/README.md](../infra/README.md)
 
 The API and scheduler expect Firebase credentials via , which in Render should point at the mounted secret file path.
 
