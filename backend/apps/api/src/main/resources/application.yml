@@ -20,6 +20,8 @@ management:
         enabled: true
       show-details: always
 spring:
+  application:
+    name: feedback-api
   jpa:
     open-in-view: false
   security:
@@ -51,3 +53,10 @@ springdoc:
 feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
   firebase-config-path: ${FIREBASE_CONFIG_PATH:}
+logging:
+  include-application-name: true
+  level:
+    root: ${LOG_LEVEL_ROOT:INFO}
+    dk.example.feedback: ${LOG_LEVEL_APP:INFO}
+    org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
+    org.springframework.security: ${LOG_LEVEL_SPRING_SECURITY:INFO}

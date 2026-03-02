@@ -40,6 +40,14 @@ Render-specific assets:
 
 The API and scheduler expect Firebase credentials via , which in Render should point at the mounted secret file path.
 
+## Logging
+The backend uses Spring Boot's default console logging.
+
+- Both services write logs to stdout/stderr, which Render captures automatically.
+- The API includes request-completion logs with method, path, status, and duration to make Render logs easier to filter.
+- Actuator endpoints and `/error` are excluded from the API request interceptor to reduce noise.
+- Log levels can be tuned with `LOG_LEVEL_ROOT`, `LOG_LEVEL_APP`, `LOG_LEVEL_SPRING_WEB`, and `LOG_LEVEL_SPRING_SECURITY` (API only).
+
 ## Build, Test, and Tooling
 -  – compile all modules and run tests (warnings fail build).
 -  or  – run full or scoped tests.

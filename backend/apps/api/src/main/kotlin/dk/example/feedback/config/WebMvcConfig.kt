@@ -12,6 +12,6 @@ class WebMvcConfig(
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(loggingInterceptor)
             .addPathPatterns("/**")
-            .excludePathPatterns("/health", "/metrics")
+            .excludePathPatterns("/actuator/**", "/error")
     }
 }

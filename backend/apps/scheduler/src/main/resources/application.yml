@@ -13,6 +13,8 @@ management:
     health:
       show-details: never
 spring:
+  application:
+    name: feedback-scheduler
   jpa:
     open-in-view: false
   liquibase:
@@ -45,3 +47,9 @@ feedback:
       client-id: ${ZOHO_CLIENT_ID:}
       client-secret: ${ZOHO_CLIENT_SECRET:}
       token-url: ${ZOHO_TOKEN_URL:https://accounts.zoho.eu/oauth/v2/token}
+logging:
+  include-application-name: true
+  level:
+    root: ${LOG_LEVEL_ROOT:INFO}
+    dk.example.feedback: ${LOG_LEVEL_APP:INFO}
+    org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}

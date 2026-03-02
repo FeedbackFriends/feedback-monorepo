@@ -13,7 +13,7 @@
 - Default datasource is H2 in-memory for tests; Postgres is expected in real environments.
 - Liquibase runs on startup and keeps schema aligned with change sets (`000X-description.yaml`).
 - Security: Resource server with JWT (Google/Firebase) configured in `apps/api/src/main/resources/application.yml`.
-- Logging: Logback per app under `src/main/resources/`; log interceptors capture request context.
+- Logging: services use Spring Boot console logging, and the API interceptor captures request context for Render logs.
 
 ## Request/Notification Flow
 1. Client calls API (JWT bearer token).

@@ -1,10 +1,7 @@
 HELP.md
 
-# Ignore runtime logs and secrets
+# Ignore runtime secrets
 firebase_config.json
-logs/*
-LOG_DIR_IS_UNDEFINED/
-*.log
 .DS_Store
 .gradle
 .gradle-cache/
@@ -47,6 +44,8 @@ out/
 
 # Tooling artifacts
 .codex/
+.agents/
+skills-lock.json
 .specify/
 
 .env

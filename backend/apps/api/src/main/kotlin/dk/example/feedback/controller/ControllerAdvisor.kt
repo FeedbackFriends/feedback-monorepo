@@ -1,5 +1,6 @@
 package dk.example.feedback.controller
 
+import dk.example.feedback.config.LoggingInterceptor
 import dk.example.feedback.model.error.ApiError
 import dk.example.feedback.model.exceptions.DomainException
 import jakarta.servlet.http.HttpServletRequest
@@ -14,6 +15,7 @@ class ControllerAdvisor() {
 
     @ExceptionHandler(Exception::class)
     fun handleException(exception: Exception, request: HttpServletRequest): ResponseEntity<ApiError> {
+        request.setAttribute(LoggingInterceptor.HANDLED_EXCEPTION_ATTRIBUTE, exception)
 
         val domainCode = if (exception is DomainException) exception.domainCode else null
 
