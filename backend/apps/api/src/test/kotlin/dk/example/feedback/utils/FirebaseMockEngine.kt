@@ -8,15 +8,16 @@ import dk.example.feedback.model.enumerations.Role
 
 class FirebaseMockEngine(userId: String) : FirebaseService, FirebaseAdminService {
 
-
-    private var user: FirebaseUser? = FirebaseUser(
-        displayName = null,
-        email = null,
-        phoneNumber = null,
-        photoUrl = null
+    private val users = mutableMapOf(
+        userId to FirebaseUser(
+            displayName = null,
+            email = null,
+            phoneNumber = null,
+            photoUrl = null
+        )
     )
 
-    private var role: Role? = null
+    private val roles = mutableMapOf<String, Role?>()
 
     override fun configure(configFilePath: String) {}
 
@@ -25,16 +26,23 @@ class FirebaseMockEngine(userId: String) : FirebaseService, FirebaseAdminService
     }
 
     override fun getUser(userId: String): FirebaseUser {
-        return user!!
+        return users.getOrPut(userId) {
+            FirebaseUser(
+                displayName = null,
+                email = null,
+                phoneNumber = null,
+                photoUrl = null
+            )
+        }
     }
 
     override fun deleteUser(userId: String) {
-        user = null
-        role = null
+        users.remove(userId)
+        roles.remove(userId)
     }
 
     override fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?) {
-        user = FirebaseUser(
+        users[userId] = FirebaseUser(
             displayName = displayName,
             email = email,
             phoneNumber = phoneNumber,
@@ -43,9 +51,7 @@ class FirebaseMockEngine(userId: String) : FirebaseService, FirebaseAdminService
     }
 
     override fun setRole(userId: String, requestedRole: Role?) {
-        println("🚀 Before setting role: Current role = $role, New role = $requestedRole")
-        role = requestedRole
-        println("✅ After setting role: Current role = $role")
+        roles[userId] = requestedRole
     }
 
     override fun createUserIfMissing(uid: String, email: String, displayName: String) {}
