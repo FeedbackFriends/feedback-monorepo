@@ -1,4 +1,4 @@
-name: Deploy 🚀
+name: Release Artifacts 🚀
 
 on:
   workflow_dispatch:
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Compute versions
         run: |
@@ -34,6 +36,15 @@ jobs:
         with:
           java-version: "21"
           distribution: "temurin"
+          cache: gradle
+
+      - name: Install Render CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/render-oss/cli/refs/heads/main/bin/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Validate Render Blueprint
+        run: render blueprints validate render.yaml
 
       - name: Generate OpenAPI spec
         env:
@@ -81,20 +92,10 @@ jobs:
           git push origin "${{ env.FULL_VERSION }}"
 
       - name: Create GitHub Release
-        run: |
-          API_JSON=$(jq -n \
-            --arg tag_name "${{ env.FULL_VERSION }}" \
-            --arg name "Release ${{ env.FULL_VERSION }}" \
-            '{ tag_name: $tag_name, name: $name, generate_release_notes: true, draft: false, prerelease: false }')
-
-          curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "$API_JSON" \
-            "https://api.github.com/repos/${{ github.repository }}/releases"
-
-      - name: Upload OpenAPI spec to GitHub Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ env.FULL_VERSION }}" backend/apps/api/build/openapi.yaml --clobber
+          gh release create "${{ env.FULL_VERSION }}" \
+            backend/apps/api/build/openapi.yaml \
+            --generate-notes \
+            --title "Release ${{ env.FULL_VERSION }}"

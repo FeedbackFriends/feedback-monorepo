@@ -25,6 +25,10 @@ services:
     dockerContext: .
     dockerfilePath: backend/apps/api/Dockerfile
     autoDeployTrigger: checksPass
+    buildFilter:
+      paths:
+        - backend/**
+        - render.yaml
     healthCheckPath: /actuator/health
     domains:
       - api.letsgrow.dk
@@ -62,11 +66,13 @@ services:
     dockerContext: .
     dockerfilePath: backend/apps/scheduler/Dockerfile
     autoDeployTrigger: checksPass
+    buildFilter:
+      paths:
+        - backend/**
+        - render.yaml
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: SPRING_LIQUIBASE_ENABLED
-        value: "false"
       - key: FIREBASE_CONFIG_PATH
         value: /etc/secrets/firebase_config.json
       - key: ZOHO_MAIL_ENABLED
@@ -108,6 +114,11 @@ services:
     dockerContext: ./web
     dockerfilePath: ./web/Dockerfile
     autoDeployTrigger: checksPass
+    buildFilter:
+      paths:
+        - web/**
+        - render.yaml
+    healthCheckPath: /api/health
     domains:
       - letsgrow.dk
     envVars:
