@@ -122,6 +122,7 @@ databases:
   - name: feedback-db
     region: frankfurt
     plan: basic-256mb
+    diskSizeGB: 5
     postgresMajorVersion: "17"
     databaseName: feedback
     user: feedback
