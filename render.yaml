@@ -123,7 +123,7 @@ databases:
     region: frankfurt
     plan: basic-256mb
     diskSizeGB: 5
-    postgresMajorVersion: "17"
+    postgresMajorVersion: "18"
     databaseName: feedback
     user: feedback
     ipAllowList: []
