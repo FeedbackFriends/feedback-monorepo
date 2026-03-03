@@ -35,6 +35,9 @@
 - Add DAO/migration coverage in ; keep Liquibase change sets incremental ().
 - Run  before opening a PR; include failing cases when reporting bugs.
 
+## Shared Skills
+- `pr-workflow`: shared PR wrap-up guidance in [`.agents/skills/pr-workflow/SKILL.md`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/.agents/skills/pr-workflow/SKILL.md). Use when a task is wrapping up, when the user asks for a PR title or description, or when summarizing validation. For backend work, mention migrations, API contract changes, and operational consequences when relevant.
+
 ## Commit & Pull Request Guidelines
 - Use short, imperative commit messages (e.g., ); group related changes per commit.
 - Before a PR: describe the change, mention related issue IDs, and list manual/automated test results (, local bootRun checks).
