@@ -21,9 +21,6 @@ Use the `@/*` import alias for code under `src`. Match the surrounding file’s 
 ## Testing Guidelines
 Add tests alongside the feature when introducing non-trivial logic. Until a test framework is added, verify changes with `npm run lint` and `npm run build`, then smoke-test affected routes such as `/`, `/invite/[id]`, and `/privacy-policy`. For API work, confirm `src/app/api/health/route.ts` still returns `{"ok":true}`.
 
-## Shared Skills
-- `pr-workflow`: shared PR wrap-up guidance in [`.agents/skills/pr-workflow/SKILL.md`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/.agents/skills/pr-workflow/SKILL.md). Use when a task is wrapping up, when the user asks for a PR title or description, or when summarizing validation. For frontend work, include screenshots in the PR description when the change affects UI.
-
 ## Commit & Pull Request Guidelines
 Recent history uses short, imperative commit subjects with sentence casing, for example `Fix Render web host binding` and `Add Lets Grow app icons`. Keep commits focused and descriptive.
 
