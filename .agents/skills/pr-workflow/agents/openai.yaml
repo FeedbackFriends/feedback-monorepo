@@ -1,0 +1,3 @@
+display_name: PR Workflow
+description: Shared pull request wrap-up guidance for titles, descriptions, validation notes, and review-friendly scoping.
+default_prompt: Use this when a task is wrapping up and you need to prepare a pull request title, description, validation summary, or reviewer-facing change summary.

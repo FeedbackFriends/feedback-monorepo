@@ -47,5 +47,6 @@ out/
 .agents/
 skills-lock.json
 .specify/
+skills-lock.json
 
 .env
