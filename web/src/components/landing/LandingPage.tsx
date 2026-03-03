@@ -14,7 +14,7 @@ import {
   Sparkles,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
-import PhoneFrames from "@/components/sections/hero/PhoneFrames"
+import PhoneFrames from "@/components/landing/PhoneFrames"
 import { Button } from "@/components/ui/button"
 import {
   earlyAccessButtonClass,
@@ -203,7 +203,7 @@ const faqItems: FaqItem[] = [
   },
 ]
 
-function HomePageClient() {
+function LandingPage() {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [showMobileStickyCta, setShowMobileStickyCta] = useState(false)
   const heroSectionRef = useRef<HTMLElement | null>(null)
@@ -777,4 +777,4 @@ function HomePageClient() {
   )
 }
 
-export default HomePageClient
+export default LandingPage
