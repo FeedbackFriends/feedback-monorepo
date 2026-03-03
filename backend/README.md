@@ -31,7 +31,7 @@ For local Postgres:
 
 
 ## Deployment
-Production deployment is defined in [../render.yaml](../infra/render.yaml).
+Production deployment is defined in [../render.yaml](../render.yaml).
 
 Render-specific assets:
 - API Dockerfile: [./apps/api/Dockerfile](./apps/api/Dockerfile)

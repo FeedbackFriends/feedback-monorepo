@@ -20,6 +20,8 @@ For feature work or app-specific debugging:
 2. Change into `backend/` for backend tasks.
 3. Follow the local instructions in that folder's `AGENTS.md`.
 
+If you need Render access from your local shell, add `export RENDER_API_KEY=...` to `~/.zshrc` and reload your shell. If you run Render-related commands through an agent, provide `RENDER_API_KEY` in the agent environment instead.
+
 ## Deployment
 Production deployment is defined by [render.yaml](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/render.yaml).
 

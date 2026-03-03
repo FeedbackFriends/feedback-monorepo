@@ -34,7 +34,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/feedback
       SPRING_DATASOURCE_USERNAME: feedback
       SPRING_DATASOURCE_PASSWORD: feedback
-      FIREBASE_CONFIG_PATH: /app/secrets/firebase_config.json
+      FIREBASE_CONFIG_PATH: firebase_config.json
     volumes:
       - ./firebase_config.json:/app/secrets/firebase_config.json:ro
     depends_on:

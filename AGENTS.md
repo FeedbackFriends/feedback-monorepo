@@ -10,6 +10,7 @@ Do not use the root agent setup for normal application development inside `web/`
 - `docker-compose.yml`: local multi-service smoke-test entry point from the monorepo root.
 - `web/`: frontend application. If the task is primarily UI, Next.js, routes, components, or frontend build behavior, switch into `web/` and follow `web/AGENTS.md`.
 - `backend/`: backend application. If the task is primarily API, scheduler, database migrations, Kotlin, or service logic, switch into `backend/` and follow `backend/AGENTS.md`.
+- `.codex/`: repo-local Codex settings and guidance for recommended permissions and startup behavior.
 - Root files such as `README.md`, GitHub workflow files, and shared automation config belong to the root agent scope.
 
 ## Routing Rules
@@ -29,8 +30,8 @@ Do not implement frontend or backend feature work from the root. Instead:
 
 If a task spans multiple areas, keep root changes limited to orchestration and infra, and make app-specific changes from the relevant subdirectory with its local agent instructions.
 
-## Shared Skills
-- `pr-workflow`: shared PR wrap-up guidance in [`.agents/skills/pr-workflow/SKILL.md`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/.agents/skills/pr-workflow/SKILL.md). Use when a task is wrapping up, when the user asks for a PR title or description, or when summarizing validation and review impact.
+## Skills
+- `ways-of-working`: mandatory startup workflow in [`.agents/skills/ways-of-working/SKILL.md`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-monorepo/.agents/skills/ways-of-working/SKILL.md). Check `ways-of-working` before starting to implement. It requires a dedicated branch first, then planning mode, then a GitHub issue with a PRD-style description once the plan is understandable.
 
 ## Build, Test, and Validation Commands
 - `sed -n '1,240p' render.yaml`: inspect the current Render Blueprint before editing.
@@ -69,14 +70,14 @@ Current workflow intent:
 ## Ways Of Working
 Use the root agent for coordination-heavy work and operational changes, not product feature development inside `web/` or `backend/`.
 
+Always check `ways-of-working` before starting to implement in this directory unless the user explicitly states that the task branch and GitHub issue already exist.
+
 PR culture in this repository should stay review-friendly:
 - keep changes scoped to one concern
 - make root-level operational impact obvious in the summary
 - mention any secrets, domain changes, deployment consequences, or cost changes
 - avoid mixing unrelated app code with infrastructure or workflow edits from the root
 - if a task spans root plus app code, do the app-specific work from the relevant subdirectory and keep the root diff focused on orchestration
-
-When the work appears complete, use the shared `pr-workflow` skill to prepare the PR title, description, and validation summary.
 
 ## Commit & Pull Request Guidelines
 Use short, imperative commit subjects with sentence casing, for example `Fix Render web host binding` or `Update CI cache key`.

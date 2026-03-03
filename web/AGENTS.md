@@ -3,6 +3,9 @@
 ## Project Structure & Module Organization
 This repository is a single Next.js App Router frontend. Application routes live in `src/app` (`page.tsx`, `layout.tsx`, `api/*/route.ts`, and nested routes such as `invite/[id]`). Reusable UI is split across `src/components/layout`, `src/components/pages`, `src/components/sections`, and `src/components/ui`. Shared helpers belong in `src/lib`. Static assets, logos, and marketing imagery live in `public/` and `public/branding/`.
 
+## Skills
+- `ways-of-working`: mandatory startup workflow in [`.agents/skills/ways-of-working/SKILL.md`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-monorepo/.agents/skills/ways-of-working/SKILL.md). Check `ways-of-working` before starting to implement. It requires a dedicated branch first, then planning mode, then a GitHub issue with a PRD-style description once the plan is understandable.
+
 ## Build, Test, and Development Commands
 Use `npm install` to sync dependencies from `package-lock.json`.
 
@@ -28,3 +31,5 @@ PRs should include a short summary, linked issue or context, and screenshots for
 
 ## Configuration Tips
 Client-exposed settings belong in `NEXT_PUBLIC_*` variables only. Review `src/lib/letsgrow.ts` before changing signup or campaign URLs, and do not hardcode secrets into components or route handlers.
+
+Always check `ways-of-working` before starting to implement in this directory unless the user explicitly states that the task branch and GitHub issue already exist.
