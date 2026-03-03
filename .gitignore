@@ -48,5 +48,7 @@ out/
 # Tooling artifacts
 .codex/
 .specify/
+.agents/
+skills-lock.json
 
 .env
