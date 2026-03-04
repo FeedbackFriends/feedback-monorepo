@@ -30,9 +30,6 @@ Do not implement frontend or backend feature work from the root. Instead:
 
 If a task spans multiple areas, keep root changes limited to orchestration and infra, and make app-specific changes from the relevant subdirectory with its local agent instructions.
 
-## Skills
-- `ways-of-working`: mandatory startup workflow in [`.agents/skills/ways-of-working/SKILL.md`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-monorepo/.agents/skills/ways-of-working/SKILL.md). Check `ways-of-working` before starting to implement. It requires a dedicated branch first, then planning mode, then a GitHub issue with a PRD-style description once the plan is understandable.
-
 ## Build, Test, and Validation Commands
 - `sed -n '1,240p' render.yaml`: inspect the current Render Blueprint before editing.
 - `git diff -- render.yaml`: review infrastructure-only edits before committing.
@@ -66,11 +63,6 @@ Current workflow intent:
 - `ci.yml` validates backend and web changes for pull requests and pushes to `main`
 - `release.yml` is a manual release pipeline for artifacts, Docker images, OpenAPI output, and GitHub releases
 - `dependabot.yml` manages automated dependency update policy
-
-## Ways Of Working
-Use the root agent for coordination-heavy work and operational changes, not product feature development inside `web/` or `backend/`.
-
-Always check `ways-of-working` before starting to implement in this directory unless the user explicitly states that the task branch and GitHub issue already exist.
 
 PR culture in this repository should stay review-friendly:
 - keep changes scoped to one concern
