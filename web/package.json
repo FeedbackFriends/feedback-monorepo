@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "sh -ac 'set -a; if [ -f ../.env ]; then . ../.env; fi; set +a; exec next dev \"$@\"' --",
-    "build": "sh -ac 'set -a; if [ -f ../.env ]; then . ../.env; fi; set +a; exec next build \"$@\"' --",
-    "start": "sh -ac 'set -a; if [ -f ../.env ]; then . ../.env; fi; set +a; exec next start \"$@\"' --",
+    "dev": "dotenv -e ../.env -- next dev",
+    "build": "dotenv -e ../.env -- next build",
+    "start": "dotenv -e ../.env -- next start",
     "lint": "eslint .",
     "test:e2e": "playwright test"
   },
@@ -31,6 +31,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9.15.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "globals": "^15.12.0",
