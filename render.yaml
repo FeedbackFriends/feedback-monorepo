@@ -39,7 +39,7 @@ services:
         value: "false"
       - key: FIREBASE_CONFIG_PATH
         value: /etc/secrets/firebase_config.json
-      - key: DATABASE_URL
+      - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: feedback-db
           property: connectionString
@@ -79,7 +79,7 @@ services:
         value: "true"
       - key: ZOHO_POLL_INTERVAL_MS
         value: "10000"
-      - key: DATABASE_URL
+      - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: feedback-db
           property: connectionString
