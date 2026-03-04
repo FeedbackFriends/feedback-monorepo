@@ -7,9 +7,6 @@
 - Tests live in  (API/integration utilities) and  (DAO/DB coverage).
 - Diagrams for architecture live in  (PlantUML).
 
-## Skills
-- `ways-of-working`: mandatory startup workflow in [`.agents/skills/ways-of-working/SKILL.md`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-monorepo/.agents/skills/ways-of-working/SKILL.md). Check `ways-of-working` before starting to implement. It requires a dedicated branch first, then planning mode, then a GitHub issue with a PRD-style description once the plan is understandable.
-
 ## Build, Test, and Development Commands
 -  – compile all modules and run the full test suite (warnings fail the build).
 -  – run all tests.
@@ -42,5 +39,3 @@
 - Use short, imperative commit messages (e.g., ); group related changes per commit.
 - Before a PR: describe the change, mention related issue IDs, and list manual/automated test results (, local bootRun checks).
 - Include screenshots or sample payloads for API-impacting changes; document new env vars and migrations in the PR description.
-
-Always check `ways-of-working` before starting to implement in this directory unless the user explicitly states that the task branch and GitHub issue already exist.
