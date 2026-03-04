@@ -28,8 +28,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /workspace/backend/apps/api/build/libs/*.jar /app/app.jar
-COPY backend/docker/start-spring.sh /usr/local/bin/start-spring.sh
-RUN chmod +x /usr/local/bin/start-spring.sh
 
 ENV PORT=8080
 ENV SPRING_PROFILES_ACTIVE=prod
@@ -37,4 +35,4 @@ ENV SPRING_PROFILES_ACTIVE=prod
 EXPOSE 8080
 
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["/usr/local/bin/start-spring.sh"]
+CMD ["sh", "-c", "if [ -n \"${SPRING_DATASOURCE_URL:-}\" ] && [ \"${SPRING_DATASOURCE_URL#jdbc:}\" = \"${SPRING_DATASOURCE_URL}\" ]; then export SPRING_DATASOURCE_URL=\"jdbc:${SPRING_DATASOURCE_URL}\"; fi; exec java ${JAVA_OPTS:--Xmx512m} -Dserver.port=${PORT:-8080} ${MANAGEMENT_SERVER_PORT:+-Dmanagement.server.port=${MANAGEMENT_SERVER_PORT}} -jar /app/app.jar"]

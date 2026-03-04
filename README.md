@@ -31,7 +31,7 @@ The active Render Blueprint defines:
 - the `feedback-web` web service
 - the `feedback-db` managed Postgres instance
 
-Backend container entrypoints live in [backend/apps/api/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/backend/apps/api/Dockerfile), [backend/apps/scheduler/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/backend/apps/scheduler/Dockerfile), and [backend/docker/start-spring.sh](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/backend/docker/start-spring.sh). The frontend container build lives in [web/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/web/Dockerfile).
+Backend container entrypoints live in [backend/apps/api/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/backend/apps/api/Dockerfile) and [backend/apps/scheduler/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/backend/apps/scheduler/Dockerfile). The frontend container build lives in [web/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/web/Dockerfile).
 
 Render is the production deployment target. Changes to `render.yaml` should be treated as production-sensitive because they affect build behavior, runtime configuration, service plans, and database wiring.
 
