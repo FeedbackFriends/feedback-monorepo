@@ -33,12 +33,7 @@ services:
     domains:
       - api.letsgrow.dk
     envVars:
-      - key: SPRING_PROFILES_ACTIVE
-        value: prod
-      - key: SHOW_EXPOSED_SQL
-        value: "false"
-      - key: FIREBASE_CONFIG_PATH
-        value: /etc/secrets/firebase_config.json
+      - fromGroup: feedback-backend-common
       - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: feedback-db
@@ -55,8 +50,6 @@ services:
         sync: false
       - key: JWT_ISSUER_URI
         sync: false
-      - key: FIREBASE_API_KEY
-        sync: false
 
   - type: worker
     name: feedback-scheduler
@@ -71,14 +64,13 @@ services:
         - backend/**
         - render.yaml
     envVars:
-      - key: SPRING_PROFILES_ACTIVE
-        value: prod
-      - key: FIREBASE_CONFIG_PATH
-        value: /etc/secrets/firebase_config.json
+      - fromGroup: feedback-backend-common
       - key: ZOHO_MAIL_ENABLED
         value: "true"
       - key: ZOHO_POLL_INTERVAL_MS
         value: "10000"
+      - key: MANAGEMENT_SERVER_PORT
+        value: "8091"
       - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: feedback-db
@@ -91,8 +83,6 @@ services:
         fromDatabase:
           name: feedback-db
           property: password
-      - key: FIREBASE_API_KEY
-        sync: false
       - key: ZOHO_ACCOUNT_ID
         sync: false
       - key: ZOHO_FOLDER_ID
@@ -141,6 +131,18 @@ services:
       - key: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
         sync: false
       - key: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+        sync: false
+
+envVarGroups:
+  - name: feedback-backend-common
+    envVars:
+      - key: PORT
+        value: "8080"
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: FIREBASE_CONFIG_PATH
+        value: /etc/secrets/firebase_config.json
+      - key: FIREBASE_API_KEY
         sync: false
 
 databases:

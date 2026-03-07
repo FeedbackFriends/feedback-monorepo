@@ -22,14 +22,20 @@ jobs:
 
       - name: Compute versions
         run: |
-          BASE_VERSION="${BUILD_NUMBER}"
+          CALVER_DATE="$(date -u +'%Y.%m.%d')"
+          RELEASE_LABEL="${CALVER_DATE}.${BUILD_NUMBER}"
+          RELEASE_TAG="rel-${RELEASE_LABEL}"
+          FULL_SHA="${GITHUB_SHA}"
           SHORT_SHA=${GITHUB_SHA:0:7}
-          FULL_VERSION="${BASE_VERSION}-${SHORT_SHA}"
-          # Keep Docker tags aligned with release versions for traceability.
-          DOCKER_TAG="${FULL_VERSION}"
-          echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_ENV
-          echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
-          echo "DOCKER_TAG=$DOCKER_TAG" >> $GITHUB_ENV
+          # Use SHA as immutable deploy identity; keep CalVer as human release label.
+          DOCKER_TAG_SHA="sha-${FULL_SHA}"
+          DOCKER_TAG_RELEASE="rel-${RELEASE_LABEL}"
+          echo "RELEASE_LABEL=$RELEASE_LABEL" >> $GITHUB_ENV
+          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+          echo "FULL_SHA=$FULL_SHA" >> $GITHUB_ENV
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
+          echo "DOCKER_TAG_SHA=$DOCKER_TAG_SHA" >> $GITHUB_ENV
+          echo "DOCKER_TAG_RELEASE=$DOCKER_TAG_RELEASE" >> $GITHUB_ENV
 
       - name: Set up JDK environment
         uses: actions/setup-java@v4
@@ -48,7 +54,7 @@ jobs:
 
       - name: Generate OpenAPI spec
         env:
-          VERSION: ${{ env.FULL_VERSION }}
+          VERSION: ${{ env.RELEASE_LABEL }}
           SPRING_PROFILES_ACTIVE: openapi
         run: |
           ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
@@ -66,7 +72,9 @@ jobs:
           context: .
           file: backend/apps/api/Dockerfile
           push: true
-          tags: nicolaidam/feedback-api:${{ env.DOCKER_TAG }}
+          tags: |
+            nicolaidam/feedback-api:${{ env.DOCKER_TAG_SHA }}
+            nicolaidam/feedback-api:${{ env.DOCKER_TAG_RELEASE }}
 
       - name: Build and publish scheduler image
         uses: docker/build-push-action@v6
@@ -74,7 +82,9 @@ jobs:
           context: .
           file: backend/apps/scheduler/Dockerfile
           push: true
-          tags: nicolaidam/feedback-scheduler:${{ env.DOCKER_TAG }}
+          tags: |
+            nicolaidam/feedback-scheduler:${{ env.DOCKER_TAG_SHA }}
+            nicolaidam/feedback-scheduler:${{ env.DOCKER_TAG_RELEASE }}
 
       - name: Build and publish frontend image
         uses: docker/build-push-action@v6
@@ -91,20 +101,22 @@ jobs:
             NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ vars.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
             NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL=${{ vars.NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL }}
           push: true
-          tags: nicolaidam/feedback-web:${{ env.DOCKER_TAG }}
+          tags: |
+            nicolaidam/feedback-web:${{ env.DOCKER_TAG_SHA }}
+            nicolaidam/feedback-web:${{ env.DOCKER_TAG_RELEASE }}
 
       - name: Create and Push Git Tag
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "${{ env.FULL_VERSION }}" -m "Release ${{ env.FULL_VERSION }}"
-          git push origin "${{ env.FULL_VERSION }}"
+          git tag -a "${{ env.RELEASE_TAG }}" -m "Release ${{ env.RELEASE_LABEL }} (${GITHUB_SHA})"
+          git push origin "${{ env.RELEASE_TAG }}"
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${{ env.FULL_VERSION }}" \
+          gh release create "${{ env.RELEASE_TAG }}" \
             backend/apps/api/build/openapi.yaml \
             --generate-notes \
-            --title "Release ${{ env.FULL_VERSION }}"
+            --title "Release ${{ env.RELEASE_LABEL }}"

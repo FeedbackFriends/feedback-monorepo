@@ -2,36 +2,28 @@ FROM gradle:8.5-jdk17 AS build
 
 WORKDIR /workspace/backend
 
-# Copy Gradle metadata first so dependency resolution can be cached.
-COPY backend/gradle ./gradle
-COPY backend/gradlew backend/gradlew.bat backend/build.gradle.kts backend/settings.gradle.kts backend/gradle.properties ./
-COPY backend/apps/api/build.gradle.kts ./apps/api/build.gradle.kts
-COPY backend/apps/scheduler/build.gradle.kts ./apps/scheduler/build.gradle.kts
-COPY backend/lib/model/build.gradle.kts ./lib/model/build.gradle.kts
-COPY backend/lib/persistence/build.gradle.kts ./lib/persistence/build.gradle.kts
-COPY backend/lib/firebase/build.gradle.kts ./lib/firebase/build.gradle.kts
-COPY backend/lib/ical-parser/build.gradle.kts ./lib/ical-parser/build.gradle.kts
+COPY backend .
 
-RUN ./gradlew --no-daemon :scheduler:dependencies
-
-COPY backend/apps ./apps
-COPY backend/lib ./lib
-
-RUN ./gradlew --no-daemon :scheduler:bootJar -x test
+RUN set -eux; \
+    ./gradlew --no-daemon :scheduler:bootJar -x test; \
+    app_jar="$(find apps/scheduler/build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-plain.jar' | head -n 1)"; \
+    [ -n "${app_jar}" ]; \
+    install -m 0644 "${app_jar}" /workspace/app.jar
 
 FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends dumb-init \
-    && rm -rf /var/lib/apt/lists/*
+RUN set -eux; \
+    groupadd --system --gid 10001 app; \
+    useradd --system --uid 10001 --gid 10001 --home /app --shell /usr/sbin/nologin app
 
-COPY --from=build /workspace/backend/apps/scheduler/build/libs/*.jar /app/app.jar
+COPY --from=build /workspace/app.jar /app/app.jar
 
 ENV PORT=8080
 ENV MANAGEMENT_SERVER_PORT=8091
 ENV SPRING_PROFILES_ACTIVE=prod
 
-ENTRYPOINT ["dumb-init", "--"]
-CMD ["sh", "-c", "if [ -n \"${SPRING_DATASOURCE_URL:-}\" ] && [ \"${SPRING_DATASOURCE_URL#jdbc:}\" = \"${SPRING_DATASOURCE_URL}\" ]; then export SPRING_DATASOURCE_URL=\"jdbc:${SPRING_DATASOURCE_URL}\"; fi; exec java ${JAVA_OPTS:--Xmx512m} -Dserver.port=${PORT:-8080} ${MANAGEMENT_SERVER_PORT:+-Dmanagement.server.port=${MANAGEMENT_SERVER_PORT}} -jar /app/app.jar"]
+USER 10001:10001
+
+CMD ["sh", "-ec", "if [ -n \"${SPRING_DATASOURCE_URL:-}\" ] && [ \"${SPRING_DATASOURCE_URL#jdbc:}\" = \"${SPRING_DATASOURCE_URL}\" ]; then export SPRING_DATASOURCE_URL=\"jdbc:${SPRING_DATASOURCE_URL}\"; fi; exec java ${JAVA_OPTS:--Xmx512m} -Dserver.port=\"${PORT:-8080}\" ${MANAGEMENT_SERVER_PORT:+-Dmanagement.server.port=${MANAGEMENT_SERVER_PORT}} -jar /app/app.jar"]

@@ -3,6 +3,9 @@
 .DS_Store
 .env
 firebase_config.json
+firebase-debug.log
+backend/.agents
+backend/skills-lock.json
 
 **/.DS_Store
 **/.gradle
@@ -13,5 +16,4 @@ firebase_config.json
 **/out
 **/LOG_PATH_IS_UNDEFINED
 
-web/node_modules
-web/.next
+web
