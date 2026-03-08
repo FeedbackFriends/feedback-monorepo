@@ -90,25 +90,35 @@ jobs:
             --generate-notes \
             --title "Release ${{ env.VERSION }}"
 
-      - name: Verify Coolify webhook configuration
+      - name: Update APP_VERSION and deploy in Coolify
         env:
-          COOLIFY_DEPLOY_WEBHOOK_URL: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
-          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          BASE_URL: ${{ secrets.COOLIFY_BASE_URL }}
+          RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
+          TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          DEPLOY_WEBHOOK: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
         run: |
-          if [ -z "$COOLIFY_DEPLOY_WEBHOOK_URL" ]; then
-            echo "Missing required secret: COOLIFY_DEPLOY_WEBHOOK_URL" >&2
-            exit 1
-          fi
-          if [ -z "$COOLIFY_TOKEN" ]; then
-            echo "Missing required secret: COOLIFY_TOKEN" >&2
-            exit 1
-          fi
+          set -euo pipefail
 
-      - name: Trigger Coolify deployment
-        env:
-          COOLIFY_DEPLOY_WEBHOOK_URL: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
-          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
-        run: |
-          curl --silent --show-error --fail --request GET \
-            "$COOLIFY_DEPLOY_WEBHOOK_URL" \
-            --header "Authorization: Bearer $COOLIFY_TOKEN"
+          echo "::add-mask::$TOKEN"
+
+          echo "Updating Coolify APP_VERSION=${VERSION}"
+          curl --fail --silent --show-error \
+            -X PATCH "$BASE_URL/api/v1/services/$RESOURCE_UUID/envs/bulk" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "data": [
+              {
+                "key": "APP_VERSION",
+                "value": "${VERSION}",
+                "is_literal": false,
+                "is_multiline": false,
+                "is_shown_once": false
+              }
+            ]
+          }
+          EOF
+
+          echo "Triggering Coolify deployment for VERSION=${VERSION}"
+          curl --fail --silent --show-error "$DEPLOY_WEBHOOK"

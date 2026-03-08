@@ -2,7 +2,7 @@ name: feedback
 
 services:
   api:
-    image: "nicolaidam/feedback-api:${VERSION}"
+    image: "nicolaidam/feedback-api:${APP_VERSION}"
     restart: unless-stopped
     environment:
       PORT: "8080"
@@ -24,7 +24,7 @@ services:
       - "8090"
 
   scheduler:
-    image: "nicolaidam/feedback-scheduler:${VERSION}"
+    image: "nicolaidam/feedback-scheduler:${APP_VERSION}"
     restart: unless-stopped
     environment:
       PORT: "8080"
@@ -49,7 +49,7 @@ services:
       - "8091"
 
   web:
-    image: "nicolaidam/feedback-web:${VERSION}"
+    image: "nicolaidam/feedback-web:${APP_VERSION}"
     restart: unless-stopped
     environment:
       NODE_ENV: production
