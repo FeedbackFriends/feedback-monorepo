@@ -23,19 +23,10 @@ jobs:
       - name: Compute versions
         run: |
           CALVER_DATE="$(date -u +'%Y.%m.%d')"
-          RELEASE_LABEL="${CALVER_DATE}.${BUILD_NUMBER}"
-          RELEASE_TAG="rel-${RELEASE_LABEL}"
-          FULL_SHA="${GITHUB_SHA}"
-          SHORT_SHA=${GITHUB_SHA:0:7}
-          # Use SHA as immutable deploy identity; keep CalVer as human release label.
-          DOCKER_TAG_SHA="sha-${FULL_SHA}"
-          DOCKER_TAG_RELEASE="rel-${RELEASE_LABEL}"
-          echo "RELEASE_LABEL=$RELEASE_LABEL" >> $GITHUB_ENV
+          VERSION="${CALVER_DATE}.${BUILD_NUMBER}"
+          RELEASE_TAG="rel-${VERSION}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
-          echo "FULL_SHA=$FULL_SHA" >> $GITHUB_ENV
-          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
-          echo "DOCKER_TAG_SHA=$DOCKER_TAG_SHA" >> $GITHUB_ENV
-          echo "DOCKER_TAG_RELEASE=$DOCKER_TAG_RELEASE" >> $GITHUB_ENV
 
       - name: Set up JDK environment
         uses: actions/setup-java@v4
@@ -44,17 +35,8 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
-      - name: Install Render CLI
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/render-oss/cli/refs/heads/main/bin/install.sh | sh
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      - name: Validate Render Blueprint
-        run: render blueprints validate render.yaml
-
       - name: Generate OpenAPI spec
         env:
-          VERSION: ${{ env.RELEASE_LABEL }}
           SPRING_PROFILES_ACTIVE: openapi
         run: |
           ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
@@ -66,25 +48,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and publish API image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: backend/apps/api/Dockerfile
-          push: true
-          tags: |
-            nicolaidam/feedback-api:${{ env.DOCKER_TAG_SHA }}
-            nicolaidam/feedback-api:${{ env.DOCKER_TAG_RELEASE }}
-
-      - name: Build and publish scheduler image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: backend/apps/scheduler/Dockerfile
-          push: true
-          tags: |
-            nicolaidam/feedback-scheduler:${{ env.DOCKER_TAG_SHA }}
-            nicolaidam/feedback-scheduler:${{ env.DOCKER_TAG_RELEASE }}
+      - name: Build and publish backend images with Jib
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          ./gradlew :api:jib :scheduler:jib --no-configuration-cache -Pversion=${VERSION}
+        working-directory: backend
 
       - name: Build and publish frontend image
         uses: docker/build-push-action@v6
@@ -102,14 +72,13 @@ jobs:
             NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL=${{ vars.NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL }}
           push: true
           tags: |
-            nicolaidam/feedback-web:${{ env.DOCKER_TAG_SHA }}
-            nicolaidam/feedback-web:${{ env.DOCKER_TAG_RELEASE }}
+            nicolaidam/feedback-web:${{ env.VERSION }}
 
       - name: Create and Push Git Tag
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "${{ env.RELEASE_TAG }}" -m "Release ${{ env.RELEASE_LABEL }} (${GITHUB_SHA})"
+          git tag -a "${{ env.RELEASE_TAG }}" -m "Release ${{ env.VERSION }} (${GITHUB_SHA})"
           git push origin "${{ env.RELEASE_TAG }}"
 
       - name: Create GitHub Release
@@ -119,4 +88,27 @@ jobs:
           gh release create "${{ env.RELEASE_TAG }}" \
             backend/apps/api/build/openapi.yaml \
             --generate-notes \
-            --title "Release ${{ env.RELEASE_LABEL }}"
+            --title "Release ${{ env.VERSION }}"
+
+      - name: Verify Coolify webhook configuration
+        env:
+          COOLIFY_DEPLOY_WEBHOOK_URL: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+        run: |
+          if [ -z "$COOLIFY_DEPLOY_WEBHOOK_URL" ]; then
+            echo "Missing required secret: COOLIFY_DEPLOY_WEBHOOK_URL" >&2
+            exit 1
+          fi
+          if [ -z "$COOLIFY_TOKEN" ]; then
+            echo "Missing required secret: COOLIFY_TOKEN" >&2
+            exit 1
+          fi
+
+      - name: Trigger Coolify deployment
+        env:
+          COOLIFY_DEPLOY_WEBHOOK_URL: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+        run: |
+          curl --silent --show-error --fail --request GET \
+            "$COOLIFY_DEPLOY_WEBHOOK_URL" \
+            --header "Authorization: Bearer $COOLIFY_TOKEN"

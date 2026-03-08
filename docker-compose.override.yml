@@ -1,0 +1,69 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-feedback}"
+      POSTGRES_USER: "${POSTGRES_USER:-feedback}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
+    ports:
+      - "${DB_HOST_PORT:-5432}:5432"
+    volumes:
+      - feedback-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-feedback} -d ${POSTGRES_DB:-feedback}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: "openapi"
+      SPRING_MAIN_LAZY_INITIALIZATION: "false"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
+      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
+      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
+      JWT_JWK_SET_URL: "http://localhost:65535/jwks"
+      JWT_ISSUER_URI: ""
+      FIREBASE_API_KEY: "${FIREBASE_API_KEY:-}"
+      FIREBASE_CONFIG_PATH: "${FIREBASE_CONFIG_PATH:-}"
+    ports:
+      - "${API_HOST_PORT:-8080}:8080"
+      - "${API_MANAGEMENT_HOST_PORT:-8090}:8090"
+
+  scheduler:
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
+      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
+      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
+      FIREBASE_API_KEY: "${FIREBASE_API_KEY:-}"
+      FIREBASE_CONFIG_PATH: "${FIREBASE_CONFIG_PATH:-}"
+    ports:
+      - "${SCHEDULER_MANAGEMENT_HOST_PORT:-8091}:8091"
+
+  web:
+    image: "feedback-web:local"
+    pull_policy: never
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL: ${NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL:-}
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY:-}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:-}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID:-}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID:-}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET:-}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:-}
+        NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID:-}
+    ports:
+      - "${WEB_HOST_PORT:-3000}:3000"
+
+volumes:
+  feedback-postgres:

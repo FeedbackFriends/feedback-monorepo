@@ -1,10 +1,10 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
   shutdown: graceful
   max-http-request-header-size: 16KB
 management:
   server:
-    port: 8091
+    port: ${MANAGEMENT_SERVER_PORT:8091}
   endpoints:
     web:
       exposure:

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.openapi)
+    alias(libs.plugins.jib)
     kotlin("plugin.spring") version libs.versions.kotlin
     alias(libs.plugins.springboot)
     alias(libs.plugins.spring.dependencies)
@@ -36,6 +37,10 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.withType<com.google.cloud.tools.jib.gradle.BuildDockerTask>().configureEach {
+    notCompatibleWithConfigurationCache("Jib Docker task is not configuration-cache compatible in this setup.")
+}
+
 // Generate build metadata so Spring can read the build version at runtime.
 springBoot {
     buildInfo()
@@ -45,4 +50,17 @@ openApi {
     apiDocsUrl.set("http://localhost:8080/v3/api-docs")
     outputFileName.set("openapi.yaml")
     waitTimeInSeconds.set(60)
+}
+
+jib {
+    from {
+        image = "eclipse-temurin:21-jre"
+    }
+    to {
+        image = "nicolaidam/feedback-api:${project.version}"
+        auth {
+            username = System.getenv("DOCKER_USERNAME")
+            password = System.getenv("DOCKER_PASSWORD")
+        }
+    }
 }
