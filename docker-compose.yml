@@ -1,86 +1,55 @@
 name: feedback
 
 services:
-  db:
-    image: postgres:17-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: feedback
-      POSTGRES_USER: feedback
-      POSTGRES_PASSWORD: feedback
-    ports:
-      - "${DB_HOST_PORT:-5432}:5432"
-    volumes:
-      - feedback-postgres:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U feedback -d feedback"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
   api:
-    build:
-      context: .
-      dockerfile: backend/apps/api/Dockerfile
+    image: "nicolaidam/feedback-api:${VERSION}"
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       PORT: "8080"
       MANAGEMENT_SERVER_PORT: "8090"
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: "${API_SPRING_PROFILES_ACTIVE:-prod}"
       SPRING_DOC_API_DOCS_ENABLED: "true"
       SPRING_DOC_SWAGGER_UI_ENABLED: "true"
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/feedback
-      SPRING_DATASOURCE_USERNAME: feedback
-      SPRING_DATASOURCE_PASSWORD: feedback
-      FIREBASE_CONFIG_PATH: /app/firebase_config.json
-    volumes:
-      - ./firebase_config.json:/app/firebase_config.json:ro
-    depends_on:
-      db:
-        condition: service_healthy
-    ports:
-      - "${API_HOST_PORT:-18080}:8080"
-      - "${API_MANAGEMENT_HOST_PORT:-18090}:8090"
+      SPRING_DATASOURCE_URL: "${API_SPRING_DATASOURCE_URL:-}"
+      SPRING_DATASOURCE_USERNAME: "${API_SPRING_DATASOURCE_USERNAME:-}"
+      SPRING_DATASOURCE_PASSWORD: "${API_SPRING_DATASOURCE_PASSWORD:-}"
+      JWT_JWK_SET_URL: "${API_JWT_JWK_SET_URL:-}"
+      JWT_ISSUER_URI: "${API_JWT_ISSUER_URI:-}"
+      FIREBASE_API_KEY: "${API_FIREBASE_API_KEY:-}"
+      FIREBASE_CONFIG_PATH: "${API_FIREBASE_CONFIG_PATH:-}"
+      JAVA_OPTS: "${API_JAVA_OPTS:--Xmx512m}"
+      JAVA_TOOL_OPTIONS: "${API_JAVA_OPTS:--Xmx512m}"
+    expose:
+      - "8080"
+      - "8090"
 
   scheduler:
-    build:
-      context: .
-      dockerfile: backend/apps/scheduler/Dockerfile
+    image: "nicolaidam/feedback-scheduler:${VERSION}"
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       PORT: "8080"
       MANAGEMENT_SERVER_PORT: "8091"
-      SPRING_PROFILES_ACTIVE: prod
-      SPRING_LIQUIBASE_ENABLED: "false"
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/feedback
-      SPRING_DATASOURCE_USERNAME: feedback
-      SPRING_DATASOURCE_PASSWORD: feedback
-      FIREBASE_CONFIG_PATH: /app/firebase_config.json
-    volumes:
-      - ./firebase_config.json:/app/firebase_config.json:ro
-    depends_on:
-      db:
-        condition: service_healthy
-    ports:
-      - "${SCHEDULER_MANAGEMENT_HOST_PORT:-18091}:8091"
+      SPRING_PROFILES_ACTIVE: "${SCHEDULER_SPRING_PROFILES_ACTIVE:-prod}"
+      SPRING_LIQUIBASE_ENABLED: "${SCHEDULER_SPRING_LIQUIBASE_ENABLED:-true}"
+      SPRING_DATASOURCE_URL: "${SCHEDULER_SPRING_DATASOURCE_URL:-}"
+      SPRING_DATASOURCE_USERNAME: "${SCHEDULER_SPRING_DATASOURCE_USERNAME:-}"
+      SPRING_DATASOURCE_PASSWORD: "${SCHEDULER_SPRING_DATASOURCE_PASSWORD:-}"
+      FIREBASE_API_KEY: "${SCHEDULER_FIREBASE_API_KEY:-}"
+      FIREBASE_CONFIG_PATH: "${SCHEDULER_FIREBASE_CONFIG_PATH:-}"
+      ZOHO_ACCOUNT_ID: "${ZOHO_ACCOUNT_ID:-}"
+      ZOHO_FOLDER_ID: "${ZOHO_FOLDER_ID:-}"
+      ZOHO_MAILBOX_ADDRESS: "${ZOHO_MAILBOX_ADDRESS:-}"
+      ZOHO_OAUTH_REFRESH_TOKEN: "${ZOHO_OAUTH_REFRESH_TOKEN:-}"
+      ZOHO_CLIENT_ID: "${ZOHO_CLIENT_ID:-}"
+      ZOHO_CLIENT_SECRET: "${ZOHO_CLIENT_SECRET:-}"
+      JAVA_OPTS: "${SCHEDULER_JAVA_OPTS:--Xmx512m}"
+      JAVA_TOOL_OPTIONS: "${SCHEDULER_JAVA_OPTS:--Xmx512m}"
+    expose:
+      - "8080"
+      - "8091"
 
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL: ${NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL:-}
-        NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY:-}
-        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:-}
-        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID:-}
-        NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID:-}
-        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET:-}
-        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:-}
-        NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID:-}
+    image: "nicolaidam/feedback-web:${VERSION}"
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -96,8 +65,5 @@ services:
       NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID:-}
     depends_on:
       - api
-    ports:
-      - "${WEB_HOST_PORT:-3000}:3000"
-
-volumes:
-  feedback-postgres:
+    expose:
+      - "3000"

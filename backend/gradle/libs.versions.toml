@@ -13,6 +13,7 @@ openapi = "1.9.0"
 firebase = "9.7.0"
 ical4j = "4.2.2"
 h2 = "2.3.232"
+jib = "3.5.3"
 
 [libraries]
 
@@ -58,6 +59,7 @@ springdoc-openapi-starter-webmvc = { module = "org.springdoc:springdoc-openapi-s
 springboot = { id = "org.springframework.boot", version.ref = "springboot" }
 spring-dependencies = { id = "io.spring.dependency-management", version.ref = "springDependencyPlugin" }
 openapi = { id = "org.springdoc.openapi-gradle-plugin", version.ref = "openapi" }
+jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
 
 [bundles]
 jackson = ["jackson-module-kotlin", "jackson-datatype-jsr310"]

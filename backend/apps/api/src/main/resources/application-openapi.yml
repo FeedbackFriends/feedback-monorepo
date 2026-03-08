@@ -17,9 +17,9 @@ spring:
       initialization-fail-timeout: 0
 springdoc:
   api-docs:
-    enabled: true
+    enabled: ${SPRING_DOC_API_DOCS_ENABLED:true}
   swagger-ui:
-    enabled: false
+    enabled: ${SPRING_DOC_SWAGGER_UI_ENABLED:true}
 server:
   port: 8080
 management:
