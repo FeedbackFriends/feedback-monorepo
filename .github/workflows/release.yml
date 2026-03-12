@@ -145,7 +145,7 @@ jobs:
 
           echo "::add-mask::$TOKEN"
           API_URL="${BASE_URL%/}/api/v1/deploy"
-          echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID} with tag=prod"
+          echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID}"
 
           RESPONSE_FILE="$(mktemp)"
           run_deploy_request() {
@@ -155,8 +155,7 @@ jobs:
               --write-out "%{http_code}" \
               --get "$API_URL" \
               -H "Authorization: ${authorization_value}" \
-              --data-urlencode "uuid=${RESOURCE_UUID}" \
-              --data-urlencode "tag=prod" || true
+              --data-urlencode "uuid=${RESOURCE_UUID}" || true
           }
 
           HTTP_STATUS="$(run_deploy_request "Bearer ${TOKEN}")"
