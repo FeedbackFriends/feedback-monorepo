@@ -1,24 +1,30 @@
 name: Release Artifacts 🚀
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["CI ✅"]
+    types: [completed]
+    branches:
+      - main
 
 permissions:
   contents: write
-  packages: write
 
 jobs:
   build-and-deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
     runs-on: ubuntu-latest
 
     env:
-      BUILD_NUMBER: ${{ github.run_number }}
+      BUILD_NUMBER: ${{ github.event.workflow_run.run_number }}
+      SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ env.SOURCE_SHA }}
 
       - name: Compute versions
         run: |
@@ -53,7 +59,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          ./gradlew :api:jib :scheduler:jib --no-configuration-cache -Pversion=${VERSION}
+          ./gradlew :api:jib :scheduler:jib --no-configuration-cache -Pversion=${VERSION} -Djib.to.tags=prod
         working-directory: backend
 
       - name: Build and publish frontend image
@@ -73,52 +79,43 @@ jobs:
           push: true
           tags: |
             nicolaidam/feedback-web:${{ env.VERSION }}
+            nicolaidam/feedback-web:prod
 
       - name: Create and Push Git Tag
         run: |
+          set -euo pipefail
+
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "${{ env.RELEASE_TAG }}" -m "Release ${{ env.VERSION }} (${GITHUB_SHA})"
-          git push origin "${{ env.RELEASE_TAG }}"
+          git fetch --tags --force origin
+
+          if git ls-remote --exit-code --tags origin "refs/tags/${RELEASE_TAG}" > /dev/null 2>&1; then
+            echo "Git tag ${RELEASE_TAG} already exists on origin; skipping creation."
+          else
+            git tag -a "${RELEASE_TAG}" -m "Release ${VERSION} (${SOURCE_SHA})"
+            git push origin "${RELEASE_TAG}"
+          fi
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${{ env.RELEASE_TAG }}" \
-            backend/apps/api/build/openapi.yaml \
-            --generate-notes \
-            --title "Release ${{ env.VERSION }}"
+          set -euo pipefail
 
-      - name: Update APP_VERSION and deploy in Coolify
+          if gh release view "${RELEASE_TAG}" > /dev/null 2>&1; then
+            echo "GitHub release ${RELEASE_TAG} already exists; uploading OpenAPI asset with --clobber."
+            gh release upload "${RELEASE_TAG}" backend/apps/api/build/openapi.yaml --clobber
+          else
+            gh release create "${RELEASE_TAG}" \
+              backend/apps/api/build/openapi.yaml \
+              --generate-notes \
+              --title "Release ${VERSION}"
+          fi
+
+      - name: Trigger Coolify deployment
         env:
-          BASE_URL: ${{ secrets.COOLIFY_BASE_URL }}
-          RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
-          TOKEN: ${{ secrets.COOLIFY_TOKEN }}
           DEPLOY_WEBHOOK: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
         run: |
           set -euo pipefail
-
-          echo "::add-mask::$TOKEN"
-
-          echo "Updating Coolify APP_VERSION=${VERSION}"
-          curl --fail --silent --show-error \
-            -X PATCH "$BASE_URL/api/v1/services/$RESOURCE_UUID/envs/bulk" \
-            -H "Authorization: Bearer $TOKEN" \
-            -H "Content-Type: application/json" \
-            -d @- <<EOF
-          {
-            "data": [
-              {
-                "key": "APP_VERSION",
-                "value": "${VERSION}",
-                "is_literal": false,
-                "is_multiline": false,
-                "is_shown_once": false
-              }
-            ]
-          }
-          EOF
-
           echo "Triggering Coolify deployment for VERSION=${VERSION}"
           curl --fail --silent --show-error "$DEPLOY_WEBHOOK"

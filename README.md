@@ -52,7 +52,7 @@ GitHub Actions configuration lives in [`.github/workflows/ci.yml`](/Users/nicola
 Current workflow behavior:
 - `ci.yml` runs on pushes to `main` and on pull request open, sync, and reopen events.
 - CI builds and tests the backend with Gradle, then installs, lints, and builds the web app with npm.
-- `release.yml` is manual (`workflow_dispatch`) and is used for release artifacts, Docker image publishing, OpenAPI generation, and GitHub release creation.
+- `release.yml` runs automatically after a successful `CI ✅` run on `main`, publishes Docker images with both immutable and `prod` tags, generates OpenAPI output, and creates GitHub releases.
 - Dependabot configuration lives in [`.github/dependabot.yml`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/.github/dependabot.yml) and currently manages Gradle dependency updates.
 
 When updating GitHub Actions:
