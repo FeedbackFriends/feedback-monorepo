@@ -121,9 +121,44 @@ jobs:
           set -euo pipefail
 
           echo "::add-mask::$TOKEN"
+          API_URL="${BASE_URL%/}/api/v1/deploy"
           echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID} with tag=prod"
-          curl --fail --silent --show-error \
-            -G "${BASE_URL%/}/api/v1/deploy" \
-            -H "Authorization: Bearer $TOKEN" \
-            --data-urlencode "uuid=${RESOURCE_UUID}" \
-            --data-urlencode "tag=prod"
+
+          RESPONSE_FILE="$(mktemp)"
+          HTTP_STATUS="$(
+            curl --silent --show-error \
+              --output "$RESPONSE_FILE" \
+              --write-out "%{http_code}" \
+              -X POST "$API_URL" \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "{\"uuid\":\"${RESOURCE_UUID}\",\"tag\":\"prod\"}" || true
+          )"
+          echo "Coolify deploy response status (uuid+tag): ${HTTP_STATUS}"
+          cat "$RESPONSE_FILE" || true
+
+          if [[ "$HTTP_STATUS" =~ ^2 ]]; then
+            rm -f "$RESPONSE_FILE"
+            exit 0
+          fi
+
+          if [[ "$HTTP_STATUS" == "400" ]]; then
+            echo "Retrying Coolify deploy with UUID only."
+            HTTP_STATUS="$(
+              curl --silent --show-error \
+                --output "$RESPONSE_FILE" \
+                --write-out "%{http_code}" \
+                -X POST "$API_URL" \
+                -H "Authorization: Bearer $TOKEN" \
+                -H "Content-Type: application/json" \
+                --data "{\"uuid\":\"${RESOURCE_UUID}\"}" || true
+            )"
+            echo "Coolify deploy response status (uuid only): ${HTTP_STATUS}"
+            cat "$RESPONSE_FILE" || true
+          fi
+
+          rm -f "$RESPONSE_FILE"
+          [[ "$HTTP_STATUS" =~ ^2 ]] || {
+            echo "Coolify deployment trigger failed with status ${HTTP_STATUS}."
+            exit 1
+          }
