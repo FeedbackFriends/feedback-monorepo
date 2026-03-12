@@ -114,8 +114,16 @@ jobs:
 
       - name: Trigger Coolify deployment
         env:
-          DEPLOY_WEBHOOK: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
+          BASE_URL: ${{ secrets.COOLIFY_BASE_URL }}
+          RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
+          TOKEN: ${{ secrets.COOLIFY_TOKEN }}
         run: |
           set -euo pipefail
-          echo "Triggering Coolify deployment for VERSION=${VERSION}"
-          curl --fail --silent --show-error "$DEPLOY_WEBHOOK"
+
+          echo "::add-mask::$TOKEN"
+          echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID} with tag=prod"
+          curl --fail --silent --show-error \
+            -G "${BASE_URL%/}/api/v1/deploy" \
+            -H "Authorization: Bearer $TOKEN" \
+            --data-urlencode "uuid=${RESOURCE_UUID}" \
+            --data-urlencode "tag=prod"
