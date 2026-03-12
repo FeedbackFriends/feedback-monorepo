@@ -117,6 +117,7 @@ jobs:
           BASE_URL: ${{ secrets.COOLIFY_BASE_URL }}
           RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
           TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          DEPLOY_WEBHOOK: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
         run: |
           set -euo pipefail
 
@@ -178,7 +179,23 @@ jobs:
 
           rm -f "$RESPONSE_FILE"
 
-          [[ "$HTTP_STATUS" =~ ^2 ]] || {
-            echo "Coolify deployment trigger failed with status ${HTTP_STATUS}."
-            exit 1
-          }
+          if [[ "$HTTP_STATUS" =~ ^2 ]]; then
+            exit 0
+          fi
+
+          DEPLOY_WEBHOOK="$(sanitize_secret "${DEPLOY_WEBHOOK:-}")"
+          if [[ "$HTTP_STATUS" == "401" && -n "$DEPLOY_WEBHOOK" ]]; then
+            echo "API authentication failed. Falling back to Coolify deploy webhook."
+            WEBHOOK_STATUS="$(
+              curl --silent --show-error \
+                --output /dev/null \
+                --write-out "%{http_code}" \
+                "$DEPLOY_WEBHOOK" || true
+            )"
+            echo "Coolify deploy webhook status: ${WEBHOOK_STATUS}"
+            [[ "$WEBHOOK_STATUS" =~ ^2 ]] && exit 0
+            echo "Coolify deploy webhook fallback failed with status ${WEBHOOK_STATUS}."
+          fi
+
+          echo "Coolify deployment trigger failed with status ${HTTP_STATUS}."
+          exit 1
