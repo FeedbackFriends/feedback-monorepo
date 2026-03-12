@@ -26,7 +26,7 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
       SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
       SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
-      JWT_JWK_SET_URL: "http://localhost:65535/jwks"
+      JWK_SET_URL: "http://localhost:65535/jwks"
       JWT_ISSUER_URI: ""
       FIREBASE_API_KEY: "${FIREBASE_API_KEY:-}"
       FIREBASE_CONFIG_PATH: "${FIREBASE_CONFIG_PATH:-}"
