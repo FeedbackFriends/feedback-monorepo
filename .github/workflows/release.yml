@@ -126,6 +126,7 @@ jobs:
           RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
           TOKEN: ${{ secrets.COOLIFY_TOKEN }}
           DEPLOY_WEBHOOK: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
+          IMAGE_PLATFORM: ${{ vars.COOLIFY_IMAGE_PLATFORM || 'linux/arm64' }}
         run: |
           set -euo pipefail
 
@@ -152,8 +153,56 @@ jobs:
           [[ -n "$TOKEN" ]] || { echo "COOLIFY_TOKEN is empty."; exit 1; }
 
           echo "::add-mask::$TOKEN"
+          ENV_URL="${BASE_URL%/}/api/v1/applications/${RESOURCE_UUID}/envs"
+          ENV_BULK_URL="${ENV_URL}/bulk"
           API_URL="${BASE_URL%/}/api/v1/deploy"
           echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID}"
+
+          list_envs() {
+            curl --silent --show-error \
+              -H "Authorization: Bearer ${TOKEN}" \
+              "$ENV_URL"
+          }
+
+          create_env() {
+            local key="$1"
+            local value="$2"
+            curl --silent --show-error \
+              --request POST \
+              -H "Authorization: Bearer ${TOKEN}" \
+              -H "Content-Type: application/json" \
+              --data "$(jq -cn \
+                --arg key "$key" \
+                --arg value "$value" \
+                '{key: $key, value: $value, is_preview: false, is_literal: false, is_multiline: false, is_shown_once: false}')" \
+              "$ENV_URL" > /dev/null
+          }
+
+          ensure_env_exists() {
+            local key="$1"
+            local value="$2"
+            if ! list_envs | jq -e --arg key "$key" '.[] | select(.key == $key and .is_preview == false)' > /dev/null; then
+              echo "Creating Coolify env ${key}"
+              create_env "$key" "$value"
+            fi
+          }
+
+          ensure_env_exists "FEEDBACK_IMAGE_TAG" "${VERSION}"
+          ensure_env_exists "FEEDBACK_IMAGE_PLATFORM" "${IMAGE_PLATFORM}"
+
+          echo "Updating Coolify deploy envs for release ${VERSION}"
+          curl --silent --show-error \
+            --request PATCH \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "$(jq -cn \
+              --arg tag "${VERSION}" \
+              --arg platform "${IMAGE_PLATFORM}" \
+              '{data: [
+                {key: "FEEDBACK_IMAGE_TAG", value: $tag, is_preview: false, is_literal: false, is_multiline: false, is_shown_once: false},
+                {key: "FEEDBACK_IMAGE_PLATFORM", value: $platform, is_preview: false, is_literal: false, is_multiline: false, is_shown_once: false}
+              ]}')" \
+            "$ENV_BULK_URL" > /dev/null
 
           RESPONSE_FILE="$(mktemp)"
           run_deploy_request() {
