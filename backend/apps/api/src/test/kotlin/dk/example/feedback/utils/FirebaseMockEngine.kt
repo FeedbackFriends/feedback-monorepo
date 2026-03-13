@@ -19,7 +19,7 @@ class FirebaseMockEngine(userId: String) : FirebaseService, FirebaseAdminService
 
     private val roles = mutableMapOf<String, Role?>()
 
-    override fun configure(configFilePath: String) {}
+    override fun configure(serviceAccountJsonB64: String) {}
 
     override fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
         println("Mock sending ${feedbackReceivedNotifications.size} notifications")

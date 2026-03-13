@@ -17,24 +17,12 @@ services:
       JWK_SET_URL: "${JWK_SET_URL:-}"
       JWT_ISSUER_URI: "${JWT_ISSUER_URI:-}"
       FIREBASE_API_KEY: "${FIREBASE_API_KEY:-}"
-      FIREBASE_CONFIG_PATH: "${FIREBASE_CONFIG_PATH:-}"
       FIREBASE_SERVICE_ACCOUNT_JSON_B64: "${FIREBASE_SERVICE_ACCOUNT_JSON_B64:-}"
       JAVA_OPTS: "${JAVA_OPTS:--Xmx512m}"
       JAVA_TOOL_OPTIONS: "${JAVA_OPTS:--Xmx512m}"
     expose:
       - "8080"
       - "8090"
-    command: >
-      sh -ec '
-      if [ -n "$${FIREBASE_SERVICE_ACCOUNT_JSON_B64:-}" ] && [ -n "$${FIREBASE_CONFIG_PATH:-}" ]; then
-        mkdir -p "$$(dirname "$${FIREBASE_CONFIG_PATH}")";
-        printf "%s" "$${FIREBASE_SERVICE_ACCOUNT_JSON_B64}" | base64 -d > "$${FIREBASE_CONFIG_PATH}";
-      fi;
-      if [ -n "$${SPRING_DATASOURCE_URL:-}" ] && [ "$${SPRING_DATASOURCE_URL#jdbc:}" = "$${SPRING_DATASOURCE_URL}" ]; then
-        export SPRING_DATASOURCE_URL="jdbc:$${SPRING_DATASOURCE_URL}";
-      fi;
-      exec java $${JAVA_OPTS:--Xmx512m} -Dserver.port="$${PORT:-8080}" $${MANAGEMENT_SERVER_PORT:+-Dmanagement.server.port=$${MANAGEMENT_SERVER_PORT}} -jar /app/app.jar
-      '
     networks:
       - default
       - coolify
@@ -52,7 +40,6 @@ services:
       SPRING_DATASOURCE_USERNAME: "${SPRING_DATASOURCE_USERNAME:-}"
       SPRING_DATASOURCE_PASSWORD: "${SPRING_DATASOURCE_PASSWORD:-}"
       FIREBASE_API_KEY: "${FIREBASE_API_KEY:-}"
-      FIREBASE_CONFIG_PATH: "${FIREBASE_CONFIG_PATH:-}"
       FIREBASE_SERVICE_ACCOUNT_JSON_B64: "${FIREBASE_SERVICE_ACCOUNT_JSON_B64:-}"
       ZOHO_ACCOUNT_ID: "${ZOHO_ACCOUNT_ID:-}"
       ZOHO_FOLDER_ID: "${ZOHO_FOLDER_ID:-}"
@@ -65,17 +52,6 @@ services:
     expose:
       - "8080"
       - "8091"
-    command: >
-      sh -ec '
-      if [ -n "$${FIREBASE_SERVICE_ACCOUNT_JSON_B64:-}" ] && [ -n "$${FIREBASE_CONFIG_PATH:-}" ]; then
-        mkdir -p "$$(dirname "$${FIREBASE_CONFIG_PATH}")";
-        printf "%s" "$${FIREBASE_SERVICE_ACCOUNT_JSON_B64}" | base64 -d > "$${FIREBASE_CONFIG_PATH}";
-      fi;
-      if [ -n "$${SPRING_DATASOURCE_URL:-}" ] && [ "$${SPRING_DATASOURCE_URL#jdbc:}" = "$${SPRING_DATASOURCE_URL}" ]; then
-        export SPRING_DATASOURCE_URL="jdbc:$${SPRING_DATASOURCE_URL}";
-      fi;
-      exec java $${JAVA_OPTS:--Xmx512m} -Dserver.port="$${PORT:-8080}" $${MANAGEMENT_SERVER_PORT:+-Dmanagement.server.port=$${MANAGEMENT_SERVER_PORT}} -jar /app/app.jar
-      '
     networks:
       - default
       - coolify

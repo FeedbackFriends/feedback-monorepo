@@ -18,10 +18,10 @@ class FeedbackInitializer(
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         insertMockData()
-        if (feedbackConfig.firebaseConfigPath.isNotBlank()) {
-            firebaseService.configure(configFilePath = feedbackConfig.firebaseConfigPath)
+        if (feedbackConfig.firebaseServiceAccountJsonB64.isNotBlank()) {
+            firebaseService.configure(serviceAccountJsonB64 = feedbackConfig.firebaseServiceAccountJsonB64)
         } else {
-            logger.warn("Skipping Firebase initialization because no Firebase config path was provided.")
+            logger.warn("Skipping Firebase initialization because FIREBASE_SERVICE_ACCOUNT_JSON_B64 was not provided.")
         }
     }
 

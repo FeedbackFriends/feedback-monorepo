@@ -52,7 +52,7 @@ springdoc:
   default-produces-media-type: application/json
 feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
-  firebase-config-path: ${FIREBASE_CONFIG_PATH:}
+  firebase-service-account-json-b64: ${FIREBASE_SERVICE_ACCOUNT_JSON_B64:}
 logging:
   include-application-name: true
   level:

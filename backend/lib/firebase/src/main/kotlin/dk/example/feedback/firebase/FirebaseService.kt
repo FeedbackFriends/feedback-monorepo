@@ -4,7 +4,7 @@ import dk.example.feedback.model.enumerations.Role
 import java.util.*
 
 interface FirebaseService {
-    fun configure(configFilePath: String)
+    fun configure(serviceAccountJsonB64: String)
     fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>)
     fun getUser(userId: String): FirebaseUser
     fun deleteUser(userId: String)

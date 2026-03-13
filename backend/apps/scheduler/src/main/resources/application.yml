@@ -32,7 +32,7 @@ spring:
       path: /h2-console
 feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
-  firebase-config-path: ${FIREBASE_CONFIG_PATH:}
+  firebase-service-account-json-b64: ${FIREBASE_SERVICE_ACCOUNT_JSON_B64:}
   mail:
     enabled: ${ZOHO_MAIL_ENABLED:true}
     poll-interval-ms: ${ZOHO_POLL_INTERVAL_MS:10000}

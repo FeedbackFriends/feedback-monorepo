@@ -11,9 +11,9 @@ import com.google.firebase.messaging.ApsAlert
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import dk.example.feedback.model.enumerations.Role
-import java.io.FileInputStream
-import java.io.FileNotFoundException
+import java.io.ByteArrayInputStream
 import java.io.InputStream
+import java.util.Base64
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -22,14 +22,15 @@ class FirebaseServiceImpl : FirebaseService, FirebaseAdminService {
 
     private val logger = LoggerFactory.getLogger(FirebaseServiceImpl::class.java)
 
-    override fun configure(configFilePath: String) {
+    override fun configure(serviceAccountJsonB64: String) {
         try {
-            logger.info("Initializing FirebaseApp from config file path: {}", configFilePath)
-            FileInputStream(configFilePath).use { firebaseServiceAccount ->
+            logger.info("Initializing FirebaseApp from FIREBASE_SERVICE_ACCOUNT_JSON_B64.")
+            val decodedServiceAccount = Base64.getDecoder().decode(serviceAccountJsonB64)
+            ByteArrayInputStream(decodedServiceAccount).use { firebaseServiceAccount ->
                 initializeApp(firebaseServiceAccount)
             }
-        } catch (e: FileNotFoundException) {
-            logger.error("Firebase configuration file not found at path: ${configFilePath}", e)
+        } catch (e: IllegalArgumentException) {
+            logger.error("Failed to decode FIREBASE_SERVICE_ACCOUNT_JSON_B64.", e)
         } catch (e: Exception) {
             logger.error("Failed to initialize FirebaseApp", e)
         }

@@ -11,6 +11,8 @@ class FeedbackInitializer(
     private val firebaseService: FirebaseService,
 ) : ApplicationListener<ApplicationReadyEvent> {
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        firebaseService.configure(configFilePath = feedbackConfig.firebaseConfigPath)
+        if (feedbackConfig.firebaseServiceAccountJsonB64.isNotBlank()) {
+            firebaseService.configure(serviceAccountJsonB64 = feedbackConfig.firebaseServiceAccountJsonB64)
+        }
     }
 }
