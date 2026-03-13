@@ -5,6 +5,7 @@ import {
   getAuthConfigError,
   initializeAuthPersistence,
   isAuthConfigured,
+  loadRuntimeAuthClient,
   subscribeToAuthState,
   type AppAuthUser,
 } from "@/lib/auth"
@@ -35,39 +36,79 @@ type AuthProviderProps = Readonly<{
 export function AuthProvider({ children }: AuthProviderProps) {
   const [status, setStatus] = useState<AuthStatus>("loading")
   const [user, setUser] = useState<AppAuthUser | null>(null)
-  const [authError, setAuthError] = useState<string | null>(
-    getAuthConfigError()
-  )
+  const [authError, setAuthError] = useState<string | null>(null)
+  const [configured, setConfigured] = useState(false)
 
   useEffect(() => {
-    initializeAuthPersistence().catch((error: unknown) => {
-      setAuthError(
-        getErrorMessage(error, "Unable to persist Firebase auth state.")
-      )
-    })
+    let isMounted = true
+    let unsubscribe = () => {}
 
-    const unsubscribe = subscribeToAuthState(
-      (nextUser) => {
-        setUser(nextUser)
-        setStatus(nextUser ? "authenticated" : "unauthenticated")
-      },
-      (error) => {
+    async function initializeAuth() {
+      try {
+        await loadRuntimeAuthClient()
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return
+        }
+
         setUser(null)
+        setConfigured(false)
         setStatus("unauthenticated")
         setAuthError(
-          getErrorMessage(error, "Unable to read the Firebase auth session.")
+          getErrorMessage(error, "Unable to load the Firebase configuration.")
         )
+        return
       }
-    )
 
-    return unsubscribe
+      if (!isMounted) {
+        return
+      }
+
+      setConfigured(isAuthConfigured())
+      setAuthError(getAuthConfigError())
+
+      try {
+        await initializeAuthPersistence()
+      } catch (error: unknown) {
+        if (isMounted) {
+          setAuthError(
+            getErrorMessage(error, "Unable to persist Firebase auth state.")
+          )
+        }
+      }
+
+      if (!isMounted) {
+        return
+      }
+
+      unsubscribe = subscribeToAuthState(
+        (nextUser) => {
+          setUser(nextUser)
+          setStatus(nextUser ? "authenticated" : "unauthenticated")
+        },
+        (error) => {
+          setUser(null)
+          setStatus("unauthenticated")
+          setAuthError(
+            getErrorMessage(error, "Unable to read the Firebase auth session.")
+          )
+        }
+      )
+    }
+
+    void initializeAuth()
+
+    return () => {
+      isMounted = false
+      unsubscribe()
+    }
   }, [])
 
   return (
     <AuthContext.Provider
       value={{
         authError,
-        configured: isAuthConfigured(),
+        configured,
         status,
         user,
       }}

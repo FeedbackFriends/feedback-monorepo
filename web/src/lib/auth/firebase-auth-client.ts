@@ -24,25 +24,16 @@ import {
   getStoredEmailLinkAddress,
   normalizeEmail,
 } from "@/lib/auth/shared"
+import {
+  requiredFirebaseConfigKeys,
+  type FirebaseConfigInput,
+  type FirebaseConfigKey,
+} from "@/lib/auth/firebase-config"
 import type {
   AuthClient,
   AuthErrorListener,
   AuthStateListener,
 } from "@/lib/auth/types"
-
-const requiredFirebaseConfigKeys = [
-  "apiKey",
-  "authDomain",
-  "projectId",
-  "appId",
-] as const
-
-type FirebaseConfigKey = (typeof requiredFirebaseConfigKeys)[number]
-
-type FirebaseConfigInput = Record<
-  FirebaseConfigKey | "storageBucket" | "messagingSenderId" | "measurementId",
-  string | undefined
->
 
 export class FirebaseAuthClient implements AuthClient {
   private readonly firebaseConfig: FirebaseOptions | null
