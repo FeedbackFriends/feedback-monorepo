@@ -30,4 +30,4 @@ management:
 
 feedback:
   firebase-api-key: "openapi"
-  firebase-config-path: "/tmp/firebase-config.json"
+  firebase-service-account-json-b64: ""

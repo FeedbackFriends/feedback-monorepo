@@ -3,7 +3,7 @@
 ## Prerequisites
 - JDK 21 (Gradle wrapper downloads required dependencies).
 - Docker if you want the full local stack or local Postgres; otherwise H2 is used for dev/test.
-- Firebase service account JSON (path provided via `FIREBASE_CONFIG_PATH`).
+- Firebase service account JSON provided via `FIREBASE_SERVICE_ACCOUNT_JSON_B64`.
 
 ## Setup
 1. Clone the repo and ensure `./gradlew` is executable.
@@ -14,7 +14,7 @@
    export SPRING_DATASOURCE_USERNAME=feedback
    export SPRING_DATASOURCE_PASSWORD=feedback
    export FIREBASE_API_KEY=...
-   export FIREBASE_CONFIG_PATH=./firebase_config.json
+   export FIREBASE_SERVICE_ACCOUNT_JSON_B64="$(base64 < ../firebase_config.json | tr -d '\n')"
    export ZOHO_ACCOUNT_ID=...
    export ZOHO_FOLDER_ID=...
    export ZOHO_OAUTH_REFRESH_TOKEN=...
@@ -68,7 +68,7 @@ Override any published host port with `DB_HOST_PORT`, `WEB_HOST_PORT`, `API_HOST
 - In tests, H2 in-memory DB is used; no extra setup required.
 
 ## Common Issues
-- **Missing Firebase config**: ensure `FIREBASE_CONFIG_PATH` points to a valid service account JSON.
+- **Missing Firebase config**: ensure `FIREBASE_SERVICE_ACCOUNT_JSON_B64` contains a valid base64-encoded service account JSON.
 - **Connection refused to Postgres**: verify the container is running and `SPRING_DATASOURCE_URL` matches the host/port.
 - **Ports in use**: change `server.port` in `apps/api/src/main/resources/application.yml` or via `--server.port=8081`.
 
