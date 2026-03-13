@@ -22,14 +22,11 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: "openapi"
-      SPRING_MAIN_LAZY_INITIALIZATION: "false"
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
       SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
       SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
       JWK_SET_URL: "http://localhost:65535/jwks"
       JWT_ISSUER_URI: ""
-      FIREBASE_API_KEY: "${FIREBASE_API_KEY:-}"
-      FIREBASE_SERVICE_ACCOUNT_JSON_B64: "${FIREBASE_SERVICE_ACCOUNT_JSON_B64:-}"
     ports:
       - "${API_HOST_PORT:-8080}:8080"
       - "${API_MANAGEMENT_HOST_PORT:-8090}:8090"
@@ -42,14 +39,10 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
       SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
       SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
-      FIREBASE_API_KEY: "${FIREBASE_API_KEY:-}"
-      FIREBASE_SERVICE_ACCOUNT_JSON_B64: "${FIREBASE_SERVICE_ACCOUNT_JSON_B64:-}"
     ports:
       - "${SCHEDULER_MANAGEMENT_HOST_PORT:-8091}:8091"
 
   web:
-    image: "feedback-web:local"
-    pull_policy: never
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -67,3 +60,7 @@ services:
 
 volumes:
   feedback-postgres:
+
+networks:
+  coolify:
+    external: false
