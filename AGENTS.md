@@ -7,6 +7,11 @@ Do not implement product features from the root when they belong inside an app:
 - `web/`: frontend app. Follow `web/AGENTS.md` for UI, Next.js, routes, components, and frontend build work.
 - `backend/`: API and scheduler. Follow `backend/AGENTS.md` for Kotlin, database, migrations, and service logic.
 
+## Its better to throw an error instead of falling back
+Operations should be deterministic and single-path.
+Fallback logic and special-case recovery should not be implemented.
+Errors should propagate instead of triggering alternate behavior.
+
 ## Docker Compose
 Root Docker files orchestrate the full stack together:
 - `docker-compose.yml`: base stack. Uses the published `feedback-api:prod`, `feedback-scheduler:prod`, and `feedback-web:prod` images plus shared environment variables. This is the production-like Compose definition and includes the external `coolify` network.
