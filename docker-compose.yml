@@ -23,6 +23,9 @@ services:
     expose:
       - "8080"
       - "8090"
+    networks:
+      - default
+      - coolify
 
   scheduler:
     image: "nicolaidam/feedback-scheduler:${FEEDBACK_IMAGE_TAG:-prod}"
@@ -49,6 +52,9 @@ services:
     expose:
       - "8080"
       - "8091"
+    networks:
+      - default
+      - coolify
 
   web:
     image: "nicolaidam/feedback-web:${FEEDBACK_IMAGE_TAG:-prod}"
@@ -70,3 +76,7 @@ services:
       - api
     expose:
       - "3000"
+
+networks:
+  coolify:
+    external: true
