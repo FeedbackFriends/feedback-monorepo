@@ -1,82 +1,52 @@
 # Repository Guidelines
 
-## Project Scope
-This directory is the monorepo root. Work here should stay focused on cross-cutting repository concerns such as CI/CD, GitHub Actions, Docker Compose, shared tooling, root documentation, and Render infrastructure in `render.yaml`.
+## Scope
+This is a monorepo. Root-level work should stay limited to shared tooling, Docker Compose, GitHub Actions, CI/CD, documentation, and deployment wiring.
 
-Do not use the root agent setup for normal application development inside `web/` or `backend/`. Those folders have their own `AGENTS.md` files and should be treated as the source of truth for frontend and backend development workflows.
+Do not implement product features from the root when they belong inside an app:
+- `web/`: frontend app. Follow `web/AGENTS.md` for UI, Next.js, routes, components, and frontend build work.
+- `backend/`: API and scheduler. Follow `backend/AGENTS.md` for Kotlin, database, migrations, and service logic.
 
-## Project Structure & Ownership
-- `render.yaml`: Render Blueprint for the deployed services and database. This is the root infrastructure source of truth.
-- `docker-compose.yml`: local multi-service smoke-test entry point from the monorepo root.
-- `web/`: frontend application. If the task is primarily UI, Next.js, routes, components, or frontend build behavior, switch into `web/` and follow `web/AGENTS.md`.
-- `backend/`: backend application. If the task is primarily API, scheduler, database migrations, Kotlin, or service logic, switch into `backend/` and follow `backend/AGENTS.md`.
-- `.codex/`: repo-local Codex settings and guidance for recommended permissions and startup behavior.
-- Root files such as `README.md`, GitHub workflow files, and shared automation config belong to the root agent scope.
+## Docker Compose
+Root Docker files orchestrate the full stack together:
+- `docker-compose.yml`: base stack. Uses the published `feedback-api`, `feedback-scheduler`, and `feedback-web` images and shared environment variables. This is the production-like Compose definition and includes the external `coolify` network.
+- `docker-compose.override.yml`: local development override. Adds Postgres, publishes ports, points backend services at the local database, and builds the web app from `./web`.
 
-## Routing Rules
-Before making changes, decide whether the task belongs at the root or inside a product app.
+Default root commands:
+- `docker compose up --build`: start the local stack with the override applied.
+- `docker compose down`: stop the stack.
+- `docker compose logs -f`: stream logs.
+- `docker compose ps`: inspect service state.
 
-Use the root agent setup for:
-- `render.yaml`
-- `.github/workflows/`
-- `docker-compose.yml`
-- repo-wide docs or automation
-- coordination across `web/` and `backend/`
+## Environment
+Compose reads variables from a root `.env` file if present. Use it for local configuration such as database credentials, host ports, image tags, Firebase values, and other runtime settings.
 
-Do not implement frontend or backend feature work from the root. Instead:
-1. Change into `web/` for frontend development tasks.
-2. Change into `backend/` for backend development tasks.
-3. Read and follow the local `AGENTS.md` in that folder before editing code there.
+Rules:
+- keep secrets in `.env`, GitHub secrets, or Coolify-managed env vars
+- never commit real secret values
+- treat `NEXT_PUBLIC_*` values as client-exposed
+- `COOLIFY_TOKEN` in `.env` can be used for authenticated calls to the Coolify API from local scripts or automation; treat it as a secret and never expose it in logs or commits
 
-If a task spans multiple areas, keep root changes limited to orchestration and infra, and make app-specific changes from the relevant subdirectory with its local agent instructions.
+## Deployment
+Production deployment uses Coolify, not local Compose. Keep root deployment changes aligned with the current Coolify setup and image tags.
 
-## Build, Test, and Validation Commands
-- `sed -n '1,240p' render.yaml`: inspect the current Render Blueprint before editing.
-- `git diff -- render.yaml`: review infrastructure-only edits before committing.
-- `git diff -- .github/workflows`: review CI/CD changes before committing.
-- `docker compose up --build`: smoke-test the full stack wiring from the repo root when service integration changes.
-- `git log --oneline -- render.yaml`: inspect recent infrastructure history and naming patterns.
+When changing deployment-related files:
+- call out any new env vars, ports, domains, or image changes
+- treat cost or infrastructure changes as review-sensitive
+- keep local Compose behavior and Coolify runtime expectations consistent
 
-When application behavior must be validated in detail, run the relevant commands from `web/` or `backend/` under those folders' instructions instead of inventing a root-level workflow.
+## GitHub Actions / CI/CD
+GitHub Actions live in `.github/workflows/` and are root-owned infrastructure.
+- `ci.yml`: runs backend build/tests and web install/lint/build for pull requests and pushes to `main`
+- `release.yml`: builds and publishes Docker images, generates OpenAPI output, creates a GitHub release, and triggers Coolify deployment
 
-## Editing Conventions
-Use two-space indentation in YAML files such as `render.yaml` and GitHub Actions workflows. Keep Render resource definitions easy to scan: metadata first, then build/run settings, health checks, domains, and `envVars`.
+When editing workflows:
+- keep triggers, permissions, caches, and concurrency intentional
+- call out any new required secrets or external integrations
+- keep changes small and easy to review
 
-Preserve existing service naming patterns such as `feedback-api`, `feedback-scheduler`, `feedback-web`, and `feedback-db`. Prefer explicit configuration over YAML anchors or clever indirection.
-
-## Deployment & Render Notes
-Render resources belong in the `FeedbackFriends` workspace. 
-Use Render MCP read operations freely for inspection, but explicitly select the correct workspace before any mutating action.
-Call out plan, disk, region, or other cost-affecting changes clearly in review.
-
-## GitHub Actions Ways Of Working
-Treat `.github/workflows/` as root-owned CI/CD infrastructure. Changes here should be deliberate because they can affect branch protection, release behavior, cache usage, required secrets, and Render deploy readiness.
-
-When editing GitHub Actions:
-- verify triggers such as `push`, `pull_request`, and `workflow_dispatch`
-- keep `permissions` minimal and explicit
-- review concurrency and cache settings so they still match repository behavior
-- call out new secrets, tokens, registries, or external services in your summary
-- prefer small, reviewable changes instead of broad workflow rewrites unless the task requires it
-
-Current workflow intent:
-- `ci.yml` validates backend and web changes for pull requests and pushes to `main`
-- `release.yml` is a manual release pipeline for artifacts, Docker images, OpenAPI output, and GitHub releases
-- `dependabot.yml` manages automated dependency update policy
-
-PR culture in this repository should stay review-friendly:
-- keep changes scoped to one concern
-- make root-level operational impact obvious in the summary
-- mention any secrets, domain changes, deployment consequences, or cost changes
-- avoid mixing unrelated app code with infrastructure or workflow edits from the root
-- if a task spans root plus app code, do the app-specific work from the relevant subdirectory and keep the root diff focused on orchestration
-
-## Commit & Pull Request Guidelines
-Use short, imperative commit subjects with sentence casing, for example `Fix Render web host binding` or `Update CI cache key`.
-
-Keep commits narrowly scoped to one operational concern. PRs should summarize deployment or pipeline impact, mention new secrets or domain changes, and note any cost-affecting infrastructure edits.
-
-## Security & Configuration Tips
-Never commit secret values into `render.yaml`, workflow files, or other root config. Secrets belong in Render-managed environment variables, GitHub Actions secrets, or other managed secret stores.
-
-Treat root-level changes as production-sensitive by default. Infrastructure, CI/CD, domains, database sizing, and workspace targeting should be changed deliberately and reviewed carefully.
+## Working Rules
+- keep root changes focused on orchestration and shared infrastructure
+- use two-space indentation in YAML
+- prefer explicit config over clever indirection
+- validate root changes with `git diff -- .github/workflows` and relevant `docker compose` commands
