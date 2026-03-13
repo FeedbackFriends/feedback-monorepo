@@ -23,6 +23,9 @@ services:
     expose:
       - "8080"
       - "8090"
+    configs:
+      - source: firebase-service-account
+        target: /run/secrets/firebase-service-account.json
     networks:
       - default
       - coolify
@@ -52,6 +55,9 @@ services:
     expose:
       - "8080"
       - "8091"
+    configs:
+      - source: firebase-service-account
+        target: /run/secrets/firebase-service-account.json
     networks:
       - default
       - coolify
@@ -80,3 +86,7 @@ services:
 networks:
   coolify:
     external: true
+
+configs:
+  firebase-service-account:
+    content: ${FIREBASE_SERVICE_ACCOUNT_JSON:-{}}
