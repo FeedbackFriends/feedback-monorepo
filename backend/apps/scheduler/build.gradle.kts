@@ -48,6 +48,16 @@ springBoot {
 jib {
     from {
         image = "eclipse-temurin:21-jre"
+        platforms {
+            platform {
+                os = "linux"
+                architecture = "amd64"
+            }
+            platform {
+                os = "linux"
+                architecture = "arm64"
+            }
+        }
     }
     to {
         image = "nicolaidam/feedback-scheduler:${project.version}"
