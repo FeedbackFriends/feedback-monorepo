@@ -95,14 +95,8 @@ jobs:
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch --tags --force origin
-
-          if git ls-remote --exit-code --tags origin "refs/tags/${RELEASE_TAG}" > /dev/null 2>&1; then
-            echo "Git tag ${RELEASE_TAG} already exists on origin; skipping creation."
-          else
-            git tag -a "${RELEASE_TAG}" -m "Release ${VERSION} (${SOURCE_SHA})"
-            git push origin "${RELEASE_TAG}"
-          fi
+          git tag -a "${RELEASE_TAG}" -m "Release ${VERSION} (${SOURCE_SHA})"
+          git push origin "${RELEASE_TAG}"
 
       - name: Create GitHub Release
         env:
@@ -110,99 +104,28 @@ jobs:
         run: |
           set -euo pipefail
 
-          if gh release view "${RELEASE_TAG}" > /dev/null 2>&1; then
-            echo "GitHub release ${RELEASE_TAG} already exists; uploading OpenAPI asset with --clobber."
-            gh release upload "${RELEASE_TAG}" backend/apps/api/build/openapi.yaml --clobber
-          else
-            gh release create "${RELEASE_TAG}" \
-              backend/apps/api/build/openapi.yaml \
-              --generate-notes \
-              --title "Release ${VERSION}"
-          fi
+          gh release create "${RELEASE_TAG}" \
+            backend/apps/api/build/openapi.yaml \
+            --generate-notes \
+            --title "Release ${VERSION}"
 
       - name: Trigger Coolify deployment
         env:
           BASE_URL: ${{ secrets.COOLIFY_BASE_URL }}
           RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
           TOKEN: ${{ secrets.COOLIFY_TOKEN }}
-          DEPLOY_WEBHOOK: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
         run: |
           set -euo pipefail
 
-          sanitize_secret() {
-            printf '%s' "$1" \
-              | tr -d '\r\n' \
-              | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
-                    -e 's/^"//' -e 's/"$//' \
-                    -e "s/^'//" -e "s/'$//"
-          }
-
-          BASE_URL="$(sanitize_secret "${BASE_URL:-}")"
-          RESOURCE_UUID="$(sanitize_secret "${RESOURCE_UUID:-}")"
-          TOKEN="$(sanitize_secret "${TOKEN:-}")"
-          if [[ "$TOKEN" =~ ^[Bb]earer[[:space:]]+(.+)$ ]]; then
-            TOKEN="${BASH_REMATCH[1]}"
-          fi
-          if [[ "$TOKEN" =~ ^[Tt]oken[[:space:]]+(.+)$ ]]; then
-            TOKEN="${BASH_REMATCH[1]}"
-          fi
-
-          [[ -n "$BASE_URL" ]] || { echo "COOLIFY_BASE_URL is empty."; exit 1; }
-          [[ -n "$RESOURCE_UUID" ]] || { echo "COOLIFY_RESOURCE_UUID is empty."; exit 1; }
-          [[ -n "$TOKEN" ]] || { echo "COOLIFY_TOKEN is empty."; exit 1; }
+          [[ -n "${BASE_URL:-}" ]] || { echo "COOLIFY_BASE_URL is empty."; exit 1; }
+          [[ -n "${RESOURCE_UUID:-}" ]] || { echo "COOLIFY_RESOURCE_UUID is empty."; exit 1; }
+          [[ -n "${TOKEN:-}" ]] || { echo "COOLIFY_TOKEN is empty."; exit 1; }
 
           echo "::add-mask::$TOKEN"
           API_URL="${BASE_URL%/}/api/v1/deploy"
           echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID}"
 
-          RESPONSE_FILE="$(mktemp)"
-          run_deploy_request() {
-            local authorization_value="$1"
-            curl --silent --show-error \
-              --output "$RESPONSE_FILE" \
-              --write-out "%{http_code}" \
-              --get "$API_URL" \
-              -H "Authorization: ${authorization_value}" \
-              --data-urlencode "uuid=${RESOURCE_UUID}" || true
-          }
-
-          HTTP_STATUS="$(run_deploy_request "Bearer ${TOKEN}")"
-          echo "Coolify deploy response status (bearer): ${HTTP_STATUS}"
-          cat "$RESPONSE_FILE" || true
-
-          if [[ "$HTTP_STATUS" == "401" ]]; then
-            echo "Retrying Coolify deploy with raw token Authorization format."
-            HTTP_STATUS="$(run_deploy_request "${TOKEN}")"
-            echo "Coolify deploy response status (raw token): ${HTTP_STATUS}"
-            cat "$RESPONSE_FILE" || true
-          fi
-
-          if [[ "$HTTP_STATUS" == "401" ]]; then
-            echo "Retrying Coolify deploy with Token-prefixed Authorization format."
-            HTTP_STATUS="$(run_deploy_request "Token ${TOKEN}")"
-            echo "Coolify deploy response status (token prefix): ${HTTP_STATUS}"
-            cat "$RESPONSE_FILE" || true
-          fi
-
-          rm -f "$RESPONSE_FILE"
-
-          if [[ "$HTTP_STATUS" =~ ^2 ]]; then
-            exit 0
-          fi
-
-          DEPLOY_WEBHOOK="$(sanitize_secret "${DEPLOY_WEBHOOK:-}")"
-          if [[ "$HTTP_STATUS" == "401" && -n "$DEPLOY_WEBHOOK" ]]; then
-            echo "API authentication failed. Falling back to Coolify deploy webhook."
-            WEBHOOK_STATUS="$(
-              curl --silent --show-error \
-                --output /dev/null \
-                --write-out "%{http_code}" \
-                "$DEPLOY_WEBHOOK" || true
-            )"
-            echo "Coolify deploy webhook status: ${WEBHOOK_STATUS}"
-            [[ "$WEBHOOK_STATUS" =~ ^2 ]] && exit 0
-            echo "Coolify deploy webhook fallback failed with status ${WEBHOOK_STATUS}."
-          fi
-
-          echo "Coolify deployment trigger failed with status ${HTTP_STATUS}."
-          exit 1
+          curl --fail --silent --show-error \
+            --get "$API_URL" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            --data-urlencode "uuid=${RESOURCE_UUID}"
