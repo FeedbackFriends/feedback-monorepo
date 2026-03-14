@@ -1,16 +1,17 @@
 [versions]
+commonsLang3 = "3.18.0"
 exposed = "0.61.0"
-jackson = "2.20.1"
+firebase = "9.8.0"
+jackson = "2.21.1"
 junitPlatformLauncher = "1.12.2"
 kotlin = "2.3.0"
 liquibase = "5.0.1"
 postgres = "42.7.8"
-springboot = "3.5.9"
+springboot = "3.5.11"
 springDependencyPlugin = "1.1.7"
 springdoc = "2.8.14"
-testcontainers = "1.21.4"
+testcontainers = "2.0.3"
 openapi = "1.9.0"
-firebase = "9.7.0"
 ical4j = "4.2.2"
 h2 = "2.3.232"
 jib = "3.5.3"
@@ -49,7 +50,7 @@ springboot-mail = { module = "org.springframework.boot:spring-boot-starter-mail"
 #springboot-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server" }
 #springboot-testcontainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
 
-testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:testcontainers-postgresql", version.ref = "testcontainers" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatformLauncher" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }
 
