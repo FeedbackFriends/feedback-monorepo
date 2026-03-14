@@ -21,8 +21,6 @@ RUN set -eux; \
 COPY --from=build /workspace/app.jar /app/app.jar
 
 ENV PORT=8080
-ENV SPRING_PROFILES_ACTIVE=prod
-
 USER 10001:10001
 
 EXPOSE 8080

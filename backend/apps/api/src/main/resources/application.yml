@@ -45,9 +45,9 @@ spring:
       path: /h2-console
 springdoc:
   api-docs:
-    enabled: true
+    enabled: ${SPRING_DOC_API_DOCS_ENABLED:false}
   swagger-ui:
-    enabled: true
+    enabled: ${SPRING_DOC_SWAGGER_UI_ENABLED:false}
     path: /
   default-produces-media-type: application/json
 feedback:
