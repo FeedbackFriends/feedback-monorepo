@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { LoaderCircle } from "lucide-react"
+import GoogleLoginButton from "@/components/auth/GoogleLoginButton"
 import { useAuth } from "@/components/auth/AuthProvider"
 import Background from "@/components/layout/Background"
 import BrandLogo from "@/components/layout/BrandLogo"
-import CapsuleButton from "@/components/ui/CapsuleButton"
 import SurfaceCard from "@/components/ui/SurfaceCard"
 import { signInWithGoogle } from "@/lib/auth"
 
@@ -106,14 +106,12 @@ export default function LoginScreen() {
                 </div>
               ) : null}
 
-              <CapsuleButton
+              <GoogleLoginButton
                 className="h-12 w-full px-6 text-sm font-semibold shadow-lg shadow-primary/20"
                 disabled={!configured || isBusy}
                 onClick={handleGoogleSignIn}
-                type="button"
-              >
-                Fortsæt med Google
-              </CapsuleButton>
+                size="default"
+              />
 
               <p className="text-xs leading-5 text-slate-500">
                 Brugere der er logget ind, sendes direkte til dashboardet.

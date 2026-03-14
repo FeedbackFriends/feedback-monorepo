@@ -1,14 +1,13 @@
 import { ArrowRight } from "lucide-react"
-import CapsuleButton from "@/components/ui/CapsuleButton"
-import { earlyAccessButtonClass, earlyAccessLabel } from "@/lib/letsgrow"
-import { cn } from "@/lib/utils"
+import PrimaryButton, { type PrimaryButtonProps } from "@/components/ui/PrimaryButton"
+import { earlyAccessLabel } from "@/lib/letsgrow"
 
-type EarlyAccessButtonProps = Readonly<{
+export type EarlyAccessButtonProps = Readonly<{
   className?: string
   href: string
   showIcon?: boolean
-  size?: "default" | "sm" | "lg" | "icon"
-}>
+}> &
+  Pick<PrimaryButtonProps, "size">
 
 function EarlyAccessButton({
   className,
@@ -17,16 +16,16 @@ function EarlyAccessButton({
   size = "default",
 }: EarlyAccessButtonProps) {
   return (
-    <CapsuleButton
+    <PrimaryButton
       asChild
-      className={cn(earlyAccessButtonClass, className)}
+      className={className}
       size={size}
     >
       <a href={href} target="_blank" rel="noopener noreferrer">
         {earlyAccessLabel}
         {showIcon ? <ArrowRight className="ml-2 h-4 w-4" /> : null}
       </a>
-    </CapsuleButton>
+    </PrimaryButton>
   )
 }
 
