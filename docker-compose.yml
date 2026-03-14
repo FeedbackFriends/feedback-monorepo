@@ -3,6 +3,7 @@ name: feedback
 services:
   api:
     image: "nicolaidam/feedback-api:prod"
+    platform: "${IMAGE_PLATFORM:?Set IMAGE_PLATFORM to linux/amd64 or linux/arm64}"
     restart: unless-stopped
     environment:
       PORT: "8080"
@@ -26,6 +27,7 @@ services:
 
   scheduler:
     image: "nicolaidam/feedback-scheduler:prod"
+    platform: "${IMAGE_PLATFORM:?Set IMAGE_PLATFORM to linux/amd64 or linux/arm64}"
     restart: unless-stopped
     environment:
       PORT: "8080"
@@ -51,6 +53,7 @@ services:
 
   web:
     image: "nicolaidam/feedback-web:prod"
+    platform: "${IMAGE_PLATFORM:?Set IMAGE_PLATFORM to linux/amd64 or linux/arm64}"
     restart: unless-stopped
     environment:
       NODE_ENV: production

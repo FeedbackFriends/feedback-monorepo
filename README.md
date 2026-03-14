@@ -101,6 +101,7 @@ Compose reads variables from the root `.env` file when present.
 Typical values stored there include:
 
 - Compose/image settings
+- Runtime image platform selection via `IMAGE_PLATFORM`
 - Postgres connection settings
 - JWT / auth configuration
 - Firebase configuration
@@ -120,6 +121,7 @@ Production deployment is handled through Coolify using the root `docker-compose.
 Important deployment assumptions:
 
 - production should pull the mutable `prod` image tags
+- `IMAGE_PLATFORM` must match the CPU architecture of the Docker host that will run the published images: use `linux/amd64` for x86_64 hosts and `linux/arm64` for ARM64 hosts
 - root deployment changes should stay aligned with the current Coolify setup and runtime env contract
 - infrastructure changes should call out any new env vars, ports, domains, or image changes
 
