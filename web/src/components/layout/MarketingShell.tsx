@@ -7,9 +7,14 @@ import Navbar from "@/components/layout/Navbar"
 type MarketingShellProps = {
   children: ReactNode
   contentClassName?: string
+  earlyAccessUrl: string
 }
 
-function MarketingShell({ children, contentClassName }: MarketingShellProps) {
+function MarketingShell({
+  children,
+  contentClassName,
+  earlyAccessUrl,
+}: MarketingShellProps) {
   return (
     <div className="relative min-h-screen bg-background">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -17,7 +22,7 @@ function MarketingShell({ children, contentClassName }: MarketingShellProps) {
       </div>
 
       <div className={cn("relative", contentClassName)}>
-        <Navbar />
+        <Navbar earlyAccessUrl={earlyAccessUrl} />
         <main>{children}</main>
         <Footer />
       </div>

@@ -8,8 +8,8 @@ The root of the repo is for shared orchestration only. Product work should usual
 
 - `web/` contains the Next.js frontend.
 - `backend/` contains the Kotlin services, shared backend libraries, and database tooling.
-- `docker-compose.yml` defines the production-like multi-service stack using published images.
-- `docker-compose.override.yml` adds the local development overrides, including Postgres and a locally built web app.
+- `docker-compose.yml` is the canonical stack for shared and production wiring using published images.
+- `docker-compose.override.yml` adds only local development concerns: Postgres, host ports, and a locally built web app.
 - `.github/workflows/` contains CI and release automation.
 
 ## Tech Stack
@@ -61,6 +61,8 @@ App-specific instructions live in:
 - `web/AGENTS.md`
 - `backend/AGENTS.md`
 
+The backend setup and day-to-day commands now live directly in `backend/README.md` instead of a separate getting-started document.
+
 ## Local Development
 
 For full-stack local development from the repo root:
@@ -77,11 +79,17 @@ docker compose logs -f
 docker compose ps
 ```
 
-How local Compose is wired:
+Generate the API OpenAPI spec from the repo root:
 
-- `docker-compose.yml` uses the published production-style images and shared environment variables.
-- `docker-compose.override.yml` adds a local Postgres container, exposes ports, points backend services at the local database, and builds the web app from `./web`.
-- The local API still runs on Spring's default profile, but it requires `JWK_SET_URL` and `JWT_ISSUER_URI` from `.env`; [`.env.example`](/Users/nicolaidam/.codex/worktrees/1f18/feedback-monorepo/.env.example) provides local stub values for those keys.
+```bash
+cd backend && SPRING_PROFILES_ACTIVE=openapi ./gradlew :api:generateOpenApiDocs --no-configuration-cache
+```
+
+How Compose is wired:
+
+- `docker-compose.yml` contains the shared service definitions, explicit runtime env contract, and published images.
+- `docker-compose.override.yml` adds the local Postgres container, local host ports, local backend startup ordering, and local builds for `api`, `scheduler`, and `web`.
+- Local Compose still expects the full env contract to exist in `.env`, and [`.env.example`](./.env.example) now includes every variable needed for a local run with explicit values or intentionally blank placeholders. There are no Compose fallbacks.
 - For the API docs: `SPRING_DOC_API_DOCS_ENABLED` controls the raw OpenAPI document at `/v3/api-docs` and `/v3/api-docs.yaml`, while `SPRING_DOC_SWAGGER_UI_ENABLED` controls the interactive Swagger UI served at `/`.
 
 For feature work inside a single app, switch into that app directory and use its local README and AGENTS instructions.
@@ -92,10 +100,11 @@ Compose reads variables from the root `.env` file when present.
 
 Typical values stored there include:
 
-- database credentials and port overrides
-- Firebase configuration
+- Compose/image settings
+- Postgres connection settings
 - JWT / auth configuration
-- Docker image platform settings
+- Firebase configuration
+- Zoho mail settings
 - public frontend variables prefixed with `NEXT_PUBLIC_`
 
 Rules:
@@ -106,12 +115,12 @@ Rules:
 
 ## Deployment
 
-Production deployment is handled through Coolify, not local Compose.
+Production deployment is handled through Coolify using the root `docker-compose.yml`.
 
 Important deployment assumptions:
 
 - production should pull the mutable `prod` image tags
-- root deployment changes should stay aligned with the current Coolify setup
+- root deployment changes should stay aligned with the current Coolify setup and runtime env contract
 - infrastructure changes should call out any new env vars, ports, domains, or image changes
 
 ## CI/CD

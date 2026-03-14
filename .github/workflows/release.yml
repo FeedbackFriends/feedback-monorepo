@@ -75,8 +75,6 @@ jobs:
           context: ./web
           file: ./web/Dockerfile
           platforms: linux/amd64,linux/arm64
-          build-args: |
-            NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL=${{ vars.NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL }}
           cache-from: type=gha,scope=feedback-web
           cache-to: type=gha,mode=max,scope=feedback-web
           push: true

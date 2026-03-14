@@ -10,7 +10,11 @@ import OutcomesSection from "@/components/landing/sections/OutcomesSection"
 import ProblemSection from "@/components/landing/sections/ProblemSection"
 import WhyStartHereSection from "@/components/landing/sections/WhyStartHereSection"
 
-function LandingPage() {
+type LandingPageProps = {
+  earlyAccessUrl: string
+}
+
+function LandingPage({ earlyAccessUrl }: LandingPageProps) {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [showMobileStickyCta, setShowMobileStickyCta] = useState(false)
   const heroSectionRef = useRef<HTMLElement | null>(null)
@@ -99,6 +103,7 @@ function LandingPage() {
   return (
     <>
       <HeroSection
+        earlyAccessUrl={earlyAccessUrl}
         heroSectionRef={heroSectionRef}
         onHowItWorksClick={handleHowItWorksClick}
       />
@@ -107,8 +112,14 @@ function LandingPage() {
       <HowItWorksSection />
       <OutcomesSection />
       <FaqSection openFaqIndex={openFaqIndex} onToggleFaq={handleToggleFaq} />
-      <EarlyAccessSection onHowItWorksClick={handleHowItWorksClick} />
-      <MobileStickyCta visible={showMobileStickyCta} />
+      <EarlyAccessSection
+        earlyAccessUrl={earlyAccessUrl}
+        onHowItWorksClick={handleHowItWorksClick}
+      />
+      <MobileStickyCta
+        earlyAccessUrl={earlyAccessUrl}
+        visible={showMobileStickyCta}
+      />
     </>
   )
 }

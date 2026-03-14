@@ -3,56 +3,62 @@ services:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: "${POSTGRES_DB:-feedback}"
-      POSTGRES_USER: "${POSTGRES_USER:-feedback}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
+      POSTGRES_DB: "feedback"
+      POSTGRES_USER: "feedback"
+      POSTGRES_PASSWORD: "feedback"
     ports:
-      - "${DB_HOST_PORT:-5432}:5432"
+      - "5432:5432"
     volumes:
       - feedback-postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-feedback} -d ${POSTGRES_DB:-feedback}"]
+      test: ["CMD-SHELL", "pg_isready -U feedback -d feedback"]
       interval: 10s
       timeout: 5s
       retries: 10
 
   api:
+    pull_policy: never
+    build:
+      context: .
+      dockerfile: backend/apps/api/Dockerfile
+    environment:
+      POSTGRES_HOST: "db"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "feedback"
+      POSTGRES_USER: "feedback"
+      POSTGRES_PASSWORD: "feedback"
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
-      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
-      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
-      JWK_SET_URL: "${JWK_SET_URL:?Set JWK_SET_URL in .env for local API startup}"
-      JWT_ISSUER_URI: "${JWT_ISSUER_URI:?Set JWT_ISSUER_URI in .env for local API startup}"
     ports:
-      - "${API_HOST_PORT:-8080}:8080"
-      - "${API_MANAGEMENT_HOST_PORT:-8090}:8090"
+      - "8080:8080"
+      - "8090:8090"
 
   scheduler:
+    pull_policy: never
+    build:
+      context: .
+      dockerfile: backend/apps/scheduler/Dockerfile
+    environment:
+      POSTGRES_HOST: "db"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "feedback"
+      POSTGRES_USER: "feedback"
+      POSTGRES_PASSWORD: "feedback"
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
-      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
-      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
     ports:
-      - "${SCHEDULER_MANAGEMENT_HOST_PORT:-8091}:8091"
+      - "8091:8091"
 
   web:
+    pull_policy: never
     build:
       context: ./web
       dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL: ${NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL:-}
     ports:
-      - "${WEB_HOST_PORT:-3000}:3000"
+      - "3000:3000"
 
 volumes:
   feedback-postgres:
-
-networks:
-  coolify:
-    external: false
+  

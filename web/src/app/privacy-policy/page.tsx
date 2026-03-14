@@ -1,13 +1,18 @@
 import type { Metadata } from "next"
 import MarketingShell from "@/components/layout/MarketingShell"
+import { readEarlyAccessUrlFromEnv } from "@/lib/letsgrow-server"
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Lets Grow",
 }
 
+export const dynamic = "force-dynamic"
+
 export default function PrivacyPolicyPage() {
+  const earlyAccessUrl = readEarlyAccessUrlFromEnv()
+
   return (
-    <MarketingShell>
+    <MarketingShell earlyAccessUrl={earlyAccessUrl}>
       <div className="container mx-auto max-w-4xl px-6 py-6 sm:px-8 sm:py-12">
         <div className="space-y-8">
           <div>

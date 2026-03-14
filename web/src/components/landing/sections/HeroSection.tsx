@@ -10,15 +10,16 @@ import { Button } from "@/components/ui/button"
 import {
   earlyAccessButtonClass,
   earlyAccessLabel,
-  earlyAccessUrl,
 } from "@/lib/letsgrow"
 
 type HeroSectionProps = {
+  earlyAccessUrl: string
   heroSectionRef: Ref<HTMLElement>
   onHowItWorksClick: MouseEventHandler<HTMLAnchorElement>
 }
 
 function HeroSection({
+  earlyAccessUrl,
   heroSectionRef,
   onHowItWorksClick,
 }: HeroSectionProps) {

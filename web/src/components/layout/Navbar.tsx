@@ -6,10 +6,13 @@ import { Button } from '@/components/ui/button'
 import {
   earlyAccessButtonClass,
   earlyAccessLabel,
-  earlyAccessUrl,
 } from '@/lib/letsgrow'
 
-function Navbar() {
+type NavbarProps = {
+  earlyAccessUrl: string
+}
+
+function Navbar({ earlyAccessUrl }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {

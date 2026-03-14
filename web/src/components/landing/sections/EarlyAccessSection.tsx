@@ -5,13 +5,17 @@ import type { MouseEventHandler } from "react"
 import { ArrowRight } from "lucide-react"
 import { fadeInUp, stagger } from "@/components/landing/motion"
 import { Button } from "@/components/ui/button"
-import { earlyAccessLabel, earlyAccessUrl } from "@/lib/letsgrow"
+import { earlyAccessLabel } from "@/lib/letsgrow"
 
 type EarlyAccessSectionProps = {
+  earlyAccessUrl: string
   onHowItWorksClick: MouseEventHandler<HTMLAnchorElement>
 }
 
-function EarlyAccessSection({ onHowItWorksClick }: EarlyAccessSectionProps) {
+function EarlyAccessSection({
+  earlyAccessUrl,
+  onHowItWorksClick,
+}: EarlyAccessSectionProps) {
   return (
     <section className="container pb-16 pt-6 sm:pb-24">
       <motion.div
