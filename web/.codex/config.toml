@@ -1,2 +1,5 @@
 sandbox = "workspace-write"
 ask_for_approval = "never"
+
+[mcp_servers.xcode]
+enabled = false
