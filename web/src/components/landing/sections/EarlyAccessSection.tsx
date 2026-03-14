@@ -1,21 +1,16 @@
 'use client'
 
 import { motion } from "framer-motion"
-import type { MouseEventHandler } from "react"
 import { ArrowRight } from "lucide-react"
 import { fadeInUp, stagger } from "@/components/landing/motion"
-import EarlyAccessButton from "@/components/ui/EarlyAccessButton"
 import SecondaryButton from "@/components/ui/SecondaryButton"
+import { earlyAccessLabel } from "@/lib/letsgrow"
 
 type EarlyAccessSectionProps = {
   earlyAccessUrl: string
-  onHowItWorksClick: MouseEventHandler<HTMLAnchorElement>
 }
 
-function EarlyAccessSection({
-  earlyAccessUrl,
-  onHowItWorksClick,
-}: EarlyAccessSectionProps) {
+function EarlyAccessSection({ earlyAccessUrl }: EarlyAccessSectionProps) {
   return (
     <section className="container pb-16 pt-6 sm:pb-24">
       <motion.div
@@ -44,14 +39,12 @@ function EarlyAccessSection({
           className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center"
           variants={fadeInUp}
         >
-          <EarlyAccessButton className="h-12 px-6" href={earlyAccessUrl} size="lg" />
           <SecondaryButton
             asChild
-            className="h-12 px-5 text-sm font-semibold"
-            tone="inverse"
+            className="h-12 px-6 text-sm font-semibold"
           >
-            <a href="#how-it-works" onClick={onHowItWorksClick}>
-              Se workflowet igen
+            <a href={earlyAccessUrl} target="_blank" rel="noopener noreferrer">
+              {earlyAccessLabel}
               <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </SecondaryButton>

@@ -112,10 +112,7 @@ function LandingPage({ earlyAccessUrl }: LandingPageProps) {
       <HowItWorksSection />
       <OutcomesSection />
       <FaqSection openFaqIndex={openFaqIndex} onToggleFaq={handleToggleFaq} />
-      <EarlyAccessSection
-        earlyAccessUrl={earlyAccessUrl}
-        onHowItWorksClick={handleHowItWorksClick}
-      />
+      <EarlyAccessSection earlyAccessUrl={earlyAccessUrl} />
       <MobileStickyCta
         earlyAccessUrl={earlyAccessUrl}
         visible={showMobileStickyCta}
