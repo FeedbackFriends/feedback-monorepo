@@ -2,7 +2,7 @@ name: feedback
 
 services:
   api:
-    image: "nicolaidam/feedback-api:${FEEDBACK_IMAGE_TAG:-prod}"
+    image: "nicolaidam/feedback-api:prod"
     platform: "${FEEDBACK_IMAGE_PLATFORM:-linux/amd64}"
     restart: unless-stopped
     environment:
@@ -28,7 +28,7 @@ services:
       - coolify
 
   scheduler:
-    image: "nicolaidam/feedback-scheduler:${FEEDBACK_IMAGE_TAG:-prod}"
+    image: "nicolaidam/feedback-scheduler:prod"
     platform: "${FEEDBACK_IMAGE_PLATFORM:-linux/amd64}"
     restart: unless-stopped
     environment:
@@ -57,7 +57,7 @@ services:
       - coolify
 
   web:
-    image: "nicolaidam/feedback-web:${FEEDBACK_IMAGE_TAG:-prod}"
+    image: "nicolaidam/feedback-web:prod"
     platform: "${FEEDBACK_IMAGE_PLATFORM:-linux/amd64}"
     restart: unless-stopped
     environment:

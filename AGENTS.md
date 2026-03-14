@@ -7,9 +7,14 @@ Do not implement product features from the root when they belong inside an app:
 - `web/`: frontend app. Follow `web/AGENTS.md` for UI, Next.js, routes, components, and frontend build work.
 - `backend/`: API and scheduler. Follow `backend/AGENTS.md` for Kotlin, database, migrations, and service logic.
 
+## Its better to throw an error instead of falling back
+Operations should be deterministic and single-path.
+Fallback logic and special-case recovery should not be implemented.
+Errors should propagate instead of triggering alternate behavior.
+
 ## Docker Compose
 Root Docker files orchestrate the full stack together:
-- `docker-compose.yml`: base stack. Uses the published `feedback-api`, `feedback-scheduler`, and `feedback-web` images and shared environment variables. This is the production-like Compose definition and includes the external `coolify` network.
+- `docker-compose.yml`: base stack. Uses the published `feedback-api:prod`, `feedback-scheduler:prod`, and `feedback-web:prod` images plus shared environment variables. This is the production-like Compose definition and includes the external `coolify` network.
 - `docker-compose.override.yml`: local development override. Adds Postgres, publishes ports, points backend services at the local database, and builds the web app from `./web`.
 
 Default root commands:
@@ -19,7 +24,7 @@ Default root commands:
 - `docker compose ps`: inspect service state.
 
 ## Environment
-Compose reads variables from a root `.env` file if present. Use it for local configuration such as database credentials, host ports, image tags, Firebase values, and other runtime settings.
+Compose reads variables from a root `.env` file if present. Use it for local configuration such as database credentials, host ports, image platform, Firebase values, and other runtime settings.
 
 Rules:
 - keep secrets in `.env`, GitHub secrets, or Coolify-managed env vars
@@ -28,7 +33,7 @@ Rules:
 - `COOLIFY_TOKEN` in `.env` can be used for authenticated calls to the Coolify API from local scripts or automation; treat it as a secret and never expose it in logs or commits
 
 ## Deployment
-Production deployment uses Coolify, not local Compose. Keep root deployment changes aligned with the current Coolify setup and image tags.
+Production deployment uses Coolify, not local Compose. Keep root deployment changes aligned with the current Coolify setup and image tags. The release workflow publishes both dated release tags and mutable `prod` tags; production runtime should always pull `prod` rather than relying on an image-tag override env var.
 
 When changing deployment-related files:
 - call out any new env vars, ports, domains, or image changes
