@@ -7,7 +7,7 @@ import PhoneFrames from "@/components/landing/PhoneFrames"
 import { appStoreUrl, calendarPlatforms } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
 import EarlyAccessButton from "@/components/ui/EarlyAccessButton"
-import { Button } from "@/components/ui/button"
+import SecondaryButton from "@/components/ui/SecondaryButton"
 
 type HeroSectionProps = {
   earlyAccessUrl: string
@@ -48,17 +48,16 @@ function HeroSection({
             variants={fadeInUp}
           >
             <EarlyAccessButton className="h-12 px-6" href={earlyAccessUrl} size="lg" />
-            <Button
+            <SecondaryButton
               asChild
               size="lg"
-              variant="outline"
-              className="h-12 rounded-full border-[#DCE3F4] bg-white/80 px-6 text-[#282A47] shadow-sm hover:bg-white"
+              className="h-12 px-6"
             >
               <a href="#how-it-works" onClick={onHowItWorksClick}>
                 Se hvordan det virker
                 <ArrowRight className="ml-2 h-4 w-4" />
               </a>
-            </Button>
+            </SecondaryButton>
           </motion.div>
 
           <motion.div

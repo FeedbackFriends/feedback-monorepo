@@ -5,6 +5,7 @@ import type { MouseEventHandler } from "react"
 import { ArrowRight } from "lucide-react"
 import { fadeInUp, stagger } from "@/components/landing/motion"
 import EarlyAccessButton from "@/components/ui/EarlyAccessButton"
+import SecondaryButton from "@/components/ui/SecondaryButton"
 
 type EarlyAccessSectionProps = {
   earlyAccessUrl: string
@@ -44,14 +45,16 @@ function EarlyAccessSection({
           variants={fadeInUp}
         >
           <EarlyAccessButton className="h-12 px-6" href={earlyAccessUrl} size="lg" />
-          <a
-            href="#how-it-works"
-            onClick={onHowItWorksClick}
-            className="inline-flex h-12 items-center rounded-full border border-white/20 bg-white/10 px-5 text-sm font-semibold text-white/90 transition-colors hover:bg-white/16 hover:text-white"
+          <SecondaryButton
+            asChild
+            className="h-12 px-5 text-sm font-semibold"
+            tone="inverse"
           >
-            Se workflowet igen
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </a>
+            <a href="#how-it-works" onClick={onHowItWorksClick}>
+              Se workflowet igen
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </a>
+          </SecondaryButton>
         </motion.div>
 
         <motion.p
