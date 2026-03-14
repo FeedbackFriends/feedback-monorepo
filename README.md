@@ -14,6 +14,7 @@ Application development should happen from `web/` or `backend/`, each of which h
 ## Local Development
 Docker Compose reads a root `.env` file automatically.
 When you run `docker compose up --build` from the repo root, Docker also applies [docker-compose.override.yml](/Users/nicolaidam/.codex/worktrees/1f18/feedback-monorepo/docker-compose.override.yml) automatically. That local override adds the Postgres container, connects the API and scheduler to it, and publishes the local ports.
+The API and scheduler run with Spring's default profile in local and deployed runtime. The `openapi` profile is reserved for generating the OpenAPI spec.
 
 ### 1. Set up `.env`
 Create your local env file from the example:
@@ -23,10 +24,6 @@ cp .env.example .env
 ```
 
 Open `.env` and fill in the values from [`.env.example`](/Users/nicolaidam/.codex/worktrees/1f18/feedback-monorepo/.env.example):
-- `JWK_SET_URL`
-- `JWT_ISSUER_URI`
-- `FIREBASE_API_KEY`
-- `FIREBASE_SERVICE_ACCOUNT_JSON_B64`
 - `NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL`
 - `NEXT_PUBLIC_FIREBASE_API_KEY`
 - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
@@ -37,6 +34,8 @@ Open `.env` and fill in the values from [`.env.example`](/Users/nicolaidam/.code
 - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`
 
 Optional additions to `.env`:
+- Backend auth and Firebase settings, only if you are running the backend outside the local Compose override or testing those integrations locally:
+  `JWK_SET_URL`, `JWT_ISSUER_URI`, `FIREBASE_API_KEY`, `FIREBASE_SERVICE_ACCOUNT_JSON_B64`
 - Local ports, only if the defaults conflict on your machine:
   `DB_HOST_PORT=5432`, `API_HOST_PORT=8080`, `API_MANAGEMENT_HOST_PORT=8090`, `SCHEDULER_MANAGEMENT_HOST_PORT=8091`, `WEB_HOST_PORT=3000`
 - Local Postgres settings, only if you do not want the defaults:
