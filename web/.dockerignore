@@ -1,0 +1,12 @@
+.git
+.next
+.agents
+node_modules
+coverage
+playwright-report
+test-results
+tests
+AGENTS.md
+README.md
+*.log
+letsgrow_*.md
