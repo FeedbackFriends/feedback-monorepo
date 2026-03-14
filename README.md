@@ -12,6 +12,78 @@ This repository contains the Feedback frontend, backend, and root-level infrastr
 Application development should happen from `web/` or `backend/`, each of which has its own local `AGENTS.md` and workflow. The root is mainly for repo-wide orchestration, CI/CD, shared docs, Docker Compose, and Render configuration.
 
 ## Local Development
+Docker Compose reads a root `.env` file automatically.
+
+### Set up `.env`
+1. Create your local env file from the example:
+
+```bash
+cp .env.example .env
+```
+
+2. Open `.env` and fill in the values you need for your environment.
+3. Start the stack from the repo root:
+
+```bash
+docker compose up --build
+```
+
+The example file is at [`.env.example`](/Users/nicolaidam/.codex/worktrees/1f18/feedback-monorepo/.env.example).
+
+What you will usually edit first:
+- `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` for the local database container.
+- `DB_HOST_PORT`, `API_HOST_PORT`, `API_MANAGEMENT_HOST_PORT`, `SCHEDULER_MANAGEMENT_HOST_PORT`, `WEB_HOST_PORT` if you need different local ports.
+- `NEXT_PUBLIC_*` values for frontend configuration.
+- `FIREBASE_*`, `JWK_SET_URL`, and `JWT_ISSUER_URI` for backend auth and Firebase wiring.
+- `ZOHO_*` values if you want the scheduler mail integration configured.
+
+Example `.env` content:
+
+```env
+# Local ports
+DB_HOST_PORT=5432
+API_HOST_PORT=8080
+API_MANAGEMENT_HOST_PORT=8090
+SCHEDULER_MANAGEMENT_HOST_PORT=8091
+WEB_HOST_PORT=3000
+
+# Local Postgres
+POSTGRES_DB=feedback
+POSTGRES_USER=feedback
+POSTGRES_PASSWORD=change-me
+
+# Shared runtime settings
+FEEDBACK_IMAGE_PLATFORM=linux/amd64
+JAVA_OPTS=-Xmx512m
+
+# Backend auth and Firebase
+SPRING_DATASOURCE_URL=
+SPRING_DATASOURCE_USERNAME=
+SPRING_DATASOURCE_PASSWORD=
+JWK_SET_URL=
+JWT_ISSUER_URI=
+FIREBASE_API_KEY=
+FIREBASE_SERVICE_ACCOUNT_JSON_B64=
+
+# Scheduler integrations
+ZOHO_ACCOUNT_ID=
+ZOHO_FOLDER_ID=
+ZOHO_MAILBOX_ADDRESS=
+ZOHO_OAUTH_REFRESH_TOKEN=
+ZOHO_CLIENT_ID=
+ZOHO_CLIENT_SECRET=
+
+# Frontend public env
+NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL=
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+```
+
 For full-stack smoke testing from the monorepo root:
 - `docker compose up --build`
 
