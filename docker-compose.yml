@@ -32,7 +32,6 @@ services:
     environment:
       PORT: "8080"
       MANAGEMENT_SERVER_PORT: "8091"
-      SPRING_LIQUIBASE_ENABLED: "true"
       POSTGRES_HOST:
       POSTGRES_PORT:
       POSTGRES_DB:
