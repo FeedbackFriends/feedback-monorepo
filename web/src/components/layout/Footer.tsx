@@ -1,4 +1,5 @@
 import Link from "next/link"
+import BrandLogo from "@/components/layout/BrandLogo"
 
 function Footer() {
   const currentYear = new Date().getFullYear()
@@ -8,19 +9,7 @@ function Footer() {
       <div className="container py-12 sm:py-14">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <Link href="/" className="inline-flex items-center gap-3">
-              <img
-                src="/branding/icon_transparent.png"
-                alt="Lets Grow"
-                className="h-8 object-contain"
-                style={{ maxWidth: "3rem" }}
-              />
-              <img
-                src="/branding/headline4.png"
-                alt="Lets Grow"
-                className="h-10 object-contain"
-              />
-            </Link>
+            <BrandLogo href="/" className="inline-flex space-x-3" />
           </div>
 
           <div className="flex flex-col items-start gap-3 text-sm text-muted-foreground sm:items-end">

@@ -1,6 +1,16 @@
 # feedback-web
 
-This frontend now runs on Next.js App Router with Tailwind CSS and shadcn UI primitives.
+This frontend runs on Next.js 16 App Router, React 19, and Tailwind CSS with
+shadcn UI primitives.
+
+## Runtime
+
+The web app is pinned to Node `20.19.0`.
+
+- Use `nvm use` in `web/` to load the version from `.nvmrc`.
+- `package.json` enforces the same version via `engines.node`.
+- GitHub Actions reads `web/.nvmrc`.
+- The web `Dockerfile` uses `node:20.19.0-alpine` for dependency, build, and runtime stages.
 
 ## Firebase auth config
 
