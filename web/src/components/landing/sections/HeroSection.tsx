@@ -6,11 +6,8 @@ import { ArrowRight } from "lucide-react"
 import PhoneFrames from "@/components/landing/PhoneFrames"
 import { appStoreUrl, calendarPlatforms } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
+import EarlyAccessButton from "@/components/ui/EarlyAccessButton"
 import { Button } from "@/components/ui/button"
-import {
-  earlyAccessButtonClass,
-  earlyAccessLabel,
-} from "@/lib/letsgrow"
 
 type HeroSectionProps = {
   earlyAccessUrl: string
@@ -50,16 +47,7 @@ function HeroSection({
             className="flex flex-col gap-4 sm:flex-row sm:items-center"
             variants={fadeInUp}
           >
-            <Button
-              asChild
-              size="lg"
-              className={`${earlyAccessButtonClass} h-12 rounded-full px-6`}
-            >
-              <a href={earlyAccessUrl} target="_blank" rel="noopener noreferrer">
-                {earlyAccessLabel}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
+            <EarlyAccessButton className="h-12 px-6" href={earlyAccessUrl} size="lg" />
             <Button
               asChild
               size="lg"

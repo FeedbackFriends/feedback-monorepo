@@ -4,8 +4,7 @@ import { motion } from "framer-motion"
 import type { MouseEventHandler } from "react"
 import { ArrowRight } from "lucide-react"
 import { fadeInUp, stagger } from "@/components/landing/motion"
-import { Button } from "@/components/ui/button"
-import { earlyAccessLabel } from "@/lib/letsgrow"
+import EarlyAccessButton from "@/components/ui/EarlyAccessButton"
 
 type EarlyAccessSectionProps = {
   earlyAccessUrl: string
@@ -44,16 +43,7 @@ function EarlyAccessSection({
           className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center"
           variants={fadeInUp}
         >
-          <Button
-            asChild
-            size="lg"
-            className="h-12 rounded-full border border-white/70 bg-white px-6 text-[#1F8F71] shadow-[0_16px_40px_-18px_rgba(15,23,42,0.35)] hover:bg-white/95"
-          >
-            <a href={earlyAccessUrl} target="_blank" rel="noopener noreferrer">
-              {earlyAccessLabel}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
-          </Button>
+          <EarlyAccessButton className="h-12 px-6" href={earlyAccessUrl} size="lg" />
           <a
             href="#how-it-works"
             onClick={onHowItWorksClick}

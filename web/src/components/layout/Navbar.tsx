@@ -1,12 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import {
-  earlyAccessButtonClass,
-  earlyAccessLabel,
-} from '@/lib/letsgrow'
+import BrandLogo from '@/components/layout/BrandLogo'
+import EarlyAccessButton from '@/components/ui/EarlyAccessButton'
 
 type NavbarProps = {
   earlyAccessUrl: string
@@ -38,34 +34,14 @@ function Navbar({ earlyAccessUrl }: NavbarProps) {
     >
       <div className="container flex h-16 items-center justify-between gap-4">
         <div className="flex gap-6 md:gap-10">
-          <Link href="/" className="flex items-center space-x-4">
-            <img
-              src="/branding/icon_transparent.png"
-              alt="Lets Grow Icon"
-              className="h-8 object-contain"
-              style={{ maxWidth: '3rem' }}
-            />
-
-            <img
-              src="/branding/headline4.png"
-              alt="Headline"
-              className="h-10 object-contain"
-            />
-          </Link>
+          <BrandLogo />
         </div>
-        <Button
-          asChild
+        <EarlyAccessButton
+          className="hidden px-4 sm:inline-flex"
+          href={earlyAccessUrl}
+          showIcon={false}
           size="sm"
-          className={`${earlyAccessButtonClass} hidden rounded-full px-4 sm:inline-flex`}
-        >
-          <a
-            href={earlyAccessUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {earlyAccessLabel}
-          </a>
-        </Button>
+        />
       </div>
     </nav>
   )
