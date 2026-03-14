@@ -55,6 +55,9 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -71,7 +74,7 @@ jobs:
         with:
           context: ./web
           file: ./web/Dockerfile
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           build-args: |
             NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL=${{ vars.NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL }}
           cache-from: type=gha,scope=feedback-web

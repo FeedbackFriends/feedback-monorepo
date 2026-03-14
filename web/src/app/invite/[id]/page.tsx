@@ -4,18 +4,19 @@ import { GlassCard } from "@/components/ui/glass-card"
 import { Button } from "@/components/ui/button"
 
 type InvitePageProps = {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export const metadata: Metadata = {
   title: "Invitation | Lets Grow",
 }
 
-export default function InvitePage({ params }: InvitePageProps) {
+export default async function InvitePage({ params }: InvitePageProps) {
+  const { id } = await params
   const appStoreUrl = "https://apps.apple.com/app/lets-grow/id6742420307"
-  const deepLink = `letsgrow://invite?pin_code=${params.id}`
+  const deepLink = `letsgrow://invite?pin_code=${id}`
 
   return (
     <MarketingShell>
@@ -89,7 +90,7 @@ export default function InvitePage({ params }: InvitePageProps) {
                         You also have the possibility to join the event manually
                       </p>
                       <div className="mt-2 text-2xl font-medium tracking-[.25em] text-gray-800 sm:text-3xl">
-                        {params.id}
+                        {id}
                       </div>
                     </div>
                   </div>
