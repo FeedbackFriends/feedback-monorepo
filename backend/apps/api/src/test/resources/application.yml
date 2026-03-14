@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_UPPER=false
+    username: sa
+    password:
+feedback:
+  firebase-api-key: test-firebase-api-key
+  firebase-service-account-json-b64: ""

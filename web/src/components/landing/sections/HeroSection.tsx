@@ -6,11 +6,8 @@ import { ArrowRight } from "lucide-react"
 import PhoneFrames from "@/components/landing/PhoneFrames"
 import { appStoreUrl, calendarPlatforms } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
-import { Button } from "@/components/ui/button"
-import {
-  earlyAccessButtonClass,
-  earlyAccessLabel,
-} from "@/lib/letsgrow"
+import EarlyAccessButton from "@/components/ui/EarlyAccessButton"
+import SecondaryButton from "@/components/ui/SecondaryButton"
 
 type HeroSectionProps = {
   earlyAccessUrl: string
@@ -50,27 +47,17 @@ function HeroSection({
             className="flex flex-col gap-4 sm:flex-row sm:items-center"
             variants={fadeInUp}
           >
-            <Button
+            <EarlyAccessButton className="h-12 px-6" href={earlyAccessUrl} size="lg" />
+            <SecondaryButton
               asChild
               size="lg"
-              className={`${earlyAccessButtonClass} h-12 rounded-full px-6`}
-            >
-              <a href={earlyAccessUrl} target="_blank" rel="noopener noreferrer">
-                {earlyAccessLabel}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="h-12 rounded-full border-[#DCE3F4] bg-white/80 px-6 text-[#282A47] shadow-sm hover:bg-white"
+              className="h-12 px-6"
             >
               <a href="#how-it-works" onClick={onHowItWorksClick}>
                 Se hvordan det virker
                 <ArrowRight className="ml-2 h-4 w-4" />
               </a>
-            </Button>
+            </SecondaryButton>
           </motion.div>
 
           <motion.div

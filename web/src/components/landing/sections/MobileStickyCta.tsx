@@ -1,11 +1,6 @@
 'use client'
 
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import {
-  earlyAccessButtonClass,
-  earlyAccessLabel,
-} from "@/lib/letsgrow"
+import EarlyAccessButton from "@/components/ui/EarlyAccessButton"
 
 type MobileStickyCtaProps = {
   earlyAccessUrl: string
@@ -30,15 +25,10 @@ function MobileStickyCta({ earlyAccessUrl, visible }: MobileStickyCtaProps) {
             </p>
           </div>
 
-          <Button
-            asChild
-            className={`${earlyAccessButtonClass} h-11 shrink-0 rounded-full px-5 text-sm`}
-          >
-            <a href={earlyAccessUrl} target="_blank" rel="noopener noreferrer">
-              {earlyAccessLabel}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
-          </Button>
+          <EarlyAccessButton
+            className="h-11 shrink-0 px-5 text-sm"
+            href={earlyAccessUrl}
+          />
         </div>
       </div>
     </div>

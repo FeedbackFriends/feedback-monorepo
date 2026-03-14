@@ -3,17 +3,19 @@
 import { motion } from "framer-motion"
 import { problemCards } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
+import SurfaceCard from "@/components/ui/SurfaceCard"
 
 function ProblemSection() {
   return (
     <section className="container py-8 sm:py-12">
-      <motion.div
-        className="rounded-[2rem] border border-white/70 bg-white/65 p-8 shadow-[0_30px_90px_-60px_rgba(40,42,71,0.8)] backdrop-blur"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, margin: "-120px" }}
-        variants={stagger}
-      >
+      <SurfaceCard asChild>
+        <motion.div
+          className="p-8"
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-120px" }}
+          variants={stagger}
+        >
         <motion.div className="max-w-3xl space-y-4" variants={fadeInUp}>
           <span className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">
             Problemet
@@ -51,7 +53,8 @@ function ProblemSection() {
             )
           })}
         </motion.div>
-      </motion.div>
+        </motion.div>
+      </SurfaceCard>
     </section>
   )
 }

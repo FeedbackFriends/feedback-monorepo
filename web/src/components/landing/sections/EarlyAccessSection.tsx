@@ -1,21 +1,16 @@
 'use client'
 
 import { motion } from "framer-motion"
-import type { MouseEventHandler } from "react"
 import { ArrowRight } from "lucide-react"
 import { fadeInUp, stagger } from "@/components/landing/motion"
-import { Button } from "@/components/ui/button"
+import SecondaryButton from "@/components/ui/SecondaryButton"
 import { earlyAccessLabel } from "@/lib/letsgrow"
 
 type EarlyAccessSectionProps = {
   earlyAccessUrl: string
-  onHowItWorksClick: MouseEventHandler<HTMLAnchorElement>
 }
 
-function EarlyAccessSection({
-  earlyAccessUrl,
-  onHowItWorksClick,
-}: EarlyAccessSectionProps) {
+function EarlyAccessSection({ earlyAccessUrl }: EarlyAccessSectionProps) {
   return (
     <section className="container pb-16 pt-6 sm:pb-24">
       <motion.div
@@ -44,24 +39,15 @@ function EarlyAccessSection({
           className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center"
           variants={fadeInUp}
         >
-          <Button
+          <SecondaryButton
             asChild
-            size="lg"
-            className="h-12 rounded-full border border-white/70 bg-white px-6 text-[#1F8F71] shadow-[0_16px_40px_-18px_rgba(15,23,42,0.35)] hover:bg-white/95"
+            className="h-12 px-6 text-sm font-semibold"
           >
             <a href={earlyAccessUrl} target="_blank" rel="noopener noreferrer">
               {earlyAccessLabel}
               <ArrowRight className="ml-2 h-4 w-4" />
             </a>
-          </Button>
-          <a
-            href="#how-it-works"
-            onClick={onHowItWorksClick}
-            className="inline-flex h-12 items-center rounded-full border border-white/20 bg-white/10 px-5 text-sm font-semibold text-white/90 transition-colors hover:bg-white/16 hover:text-white"
-          >
-            Se workflowet igen
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </a>
+          </SecondaryButton>
         </motion.div>
 
         <motion.p
