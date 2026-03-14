@@ -1,69 +1,126 @@
 # Feedback Monorepo
 
-This repository contains the Feedback frontend, backend, and root-level infrastructure and automation used to run them together.
+This repository contains the Feedback platform as a single monorepo: the web app, the backend services, and the root-level infrastructure used to run and deploy them together.
 
-## Repository Layout
-- `web/`: frontend application and frontend-specific tooling.
-- `backend/`: API, scheduler, shared backend modules, and backend-specific tooling.
-- `render.yaml`: Render Blueprint for production infrastructure.
-- `docker-compose.yml`: local multi-service entry point for running the stack together from the repo root.
-- `.github/workflows/`: CI and release automation.
+The root of the repo is for shared orchestration only. Product work should usually happen inside `web/` or `backend/`.
 
-Application development should happen from `web/` or `backend/`, each of which has its own local `AGENTS.md` and workflow. The root is mainly for repo-wide orchestration, CI/CD, shared docs, Docker Compose, and Render configuration.
+## What Lives Here
+
+- `web/` contains the Next.js frontend.
+- `backend/` contains the Kotlin services, shared backend libraries, and database tooling.
+- `docker-compose.yml` defines the production-like multi-service stack using published images.
+- `docker-compose.override.yml` adds the local development overrides, including Postgres and a locally built web app.
+- `.github/workflows/` contains CI and release automation.
+
+## Tech Stack
+
+### Frontend
+
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+- Radix UI / shadcn-style primitives
+- Firebase client auth
+- Playwright for end-to-end testing
+
+### Backend
+
+- Kotlin
+- Spring Boot
+- Gradle
+- PostgreSQL
+- Liquibase
+- OpenAPI / Swagger
+- Firebase integration
+- Dedicated scheduler service for background jobs
+
+### Infrastructure
+
+- Docker Compose
+- GitHub Actions
+- Coolify for production deployment
+- Published Docker images for `feedback-api`, `feedback-scheduler`, and `feedback-web`
+
+## Repository Structure
+
+```text
+.
+|-- web/                    # Frontend app
+|-- backend/                # API, scheduler, shared backend code, DB tooling
+|-- docker-compose.yml      # Base stack using published production images
+|-- docker-compose.override.yml
+|-- .github/workflows/      # CI/CD pipelines
+|-- AGENTS.md               # Root-level repo working rules
+```
+
+App-specific instructions live in:
+
+- `web/README.md`
+- `backend/README.md`
+- `web/AGENTS.md`
+- `backend/AGENTS.md`
 
 ## Local Development
-For full-stack smoke testing from the monorepo root:
-- `docker compose up --build`
 
-For feature work or app-specific debugging:
-1. Change into `web/` for frontend tasks.
-2. Change into `backend/` for backend tasks.
-3. Follow the local instructions in that folder's `AGENTS.md`.
+For full-stack local development from the repo root:
 
-If you need Render access from your local shell, add `export RENDER_API_KEY=...` to `~/.zshrc` and reload your shell. If you run Render-related commands through an agent, provide `RENDER_API_KEY` in the agent environment instead.
+```bash
+docker compose up --build
+```
+
+Useful root-level commands:
+
+```bash
+docker compose down
+docker compose logs -f
+docker compose ps
+```
+
+How local Compose is wired:
+
+- `docker-compose.yml` uses the published production-style images and shared environment variables.
+- `docker-compose.override.yml` adds a local Postgres container, exposes ports, points backend services at the local database, and builds the web app from `./web`.
+
+For feature work inside a single app, switch into that app directory and use its local README and AGENTS instructions.
+
+## Environment
+
+Compose reads variables from the root `.env` file when present.
+
+Typical values stored there include:
+
+- database credentials and port overrides
+- Firebase configuration
+- JWT / auth configuration
+- Docker image platform settings
+- public frontend variables prefixed with `NEXT_PUBLIC_`
+
+Rules:
+
+- never commit real secrets
+- keep secrets in `.env`, GitHub secrets, or Coolify-managed environment variables
+- treat `NEXT_PUBLIC_*` values as client-exposed
 
 ## Deployment
-Production deployment is defined by [render.yaml](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/render.yaml).
 
-The active Render Blueprint defines:
-- the `feedback-api` web service
-- the `feedback-scheduler` background worker
-- the `feedback-web` web service
-- the `feedback-db` managed Postgres instance
+Production deployment is handled through Coolify, not local Compose.
 
-Backend container builds use [backend/apps/api/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-monorepo/backend/apps/api/Dockerfile) and [backend/apps/scheduler/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-monorepo/backend/apps/scheduler/Dockerfile). The frontend container build lives in [web/Dockerfile](/Users/nicolaidam/Documents/Projects/Feedback/feedback-monorepo/web/Dockerfile).
+Important deployment assumptions:
 
-Render is the production deployment target. Changes to `render.yaml` should be treated as production-sensitive because they affect build behavior, runtime configuration, service plans, and database wiring.
+- production should pull the mutable `prod` image tags
+- root deployment changes should stay aligned with the current Coolify setup
+- infrastructure changes should call out any new env vars, ports, domains, or image changes
 
-Current cost posture:
-- `feedback-api` uses Render `free`.
-- `feedback-web` uses Render `free`.
-- `feedback-scheduler` uses Render `starter`.
-- `feedback-db` uses `basic-256mb`.
+## CI/CD
 
-Free-tier tradeoffs:
-- `feedback-api` and `feedback-web` can spin down after idle periods and incur cold starts.
-- This setup is acceptable for low-traffic production or pre-launch use, but it is not a zero-latency production setup.
-- The first infrastructure upgrade should be moving the API and web services from `free` to `starter`.
+GitHub Actions in `.github/workflows/` handle validation and releases.
 
-## GitHub Actions
-GitHub Actions configuration lives in [`.github/workflows/ci.yml`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/.github/workflows/ci.yml) and [`.github/workflows/release.yml`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/.github/workflows/release.yml).
+- `ci.yml` runs backend build/tests plus web install, lint, and build
+- `release.yml` builds and publishes Docker images, generates OpenAPI output, creates a GitHub release, and triggers deployment
 
-Current workflow behavior:
-- `ci.yml` runs on pushes to `main` and on pull request open, sync, and reopen events.
-- CI builds and tests the backend with Gradle, then installs, lints, and builds the web app with npm.
-- `release.yml` runs automatically after a successful `CI ✅` run on `main`, publishes Docker images with both immutable and `prod` tags, generates OpenAPI output, and creates GitHub releases.
-- Dependabot configuration lives in [`.github/dependabot.yml`](/Users/nicolaidam/Documents/Projects/Feedback/feedback-mono/.github/dependabot.yml) and currently manages Gradle dependency updates.
+## Where To Work
 
-When updating GitHub Actions:
-- keep workflow names, triggers, permissions, and cache behavior intentional
-- review whether a change affects PR validation, `main` branch protection, or Render deployment readiness
-- call out any new required secrets, tokens, or package registry permissions
-
-## Validation
-Useful root-level checks:
-- `docker compose up --build`
-- `git diff -- render.yaml`
-- `git diff -- .github/workflows`
-
-App-specific validation should be run from `web/` or `backend/` using the commands documented in those directories.
+- Work in `web/` for frontend routes, components, and UI behavior.
+- Work in `backend/` for API logic, scheduler jobs, database changes, and backend integrations.
+- Keep root changes focused on documentation, Docker Compose, CI/CD, and deployment wiring.
