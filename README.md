@@ -16,8 +16,9 @@ The root of the repo is for shared orchestration only. Product work should usual
 
 ### Frontend
 
-- Next.js 14
-- React 18
+- Next.js 16
+- React 19
+- Node.js 20.19.0 for the `web/` app in local development, CI, and Docker
 - TypeScript
 - Tailwind CSS
 - Radix UI / shadcn-style primitives
@@ -60,6 +61,9 @@ App-specific instructions live in:
 - `backend/README.md`
 - `web/AGENTS.md`
 - `backend/AGENTS.md`
+
+For frontend work, use Node `20.19.0` in `web/` so local installs match
+GitHub Actions (`web/.nvmrc`) and the pinned web Docker image.
 
 The backend setup and day-to-day commands now live directly in `backend/README.md` instead of a separate getting-started document.
 

@@ -51,6 +51,12 @@ jobs:
           npm run build
         working-directory: web
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('web/package-lock.json') }}
+
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
         working-directory: web

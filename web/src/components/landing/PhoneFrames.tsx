@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import Image from "next/image"
 
 function PhoneFrames() {
   return (
@@ -19,9 +20,13 @@ function PhoneFrames() {
           ease: "easeInOut",
         }}
       >
-        <img
+        <Image
           src="/hero_image.png"
           alt="Let's Grow App Interface"
+          width={2946}
+          height={2231}
+          preload
+          sizes="(min-width: 1024px) 45vw, 100vw"
           className="h-auto w-full"
         />
       </motion.div>

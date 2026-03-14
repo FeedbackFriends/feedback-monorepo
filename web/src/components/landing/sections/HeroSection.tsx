@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import type { MouseEventHandler, Ref } from "react"
 import { ArrowRight } from "lucide-react"
+import Image from "next/image"
 import PhoneFrames from "@/components/landing/PhoneFrames"
 import { appStoreUrl, calendarPlatforms } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
@@ -74,10 +75,12 @@ function HeroSection({
                   className="group flex w-14 flex-col items-center gap-1 opacity-80 transition-all duration-300 hover:-translate-y-0.5 hover:opacity-100 sm:w-16"
                   title={platform.name}
                 >
-                  <div className="flex h-10 w-10 items-center justify-center sm:h-11 sm:w-11">
-                    <img
+                  <div className="relative flex h-10 w-10 items-center justify-center sm:h-11 sm:w-11">
+                    <Image
                       src={platform.icon}
                       alt={platform.name}
+                      fill
+                      sizes="(min-width: 640px) 44px, 40px"
                       className="max-h-8 max-w-[2rem] object-contain sm:max-h-9 sm:max-w-[2.25rem]"
                     />
                   </div>
@@ -100,11 +103,18 @@ function HeroSection({
         >
           <PhoneFrames />
           <div className="flex justify-center">
-            <a href={appStoreUrl} target="_blank" rel="noopener noreferrer">
-              <img
+            <a
+              href={appStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative block h-14 w-[11.25rem]"
+            >
+              <Image
                 src="/appstore.png"
                 alt="Download on the App Store"
-                className="h-14 w-auto transition-opacity duration-200 hover:opacity-85"
+                fill
+                sizes="180px"
+                className="object-contain transition-opacity duration-200 hover:opacity-85"
               />
             </a>
           </div>
