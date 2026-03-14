@@ -26,14 +26,14 @@ export default function AuthShell({
   return (
     <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,#f5fffc,transparent_38%),linear-gradient(135deg,#eff8ff_0%,#f7fcfb_48%,#ffffff_100%)]">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-10%] top-[-12rem] h-[28rem] w-[28rem] rounded-full bg-emerald-300/20 blur-3xl" />
-        <div className="absolute right-[-8%] top-[12%] h-[24rem] w-[24rem] rounded-full bg-sky-300/20 blur-3xl" />
-        <div className="absolute bottom-[-10rem] left-[22%] h-[26rem] w-[26rem] rounded-full bg-cyan-200/30 blur-3xl" />
+        <div className="absolute left-[-10%] -top-48 h-112 w-md rounded-full bg-emerald-300/20 blur-3xl" />
+        <div className="absolute right-[-8%] top-[12%] h-96 w-[24rem] rounded-full bg-sky-300/20 blur-3xl" />
+        <div className="absolute -bottom-40 left-[22%] h-104 w-104 rounded-full bg-cyan-200/30 blur-3xl" />
       </div>
 
       <main className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center gap-10 px-6 py-12 lg:flex-row lg:items-center lg:px-10">
         <section className="max-w-xl space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-white/75 px-4 py-1.5 text-sm font-semibold text-emerald-900 shadow-sm backdrop-blur">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-white/75 px-4 py-1.5 text-sm font-semibold text-emerald-900 shadow-xs backdrop-blur-sm">
             <Sparkles className="h-4 w-4" />
             {badge}
           </div>
@@ -51,7 +51,7 @@ export default function AuthShell({
             {highlights.map((highlight) => (
               <div
                 key={highlight}
-                className="flex items-center gap-3 rounded-2xl border border-white/80 bg-white/70 px-4 py-3 shadow-sm backdrop-blur"
+                className="flex items-center gap-3 rounded-2xl border border-white/80 bg-white/70 px-4 py-3 shadow-xs backdrop-blur-sm"
               >
                 <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                 <span>{highlight}</span>

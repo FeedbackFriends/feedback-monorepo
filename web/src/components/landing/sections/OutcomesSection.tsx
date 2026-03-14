@@ -37,7 +37,7 @@ function OutcomesSection() {
             return (
               <motion.div
                 key={outcome.title}
-                className="rounded-[1.75rem] border border-white/70 bg-white/80 p-6 shadow-[0_22px_60px_-45px_rgba(40,42,71,0.95)] backdrop-blur"
+                className="rounded-[1.75rem] border border-white/70 bg-white/80 p-6 shadow-[0_22px_60px_-45px_rgba(40,42,71,0.95)] backdrop-blur-sm"
                 variants={fadeInUp}
               >
                 <div className="mb-5 inline-flex rounded-full bg-[#EEF1F5] p-3 text-[#3F4F63]">

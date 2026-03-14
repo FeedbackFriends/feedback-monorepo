@@ -8,7 +8,7 @@ function WhyStartHereSection() {
   return (
     <section className="container py-8 sm:py-12">
       <motion.div
-        className="rounded-[2rem] border border-white/70 bg-white/70 p-8 shadow-[0_30px_90px_-60px_rgba(40,42,71,0.8)] backdrop-blur"
+        className="rounded-4xl border border-white/70 bg-white/70 p-8 shadow-[0_30px_90px_-60px_rgba(40,42,71,0.8)] backdrop-blur-sm"
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, margin: "-120px" }}
@@ -38,7 +38,7 @@ function WhyStartHereSection() {
             return (
               <motion.div
                 key={reason.title}
-                className="rounded-[1.5rem] border border-[#DCE3F4] bg-gradient-to-b from-white to-[#F7FAFF] px-5 py-6 shadow-[0_18px_50px_-40px_rgba(40,42,71,0.9)]"
+                className="rounded-3xl border border-[#DCE3F4] bg-linear-to-b from-white to-[#F7FAFF] px-5 py-6 shadow-[0_18px_50px_-40px_rgba(40,42,71,0.9)]"
                 variants={fadeInUp}
                 whileHover={{ y: -4, scale: 1.01 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}

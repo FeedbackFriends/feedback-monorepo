@@ -14,8 +14,8 @@ function Background({ className }: BackgroundProps) {
       {/* Additional Blobs - Hide some on mobile, adjust others */}
       <div className="hidden sm:block absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-blue-300/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/3 left-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-indigo-400/[0.07] rounded-full blur-2xl sm:blur-3xl" />
-      <div className="hidden sm:block absolute -top-20 left-1/3 w-[400px] h-[400px] bg-blue-400/[0.05] rounded-full blur-3xl" />
-      <div className={cn("absolute top-2/3 right-1/4 w-[250px] sm:w-[450px] h-[250px] sm:h-[450px] bg-blue-500/[0.08] rounded-full blur-2xl sm:blur-3xl animate-pulse", className)} />
+      <div className="hidden sm:block absolute -top-20 left-1/3 w-[400px] h-[400px] bg-blue-400/5 rounded-full blur-3xl" />
+      <div className={cn("absolute top-2/3 right-1/4 w-[250px] sm:w-[450px] h-[250px] sm:h-[450px] bg-blue-500/8 rounded-full blur-2xl sm:blur-3xl animate-pulse", className)} />
     </>
   )
 }

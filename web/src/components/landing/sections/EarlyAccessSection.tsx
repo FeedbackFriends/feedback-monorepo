@@ -14,7 +14,7 @@ function EarlyAccessSection({ earlyAccessUrl }: EarlyAccessSectionProps) {
   return (
     <section className="container pb-16 pt-6 sm:pb-24">
       <motion.div
-        className="rounded-[2rem] border border-[#27AB85]/45 bg-gradient-to-b from-[#26A783] to-[#28AE88] p-8 text-white shadow-[0_35px_90px_-55px_rgba(39,171,133,0.62)] sm:p-10"
+        className="rounded-4xl border border-[#27AB85]/45 bg-linear-to-b from-[#26A783] to-[#28AE88] p-8 text-white shadow-[0_35px_90px_-55px_rgba(39,171,133,0.62)] sm:p-10"
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, margin: "-120px" }}
