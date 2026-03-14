@@ -1,0 +1,129 @@
+'use client'
+
+import { motion } from "framer-motion"
+import type { MouseEventHandler, Ref } from "react"
+import { ArrowRight } from "lucide-react"
+import PhoneFrames from "@/components/landing/PhoneFrames"
+import { appStoreUrl, calendarPlatforms } from "@/components/landing/content"
+import { fadeInUp, stagger } from "@/components/landing/motion"
+import { Button } from "@/components/ui/button"
+import {
+  earlyAccessButtonClass,
+  earlyAccessLabel,
+  earlyAccessUrl,
+} from "@/lib/letsgrow"
+
+type HeroSectionProps = {
+  heroSectionRef: Ref<HTMLElement>
+  onHowItWorksClick: MouseEventHandler<HTMLAnchorElement>
+}
+
+function HeroSection({
+  heroSectionRef,
+  onHowItWorksClick,
+}: HeroSectionProps) {
+  return (
+    <section
+      ref={heroSectionRef}
+      className="container flex min-h-screen items-center py-12 sm:py-16"
+    >
+      <div className="grid w-full items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <motion.div
+          className="space-y-8"
+          initial="initial"
+          animate="animate"
+          variants={stagger}
+        >
+          <motion.div className="space-y-7" variants={fadeInUp}>
+            <h1 className="max-w-3xl bg-gradient-to-b from-[#4A4D69] via-[#282A47] to-[#1F2140] bg-clip-text pb-1 text-4xl font-bold leading-[1.08] text-transparent sm:text-5xl lg:text-6xl">
+              Gør jeres faste møder bedre, uge for uge
+            </h1>
+            <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+              Lets Grow hjælper team leads, scrum masters og mødeejere med at
+              forbedre tilbagevendende møder gennem enkel, automatisk feedback i
+              de værktøjer, de allerede bruger.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="flex flex-col gap-4 sm:flex-row sm:items-center"
+            variants={fadeInUp}
+          >
+            <Button
+              asChild
+              size="lg"
+              className={`${earlyAccessButtonClass} h-12 rounded-full px-6`}
+            >
+              <a href={earlyAccessUrl} target="_blank" rel="noopener noreferrer">
+                {earlyAccessLabel}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="h-12 rounded-full border-[#DCE3F4] bg-white/80 px-6 text-[#282A47] shadow-sm hover:bg-white"
+            >
+              <a href="#how-it-works" onClick={onHowItWorksClick}>
+                Se hvordan det virker
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </motion.div>
+
+          <motion.div
+            className="rounded-[1.5rem] border border-white/70 bg-white/55 px-4 py-4 shadow-[0_18px_50px_-40px_rgba(40,42,71,0.7)] backdrop-blur sm:max-w-[34rem]"
+            variants={fadeInUp}
+          >
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#6A6D88]">
+              Fungerer med de værktøjer, I allerede bruger
+            </p>
+            <div className="mt-4 flex flex-wrap items-start gap-x-4 gap-y-3 sm:gap-x-5">
+              {calendarPlatforms.map((platform) => (
+                <div
+                  key={platform.name}
+                  className="group flex w-14 flex-col items-center gap-1 opacity-80 transition-all duration-300 hover:-translate-y-0.5 hover:opacity-100 sm:w-16"
+                  title={platform.name}
+                >
+                  <div className="flex h-10 w-10 items-center justify-center sm:h-11 sm:w-11">
+                    <img
+                      src={platform.icon}
+                      alt={platform.name}
+                      className="max-h-8 max-w-[2rem] object-contain sm:max-h-9 sm:max-w-[2.25rem]"
+                    />
+                  </div>
+                  <span className="text-center text-[11px] font-medium leading-3 text-[#5B5F7B] sm:text-xs">
+                    {platform.name
+                      .replace("Microsoft ", "")
+                      .replace(" Calendar", "")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          className="relative space-y-4"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.15 }}
+        >
+          <PhoneFrames />
+          <div className="flex justify-center">
+            <a href={appStoreUrl} target="_blank" rel="noopener noreferrer">
+              <img
+                src="/appstore.png"
+                alt="Download on the App Store"
+                className="h-14 w-auto transition-opacity duration-200 hover:opacity-85"
+              />
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+export default HeroSection
