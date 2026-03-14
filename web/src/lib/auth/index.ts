@@ -81,26 +81,6 @@ export function signInWithGoogle() {
   return authClient.signInWithGoogle()
 }
 
-export function sendEmailLink(email: string) {
-  return authClient.sendEmailLink(email)
-}
-
-export function isEmailLink(url: string) {
-  return authClient.isEmailLink(url)
-}
-
-export function getStoredEmailLinkAddress() {
-  return authClient.getStoredEmailLinkAddress()
-}
-
-export function clearStoredEmailLinkAddress() {
-  authClient.clearStoredEmailLinkAddress()
-}
-
-export function completeEmailLinkSignIn(email: string, url: string) {
-  return authClient.completeEmailLinkSignIn(email, url)
-}
-
 export function signOut() {
   return authClient.signOut()
 }

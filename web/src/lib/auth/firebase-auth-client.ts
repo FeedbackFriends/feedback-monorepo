@@ -10,20 +10,11 @@ import {
   GoogleAuthProvider,
   browserLocalPersistence,
   getAuth,
-  isSignInWithEmailLink as firebaseIsSignInWithEmailLink,
   onAuthStateChanged,
-  sendSignInLinkToEmail,
   setPersistence,
-  signInWithEmailLink,
   signInWithPopup,
   signOut,
 } from "firebase/auth"
-import {
-  clearStoredEmailLinkAddress,
-  emailStorageKey,
-  getStoredEmailLinkAddress,
-  normalizeEmail,
-} from "@/lib/auth/shared"
 import {
   requiredFirebaseConfigKeys,
   type FirebaseConfigInput,
@@ -56,31 +47,12 @@ export class FirebaseAuthClient implements AuthClient {
     this.googleProvider.setCustomParameters({ prompt: "select_account" })
   }
 
-  clearStoredEmailLinkAddress() {
-    clearStoredEmailLinkAddress()
-  }
-
-  async completeEmailLinkSignIn(email: string, url: string) {
-    const normalizedEmail = normalizeEmail(email)
-
-    await signInWithEmailLink(
-      this.requireFirebaseAuth(),
-      normalizedEmail,
-      url
-    )
-    clearStoredEmailLinkAddress()
-  }
-
   getConfigError() {
     if (this.firebaseConfig) {
       return null
     }
 
     return `Missing Firebase configuration: ${this.missingConfigKeys.join(", ")}`
-  }
-
-  getStoredEmailLinkAddress() {
-    return getStoredEmailLinkAddress()
   }
 
   initializePersistence() {
@@ -93,22 +65,6 @@ export class FirebaseAuthClient implements AuthClient {
 
   isConfigured() {
     return this.firebaseConfig !== null
-  }
-
-  isEmailLink(url: string) {
-    const auth = this.getFirebaseAuth()
-    return auth ? firebaseIsSignInWithEmailLink(auth, url) : false
-  }
-
-  async sendEmailLink(email: string) {
-    const normalizedEmail = normalizeEmail(email)
-
-    await sendSignInLinkToEmail(this.requireFirebaseAuth(), normalizedEmail, {
-      url: `${window.location.origin}/login`,
-      handleCodeInApp: true,
-    })
-    window.localStorage.setItem(emailStorageKey, normalizedEmail)
-    return normalizedEmail
   }
 
   async signInWithGoogle() {
