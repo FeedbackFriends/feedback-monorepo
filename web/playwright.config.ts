@@ -18,6 +18,8 @@ export default defineConfig({
         command: `npm run dev -- --hostname 127.0.0.1 --port ${defaultPort}`,
         env: {
           ...process.env,
+          NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL:
+            "https://form.typeform.com/to/RSs7TZAj",
           NEXT_PUBLIC_E2E_AUTH: "1",
         },
         reuseExistingServer: false,

@@ -12,8 +12,8 @@ type AuthShellProps = Readonly<{
 
 const highlights = [
   "Google sign-in for quick access",
-  "Email-link sign-in without passwords",
   "Browser-local session persistence until sign-out",
+  "Protected dashboard routing for signed-in users",
 ]
 
 export default function AuthShell({

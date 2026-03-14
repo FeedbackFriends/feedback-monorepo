@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "20.19.0"
+  },
   "scripts": {
     "dev": "dotenv -e ../.env -- next dev",
     "build": "dotenv -e ../.env -- next build",
@@ -15,21 +18,21 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase": "^12.10.0",
-    "framer-motion": "^11.13.1",
+    "framer-motion": "12.36.0",
     "lucide-react": "^0.468.0",
-    "next": "^15.5.12",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "next": "16.1.6",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@next/eslint-plugin-next": "^15.5.12",
+    "@next/eslint-plugin-next": "16.1.6",
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.10.1",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
     "autoprefixer": "^10.4.20",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9.39.4",
