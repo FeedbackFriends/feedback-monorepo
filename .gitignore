@@ -43,8 +43,6 @@ out/
 .next/
 
 # Tooling artifacts
-.codex/
-.agents/
 skills-lock.json
 .specify/
 skills-lock.json
