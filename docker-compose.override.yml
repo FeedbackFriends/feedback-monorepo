@@ -22,8 +22,10 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
-      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
-      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
+      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD}"
+      JWK_SET_URL: "${JWK_SET_URL}"
+      JWT_ISSUER_URI: "${JWT_ISSUER_URI}"
     ports:
       - "${API_HOST_PORT:-8080}:8080"
       - "${API_MANAGEMENT_HOST_PORT:-8090}:8090"

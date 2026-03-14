@@ -81,7 +81,7 @@ How local Compose is wired:
 
 - `docker-compose.yml` uses the published production-style images and shared environment variables.
 - `docker-compose.override.yml` adds a local Postgres container, exposes ports, points backend services at the local database, and builds the web app from `./web`.
-- The API runs on Spring's default profile and requires `JWK_SET_URL` and `JWT_ISSUER_URI` from `.env`; [`.env.example`](/Users/nicolaidam/.codex/worktrees/1f18/feedback-monorepo/.env.example) provides local stub values for those keys.
+- The local API still runs on Spring's default profile, but it requires `JWK_SET_URL` and `JWT_ISSUER_URI` from `.env`; [`.env.example`](/Users/nicolaidam/.codex/worktrees/1f18/feedback-monorepo/.env.example) provides local stub values for those keys.
 - For the API docs: `SPRING_DOC_API_DOCS_ENABLED` controls the raw OpenAPI document at `/v3/api-docs` and `/v3/api-docs.yaml`, while `SPRING_DOC_SWAGGER_UI_ENABLED` controls the interactive Swagger UI served at `/`.
 
 For feature work inside a single app, switch into that app directory and use its local README and AGENTS instructions.
