@@ -12,14 +12,9 @@ export type AuthStateListener = (user: AppAuthUser | null) => void
 export type AuthErrorListener = (error: unknown) => void
 
 export interface AuthClient {
-  clearStoredEmailLinkAddress(): void
-  completeEmailLinkSignIn(email: string, url: string): Promise<void>
   getConfigError(): string | null
-  getStoredEmailLinkAddress(): string | null
   initializePersistence(): Promise<void>
   isConfigured(): boolean
-  isEmailLink(url: string): boolean
-  sendEmailLink(email: string): Promise<string>
   signInWithGoogle(): Promise<void>
   signOut(): Promise<void>
   subscribeToAuthState(
