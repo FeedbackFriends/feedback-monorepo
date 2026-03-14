@@ -3,7 +3,6 @@ name: feedback
 services:
   api:
     image: "nicolaidam/feedback-api:prod"
-    platform: "linux/amd64"
     restart: unless-stopped
     environment:
       PORT: "8080"
@@ -27,7 +26,6 @@ services:
 
   scheduler:
     image: "nicolaidam/feedback-scheduler:prod"
-    platform: "linux/amd64"
     restart: unless-stopped
     environment:
       PORT: "8080"
@@ -53,7 +51,6 @@ services:
 
   web:
     image: "nicolaidam/feedback-web:prod"
-    platform: "linux/amd64"
     restart: unless-stopped
     environment:
       NODE_ENV: production
