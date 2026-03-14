@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button"
 import {
   earlyAccessButtonClass,
   earlyAccessLabel,
-  earlyAccessUrl,
 } from "@/lib/letsgrow"
 
 type MobileStickyCtaProps = {
+  earlyAccessUrl: string
   visible: boolean
 }
 
-function MobileStickyCta({ visible }: MobileStickyCtaProps) {
+function MobileStickyCta({ earlyAccessUrl, visible }: MobileStickyCtaProps) {
   return (
     <div
       className={`mobile-cta-safe fixed inset-x-0 bottom-0 z-40 border-t border-white/70 bg-white/88 backdrop-blur-xl transition-transform duration-300 sm:hidden ${

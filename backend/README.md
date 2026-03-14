@@ -1,68 +1,92 @@
 # Feedback Backend
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.0-blue.svg)](https://kotlinlang.org)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
-
-Kotlin + Spring Boot services powering the LetsGrow feedback platform. Provides REST APIs and scheduled jobs for feedback management and notifications.
+Kotlin + Spring Boot services powering the Feedback platform. The backend is split into an API service, a scheduler service, and shared libraries for persistence, models, and integrations.
 
 ## Project Layout
--  – main REST API (controllers, services, configs, resources).
--  – background jobs and notification polling.
--  – shared entities/DTOs/enums and Jackson config.
--  – Exposed DAOs/repos and Liquibase change sets in .
--  – Firebase client wrapper.
--  – iCal parsing utilities for calendar invites.
--  – quick reference and diagrams ( PlantUML).
+- `apps/api` contains the main REST API, Spring configuration, and OpenAPI generation.
+- `apps/scheduler` contains background jobs and notification polling.
+- `lib/model` contains shared DTOs, enums, entities, and Jackson configuration.
+- `lib/persistence` contains Exposed repositories and Liquibase change sets.
+- `lib/firebase` contains Firebase integration helpers.
+- `lib/ical` contains iCal parsing utilities.
+- `docs/` contains architecture notes and diagrams.
 
 ## Prerequisites
-- JDK 21 (toolchain); Kotlin 1.9; Gradle wrapper included.
-- Environment:  for Postgres, , , optional .
-- Scheduler mail polling uses , , , plus OAuth refresh token + client credentials.
-- Secrets: keep , Firebase service-account JSON, and any exported secrets out of git.
+- JDK 21
+- Docker for the full local stack or local Postgres
+- Firebase service account JSON exposed via `FIREBASE_SERVICE_ACCOUNT_JSON_B64`
 
-## Quick Start
-API:
+## Local Development
 
+### Full Stack From The Repo Root
+Run the full stack from the monorepo root:
 
-Scheduler:
+```bash
+docker compose up --build
+```
 
+Services:
+- `web` at `http://localhost:3000`
+- `api` at `http://localhost:8080`
+- API health at `http://localhost:8090/actuator/health`
+- scheduler health at `http://localhost:8091/actuator/health`
+- Postgres at `localhost:5432` with database `feedback`
 
-For local Postgres:
+The root [`.env.example`](../.env.example) includes every environment variable Compose needs for a local run. Copy it to `.env` at the repo root and fill in the real values you need.
 
+### Direct Gradle Runs
+Export the runtime variables first:
 
-## Deployment
-Production deployment is defined in [../render.yaml](../render.yaml).
+```bash
+export POSTGRES_HOST=localhost
+export POSTGRES_PORT=5432
+export POSTGRES_DB=feedback
+export POSTGRES_USER=feedback
+export POSTGRES_PASSWORD=feedback
+export FIREBASE_API_KEY=...
+export FIREBASE_SERVICE_ACCOUNT_JSON_B64="$(base64 < ../firebase_config.json | tr -d '\n')"
+export ZOHO_ACCOUNT_ID=...
+export ZOHO_FOLDER_ID=...
+export ZOHO_OAUTH_REFRESH_TOKEN=...
+export ZOHO_CLIENT_ID=...
+export ZOHO_CLIENT_SECRET=...
+```
 
-Render-specific assets:
-- API Dockerfile: [./apps/api/Dockerfile](./apps/api/Dockerfile)
-- Scheduler Dockerfile: [./apps/scheduler/Dockerfile](./apps/scheduler/Dockerfile)
-- Render setup notes: [../render/README.md](../infra/README.md)
+Run the services:
 
-The API and scheduler expect Firebase credentials via , which in Render should point at the mounted secret file path.
+```bash
+./gradlew :api:bootRun
+./gradlew :scheduler:bootRun
+```
 
-## Logging
-The backend uses Spring Boot's default console logging.
+Swagger UI is served at `http://localhost:8080/` and the OpenAPI YAML at `http://localhost:8080/v3/api-docs.yaml`.
 
-- Both services write logs to stdout/stderr, which Render captures automatically.
-- The API includes request-completion logs with method, path, status, and duration to make Render logs easier to filter.
-- Actuator endpoints and `/error` are excluded from the API request interceptor to reduce noise.
-- Log levels can be tuned with `LOG_LEVEL_ROOT`, `LOG_LEVEL_APP`, `LOG_LEVEL_SPRING_WEB`, and `LOG_LEVEL_SPRING_SECURITY` (API only).
+### OpenAPI Generation
+Generate the API spec with the dedicated `openapi` profile:
 
-## Build, Test, and Tooling
--  – compile all modules and run tests (warnings fail build).
--  or  – run full or scoped tests.
--  – build the API image from [./apps/api/Dockerfile](./apps/api/Dockerfile).
--  – build the scheduler image from [./apps/scheduler/Dockerfile](./apps/scheduler/Dockerfile).
--  – start the full local stack with [../docker-compose.yml](../docker-compose.yml).
+```bash
+SPRING_PROFILES_ACTIVE=openapi ./gradlew :api:generateOpenApiDocs --no-configuration-cache
+```
 
-OpenAPI: auto-generated via Springdoc plugin; Swagger UI is served at  and the spec at  in the API service.
+## Tests And Tooling
+- `./gradlew test` runs all backend tests.
+- `./gradlew :api:test` runs only API tests.
+- `./gradlew clean build` builds all backend modules and fails on warnings.
+- `docker build -f backend/apps/api/Dockerfile .` builds the API image.
+- `docker build -f backend/apps/scheduler/Dockerfile .` builds the scheduler image.
+
+## Database And Migrations
+- Postgres is the runtime datasource for the application services.
+- Liquibase change sets live in `lib/persistence/src/main/resources/db/changelog/` and run automatically on startup.
+
+## Common Issues
+- Missing Firebase config: ensure `FIREBASE_SERVICE_ACCOUNT_JSON_B64` contains a valid base64-encoded service account JSON.
+- Connection refused to Postgres: verify the container is running and `POSTGRES_HOST` / `POSTGRES_PORT` point at the right server.
+- Ports in use: override Spring ports with standard Spring Boot properties when running directly.
+
+## Zoho Notes
+Zoho OAuth scopes for Self Client should use `ZohoMail.messages.READ` for the scheduler runtime. If Zoho rejects multiple scopes in a Self Client grant, obtain `ZOHO_ACCOUNT_ID` and `ZOHO_FOLDER_ID` with one-off access tokens using `ZohoMail.accounts.READ` and `ZohoMail.folders.READ`, then switch the refresh token to `ZohoMail.messages.READ` for the runtime path.
 
 ## Documentation
-- [Getting Started](./docs/getting-started.md) – setup, environment, and common tasks.
-- [Architecture Overview](./docs/overview.md) – module roles and request/notification flows.
-- [Diagrams](./docs/diagrams/) – PlantUML diagrams; regenerate with your preferred UML tool.
-
-## Contributing
-- Follow the Kotlin style used in the codebase (4-space indent, idiomatic null-safety).
-- Use concise, imperative commits (e.g., ); group related changes.
-- Run  before opening a PR and include results plus any new env vars/migrations in the PR description.
+- [Architecture Overview](./docs/overview.md) explains module roles and request/notification flows.
+- [Diagrams](./docs/diagrams/) contains PlantUML diagrams.

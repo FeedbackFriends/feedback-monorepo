@@ -27,10 +27,10 @@
 - Favor straight-line flows with guard clauses/exceptions over clever abstractions; simple and explicit beats smart.
 - Use data classes with explicit nullability and trailing commas; convert collections with / instead of in-place mutation.
 - Log notable state changes with , but keep noise low; warnings are treated as errors during compilation.
-- Tests lean on JUnit5 + MockMvc integration flows with scenario-style backtick names; H2 in-memory defaults keep them fast and repeatable.
+- Tests lean on JUnit5 + MockMvc integration flows with scenario-style backtick names.
 
 ## Testing Guidelines
-- Primary framework: JUnit 5 with ; H2 in-memory DB is the default test datasource.
+- Primary framework: JUnit 5 with .
 - Name tests ; integration tests typically extend helpers in .
 - Add DAO/migration coverage in ; keep Liquibase change sets incremental ().
 - Run  before opening a PR; include failing cases when reporting bugs.

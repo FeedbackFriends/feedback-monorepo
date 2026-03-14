@@ -1,9 +1,3 @@
-// Replace the fallback URL with the live Typeform URL, or set it via
-// NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL for each environment.
-export const earlyAccessUrl =
-  process.env.NEXT_PUBLIC_LETSGROW_EARLY_ACCESS_URL ??
-  "https://form.typeform.com/to/RSs7TZAj"
-
 export const earlyAccessLabel = "Få tidlig adgang"
 
 export const earlyAccessButtonClass =

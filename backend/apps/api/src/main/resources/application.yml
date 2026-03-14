@@ -35,14 +35,6 @@ spring:
   exposed:
     show-sql: ${SHOW_EXPOSED_SQL:false}
     generate-ddl: false
-  datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:devDb;MODE=PostgreSQL;DATABASE_TO_UPPER=false}
-    username: ${SPRING_DATASOURCE_USERNAME:sa}
-    password: ${SPRING_DATASOURCE_PASSWORD:''}
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
 springdoc:
   api-docs:
     enabled: ${SPRING_DOC_API_DOCS_ENABLED:false}

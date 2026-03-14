@@ -10,7 +10,7 @@
 - **firebase (`lib/firebase`)**: Wrapper for Firebase messaging/auth helpers.
 
 ## Data & Configuration
-- Default datasource is H2 in-memory for tests; Postgres is expected in real environments.
+- Postgres is the runtime datasource for the application services.
 - Liquibase runs on startup and keeps schema aligned with change sets (`000X-description.yaml`).
 - Security: Resource server with JWT (Google/Firebase) configured in `apps/api/src/main/resources/application.yml`.
 - Logging: services use Spring Boot console logging, and the API interceptor captures request context for Render logs.
@@ -22,6 +22,6 @@
 4. Scheduler jobs poll outstanding notification records and notify owners/managers, updating activity history.
 
 ## Local Development Tips
-- Use H2 for quick iteration; switch to Postgres via `SPRING_DATASOURCE_URL` env.
-- OpenAPI docs live at `/` (Swagger UI) and `/v3/api-docs.yaml`; regenerate spec with `./gradlew :api:generateOpenApiDocs` if you add endpoints.
+- Configure Postgres via `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_DB`, `POSTGRES_USER`, and `POSTGRES_PASSWORD`.
+- OpenAPI docs live at `/` (Swagger UI) and `/v3/api-docs.yaml`; regenerate spec with `SPRING_PROFILES_ACTIVE=openapi ./gradlew :api:generateOpenApiDocs` if you add endpoints.
 - Keep DTOs in `model`, business logic in `service`, and database details in `persistence` to maintain module boundaries.

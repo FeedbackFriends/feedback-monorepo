@@ -25,4 +25,4 @@ USER 10001:10001
 
 EXPOSE 8080
 
-CMD ["sh", "-ec", "if [ -n \"${SPRING_DATASOURCE_URL:-}\" ] && [ \"${SPRING_DATASOURCE_URL#jdbc:}\" = \"${SPRING_DATASOURCE_URL}\" ]; then export SPRING_DATASOURCE_URL=\"jdbc:${SPRING_DATASOURCE_URL}\"; fi; exec java ${JAVA_OPTS:--Xmx512m} -Dserver.port=\"${PORT:-8080}\" ${MANAGEMENT_SERVER_PORT:+-Dmanagement.server.port=${MANAGEMENT_SERVER_PORT}} -jar /app/app.jar"]
+CMD ["sh", "-ec", "exec java ${JAVA_OPTS:--Xmx512m} -Dserver.port=\"${PORT:-8080}\" ${MANAGEMENT_SERVER_PORT:+-Dmanagement.server.port=${MANAGEMENT_SERVER_PORT}} -jar /app/app.jar"]
