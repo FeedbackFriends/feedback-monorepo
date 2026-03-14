@@ -24,8 +24,8 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${POSTGRES_DB:-feedback}"
       SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER:-feedback}"
       SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD:-feedback}"
-      JWK_SET_URL: "http://localhost:65535/jwks"
-      JWT_ISSUER_URI: "http://localhost:65535/issuer"
+      JWK_SET_URL: "${JWK_SET_URL:?Set JWK_SET_URL in .env for local API startup}"
+      JWT_ISSUER_URI: "${JWT_ISSUER_URI:?Set JWT_ISSUER_URI in .env for local API startup}"
     ports:
       - "${API_HOST_PORT:-8080}:8080"
       - "${API_MANAGEMENT_HOST_PORT:-8090}:8090"
