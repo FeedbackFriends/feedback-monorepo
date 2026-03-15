@@ -53,7 +53,7 @@ export default function DashboardScreen() {
       description="This protected area stays client-side and only renders once Firebase confirms an authenticated user."
       title="Your feedback dashboard is ready"
     >
-      <Card className="border-white/80 bg-white/90 shadow-2xl shadow-slate-900/10 backdrop-blur">
+      <Card className="border-white/80 bg-white/90 shadow-2xl shadow-slate-900/10 backdrop-blur-sm">
         <CardContent className="space-y-6 p-6 sm:p-8">
           {isLoading ? (
             <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-6 text-sm font-medium text-slate-700">

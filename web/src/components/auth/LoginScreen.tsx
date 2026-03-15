@@ -74,7 +74,7 @@ export default function LoginScreen() {
       <main className="relative mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 py-12 lg:px-10">
         <div className="w-full max-w-md space-y-6">
           <div className="flex justify-center">
-            <div className="rounded-[1.75rem] border border-white/70 bg-white/55 px-5 py-4 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.8)] backdrop-blur">
+            <div className="rounded-[1.75rem] border border-white/70 bg-white/55 px-5 py-4 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.8)] backdrop-blur-sm">
               <BrandLogo className="scale-90 sm:scale-100" />
             </div>
           </div>

@@ -18,7 +18,7 @@ function GlassCard({ className, contentClassName, children, ...props }: GlassCar
       <CardContent className={cn("relative z-10", contentClassName)}>
         {children}
       </CardContent>
-      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5" />
+      <div className="absolute inset-0 bg-linear-to-br from-white/10 to-white/5" />
     </Card>
   )
 }

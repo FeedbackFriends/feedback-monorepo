@@ -14,7 +14,7 @@ const SecondaryButton = React.forwardRef<HTMLButtonElement, SecondaryButtonProps
         className={cn(
           "rounded-full",
           tone === "default"
-            ? "border-[#DCE3F4] bg-white/80 text-[#282A47] shadow-sm hover:bg-white"
+            ? "border-[#DCE3F4] bg-white/80 text-[#282A47] shadow-xs hover:bg-white"
             : "border-white/20 bg-white/10 text-white/90 hover:bg-white/16 hover:text-white",
           className
         )}

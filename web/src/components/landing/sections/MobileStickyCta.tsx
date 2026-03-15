@@ -15,7 +15,7 @@ function MobileStickyCta({ earlyAccessUrl, visible }: MobileStickyCtaProps) {
       }`}
     >
       <div className="container py-3">
-        <div className="flex items-center gap-3 rounded-[1.5rem] border border-[#DCE3F4] bg-white/90 p-3 shadow-[0_18px_40px_-30px_rgba(40,42,71,0.5)]">
+        <div className="flex items-center gap-3 rounded-3xl border border-[#DCE3F4] bg-white/90 p-3 shadow-[0_18px_40px_-30px_rgba(40,42,71,0.5)]">
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-[#282A47]">
               Test Lets Grow gratis

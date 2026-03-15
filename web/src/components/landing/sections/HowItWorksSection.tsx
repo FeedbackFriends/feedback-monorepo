@@ -8,7 +8,7 @@ function HowItWorksSection() {
   return (
     <section id="how-it-works" className="container py-12 sm:py-16">
       <motion.div
-        className="rounded-[2rem] border border-[#DCE3F4] bg-gradient-to-br from-white via-[#F8FAFF] to-[#EEF4FF] p-6 shadow-[0_28px_80px_-55px_rgba(40,42,71,0.95)] sm:p-8 lg:p-10"
+        className="rounded-4xl border border-[#DCE3F4] bg-linear-to-br from-white via-[#F8FAFF] to-[#EEF4FF] p-6 shadow-[0_28px_80px_-55px_rgba(40,42,71,0.95)] sm:p-8 lg:p-10"
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, margin: "-120px" }}
@@ -32,7 +32,7 @@ function HowItWorksSection() {
           {workflowSteps.map((step, index) => (
             <motion.div
               key={step.title}
-              className="rounded-[1.5rem] border border-[#DCE3F4] bg-white px-5 py-5 shadow-[0_18px_40px_-35px_rgba(40,42,71,0.85)]"
+              className="rounded-3xl border border-[#DCE3F4] bg-white px-5 py-5 shadow-[0_18px_40px_-35px_rgba(40,42,71,0.85)]"
               variants={fadeInUp}
             >
               <div className="flex items-start gap-4">

@@ -34,7 +34,7 @@ function HeroSection({
           variants={stagger}
         >
           <motion.div className="space-y-7" variants={fadeInUp}>
-            <h1 className="max-w-3xl bg-gradient-to-b from-[#4A4D69] via-[#282A47] to-[#1F2140] bg-clip-text pb-1 text-4xl font-bold leading-[1.08] text-transparent sm:text-5xl lg:text-6xl">
+            <h1 className="max-w-3xl bg-linear-to-b from-[#4A4D69] via-[#282A47] to-[#1F2140] bg-clip-text pb-1 text-4xl font-bold leading-[1.08] text-transparent sm:text-5xl lg:text-6xl">
               Gør jeres faste møder bedre, uge for uge
             </h1>
             <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
@@ -62,7 +62,7 @@ function HeroSection({
           </motion.div>
 
           <motion.div
-            className="rounded-[1.5rem] border border-white/70 bg-white/55 px-4 py-4 shadow-[0_18px_50px_-40px_rgba(40,42,71,0.7)] backdrop-blur sm:max-w-[34rem]"
+            className="rounded-3xl border border-white/70 bg-white/55 px-4 py-4 shadow-[0_18px_50px_-40px_rgba(40,42,71,0.7)] backdrop-blur-sm sm:max-w-136"
             variants={fadeInUp}
           >
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#6A6D88]">
@@ -81,7 +81,7 @@ function HeroSection({
                       alt={platform.name}
                       fill
                       sizes="(min-width: 640px) 44px, 40px"
-                      className="max-h-8 max-w-[2rem] object-contain sm:max-h-9 sm:max-w-[2.25rem]"
+                      className="max-h-8 max-w-8 object-contain sm:max-h-9 sm:max-w-9"
                     />
                   </div>
                   <span className="text-center text-[11px] font-medium leading-3 text-[#5B5F7B] sm:text-xs">
@@ -107,7 +107,7 @@ function HeroSection({
               href={appStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative block h-14 w-[11.25rem]"
+              className="relative block h-14 w-45"
             >
               <Image
                 src="/appstore.png"

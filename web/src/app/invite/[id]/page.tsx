@@ -39,7 +39,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button
                 asChild
-                className="h-11 rounded-full bg-gradient-to-b from-[#37B791] to-[#27AB85] px-6 font-medium text-white hover:opacity-90"
+                className="h-11 rounded-full bg-linear-to-b from-[#37B791] to-[#27AB85] px-6 font-medium text-white hover:opacity-90"
               >
                 <a
                   href={appStoreUrl}
@@ -52,7 +52,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
 
               <Button
                 asChild
-                className="h-11 rounded-full bg-gradient-to-b from-[#37B791] to-[#27AB85] px-6 font-medium text-white hover:opacity-90"
+                className="h-11 rounded-full bg-linear-to-b from-[#37B791] to-[#27AB85] px-6 font-medium text-white hover:opacity-90"
               >
                 <a href={deepLink}>Åbn invitation</a>
               </Button>

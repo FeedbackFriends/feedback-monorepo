@@ -16,7 +16,7 @@ function SurfaceCard({
   return (
     <Comp
       className={cn(
-        "rounded-[2rem] border border-white/70 bg-white/65 shadow-[0_30px_90px_-60px_rgba(40,42,71,0.8)] backdrop-blur",
+        "rounded-4xl border border-white/70 bg-white/65 shadow-[0_30px_90px_-60px_rgba(40,42,71,0.8)] backdrop-blur-sm",
         className
       )}
       {...props}

@@ -12,6 +12,25 @@ The web app is pinned to Node `20.19.0`.
 - GitHub Actions reads `web/.nvmrc`.
 - The web `Dockerfile` uses `node:20.19.0-alpine` for dependency, build, and runtime stages.
 
+## Tailwind CSS
+
+The web app now uses Tailwind CSS `v4` with the CSS-first setup recommended by
+the current Next.js docs:
+
+- `src/app/globals.css` is the Tailwind entrypoint via `@import 'tailwindcss'`
+- `postcss.config.js` uses `@tailwindcss/postcss`
+- there is no `tailwind.config.js`; theme tokens and custom utilities live in
+  `src/app/globals.css`
+
+Tailwind CSS `v4` requires a modern browser baseline. For this app, that means:
+
+- Chrome `111+`
+- Safari `16.4+`
+- Firefox `128+`
+
+If older browser support becomes a requirement again, the styling stack should
+move back to Tailwind CSS `v3` instead of adding fallbacks.
+
 ## Firebase auth config
 
 The `web` npm scripts now load the repo-root `.env`, so the same file works for

@@ -33,7 +33,7 @@ function FaqSection({ openFaqIndex, onToggleFaq }: FaqSectionProps) {
         </motion.div>
 
         <motion.div
-          className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-[1.75rem] border border-[#DCE3F4] bg-white/85 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.9)] backdrop-blur"
+          className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-[1.75rem] border border-[#DCE3F4] bg-white/85 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.9)] backdrop-blur-sm"
           variants={stagger}
         >
           {faqItems.map((item, index) => (
@@ -41,7 +41,7 @@ function FaqSection({ openFaqIndex, onToggleFaq }: FaqSectionProps) {
               key={item.question}
               className={`border-b border-[#DCE3F4] last:border-b-0 ${
                 openFaqIndex === index
-                  ? "bg-gradient-to-r from-[#F8FAFF] via-white to-[#F4F8FF]"
+                  ? "bg-linear-to-r from-[#F8FAFF] via-white to-[#F4F8FF]"
                   : "bg-white/80"
               }`}
               transition={{ duration: 0.28, ease: "easeOut" }}
