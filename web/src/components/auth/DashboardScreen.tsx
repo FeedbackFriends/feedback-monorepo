@@ -27,9 +27,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
+} from "@/components/ui/sidebar"
 import { signOut } from "@/lib/auth"
-import { cn } from "@/lib/utils"
 
 type DashboardTabId =
   | "overview"
@@ -164,85 +178,329 @@ function getProviderLabel(providerIds: string[]) {
     .join(", ")
 }
 
-function isDashboardTabId(value: string): value is DashboardTabId {
-  return dashboardTabs.some((tab) => tab.id === value)
-}
-
-type TabNavigationProps = Readonly<{
+type DashboardSidebarNavigationProps = Readonly<{
   activeTab: DashboardTabId
-  className?: string
   onChange: (tabId: DashboardTabId) => void
-  orientation?: "horizontal" | "vertical"
+  onNavigate?: () => void
 }>
 
-function TabNavigation({
+function DashboardSidebarNavigation({
   activeTab,
-  className,
   onChange,
-  orientation = "vertical",
-}: TabNavigationProps) {
+  onNavigate,
+}: DashboardSidebarNavigationProps) {
   return (
-    <Tabs
-      activationMode="manual"
-      onValueChange={(value) => {
-        if (isDashboardTabId(value)) {
-          onChange(value)
-        }
-      }}
-      orientation={orientation}
-      value={activeTab}
-    >
-      <TabsList
-        aria-label="Dashboard sections"
-        className={cn(
-          "h-auto gap-2 border border-white/70 bg-white/72 p-2 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.35)] backdrop-blur-sm",
-          orientation === "horizontal"
-            ? "w-max min-w-full justify-start overflow-x-auto rounded-3xl"
-            : "flex w-full flex-col rounded-3xl",
-          className
-        )}
-      >
-        {dashboardTabs.map((tab) => {
-          const Icon = tab.icon
+    <SidebarGroup>
+      <div className="flex items-center justify-between px-2">
+        <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+        <Badge className="bg-emerald-50 text-emerald-900" variant="secondary">
+          Shell v1
+        </Badge>
+      </div>
 
-          return (
-            <TabsTrigger
-              className={cn(
-                "h-auto min-w-fit gap-3 rounded-2xl border border-transparent px-4 py-3 text-left whitespace-nowrap shadow-none transition-all",
-                "[&[data-state=active]_[data-slot=icon]]:text-emerald-300 [&[data-state=active]_[data-slot=meta]]:text-slate-300 [&[data-state=active]_[data-slot=label]]:text-white",
-                "[&[data-state=inactive]_[data-slot=meta]]:text-slate-500 [&[data-state=inactive]_[data-slot=label]]:text-slate-700",
-                "data-[state=active]:border-slate-950 data-[state=active]:bg-slate-950 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-slate-900/15",
-                "data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-600",
-                orientation === "horizontal"
-                  ? "justify-start"
-                  : "w-full justify-start"
-              )}
-              key={tab.id}
-              value={tab.id}
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {dashboardTabs.map((tab) => {
+            const Icon = tab.icon
+
+            return (
+              <SidebarMenuItem key={tab.id}>
+                <SidebarMenuButton
+                  isActive={tab.id === activeTab}
+                  onClick={() => {
+                    onChange(tab.id)
+                    onNavigate?.()
+                  }}
+                  type="button"
+                >
+                  <Icon className="mt-0.5 h-4 w-4 shrink-0" data-slot="icon" />
+                  <span className="flex min-w-0 flex-col items-start">
+                    <span
+                      className="text-sm font-semibold transition-colors"
+                      data-slot="label"
+                    >
+                      {tab.label}
+                    </span>
+                    <span className="text-xs transition-colors" data-slot="meta">
+                      {tab.stageLabel}
+                    </span>
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )
+          })}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  )
+}
+
+function DashboardPanel({
+  activeTab,
+  activeTabDefinition,
+  user,
+  userName,
+}: Readonly<{
+  activeTab: DashboardTabId
+  activeTabDefinition: DashboardTab
+  user: NonNullable<ReturnType<typeof useAuth>["user"]>
+  userName: string
+}>) {
+  return (
+    <Card className="border-white/70 bg-white/76 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.8)] backdrop-blur-sm">
+      <CardHeader className="space-y-4 border-b border-slate-200/80 pb-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge className="bg-emerald-50 text-emerald-900" variant="secondary">
+                Persistent navigation
+              </Badge>
+              <Badge className="border-slate-300 text-slate-700" variant="outline">
+                {activeTabDefinition.stageLabel}
+              </Badge>
+            </div>
+            <div className="space-y-2">
+              <CardTitle className="text-3xl tracking-tight text-slate-950 sm:text-4xl">
+                {activeTabDefinition.label}
+              </CardTitle>
+              <CardDescription className="max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+                {activeTabDefinition.description}
+              </CardDescription>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-slate-50/85 px-4 py-3 text-sm leading-6 text-slate-600">
+            Built as a stable dashboard frame first, so feature work can land without
+            reworking layout or navigation.
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="p-4 sm:p-6">
+        {activeTab === "overview" ? (
+          <OverviewPanel email={user.email} userName={userName} />
+        ) : (
+          <PlaceholderPanel tab={activeTabDefinition} />
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
+function DashboardChrome({
+  activeTab,
+  activeTabDefinition,
+  configured,
+  displayError,
+  handleSignOut,
+  isSigningOut,
+  providerIds,
+  setActiveTab,
+  user,
+  userInitials,
+  userName,
+}: Readonly<{
+  activeTab: DashboardTabId
+  activeTabDefinition: DashboardTab
+  configured: boolean
+  displayError: string | null
+  handleSignOut: () => Promise<void>
+  isSigningOut: boolean
+  providerIds: string[]
+  setActiveTab: React.Dispatch<React.SetStateAction<DashboardTabId>>
+  user: NonNullable<ReturnType<typeof useAuth>["user"]>
+  userInitials: string
+  userName: string
+}>) {
+  return (
+    <SidebarProvider>
+      <DashboardChromeContent
+        activeTab={activeTab}
+        activeTabDefinition={activeTabDefinition}
+        configured={configured}
+        displayError={displayError}
+        handleSignOut={handleSignOut}
+        isSigningOut={isSigningOut}
+        providerIds={providerIds}
+        setActiveTab={setActiveTab}
+        user={user}
+        userInitials={userInitials}
+        userName={userName}
+      />
+    </SidebarProvider>
+  )
+}
+
+function DashboardChromeContent({
+  activeTab,
+  activeTabDefinition,
+  configured,
+  displayError,
+  handleSignOut,
+  isSigningOut,
+  providerIds,
+  setActiveTab,
+  user,
+  userInitials,
+  userName,
+}: Readonly<{
+  activeTab: DashboardTabId
+  activeTabDefinition: DashboardTab
+  configured: boolean
+  displayError: string | null
+  handleSignOut: () => Promise<void>
+  isSigningOut: boolean
+  providerIds: string[]
+  setActiveTab: React.Dispatch<React.SetStateAction<DashboardTabId>>
+  user: NonNullable<ReturnType<typeof useAuth>["user"]>
+  userInitials: string
+  userName: string
+}>) {
+  const { setOpenMobile } = useSidebar()
+
+  return (
+    <div className="flex gap-4 xl:gap-5">
+      <Sidebar className="md:sticky md:top-6 md:h-[calc(100vh-3rem)]">
+        <SidebarHeader>
+          <div className="flex items-center justify-between gap-3">
+            <BrandLogo />
+            <button
+              className="inline-flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50 md:hidden"
+              onClick={() => setOpenMobile(false)}
+              type="button"
             >
-              <Icon
-                className="h-4 w-4 shrink-0 text-emerald-600 transition-colors"
-                data-slot="icon"
-              />
-              <span className="flex flex-col items-start">
-                <span
-                  className="text-sm font-semibold transition-colors"
-                  data-slot="label"
-                >
-                  {tab.label}
+              <MoveLeft className="h-4 w-4" />
+              <span className="sr-only">Close sidebar</span>
+            </button>
+          </div>
+
+          <div className="rounded-3xl border border-white/70 bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(240,253,250,0.95))] p-4 shadow-[0_20px_60px_-45px_rgba(16,24,40,0.45)]">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-sm font-semibold text-white">
+                {userInitials}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-lg font-semibold text-slate-950">
+                  {userName}
+                </p>
+                <p className="mt-1 truncate text-sm text-slate-600">
+                  {user.email ?? "Authenticated browser session"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-3 rounded-2xl border border-slate-200 bg-white/85 p-3">
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="text-slate-500">Providers</span>
+                <span className="text-right font-medium text-slate-950">
+                  {getProviderLabel(providerIds)}
                 </span>
-                <span
-                  className="text-xs transition-colors"
-                  data-slot="meta"
-                >
-                  {tab.stageLabel}
+              </div>
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="text-slate-500">User ID</span>
+                <span className="max-w-[11rem] truncate font-medium text-slate-950">
+                  {user.uid}
                 </span>
-              </span>
-            </TabsTrigger>
-          )
-        })}
-      </TabsList>
-    </Tabs>
+              </div>
+            </div>
+          </div>
+        </SidebarHeader>
+
+        <SidebarContent>
+          <DashboardSidebarNavigation
+            activeTab={activeTab}
+            onChange={setActiveTab}
+            onNavigate={() => setOpenMobile(false)}
+          />
+
+          <div className="space-y-3 rounded-3xl border border-slate-200 bg-slate-50/80 p-4">
+            <p className="text-sm font-semibold text-slate-950">
+              Protected client session
+            </p>
+            <p className="text-sm leading-6 text-slate-600">
+              Redirect and sign-out behavior stay intact while the app shell grows around them.
+            </p>
+          </div>
+        </SidebarContent>
+
+        <SidebarFooter>
+          <div className="space-y-3">
+            <Button
+              className="h-11 w-full rounded-2xl"
+              disabled={isSigningOut}
+              onClick={handleSignOut}
+              type="button"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              {isSigningOut ? "Signing out..." : "Sign out"}
+            </Button>
+            <Button
+              asChild
+              className="h-11 w-full rounded-2xl"
+              variant="outline"
+            >
+              <Link href="/">
+                <MoveLeft className="mr-2 h-4 w-4" />
+                Return to landing page
+              </Link>
+            </Button>
+          </div>
+        </SidebarFooter>
+      </Sidebar>
+
+      <SidebarInset className="space-y-4">
+        <Card className="border-white/70 bg-white/78 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.8)] backdrop-blur-sm md:hidden">
+          <CardContent className="space-y-4 p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-3">
+                <BrandLogo />
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">
+                    Signed in
+                  </p>
+                  <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+                    {userName}
+                  </h1>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">
+                    {user.email
+                      ? `Authenticated as ${user.email}.`
+                      : "Your session is active in this browser."}
+                  </p>
+                </div>
+              </div>
+              <SidebarTrigger />
+            </div>
+
+            <div className="rounded-3xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600">
+              Open the sidebar to switch sections, review your workspace context, or sign out.
+            </div>
+          </CardContent>
+        </Card>
+
+        {!configured ? (
+          <Card className="border-amber-200 bg-amber-50 shadow-none">
+            <CardContent className="p-4 text-sm text-amber-950">
+              Firebase is not configured, so the dashboard cannot be opened yet.
+            </CardContent>
+          </Card>
+        ) : null}
+
+        {displayError ? (
+          <Card className="border-rose-200 bg-rose-50 shadow-none">
+            <CardContent className="p-4 text-sm text-rose-950">
+              {displayError}
+            </CardContent>
+          </Card>
+        ) : null}
+
+        <DashboardPanel
+          activeTab={activeTab}
+          activeTabDefinition={activeTabDefinition}
+          user={user}
+          userName={userName}
+        />
+      </SidebarInset>
+    </div>
   )
 }
 
@@ -512,204 +770,19 @@ export default function DashboardScreen() {
         ) : null}
 
         {!isLoading && status === "authenticated" && user ? (
-          <div className="space-y-4">
-            <Card className="border-white/70 bg-white/78 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.8)] backdrop-blur-sm md:hidden">
-              <CardContent className="space-y-4 p-4">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="space-y-3">
-                    <BrandLogo />
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">
-                        Signed in
-                      </p>
-                      <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
-                        {userName}
-                      </h1>
-                      <p className="mt-1 text-sm leading-6 text-slate-600">
-                        {user.email
-                          ? `Authenticated as ${user.email}.`
-                          : "Your session is active in this browser."}
-                      </p>
-                    </div>
-                  </div>
-
-                  <Button
-                    className="rounded-2xl"
-                    disabled={isSigningOut}
-                    onClick={handleSignOut}
-                    size="icon"
-                    type="button"
-                    variant="outline"
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </Button>
-                </div>
-
-                <TabNavigation
-                  activeTab={activeTab}
-                  onChange={setActiveTab}
-                  orientation="horizontal"
-                />
-              </CardContent>
-            </Card>
-
-            <div className="grid gap-4 md:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
-              <aside className="hidden md:block">
-                <Card className="sticky top-6 border-white/70 bg-white/76 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.8)] backdrop-blur-sm">
-                  <CardContent className="space-y-6 p-5">
-                    <BrandLogo />
-
-                    <div className="rounded-3xl border border-white/70 bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(240,253,250,0.95))] p-4 shadow-[0_20px_60px_-45px_rgba(16,24,40,0.45)]">
-                      <div className="flex items-start gap-4">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-sm font-semibold text-white">
-                          {userInitials}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="truncate text-lg font-semibold text-slate-950">
-                            {userName}
-                          </p>
-                          <p className="mt-1 truncate text-sm text-slate-600">
-                            {user.email ?? "Authenticated browser session"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 space-y-3 rounded-2xl border border-slate-200 bg-white/85 p-3">
-                        <div className="flex items-center justify-between gap-3 text-sm">
-                          <span className="text-slate-500">Providers</span>
-                          <span className="text-right font-medium text-slate-950">
-                            {getProviderLabel(providerIds)}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between gap-3 text-sm">
-                          <span className="text-slate-500">User ID</span>
-                          <span className="max-w-[11rem] truncate font-medium text-slate-950">
-                            {user.uid}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-                          Workspace
-                        </p>
-                        <Badge className="bg-emerald-50 text-emerald-900" variant="secondary">
-                          Shell v1
-                        </Badge>
-                      </div>
-                      <TabNavigation activeTab={activeTab} onChange={setActiveTab} />
-                    </div>
-
-                    <div className="space-y-3 rounded-3xl border border-slate-200 bg-slate-50/80 p-4">
-                      <p className="text-sm font-semibold text-slate-950">
-                        Protected client session
-                      </p>
-                      <p className="text-sm leading-6 text-slate-600">
-                        Redirect and sign-out behavior stay intact while the app shell grows around them.
-                      </p>
-                    </div>
-
-                    <div className="space-y-3">
-                      <Button
-                        className="h-11 w-full rounded-2xl"
-                        disabled={isSigningOut}
-                        onClick={handleSignOut}
-                        type="button"
-                      >
-                        <LogOut className="mr-2 h-4 w-4" />
-                        {isSigningOut ? "Signing out..." : "Sign out"}
-                      </Button>
-                      <Button
-                        asChild
-                        className="h-11 w-full rounded-2xl"
-                        variant="outline"
-                      >
-                        <Link href="/">
-                          <MoveLeft className="mr-2 h-4 w-4" />
-                          Return to landing page
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </aside>
-
-              <section className="min-w-0 space-y-4">
-                {!configured ? (
-                  <Card className="border-amber-200 bg-amber-50 shadow-none">
-                    <CardContent className="p-4 text-sm text-amber-950">
-                      Firebase is not configured, so the dashboard cannot be opened yet.
-                    </CardContent>
-                  </Card>
-                ) : null}
-
-                {displayError ? (
-                  <Card className="border-rose-200 bg-rose-50 shadow-none">
-                    <CardContent className="p-4 text-sm text-rose-950">
-                      {displayError}
-                    </CardContent>
-                  </Card>
-                ) : null}
-
-                <Card className="border-white/70 bg-white/76 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.8)] backdrop-blur-sm">
-                  <CardHeader className="space-y-4 border-b border-slate-200/80 pb-5">
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                      <div className="space-y-3">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Badge className="bg-emerald-50 text-emerald-900" variant="secondary">
-                            Persistent navigation
-                          </Badge>
-                          <Badge className="border-slate-300 text-slate-700" variant="outline">
-                            {activeTabDefinition.stageLabel}
-                          </Badge>
-                        </div>
-                        <div className="space-y-2">
-                          <CardTitle className="text-3xl tracking-tight text-slate-950 sm:text-4xl">
-                            {activeTabDefinition.label}
-                          </CardTitle>
-                          <CardDescription className="max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
-                            {activeTabDefinition.description}
-                          </CardDescription>
-                        </div>
-                      </div>
-
-                      <div className="rounded-3xl border border-slate-200 bg-slate-50/85 px-4 py-3 text-sm leading-6 text-slate-600">
-                        Built as a stable dashboard frame first, so feature work can land without
-                        reworking layout or navigation.
-                      </div>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="p-4 sm:p-6">
-                    <Tabs activationMode="manual" value={activeTab}>
-                      <TabsContent
-                        aria-label="Overview content"
-                        className="mt-0"
-                        value="overview"
-                      >
-                        <OverviewPanel email={user.email} userName={userName} />
-                      </TabsContent>
-
-                      {dashboardTabs
-                        .filter((tab) => tab.id !== "overview")
-                        .map((tab) => (
-                          <TabsContent
-                            aria-label={`${tab.label} content`}
-                            className="mt-0"
-                            key={tab.id}
-                            value={tab.id}
-                          >
-                            <PlaceholderPanel tab={tab} />
-                          </TabsContent>
-                        ))}
-                    </Tabs>
-                  </CardContent>
-                </Card>
-              </section>
-            </div>
-          </div>
+          <DashboardChrome
+            activeTab={activeTab}
+            activeTabDefinition={activeTabDefinition}
+            configured={configured}
+            displayError={displayError}
+            handleSignOut={handleSignOut}
+            isSigningOut={isSigningOut}
+            providerIds={providerIds}
+            setActiveTab={setActiveTab}
+            user={user}
+            userInitials={userInitials}
+            userName={userName}
+          />
         ) : null}
       </main>
     </div>
