@@ -27,6 +27,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { signOut } from "@/lib/auth"
 import { cn } from "@/lib/utils"
 
@@ -163,6 +164,10 @@ function getProviderLabel(providerIds: string[]) {
     .join(", ")
 }
 
+function isDashboardTabId(value: string): value is DashboardTabId {
+  return dashboardTabs.some((tab) => tab.id === value)
+}
+
 type TabNavigationProps = Readonly<{
   activeTab: DashboardTabId
   className?: string
@@ -177,53 +182,67 @@ function TabNavigation({
   orientation = "vertical",
 }: TabNavigationProps) {
   return (
-    <div
-      aria-label="Dashboard sections"
-      className={cn(
-        "flex gap-2",
-        orientation === "horizontal"
-          ? "overflow-x-auto pb-1"
-          : "flex-col",
-        className
-      )}
-      role="tablist"
+    <Tabs
+      activationMode="manual"
+      onValueChange={(value) => {
+        if (isDashboardTabId(value)) {
+          onChange(value)
+        }
+      }}
+      orientation={orientation}
+      value={activeTab}
     >
-      {dashboardTabs.map((tab) => {
-        const Icon = tab.icon
-        const isActive = tab.id === activeTab
+      <TabsList
+        aria-label="Dashboard sections"
+        className={cn(
+          "h-auto gap-2 border border-white/70 bg-white/72 p-2 shadow-[0_24px_70px_-50px_rgba(40,42,71,0.35)] backdrop-blur-sm",
+          orientation === "horizontal"
+            ? "w-max min-w-full justify-start overflow-x-auto rounded-3xl"
+            : "flex w-full flex-col rounded-3xl",
+          className
+        )}
+      >
+        {dashboardTabs.map((tab) => {
+          const Icon = tab.icon
 
-        return (
-          <Button
-            aria-selected={isActive}
-            className={cn(
-              "h-auto min-w-fit justify-start gap-3 rounded-2xl border px-4 py-3 text-left whitespace-nowrap transition-all",
-              isActive
-                ? "border-slate-950 bg-slate-950 text-white shadow-lg shadow-slate-900/15 hover:bg-slate-900"
-                : "border-white/60 bg-white/65 text-slate-600 hover:bg-white hover:text-slate-950"
-            )}
-            key={tab.id}
-            onClick={() => onChange(tab.id)}
-            role="tab"
-            tabIndex={isActive ? 0 : -1}
-            type="button"
-            variant="ghost"
-          >
-            <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-emerald-300" : "text-emerald-600")} />
-            <span className="flex flex-col items-start">
-              <span className="text-sm font-semibold">{tab.label}</span>
-              <span
-                className={cn(
-                  "text-xs",
-                  isActive ? "text-slate-300" : "text-slate-500"
-                )}
-              >
-                {tab.stageLabel}
+          return (
+            <TabsTrigger
+              className={cn(
+                "h-auto min-w-fit gap-3 rounded-2xl border border-transparent px-4 py-3 text-left whitespace-nowrap shadow-none transition-all",
+                "[&[data-state=active]_[data-slot=icon]]:text-emerald-300 [&[data-state=active]_[data-slot=meta]]:text-slate-300 [&[data-state=active]_[data-slot=label]]:text-white",
+                "[&[data-state=inactive]_[data-slot=meta]]:text-slate-500 [&[data-state=inactive]_[data-slot=label]]:text-slate-700",
+                "data-[state=active]:border-slate-950 data-[state=active]:bg-slate-950 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-slate-900/15",
+                "data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-600",
+                orientation === "horizontal"
+                  ? "justify-start"
+                  : "w-full justify-start"
+              )}
+              key={tab.id}
+              value={tab.id}
+            >
+              <Icon
+                className="h-4 w-4 shrink-0 text-emerald-600 transition-colors"
+                data-slot="icon"
+              />
+              <span className="flex flex-col items-start">
+                <span
+                  className="text-sm font-semibold transition-colors"
+                  data-slot="label"
+                >
+                  {tab.label}
+                </span>
+                <span
+                  className="text-xs transition-colors"
+                  data-slot="meta"
+                >
+                  {tab.stageLabel}
+                </span>
               </span>
-            </span>
-          </Button>
-        )
-      })}
-    </div>
+            </TabsTrigger>
+          )
+        })}
+      </TabsList>
+    </Tabs>
   )
 }
 
@@ -663,16 +682,29 @@ export default function DashboardScreen() {
                     </div>
                   </CardHeader>
 
-                  <CardContent
-                    aria-label={`${activeTabDefinition.label} content`}
-                    className="p-4 sm:p-6"
-                    role="tabpanel"
-                  >
-                    {activeTab === "overview" ? (
-                      <OverviewPanel email={user.email} userName={userName} />
-                    ) : (
-                      <PlaceholderPanel tab={activeTabDefinition} />
-                    )}
+                  <CardContent className="p-4 sm:p-6">
+                    <Tabs activationMode="manual" value={activeTab}>
+                      <TabsContent
+                        aria-label="Overview content"
+                        className="mt-0"
+                        value="overview"
+                      >
+                        <OverviewPanel email={user.email} userName={userName} />
+                      </TabsContent>
+
+                      {dashboardTabs
+                        .filter((tab) => tab.id !== "overview")
+                        .map((tab) => (
+                          <TabsContent
+                            aria-label={`${tab.label} content`}
+                            className="mt-0"
+                            key={tab.id}
+                            value={tab.id}
+                          >
+                            <PlaceholderPanel tab={tab} />
+                          </TabsContent>
+                        ))}
+                    </Tabs>
                   </CardContent>
                 </Card>
               </section>
