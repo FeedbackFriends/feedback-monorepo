@@ -46,3 +46,17 @@ Set these public environment variables in the repo-root `.env` before using the
 - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` (optional)
 - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` (optional)
 - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` (optional)
+
+## Backend API types
+
+The frontend generates backend API types from the committed monorepo contract at
+`../contracts/openapi/feedback-api.yaml`.
+
+Refresh the generated types with:
+
+```bash
+npm run generate:api-types
+```
+
+This writes the generated TypeScript definitions to
+`src/lib/api/generated/openapi.ts`.

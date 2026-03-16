@@ -12,35 +12,22 @@ import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springdoc.core.customizers.OpenApiCustomizer
-import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.beans.factory.ObjectProvider
 
 @Configuration
-class OpenApiConfig(
-    private val buildPropertiesProvider: ObjectProvider<BuildProperties>,
-) {
+class OpenApiConfig {
 
     @Bean
     fun swagger(): OpenAPI {
+        val apiVersion = "v1"
         val securitySchemeName = "bearerAuth"
-        val version = buildPropertiesProvider.getIfAvailable()?.version ?: "dev"
-        val (_, commitHash) = version.split("-", limit = 2).let {
-            it.first() to it.getOrElse(1) { "unknown" }
-        }
         return OpenAPI()
             .info(
                 io.swagger.v3.oas.models.info.Info()
                     .title("Feedback API")
-                    .version(version)
-                    .description(
-                        """
-                        API documentation for Lets Grow application.
-
-                        [Link to GitHub commit](https://github.com/FeedbackFriends/feedback-backend/commit/$commitHash)
-                        """.trimIndent()
-                    )
+                    .version(apiVersion)
+                    .description("API documentation for Lets Grow application.")
             )
             .addSecurityItem(SecurityRequirement().addList(securitySchemeName))
             .components(

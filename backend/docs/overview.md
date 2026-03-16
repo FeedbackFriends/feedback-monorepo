@@ -23,5 +23,5 @@
 
 ## Local Development Tips
 - Configure Postgres via `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_DB`, `POSTGRES_USER`, and `POSTGRES_PASSWORD`.
-- OpenAPI docs live at `/` (Swagger UI) and `/v3/api-docs.yaml`; regenerate spec with `SPRING_PROFILES_ACTIVE=openapi ./gradlew :api:generateOpenApiDocs` if you add endpoints.
+- OpenAPI docs live at `/` (Swagger UI) and `/v3/api-docs.yaml`; regenerate the committed contract with `SPRING_PROFILES_ACTIVE=openapi ./gradlew syncOpenApiSpec --no-configuration-cache` if you add endpoints.
 - Keep DTOs in `model`, business logic in `service`, and database details in `persistence` to maintain module boundaries.

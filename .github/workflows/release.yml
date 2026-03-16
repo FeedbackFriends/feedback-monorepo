@@ -24,7 +24,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           ref: ${{ env.SOURCE_SHA }}
 
       - name: Compute versions
@@ -41,13 +40,6 @@ jobs:
           java-version: "21"
           distribution: "temurin"
           cache: gradle
-
-      - name: Generate OpenAPI spec
-        env:
-          SPRING_PROFILES_ACTIVE: openapi
-        run: |
-          ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
-        working-directory: backend
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -98,7 +90,7 @@ jobs:
           set -euo pipefail
 
           gh release create "${RELEASE_TAG}" \
-            backend/apps/api/build/openapi.yaml \
+            contracts/openapi/feedback-api.yaml \
             --generate-notes \
             --title "Release ${VERSION}"
 

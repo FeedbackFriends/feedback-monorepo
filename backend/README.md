@@ -62,11 +62,13 @@ Run the services:
 Swagger UI is served at `http://localhost:8080/` and the OpenAPI YAML at `http://localhost:8080/v3/api-docs.yaml`.
 
 ### OpenAPI Generation
-Generate the API spec with the dedicated `openapi` profile:
+Generate and sync the canonical API spec with the dedicated `openapi` profile:
 
 ```bash
-SPRING_PROFILES_ACTIVE=openapi ./gradlew :api:generateOpenApiDocs --no-configuration-cache
+SPRING_PROFILES_ACTIVE=openapi ./gradlew syncOpenApiSpec --no-configuration-cache
 ```
+
+This writes the committed monorepo contract to `../contracts/openapi/feedback-api.yaml`. Do not edit that file by hand.
 
 ## Tests And Tooling
 - `./gradlew test` runs all backend tests.

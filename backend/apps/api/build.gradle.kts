@@ -47,7 +47,7 @@ springBoot {
 }
 
 openApi {
-    apiDocsUrl.set("http://localhost:8080/v3/api-docs")
+    apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
     outputFileName.set("openapi.yaml")
     waitTimeInSeconds.set(60)
 }
