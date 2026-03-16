@@ -15,6 +15,16 @@
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "computedHash": "e14cfdd2544888373d85ba4afe548dd21df1a0730485e213b5c79bb2df4f7289"
+    },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "computedHash": "1ec42c9b918b315d8e5c6c856b78c3c4725fc93dea30b9b7e9975c69848fcce6"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "computedHash": "0a413bf988d06481f69bb81df2070741c3ba12dd9f1be2706d57f259c905992d"
     }
   }
 }
