@@ -136,7 +136,7 @@ Important deployment assumptions:
 GitHub Actions in `.github/workflows/` handle validation and releases.
 
 - `ci.yml` runs backend build/tests plus web install, lint, and build
-- `release.yml` builds and publishes Docker images, creates a GitHub release with the committed OpenAPI contract, and triggers deployment
+- `release.yml` runs web e2e tests, builds and publishes Docker images, creates a GitHub release with the committed OpenAPI contract, and triggers deployment
 
 ## Where To Work
 

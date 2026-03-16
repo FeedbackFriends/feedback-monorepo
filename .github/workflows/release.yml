@@ -41,6 +41,31 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install web dependencies
+        run: npm ci
+        working-directory: web
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('web/package-lock.json') }}
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+        working-directory: web
+
+      - name: Run web e2e tests
+        run: npm run test:e2e
+        working-directory: web
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
