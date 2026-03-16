@@ -1,0 +1,111 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Crash" : {
+
+    },
+    "Debug session" : {
+
+    },
+    "Failed to encode session" : {
+
+    },
+    "Hide" : {
+
+    },
+    "Local mock notification" : {
+
+    },
+    "Local session" : {
+
+    },
+    "Logout" : {
+
+    },
+    "No local session" : {
+
+    },
+    "notification_feedback_received_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have received %@ feedback on ‘%@’ "
+          }
+        }
+      }
+    },
+    "notification_feedback_received_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New feedback 🔥"
+          }
+        }
+      }
+    },
+    "notification_start_feedback_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicolai really wants the feedback from you, tap to start the feedback session."
+          }
+        }
+      }
+    },
+    "notification_start_feedback_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "It is time for feedback 🔥"
+          }
+        }
+      }
+    },
+    "notification_team_invite_received_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to accept the invite"
+          }
+        }
+      }
+    },
+    "notification_team_invite_received_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You received a team invitation🔥"
+          }
+        }
+      }
+    },
+    "Print fcm token" : {
+
+    },
+    "Print id token" : {
+
+    },
+    "Server session" : {
+
+    },
+    "Show session data" : {
+
+    },
+    "Sign in with Mock" : {
+
+    }
+  },
+  "version" : "1.0"
+}

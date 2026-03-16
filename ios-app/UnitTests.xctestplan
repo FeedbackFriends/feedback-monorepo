@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "CFCA8DAE-EC9F-46B8-A4CA-2FB98127B998",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Modules",
+        "identifier" : "AppTests",
+        "name" : "AppTests"
+      }
+    }
+  ],
+  "version" : 1
+}

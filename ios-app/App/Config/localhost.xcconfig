@@ -1,0 +1,7 @@
+#include "default.xcconfig"
+
+//API_BASE_URL = chadless-larcenously-davin.ngrok-free.dev
+//API_SCHEME = https
+//API_BASE_URL = proxyman.debug:8080
+API_BASE_URL =  chadless-larcenously-davin.ngrok-free.dev
+API_SCHEME =  https

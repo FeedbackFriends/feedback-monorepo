@@ -1,0 +1,7 @@
+#include? "secrets.xcconfig"
+
+APPSTORE_ID = 6742420307
+SUPPORT_EMAIL = nicolaidam96@gmail.com
+WEB_BASE_URL = letsgrow.dk
+WEB_SCHEME = https
+MARKETING_VERSION = 1.1.2

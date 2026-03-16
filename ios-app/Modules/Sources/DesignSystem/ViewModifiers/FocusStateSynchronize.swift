@@ -1,0 +1,16 @@
+import SwiftUI
+
+public extension View {
+    func synchronize<Value>(
+        _ first: Binding<Value>,
+        _ second: FocusState<Value>.Binding
+    ) -> some View {
+        self
+            .onChange(of: first.wrappedValue, { _, newValue in
+                second.wrappedValue = newValue
+            })
+            .onChange(of: second.wrappedValue, { _, newValue in
+                first.wrappedValue = newValue
+            })
+    }
+}
