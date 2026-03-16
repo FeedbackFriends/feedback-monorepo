@@ -11,6 +11,7 @@
     "build": "dotenv -e ../.env -- next build",
     "start": "dotenv -e ../.env -- next start",
     "lint": "eslint .",
+    "generate:api-types": "openapi-typescript ../contracts/openapi/feedback-api.yaml -o src/lib/api/generated/openapi.ts",
     "test:e2e": "playwright test"
   },
   "dependencies": {
@@ -37,6 +38,7 @@
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^5.0.0",
     "globals": "^15.12.0",
+    "openapi-typescript": "^7.13.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^4.2.1",
     "typescript": "~5.6.2",

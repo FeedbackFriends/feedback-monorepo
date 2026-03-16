@@ -1,5 +1,6 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.tasks.Copy
 
 plugins {
     kotlin("jvm") version libs.versions.kotlin
@@ -37,4 +38,17 @@ subprojects {
             }
         }
     }
+}
+
+tasks.register<Copy>("syncOpenApiSpec") {
+    group = "documentation"
+    description = "Generates the API OpenAPI spec and copies it to the monorepo contracts directory."
+
+    dependsOn(":api:generateOpenApiDocs")
+
+    from(layout.projectDirectory.dir("apps/api/build")) {
+        include("openapi.yaml")
+        rename { "feedback-api.yaml" }
+    }
+    into(layout.projectDirectory.dir("../contracts/openapi"))
 }

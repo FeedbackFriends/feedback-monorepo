@@ -24,7 +24,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           ref: ${{ env.SOURCE_SHA }}
 
       - name: Compute versions
@@ -42,12 +41,30 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
-      - name: Generate OpenAPI spec
-        env:
-          SPRING_PROFILES_ACTIVE: openapi
-        run: |
-          ./gradlew :api:generateOpenApiDocs --no-configuration-cache -Pversion=${VERSION}
-        working-directory: backend
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install web dependencies
+        run: npm ci
+        working-directory: web
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('web/package-lock.json') }}
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+        working-directory: web
+
+      - name: Run web e2e tests
+        run: npm run test:e2e
+        working-directory: web
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -98,7 +115,7 @@ jobs:
           set -euo pipefail
 
           gh release create "${RELEASE_TAG}" \
-            backend/apps/api/build/openapi.yaml \
+            contracts/openapi/feedback-api.yaml \
             --generate-notes \
             --title "Release ${VERSION}"
 

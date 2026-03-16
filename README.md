@@ -83,11 +83,13 @@ docker compose logs -f
 docker compose ps
 ```
 
-Generate the API OpenAPI spec from the repo root:
+Generate the canonical API OpenAPI contract from the repo root:
 
 ```bash
-cd backend && SPRING_PROFILES_ACTIVE=openapi ./gradlew :api:generateOpenApiDocs --no-configuration-cache
+cd backend && SPRING_PROFILES_ACTIVE=openapi ./gradlew syncOpenApiSpec --no-configuration-cache
 ```
+
+The generated contract is committed at `contracts/openapi/feedback-api.yaml`. Frontend type generation in `web/` reads from that file.
 
 How Compose is wired:
 
@@ -134,7 +136,7 @@ Important deployment assumptions:
 GitHub Actions in `.github/workflows/` handle validation and releases.
 
 - `ci.yml` runs backend build/tests plus web install, lint, and build
-- `release.yml` builds and publishes Docker images, generates OpenAPI output, creates a GitHub release, and triggers deployment
+- `release.yml` runs web e2e tests, builds and publishes Docker images, creates a GitHub release with the committed OpenAPI contract, and triggers deployment
 
 ## Where To Work
 

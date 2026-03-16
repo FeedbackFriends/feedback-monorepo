@@ -38,29 +38,29 @@ jobs:
 
       - name: Test and build backend
         run: |
-          ./gradlew clean build
+          ./gradlew build
+        working-directory: backend
+
+      - name: Sync committed OpenAPI contract
+        env:
+          SPRING_PROFILES_ACTIVE: openapi
+        run: |
+          ./gradlew syncOpenApiSpec --no-configuration-cache
         working-directory: backend
 
       - name: Install web dependencies
         run: npm ci
         working-directory: web
 
+      - name: Generate frontend API types
+        run: npm run generate:api-types
+        working-directory: web
+
+      - name: Verify committed API artifacts are up to date
+        run: git diff --exit-code -- contracts/openapi/feedback-api.yaml web/src/lib/api/generated/openapi.ts
+
       - name: Lint and build web
         run: |
           npm run lint
           npm run build
-        working-directory: web
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('web/package-lock.json') }}
-
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
-        working-directory: web
-
-      - name: Run web e2e tests
-        run: npm run test:e2e
         working-directory: web
