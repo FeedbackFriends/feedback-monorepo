@@ -437,7 +437,6 @@
 				7AE1561C2D26AD4900440870 /* Sources */,
 				7AE1561D2D26AD4900440870 /* Frameworks */,
 				7AE1561E2D26AD4900440870 /* Resources */,
-				7AE156302D26AD5200440870 /* Fetch Open Api from localhost and copy to APIClient yaml */,
 			);
 			buildRules = (
 			);
@@ -653,24 +652,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Adds support for Apple Silicon brew directory\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n  swiftlint lint --fix\n  swiftlint lint --reporter xcode\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n\n\n";
-		};
-		7AE156302D26AD5200440870 /* Fetch Open Api from localhost and copy to APIClient yaml */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch Open Api from localhost and copy to APIClient yaml";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nOPEN_API_PATH=\"$SRCROOT/Modules/Sources/OpenAPI/openapi.yaml\"\nOPENAPI_URL=\"https://github.com/FeedbackFriends/feedback-backend/releases/latest/download/openapi.yaml\"\n\n# Fetch the OpenAPI YAML from the provided URL\ncurl -s $OPENAPI_URL -o /tmp/openapi.yaml\n\n# Check if the download was successful\nif [ $? -ne 0 ]; then\n    echo \"Failed to download the OpenAPI YAML file.\"\n    exit 0  # Continue the build without failing\nfi\n\n# Replace the existing YAML file only if the download was successful\nif [ -f /tmp/openapi.yaml ]; then\n    cp /tmp/openapi.yaml $OPEN_API_PATH\n    echo \"openapi.yaml updated successfully.\"\nelse\n    echo \"Temporary openapi.yaml file not found. Keeping the old version.\"\nfi\n";
 		};
 		95CAC281A1DE47568C620263 /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;

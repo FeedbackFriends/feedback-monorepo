@@ -55,10 +55,11 @@ See also: `Xcode_project/Modules/Package.swift` for module targets and dependenc
 
 ## 🔌 API Layer
 
-The API layer is fully generated from our [OpenAPI specification](https://github.com/FeedbackFriends/feedback-openapi).  
+The API layer is fully generated from the committed monorepo OpenAPI contract.  
 This ensures the client stays in sync with the backend contract.
 
-- Spec and generated client live under `Xcode_project/Modules/Sources/OpenAPI/`.
+- Canonical spec lives at `../contracts/openapi/feedback-api.yaml`.
+- `Modules/Sources/OpenAPI/openapi.yaml` is a symlink to that contract so the Swift OpenAPI plugin can consume it.
 - Generation is handled by the Swift OpenAPI Generator plugin during builds; no manual step needed.
 - The live `APIClient` is injected via TCA dependencies.
 
