@@ -38,7 +38,7 @@ jobs:
 
       - name: Test and build backend
         run: |
-          ./gradlew clean build
+          ./gradlew build
         working-directory: backend
 
       - name: Sync committed OpenAPI contract
