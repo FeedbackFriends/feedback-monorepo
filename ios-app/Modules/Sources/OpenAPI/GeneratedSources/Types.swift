@@ -1433,21 +1433,6 @@ public enum Components {
                 case sessionHash
             }
         }
-        /// - Remark: Generated from `#/components/schemas/UpdatedSessionResponse`.
-        public struct UpdatedSessionResponse: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/UpdatedSessionResponse/session`.
-            public var session: Components.Schemas.SessionDto?
-            /// Creates a new `UpdatedSessionResponse`.
-            ///
-            /// - Parameters:
-            ///   - session:
-            public init(session: Components.Schemas.SessionDto? = nil) {
-                self.session = session
-            }
-            public enum CodingKeys: String, CodingKey {
-                case session
-            }
-        }
         /// - Remark: Generated from `#/components/schemas/ApiError`.
         public struct ApiError: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/ApiError/timestamp`.
@@ -4165,12 +4150,12 @@ public enum Operations {
                 /// - Remark: Generated from `#/paths/bootstrap/bootstrap-update/{hash}/GET/responses/200/content`.
                 @frozen public enum Body: Sendable, Hashable {
                     /// - Remark: Generated from `#/paths/bootstrap/bootstrap-update/{hash}/GET/responses/200/content/application\/json`.
-                    case json(Components.Schemas.UpdatedSessionResponse)
+                    case json(Components.Schemas.BootstrapDto)
                     /// The associated value of the enum case if `self` is `.json`.
                     ///
                     /// - Throws: An error if `self` is not `.json`.
                     /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.UpdatedSessionResponse {
+                    public var json: Components.Schemas.BootstrapDto {
                         get throws {
                             switch self {
                             case let .json(body):

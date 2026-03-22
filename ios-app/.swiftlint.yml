@@ -45,3 +45,4 @@ included:
   - Modules/Sources
 excluded:
   - Modules/Tests
+  - Modules/Sources/OpenAPI/GeneratedSources

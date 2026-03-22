@@ -196,14 +196,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/session": {
+    "/bootstrap": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getSession"];
+        get: operations["getBootstrap"];
         put?: never;
         post?: never;
         delete?: never;
@@ -212,14 +212,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/session/session-update/{feedbackSessionHash}": {
+    "/bootstrap/bootstrap-update/{hash}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getUpdatedSession"];
+        get: operations["getBoostrapUpdate"];
         put?: never;
         post?: never;
         delete?: never;
@@ -264,204 +264,79 @@ export interface components {
             /** @enum {string} */
             feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
         };
-        EmojiQuestionFeedbackSummary: {
-            /** Format: int32 */
-            countVerySad: number;
-            /** Format: int32 */
-            countSad: number;
-            /** Format: int32 */
-            countHappy: number;
-            /** Format: int32 */
-            countVeryHappy: number;
-            /** Format: double */
-            percentageVerySad: number;
-            /** Format: double */
-            percentageSad: number;
-            /** Format: double */
-            percentageHappy: number;
-            /** Format: double */
-            percentageVeryHappy: number;
+        AutomationSettings: {
+            botEmail: string;
+            isActive: boolean;
         };
-        EventWrapperDto: {
-            event: components["schemas"]["ManagerEventDto"];
-            recentlyUsedQuestions: components["schemas"]["RecentlyUsedQuestions"][];
-        };
-        FeedbackEntity: {
-            /** Format: uuid */
-            id: string;
-            /** @enum {string} */
-            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
-            comment?: string;
-            /** @enum {string} */
-            emoji?: "VerySad" | "Sad" | "Happy" | "VeryHappy";
-            /** @enum {string} */
-            thumbsUpThumpsDown?: "Up" | "Down";
-            /** @enum {string} */
-            opinion?: "StronglyDisagree" | "Disagree" | "Neutral" | "Agree" | "StronglyAgree";
-            /** Format: int32 */
-            zeroToTen?: number;
-            /** Format: uuid */
-            questionId: string;
-            participantId?: string;
-            seenByManager: boolean;
-            /** Format: date-time */
-            createdAt: string;
-        };
-        ManagerEventDto: {
+        FeedbackFlowDto: {
             /** Format: uuid */
             id: string;
             title: string;
-            agenda?: string;
-            /** Format: date-time */
-            date: string;
-            pinCode?: string;
-            /** Format: int32 */
-            durationInMinutes: number;
-            location?: string;
-            /** @enum {string} */
-            calendarProvider?: "GOOGLE" | "APPLE" | "MICROSOFT" | "ZOOM";
-            isDraft: boolean;
-            ownerInfo: components["schemas"]["OwnerInfoDto"];
-            overallFeedbackSummary?: components["schemas"]["OverallFeedbackSummaryDto"];
-            invitedEmails: string[];
-            participants: components["schemas"]["ParticipantSummaryDto"][];
-            questions: components["schemas"]["ManagerQuestion"][];
+            owner: components["schemas"]["OwnerDto"];
+            newFeedback: boolean;
+            analytics: components["schemas"]["FlowAnalytics"];
+            insights: components["schemas"]["FlowInsights"];
+            sessions: components["schemas"]["SessionDto"][];
+            sessionSettings: components["schemas"]["SessionSettings"];
+            currentQuestions: components["schemas"]["QuestionDto"][];
         };
-        ManagerQuestion: {
+        FlowAnalytics: {
+            /** Format: double */
+            averageRating?: number;
+            /** @enum {string} */
+            trendStatus?: "IMPROVING" | "STABLE" | "NEEDS_ATTENTION";
+            /** Format: date-time */
+            lastSessionAt?: string;
+            ratingTrend: components["schemas"]["RatingPoint"][];
+        };
+        FlowInsights: {
+            summary?: string;
+        };
+        OwnerDto: {
             /** Format: uuid */
             id: string;
-            questionText: string;
-            /** @enum {string} */
-            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
-            feedback: components["schemas"]["FeedbackEntity"][];
-            questionFeedbackSummary?: components["schemas"]["QuestionFeedbackSummaryDto"];
+            name: string;
+            email: string;
         };
-        OpinionQuestionFeedbackSummary: {
-            /** Format: int32 */
-            countStronglyAgree: number;
-            /** Format: int32 */
-            countAgree: number;
-            /** Format: int32 */
-            countStronglyDisagree: number;
-            /** Format: int32 */
-            countDisagree: number;
-            /** Format: double */
-            percentageStronglyAgree: number;
-            /** Format: double */
-            percentageAgree: number;
-            /** Format: double */
-            percentageStronglyDisagree: number;
-            /** Format: double */
-            percentageDisagree: number;
+        QuestionDto: {
+            id: string;
+            text: string;
         };
-        OverallFeedbackCountStatsDto: {
-            /** Format: int32 */
-            verySadCount: number;
-            /** Format: int32 */
-            sadCount: number;
-            /** Format: int32 */
-            happyCount: number;
-            /** Format: int32 */
-            veryHappyCount: number;
-            /** Format: int32 */
-            commentsCount: number;
+        QuestionSummaryDto: {
+            positives: string[];
+            improvements: string[];
         };
-        OverallFeedbackSegmentationStatsDto: {
+        RatingPoint: {
             /** Format: double */
-            verySadPercentage: number;
-            /** Format: double */
-            sadPercentage: number;
-            /** Format: double */
-            happyPercentage: number;
-            /** Format: double */
-            veryHappyPercentage: number;
-        };
-        OverallFeedbackSummaryDto: {
-            segmentationStats: components["schemas"]["OverallFeedbackSegmentationStatsDto"];
-            countStats: components["schemas"]["OverallFeedbackCountStatsDto"];
-            /** Format: int32 */
-            unseenResponses: number;
-            /** Format: int32 */
-            responses: number;
-        };
-        OwnerInfoDto: {
-            name?: string;
-            email?: string;
-            phoneNumber?: string;
-        };
-        ParticipantSummaryDto: {
-            name?: string;
-            email?: string;
-            phoneNumber?: string;
-        };
-        QuestionFeedbackSummaryDto: {
-            emojiQuestionFeedbackSummary?: components["schemas"]["EmojiQuestionFeedbackSummary"];
-            thumpsQuestionFeedbackSummary?: components["schemas"]["ThumpsQuestionFeedbackSummary"];
-            opinionQuestionFeedbackSummary?: components["schemas"]["OpinionQuestionFeedbackSummary"];
-            zeroToTenQuestionFeedbackSummary?: components["schemas"]["ZeroToTenQuestionFeedbackSummary"];
-        };
-        RecentlyUsedQuestions: {
-            questionText: string;
-            /** @enum {string} */
-            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
+            value: number;
             /** Format: date-time */
-            updatedAt: string;
+            timestamp: string;
         };
-        ThumpsQuestionFeedbackSummary: {
+        RecurringSettings: {
+            /** @enum {string} */
+            frequency: "WEEKLY" | "MONTHLY";
+            /** @enum {string} */
+            dayOfWeek?: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
             /** Format: int32 */
-            countUp: number;
-            /** Format: int32 */
-            countDown: number;
-            /** Format: double */
-            percentageUp: number;
-            /** Format: double */
-            percentageDown: number;
+            dayOfMonth?: number;
+            time: string;
         };
-        ZeroToTenQuestionFeedbackSummary: {
-            /** Format: int32 */
-            countValue0: number;
-            /** Format: int32 */
-            countValue1: number;
-            /** Format: int32 */
-            countValue2: number;
-            /** Format: int32 */
-            countValue3: number;
-            /** Format: int32 */
-            countValue4: number;
-            /** Format: int32 */
-            countValue5: number;
-            /** Format: int32 */
-            countValue6: number;
-            /** Format: int32 */
-            countValue7: number;
-            /** Format: int32 */
-            countValue8: number;
-            /** Format: int32 */
-            countValue9: number;
-            /** Format: int32 */
-            countValue10: number;
+        SessionDto: {
+            /** Format: uuid */
+            id: string;
             /** Format: double */
-            percentageValue0: number;
+            averageRating?: number;
             /** Format: double */
-            percentageValue1: number;
-            /** Format: double */
-            percentageValue2: number;
-            /** Format: double */
-            percentageValue3: number;
-            /** Format: double */
-            percentageValue4: number;
-            /** Format: double */
-            percentageValue5: number;
-            /** Format: double */
-            percentageValue6: number;
-            /** Format: double */
-            percentageValue7: number;
-            /** Format: double */
-            percentageValue8: number;
-            /** Format: double */
-            percentageValue9: number;
-            /** Format: double */
-            percentageValue10: number;
+            ratingDelta?: number;
+            summary?: string;
+            questionSummary?: components["schemas"]["QuestionSummaryDto"];
+            questionsSnapshot: components["schemas"]["QuestionDto"][];
+        };
+        SessionSettings: {
+            /** @enum {string} */
+            source: "MANUAL" | "RECURRING" | "CALENDAR_AUTOMATION";
+            recurring?: components["schemas"]["RecurringSettings"];
+            automation?: components["schemas"]["AutomationSettings"];
         };
         SendNotificationInput: {
             fcmToken: string;
@@ -500,6 +375,11 @@ export interface components {
         SubmitFeedbackInput: {
             feedback: components["schemas"]["FeedbackInput"][];
             pinCode: string;
+        };
+        OwnerInfoDto: {
+            name?: string;
+            email?: string;
+            phoneNumber?: string;
         };
         ParticipantEventDto: {
             /** Format: uuid */
@@ -557,6 +437,9 @@ export interface components {
             requestedRole?: string;
             fcmToken?: string;
         };
+        LogoutInput: {
+            fcmToken: string;
+        };
         AccountInfoDto: {
             name?: string;
             email?: string;
@@ -579,24 +462,16 @@ export interface components {
             newFeedbackCount: number;
             seenByManager: boolean;
         };
-        ManagerDataDto: {
-            managerEvents: components["schemas"]["ManagerEventDto"][];
-            activity: components["schemas"]["ActivityDto"];
-            recentlyUsedQuestions: components["schemas"]["RecentlyUsedQuestions"][];
-            /** Format: uuid */
-            feedbackSessionHash: string;
-        };
-        SessionDto: {
+        BootstrapDto: {
             role?: string;
             accountInfo: components["schemas"]["AccountInfoDto"];
-            participantEvents: components["schemas"]["ParticipantEventDto"][];
             managerData?: components["schemas"]["ManagerDataDto"];
         };
-        LogoutInput: {
-            fcmToken: string;
-        };
-        UpdatedSessionResponse: {
-            session?: components["schemas"]["SessionDto"];
+        ManagerDataDto: {
+            feedbackFlows: components["schemas"]["FeedbackFlowDto"][];
+            activity: components["schemas"]["ActivityDto"];
+            /** Format: uuid */
+            sessionHash: string;
         };
         ApiError: {
             timestamp?: string;
@@ -636,7 +511,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventWrapperDto"];
+                    "application/json": components["schemas"]["FeedbackFlowDto"];
                 };
             };
             /** @description Internal Server Error */
@@ -977,7 +852,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventWrapperDto"];
+                    "application/json": components["schemas"]["FeedbackFlowDto"];
                 };
             };
             /** @description Internal Server Error */
@@ -1086,7 +961,7 @@ export interface operations {
             };
         };
     };
-    getSession: {
+    getBootstrap: {
         parameters: {
             query?: never;
             header?: never;
@@ -1101,7 +976,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SessionDto"];
+                    "application/json": components["schemas"]["BootstrapDto"];
                 };
             };
             /** @description Internal Server Error */
@@ -1115,12 +990,12 @@ export interface operations {
             };
         };
     };
-    getUpdatedSession: {
+    getBoostrapUpdate: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                feedbackSessionHash: string;
+                hash: string;
             };
             cookie?: never;
         };
@@ -1132,7 +1007,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UpdatedSessionResponse"];
+                    "application/json": components["schemas"]["BootstrapDto"];
                 };
             };
             /** @description Internal Server Error */

@@ -54,8 +54,8 @@ public extension APIClient {
             },
             getSession: {
                 try await withAuthorization {
-                    let sessionDto = try await api.getSession().ok.body.json
-                    let newSession = Session(sessionDto)
+                    let bootstrap = try await api.getBootstrap().ok.body.json
+                    let newSession = Session(bootstrap)
                     await sessionCache.updateSession(newSession)
                     return newSession
                 }
@@ -96,7 +96,6 @@ public extension APIClient {
                     await sessionCache.updateOrAppendManagerEvent(
                         event: eventWrapper.event
                     )
-                    await sessionCache.updateRecentlyUsedQuestions(recentlyUsedQuestions: eventWrapper.recentlyUsedQuestions)
                     return eventWrapper.event
                 }
             },
@@ -106,7 +105,6 @@ public extension APIClient {
                     await sessionCache.updateOrAppendManagerEvent(
                         event: eventWrapper.event
                     )
-                    await sessionCache.updateRecentlyUsedQuestions(recentlyUsedQuestions: eventWrapper.recentlyUsedQuestions)
                     return eventWrapper.event
                 }
             },
@@ -119,17 +117,19 @@ public extension APIClient {
             },
             createAccount: { optionalRole in
                 return try await withAuthorization(forceRefreshAfter: true) {
-                    let sessionDto = try await api.createAccount(
+                    let fcmToken = await provideFcmToken()
+                    _ = try await api.createAccount(
                         .init(
                             body: .json(
                                 .init(
                                     requestedRole: optionalRole?.rawValue.uppercasingFirst(),
-                                    fcmToken: provideFcmToken()
+                                    fcmToken: fcmToken
                                 )
                             )
                         )
-                    ).ok.body.json
-                    let session = Session(sessionDto)
+                    ).ok
+                    let bootstrap = try await api.getBootstrap().ok.body.json
+                    let session = Session(bootstrap)
                     await sessionCache.updateSession(session)
                     return session
                 }
@@ -175,16 +175,20 @@ public extension APIClient {
             getUpdatedSession: {
                 guard let feedbackSessionHash = await sessionCache.feedbackSessionHash else { return .none }
                 let optionalSessionDto = try await withAuthorization {
-                    try await api.getUpdatedSession(
+                    try await api.getBoostrapUpdate(
                         .init(
-                            path: .init(feedbackSessionHash: feedbackSessionHash.uuidString)
+                            path: .init(hash: feedbackSessionHash.uuidString)
                         )
                     ).ok.body.json.session
                 }
                 guard let sessionDto = optionalSessionDto else {
                     return .none
                 }
-                let session = Session(sessionDto)
+                _ = sessionDto
+                let bootstrap = try await withAuthorization {
+                    try await api.getBootstrap().ok.body.json
+                }
+                let session = Session(bootstrap)
                 await sessionCache.updateSession(session)
                 return session
             },

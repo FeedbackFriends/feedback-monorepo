@@ -374,7 +374,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UpdatedSessionResponse"
+                $ref: "#/components/schemas/BootstrapDto"
         "500":
           description: Internal Server Error
           content:
@@ -953,11 +953,6 @@ components:
       - activity
       - feedbackFlows
       - sessionHash
-    UpdatedSessionResponse:
-      type: object
-      properties:
-        session:
-          $ref: "#/components/schemas/SessionDto"
     ApiError:
       properties:
         timestamp:
