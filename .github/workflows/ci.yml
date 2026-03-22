@@ -64,3 +64,34 @@ jobs:
           npm run lint
           npm run build
         working-directory: web
+
+  verify-swift-api-artifacts:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK environment
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: gradle
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install web dependencies
+        run: npm ci
+        working-directory: web
+
+      - name: Generate committed API artifacts
+        run: ./scripts/generate-api-artifacts.sh
+
+      - name: Verify committed Swift API artifacts are up to date
+        run: git diff --exit-code -- ios-app/Modules/Sources/OpenAPI/GeneratedSources

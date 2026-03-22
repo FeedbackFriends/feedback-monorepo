@@ -5,12 +5,13 @@ import SwiftUI
 import ComposableArchitecture
 import FeedbackFlowFeature
 import Utility
+import EnterCodeFeature
 
 public struct TabbarView: View {
     
     @Environment(\.scenePhase) private var scenePhase
     @Bindable var store: StoreOf<Tabbar>
-    @State private var isShowingWelcomeOnboarding = false
+    @StateObject private var viewModel = GrowthViewModel()
     
     public init(store: StoreOf<Tabbar>) {
         self.store = store
@@ -24,13 +25,13 @@ public struct TabbarView: View {
                 await self.store.send(.tabbarLifecyle(.onTask)).finish()
                 resetSelectedTabIfNeeded()
             }
-            .overlay(alignment: .bottomTrailing) {
-                if shouldShowJoinFloatingActionButton {
-                    joinFloatingActionButton
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 80)
-                }
-            }
+//            .overlay(alignment: .bottomTrailing) {
+//                if shouldShowJoinFloatingActionButton {
+//                    joinFloatingActionButton
+//                        .padding(.trailing, 20)
+//                        .padding(.bottom, 80)
+//                }
+//            }
             .onChange(of: scenePhase) { _, newValue in
                 switch newValue {
                 case .active:
@@ -97,31 +98,73 @@ private extension TabbarView {
     var tabView: some View {
         TabView(selection: $store.selectedTab) {
             NavigationStack {
-                feedbackTabContent
-                    .navigationTitle("Give feedback")
+                EnterCodeView(store: store.scope(state: \.enterCode, action: \.enterCode))
             }
             .tabItem {
                 Image.letsGrowIconTab
-                Text("Give feedback")
+                Text("Give Feedback")
             }
             .tag(Tab.feedback)
             
             if isManager {
+                GrowView()
+                    .environmentObject(viewModel)
+                    .tabItem {
+                        Label("Activities", systemImage: "calendar")
+                    }
+//                NavigationStack {
+//                    ContentView()
+////                    List {
+////                        WorkshopsView()
+////    //                    switch store.session.account {
+////    //                    case .manager:
+////    //                        managerEventsView
+////    //                            .navigationTitle("Sessions")
+////    //                            .toolbar {
+////    //                                activityToolbarItem(store.session.activityBadgeCount)
+////    //                                ToolbarSpacer(.flexible)
+////    //                                draftsToolbarItem(store.session.managerData?.draftEvents.count ?? 0)
+////    //                                createEventToolbarItem
+////    //                            }
+////    //                    case .participant:
+////    //                        participantEventsView
+////    //                            .navigationTitle("Sessions")
+////    //                            .toolbar {
+////    //                                joinEventToolbarItem
+////    //                                activityToolbarItem(store.session.activityBadgeCount)
+////    //                            }
+////    //                    case .anonymous:
+////    //                        participantEventsView
+////    //                            .navigationTitle("Sessions")
+////    //                            .toolbar {
+////    //                                createEventToolbarItem
+////    //                                activityToolbarItem(store.session.activityBadgeCount)
+////    //                            }
+////    //                    }
+////                    }
+////                    .navigationTitle("Workshops")
+//                }
+//                .tabItem {
+//                    Image.calendar
+//                    Text("Workshops")
+//                }
+                .tag(Tab.events)
+                
                 NavigationStack {
                     managerEventsView
                         .navigationTitle("My sessions")
-                        .navigationDestination(isPresented: $isShowingWelcomeOnboarding) {
-                            WelcomeOnboardingView(
-                                accountEmail: store.session.accountInfo.email,
-                                primaryAction: {
-                                    isShowingWelcomeOnboarding = false
-                                }
-                            )
-                        }
-                        .toolbar {
-                            activityToolbarItem(store.session.activityBadgeCount)
-                            welcomeOnboardingToolbarItem
-                        }
+//                        .navigationDestination(isPresented: $isShowingWelcomeOnboarding) {
+//                            WelcomeOnboardingView(
+//                                accountEmail: store.session.accountInfo.email,
+//                                primaryAction: {
+//                                    isShowingWelcomeOnboarding = false
+//                                }
+//                            )
+//                        }
+//                        .toolbar {
+//                            activityToolbarItem(store.session.activityBadgeCount)
+//                            welcomeOnboardingToolbarItem
+//                        }
                 }
                 .tabItem {
                     Image.calendar
@@ -170,10 +213,7 @@ private extension TabbarView {
     
     var managerEventsView: some View {
         ManagerEventsView(
-            store: store.scope(state: \.managerEvents, action: \.managerEvents),
-            onboardingTutorialButtonTap: {
-                isShowingWelcomeOnboarding = true
-            }
+            store: store.scope(state: \.managerEvents, action: \.managerEvents)
         )
     }
     
@@ -188,19 +228,6 @@ private extension TabbarView {
                     .frame(width: 16, height: 16)
             }
             .badge(badgeCount)
-        }
-    }
-
-    var welcomeOnboardingToolbarItem: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                isShowingWelcomeOnboarding = true
-            } label: {
-                Image.questionmarkCircle
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 16, height: 16)
-            }
         }
     }
 
@@ -250,10 +277,11 @@ private extension TabbarView {
     }
 }
 
-#Preview {
-    TabbarView(
-        store: StoreOf<Tabbar>.init(initialState: .init(session: .init(value: .mock()))) {
-            Tabbar()
-        }
-    )
-}
+#warning("Fix me")
+//#Preview {
+//    TabbarView(
+//        store: StoreOf<Tabbar>.init(initialState: .init(session: .init(value: .mock()))) {
+//            Tabbar()
+//        }
+//    )
+//}

@@ -25,6 +25,14 @@ public extension AuthClient {
     static var live: Self {
         let stateStream = UserStateStream()
         return Self.init(
+            signInAnonymously: {
+                guard Auth.auth().currentUser != nil else {
+                    Logger.debug("🔥 Firebase signInAnonymously: Signing in anonymously since no user was logged in before")
+                    try await Auth.auth().signInAnonymously()
+                    return
+                }
+                Logger.log(.error, "🔥 Firebase signInAnonymously: Sign in anonymously called but user was already logged in.")
+            },
             fetchCustomRole: {
                 guard let currentUser = Auth.auth().currentUser else {
                     throw AuthenticationError.notSignedIn
@@ -48,11 +56,11 @@ public extension AuthClient {
             },
             googleLogin: {
                 let credential = try await FirebaseService().startGoogleSignInFlow()
-                _ = try await Auth.auth().signIn(with: credential)
+                try await credential.linkOrSignInWithCredential()
             },
             appleLogin: {
                 let credential = try await FirebaseService().startSignInWithAppleFlow()
-                _ = try await Auth.auth().signIn(with: credential)
+                try await credential.linkOrSignInWithCredential()
             },
             logout: {
                 try Auth.auth().signOut()
@@ -65,7 +73,7 @@ public extension AuthClient {
                     
                     let userState: UserState = {
                         guard let user = optionalUser.optional else { return .loggedOut }
-                        return .authenticated
+                        return user.isAnonymous ? .anonymous : .authenticated
                     }()
                     Task { [stateStream] in
                         await stateStream.yield(userState)
@@ -79,5 +87,29 @@ public extension AuthClient {
                 _ = try await Auth.auth().currentUser?.getIDTokenResult(forcingRefresh: true)
             }
         )
+    }
+}
+
+extension AuthCredential {
+    func linkOrSignInWithCredential () async throws {
+        guard let currentUser = Auth.auth().currentUser else {
+            _ = try await Auth.auth().signIn(with: self)
+            return
+        }
+        do {
+            if currentUser.isAnonymous {
+                try await currentUser.link(with: self)
+            } else {
+                try Auth.auth().signOut()
+                _ = try await Auth.auth().signIn(with: self)
+            }
+        } catch let error as NSError {
+            switch error.code {
+            case AuthErrorCode.credentialAlreadyInUse.rawValue:
+                _ = try await Auth.auth().signIn(with: self)
+            default:
+                throw error
+            }
+        }
     }
 }

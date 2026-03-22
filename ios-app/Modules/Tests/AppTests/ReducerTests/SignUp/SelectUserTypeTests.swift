@@ -7,7 +7,7 @@ struct SelectUserTypeTests {
     enum TestError: Error, Equatable { case mock }
 
     @Test
-    func `Create account succeeds and navigates to notification permission prompt`() async {
+    func `Create account succeeds and navigates to session fetch`() async {
         let store = await TestStore(initialState: SelectUserType.State()) {
             SelectUserType()
         } withDependencies: {
@@ -24,21 +24,6 @@ struct SelectUserTypeTests {
             $0.isLoading = true
         }
 
-        await store.receive(\.createAccountResponse) {
-            $0.isLoading = false
-            $0.destination = .notificationPermissionPrompt(.init())
-        }
-    }
-
-    @Test
-    func `Notification permission completion delegates to session fetch`() async {
-        var initialState = SelectUserType.State()
-        initialState.destination = .notificationPermissionPrompt(.init())
-        let store = await TestStore(initialState: initialState) {
-            SelectUserType()
-        }
-
-        await store.send(.destination(.presented(.notificationPermissionPrompt(.delegate(.completed)))))
         await store.receive(\.delegate, .getSession)
     }
 

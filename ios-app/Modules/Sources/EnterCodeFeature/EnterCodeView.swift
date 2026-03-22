@@ -39,7 +39,7 @@ private extension EnterCodeView {
                     .frame(maxWidth: 250)
                     
                     Spacer()
-                    Text("Enter PIN")
+                    Text("Enter PIN Code")
                         .foregroundStyle(Color.themeTextSecondary)
                         .font(.montserratSemiBold, 20)
                     TextField("", text: $store.pinCodeInput.value)

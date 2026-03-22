@@ -18,9 +18,9 @@ public func listElementView(
             .font(.system(size: 12, weight: .medium))
             .aspectRatio(contentMode: .fill)
             .padding(6)
+            .foregroundStyle(Color.themeText)
         Text(label)
     }
-    .foregroundStyle(Color.themeText)
     .font(.montserratRegular, 13)
     .animation(.bouncy, value: isLoading)
 }

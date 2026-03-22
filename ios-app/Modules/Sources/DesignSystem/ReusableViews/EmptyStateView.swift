@@ -5,24 +5,22 @@ public struct EmptyStateView: View {
     let title: String
     let message: String
     
-    public init(title: String = "Nothing here yet", message: String) {
+    public init(title: String = "Nothing here yet.", message: String) {
         self.title = title
         self.message = message
     }
     
     public var body: some View {
-        VStack(alignment: .center, spacing: 24) {
+        VStack(alignment: .center, spacing: 16) {
             Image.rectangeOnRectangle
                 .resizable()
                 .frame(width: 40, height: 40)
                 .foregroundColor(.themeTextSecondary)
             VStack(spacing: 6) {
                 Text(title)
-                    .font(.montserratBold, 14)
-                    .multilineTextAlignment(.center)
+                    .font(.montserratExtraBold, 18)
                 Text(message)
-                    .font(.montserratRegular, 12)
-                    .lineSpacing(4)
+                    .font(.montserratRegular, 14)
                     .multilineTextAlignment(.center)
             }
         }
@@ -35,6 +33,6 @@ public struct EmptyStateView: View {
 
 #Preview {
     EmptyStateView(
-        message: "Items will appear here once they are available."
+        message: "Message bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
     )
 }

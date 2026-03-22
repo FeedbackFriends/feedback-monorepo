@@ -17,6 +17,9 @@ extension AuthClient: TestDependencyKey {
         }
         let mockAuthEngine = MockAuthEngine()
         return Self.init(
+            signInAnonymously: {
+                await mockAuthEngine.yield(.anonymous)
+            },
             fetchCustomRole: { nil },
             googleLogin: {
                 await mockAuthEngine.yield(.authenticated)

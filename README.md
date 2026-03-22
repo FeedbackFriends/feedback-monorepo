@@ -89,7 +89,17 @@ Generate the canonical API OpenAPI contract from the repo root:
 cd backend && SPRING_PROFILES_ACTIVE=openapi ./gradlew syncOpenApiSpec --no-configuration-cache
 ```
 
-The generated contract is committed at `contracts/openapi/feedback-api.yaml`. Frontend type generation in `web/` reads from that file.
+Generate all committed API artifacts from the repo root:
+
+```bash
+./scripts/generate-api-artifacts.sh
+```
+
+The generated contract is committed at `contracts/openapi/feedback-api.yaml`.
+Both generated clients read from that file:
+
+- `web/src/lib/api/generated/openapi.ts`
+- `ios-app/Modules/Sources/OpenAPI/GeneratedSources/`
 
 How Compose is wired:
 
@@ -136,6 +146,7 @@ Important deployment assumptions:
 GitHub Actions in `.github/workflows/` handle validation and releases.
 
 - `ci.yml` runs backend build/tests plus web install, lint, and build
+- `ci.yml` also verifies the committed OpenAPI contract, generated TypeScript client, and generated Swift client are up to date
 - `release.yml` runs web e2e tests, builds and publishes Docker images, creates a GitHub release with the committed OpenAPI contract, and triggers deployment
 
 ## Where To Work

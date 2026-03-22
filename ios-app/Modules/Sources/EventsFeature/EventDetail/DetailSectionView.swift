@@ -29,13 +29,9 @@ private extension DetailSectionView {
     
     var detailSectionView: some View {
         VStack(alignment: .leading) {
-            HStack(spacing: 6) {
-                Image(systemName: "lock.fill")
-                    .font(.system(size: 11, weight: .semibold))
-                Text("Meeting details (from your calendar)")
-            }
-            .sectionHeaderStyle()
-            .padding(.leading, 18)
+            Text("DETAILS")
+                .sectionHeaderStyle()
+                .padding(.leading, 18)
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
                     if let agenda = event.agenda {
@@ -49,11 +45,6 @@ private extension DetailSectionView {
                         .font(.montserratSemiBold, 13)
                     Text(event.formattedDate)
                         .font(.montserratRegular, 13)
-                    Text("Participants")
-                        .font(.montserratSemiBold, 13)
-                    Text(participantLabel(event.participants.count))
-                        .font(.montserratRegular, 13)
-                    Text("Inviterede uden for lets grow: \(event.invitedEmails.count)")
                     if let totalFeedback = event.overallFeedbackSummary {
                         HStack {
                             Text("\(totalFeedback.responses) responses")
@@ -74,7 +65,7 @@ private extension DetailSectionView {
                 }
             }
             .font(.montserratRegular, 14)
-            .background(Color.themeSurfaceSecondary)
+            .background(Color.themeSurface)
             .cornerRadius(14)
         }
     }
@@ -134,7 +125,7 @@ private extension DetailSectionView {
     @ViewBuilder
     var questionsSectionView: some View {
         VStack(alignment: .leading) {
-            Text("FEEDBACK QUESTIONS")
+            Text("QUESTIONS")
                 .sectionHeaderStyle()
                 .padding(.leading, 18)
             ForEach(Array(zip(event.questions.indices, event.questions)), id: \.0) { index, question in
@@ -143,13 +134,6 @@ private extension DetailSectionView {
                 
             }
         }
-    }
-
-    func participantLabel(_ count: Int) -> String {
-        if count == 0 {
-            return "No participants yet"
-        }
-        return "\(count) participant\(count == 1 ? "" : "s")"
     }
 }
 

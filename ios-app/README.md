@@ -40,7 +40,7 @@ Xcode_project/
       TabbarFeature/           # Tab coordination
       Domain/                  # Models, errors, service interfaces 
       Adapters/                # Live implementations (API, Firebase, etc.)
-      OpenAPI/                 # Spec + generated client (plugin)
+      OpenAPI/                 # Spec + committed generated client
       DesignSystem/            # Theme, styles, reusable views
       Logger/, Utility/, InfoPlist/  # Cross‑cutting utilities
     Tests/                     # Reducer & snapshot tests
@@ -55,12 +55,12 @@ See also: `Xcode_project/Modules/Package.swift` for module targets and dependenc
 
 ## 🔌 API Layer
 
-The API layer is fully generated from the committed monorepo OpenAPI contract.  
+The API layer is fully generated from our [OpenAPI specification](https://github.com/FeedbackFriends/feedback-openapi).  
 This ensures the client stays in sync with the backend contract.
 
-- Canonical spec lives at `../contracts/openapi/feedback-api.yaml`.
-- `Modules/Sources/OpenAPI/openapi.yaml` is a symlink to that contract so the Swift OpenAPI plugin can consume it.
-- Generation is handled by the Swift OpenAPI Generator plugin during builds; no manual step needed.
+- Spec and generated client live under `Xcode_project/Modules/Sources/OpenAPI/`.
+- Committed generated Swift sources live under `Xcode_project/Modules/Sources/OpenAPI/GeneratedSources/`.
+- Regenerate the backend contract, TypeScript client, and Swift client from the monorepo root with `./scripts/generate-api-artifacts.sh`.
 - The live `APIClient` is injected via TCA dependencies.
 
 ---
@@ -119,6 +119,7 @@ Details: [Docs/NOTIFICATIONS.md](Docs/NOTIFICATIONS.md)
 ## 🧰 CI
 
 - `Xcode_project/CI_scripts/ci_post_clone.sh` relaxes SwiftPM plugin fingerprint checks (needed for the OpenAPI generator) in CI environments.
+- GitHub Actions verifies the committed Swift OpenAPI sources stay in sync with `contracts/openapi/feedback-api.yaml`.
 
 
 ## 🏗️ Architecture

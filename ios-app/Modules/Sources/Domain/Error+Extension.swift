@@ -15,7 +15,7 @@ public extension Error {
                 title = "Already joined"
                 message = "You already joined this event."
             case .pincodeNotFound:
-                title = "Invalid PIN"
+                title = "Invalid PIN code"
                 message = "The provided pin code does not match any active event."
             case .cannotJoinOwnEvent:
                 title = "Not allowed"

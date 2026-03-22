@@ -35,13 +35,13 @@ public struct Session: Equatable, Sendable {
     public var participantEvents: IdentifiedArrayOf<ParticipantEvent>
     public var managerData: ManagerData?
     public var accountInfo: AccountInfo
-    public var role: Role
+    public var role: Role?
     
     public init(
         participantEvents: IdentifiedArrayOf<ParticipantEvent>,
         managerData: ManagerData? = nil,
         accountInfo: AccountInfo,
-        role: Role
+        role: Role?
     ) {
         self.participantEvents = participantEvents
         self.managerData = managerData
@@ -71,6 +71,8 @@ public struct Session: Equatable, Sendable {
                     accountInfo: accountInfo
                 )
             )
+        case .none:
+            fatalError()
         }
     }
     

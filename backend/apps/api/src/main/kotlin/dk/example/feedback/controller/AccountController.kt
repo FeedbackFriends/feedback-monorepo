@@ -10,7 +10,7 @@ import dk.example.feedback.payloads.LogoutInput
 import dk.example.feedback.payloads.ModifyAccountInput
 import dk.example.feedback.payloads.UpdateRoleInput
 import dk.example.feedback.service.AccountService
-import dk.example.feedback.service.SessionService
+import dk.example.feedback.service.BootstrapService
 import dk.example.feedback.model.helpers.normalizedEmail
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController
 class AccountController(
     val accountService: AccountService,
     val firebaseService: FirebaseService,
-    val sessionService: SessionService,
+    val bootstrapService: BootstrapService,
 ) {
 
     @PostMapping
@@ -59,7 +59,7 @@ class AccountController(
             jwt = principal,
             fcmToken = input.fcmToken
         )
-        return sessionService.getSession(jwt = principal)
+        return bootstrapService.getSession(jwt = principal)
     }
 
     @PutMapping

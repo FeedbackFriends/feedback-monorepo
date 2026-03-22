@@ -10,54 +10,39 @@ public struct ParticipantEventsView: View {
     }
     public var body: some View {
         let infoStore = $store.scope(state: \.destination?.info, action: \.destination.info)
+        let startFeedbackConfirmationStore = $store.scope(
+            state: \.destination?.startFeedbackConfirmation,
+            action: \.destination.startFeedbackConfirmation
+        )
         ScrollView {
             LazyVStack(spacing: 12, pinnedViews: [.sectionHeaders]) {
-                segmentPicker
-                let participantEvents = filteredParticipantEvents
+                let participantEvents = store.session.participantEvents
                 if participantEvents.isEmpty {
                     EmptyStateView(
-                        title: emptyStateTitle,
-                        message: emptyStateMessage
+                        message: "Sessions you are attending will be visible here."
                     )
                 } else {
-                    switch store.selectedSegment {
-                    case .invited:
-                        let todayMeetings = participantEvents.filter { $0.date.isToday }.sorted { $0.date > $1.date }
-                        let comingUpMeetings = participantEvents.filter { $0.date.isAfterToday }.sorted { $0.date < $1.date }
-
-                        if !todayMeetings.isEmpty {
-                            CustomSection(title: "Today") {
-                                ForEach(todayMeetings) { event in
-                                    listItem(event)
-                                }
+                    let todayMeetings = participantEvents.filter { $0.date.isToday }
+                    let comingUpMeetings = participantEvents.filter { $0.date.isAfterToday }
+                    let pastMeetings = participantEvents.filter { $0.date.isBeforeToday }
+                    if !todayMeetings.isEmpty {
+                        CustomSection(title: "Today") {
+                            ForEach(todayMeetings.sorted { $0.date > $1.date }) { event in
+                                listItem(event)
                             }
                         }
-
-                        if !comingUpMeetings.isEmpty {
-                            CustomSection(title: "Coming up") {
-                                ForEach(comingUpMeetings) { event in
-                                    listItem(event)
-                                }
+                    }
+                    if !pastMeetings.isEmpty {
+                        CustomSection(title: "Past week") {
+                            ForEach(pastMeetings) { event in
+                                listItem(event)
                             }
                         }
-
-                    case .history:
-                        let submittedFeedback = participantEvents.filter { $0.feedbackSubmitted }.sorted { $0.date > $1.date }
-                        let pastMeetings = participantEvents.filter { !$0.feedbackSubmitted && $0.date.isBeforeToday }.sorted { $0.date > $1.date }
-
-                        if !submittedFeedback.isEmpty {
-                            CustomSection(title: "Submitted") {
-                                ForEach(submittedFeedback) { event in
-                                    listItem(event)
-                                }
-                            }
-                        }
-
-                        if !pastMeetings.isEmpty {
-                            CustomSection(title: "Past") {
-                                ForEach(pastMeetings) { event in
-                                    listItem(event)
-                                }
+                    }
+                    if !comingUpMeetings.isEmpty {
+                        CustomSection(title: "Coming up") {
+                            ForEach(comingUpMeetings) { event in
+                                listItem(event)
                             }
                         }
                     }
@@ -69,12 +54,6 @@ public struct ParticipantEventsView: View {
         .foregroundColor(Color.themeText)
         .scrollContentBackground(.hidden)
         .background(Color.themeBackground)
-        .onAppear {
-            store.send(.participantEventsChanged(store.session.participantEvents.map { $0 }))
-        }
-        .onChange(of: store.session.participantEvents) { _, newValue in
-            store.send(.participantEventsChanged(newValue.map { $0 }))
-        }
         .sheet(item: infoStore) { event in
             event.withState { event in
                 EventInfoView(
@@ -88,70 +67,18 @@ public struct ParticipantEventsView: View {
                 .presentationDetents([.medium])
             }
         }
+        .sheet(item: startFeedbackConfirmationStore) { pinCode in
+            pinCode.withState { pinCode in
+                StartFeedbackConfirmationView(startFeedback: {
+                    store.send(.confirmedToStartFeedback(pinCode: pinCode))
+                })
+                .presentationDetents([.height(300)])
+            }
+        }
     }
 }
 
 extension ParticipantEventsView {
-    var segmentPicker: some View {
-        Picker("Participant events filter", selection: $store.selectedSegment) {
-            Text("Invitations")
-                .tag(ParticipantEvents.Segment.invited)
-            Text("History")
-                .tag(ParticipantEvents.Segment.history)
-        }
-        .pickerStyle(.segmented)
-        .overlay(alignment: .topTrailing) {
-            if store.historyBadgeCount > 0 {
-                historyBadge
-                    .offset(x: -16, y: -6)
-            }
-        }
-    }
-
-    var filteredParticipantEvents: [ParticipantEvent] {
-        let allParticipantEvents = store.session.participantEvents.map { $0 }
-        switch store.selectedSegment {
-        case .invited:
-            return allParticipantEvents.filter { !$0.feedbackSubmitted && ($0.date.isToday || $0.date.isAfterToday) }
-        case .history:
-            return allParticipantEvents.filter { $0.feedbackSubmitted || $0.date.isBeforeToday }
-        }
-    }
-
-    var emptyStateTitle: String {
-        switch store.selectedSegment {
-        case .invited:
-            return "No invitations"
-        case .history:
-            return "No feedback history"
-        }
-    }
-
-    var emptyStateMessage: String {
-        switch store.selectedSegment {
-        case .invited:
-            return "You'll see upcoming sessions here when you're invited."
-        case .history:
-            return "Your submitted and past sessions will appear here."
-        }
-    }
-
-    var historyBadgeText: String {
-        if store.historyBadgeCount > 99 {
-            return "99+"
-        }
-        return "\(store.historyBadgeCount)"
-    }
-
-    var historyBadge: some View {
-        Text(historyBadgeText)
-            .font(.montserratBold, 9)
-            .foregroundStyle(Color.white)
-            .padding(.horizontal, 5)
-            .padding(.vertical, 2)
-            .background(Color(.systemRed))
-            .clipShape(Capsule())
-    }
     
     func listItem(_ event: ParticipantEvent) -> some View {
         VStack(spacing: 0) {
@@ -162,7 +89,7 @@ extension ParticipantEventsView {
                             .font(.montserratSemiBold, 14)
                         Spacer()
                         if event.recentlyJoined {
-                            Text("New feedback")
+                            Text("Recently joined")
                                 .font(.montserratBold, 10)
                                 .padding(4)
                                 .padding(.horizontal, 4)
@@ -195,14 +122,14 @@ extension ParticipantEventsView {
                     .frame(maxWidth: .infinity, minHeight: 40)
                     Divider()
                     if event.feedbackSubmitted {
-                        Text("Sent")
+                        Text("Submitted")
                             .font(.montserratSemiBold, 14)
                             .frame(maxWidth: .infinity, minHeight: 40)
                             .foregroundStyle(Color.themeText.gradient.opacity(0.5))
                     } else {
                         if let pinCode = event.pinCode {
                             let startFeedbackPincodeInFlight = store.startFeedbackPincodeInFlight == event.pinCode
-                            Button("Give feedback") {
+                            Button("Start") {
                                 store.send(.startFeedbackButtonTap(pinCode: pinCode))
                             }
                             .disabled(startFeedbackPincodeInFlight)

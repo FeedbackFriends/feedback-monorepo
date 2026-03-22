@@ -47,12 +47,12 @@ public struct AccountSection: Sendable {
         Reduce { state, action in
             switch action {
             case .settingsButtonTap:
-                state.destination = .profileSettings(
-                    .init(
-                        role: state.session.role,
-                        accountInfo: state.session.accountInfo
-                    )
-                )
+//                state.destination = .profileSettings(
+//                    .init(
+//                        role: state.session.role,
+//                        accountInfo: state.session.accountInfo
+//                    )
+//                )
                 return .none
                 
             case .signOutButtonTapped:

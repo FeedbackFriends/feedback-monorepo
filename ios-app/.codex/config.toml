@@ -1,0 +1,3 @@
+[mcp_servers.xcodebuildmcp]
+command = "npx"
+args = ["-y", "@smithery/cli@latest", "run", "cameroncooke/xcodebuildmcp"]

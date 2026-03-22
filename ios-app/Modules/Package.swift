@@ -126,8 +126,7 @@ let package = Package(
                 .product(name: "OpenAPIURLSession", package: "swift-openapi-urlsession"),
                 "Domain",
                 "Utility"
-            ],
-            plugins: [.plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator")]
+            ]
         ),
         .target(
             name: "RootFeature",

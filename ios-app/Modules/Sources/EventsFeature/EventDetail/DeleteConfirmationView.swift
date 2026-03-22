@@ -1,6 +1,6 @@
 import SwiftUI
 import DesignSystem
-import ComposableArchitecture   
+import ComposableArchitecture
 
 struct DeleteConfirmationView: View {
     @Bindable var store: StoreOf<DeleteConfirmation>

@@ -35,12 +35,10 @@ function HeroSection({
         >
           <motion.div className="space-y-7" variants={fadeInUp}>
             <h1 className="max-w-3xl bg-linear-to-b from-[#4A4D69] via-[#282A47] to-[#1F2140] bg-clip-text pb-1 text-4xl font-bold leading-[1.08] text-transparent sm:text-5xl lg:text-6xl">
-              Gør jeres faste møder bedre, uge for uge
+                Få feedback – hver gang I samler folk
             </h1>
             <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-              Lets Grow hjælper team leads, scrum masters og mødeejere med at
-              forbedre tilbagevendende møder gennem enkel, automatisk feedback i
-              de værktøjer, de allerede bruger.
+                Få enkel feedback efter møder, workshops og oplæg – og se hvad der virker over tid.
             </p>
           </motion.div>
 

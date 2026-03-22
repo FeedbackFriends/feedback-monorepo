@@ -22,7 +22,7 @@ Kotlin + Spring Boot services powering the Feedback platform. The backend is spl
 Run the full stack from the monorepo root:
 
 ```bash
-docker compose up --build
+docker compose up -d
 ```
 
 Services:

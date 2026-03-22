@@ -1,10 +1,8 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.dto.EventWrapperDto
 import dk.example.feedback.dto.EmojiQuestionFeedbackSummary
+import dk.example.feedback.dto.FeedbackFlowDto
 import dk.example.feedback.dto.OverallFeedbackSummaryDto
-import dk.example.feedback.dto.ManagerEventDto
-import dk.example.feedback.dto.ManagerQuestion
 import dk.example.feedback.dto.OpinionQuestionFeedbackSummary
 import dk.example.feedback.dto.OverallFeedbackCountStatsDto
 import dk.example.feedback.dto.OverallFeedbackSegmentationStatsDto
@@ -44,32 +42,33 @@ class EventService(
     private val accountService: AccountService,
 ) {
 
-    fun createEvent(eventInput: EventInput, jwt: Jwt): EventWrapperDto {
-        val generatedPinCode = PinCodeGenerator(eventRepo = eventRepo).generate()
-        val managerId = jwt.getAccountId()
-        val managerEmail = accountService.fetchAccount(managerId)?.email
-        val invitedEmails = filterInvitedEmails(eventInput.invitedEmails, managerEmail)
-        val eventEntity = eventRepo.persistEvent(
-            title = eventInput.title,
-            agenda = eventInput.agenda,
-            date = eventInput.date,
-            location = eventInput.location,
-            durationInMinutes = eventInput.durationInMinutes,
-            generatedPinCode = generatedPinCode,
-            questions = eventInput.questions.map { question ->
-                Pair(question.questionText, question.feedbackType)
-            },
-            managerId = managerId,
-            invitedEmails = invitedEmails,
-        )
-        val participants = eventRepo.getParticipantsForEvent(eventEntity.id, managerId)
-        return EventWrapperDto(
-            event = eventEntity.toManagerEvent(
-                pinCode = generatedPinCode,
-                participants = participants
-            ),
-            recentlyUsedQuestions = getRecentlyUsedQuestions(accountId = jwt.getAccountId())
-        )
+    fun createEvent(eventInput: EventInput, jwt: Jwt): FeedbackFlowDto {
+        TODO()
+//        val generatedPinCode = PinCodeGenerator(eventRepo = eventRepo).generate()
+//        val managerId = jwt.getAccountId()
+//        val managerEmail = accountService.fetchAccount(managerId)?.email
+//        val invitedEmails = filterInvitedEmails(eventInput.invitedEmails, managerEmail)
+//        val eventEntity = eventRepo.persistEvent(
+//            title = eventInput.title,
+//            agenda = eventInput.agenda,
+//            date = eventInput.date,
+//            location = eventInput.location,
+//            durationInMinutes = eventInput.durationInMinutes,
+//            generatedPinCode = generatedPinCode,
+//            questions = eventInput.questions.map { question ->
+//                Pair(question.questionText, question.feedbackType)
+//            },
+//            managerId = managerId,
+//            invitedEmails = invitedEmails,
+//        )
+//        val participants = eventRepo.getParticipantsForEvent(eventEntity.id, managerId)
+//        return FeedbackFlowDto(
+//            event = eventEntity.toManagerEvent(
+//                pinCode = generatedPinCode,
+//                participants = participants
+//            ),
+//            recentlyUsedQuestions = getRecentlyUsedQuestions(accountId = jwt.getAccountId())
+//        )
     }
 
     fun deleteEvent(eventId: UUID, jwt: Jwt) {
@@ -78,85 +77,86 @@ class EventService(
         eventRepo.deleteEvent(eventId)
     }
 
-    fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): EventWrapperDto {
-        val event = eventRepo.getEvent(eventId)
-        jwt.verifyAccountHasId(event.manager.id)
-        if (event.feedback.isNotEmpty()) {
-            throw IllegalArgumentException("Cannot update event with feedback")
-        }
-        val invitedEmails = filterInvitedEmails(eventInput.invitedEmails, event.manager.email)
-        val updatedEvent = eventRepo.updateEvent(
-            eventId = eventId,
-            title = eventInput.title,
-            agenda = eventInput.agenda,
-            date = eventInput.date,
-            location = eventInput.location,
-            durationInMinutes = eventInput.durationInMinutes,
-            questions = eventInput.questions.map { question ->
-                Pair(question.questionText, question.feedbackType)
-            },
-            invitedEmails = invitedEmails,
-        )
-        val participants = eventRepo.getParticipantsForEvent(updatedEvent.id, event.manager.id)
-        return EventWrapperDto(
-            event = updatedEvent.toManagerEvent(
-                pinCode = getPinCodeForEvent(eventId),
-                participants = participants
-            ),
-            recentlyUsedQuestions = getRecentlyUsedQuestions(accountId = jwt.getAccountId())
-        )
+    fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): FeedbackFlowDto {
+        TODO()
+//        val event = eventRepo.getEvent(eventId)
+//        jwt.verifyAccountHasId(event.manager.id)
+//        if (event.feedback.isNotEmpty()) {
+//            throw IllegalArgumentException("Cannot update event with feedback")
+//        }
+//        val invitedEmails = filterInvitedEmails(eventInput.invitedEmails, event.manager.email)
+//        val updatedEvent = eventRepo.updateEvent(
+//            eventId = eventId,
+//            title = eventInput.title,
+//            agenda = eventInput.agenda,
+//            date = eventInput.date,
+//            location = eventInput.location,
+//            durationInMinutes = eventInput.durationInMinutes,
+//            questions = eventInput.questions.map { question ->
+//                Pair(question.questionText, question.feedbackType)
+//            },
+//            invitedEmails = invitedEmails,
+//        )
+//        val participants = eventRepo.getParticipantsForEvent(updatedEvent.id, event.manager.id)
+//        return EventWrapperDto(
+//            event = updatedEvent.toManagerEvent(
+//                pinCode = getPinCodeForEvent(eventId),
+//                participants = participants
+//            ),
+//            recentlyUsedQuestions = getRecentlyUsedQuestions(accountId = jwt.getAccountId())
+//        )
     }
 
-    fun getManagerEvents(managerId: String): List<ManagerEventDto> {
-        return eventRepo.getManagerEvents(managerId).map {
-            val participants = eventRepo.getParticipantsForEvent(it.id, managerId)
-            it.toManagerEvent(
-                pinCode = getPinCodeForEvent(eventId = it.id),
-                participants = participants
-            )
-        }
-    }
+//    fun getManagerEvents(managerId: String): List<ManagerEventDto> {
+//        return eventRepo.getManagerEvents(managerId).map {
+//            val participants = eventRepo.getParticipantsForEvent(it.id, managerId)
+//            it.toManagerEvent(
+//                pinCode = getPinCodeForEvent(eventId = it.id),
+//                participants = participants
+//            )
+//        }
+//    }
 
-    fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
-        val eventsWrapped = eventRepo.getParticipantEvents(accountId)
-        return eventsWrapped.map { wrapped ->
-            val accountDidSubmitFeedbackForEvent =
-                eventRepo.accountDidSubmitFeedbackForEvent(wrapped.event.id, accountId)
-            wrapped.event.toParticipantEvent(
-                getPinCodeForEvent(eventId = wrapped.event.id),
-                feedbackSubmitted = accountDidSubmitFeedbackForEvent,
-                recentlyJoined = wrapped.recentlyJoined
-            )
-        }
-    }
+//    fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
+//        val eventsWrapped = eventRepo.getParticipantEvents(accountId)
+//        return eventsWrapped.map { wrapped ->
+//            val accountDidSubmitFeedbackForEvent =
+//                eventRepo.accountDidSubmitFeedbackForEvent(wrapped.event.id, accountId)
+//            wrapped.event.toParticipantEvent(
+//                getPinCodeForEvent(eventId = wrapped.event.id),
+//                feedbackSubmitted = accountDidSubmitFeedbackForEvent,
+//                recentlyJoined = wrapped.recentlyJoined
+//            )
+//        }
+//    }
 
-    fun getRecentlyUsedQuestions(accountId: String): List<SessionDto.RecentlyUsedQuestions> {
-        return eventRepo.getRecentlyUsedQuestions(accountId).map {
-            SessionDto.RecentlyUsedQuestions(
-                questionText = it.questionText,
-                feedbackType = it.feedbackType,
-                updatedAt = it.updatedAt,
-            )
-        }
-    }
+//    fun getRecentlyUsedQuestions(accountId: String): List<SessionDto.RecentlyUsedQuestions> {
+//        return eventRepo.getRecentlyUsedQuestions(accountId).map {
+//            SessionDto.RecentlyUsedQuestions(
+//                questionText = it.questionText,
+//                feedbackType = it.feedbackType,
+//                updatedAt = it.updatedAt,
+//            )
+//        }
+//    }
 
-    fun joinEvent(pinCode: String, jwt: Jwt): ParticipantEventDto {
-        val accountId = jwt.getAccountId()
-        val event = eventRepo.getEventByPinCode(pinCode)
-        throwIfAccountIsManager(event, accountId)
-        throwIfAccountAlreadyJoinedEvent(event, accountId)
-        throwIfFeedbackAlreadySubmitted(event, accountId)
-        eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = false)
-        val accountEmail = accountService.fetchAccount(accountId)?.email
-        if (accountEmail != null) {
-            eventRepo.removeInviteForEmail(eventId = event.id, email = accountEmail)
-        }
-        return event.toParticipantEvent(
-            pinCode = getPinCodeForEvent(event.id),
-            feedbackSubmitted = false,
-            recentlyJoined = true
-        )
-    }
+//    fun joinEvent(pinCode: String, jwt: Jwt): ParticipantEventDto {
+//        val accountId = jwt.getAccountId()
+//        val event = eventRepo.getEventByPinCode(pinCode)
+//        throwIfAccountIsManager(event, accountId)
+//        throwIfAccountAlreadyJoinedEvent(event, accountId)
+//        throwIfFeedbackAlreadySubmitted(event, accountId)
+//        eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = false)
+//        val accountEmail = accountService.fetchAccount(accountId)?.email
+//        if (accountEmail != null) {
+//            eventRepo.removeInviteForEmail(eventId = event.id, email = accountEmail)
+//        }
+//        return event.toParticipantEvent(
+//            pinCode = getPinCodeForEvent(event.id),
+//            feedbackSubmitted = false,
+//            recentlyJoined = true
+//        )
+//    }
 
     fun markEventAsSeen(eventId: UUID, jwt: Jwt) {
         val event = eventRepo.getEvent(eventId)
@@ -207,72 +207,72 @@ class EventService(
     }
 }
 
-fun EventEntity.toManagerEvent(pinCode: String?, participants: List<AccountEntity>): ManagerEventDto {
-    val isDraft = questions.isEmpty()
-    return ManagerEventDto(
-        id = id,
-        title = title,
-        agenda = agenda,
-        date = date,
-        durationInMinutes = durationInMinutes,
-        location = location,
-        calendarProvider = calendarProvider,
-        isDraft = isDraft,
-        pinCode = pinCode,
-        invitedEmails = invites.sortedBy { it.createdAt }.map { it.email },
-        participants = participants.map {
-            ParticipantSummaryDto(
-                name = it.name,
-                email = it.email,
-                phoneNumber = it.phoneNumber,
-            )
-        },
-        questions = questions.sortedBy { it.createdAt }.map { question ->
-            ManagerQuestion(
-                id = question.id,
-                questionText = question.questionText,
-                feedbackType = question.feedbackType,
-                questionFeedbackSummary = generateQuestionFeedbackSummary(
-                    feedback = question.feedback,
-                    type = question.feedbackType,
-                ),
-                feedback = question.feedback,
-            )
-        },
-        overallFeedbackSummary = generateOverallFeedbackSummary(
-            participantResponses = feedback.participantResponses(),
-            feedback = feedback
-        ),
-        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
-    )
-}
-
-fun EventEntity.toParticipantEvent(
-    pinCode: String?,
-    feedbackSubmitted: Boolean,
-    recentlyJoined: Boolean
-): ParticipantEventDto {
-    return ParticipantEventDto(
-        id = id,
-        title = title,
-        agenda = agenda,
-        date = date,
-        durationInMinutes = durationInMinutes,
-        location = location,
-        createdFromMailListener = createdFromMailListener,
-        pinCode = pinCode,
-        questions = questions.map { question ->
-            ParticipantQuestionDto(
-                id = question.id,
-                questionText = question.questionText,
-                feedbackType = question.feedbackType
-            )
-        },
-        feedbackSubmited = feedbackSubmitted,
-        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber),
-        recentlyJoined = recentlyJoined
-    )
-}
+//fun EventEntity.toManagerEvent(pinCode: String?, participants: List<AccountEntity>): ManagerEventDto {
+//    val isDraft = questions.isEmpty()
+//    return ManagerEventDto(
+//        id = id,
+//        title = title,
+//        agenda = agenda,
+//        date = date,
+//        durationInMinutes = durationInMinutes,
+//        location = location,
+//        calendarProvider = calendarProvider,
+//        isDraft = isDraft,
+//        pinCode = pinCode,
+//        invitedEmails = invites.sortedBy { it.createdAt }.map { it.email },
+//        participants = participants.map {
+//            ParticipantSummaryDto(
+//                name = it.name,
+//                email = it.email,
+//                phoneNumber = it.phoneNumber,
+//            )
+//        },
+//        questions = questions.sortedBy { it.createdAt }.map { question ->
+//            ManagerQuestion(
+//                id = question.id,
+//                questionText = question.questionText,
+//                feedbackType = question.feedbackType,
+//                questionFeedbackSummary = generateQuestionFeedbackSummary(
+//                    feedback = question.feedback,
+//                    type = question.feedbackType,
+//                ),
+//                feedback = question.feedback,
+//            )
+//        },
+//        overallFeedbackSummary = generateOverallFeedbackSummary(
+//            participantResponses = feedback.participantResponses(),
+//            feedback = feedback
+//        ),
+//        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber)
+//    )
+//}
+//
+//fun EventEntity.toParticipantEvent(
+//    pinCode: String?,
+//    feedbackSubmitted: Boolean,
+//    recentlyJoined: Boolean
+//): ParticipantEventDto {
+//    return ParticipantEventDto(
+//        id = id,
+//        title = title,
+//        agenda = agenda,
+//        date = date,
+//        durationInMinutes = durationInMinutes,
+//        location = location,
+//        createdFromMailListener = createdFromMailListener,
+//        pinCode = pinCode,
+//        questions = questions.map { question ->
+//            ParticipantQuestionDto(
+//                id = question.id,
+//                questionText = question.questionText,
+//                feedbackType = question.feedbackType
+//            )
+//        },
+//        feedbackSubmited = feedbackSubmitted,
+//        ownerInfo = OwnerInfoDto(name = manager.name, email = manager.email, phoneNumber = manager.phoneNumber),
+//        recentlyJoined = recentlyJoined
+//    )
+//}
 
 
 private fun generateOverallFeedbackSummary(

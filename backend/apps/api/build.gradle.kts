@@ -47,9 +47,17 @@ springBoot {
 }
 
 openApi {
-    apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
+    apiDocsUrl.set("http://localhost:18080/v3/api-docs.yaml")
     outputFileName.set("openapi.yaml")
     waitTimeInSeconds.set(60)
+    customBootRun {
+        args.set(
+            listOf(
+                "--spring.profiles.active=openapi",
+                "--server.port=18080"
+            )
+        )
+    }
 }
 
 jib {

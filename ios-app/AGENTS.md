@@ -32,5 +32,4 @@
 ## Configuration & Secrets
 - Runtime configuration comes from Info.plist keys (see `Docs/CONFIGURATION.md`).
 - Non-mock schemes may require `GoogleService-Info.plist` for Firebase features.
-- OpenAPI client code is generated during builds; avoid manual edits in `Xcode_project/Modules/Sources/OpenAPI/`.
-
+- OpenAPI client code is committed under `Modules/Sources/OpenAPI/GeneratedSources/`; regenerate via `../scripts/generate-api-artifacts.sh` from the repo root and never edit generated files by hand.

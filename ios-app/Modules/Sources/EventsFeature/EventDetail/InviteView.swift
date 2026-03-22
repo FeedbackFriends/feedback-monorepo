@@ -35,11 +35,7 @@ struct InviteView: View {
     
     private var infoSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Invite people in either of these ways:")
-                .font(.montserratRegular, 14)
-            Text("1. Share this invite link directly.")
-                .font(.montserratRegular, 14)
-            Text("2. Add attendees to your calendar event (Google, Outlook, etc.) and they will receive this invite link by email.")
+            Text("Share the link with people you would like feedback from 🤝")
                 .font(.montserratRegular, 14)
         }
     }

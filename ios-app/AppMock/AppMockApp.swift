@@ -46,6 +46,9 @@ actor MockAuthEngine {
 extension AuthClient {
     static func mock(mockAuthEngine: MockAuthEngine) -> Self {
         return Self.init(
+            signInAnonymously: {
+                await mockAuthEngine.yield(.anonymous)
+            },
             fetchCustomRole: { .manager },
             googleLogin: {
                 await mockAuthEngine.yield(.authenticated)

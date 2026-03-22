@@ -16,7 +16,6 @@ public enum Tab: Hashable, Sendable {
 public extension Tabbar.State {
     init(
         session: Shared<Session>,
-        syncStatus: Shared<SyncStatus> = Shared(value: SyncStatus()),
         tabbarLifecyle: TabbarLifecycle.State,
         enterCode: EnterCode.State,
         moreSection: MoreSection.State,
@@ -29,7 +28,6 @@ public extension Tabbar.State {
         destination: Tabbar.Destination.State? = nil
     ) {
         self._session = session
-        self._syncStatus = syncStatus
         self.tabbarLifecyle = tabbarLifecyle
         self.enterCode = enterCode
         self.moreSection = moreSection
@@ -44,12 +42,10 @@ public extension Tabbar.State {
     
     init(
         session: Shared<Session>,
-        syncStatus: Shared<SyncStatus> = Shared(value: SyncStatus()),
         selectedTab: Tab = .events,
         destination: Tabbar.Destination.State? = nil,
     ) {
         self._session = session
-        self._syncStatus = syncStatus
         self.enterCode = .init()
         self.selectedTab = selectedTab
         self.moreSection = .init()
@@ -57,8 +53,8 @@ public extension Tabbar.State {
         self.initialiseFeedback = .init()
         self.participantEvents = .init(session: session)
         self.deleteAccount = .init()
-        self.managerEvents = .init(session: session, syncStatus: syncStatus)
-        self.tabbarLifecyle = .init(session: session, syncStatus: syncStatus)
+        self.managerEvents = .init(session: session)
+        self.tabbarLifecyle = .init(session: session)
         self.destination = destination
     }
 }
@@ -81,7 +77,6 @@ public struct Tabbar: Sendable {
     public struct State: Equatable, Sendable {
         
         @Shared public var session: Session
-        @Shared public var syncStatus: SyncStatus
         var tabbarLifecyle: TabbarLifecycle.State
         var enterCode: EnterCode.State
         var moreSection: MoreSection.State

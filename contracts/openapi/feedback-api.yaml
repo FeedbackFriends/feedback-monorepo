@@ -4,7 +4,7 @@ info:
   description: API documentation for Lets Grow application.
   version: v1
 servers:
-- url: http://localhost:8080
+- url: http://localhost:18080
   description: Generated server url
 security:
 - bearerAuth: []
@@ -33,7 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EventWrapperDto"
+                $ref: "#/components/schemas/FeedbackFlowDto"
         "500":
           description: Internal Server Error
           content:
@@ -263,7 +263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EventWrapperDto"
+                $ref: "#/components/schemas/FeedbackFlowDto"
         "500":
           description: Internal Server Error
           content:
@@ -338,31 +338,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /session:
+  /bootstrap:
     get:
       tags:
-      - Session
-      operationId: getSession
+      - Bootstrap
+      operationId: getBootstrap
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SessionDto"
+                $ref: "#/components/schemas/BootstrapDto"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /session/session-update/{feedbackSessionHash}:
+  /bootstrap/bootstrap-update/{hash}:
     get:
       tags:
-      - Session
-      operationId: getUpdatedSession
+      - Bootstrap
+      operationId: getBoostrapUpdate
       parameters:
-      - name: feedbackSessionHash
+      - name: hash
         in: path
         required: true
         schema:
@@ -442,110 +442,17 @@ components:
       required:
       - feedbackType
       - questionText
-    EmojiQuestionFeedbackSummary:
+    AutomationSettings:
       type: object
       properties:
-        countVerySad:
-          type: integer
-          format: int32
-        countSad:
-          type: integer
-          format: int32
-        countHappy:
-          type: integer
-          format: int32
-        countVeryHappy:
-          type: integer
-          format: int32
-        percentageVerySad:
-          type: number
-          format: double
-        percentageSad:
-          type: number
-          format: double
-        percentageHappy:
-          type: number
-          format: double
-        percentageVeryHappy:
-          type: number
-          format: double
-      required:
-      - countHappy
-      - countSad
-      - countVeryHappy
-      - countVerySad
-      - percentageHappy
-      - percentageSad
-      - percentageVeryHappy
-      - percentageVerySad
-    EventWrapperDto:
-      type: object
-      properties:
-        event:
-          $ref: "#/components/schemas/ManagerEventDto"
-        recentlyUsedQuestions:
-          type: array
-          items:
-            $ref: "#/components/schemas/RecentlyUsedQuestions"
-      required:
-      - event
-      - recentlyUsedQuestions
-    FeedbackEntity:
-      type: object
-      properties:
-        id:
+        botEmail:
           type: string
-          format: uuid
-        feedbackType:
-          type: string
-          enum:
-          - Emoji
-          - Comment
-          - ThumpsUpThumpsDown
-          - Opinion
-          - ZeroToTen
-        comment:
-          type: string
-        emoji:
-          type: string
-          enum:
-          - VerySad
-          - Sad
-          - Happy
-          - VeryHappy
-        thumbsUpThumpsDown:
-          type: string
-          enum:
-          - Up
-          - Down
-        opinion:
-          type: string
-          enum:
-          - StronglyDisagree
-          - Disagree
-          - Neutral
-          - Agree
-          - StronglyAgree
-        zeroToTen:
-          type: integer
-          format: int32
-        questionId:
-          type: string
-          format: uuid
-        participantId:
-          type: string
-        seenByManager:
+        isActive:
           type: boolean
-        createdAt:
-          type: string
-          format: date-time
       required:
-      - createdAt
-      - feedbackType
-      - id
-      - questionId
-      - seenByManager
-    ManagerEventDto:
+      - botEmail
+      - isActive
+    FeedbackFlowDto:
       type: object
       properties:
         id:
@@ -553,339 +460,174 @@ components:
           format: uuid
         title:
           type: string
-        agenda:
-          type: string
-        date:
-          type: string
-          format: date-time
-        pinCode:
-          type: string
-        durationInMinutes:
-          type: integer
-          format: int32
-        location:
-          type: string
-        calendarProvider:
+        owner:
+          $ref: "#/components/schemas/OwnerDto"
+        newFeedback:
+          type: boolean
+        analytics:
+          $ref: "#/components/schemas/FlowAnalytics"
+        insights:
+          $ref: "#/components/schemas/FlowInsights"
+        sessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SessionDto"
+        sessionSettings:
+          $ref: "#/components/schemas/SessionSettings"
+        currentQuestions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionDto"
+      required:
+      - analytics
+      - currentQuestions
+      - id
+      - insights
+      - newFeedback
+      - owner
+      - sessionSettings
+      - sessions
+      - title
+    FlowAnalytics:
+      type: object
+      properties:
+        averageRating:
+          type: number
+          format: double
+        trendStatus:
           type: string
           enum:
-          - GOOGLE
-          - APPLE
-          - MICROSOFT
-          - ZOOM
-        isDraft:
-          type: boolean
-        ownerInfo:
-          $ref: "#/components/schemas/OwnerInfoDto"
-        overallFeedbackSummary:
-          $ref: "#/components/schemas/OverallFeedbackSummaryDto"
-        invitedEmails:
+          - IMPROVING
+          - STABLE
+          - NEEDS_ATTENTION
+        lastSessionAt:
+          type: string
+          format: date-time
+        ratingTrend:
           type: array
           items:
-            type: string
-        participants:
-          type: array
-          items:
-            $ref: "#/components/schemas/ParticipantSummaryDto"
-        questions:
-          type: array
-          items:
-            $ref: "#/components/schemas/ManagerQuestion"
+            $ref: "#/components/schemas/RatingPoint"
       required:
-      - date
-      - durationInMinutes
-      - id
-      - invitedEmails
-      - isDraft
-      - ownerInfo
-      - participants
-      - questions
-      - title
-    ManagerQuestion:
+      - ratingTrend
+    FlowInsights:
+      type: object
+      properties:
+        summary:
+          type: string
+    OwnerDto:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        questionText:
+        name:
           type: string
-        feedbackType:
+        email:
           type: string
-          enum:
-          - Emoji
-          - Comment
-          - ThumpsUpThumpsDown
-          - Opinion
-          - ZeroToTen
-        feedback:
+      required:
+      - email
+      - id
+      - name
+    QuestionDto:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+      required:
+      - id
+      - text
+    QuestionSummaryDto:
+      type: object
+      properties:
+        positives:
           type: array
           items:
-            $ref: "#/components/schemas/FeedbackEntity"
-        questionFeedbackSummary:
-          $ref: "#/components/schemas/QuestionFeedbackSummaryDto"
+            type: string
+        improvements:
+          type: array
+          items:
+            type: string
       required:
-      - feedback
-      - feedbackType
-      - id
-      - questionText
-    OpinionQuestionFeedbackSummary:
+      - improvements
+      - positives
+    RatingPoint:
       type: object
       properties:
-        countStronglyAgree:
-          type: integer
-          format: int32
-        countAgree:
-          type: integer
-          format: int32
-        countStronglyDisagree:
-          type: integer
-          format: int32
-        countDisagree:
-          type: integer
-          format: int32
-        percentageStronglyAgree:
+        value:
           type: number
           format: double
-        percentageAgree:
-          type: number
-          format: double
-        percentageStronglyDisagree:
-          type: number
-          format: double
-        percentageDisagree:
-          type: number
-          format: double
-      required:
-      - countAgree
-      - countDisagree
-      - countStronglyAgree
-      - countStronglyDisagree
-      - percentageAgree
-      - percentageDisagree
-      - percentageStronglyAgree
-      - percentageStronglyDisagree
-    OverallFeedbackCountStatsDto:
-      type: object
-      properties:
-        verySadCount:
-          type: integer
-          format: int32
-        sadCount:
-          type: integer
-          format: int32
-        happyCount:
-          type: integer
-          format: int32
-        veryHappyCount:
-          type: integer
-          format: int32
-        commentsCount:
-          type: integer
-          format: int32
-      required:
-      - commentsCount
-      - happyCount
-      - sadCount
-      - veryHappyCount
-      - verySadCount
-    OverallFeedbackSegmentationStatsDto:
-      type: object
-      properties:
-        verySadPercentage:
-          type: number
-          format: double
-        sadPercentage:
-          type: number
-          format: double
-        happyPercentage:
-          type: number
-          format: double
-        veryHappyPercentage:
-          type: number
-          format: double
-      required:
-      - happyPercentage
-      - sadPercentage
-      - veryHappyPercentage
-      - verySadPercentage
-    OverallFeedbackSummaryDto:
-      type: object
-      properties:
-        segmentationStats:
-          $ref: "#/components/schemas/OverallFeedbackSegmentationStatsDto"
-        countStats:
-          $ref: "#/components/schemas/OverallFeedbackCountStatsDto"
-        unseenResponses:
-          type: integer
-          format: int32
-        responses:
-          type: integer
-          format: int32
-      required:
-      - countStats
-      - responses
-      - segmentationStats
-      - unseenResponses
-    OwnerInfoDto:
-      type: object
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-    ParticipantSummaryDto:
-      type: object
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-    QuestionFeedbackSummaryDto:
-      type: object
-      properties:
-        emojiQuestionFeedbackSummary:
-          $ref: "#/components/schemas/EmojiQuestionFeedbackSummary"
-        thumpsQuestionFeedbackSummary:
-          $ref: "#/components/schemas/ThumpsQuestionFeedbackSummary"
-        opinionQuestionFeedbackSummary:
-          $ref: "#/components/schemas/OpinionQuestionFeedbackSummary"
-        zeroToTenQuestionFeedbackSummary:
-          $ref: "#/components/schemas/ZeroToTenQuestionFeedbackSummary"
-    RecentlyUsedQuestions:
-      type: object
-      properties:
-        questionText:
-          type: string
-        feedbackType:
-          type: string
-          enum:
-          - Emoji
-          - Comment
-          - ThumpsUpThumpsDown
-          - Opinion
-          - ZeroToTen
-        updatedAt:
+        timestamp:
           type: string
           format: date-time
       required:
-      - feedbackType
-      - questionText
-      - updatedAt
-    ThumpsQuestionFeedbackSummary:
+      - timestamp
+      - value
+    RecurringSettings:
       type: object
       properties:
-        countUp:
+        frequency:
+          type: string
+          enum:
+          - WEEKLY
+          - MONTHLY
+        dayOfWeek:
+          type: string
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+        dayOfMonth:
           type: integer
           format: int32
-        countDown:
-          type: integer
-          format: int32
-        percentageUp:
-          type: number
-          format: double
-        percentageDown:
-          type: number
-          format: double
+        time:
+          type: string
       required:
-      - countDown
-      - countUp
-      - percentageDown
-      - percentageUp
-    ZeroToTenQuestionFeedbackSummary:
+      - frequency
+      - time
+    SessionDto:
       type: object
       properties:
-        countValue0:
-          type: integer
-          format: int32
-        countValue1:
-          type: integer
-          format: int32
-        countValue2:
-          type: integer
-          format: int32
-        countValue3:
-          type: integer
-          format: int32
-        countValue4:
-          type: integer
-          format: int32
-        countValue5:
-          type: integer
-          format: int32
-        countValue6:
-          type: integer
-          format: int32
-        countValue7:
-          type: integer
-          format: int32
-        countValue8:
-          type: integer
-          format: int32
-        countValue9:
-          type: integer
-          format: int32
-        countValue10:
-          type: integer
-          format: int32
-        percentageValue0:
+        id:
+          type: string
+          format: uuid
+        averageRating:
           type: number
           format: double
-        percentageValue1:
+        ratingDelta:
           type: number
           format: double
-        percentageValue2:
-          type: number
-          format: double
-        percentageValue3:
-          type: number
-          format: double
-        percentageValue4:
-          type: number
-          format: double
-        percentageValue5:
-          type: number
-          format: double
-        percentageValue6:
-          type: number
-          format: double
-        percentageValue7:
-          type: number
-          format: double
-        percentageValue8:
-          type: number
-          format: double
-        percentageValue9:
-          type: number
-          format: double
-        percentageValue10:
-          type: number
-          format: double
+        summary:
+          type: string
+        questionSummary:
+          $ref: "#/components/schemas/QuestionSummaryDto"
+        questionsSnapshot:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionDto"
       required:
-      - countValue0
-      - countValue1
-      - countValue10
-      - countValue2
-      - countValue3
-      - countValue4
-      - countValue5
-      - countValue6
-      - countValue7
-      - countValue8
-      - countValue9
-      - percentageValue0
-      - percentageValue1
-      - percentageValue10
-      - percentageValue2
-      - percentageValue3
-      - percentageValue4
-      - percentageValue5
-      - percentageValue6
-      - percentageValue7
-      - percentageValue8
-      - percentageValue9
+      - id
+      - questionsSnapshot
+    SessionSettings:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - MANUAL
+          - RECURRING
+          - CALENDAR_AUTOMATION
+        recurring:
+          $ref: "#/components/schemas/RecurringSettings"
+        automation:
+          $ref: "#/components/schemas/AutomationSettings"
+      required:
+      - source
     SendNotificationInput:
       type: object
       properties:
@@ -981,6 +723,15 @@ components:
       required:
       - feedback
       - pinCode
+    OwnerInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
     ParticipantEventDto:
       type: object
       properties:
@@ -1120,6 +871,13 @@ components:
           type: string
         fcmToken:
           type: string
+    LogoutInput:
+      type: object
+      properties:
+        fcmToken:
+          type: string
+      required:
+      - fcmToken
     AccountInfoDto:
       type: object
       properties:
@@ -1168,50 +926,33 @@ components:
       - id
       - newFeedbackCount
       - seenByManager
-    ManagerDataDto:
-      type: object
-      properties:
-        managerEvents:
-          type: array
-          items:
-            $ref: "#/components/schemas/ManagerEventDto"
-        activity:
-          $ref: "#/components/schemas/ActivityDto"
-        recentlyUsedQuestions:
-          type: array
-          items:
-            $ref: "#/components/schemas/RecentlyUsedQuestions"
-        feedbackSessionHash:
-          type: string
-          format: uuid
-      required:
-      - activity
-      - feedbackSessionHash
-      - managerEvents
-      - recentlyUsedQuestions
-    SessionDto:
+    BootstrapDto:
       type: object
       properties:
         role:
           type: string
         accountInfo:
           $ref: "#/components/schemas/AccountInfoDto"
-        participantEvents:
-          type: array
-          items:
-            $ref: "#/components/schemas/ParticipantEventDto"
         managerData:
           $ref: "#/components/schemas/ManagerDataDto"
       required:
       - accountInfo
-      - participantEvents
-    LogoutInput:
+    ManagerDataDto:
       type: object
       properties:
-        fcmToken:
+        feedbackFlows:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeedbackFlowDto"
+        activity:
+          $ref: "#/components/schemas/ActivityDto"
+        sessionHash:
           type: string
+          format: uuid
       required:
-      - fcmToken
+      - activity
+      - feedbackFlows
+      - sessionHash
     UpdatedSessionResponse:
       type: object
       properties:

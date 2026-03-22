@@ -1,6 +1,6 @@
 package dk.example.feedback.controller
 
-import dk.example.feedback.dto.EventWrapperDto
+import dk.example.feedback.dto.FeedbackFlowDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.payloads.EventInput
@@ -27,7 +27,7 @@ class EventController(
 
     @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     @PostMapping
-    fun createEvent(@RequestBody eventInput: EventInput, @AuthenticationPrincipal principal: Jwt): EventWrapperDto {
+    fun createEvent(@RequestBody eventInput: EventInput, @AuthenticationPrincipal principal: Jwt): FeedbackFlowDto {
         return eventService.createEvent(eventInput = eventInput, jwt = principal)
     }
 
@@ -37,7 +37,7 @@ class EventController(
         @RequestBody eventInput: EventInput,
         @PathVariable eventId: UUID,
         @AuthenticationPrincipal principal: Jwt
-    ): EventWrapperDto {
+    ): FeedbackFlowDto {
         return eventService.updateEvent(eventInput = eventInput, eventId = eventId, jwt = principal)
     }
 
@@ -50,7 +50,8 @@ class EventController(
     @PreAuthorize("isAuthenticated()")
     @PostMapping("join/{pinCode}")
     fun joinEvent(@PathVariable pinCode: String, @AuthenticationPrincipal principal: Jwt): ParticipantEventDto {
-        return eventService.joinEvent(pinCode = pinCode, jwt = principal)
+        TODO()
+//        return eventService.joinEvent(pinCode = pinCode, jwt = principal)
     }
 
     @PutMapping("mark-as-seen/{eventId}")

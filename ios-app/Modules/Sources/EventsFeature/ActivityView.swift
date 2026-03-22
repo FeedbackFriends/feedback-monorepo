@@ -21,8 +21,8 @@ public struct ActivityView: View {
                 if activityItems.isEmpty {
                     ScrollView {
                         EmptyStateView(
-                            title: "No activity yet",
-                            message: "When new feedback comes in, activity updates will appear here."
+                            title: "Nothing to show here yet.",
+                            message: "Once there’s an update, you’ll see it here."
                         )
                     }
                     .scrollContentBackground(.hidden)

@@ -107,6 +107,12 @@ public extension ParticipantSession {
         accountInfo: .init(name: "Nicolai", email: "Nicolai@letsgrow.dk", phoneNumber: "88888888")
     )
 }
+//
+//public extension AnonymousSession {
+//    static let mock = Self(
+//        participantEvents: .init(uniqueElements: (0...100).map { _ in .mock() })
+//    )
+//}
 
 public extension ManagerSession {
     static let mock = Self(
@@ -168,6 +174,12 @@ public extension Session {
             ),
             accountInfo: .init(name: "Nicolai", email: "Nicolai@letsgrow.dk", phoneNumber: "88888888"),
             role: .manager
+        )
+    }
+    static func mockAnonymous() -> Self {
+        Self(
+            participantEvents: .init(uniqueElements: []),
+            accountInfo: .init(name: nil, email: nil, phoneNumber: nil), role: nil
         )
     }
     static func mockParticipant() -> Self {
