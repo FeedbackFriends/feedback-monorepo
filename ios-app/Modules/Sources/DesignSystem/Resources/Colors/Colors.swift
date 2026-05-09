@@ -1,6 +1,8 @@
 import Foundation
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public struct Theme {
 	public static let cornerRadius = 18.0
@@ -28,7 +30,9 @@ public extension Color {
     static let themeHoverOverlay = Color("themeHoverOverlay", bundle: Bundle.module)
 }
 
+#if canImport(UIKit)
 public extension UIColor {
-	static var themeText: UIColor { return UIColor(.themeText) }
-	static var themeBackground: UIColor { return UIColor(.themeBackground) }
+    static var themeText: UIColor { UIColor(.themeText) }
+    static var themeBackground: UIColor { UIColor(.themeBackground) }
 }
+#endif

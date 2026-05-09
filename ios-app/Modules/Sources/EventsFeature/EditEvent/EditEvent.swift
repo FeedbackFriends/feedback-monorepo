@@ -64,8 +64,8 @@ public struct EditEvent: Sendable {
                 state.editRequestInFlight = true
                 return .run { [state = state] send in
                     do {
-                        _ = try await apiClient.updateEvent(
-                            state.eventForm.eventInput,
+                        _ = try await apiClient.updateActivity(
+                            .init(state.eventForm.eventInput),
                             state.eventId
                         )
                         await send(.editEventResponse)

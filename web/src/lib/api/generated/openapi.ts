@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/event/{eventId}": {
+    "/session/{sessionId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -12,15 +12,15 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["updateEvent"];
+        put: operations["updateSession"];
         post?: never;
-        delete: operations["deleteEvent"];
+        delete: operations["deleteSession"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/event/mark-as-seen/{eventId}": {
+    "/session/mark-as-seen/{sessionId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -28,7 +28,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["markEventAsSeen"];
+        put: operations["markSessionAsSeen"];
         post?: never;
         delete?: never;
         options?: never;
@@ -47,6 +47,22 @@ export interface paths {
         put: operations["sendNotification"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/activity/{activityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["updateActivity"];
+        post?: never;
+        delete: operations["deleteActivity"];
         options?: never;
         head?: never;
         patch?: never;
@@ -100,6 +116,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["createSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/session/join/{pinCode}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["joinSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/feedback/submit": {
         parameters: {
             query?: never;
@@ -132,38 +180,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/event": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["createEvent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/event/join/{pinCode}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["joinEvent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/admin/mock-id-token": {
         parameters: {
             query?: never;
@@ -180,6 +196,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/activity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["createActivity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/account/logout": {
         parameters: {
             query?: never;
@@ -190,6 +222,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/notification-history/mark-as-seen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["markNotificationHistoryAsSeen"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -228,115 +276,111 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/activity/mark-activity-as-seen": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["markActivityAsSeen"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        EventInput: {
-            title: string;
-            agenda?: string;
+        SessionInput: {
+            /** Format: uuid */
+            activityId: string;
             /** Format: date-time */
             date: string;
             /** Format: int32 */
             durationInMinutes: number;
             location?: string;
-            invitedEmails: string[];
-            questions: components["schemas"]["QuestionInput"][];
         };
-        QuestionInput: {
-            questionText: string;
-            /** @enum {string} */
-            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
-        };
-        AutomationSettings: {
-            botEmail: string;
-            isActive: boolean;
-        };
-        FeedbackFlowDto: {
+        /** @description Manager-facing activity payload and session history for a feedback activity. */
+        ActivityDto: {
             /** Format: uuid */
             id: string;
             title: string;
+            agenda?: string;
             owner: components["schemas"]["OwnerDto"];
-            newFeedback: boolean;
-            analytics: components["schemas"]["FlowAnalytics"];
-            insights: components["schemas"]["FlowInsights"];
-            sessions: components["schemas"]["SessionDto"][];
-            sessionSettings: components["schemas"]["SessionSettings"];
-            currentQuestions: components["schemas"]["QuestionDto"][];
-        };
-        FlowAnalytics: {
-            /** Format: double */
-            averageRating?: number;
             /** @enum {string} */
-            trendStatus?: "IMPROVING" | "STABLE" | "NEEDS_ATTENTION";
-            /** Format: date-time */
-            lastSessionAt?: string;
-            ratingTrend: components["schemas"]["RatingPoint"][];
+            runMode: "MANUAL" | "AUTOMATIC";
+            sendEmails: boolean;
+            invitedEmails: string[];
+            sessions: components["schemas"]["SessionDto"][];
+            currentQuestions: components["schemas"]["QuestionDto"][];
+            trend: components["schemas"]["ActivityTrendDto"];
         };
-        FlowInsights: {
-            summary?: string;
+        /** @description Activity-level trend based on comparable session scores. Uses the latest sessions with numeric average rating normalized to 0-5. */
+        ActivityTrendDto: {
+            /** @enum {string} */
+            direction: "improving" | "stable" | "declining" | "insufficient_data";
+            /** @enum {string} */
+            indicator: "positive" | "neutral" | "negative";
+            /** @enum {string} */
+            metric: "average_rating";
+            /** Format: double */
+            latestValue?: number;
+            /** Format: double */
+            previousValue?: number;
+            /** Format: double */
+            delta?: number;
+            /** Format: int32 */
+            comparedSessionCount: number;
         };
+        OverallFeedbackCountStatsDto: {
+            /** Format: int32 */
+            verySadCount: number;
+            /** Format: int32 */
+            sadCount: number;
+            /** Format: int32 */
+            happyCount: number;
+            /** Format: int32 */
+            veryHappyCount: number;
+            /** Format: int32 */
+            commentsCount: number;
+        };
+        OverallFeedbackSegmentationStatsDto: {
+            /** Format: double */
+            verySadPercentage: number;
+            /** Format: double */
+            sadPercentage: number;
+            /** Format: double */
+            happyPercentage: number;
+            /** Format: double */
+            veryHappyPercentage: number;
+        };
+        OverallFeedbackSummaryDto: {
+            segmentationStats: components["schemas"]["OverallFeedbackSegmentationStatsDto"];
+            countStats: components["schemas"]["OverallFeedbackCountStatsDto"];
+            /** Format: int32 */
+            unseenResponses: number;
+            /** Format: int32 */
+            responses: number;
+        };
+        /** @description Basic owner metadata for an activity or session. */
         OwnerDto: {
-            /** Format: uuid */
             id: string;
-            name: string;
-            email: string;
+            name?: string;
+            email?: string;
         };
+        /** @description Activity question reference. */
         QuestionDto: {
+            /** Format: uuid */
             id: string;
             text: string;
         };
-        QuestionSummaryDto: {
-            positives: string[];
-            improvements: string[];
-        };
-        RatingPoint: {
-            /** Format: double */
-            value: number;
-            /** Format: date-time */
-            timestamp: string;
-        };
-        RecurringSettings: {
-            /** @enum {string} */
-            frequency: "WEEKLY" | "MONTHLY";
-            /** @enum {string} */
-            dayOfWeek?: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-            /** Format: int32 */
-            dayOfMonth?: number;
-            time: string;
-        };
+        /** @description Session summary for an activity. Includes scheduling and calendar metadata plus the feedback snapshot attached to the session. */
         SessionDto: {
             /** Format: uuid */
             id: string;
+            /** Format: date-time */
+            date: string;
+            /** Format: int32 */
+            durationInMinutes: number;
+            location?: string;
+            pinCode?: string;
+            createdFromMailListener: boolean;
+            /** @enum {string} */
+            calendarProvider?: "GOOGLE" | "APPLE" | "MICROSOFT" | "ZOOM";
+            calendarEventId?: string;
             /** Format: double */
             averageRating?: number;
-            /** Format: double */
-            ratingDelta?: number;
-            summary?: string;
-            questionSummary?: components["schemas"]["QuestionSummaryDto"];
+            overallFeedbackSummary?: components["schemas"]["OverallFeedbackSummaryDto"];
             questionsSnapshot: components["schemas"]["QuestionDto"][];
-        };
-        SessionSettings: {
-            /** @enum {string} */
-            source: "MANUAL" | "RECURRING" | "CALENDAR_AUTOMATION";
-            recurring?: components["schemas"]["RecurringSettings"];
-            automation?: components["schemas"]["AutomationSettings"];
         };
         SendNotificationInput: {
             fcmToken: string;
@@ -345,6 +389,22 @@ export interface components {
             newFeedback: number;
             /** Format: uuid */
             eventId: string;
+        };
+        ActivityInput: {
+            title: string;
+            agenda?: string;
+            questions: components["schemas"]["QuestionInput"][];
+            /** @enum {string} */
+            runMode: "MANUAL" | "AUTOMATIC";
+            invitedEmails: string[];
+            sendEmails: boolean;
+        };
+        QuestionInput: {
+            /** Format: uuid */
+            id?: string;
+            questionText: string;
+            /** @enum {string} */
+            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
         };
         ModifyAccountInput: {
             name?: string;
@@ -356,6 +416,35 @@ export interface components {
         };
         LinkFCMTokenToAccountInput: {
             fcmToken: string;
+        };
+        OwnerInfoDto: {
+            name?: string;
+            email?: string;
+            phoneNumber?: string;
+        };
+        ParticipantQuestionDto: {
+            /** Format: uuid */
+            id: string;
+            questionText: string;
+            /** @enum {string} */
+            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
+        };
+        ParticipantSessionDto: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            agenda?: string;
+            /** Format: date-time */
+            date: string;
+            pinCode?: string;
+            /** Format: int32 */
+            durationInMinutes: number;
+            location?: string;
+            createdFromMailListener: boolean;
+            ownerInfo: components["schemas"]["OwnerInfoDto"];
+            questions: components["schemas"]["ParticipantQuestionDto"][];
+            feedbackSubmited: boolean;
+            recentlyJoined: boolean;
         };
         FeedbackInput: {
             comment?: string;
@@ -376,38 +465,10 @@ export interface components {
             feedback: components["schemas"]["FeedbackInput"][];
             pinCode: string;
         };
-        OwnerInfoDto: {
-            name?: string;
-            email?: string;
-            phoneNumber?: string;
-        };
-        ParticipantEventDto: {
-            /** Format: uuid */
-            id: string;
-            title: string;
-            agenda?: string;
-            /** Format: date-time */
-            date: string;
-            pinCode?: string;
-            /** Format: int32 */
-            durationInMinutes: number;
-            location?: string;
-            createdFromMailListener: boolean;
-            ownerInfo: components["schemas"]["OwnerInfoDto"];
-            questions: components["schemas"]["ParticipantQuestionDto"][];
-            feedbackSubmited: boolean;
-            recentlyJoined: boolean;
-        };
-        ParticipantQuestionDto: {
-            /** Format: uuid */
-            id: string;
-            questionText: string;
-            /** @enum {string} */
-            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
-        };
         SubmitFeedbackResponseDto: {
             shouldPresentRatingPrompt: boolean;
-            event: components["schemas"]["ParticipantEventDto"];
+            session: components["schemas"]["ParticipantSessionDto"];
+            event: components["schemas"]["ParticipantSessionDto"];
         };
         StartFeedbackSessionInput: {
             pinCode: string;
@@ -437,20 +498,63 @@ export interface components {
             requestedRole?: string;
             fcmToken?: string;
         };
-        LogoutInput: {
-            fcmToken: string;
-        };
         AccountInfoDto: {
             name?: string;
             email?: string;
             phoneNumber?: string;
         };
-        ActivityDto: {
-            items: components["schemas"]["ActivityItem"][];
+        BootstrapDto: {
+            role?: string;
+            accountInfo: components["schemas"]["AccountInfoDto"];
+            participantSessions: components["schemas"]["ParticipantSessionDto"][];
+            managerData?: components["schemas"]["ManagerDataDto"];
+        };
+        EmojiQuestionFeedbackSummary: {
+            /** Format: int32 */
+            countVerySad: number;
+            /** Format: int32 */
+            countSad: number;
+            /** Format: int32 */
+            countHappy: number;
+            /** Format: int32 */
+            countVeryHappy: number;
+            /** Format: double */
+            percentageVerySad: number;
+            /** Format: double */
+            percentageSad: number;
+            /** Format: double */
+            percentageHappy: number;
+            /** Format: double */
+            percentageVeryHappy: number;
+        };
+        ManagerDataDto: {
+            activities: components["schemas"]["ActivityDto"][];
+            notificationHistory: components["schemas"]["NotificationHistoryDto"];
+            /** Format: uuid */
+            bootstrapHash: string;
+            questionAnalytics: components["schemas"]["ManagerQuestionAnalyticsDto"][];
+        };
+        ManagerQuestionAnalyticsDto: {
+            /** Format: uuid */
+            questionId: string;
+            questionText: string;
+            /** @enum {string} */
+            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
+            /** Format: int32 */
+            sessionCount: number;
+            /** Format: int32 */
+            responseCount: number;
+            /** Format: date-time */
+            latestAskedAt?: string;
+            overallSummary?: components["schemas"]["QuestionFeedbackSummaryDto"];
+            timeline: components["schemas"]["QuestionTrendPointDto"][];
+        };
+        NotificationHistoryDto: {
+            items: components["schemas"]["NotificationHistoryItem"][];
             /** Format: int32 */
             unseenTotal: number;
         };
-        ActivityItem: {
+        NotificationHistoryItem: {
             /** Format: uuid */
             id: string;
             /** Format: date-time */
@@ -462,16 +566,97 @@ export interface components {
             newFeedbackCount: number;
             seenByManager: boolean;
         };
-        BootstrapDto: {
-            role?: string;
-            accountInfo: components["schemas"]["AccountInfoDto"];
-            managerData?: components["schemas"]["ManagerDataDto"];
+        OpinionQuestionFeedbackSummary: {
+            /** Format: int32 */
+            countStronglyAgree: number;
+            /** Format: int32 */
+            countAgree: number;
+            /** Format: int32 */
+            countStronglyDisagree: number;
+            /** Format: int32 */
+            countDisagree: number;
+            /** Format: double */
+            percentageStronglyAgree: number;
+            /** Format: double */
+            percentageAgree: number;
+            /** Format: double */
+            percentageStronglyDisagree: number;
+            /** Format: double */
+            percentageDisagree: number;
         };
-        ManagerDataDto: {
-            feedbackFlows: components["schemas"]["FeedbackFlowDto"][];
-            activity: components["schemas"]["ActivityDto"];
+        QuestionFeedbackSummaryDto: {
+            emojiQuestionFeedbackSummary?: components["schemas"]["EmojiQuestionFeedbackSummary"];
+            thumpsQuestionFeedbackSummary?: components["schemas"]["ThumpsQuestionFeedbackSummary"];
+            opinionQuestionFeedbackSummary?: components["schemas"]["OpinionQuestionFeedbackSummary"];
+            zeroToTenQuestionFeedbackSummary?: components["schemas"]["ZeroToTenQuestionFeedbackSummary"];
+        };
+        QuestionTrendPointDto: {
             /** Format: uuid */
-            sessionHash: string;
+            sessionId: string;
+            /** Format: date-time */
+            sessionDate: string;
+            /** Format: int32 */
+            responseCount: number;
+            summary?: components["schemas"]["QuestionFeedbackSummaryDto"];
+        };
+        ThumpsQuestionFeedbackSummary: {
+            /** Format: int32 */
+            countUp: number;
+            /** Format: int32 */
+            countDown: number;
+            /** Format: double */
+            percentageUp: number;
+            /** Format: double */
+            percentageDown: number;
+        };
+        ZeroToTenQuestionFeedbackSummary: {
+            /** Format: int32 */
+            countValue0: number;
+            /** Format: int32 */
+            countValue1: number;
+            /** Format: int32 */
+            countValue2: number;
+            /** Format: int32 */
+            countValue3: number;
+            /** Format: int32 */
+            countValue4: number;
+            /** Format: int32 */
+            countValue5: number;
+            /** Format: int32 */
+            countValue6: number;
+            /** Format: int32 */
+            countValue7: number;
+            /** Format: int32 */
+            countValue8: number;
+            /** Format: int32 */
+            countValue9: number;
+            /** Format: int32 */
+            countValue10: number;
+            /** Format: double */
+            percentageValue0: number;
+            /** Format: double */
+            percentageValue1: number;
+            /** Format: double */
+            percentageValue2: number;
+            /** Format: double */
+            percentageValue3: number;
+            /** Format: double */
+            percentageValue4: number;
+            /** Format: double */
+            percentageValue5: number;
+            /** Format: double */
+            percentageValue6: number;
+            /** Format: double */
+            percentageValue7: number;
+            /** Format: double */
+            percentageValue8: number;
+            /** Format: double */
+            percentageValue9: number;
+            /** Format: double */
+            percentageValue10: number;
+        };
+        LogoutInput: {
+            fcmToken: string;
         };
         ApiError: {
             timestamp?: string;
@@ -490,18 +675,18 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    updateEvent: {
+    updateSession: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
+                sessionId: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["EventInput"];
+                "application/json": components["schemas"]["SessionInput"];
             };
         };
         responses: {
@@ -511,7 +696,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FeedbackFlowDto"];
+                    "application/json": components["schemas"]["ActivityDto"];
                 };
             };
             /** @description Internal Server Error */
@@ -525,12 +710,12 @@ export interface operations {
             };
         };
     };
-    deleteEvent: {
+    deleteSession: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
+                sessionId: string;
             };
             cookie?: never;
         };
@@ -554,12 +739,12 @@ export interface operations {
             };
         };
     };
-    markEventAsSeen: {
+    markSessionAsSeen: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                eventId: string;
+                sessionId: string;
             };
             cookie?: never;
         };
@@ -595,6 +780,70 @@ export interface operations {
                 "application/json": components["schemas"]["SendNotificationInput"];
             };
         };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    updateActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                activityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActivityInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    deleteActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                activityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -664,7 +913,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SessionDto"];
+                    "application/json": components["schemas"]["BootstrapDto"];
                 };
             };
             /** @description Internal Server Error */
@@ -767,6 +1016,70 @@ export interface operations {
             };
         };
     };
+    createSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SessionInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    joinSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pinCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParticipantSessionDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     submitFeedback: {
         parameters: {
             query?: never;
@@ -833,70 +1146,6 @@ export interface operations {
             };
         };
     };
-    createEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EventInput"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["FeedbackFlowDto"];
-                };
-            };
-            /** @description Internal Server Error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiError"];
-                };
-            };
-        };
-    };
-    joinEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                pinCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ParticipantEventDto"];
-                };
-            };
-            /** @description Internal Server Error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiError"];
-                };
-            };
-        };
-    };
     mockIdToken: {
         parameters: {
             query?: never;
@@ -930,6 +1179,39 @@ export interface operations {
             };
         };
     };
+    createActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActivityInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     logout: {
         parameters: {
             query?: never;
@@ -942,6 +1224,33 @@ export interface operations {
                 "application/json": components["schemas"]["LogoutInput"];
             };
         };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    markNotificationHistoryAsSeen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -1009,33 +1318,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["BootstrapDto"];
                 };
-            };
-            /** @description Internal Server Error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiError"];
-                };
-            };
-        };
-    };
-    markActivityAsSeen: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
             /** @description Internal Server Error */
             500: {

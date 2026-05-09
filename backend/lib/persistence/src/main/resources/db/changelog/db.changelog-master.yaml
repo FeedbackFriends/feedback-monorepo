@@ -67,3 +67,9 @@ databaseChangeLog:
   - include:
       file: 0017-add-zoho-archive-status.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0018-add-activity-and-rename-event-to-session.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0019-add-activity-question-id.yaml
+      relativeToChangelogFile: true

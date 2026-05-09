@@ -1,30 +1,38 @@
 package dk.example.feedback.persistence.dao
 
 import dk.example.feedback.model.database.ActivityEntity
+import dk.example.feedback.persistence.dao.utility.BaseCompanion
+import dk.example.feedback.persistence.dao.utility.CommonColumns
+import dk.example.feedback.persistence.table.ActivityInviteTable
 import dk.example.feedback.persistence.table.ActivityTable
-import java.util.*
-import org.jetbrains.exposed.dao.Entity
-import org.jetbrains.exposed.dao.EntityClass
+import dk.example.feedback.persistence.table.QuestionTable
+import java.util.UUID
 import org.jetbrains.exposed.dao.id.EntityID
 
-class ActivityDao(id: EntityID<UUID>) : Entity<UUID>(id) {
+class ActivityDao(id: EntityID<UUID>) : CommonColumns<ActivityEntity>(id, ActivityTable) {
 
-    companion object : EntityClass<UUID, ActivityDao>(ActivityTable)
+    companion object : BaseCompanion<ActivityEntity, ActivityDao>(ActivityTable)
 
-    var createdAt by ActivityTable.dateCreated
-    var newFeedback by ActivityTable.newFeedback
-    var seenByManager by ActivityTable.seenByManager
-    var event by EventDao referencedOn ActivityTable.event
-    var account by AccountDao referencedOn ActivityTable.account
+    var title by ActivityTable.title
+    var agenda by ActivityTable.agenda
+    var runMode by ActivityTable.runMode
+    var sendEmails by ActivityTable.sendEmails
+    var manager by AccountDao referencedOn ActivityTable.manager
+    val questions by QuestionDao optionalReferrersOn QuestionTable.activity
+    val invites by ActivityInviteDao referrersOn ActivityInviteTable.activity
 
-    fun toModel(): ActivityEntity {
+    override fun toModel(): ActivityEntity {
         return ActivityEntity(
-            id = this.id.value,
-            createdAt = this.createdAt,
-            newFeedback = this.newFeedback,
-            event = this.event.toModel(),
-            account = this.account.toModel(),
-            seenByManager = this.seenByManager
+            id = id.value,
+            title = title,
+            agenda = agenda,
+            runMode = runMode,
+            sendEmails = sendEmails,
+            createdAt = dateCreated,
+            updatedAt = lastUpdate,
+            questions = questions.map { it.toModel() },
+            invites = invites.map { it.toModel() },
+            manager = manager.toModel(),
         )
     }
 }

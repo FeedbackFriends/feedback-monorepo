@@ -9,13 +9,13 @@ servers:
 security:
 - bearerAuth: []
 paths:
-  /event/{eventId}:
+  /session/{sessionId}:
     put:
       tags:
-      - Events
-      operationId: updateEvent
+      - Sessions
+      operationId: updateSession
       parameters:
-      - name: eventId
+      - name: sessionId
         in: path
         required: true
         schema:
@@ -25,7 +25,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EventInput"
+              $ref: "#/components/schemas/SessionInput"
         required: true
       responses:
         "200":
@@ -33,7 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FeedbackFlowDto"
+                $ref: "#/components/schemas/ActivityDto"
         "500":
           description: Internal Server Error
           content:
@@ -42,10 +42,10 @@ paths:
                 $ref: "#/components/schemas/ApiError"
     delete:
       tags:
-      - Events
-      operationId: deleteEvent
+      - Sessions
+      operationId: deleteSession
       parameters:
-      - name: eventId
+      - name: sessionId
         in: path
         required: true
         schema:
@@ -60,13 +60,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /event/mark-as-seen/{eventId}:
+  /session/mark-as-seen/{sessionId}:
     put:
       tags:
-      - Events
-      operationId: markEventAsSeen
+      - Sessions
+      operationId: markSessionAsSeen
       parameters:
-      - name: eventId
+      - name: sessionId
         in: path
         required: true
         schema:
@@ -96,6 +96,57 @@ paths:
         "200":
           description: OK
           content: {}
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /activity/{activityId}:
+    put:
+      tags:
+      - Activity
+      operationId: updateActivity
+      parameters:
+      - name: activityId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivityInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivityDto"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    delete:
+      tags:
+      - Activity
+      operationId: deleteActivity
+      parameters:
+      - name: activityId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
         "500":
           description: Internal Server Error
           content:
@@ -138,7 +189,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SessionDto"
+                $ref: "#/components/schemas/BootstrapDto"
         "500":
           description: Internal Server Error
           content:
@@ -198,6 +249,54 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /session:
+    post:
+      tags:
+      - Sessions
+      operationId: createSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivityDto"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /session/join/{pinCode}:
+    post:
+      tags:
+      - Sessions
+      operationId: joinSession
+      parameters:
+      - name: pinCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParticipantSessionDto"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /feedback/submit:
     post:
       tags:
@@ -246,54 +345,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /event:
-    post:
-      tags:
-      - Events
-      operationId: createEvent
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EventInput"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FeedbackFlowDto"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-  /event/join/{pinCode}:
-    post:
-      tags:
-      - Events
-      operationId: joinEvent
-      parameters:
-      - name: pinCode
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ParticipantEventDto"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
   /admin/mock-id-token:
     post:
       tags:
@@ -318,6 +369,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /activity:
+    post:
+      tags:
+      - Activity
+      operationId: createActivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivityInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivityDto"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /account/logout:
     post:
       tags:
@@ -329,6 +404,20 @@ paths:
             schema:
               $ref: "#/components/schemas/LogoutInput"
         required: true
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /notification-history/mark-as-seen:
+    get:
+      tags:
+      - NotificationHistory
+      operationId: markNotificationHistoryAsSeen
       responses:
         "200":
           description: OK
@@ -381,29 +470,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /activity/mark-activity-as-seen:
-    get:
-      tags:
-      - Activity
-      operationId: markActivityAsSeen
-      responses:
-        "200":
-          description: OK
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
 components:
   schemas:
-    EventInput:
+    SessionInput:
       type: object
       properties:
-        title:
+        activityId:
           type: string
-        agenda:
-          type: string
+          format: uuid
         date:
           type: string
           format: date-time
@@ -412,222 +486,224 @@ components:
           format: int32
         location:
           type: string
-        invitedEmails:
-          type: array
-          items:
-            type: string
-        questions:
-          type: array
-          items:
-            $ref: "#/components/schemas/QuestionInput"
       required:
+      - activityId
       - date
       - durationInMinutes
-      - invitedEmails
-      - questions
-      - title
-    QuestionInput:
+    ActivityDto:
       type: object
-      properties:
-        questionText:
-          type: string
-        feedbackType:
-          type: string
-          enum:
-          - Emoji
-          - Comment
-          - ThumpsUpThumpsDown
-          - Opinion
-          - ZeroToTen
-      required:
-      - feedbackType
-      - questionText
-    AutomationSettings:
-      type: object
-      properties:
-        botEmail:
-          type: string
-        isActive:
-          type: boolean
-      required:
-      - botEmail
-      - isActive
-    FeedbackFlowDto:
-      type: object
+      description: Manager-facing activity payload and session history for a feedback
+        activity.
       properties:
         id:
           type: string
           format: uuid
         title:
           type: string
+        agenda:
+          type: string
         owner:
           $ref: "#/components/schemas/OwnerDto"
-        newFeedback:
+        runMode:
+          type: string
+          enum:
+          - MANUAL
+          - AUTOMATIC
+        sendEmails:
           type: boolean
-        analytics:
-          $ref: "#/components/schemas/FlowAnalytics"
-        insights:
-          $ref: "#/components/schemas/FlowInsights"
+        invitedEmails:
+          type: array
+          items:
+            type: string
         sessions:
           type: array
           items:
             $ref: "#/components/schemas/SessionDto"
-        sessionSettings:
-          $ref: "#/components/schemas/SessionSettings"
         currentQuestions:
           type: array
           items:
             $ref: "#/components/schemas/QuestionDto"
+        trend:
+          $ref: "#/components/schemas/ActivityTrendDto"
       required:
-      - analytics
       - currentQuestions
       - id
-      - insights
-      - newFeedback
+      - invitedEmails
       - owner
-      - sessionSettings
+      - runMode
+      - sendEmails
       - sessions
       - title
-    FlowAnalytics:
+      - trend
+    ActivityTrendDto:
       type: object
+      description: Activity-level trend based on comparable session scores. Uses the
+        latest sessions with numeric average rating normalized to 0-5.
       properties:
-        averageRating:
-          type: number
-          format: double
-        trendStatus:
+        direction:
           type: string
           enum:
-          - IMPROVING
-          - STABLE
-          - NEEDS_ATTENTION
-        lastSessionAt:
+          - improving
+          - stable
+          - declining
+          - insufficient_data
+        indicator:
           type: string
-          format: date-time
-        ratingTrend:
-          type: array
-          items:
-            $ref: "#/components/schemas/RatingPoint"
+          enum:
+          - positive
+          - neutral
+          - negative
+        metric:
+          type: string
+          enum:
+          - average_rating
+        latestValue:
+          type: number
+          format: double
+        previousValue:
+          type: number
+          format: double
+        delta:
+          type: number
+          format: double
+        comparedSessionCount:
+          type: integer
+          format: int32
       required:
-      - ratingTrend
-    FlowInsights:
+      - comparedSessionCount
+      - direction
+      - indicator
+      - metric
+    OverallFeedbackCountStatsDto:
       type: object
       properties:
-        summary:
-          type: string
+        verySadCount:
+          type: integer
+          format: int32
+        sadCount:
+          type: integer
+          format: int32
+        happyCount:
+          type: integer
+          format: int32
+        veryHappyCount:
+          type: integer
+          format: int32
+        commentsCount:
+          type: integer
+          format: int32
+      required:
+      - commentsCount
+      - happyCount
+      - sadCount
+      - veryHappyCount
+      - verySadCount
+    OverallFeedbackSegmentationStatsDto:
+      type: object
+      properties:
+        verySadPercentage:
+          type: number
+          format: double
+        sadPercentage:
+          type: number
+          format: double
+        happyPercentage:
+          type: number
+          format: double
+        veryHappyPercentage:
+          type: number
+          format: double
+      required:
+      - happyPercentage
+      - sadPercentage
+      - veryHappyPercentage
+      - verySadPercentage
+    OverallFeedbackSummaryDto:
+      type: object
+      properties:
+        segmentationStats:
+          $ref: "#/components/schemas/OverallFeedbackSegmentationStatsDto"
+        countStats:
+          $ref: "#/components/schemas/OverallFeedbackCountStatsDto"
+        unseenResponses:
+          type: integer
+          format: int32
+        responses:
+          type: integer
+          format: int32
+      required:
+      - countStats
+      - responses
+      - segmentationStats
+      - unseenResponses
     OwnerDto:
       type: object
+      description: Basic owner metadata for an activity or session.
       properties:
         id:
           type: string
-          format: uuid
         name:
           type: string
         email:
           type: string
       required:
-      - email
       - id
-      - name
     QuestionDto:
       type: object
+      description: Activity question reference.
       properties:
         id:
           type: string
+          format: uuid
         text:
           type: string
       required:
       - id
       - text
-    QuestionSummaryDto:
-      type: object
-      properties:
-        positives:
-          type: array
-          items:
-            type: string
-        improvements:
-          type: array
-          items:
-            type: string
-      required:
-      - improvements
-      - positives
-    RatingPoint:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-        timestamp:
-          type: string
-          format: date-time
-      required:
-      - timestamp
-      - value
-    RecurringSettings:
-      type: object
-      properties:
-        frequency:
-          type: string
-          enum:
-          - WEEKLY
-          - MONTHLY
-        dayOfWeek:
-          type: string
-          enum:
-          - MONDAY
-          - TUESDAY
-          - WEDNESDAY
-          - THURSDAY
-          - FRIDAY
-          - SATURDAY
-          - SUNDAY
-        dayOfMonth:
-          type: integer
-          format: int32
-        time:
-          type: string
-      required:
-      - frequency
-      - time
     SessionDto:
       type: object
+      description: Session summary for an activity. Includes scheduling and calendar
+        metadata plus the feedback snapshot attached to the session.
       properties:
         id:
           type: string
           format: uuid
+        date:
+          type: string
+          format: date-time
+        durationInMinutes:
+          type: integer
+          format: int32
+        location:
+          type: string
+        pinCode:
+          type: string
+        createdFromMailListener:
+          type: boolean
+        calendarProvider:
+          type: string
+          enum:
+          - GOOGLE
+          - APPLE
+          - MICROSOFT
+          - ZOOM
+        calendarEventId:
+          type: string
         averageRating:
           type: number
           format: double
-        ratingDelta:
-          type: number
-          format: double
-        summary:
-          type: string
-        questionSummary:
-          $ref: "#/components/schemas/QuestionSummaryDto"
+        overallFeedbackSummary:
+          $ref: "#/components/schemas/OverallFeedbackSummaryDto"
         questionsSnapshot:
           type: array
           items:
             $ref: "#/components/schemas/QuestionDto"
       required:
+      - createdFromMailListener
+      - date
+      - durationInMinutes
       - id
       - questionsSnapshot
-    SessionSettings:
-      type: object
-      properties:
-        source:
-          type: string
-          enum:
-          - MANUAL
-          - RECURRING
-          - CALENDAR_AUTOMATION
-        recurring:
-          $ref: "#/components/schemas/RecurringSettings"
-        automation:
-          $ref: "#/components/schemas/AutomationSettings"
-      required:
-      - source
     SendNotificationInput:
       type: object
       properties:
@@ -646,6 +722,53 @@ components:
       - fcmToken
       - newFeedback
       - title
+    ActivityInput:
+      type: object
+      properties:
+        title:
+          type: string
+        agenda:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionInput"
+        runMode:
+          type: string
+          enum:
+          - MANUAL
+          - AUTOMATIC
+        invitedEmails:
+          type: array
+          items:
+            type: string
+        sendEmails:
+          type: boolean
+      required:
+      - invitedEmails
+      - questions
+      - runMode
+      - sendEmails
+      - title
+    QuestionInput:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        questionText:
+          type: string
+        feedbackType:
+          type: string
+          enum:
+          - Emoji
+          - Comment
+          - ThumpsUpThumpsDown
+          - Opinion
+          - ZeroToTen
+      required:
+      - feedbackType
+      - questionText
     ModifyAccountInput:
       type: object
       properties:
@@ -669,6 +792,77 @@ components:
           type: string
       required:
       - fcmToken
+    OwnerInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+    ParticipantQuestionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        questionText:
+          type: string
+        feedbackType:
+          type: string
+          enum:
+          - Emoji
+          - Comment
+          - ThumpsUpThumpsDown
+          - Opinion
+          - ZeroToTen
+      required:
+      - feedbackType
+      - id
+      - questionText
+    ParticipantSessionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        agenda:
+          type: string
+        date:
+          type: string
+          format: date-time
+        pinCode:
+          type: string
+        durationInMinutes:
+          type: integer
+          format: int32
+        location:
+          type: string
+        createdFromMailListener:
+          type: boolean
+        ownerInfo:
+          $ref: "#/components/schemas/OwnerInfoDto"
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ParticipantQuestionDto"
+        feedbackSubmited:
+          type: boolean
+        recentlyJoined:
+          type: boolean
+      required:
+      - createdFromMailListener
+      - date
+      - durationInMinutes
+      - feedbackSubmited
+      - id
+      - ownerInfo
+      - questions
+      - recentlyJoined
+      - title
     FeedbackInput:
       type: object
       properties:
@@ -723,86 +917,18 @@ components:
       required:
       - feedback
       - pinCode
-    OwnerInfoDto:
-      type: object
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-    ParticipantEventDto:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        title:
-          type: string
-        agenda:
-          type: string
-        date:
-          type: string
-          format: date-time
-        pinCode:
-          type: string
-        durationInMinutes:
-          type: integer
-          format: int32
-        location:
-          type: string
-        createdFromMailListener:
-          type: boolean
-        ownerInfo:
-          $ref: "#/components/schemas/OwnerInfoDto"
-        questions:
-          type: array
-          items:
-            $ref: "#/components/schemas/ParticipantQuestionDto"
-        feedbackSubmited:
-          type: boolean
-        recentlyJoined:
-          type: boolean
-      required:
-      - createdFromMailListener
-      - date
-      - durationInMinutes
-      - feedbackSubmited
-      - id
-      - ownerInfo
-      - questions
-      - recentlyJoined
-      - title
-    ParticipantQuestionDto:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        questionText:
-          type: string
-        feedbackType:
-          type: string
-          enum:
-          - Emoji
-          - Comment
-          - ThumpsUpThumpsDown
-          - Opinion
-          - ZeroToTen
-      required:
-      - feedbackType
-      - id
-      - questionText
     SubmitFeedbackResponseDto:
       type: object
       properties:
         shouldPresentRatingPrompt:
           type: boolean
+        session:
+          $ref: "#/components/schemas/ParticipantSessionDto"
         event:
-          $ref: "#/components/schemas/ParticipantEventDto"
+          $ref: "#/components/schemas/ParticipantSessionDto"
       required:
       - event
+      - session
       - shouldPresentRatingPrompt
     StartFeedbackSessionInput:
       type: object
@@ -871,13 +997,6 @@ components:
           type: string
         fcmToken:
           type: string
-    LogoutInput:
-      type: object
-      properties:
-        fcmToken:
-          type: string
-      required:
-      - fcmToken
     AccountInfoDto:
       type: object
       properties:
@@ -887,20 +1006,131 @@ components:
           type: string
         phoneNumber:
           type: string
-    ActivityDto:
+    BootstrapDto:
+      type: object
+      properties:
+        role:
+          type: string
+        accountInfo:
+          $ref: "#/components/schemas/AccountInfoDto"
+        participantSessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ParticipantSessionDto"
+        managerData:
+          $ref: "#/components/schemas/ManagerDataDto"
+      required:
+      - accountInfo
+      - participantSessions
+    EmojiQuestionFeedbackSummary:
+      type: object
+      properties:
+        countVerySad:
+          type: integer
+          format: int32
+        countSad:
+          type: integer
+          format: int32
+        countHappy:
+          type: integer
+          format: int32
+        countVeryHappy:
+          type: integer
+          format: int32
+        percentageVerySad:
+          type: number
+          format: double
+        percentageSad:
+          type: number
+          format: double
+        percentageHappy:
+          type: number
+          format: double
+        percentageVeryHappy:
+          type: number
+          format: double
+      required:
+      - countHappy
+      - countSad
+      - countVeryHappy
+      - countVerySad
+      - percentageHappy
+      - percentageSad
+      - percentageVeryHappy
+      - percentageVerySad
+    ManagerDataDto:
+      type: object
+      properties:
+        activities:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityDto"
+        notificationHistory:
+          $ref: "#/components/schemas/NotificationHistoryDto"
+        bootstrapHash:
+          type: string
+          format: uuid
+        questionAnalytics:
+          type: array
+          items:
+            $ref: "#/components/schemas/ManagerQuestionAnalyticsDto"
+      required:
+      - activities
+      - bootstrapHash
+      - notificationHistory
+      - questionAnalytics
+    ManagerQuestionAnalyticsDto:
+      type: object
+      properties:
+        questionId:
+          type: string
+          format: uuid
+        questionText:
+          type: string
+        feedbackType:
+          type: string
+          enum:
+          - Emoji
+          - Comment
+          - ThumpsUpThumpsDown
+          - Opinion
+          - ZeroToTen
+        sessionCount:
+          type: integer
+          format: int32
+        responseCount:
+          type: integer
+          format: int32
+        latestAskedAt:
+          type: string
+          format: date-time
+        overallSummary:
+          $ref: "#/components/schemas/QuestionFeedbackSummaryDto"
+        timeline:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionTrendPointDto"
+      required:
+      - feedbackType
+      - questionId
+      - questionText
+      - responseCount
+      - sessionCount
+      - timeline
+    NotificationHistoryDto:
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/ActivityItem"
+            $ref: "#/components/schemas/NotificationHistoryItem"
         unseenTotal:
           type: integer
           format: int32
       required:
       - items
       - unseenTotal
-    ActivityItem:
+    NotificationHistoryItem:
       type: object
       properties:
         id:
@@ -926,33 +1156,190 @@ components:
       - id
       - newFeedbackCount
       - seenByManager
-    BootstrapDto:
+    OpinionQuestionFeedbackSummary:
       type: object
       properties:
-        role:
-          type: string
-        accountInfo:
-          $ref: "#/components/schemas/AccountInfoDto"
-        managerData:
-          $ref: "#/components/schemas/ManagerDataDto"
+        countStronglyAgree:
+          type: integer
+          format: int32
+        countAgree:
+          type: integer
+          format: int32
+        countStronglyDisagree:
+          type: integer
+          format: int32
+        countDisagree:
+          type: integer
+          format: int32
+        percentageStronglyAgree:
+          type: number
+          format: double
+        percentageAgree:
+          type: number
+          format: double
+        percentageStronglyDisagree:
+          type: number
+          format: double
+        percentageDisagree:
+          type: number
+          format: double
       required:
-      - accountInfo
-    ManagerDataDto:
+      - countAgree
+      - countDisagree
+      - countStronglyAgree
+      - countStronglyDisagree
+      - percentageAgree
+      - percentageDisagree
+      - percentageStronglyAgree
+      - percentageStronglyDisagree
+    QuestionFeedbackSummaryDto:
       type: object
       properties:
-        feedbackFlows:
-          type: array
-          items:
-            $ref: "#/components/schemas/FeedbackFlowDto"
-        activity:
-          $ref: "#/components/schemas/ActivityDto"
-        sessionHash:
+        emojiQuestionFeedbackSummary:
+          $ref: "#/components/schemas/EmojiQuestionFeedbackSummary"
+        thumpsQuestionFeedbackSummary:
+          $ref: "#/components/schemas/ThumpsQuestionFeedbackSummary"
+        opinionQuestionFeedbackSummary:
+          $ref: "#/components/schemas/OpinionQuestionFeedbackSummary"
+        zeroToTenQuestionFeedbackSummary:
+          $ref: "#/components/schemas/ZeroToTenQuestionFeedbackSummary"
+    QuestionTrendPointDto:
+      type: object
+      properties:
+        sessionId:
           type: string
           format: uuid
+        sessionDate:
+          type: string
+          format: date-time
+        responseCount:
+          type: integer
+          format: int32
+        summary:
+          $ref: "#/components/schemas/QuestionFeedbackSummaryDto"
       required:
-      - activity
-      - feedbackFlows
-      - sessionHash
+      - responseCount
+      - sessionDate
+      - sessionId
+    ThumpsQuestionFeedbackSummary:
+      type: object
+      properties:
+        countUp:
+          type: integer
+          format: int32
+        countDown:
+          type: integer
+          format: int32
+        percentageUp:
+          type: number
+          format: double
+        percentageDown:
+          type: number
+          format: double
+      required:
+      - countDown
+      - countUp
+      - percentageDown
+      - percentageUp
+    ZeroToTenQuestionFeedbackSummary:
+      type: object
+      properties:
+        countValue0:
+          type: integer
+          format: int32
+        countValue1:
+          type: integer
+          format: int32
+        countValue2:
+          type: integer
+          format: int32
+        countValue3:
+          type: integer
+          format: int32
+        countValue4:
+          type: integer
+          format: int32
+        countValue5:
+          type: integer
+          format: int32
+        countValue6:
+          type: integer
+          format: int32
+        countValue7:
+          type: integer
+          format: int32
+        countValue8:
+          type: integer
+          format: int32
+        countValue9:
+          type: integer
+          format: int32
+        countValue10:
+          type: integer
+          format: int32
+        percentageValue0:
+          type: number
+          format: double
+        percentageValue1:
+          type: number
+          format: double
+        percentageValue2:
+          type: number
+          format: double
+        percentageValue3:
+          type: number
+          format: double
+        percentageValue4:
+          type: number
+          format: double
+        percentageValue5:
+          type: number
+          format: double
+        percentageValue6:
+          type: number
+          format: double
+        percentageValue7:
+          type: number
+          format: double
+        percentageValue8:
+          type: number
+          format: double
+        percentageValue9:
+          type: number
+          format: double
+        percentageValue10:
+          type: number
+          format: double
+      required:
+      - countValue0
+      - countValue1
+      - countValue10
+      - countValue2
+      - countValue3
+      - countValue4
+      - countValue5
+      - countValue6
+      - countValue7
+      - countValue8
+      - countValue9
+      - percentageValue0
+      - percentageValue1
+      - percentageValue10
+      - percentageValue2
+      - percentageValue3
+      - percentageValue4
+      - percentageValue5
+      - percentageValue6
+      - percentageValue7
+      - percentageValue8
+      - percentageValue9
+    LogoutInput:
+      type: object
+      properties:
+        fcmToken:
+          type: string
+      required:
+      - fcmToken
     ApiError:
       properties:
         timestamp:

@@ -1,28 +1,30 @@
 import type { ReactNode } from "react"
 import { cn } from "@/lib/utils"
-import Background from "@/components/layout/Background"
+import LandingBackground from "@/components/landing/LandingBackground"
 import Footer from "@/components/layout/Footer"
 import Navbar from "@/components/layout/Navbar"
 
 type MarketingShellProps = {
   children: ReactNode
   contentClassName?: string
-  earlyAccessUrl: string
+  ctaHref?: string
+  ctaLabel?: string
 }
 
 function MarketingShell({
   children,
   contentClassName,
-  earlyAccessUrl,
+  ctaHref,
+  ctaLabel,
 }: MarketingShellProps) {
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative isolate min-h-screen overflow-x-clip bg-background">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <Background />
+        <LandingBackground />
       </div>
 
       <div className={cn("relative", contentClassName)}>
-        <Navbar earlyAccessUrl={earlyAccessUrl} />
+        <Navbar ctaHref={ctaHref} ctaLabel={ctaLabel} />
         <main>{children}</main>
         <Footer />
       </div>

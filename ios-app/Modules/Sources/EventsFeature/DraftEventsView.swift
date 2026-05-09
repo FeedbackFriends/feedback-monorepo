@@ -3,13 +3,13 @@ import SwiftUI
 import DesignSystem
 
 public struct DraftEventsView: View {
-    let draftEvents: [ManagerEvent]
-    let draftEventButtonTap: (ManagerEvent) -> Void
+    let draftEvents: [Activity]
+    let draftEventButtonTap: (Activity) -> Void
     @Environment(\.dismiss) var dismiss
     
     public init(
-        draftEvents: [ManagerEvent],
-        draftEventButtonTap: @escaping (ManagerEvent) -> Void
+        draftEvents: [Activity],
+        draftEventButtonTap: @escaping (Activity) -> Void
     ) {
         self.draftEvents = draftEvents
         self.draftEventButtonTap = draftEventButtonTap
@@ -69,7 +69,7 @@ private extension DraftEventsView {
         let label: String
     }
 
-    func draftEventRow(_ item: ManagerEvent) -> some View {
+    func draftEventRow(_ item: Activity) -> some View {
         HStack(spacing: 12) {
             providerBadge(item.calendarProvider)
             VStack(alignment: .leading, spacing: 6) {
@@ -183,7 +183,7 @@ private extension DraftEventsView {
 #Preview {
     DraftEventsView(
         draftEvents: [
-            ManagerEvent.mock()
+            Activity.mock()
         ],
         draftEventButtonTap: { _ in }
     )

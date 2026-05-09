@@ -1,0 +1,196 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]:
+        - link "Lets Grow Icon Lets Grow" [ref=e7] [cursor=pointer]:
+          - /url: /
+          - img "Lets Grow Icon" [ref=e8]
+          - img "Lets Grow" [ref=e9]
+        - link "Få tidlig adgang" [ref=e10] [cursor=pointer]:
+          - /url: https://form.typeform.com/to/RSs7TZAj
+    - main [ref=e11]:
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - heading "Bliv klogere på hvad der virker" [level=1] [ref=e17]:
+              - generic [ref=e18]: Bliv klogere på
+              - generic [ref=e19]:
+                - text: hvad der
+                - generic [ref=e20]:
+                  - text: virker
+                  - img [ref=e21]
+            - paragraph [ref=e23]: Få ærlig feedback efter møder, workshops og oplæg, så du kan se mønstre, justere undervejs og blive bedre til det, der faktisk gør en forskel.
+          - generic [ref=e24]:
+            - link "Få tidlig adgang" [ref=e25] [cursor=pointer]:
+              - /url: https://form.typeform.com/to/RSs7TZAj
+              - text: Få tidlig adgang
+              - img [ref=e26]
+            - link "Se hvordan det virker" [ref=e28] [cursor=pointer]:
+              - /url: "#how-it-works"
+              - text: Se hvordan det virker
+              - img [ref=e29]
+          - generic [ref=e31]:
+            - paragraph [ref=e32]: Integrerer med de værktøjer, I allerede bruger
+            - generic [ref=e33]:
+              - generic "Microsoft Teams" [ref=e34]:
+                - img "Microsoft Teams" [ref=e36]
+                - generic [ref=e37]: Teams
+              - generic "Microsoft Outlook" [ref=e38]:
+                - img "Microsoft Outlook" [ref=e40]
+                - generic [ref=e41]: Outlook
+              - generic "Google Calendar" [ref=e42]:
+                - img "Google Calendar" [ref=e44]
+                - generic [ref=e45]: Google
+              - generic "Apple Calendar" [ref=e46]:
+                - img "Apple Calendar" [ref=e48]
+                - generic [ref=e49]: Apple
+              - generic "Zoho Calendar" [ref=e50]:
+                - img "Zoho Calendar" [ref=e52]
+                - generic [ref=e53]: Zoho
+              - generic "Proton Calendar" [ref=e54]:
+                - img "Proton Calendar" [ref=e56]
+                - generic [ref=e57]: Proton
+        - generic [ref=e58]:
+          - img "Let's Grow App Interface" [ref=e61]
+          - link "Download on the App Store" [ref=e63] [cursor=pointer]:
+            - /url: https://apps.apple.com/app/id6742420307
+            - img "Download on the App Store" [ref=e64]
+      - generic [ref=e66]:
+        - generic [ref=e67]:
+          - text: Problemet
+          - heading "Møder tager tid, men de færreste teams forbedrer dem systematisk" [level=2] [ref=e68]
+          - paragraph [ref=e69]: Når de samme møder vender tilbage uge efter uge, burde kvaliteten kunne følges. I praksis kører formatet ofte videre, uden at nogen samler signalerne op.
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - img [ref=e73]
+            - heading "Det samme møde, uge efter uge" [level=3] [ref=e78]
+            - paragraph [ref=e79]: Teammøder, 1:1s og reviews gentager sig, men formatet bliver sjældent justeret systematisk.
+          - generic [ref=e80]:
+            - img [ref=e82]
+            - heading "Mange meninger, ingen vane" [level=3] [ref=e84]
+            - paragraph [ref=e85]: Folk ved godt, når et møde er uklart eller fladt. De observationer bliver bare ikke samlet konsekvent.
+          - generic [ref=e86]:
+            - img [ref=e88]
+            - heading "For meget tid på mavefornemmelse" [level=3] [ref=e91]
+            - paragraph [ref=e92]: Uden et fast signal er det svært at vide, om møderne faktisk bliver mere nyttige eller bare fortsætter af vane.
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - text: Hvorfor starte her?
+          - heading "Det, der går igen, er lettere at forbedre" [level=2] [ref=e96]
+          - paragraph [ref=e97]: "Et engangsmøde giver en enkelt mening. Når noget sker igen, opstår der et mønster. Derfor starter Lets Grow her: det giver de bedste betingelser for at måle kvalitet og følge udviklingen over tid."
+        - generic [ref=e98]:
+          - generic [ref=e99]:
+            - img [ref=e101]
+            - heading "Det samme møde vender tilbage" [level=3] [ref=e106]
+            - paragraph [ref=e107]: Når et møde sker uge efter uge, giver det mening at følge kvaliteten og justere formatet løbende.
+          - generic [ref=e108]:
+            - img [ref=e110]
+            - heading "Gentagelser skaber et mønster" [level=3] [ref=e113]
+            - paragraph [ref=e114]: Enkeltstående feedback siger lidt. Gentagne svar gør det synligt, om mødet bliver bedre, står stille eller falder.
+          - generic [ref=e115]:
+            - img [ref=e117]
+            - heading "Små justeringer bliver målbare" [level=3] [ref=e120]
+            - paragraph [ref=e121]: Faste møder giver team leads og mødeejere et klart sted at forbedre noget konkret uden at starte et stort projekt.
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - text: Sådan virker det
+          - heading "Fra møde til indsigt og handling i fire enkle trin" [level=2] [ref=e125]
+          - paragraph [ref=e126]: Ingen tung opsætning og ingen lange spørgeskemaer. Bare en enkel feedbackvane, hvor mødeholderen kan tilpasse spørgsmålene, se svarene og bruge dem til at forbedre næste møde.
+        - generic [ref=e127]:
+          - generic [ref=e129]:
+            - generic [ref=e130]: "1"
+            - generic [ref=e131]:
+              - heading "Opret mødet som normalt" [level=3] [ref=e132]
+              - paragraph [ref=e133]: I bliver i de værktøjer, I allerede bruger, uanset om det er Google, Apple, Outlook, Zoho, Proton eller Teams.
+          - generic [ref=e135]:
+            - generic [ref=e136]: "2"
+            - generic [ref=e137]:
+              - heading "Tilføj feedback@letsgrow.dk som mødedeltager" [level=3] [ref=e138]
+              - paragraph [ref=e139]: Inviter feedback@letsgrow.dk til møder, og vælg en møde template du har lavet på forhånd tilpasset til mødets type.
+          - generic [ref=e141]:
+            - generic [ref=e142]: "3"
+            - generic [ref=e143]:
+              - heading "Indsaml svar efter mødet helt automatisk" [level=3] [ref=e144]
+              - paragraph [ref=e145]: Efter mødet giver deltagerne feedback i en mobilapp, der er gjort så nem og friktionsfri som muligt.
+          - generic [ref=e147]:
+            - generic [ref=e148]: "4"
+            - generic [ref=e149]:
+              - heading "Se feedbacken og tag handling" [level=3] [ref=e150]
+              - paragraph [ref=e151]: Mødeholderen får inputs fra mødedeltagere, og kan følge med i om mødetilfredsheden bliver bedre eller dårligere over tid.
+      - generic [ref=e153]:
+        - generic [ref=e154]:
+          - text: Hvad du får ud af det
+          - heading "Et klart billede af om jeres møder faktisk bliver bedre" [level=2] [ref=e155]
+          - paragraph [ref=e156]: "Vi starter ét sted: at gøre møder lettere at følge op på og lettere at forbedre over tid. Det er hverken et HR-værktøj eller en klassisk surveyplatform."
+        - generic [ref=e157]:
+          - generic [ref=e158]:
+            - img [ref=e160]
+            - heading "Mere klare møder" [level=3] [ref=e163]
+            - paragraph [ref=e164]: Se hurtigere, om agenda, retning og beslutninger føles tydelige for deltagerne.
+          - generic [ref=e165]:
+            - img [ref=e167]
+            - heading "Bedre energi i rummet" [level=3] [ref=e169]
+            - paragraph [ref=e170]: Følg om møderne opleves som engagerende eller begynder at dræne teamet.
+          - generic [ref=e171]:
+            - img [ref=e173]
+            - heading "Højere oplevet nytte" [level=3] [ref=e176]
+            - paragraph [ref=e177]: Mål om tiden i mødet faktisk skaber værdi, eller om formatet skal strammes op.
+          - generic [ref=e178]:
+            - img [ref=e180]
+            - heading "Svage mødeformater bliver synlige" [level=3] [ref=e185]
+            - paragraph [ref=e186]: Når et fast møde halter, bliver mønsteret tydeligt nok til, at du kan handle på det.
+      - generic [ref=e188]:
+        - generic [ref=e189]:
+          - text: Spørgsmål
+          - heading "Det spørger folk typisk om" [level=2] [ref=e190]
+        - generic [ref=e191]:
+          - generic [ref=e192]:
+            - button "Skal vi ændre vores nuværende måde at oprette møder på?" [ref=e193]:
+              - generic [ref=e194]: Skal vi ændre vores nuværende måde at oprette møder på?
+              - img [ref=e196]
+            - paragraph [ref=e198]: Nej. I opretter mødet som normalt og inviterer bare feedback@letsgrow.dk med. Lets Grow lægger sig oven på den arbejdsgang, I allerede bruger.
+          - generic [ref=e199]:
+            - button "Er det et langt spørgeskema?" [ref=e200]:
+              - generic [ref=e201]: Er det et langt spørgeskema?
+              - img [ref=e203]
+            - paragraph [ref=e205]: Nej. Deltagerne får 2-3 korte spørgsmål lige efter mødet, mens oplevelsen stadig er frisk.
+          - generic [ref=e206]:
+            - button "Skal deltagerne oprette en konto?" [ref=e207]:
+              - generic [ref=e208]: Skal deltagerne oprette en konto?
+              - img [ref=e210]
+            - paragraph [ref=e212]: Nej. Deltagerne skal ikke oprette en konto for at svare. Værdien starter hos mødeejeren, mens feedbacken forbliver let at give.
+          - generic [ref=e213]:
+            - button "Hvilke typer møder giver det bedst mening til?" [ref=e214]:
+              - generic [ref=e215]: Hvilke typer møder giver det bedst mening til?
+              - img [ref=e217]
+            - paragraph [ref=e219]: Det fungerer bedst på møder, der går igen, som teammøder, 1:1s, reviews og andre møder, hvor I gerne vil kunne følge udviklingen over tid.
+          - generic [ref=e220]:
+            - button "Hvordan fungerer tidlig adgang?" [ref=e221]:
+              - generic [ref=e222]: Hvordan fungerer tidlig adgang?
+              - img [ref=e224]
+            - paragraph [ref=e226]: Klik på “Få tidlig adgang”, udfyld den korte Typeform, og fortæl lidt om jeres faste møder. Vi følger op med de teams, der matcher launch-profilen bedst.
+      - generic [ref=e228]:
+        - generic [ref=e229]:
+          - text: Tidlig adgang
+          - heading "Vil I prøve Lets Grow?" [level=2] [ref=e230]
+          - paragraph [ref=e231]: Du kan prøve Let's Grow helt gratis og teste det i praksis. Hvis du har lyst til at være blandt de første brugere og give feedback undervejs, så vil vi meget gerne have dig med. Målet er at gøre tilbagevendende møder mere målbare uden tung opsætning.
+        - link "Få tidlig adgang" [ref=e233] [cursor=pointer]:
+          - /url: https://form.typeform.com/to/RSs7TZAj
+          - text: Få tidlig adgang
+          - img [ref=e234]
+        - paragraph [ref=e236]: Ingen offentlig pris endnu. Vi starter med udvalgte teams og et enkelt setup omkring jeres tilbagevendende møder.
+    - contentinfo [ref=e237]:
+      - generic [ref=e238]:
+        - generic [ref=e239]:
+          - link "Lets Grow Icon Lets Grow" [ref=e241] [cursor=pointer]:
+            - /url: /
+            - img "Lets Grow Icon" [ref=e242]
+            - img "Lets Grow" [ref=e243]
+          - generic [ref=e244]:
+            - link "Privatlivspolitik" [ref=e245] [cursor=pointer]:
+              - /url: /privacy-policy
+            - link "kontakt@letsgrow.dk" [ref=e246] [cursor=pointer]:
+              - /url: mailto:kontakt@letsgrow.dk
+        - paragraph [ref=e248]: © 2026 Lets Grow. Alle rettigheder forbeholdes.
+  - button "Open Next.js Dev Tools" [ref=e254] [cursor=pointer]:
+    - img [ref=e255]

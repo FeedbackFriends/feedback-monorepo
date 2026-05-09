@@ -40,6 +40,15 @@
 
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
+  --color-hero-heading: #282a47;
+  --color-hero-gradient-teal: #16826f;
+  --color-hero-gradient-gold: #d7a935;
+  --color-hero-result-mark: #27ab85;
+  --color-marketing-bg-sky: #dff1ff;
+  --color-marketing-bg-mint: #ddf8ed;
+  --color-marketing-bg-gold: #fff0b8;
+  --color-marketing-bg-coral: #ffe2d3;
+  --color-marketing-bg-lilac: #eee8ff;
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -91,6 +100,29 @@
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.25rem);
 }
 
+@utility hero-heading-glow {
+  background:
+    radial-gradient(
+      circle at 70% 40%,
+      color-mix(in srgb, var(--color-hero-gradient-gold) 20%, transparent),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 35% 60%,
+      color-mix(in srgb, var(--color-hero-gradient-teal) 18%, transparent),
+      transparent 42%
+    );
+}
+
+@utility marketing-background-base {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-marketing-bg-sky) 22%, white) 0%,
+    color-mix(in srgb, var(--color-marketing-bg-mint) 24%, white) 42%,
+    color-mix(in srgb, var(--color-marketing-bg-gold) 18%, white) 100%
+  );
+}
+
 @layer base {
   :root {
     --background: 228 97% 97%;
@@ -120,8 +152,50 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    position: relative;
+    background-image: linear-gradient(
+      180deg,
+      hsl(var(--background)) 0%,
+      hsl(210 38% 98.4%) 100%
+    );
+    overflow-x: clip;
     font-family: var(--font-montserrat), system-ui, sans-serif;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -18vmax;
+    z-index: -1;
+    background:
+      radial-gradient(
+        ellipse 58% 48% at 8% 4%,
+        hsla(8, 98%, 64%, 0.22) 0%,
+        hsla(8, 98%, 64%, 0.12) 22%,
+        transparent 68%
+      ),
+      radial-gradient(
+        ellipse 46% 50% at 92% 8%,
+        hsla(220, 90%, 60%, 0.2) 0%,
+        hsla(220, 90%, 60%, 0.11) 24%,
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 44% 46% at 46% 92%,
+        hsla(268, 74%, 63%, 0.13) 0%,
+        hsla(268, 74%, 63%, 0.07) 20%,
+        transparent 72%
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 76% 58%,
+        hsla(36, 100%, 60%, 0.13) 0%,
+        hsla(36, 100%, 60%, 0.07) 18%,
+        transparent 68%
+      );
+    opacity: 0.95;
+    pointer-events: none;
+    transform: translateZ(0);
   }
 
   h1,
@@ -131,5 +205,39 @@
   h5,
   h6 {
     font-family: var(--font-montserrat), system-ui, sans-serif;
+  }
+}
+
+@media (max-width: 768px) {
+  @layer base {
+    body::before {
+      inset: -24vmax -14vmax;
+      opacity: 0.82;
+      background:
+        radial-gradient(
+          ellipse 74% 54% at 4% 0%,
+          hsla(8, 98%, 64%, 0.2) 0%,
+          hsla(8, 98%, 64%, 0.11) 22%,
+          transparent 70%
+        ),
+        radial-gradient(
+          ellipse 64% 58% at 100% 8%,
+          hsla(220, 90%, 60%, 0.18) 0%,
+          hsla(220, 90%, 60%, 0.1) 22%,
+          transparent 72%
+        ),
+        radial-gradient(
+          ellipse 72% 56% at 52% 100%,
+          hsla(268, 74%, 63%, 0.12) 0%,
+          hsla(268, 74%, 63%, 0.06) 18%,
+          transparent 74%
+        ),
+        radial-gradient(
+          ellipse 72% 48% at 80% 56%,
+          hsla(36, 100%, 60%, 0.11) 0%,
+          hsla(36, 100%, 60%, 0.06) 16%,
+          transparent 70%
+        );
+    }
   }
 }

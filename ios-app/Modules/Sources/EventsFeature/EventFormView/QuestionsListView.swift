@@ -4,15 +4,41 @@ import DesignSystem
 import FeedbackFlowFeature
 import ComposableArchitecture
 
-struct QuestionsListView: View {
+public struct QuestionsListView: View {
+    
+    public struct PreviewConfiguration {
+        let title: String
+        let agenda: String?
+        let presentFeedbackFlowSession: (FeedbackFlowCoordinator.State) -> Void
+        
+        public init(
+            title: String,
+            agenda: String? = nil,
+            presentFeedbackFlowSession: @escaping (FeedbackFlowCoordinator.State) -> Void
+        ) {
+            self.title = title
+            self.agenda = agenda
+            self.presentFeedbackFlowSession = presentFeedbackFlowSession
+        }
+    }
     
     let recentlyUsedQuestions: Set<RecentlyUsedQuestions>
     @Binding var questionsInputs: [EventInput.QuestionInput]
-    @State var presentSelectQuestionSheet: EventInput.QuestionInput?
-    @State private var existingQuestionIndex: Int?
-    let presentFeedbackFlowSession: (FeedbackFlowCoordinator.State) -> Void
+    @State private var presentSelectQuestionSheet: EventInput.QuestionInput?
+    @State private var existingQuestionID: EventInput.QuestionInput.ID?
+    let previewConfiguration: PreviewConfiguration?
     
-    var body: some View {
+    public init(
+        recentlyUsedQuestions: Set<RecentlyUsedQuestions>,
+        questionsInputs: Binding<[EventInput.QuestionInput]>,
+        previewConfiguration: PreviewConfiguration? = nil
+    ) {
+        self.recentlyUsedQuestions = recentlyUsedQuestions
+        self._questionsInputs = questionsInputs
+        self.previewConfiguration = previewConfiguration
+    }
+    
+    public var body: some View {
         Group {
             if questionsInputs.isEmpty {
                 EmptyStateView(
@@ -21,9 +47,9 @@ struct QuestionsListView: View {
                 ).frame(maxHeight: .infinity)
             } else {
                 Form {
-                    ForEach(Array(questionsInputs.enumerated()), id: \.offset) { index, questionsInput in
+                    ForEach(questionsInputs) { questionsInput in
                         Button {
-                            self.existingQuestionIndex = index
+                            self.existingQuestionID = questionsInput.id
                             self.presentSelectQuestionSheet = questionsInput
                         } label: {
                             HStack(spacing: 12) {
@@ -60,11 +86,11 @@ struct QuestionsListView: View {
             item: $presentSelectQuestionSheet,
             content: { questionInput in
                 QuestionPickerView(
-                    existingQuestionIndex: self.existingQuestionIndex,
+                    existingQuestionID: self.existingQuestionID,
                     feedbackTypeSelected: questionInput.feedbackType,
                     questionTextField: questionInput.questionText
-                ) { selectedQuestionInput, index in
-                    if let index {
+                ) { selectedQuestionInput in
+                    if let index = self.questionsInputs.firstIndex(where: { $0.id == selectedQuestionInput.id }) {
                         self.questionsInputs[index] = selectedQuestionInput
                     } else {
                         self.questionsInputs.append(selectedQuestionInput)
@@ -77,45 +103,47 @@ struct QuestionsListView: View {
             alignment: .bottomTrailing,
             content: {
                 HStack(spacing: 6) {
-                    Button {
-                        self.presentFeedbackFlowSession(
-                            .initialState(
-                                feedbackSession: .init(
-                                    title: "title",
-                                    agenda: "agenda",
-                                    questions: self.questionsInputs.map {
-                                        ParticipantQuestion(
-                                            id: $0.id,
-                                            questionText: $0.questionText,
-                                            feedbackType: $0.feedbackType
-                                        )
-                                    },
-                                    ownerInfo: OwnerInfo(
-                                        name: nil,
-                                        email: nil,
-                                        phoneNumber: nil
-                                    ),
-                                    pinCode: PinCode(value: "None"),
-                                    date: Date()
+                    if let previewConfiguration {
+                        Button {
+                            previewConfiguration.presentFeedbackFlowSession(
+                                .initialState(
+                                    feedbackSession: .init(
+                                        title: previewConfiguration.title,
+                                        agenda: previewConfiguration.agenda,
+                                        questions: self.questionsInputs.map {
+                                            ParticipantQuestion(
+                                                id: $0.id,
+                                                questionText: $0.questionText,
+                                                feedbackType: $0.feedbackType
+                                            )
+                                        },
+                                        ownerInfo: OwnerInfo(
+                                            name: nil,
+                                            email: nil,
+                                            phoneNumber: nil
+                                        ),
+                                        pinCode: PinCode(value: "None"),
+                                        date: Date()
+                                    )
                                 )
                             )
-                        )
-                    } label: {
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack {
-                                Image.playButton
-                                Text("Preview session")
+                        } label: {
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Image.playButton
+                                    Text("Preview session")
+                                }
+                                Text("How participants will experience your session.")
+                                    .font(.montserratRegular, 8)
                             }
-                            Text("How participants will experience your session.")
-                                .font(.montserratRegular, 8)
                         }
+                        .buttonStyle(LargeBoxButtonStyle())
+                        .opacity(self.questionsInputs.isEmpty ? 0.6 : 1.0)
+                        .disabled(self.questionsInputs.isEmpty)
                     }
-                    .buttonStyle(LargeBoxButtonStyle())
-                    .opacity(self.questionsInputs.isEmpty ? 0.6 : 1.0)
-                    .disabled(self.questionsInputs.isEmpty)
                     Spacer()
                     Button {
-                        self.existingQuestionIndex = nil
+                        self.existingQuestionID = nil
                         self.presentSelectQuestionSheet = .init(questionText: "", feedbackType: .emoji)
                     } label: {
                         Image.circleFill
@@ -149,7 +177,10 @@ struct QuestionsListView: View {
                     )
                 ]
             ),
-            presentFeedbackFlowSession: { _ in },
+            previewConfiguration: .init(
+                title: "Preview",
+                presentFeedbackFlowSession: { _ in }
+            )
         )
     }
 }
@@ -159,7 +190,10 @@ struct QuestionsListView: View {
         QuestionsListView(
             recentlyUsedQuestions: .init(),
             questionsInputs: .constant([]),
-            presentFeedbackFlowSession: { _ in },
+            previewConfiguration: .init(
+                title: "Preview",
+                presentFeedbackFlowSession: { _ in }
+            )
         )
     }
 }

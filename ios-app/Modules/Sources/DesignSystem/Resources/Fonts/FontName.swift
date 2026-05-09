@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import UIKit
 
 public extension Font {
     enum FontName: String, CaseIterable, Identifiable {

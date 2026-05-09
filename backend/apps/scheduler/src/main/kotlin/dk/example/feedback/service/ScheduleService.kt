@@ -3,21 +3,20 @@ package dk.example.feedback.service
 import dk.example.feedback.firebase.FeedbackReceivedNotification
 import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.model.database.NewFeedbackNotificationEntity
-import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.NewFeedbackNotificationRepo
+import dk.example.feedback.persistence.repo.NotificationHistoryRepo
 import java.time.Duration
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import javax.annotation.PostConstruct
 
 @Service
 class ScheduleService(
     private val eventRepo: EventRepo,
     private val newFeedbackNotificationRepo: NewFeedbackNotificationRepo,
     private val firebaseService: FirebaseService,
-    private val activityRepo: ActivityRepo,
+    private val notificationHistoryRepo: NotificationHistoryRepo,
 ) {
 
     private val logger = LoggerFactory.getLogger(ScheduleService::class.java)
@@ -69,14 +68,14 @@ class ScheduleService(
             logger.info("Push operation to Firebase completed")
         }
 
-        logger.info("Removing ${notificationsToRemove.size} notifications and persisting activity logs")
+        logger.info("Removing ${notificationsToRemove.size} notifications and persisting notification history logs")
         notificationsToRemove.forEach { notification ->
-            logger.debug("Removing notifications and persisting activity for eventId=${notification.event.id}, accountId=${notification.account.id}")
+            logger.debug("Removing notifications and persisting notification history for eventId=${notification.event.id}, accountId=${notification.account.id}")
             newFeedbackNotificationRepo.removeAllForEvent(eventId = notification.event.id)
-            activityRepo.persistActivity(
+            notificationHistoryRepo.persistNotificationHistory(
                 eventId = notification.event.id,
                 accountId = notification.account.id,
-                newFeedback = notification.newFeedback
+                newFeedback = notification.newFeedback,
             )
         }
 

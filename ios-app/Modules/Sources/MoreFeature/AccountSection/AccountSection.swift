@@ -18,11 +18,11 @@ public struct AccountSection: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         @Presents public var destination: Destination.State?
-        @Shared var session: Session
+        @Shared var session: Bootstrap
         var accountInfo: AccountInfo {
             session.accountInfo
         }
-        public init(session: Shared<Session>) {
+        public init(session: Shared<Bootstrap>) {
             self._session = session
         }
     }

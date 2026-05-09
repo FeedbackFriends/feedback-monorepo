@@ -6,18 +6,16 @@ interface BackgroundProps {
 
 function Background({ className }: BackgroundProps) {
   return (
-    <>
-      {/* Background Blobs - Mobile Optimized */}
-      <div className="absolute -top-20 sm:-top-40 -right-20 sm:-right-40 w-64 sm:w-96 h-64 sm:h-96 bg-blue-500/10 rounded-full blur-2xl sm:blur-3xl" />
-      <div className="absolute top-1/3 -left-20 sm:-left-40 w-64 sm:w-96 h-64 sm:h-96 bg-indigo-500/5 rounded-full blur-2xl sm:blur-3xl" />
-      
-      {/* Additional Blobs - Hide some on mobile, adjust others */}
-      <div className="hidden sm:block absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-blue-300/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/3 left-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-indigo-400/[0.07] rounded-full blur-2xl sm:blur-3xl" />
-      <div className="hidden sm:block absolute -top-20 left-1/3 w-[400px] h-[400px] bg-blue-400/5 rounded-full blur-3xl" />
-      <div className={cn("absolute top-2/3 right-1/4 w-[250px] sm:w-[450px] h-[250px] sm:h-[450px] bg-blue-500/8 rounded-full blur-2xl sm:blur-3xl animate-pulse", className)} />
-    </>
+    <div className={cn("absolute inset-0", className)}>
+      <div className="marketing-background-base absolute inset-0" />
+      <div className="absolute -top-52 -left-48 h-[36rem] w-[42rem] rounded-[48%_52%_55%_45%/46%_44%_56%_54%] bg-marketing-bg-sky/70 blur-[120px]" />
+      <div className="absolute -right-48 top-8 h-[34rem] w-[38rem] rounded-[58%_42%_48%_52%/44%_58%_42%_56%] bg-marketing-bg-mint/70 blur-[130px]" />
+      <div className="absolute left-[18vw] top-[45rem] h-[28rem] w-[34rem] rounded-[44%_56%_50%_50%/58%_46%_54%_42%] bg-marketing-bg-gold/42 blur-[140px]" />
+      <div className="absolute right-[8vw] top-[42rem] h-[30rem] w-[34rem] rounded-[54%_46%_58%_42%/45%_55%_47%_53%] bg-marketing-bg-lilac/50 blur-[140px]" />
+      <div className="absolute -left-36 top-[72rem] h-[28rem] w-[32rem] rounded-[46%_54%_42%_58%/52%_48%_58%_42%] bg-marketing-bg-coral/44 blur-[150px]" />
+      <div className="absolute inset-0 bg-linear-to-b from-white/[0.18] via-white/[0.48] to-white/[0.9]" />
+    </div>
   )
 }
 
-export default Background 
+export default Background

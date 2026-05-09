@@ -1,6 +1,6 @@
 package dk.example.feedback.controller
 
-import dk.example.feedback.dto.SessionDto
+import dk.example.feedback.dto.BootstrapDto
 import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.model.enumerations.RoleConstants
@@ -37,7 +37,7 @@ class AccountController(
     fun createAccount(
         @RequestBody input: CreateAccountInput,
         @AuthenticationPrincipal principal: Jwt,
-    ): SessionDto {
+    ): BootstrapDto {
         firebaseService.setRole(userId = principal.getAccountId(), requestedRole = input.requestedRole)
         val user = firebaseService.getUser(principal.getAccountId())
         val normalizedEmail = user.email.normalizedEmail()

@@ -1,5 +1,6 @@
 package dk.example.feedback.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import dk.example.feedback.config.FeedbackConfig
 import dk.example.feedback.controller.AdminController.MockTokenDto
 import dk.example.feedback.controller.AdminController.SignInFirebaseResponseDto
@@ -8,6 +9,9 @@ import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.model.enumerations.Role
 import dk.example.feedback.persistence.repo.AccountRepo
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -19,6 +23,7 @@ class AdminService(
     val accountRepo: AccountRepo,
     val firebaseAdminService: FirebaseAdminService,
     val firebaseService: FirebaseService,
+    val objectMapper: ObjectMapper,
 ) {
 
     private val logger = LoggerFactory.getLogger(AdminService::class.java)
@@ -49,19 +54,23 @@ class AdminService(
     fun signInWithCustomToken(token: String): MockTokenDto {
         val apiKey = feedbackConfig.firebaseApiKey
         val url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=$apiKey"
-
-        data class SignInFirebaseRequestDto(
-            val token: String,
-            val returnSecureToken: Boolean
+        val body = objectMapper.writeValueAsString(
+            mapOf(
+                "token" to token,
+                "returnSecureToken" to true,
+            )
         )
 
-        val body = SignInFirebaseRequestDto(
-            token = token,
-            returnSecureToken = true
-        )
+        val headers = HttpHeaders().apply {
+            contentType = MediaType.APPLICATION_JSON
+            accept = listOf(MediaType.APPLICATION_JSON)
+        }
 
         val restTemplate = RestTemplate()
-        val response: ResponseEntity<SignInFirebaseResponseDto> = restTemplate.postForEntity(url = url, request = body)
+        val response: ResponseEntity<SignInFirebaseResponseDto> = restTemplate.postForEntity(
+            url = url,
+            request = HttpEntity(body, headers)
+        )
 
         if (response.statusCode.is2xxSuccessful) {
             return MockTokenDto(firebaseResponse = response.body!!, token = token)

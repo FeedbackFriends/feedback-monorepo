@@ -84,7 +84,7 @@ public struct JoinEvent: Sendable {
                 state.joinRequestInFlight = true
                 return .run { send in
                     do {
-                        _ = try await apiClient.joinEvent(pinCode: pinCode)
+                        _ = try await apiClient.joinSession(pinCode)
                         await send(.joinSuccess(pinCode: pinCode))
                     } catch {
                         await send(.presentError(error))

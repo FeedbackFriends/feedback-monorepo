@@ -17,7 +17,7 @@ public struct ManagerEvents: Sendable {
     public struct State: Equatable, Sendable {
         
         @Presents public var destination: Destination.State?
-        @Shared var session: Session
+        @Shared var session: Bootstrap
         public var segmentedControl: SegmentedControlMenu
         public var participantEvents: ParticipantEvents.State
         var searchTextfield: String
@@ -25,7 +25,7 @@ public struct ManagerEvents: Sendable {
         public var startFeedbackPincodeInFlight: String?
         public init(
             destination: Destination.State? = nil,
-            session: Shared<Session>,
+            session: Shared<Bootstrap>,
             segmentedControl: SegmentedControlMenu = .yourEvents,
             searchTextfield: String = "",
             filterCollection: FilterCollection = .initial,
@@ -44,7 +44,7 @@ public struct ManagerEvents: Sendable {
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
-        case managerEventTap(ManagerEvent)
+        case managerEventTap(Activity)
         case participantEvents(ParticipantEvents.Action)
     }
     
@@ -65,10 +65,11 @@ public struct ManagerEvents: Sendable {
                 
             case .destination(.dismiss):
                 if case .eventDetail(let eventDetailState) = state.destination,
-                   let overallFeedbackSummary = eventDetailState.event.overallFeedbackSummary, overallFeedbackSummary.unseenResponses > 0 {
+                   let overallFeedbackSummary = eventDetailState.detail?.overallFeedbackSummary,
+                   overallFeedbackSummary.unseenResponses > 0 {
                     return .run { _ in
                         do {
-                            try await self.apiClient.markEventAsSeen(eventDetailState.event.id)
+                            try await self.apiClient.markSessionAsSeen(eventDetailState.eventId)
                         } catch {
                             Logger.debug("Mark session as seen failed: \(error.localizedDescription)")
                         }
@@ -83,7 +84,8 @@ public struct ManagerEvents: Sendable {
             case .managerEventTap(let event):
                 state.destination = .eventDetail(
                     EventDetailFeature.State(
-                        event: event,
+                        eventId: event.id,
+                        detail: .init(event),
                         session: state.$session
                     )
                 )

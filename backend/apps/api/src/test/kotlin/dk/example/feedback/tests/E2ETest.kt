@@ -1,25 +1,28 @@
 package dk.example.feedback.tests
 
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import dk.example.feedback.config.SecurityConfig
-import dk.example.feedback.dto.FeedbackSessionDto
+import dk.example.feedback.dto.ActivityInput
 import dk.example.feedback.model.enumerations.Emoji
 import dk.example.feedback.model.enumerations.FeedbackType
+import dk.example.feedback.model.enumerations.ActivityRunMode
 import dk.example.feedback.model.enumerations.Role
-import dk.example.feedback.payloads.CreateAccountInput
-import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.payloads.FeedbackInput
+import dk.example.feedback.payloads.CreateAccountInput
 import dk.example.feedback.payloads.ModifyAccountInput
 import dk.example.feedback.payloads.QuestionInput
-import dk.example.feedback.payloads.StartFeedbackSessionInput
+import dk.example.feedback.payloads.SessionInput
 import dk.example.feedback.payloads.SubmitFeedbackInput
 import dk.example.feedback.utils.MockJwtFactory
 import dk.example.feedback.utils.TestConfig
 import java.time.OffsetDateTime
+import java.util.UUID
 import org.hamcrest.Matchers.hasItem
-import org.hamcrest.Matchers.nullValue
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -36,523 +39,438 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @Import(TestConfig::class, SecurityConfig::class)
 class E2ETest(
     @Autowired val mockMvc: MockMvc,
-
 ) {
     private val objectMapper = jacksonObjectMapper()
         .registerModule(JavaTimeModule())
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
     @Test
-    fun integration()  {
-        val user1 = "User1"
-        `Create anonymous account and verify get session`(userId = user1)
-        `Upgrade account to participant role and verify get session`(userId = user1)
-        `Update account role to manager and verify get session`(userId = user1)
-        `Modify account and verify get session`(userId = user1)
-        val createdEvent = `Create event and verify session`(userId = user1)
-//        `Delete event and verify session`(userId = user1, eventId = createdEvent.first)
-//        val newCreatedEvent = `Create event and verify session`(userId = user1)
-//        `Update event and verify session`(userId = user1, eventId = newCreatedEvent.first)
-//        `Submit emoji feedback to event`(pinCode = newCreatedEvent.second, emoji = Emoji.VeryHappy, userId = "User2")
-//        `Submit emoji feedback to event`(pinCode = newCreatedEvent.second, emoji = Emoji.Sad, userId = "User3")
-//        `Verify event has new feedback`(userId = user1, newFeedback = 2)
-//        `Trigger resetNewFeedback for event and verify session`(userId = user1, eventId = newCreatedEvent.first)
-//        `Verify event has new feedback`(userId = user1, newFeedback = 0)
-//        `A third user joins the event, verify session`()
-//        ``()
+    fun `manager creates activity then session from that activity`() {
+        val managerId = "manager-session-flow"
+        createAccount(managerId = managerId)
+
+        val activityId = createActivity(managerId = managerId)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/session")
+                .content(
+                    objectMapper.writeValueAsString(
+                        SessionInput(
+                            activityId = java.util.UUID.fromString(activityId),
+                            date = OffsetDateTime.parse("2026-04-01T09:00:00+00:00"),
+                            durationInMinutes = 30,
+                            location = "Oslo",
+                        )
+                    )
+                )
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").value(activityId))
+            .andExpect(jsonPath("$.sessions[0].location").value("Oslo"))
+            .andExpect(jsonPath("$.currentQuestions[0].text").value("How did the session go?"))
+            .andExpect(jsonPath("$.currentQuestions[1].text").value("What should we improve next time?"))
     }
 
     @Test
-    fun `Invited existing account auto joins on event create`() {
-        val managerId = "ManagerAutoJoin1"
-        val inviteeId = "InviteeAutoJoin1"
-        val inviteeEmail = "Invitee1@Example.com"
+    fun `invited existing account auto joins created session`() {
+        val managerId = "manager-auto-join"
+        val inviteeId = "invitee-auto-join"
+        val inviteeEmail = "invitee@example.com"
 
+        createAccount(managerId = managerId)
+        createParticipantAccount(accountId = inviteeId, email = inviteeEmail)
+
+        val activityId = createActivity(managerId = managerId, invitedEmails = listOf(inviteeEmail))
+
+        val response = mockMvc.perform(
+            MockMvcRequestBuilders.post("/session")
+                .content(
+                    objectMapper.writeValueAsString(
+                        SessionInput(
+                            activityId = java.util.UUID.fromString(activityId),
+                            date = OffsetDateTime.parse("2026-04-02T09:00:00+00:00"),
+                            durationInMinutes = 45,
+                            location = "Copenhagen",
+                        )
+                    )
+                )
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val sessionId = objectMapper.readTree(response.response.contentAsString)
+            .get("sessions")
+            .get(0)
+            .get("id")
+            .asText()
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/bootstrap")
+                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.participantSessions[*].id").value(hasItem(sessionId)))
+    }
+
+    
+    
+    
+    
+    @Test
+    fun `activity question update keeps old session snapshots and manager bootstrap aggregates question analytics`() {
+        val managerId = "manager-question-analytics"
+        val participantId = "participant-question-analytics"
+        createAccount(managerId = managerId)
+        createParticipantAccount(accountId = participantId, email = "participant.analytics@example.com")
+
+        val activityResponse = createActivityResponse(managerId = managerId)
+        val activityId = activityResponse.get("id").asText()
+        val canonicalQuestionId = UUID.fromString(activityResponse.get("currentQuestions").get(0).get("id").asText())
+
+        val firstSession = createSession(
+            managerId = managerId,
+            activityId = activityId,
+            date = OffsetDateTime.parse("2026-04-03T09:00:00+00:00"),
+            location = "Oslo",
+        )
+        val firstSessionPinCode = firstSession.get("pinCode").asText()
+        val firstSessionQuestionId = UUID.fromString(firstSession.get("questionsSnapshot").get(0).get("id").asText())
+
+        submitEmojiFeedback(
+            participantId = participantId,
+            pinCode = firstSessionPinCode,
+            questionId = firstSessionQuestionId,
+        )
+
+        val updatedActivity = updateActivity(
+            managerId = managerId,
+            activityId = activityId,
+            questions = listOf(
+                QuestionInput(
+                    id = canonicalQuestionId,
+                    questionText = "How did the session go?",
+                    feedbackType = FeedbackType.Emoji,
+                ),
+                QuestionInput(
+                    questionText = "What should we continue doing?",
+                    feedbackType = FeedbackType.Comment,
+                ),
+            ),
+        )
+
+        val preservedFirstSession = updatedActivity
+            .get("sessions")
+            .first { it.get("location").asText() == "Oslo" }
+        assertEquals(
+            "What should we improve next time?",
+            preservedFirstSession.get("questionsSnapshot").get(1).get("text").asText(),
+        )
+
+        val secondSession = createSession(
+            managerId = managerId,
+            activityId = activityId,
+            date = OffsetDateTime.parse("2026-04-10T09:00:00+00:00"),
+            location = "Bergen",
+        )
+        val secondSessionPinCode = secondSession.get("pinCode").asText()
+        val secondSessionQuestionId = UUID.fromString(secondSession.get("questionsSnapshot").get(0).get("id").asText())
+
+        submitEmojiFeedback(
+            participantId = participantId,
+            pinCode = secondSessionPinCode,
+            questionId = secondSessionQuestionId,
+        )
+
+        val bootstrapResponse = mockMvc.perform(
+            MockMvcRequestBuilders.get("/bootstrap")
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val bootstrapJson = objectMapper.readTree(bootstrapResponse.response.contentAsString)
+        val analyticsEntry = bootstrapJson
+            .get("managerData")
+            .get("questionAnalytics")
+            .firstOrNull { it.get("questionId").asText() == canonicalQuestionId.toString() }
+
+        assertNotNull(analyticsEntry)
+        assertEquals(2, analyticsEntry!!.get("sessionCount").asInt())
+        assertEquals(2, analyticsEntry.get("responseCount").asInt())
+        assertEquals("How did the session go?", analyticsEntry.get("questionText").asText())
+        assertEquals(2, analyticsEntry.get("timeline").size())
+        assertEquals(2, analyticsEntry.get("overallSummary").get("emojiQuestionFeedbackSummary").get("countHappy").asInt())
+    }
+
+    @Test
+    fun `activity trend uses latest two comparable zero-to-ten sessions with 0 to 5 normalization`() {
+        val managerId = "manager-activity-trend"
+        val participantId = "participant-activity-trend"
+        createAccount(managerId = managerId)
+        createParticipantAccount(accountId = participantId, email = "participant.trend@example.com")
+
+        val activityId = createActivityWithZeroToTenQuestion(managerId = managerId)
+
+        val firstSession = createSession(
+            managerId = managerId,
+            activityId = activityId,
+            date = OffsetDateTime.parse("2026-04-12T09:00:00+00:00"),
+            location = "Trend-1",
+        )
+        submitZeroToTenFeedback(
+            participantId = participantId,
+            pinCode = firstSession.get("pinCode").asText(),
+            questionId = UUID.fromString(firstSession.get("questionsSnapshot").get(0).get("id").asText()),
+            score = 6,
+        )
+
+        val afterFirstSession = fetchActivityFromBootstrap(managerId = managerId, activityId = activityId)
+        assertEquals("insufficient_data", afterFirstSession.get("trend").get("direction").asText())
+        assertEquals("neutral", afterFirstSession.get("trend").get("indicator").asText())
+        assertEquals("average_rating", afterFirstSession.get("trend").get("metric").asText())
+        assertEquals(3.0, afterFirstSession.get("trend").get("latestValue").asDouble())
+        assertEquals(1, afterFirstSession.get("trend").get("comparedSessionCount").asInt())
+        assertEquals(true, afterFirstSession.get("trend").get("previousValue").isNull)
+        assertEquals(true, afterFirstSession.get("trend").get("delta").isNull)
+
+        val secondSession = createSession(
+            managerId = managerId,
+            activityId = activityId,
+            date = OffsetDateTime.parse("2026-04-19T09:00:00+00:00"),
+            location = "Trend-2",
+        )
+        submitZeroToTenFeedback(
+            participantId = participantId,
+            pinCode = secondSession.get("pinCode").asText(),
+            questionId = UUID.fromString(secondSession.get("questionsSnapshot").get(0).get("id").asText()),
+            score = 8,
+        )
+
+        val afterSecondSession = fetchActivityFromBootstrap(managerId = managerId, activityId = activityId)
+        assertEquals("improving", afterSecondSession.get("trend").get("direction").asText())
+        assertEquals("positive", afterSecondSession.get("trend").get("indicator").asText())
+        assertEquals(4.0, afterSecondSession.get("trend").get("latestValue").asDouble())
+        assertEquals(3.0, afterSecondSession.get("trend").get("previousValue").asDouble())
+        assertEquals(1.0, afterSecondSession.get("trend").get("delta").asDouble())
+        assertEquals(2, afterSecondSession.get("trend").get("comparedSessionCount").asInt())
+    }
+
+    private fun createAccount(managerId: String) {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/account")
                 .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Manager, fcmToken = null)))
                 .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk)
+    }
 
+    private fun createParticipantAccount(accountId: String, email: String) {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/account")
                 .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)))
-                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .header("Authorization", "Bearer ${MockJwtFactory(accountId).participantToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk)
 
         mockMvc.perform(
             MockMvcRequestBuilders.put("/account")
-                .content(objectMapper.writeValueAsString(ModifyAccountInput(name = null, email = inviteeEmail, phoneNumber = null)))
-                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .content(objectMapper.writeValueAsString(ModifyAccountInput(name = null, email = email, phoneNumber = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(accountId).participantToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk)
+    }
 
-        val createEventInput = EventInput(
-            title = "Auto-join Event",
-            agenda = null,
-            date = OffsetDateTime.parse("2025-03-12T09:00:00+00:00"),
-            durationInMinutes = 30,
-            location = "Copenhagen",
-            invitedEmails = listOf(inviteeEmail),
-            questions = listOf(
-                QuestionInput(
-                    questionText = "Question?",
-                    feedbackType = FeedbackType.Emoji
+    private fun createActivity(managerId: String, invitedEmails: List<String> = emptyList()): String {
+        return createActivityResponse(managerId = managerId, invitedEmails = invitedEmails).get("id").asText()
+    }
+
+    private fun createActivityResponse(managerId: String, invitedEmails: List<String> = emptyList()): JsonNode {
+        val response = mockMvc.perform(
+            MockMvcRequestBuilders.post("/activity")
+                .content(
+                    objectMapper.writeValueAsString(
+                        ActivityInput(
+                            title = "Weekly Retro",
+                            agenda = "Review the week",
+                            questions = listOf(
+                                QuestionInput(
+                                    questionText = "How did the session go?",
+                                    feedbackType = dk.example.feedback.model.enumerations.FeedbackType.Emoji,
+                                ),
+                                QuestionInput(
+                                    questionText = "What should we improve next time?",
+                                    feedbackType = dk.example.feedback.model.enumerations.FeedbackType.Comment,
+                                ),
+                            ),
+                            runMode = ActivityRunMode.MANUAL,
+                            invitedEmails = invitedEmails,
+                            sendEmails = false,
+                        )
+                    )
                 )
-            ),
-        )
-
-        val createEventResponse = mockMvc.perform(
-            MockMvcRequestBuilders.post("/event")
-                .content(objectMapper.writeValueAsString(createEventInput))
                 .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk)
-            .andReturn()
-
-        val eventId = objectMapper.readTree(createEventResponse.response.contentAsString)
-            .get("event").get("id").asText()
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.get("/session")
-                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
-                .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.participantEvents[*].id").value(hasItem(eventId)))
+            .andReturn()
+
+        return objectMapper.readTree(response.response.contentAsString)
     }
 
-    @Test
-    fun `Invited email joins after account creation`() {
-        val managerId = "ManagerAutoJoin2"
-        val inviteeId = "InviteeAutoJoin2"
-        val inviteeEmail = "latecomer@example.com"
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/account")
-                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Manager, fcmToken = null)))
+    private fun createActivityWithZeroToTenQuestion(managerId: String): String {
+        val response = mockMvc.perform(
+            MockMvcRequestBuilders.post("/activity")
+                .content(
+                    objectMapper.writeValueAsString(
+                        ActivityInput(
+                            title = "Trend Activity",
+                            agenda = "Track trend",
+                            questions = listOf(
+                                QuestionInput(
+                                    questionText = "Rate this session",
+                                    feedbackType = FeedbackType.ZeroToTen,
+                                )
+                            ),
+                            runMode = ActivityRunMode.MANUAL,
+                            invitedEmails = emptyList(),
+                            sendEmails = false,
+                        )
+                    )
+                )
                 .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk)
-
-        val createEventInput = EventInput(
-            title = "Late join Event",
-            agenda = null,
-            date = OffsetDateTime.parse("2025-03-13T09:00:00+00:00"),
-            durationInMinutes = 45,
-            location = "Copenhagen",
-            invitedEmails = listOf(inviteeEmail),
-            questions = listOf(
-                QuestionInput(
-                    questionText = "Question?",
-                    feedbackType = FeedbackType.Emoji
-                )
-            ),
         )
+            .andExpect(status().isOk)
+            .andReturn()
 
-        val createEventResponse = mockMvc.perform(
-            MockMvcRequestBuilders.post("/event")
-                .content(objectMapper.writeValueAsString(createEventInput))
+        return objectMapper.readTree(response.response.contentAsString).get("id").asText()
+    }
+
+    private fun updateActivity(managerId: String, activityId: String, questions: List<QuestionInput>): JsonNode {
+        val response = mockMvc.perform(
+            MockMvcRequestBuilders.put("/activity/$activityId")
+                .content(
+                    objectMapper.writeValueAsString(
+                        ActivityInput(
+                            title = "Weekly Retro",
+                            agenda = "Review the week",
+                            questions = questions,
+                            runMode = ActivityRunMode.MANUAL,
+                            invitedEmails = emptyList(),
+                            sendEmails = false,
+                        )
+                    )
+                )
                 .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk)
+        )
+            .andExpect(status().isOk)
             .andReturn()
 
-        val eventId = objectMapper.readTree(createEventResponse.response.contentAsString)
-            .get("event").get("id").asText()
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/account")
-                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)))
-                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk)
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/account")
-                .content(objectMapper.writeValueAsString(ModifyAccountInput(name = null, email = inviteeEmail, phoneNumber = null)))
-                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk)
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.get("/session")
-                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.participantEvents[*].id").value(hasItem(eventId)))
+        return objectMapper.readTree(response.response.contentAsString)
     }
 
-    fun `Create anonymous account and verify get session`(userId: String) {
-        val createUserInput = CreateAccountInput(requestedRole = null, fcmToken = null)
-
-        val createAccountRequest = MockMvcRequestBuilders
-            .post("/account")
-            .content(objectMapper.writeValueAsString(createUserInput))
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).anonymousToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(createAccountRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
-            .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").value(nullValue()))
-
-        val getSessionRequest = MockMvcRequestBuilders
-            .get("/session")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).anonymousToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
-            .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").value(nullValue()))
-    }
-
-    fun `Upgrade account to participant role and verify get session`(userId: String) {
-        val createUserInput = CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)
-
-        val createAccountRequest = MockMvcRequestBuilders
-            .post("/account")
-            .content(objectMapper.writeValueAsString(createUserInput))
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).anonymousToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(createAccountRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
-            .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").value(nullValue()))
-        // TODO: remove response from create account endpoint
-
-        val getSessionRequest = MockMvcRequestBuilders
-            .get("/session")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).participantToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(Role.Participant.toString()))
-            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
-            .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").value(nullValue()))
-    }
-
-    fun `Update account role to manager and verify get session`(userId: String) {
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/account/role")
-                .header("Authorization", "Bearer ${MockJwtFactory(userId).participantToken()}")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""{"role":"Manager"}""")
-        ).andExpect(status().isOk)
-
-        val getSessionRequest = MockMvcRequestBuilders
-            .get("/session")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
-            .andExpect(jsonPath("$.accountInfo.name").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.email").value(nullValue()))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value(nullValue()))
-            .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").exists())
-    }
-
-    fun `Modify account and verify get session`(userId: String) {
-        val modifyAccountInput = ModifyAccountInput(
-            name = "New name",
-            email = "New email",
-            phoneNumber = "New phone number"
-        )
-
-        val updateAccountRequest = MockMvcRequestBuilders
-            .put("/account")
-            .content(objectMapper.writeValueAsString(modifyAccountInput))
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(updateAccountRequest).andExpect(status().isOk)
-
-        val getSessionRequest = MockMvcRequestBuilders
-            .get("/session")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
-            .andExpect(jsonPath("$.accountInfo.name").value("New name"))
-            .andExpect(jsonPath("$.accountInfo.email").value("new email"))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value("New phone number"))
-            .andExpect(jsonPath("$.participantEvents").isEmpty)
-            .andExpect(jsonPath("$.managerData").exists())
-    }
-
-    fun `Create event and verify session`(userId: String): Pair<String, String> {
-        val createEventInput = EventInput(
-            title = "Daily standup",
-            agenda = null,
-            date = OffsetDateTime.parse("2025-03-11T09:00:00+00:00"),
-            durationInMinutes = 60,
-            location = "Copenhagen",
-            questions = listOf(
-                QuestionInput(
-                    questionText = "What did you do yesterday?",
-                    feedbackType = FeedbackType.Emoji
-                ),
-                QuestionInput(
-                    questionText = "What will you do today?",
-                    feedbackType = FeedbackType.Emoji
+    private fun createSession(
+        managerId: String,
+        activityId: String,
+        date: OffsetDateTime,
+        location: String,
+    ): JsonNode {
+        val response = mockMvc.perform(
+            MockMvcRequestBuilders.post("/session")
+                .content(
+                    objectMapper.writeValueAsString(
+                        SessionInput(
+                            activityId = UUID.fromString(activityId),
+                            date = date,
+                            durationInMinutes = 30,
+                            location = location,
+                        )
+                    )
                 )
-            ),
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
         )
-
-        val createEventRequest = MockMvcRequestBuilders
-            .post("/event")
-            .content(objectMapper.writeValueAsString(createEventInput))
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        val createEventResponse = mockMvc.perform(createEventRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.event.title").value("Daily standup"))
-            .andExpect(jsonPath("$.event.location").value("Copenhagen"))
-            .andExpect(jsonPath("$.event.durationInMinutes").value(60))
-            .andExpect(jsonPath("$.event.questions").isArray)
-            .andExpect(jsonPath("$.event.questions[0].questionText").value("What did you do yesterday?"))
-            .andExpect(jsonPath("$.event.questions[0].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.event.questions[1].questionText").value("What will you do today?"))
-            .andExpect(jsonPath("$.event.questions[1].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.event.invitedEmails").isArray)
-            .andExpect(jsonPath("$.event.participants").isArray)
             .andReturn()
 
-        val eventNode = objectMapper.readTree(createEventResponse.response.contentAsString).get("event")
-        val eventId: String = eventNode.get("id").asText()
-        val pincode: String = eventNode.get("pinCode").asText()
-
-
-        val getSessionRequest = MockMvcRequestBuilders
-            .get("/session")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
-            .andExpect(jsonPath("$.accountInfo.name").value("New name"))
-            .andExpect(jsonPath("$.accountInfo.email").value("new email"))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value("New phone number"))
-            .andExpect(jsonPath("$.participantEvents").isArray)
-            .andExpect(jsonPath("$.managerData").exists())
-            .andExpect(jsonPath("$.managerData.managerEvents").isArray)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].title").value("Daily standup"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].location").value("Copenhagen"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].durationInMinutes").value(60))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions").isArray)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions[0].questionText").value("What did you do yesterday?"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions[0].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions[1].questionText").value("What will you do today?"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions[1].feedbackType").value("Emoji"))
-        return Pair(eventId, pincode)
-
+        return objectMapper
+            .readTree(response.response.contentAsString)
+            .get("sessions")
+            .first { it.get("location").asText() == location }
     }
 
-    fun `Delete event and verify session`(userId: String, eventId: String) {
-        val deleteEventRequest = MockMvcRequestBuilders
-            .delete("/event/${eventId}")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(deleteEventRequest).andExpect(status().isOk)
-
-        val getSessionRequest = MockMvcRequestBuilders
-            .get("/session")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
-            .andExpect(jsonPath("$.accountInfo.name").value("New name"))
-            .andExpect(jsonPath("$.accountInfo.email").value("new email"))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value("New phone number"))
-            .andExpect(jsonPath("$.participantEvents").isArray)
-            .andExpect(jsonPath("$.managerData").exists())
-            .andExpect(jsonPath("$.managerData.managerEvents").isArray)
-            .andExpect(jsonPath("$.managerData.managerEvents").isEmpty)
-    }
-
-    fun `Update event and verify session`(userId: String, eventId: String): String {
-        val updateEventInput = EventInput(
-            title = "New title",
-            agenda = null,
-            date = OffsetDateTime.parse("2025-03-11T09:00:00+00:00"),
-            durationInMinutes = 90,
-            location = "Copenhagen",
-            questions = listOf(
-                QuestionInput(
-                    questionText = "What will you do today?",
-                    feedbackType = FeedbackType.Emoji
-                ),
-                QuestionInput(
-                    questionText = "What did you do yesterday?",
-                    feedbackType = FeedbackType.Emoji
+    private fun submitEmojiFeedback(participantId: String, pinCode: String, questionId: UUID) {
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/feedback/submit")
+                .content(
+                    objectMapper.writeValueAsString(
+                        SubmitFeedbackInput(
+                            pinCode = pinCode,
+                            feedback = listOf(
+                                FeedbackInput(
+                                    comment = null,
+                                    emoji = Emoji.Happy,
+                                    thumbsUpThumpsDown = null,
+                                    opinion = null,
+                                    zeroToTen = null,
+                                    questionId = questionId,
+                                    feedbackType = FeedbackType.Emoji,
+                                )
+                            ),
+                        )
+                    )
                 )
-            ),
-        )
-
-        val updateEventRequest = MockMvcRequestBuilders
-            .put("/event/${eventId}")
-            .content(objectMapper.writeValueAsString(updateEventInput))
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        val createEventResponse = mockMvc.perform(updateEventRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.event.title").value("New title"))
-            .andExpect(jsonPath("$.event.location").value("Copenhagen"))
-            .andExpect(jsonPath("$.event.durationInMinutes").value(90))
-            .andExpect(jsonPath("$.event.questions").isArray)
-            .andExpect(jsonPath("$.event.questions[1].questionText").value("What did you do yesterday?"))
-            .andExpect(jsonPath("$.event.questions[1].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.event.questions[0].questionText").value("What will you do today?"))
-            .andExpect(jsonPath("$.event.questions[0].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.event.invitedEmails").isArray)
-            .andExpect(jsonPath("$.event.participants").isArray)
-            .andReturn()
-
-        val eventId: String = objectMapper.readTree(createEventResponse.response.contentAsString)
-            .get("event").get("id").asText()
-
-
-        val getSessionRequest = MockMvcRequestBuilders
-            .get("/session")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.role").value(Role.Manager.toString()))
-            .andExpect(jsonPath("$.accountInfo.name").value("New name"))
-            .andExpect(jsonPath("$.accountInfo.email").value("new email"))
-            .andExpect(jsonPath("$.accountInfo.phoneNumber").value("New phone number"))
-            .andExpect(jsonPath("$.participantEvents").isArray)
-            .andExpect(jsonPath("$.managerData").exists())
-            .andExpect(jsonPath("$.managerData.managerEvents").isArray)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].title").value("New title"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].location").value("Copenhagen"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].durationInMinutes").value(90))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions").isArray)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions[1].questionText").value("What did you do yesterday?"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions[1].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions[0].questionText").value("What will you do today?"))
-            .andExpect(jsonPath("$.managerData.managerEvents[0].questions[0].feedbackType").value("Emoji"))
-        return eventId
+                .header("Authorization", "Bearer ${MockJwtFactory(participantId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
     }
 
-    fun `Submit emoji feedback to event`(pinCode: String, emoji: Emoji, userId: String) {
-
-        val createUserInput = CreateAccountInput(requestedRole = null, fcmToken = null)
-
-        val createAccountRequest = MockMvcRequestBuilders
-            .post("/account")
-            .content(objectMapper.writeValueAsString(createUserInput))
-            .header("Authorization", "Bearer ${MockJwtFactory(userId = userId).anonymousToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(createAccountRequest)
-
-
-        val startFeedbackSessionInput = StartFeedbackSessionInput(
-            pinCode = pinCode
-        )
-
-        val startFeedbackSessionRequest = MockMvcRequestBuilders
-            .post("/feedback/start")
-            .content(objectMapper.writeValueAsString(startFeedbackSessionInput))
-            .header("Authorization", "Bearer ${MockJwtFactory(userId = userId).anonymousToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        val startFeedbackSessionResponse = mockMvc.perform(startFeedbackSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.title").value("New title"))
-            .andExpect(jsonPath("$.agenda").value(nullValue()))
-            .andExpect(jsonPath("$.ownerInfo.name").value("New name"))
-            .andExpect(jsonPath("$.ownerInfo.email").value("new email"))
-            .andExpect(jsonPath("$.ownerInfo.phoneNumber").value("New phone number"))
-            .andReturn()
-
-        val submitFeedbackResponseDto = objectMapper.readValue(
-            startFeedbackSessionResponse.response.contentAsString,
-            FeedbackSessionDto::class.java
-        )
-        val feedbackInput: SubmitFeedbackInput = SubmitFeedbackInput(
-            feedback = submitFeedbackResponseDto.questions.map {
-                FeedbackInput(
-                    comment = null,
-                    emoji = emoji,
-                    thumbsUpThumpsDown = null,
-                    opinion = null,
-                    zeroToTen = null,
-                    questionId = it.id,
-                    feedbackType = FeedbackType.Emoji
+    private fun submitZeroToTenFeedback(participantId: String, pinCode: String, questionId: UUID, score: Int) {
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/feedback/submit")
+                .content(
+                    objectMapper.writeValueAsString(
+                        SubmitFeedbackInput(
+                            pinCode = pinCode,
+                            feedback = listOf(
+                                FeedbackInput(
+                                    comment = null,
+                                    emoji = null,
+                                    thumbsUpThumpsDown = null,
+                                    opinion = null,
+                                    zeroToTen = score,
+                                    questionId = questionId,
+                                    feedbackType = FeedbackType.ZeroToTen,
+                                )
+                            ),
+                        )
+                    )
                 )
-            },
-            pinCode = pinCode
+                .header("Authorization", "Bearer ${MockJwtFactory(participantId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk)
+    }
+
+    private fun fetchActivityFromBootstrap(managerId: String, activityId: String): JsonNode {
+        val response = mockMvc.perform(
+            MockMvcRequestBuilders.get("/bootstrap")
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
         )
-
-        val submitFeedbackSessionRequest = MockMvcRequestBuilders
-            .post("/feedback/submit")
-            .content(objectMapper.writeValueAsString(feedbackInput))
-            .header("Authorization", "Bearer ${MockJwtFactory(userId = userId).anonymousToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(submitFeedbackSessionRequest)
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.shouldPresentRatingPrompt").value(false))
-    }
+            .andReturn()
 
-    fun `Verify event has new feedback`(userId: String, newFeedback: Int) {
-        val getSessionRequest = MockMvcRequestBuilders
-            .get("/session")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].invitedEmails").isArray)
-            .andExpect(jsonPath("$.managerData.managerEvents[0].participants").isArray)
-    }
-
-    fun `Trigger resetNewFeedback for event and verify session`(userId: String, eventId: String) {
-        val getSessionRequest = MockMvcRequestBuilders
-            .put("/event/resetNewFeedback/${eventId}")
-            .header("Authorization", "Bearer ${MockJwtFactory(userId).managerToken()}")
-            .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(getSessionRequest)
-            .andExpect(status().isOk)
+        val bootstrapJson = objectMapper.readTree(response.response.contentAsString)
+        return bootstrapJson
+            .get("managerData")
+            .get("activities")
+            .first { it.get("id").asText() == activityId }
     }
 }

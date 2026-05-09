@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+require_docker_daemon() {
+  local current_context
+  current_context="$(docker context show 2>/dev/null || echo "unknown")"
+
+  if ! docker info >/dev/null 2>&1; then
+    cat >&2 <<EOF
+Docker daemon is not reachable (context: ${current_context}).
+Start your Docker runtime and verify connectivity before running ./scripts/run.
+
+Quick checks:
+  docker context ls
+  docker info
+
+If you use OrbStack, ensure it is running and the '${current_context}' context is healthy.
+EOF
+    exit 1
+  fi
+}
+
+cd "$REPO_ROOT"
+require_docker_daemon
+
+./scripts/generate-api-artifacts.sh
+
+cd "$REPO_ROOT/backend"
+./gradlew --no-configuration-cache buildLocalImages
+
+cd "$REPO_ROOT"
+docker compose up --build "$@"

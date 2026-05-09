@@ -86,9 +86,13 @@ public struct EventFormView<ActionView: View>: View {
                     QuestionsListView(
                         recentlyUsedQuestions: self.store.recentlyUsedQuestions,
                         questionsInputs: self.$store.eventInput.questions,
-                        presentFeedbackFlowSession: { feedbackSessionState in
-                            self.store.send(.presentFeedbackFlowSession(feedbackSessionState))
-                        }
+                        previewConfiguration: .init(
+                            title: self.store.eventInput.title,
+                            agenda: self.store.eventInput.agenda,
+                            presentFeedbackFlowSession: { feedbackSessionState in
+                                self.store.send(.presentFeedbackFlowSession(feedbackSessionState))
+                            }
+                        )
                     )
                     .successOverlay(
                         message: store.successOverlayMessage,

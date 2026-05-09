@@ -8,7 +8,7 @@ import TabbarFeature
 import DesignSystem
 import Logger
 
-extension Session: @retroactive Identifiable {
+extension Bootstrap: @retroactive Identifiable {
     public var id: UUID {
         UUID()
     }
@@ -21,7 +21,7 @@ private struct _DynamicCodingKey: CodingKey {
     init?(intValue: Int) { self.stringValue = "\(intValue)"; self.intValue = intValue }
 }
 
-extension Session: @retroactive Encodable {
+extension Bootstrap: @retroactive Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: _DynamicCodingKey.self)
         let mirror = Mirror(reflecting: self)
@@ -38,8 +38,8 @@ struct DebugMenuView: View {
     @State var debugMenuExpanded: Bool = false
     @State var hideDebugMenu: Bool = false
     @State var alert: String?
-    @State var sessionSheet: Session?
-    @State private var localSession: Session?
+    @State var sessionSheet: Bootstrap?
+    @State private var localSession: Bootstrap?
     let apiClient: APIClient
     let notificationClient: NotificationClient
 
@@ -69,7 +69,7 @@ struct DebugMenuView: View {
                         Button("Show session data") {
                             Task {
                                 do {
-                                    let session = try await apiClient.getSession()
+                                    let session = try await apiClient.getBootstrap()
                                     self.sessionSheet = session
                                 } catch {
                                     Logger.debug(error.localizedDescription)
@@ -79,7 +79,7 @@ struct DebugMenuView: View {
                         Button("Sign in with Mock") {
                             Task {
                                 do {
-                                    let mockToken = try await apiClient.getMockToken()
+                                    let mockToken = try await apiClient.mockIdToken()
                                     Logger.debug("Mock token received: \n \(mockToken)")
                                     try await Auth.auth().signIn(withCustomToken: mockToken)
                                     Logger.debug("Signed in")

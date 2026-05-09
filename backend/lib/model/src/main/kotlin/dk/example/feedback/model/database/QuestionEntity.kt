@@ -6,6 +6,7 @@ import java.util.*
 
 data class QuestionEntity(
     val id: UUID,
+    val activityQuestionId: UUID?,
     val questionText: String,
     val feedbackType: FeedbackType,
     val createdAt: OffsetDateTime,

@@ -15,10 +15,11 @@ Errors should propagate instead of triggering alternate behavior.
 ## Docker Compose
 Root Docker files orchestrate the full stack together:
 - `docker-compose.yml`: base stack. Uses the published `feedback-api:prod`, `feedback-scheduler:prod`, and `feedback-web:prod` images plus shared environment variables. This is the production-like Compose definition.
-- `docker-compose.override.yml`: local development override. Adds Postgres, publishes ports, points backend services at the local database, and builds the API, scheduler, and web services from local source.
+- `docker-compose.override.yml`: local development override. Adds Postgres, publishes ports, points backend services at the local database, and consumes locally built `feedback-api:local`, `feedback-scheduler:local`, and `feedback-web` images.
 
 Default root commands:
-- `docker compose up --build`: start the local stack with the override applied.
+- `./scripts/run`: regenerate API artifacts, rebuild local backend images, and start the local stack.
+- `./scripts/run -d`: same as above, detached mode.
 - `docker compose down`: stop the stack.
 - `docker compose logs -f`: stream logs.
 - `docker compose ps`: inspect service state.

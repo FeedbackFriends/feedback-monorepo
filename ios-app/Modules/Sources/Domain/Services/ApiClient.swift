@@ -5,34 +5,42 @@ import Foundation
 public struct APIClient: Sendable {
     public var deleteAccount: @Sendable () async throws -> Void
     @DependencyEndpoint
-    public var updateAccount: @Sendable (
+    public var modifyAccount: @Sendable (
         _ name: String,
         _ email: String,
         _ phoneNumber: String
     ) async throws -> Void
     public var linkFCMTokenToAccount: @Sendable (String) async throws -> Void
     public var logout: @Sendable () async throws -> Void
-    public var getSession: @Sendable () async throws -> Session
+    public var getBootstrap: @Sendable () async throws -> Bootstrap
     @DependencyEndpoint
     public var startFeedbackSession: @Sendable (_ pinCode: PinCode) async throws -> FeedbackSession
     @DependencyEndpoint
     public var submitFeedback: @Sendable (_ feedback: [FeedbackInput], _ pinCode: PinCode) async throws -> Bool
     @DependencyEndpoint
-    public var createEvent: @Sendable (_ eventInput: EventInput) async throws -> ManagerEvent
+    public var createActivity: @Sendable (_ activityInput: ActivityInput) async throws -> ActivityDto
     @DependencyEndpoint
-    public var updateEvent: @Sendable (_ eventInput: EventInput, _ id: UUID) async throws -> ManagerEvent
+    public var updateActivity: @Sendable (_ activityInput: ActivityInput, _ id: UUID) async throws -> ActivityDto
     @DependencyEndpoint
-    public var deleteEvent: @Sendable (_ id: UUID) async throws -> Void
+    public var deleteActivity: @Sendable (_ id: UUID) async throws -> Void
     @DependencyEndpoint
-    public var createAccount: @Sendable (_ role: Role?) async throws -> Session
-    public var sessionChangedListener: @Sendable () async -> AsyncStream<Session> = { .never }
+    public var createSession: @Sendable (_ sessionInput: SessionInput) async throws -> ActivityDto
     @DependencyEndpoint
-    public var joinEvent: @Sendable (_ pinCode: PinCode) async throws -> Void
+    public var updateSession: @Sendable (_ sessionInput: SessionInput, _ id: UUID) async throws -> ActivityDto
     @DependencyEndpoint
-    public var markEventAsSeen: @Sendable (_ eventId: UUID) async throws -> Void
+    public var deleteSession: @Sendable (_ id: UUID) async throws -> Void
     @DependencyEndpoint
-    public var updateAccountRole: @Sendable (_ role: Role) async throws -> Void
-    public var getMockToken: @Sendable () async throws -> (String)
-    public var getUpdatedSession: @Sendable () async throws -> Session?
-    public var markActivityAsSeen: @Sendable () async throws -> Void
+    public var createAccount: @Sendable (_ role: Role?) async throws -> Bootstrap
+    public var sessionChangedListener: @Sendable () async -> AsyncStream<Bootstrap> = { .never }
+    @DependencyEndpoint
+    public var joinSession: @Sendable (_ pinCode: PinCode) async throws -> ParticipantSessionDto
+    @DependencyEndpoint
+    public var markSessionAsSeen: @Sendable (_ sessionId: UUID) async throws -> Void
+    @DependencyEndpoint
+    public var sendNotification: @Sendable (_ input: SendNotificationInput) async throws -> Void
+    @DependencyEndpoint
+    public var updateRole: @Sendable (_ role: Role) async throws -> Void
+    public var mockIdToken: @Sendable () async throws -> (String)
+    public var getBoostrapUpdate: @Sendable () async throws -> Bootstrap?
+    public var markNotificationHistoryAsSeen: @Sendable () async throws -> Void
 }

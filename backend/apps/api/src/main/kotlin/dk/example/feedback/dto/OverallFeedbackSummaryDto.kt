@@ -1,5 +1,8 @@
 package dk.example.feedback.dto
 
+import io.swagger.v3.oas.annotations.media.Schema
+
+@Schema(description = "Aggregated feedback summary for a session across all questions.")
 data class OverallFeedbackSummaryDto(
     val segmentationStats: OverallFeedbackSegmentationStatsDto,
     val countStats: OverallFeedbackCountStatsDto,
@@ -7,6 +10,7 @@ data class OverallFeedbackSummaryDto(
     val responses: Int,
 )
 
+@Schema(description = "Absolute counts of feedback outcomes in a session summary.")
 data class OverallFeedbackCountStatsDto(
     val verySadCount: Int,
     val sadCount: Int,
@@ -15,6 +19,7 @@ data class OverallFeedbackCountStatsDto(
     val commentsCount: Int,
 )
 
+@Schema(description = "Percentage distribution of emoji feedback outcomes in a session summary.")
 data class OverallFeedbackSegmentationStatsDto(
     val verySadPercentage: Double,
     val sadPercentage: Double,

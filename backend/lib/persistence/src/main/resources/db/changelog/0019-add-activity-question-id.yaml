@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0019-add-activity-question-id
+      author: codex
+      changes:
+        - addColumn:
+            tableName: question
+            columns:
+              - column:
+                  name: activity_question_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+        - sql:
+            sql: |
+              update question
+              set activity_question_id = id
+              where activity_id is not null;
+        - sql:
+            sql: |
+              update question
+              set activity_question_id = (
+                select activity_question.id
+                from session
+                join question activity_question
+                  on activity_question.activity_id = session.activity_id
+                 and activity_question.index = question.index
+                where session.id = question.session_id
+              )
+              where session_id is not null;
+        - createIndex:
+            tableName: question
+            indexName: idx_question_activity_question_id
+            columns:
+              - column:
+                  name: activity_question_id

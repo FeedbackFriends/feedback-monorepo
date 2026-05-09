@@ -123,10 +123,15 @@ let package = Package(
             name: "OpenAPI",
             dependencies: [
                 .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime"),
-                .product(name: "OpenAPIURLSession", package: "swift-openapi-urlsession"),
-                "Domain",
-                "Utility"
-            ]
+                .product(name: "OpenAPIURLSession", package: "swift-openapi-urlsession")
+            ],
+            path: "Sources/OpenAPI/GeneratedSources"
+        ),
+        .target(
+            name: "OpenAPIGeneratorInput",
+            dependencies: [],
+            path: "Sources/OpenAPI",
+            exclude: ["GeneratedSources"]
         ),
         .target(
             name: "RootFeature",
@@ -247,6 +252,8 @@ let package = Package(
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
                 "RootFeature",
                 "Adapters",
+                "Domain",
+                "OpenAPI",
                 "InfoPlist"
             ]
         )

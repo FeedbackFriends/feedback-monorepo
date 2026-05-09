@@ -1,21 +1,15 @@
 'use client'
 
 import { type MouseEvent, useEffect, useRef, useState } from "react"
-import EarlyAccessSection from "@/components/landing/sections/EarlyAccessSection"
-import FaqSection from "@/components/landing/sections/FaqSection"
+import { appStoreUrl } from "@/components/landing/content"
+import AppStoreCtaSection from "@/components/landing/sections/AppStoreCtaSection"
 import HeroSection from "@/components/landing/sections/HeroSection"
 import HowItWorksSection from "@/components/landing/sections/HowItWorksSection"
 import MobileStickyCta from "@/components/landing/sections/MobileStickyCta"
 import OutcomesSection from "@/components/landing/sections/OutcomesSection"
 import ProblemSection from "@/components/landing/sections/ProblemSection"
-import WhyStartHereSection from "@/components/landing/sections/WhyStartHereSection"
 
-type LandingPageProps = {
-  earlyAccessUrl: string
-}
-
-function LandingPage({ earlyAccessUrl }: LandingPageProps) {
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
+function LandingPage() {
   const [showMobileStickyCta, setShowMobileStickyCta] = useState(false)
   const heroSectionRef = useRef<HTMLElement | null>(null)
 
@@ -96,28 +90,18 @@ function LandingPage({ earlyAccessUrl }: LandingPageProps) {
     scrollToSection(event, "how-it-works")
   }
 
-  const handleToggleFaq = (index: number) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index)
-  }
-
   return (
-    <>
-      <HeroSection
-        earlyAccessUrl={earlyAccessUrl}
-        heroSectionRef={heroSectionRef}
-        onHowItWorksClick={handleHowItWorksClick}
-      />
-      <ProblemSection />
-      <WhyStartHereSection />
-      <HowItWorksSection />
-      <OutcomesSection />
-      <FaqSection openFaqIndex={openFaqIndex} onToggleFaq={handleToggleFaq} />
-      <EarlyAccessSection earlyAccessUrl={earlyAccessUrl} />
-      <MobileStickyCta
-        earlyAccessUrl={earlyAccessUrl}
-        visible={showMobileStickyCta}
-      />
-    </>
+      <>
+          <HeroSection
+              heroSectionRef={heroSectionRef}
+              onHowItWorksClick={handleHowItWorksClick}
+          />
+          <ProblemSection />
+          <HowItWorksSection />
+          <OutcomesSection />
+          <AppStoreCtaSection />
+          <MobileStickyCta ctaHref={appStoreUrl} visible={showMobileStickyCta} />
+      </>
   )
 }
 

@@ -11,18 +11,24 @@ import struct Foundation.Date
 #endif
 /// A type that performs HTTP operations defined by the OpenAPI document.
 public protocol APIProtocol: Sendable {
-    /// - Remark: HTTP `PUT /event/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/{eventId}/put(updateEvent)`.
-    func updateEvent(_ input: Operations.UpdateEvent.Input) async throws -> Operations.UpdateEvent.Output
-    /// - Remark: HTTP `DELETE /event/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/{eventId}/delete(deleteEvent)`.
-    func deleteEvent(_ input: Operations.DeleteEvent.Input) async throws -> Operations.DeleteEvent.Output
-    /// - Remark: HTTP `PUT /event/mark-as-seen/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/mark-as-seen/{eventId}/put(markEventAsSeen)`.
-    func markEventAsSeen(_ input: Operations.MarkEventAsSeen.Input) async throws -> Operations.MarkEventAsSeen.Output
+    /// - Remark: HTTP `PUT /session/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/{sessionId}/put(updateSession)`.
+    func updateSession(_ input: Operations.UpdateSession.Input) async throws -> Operations.UpdateSession.Output
+    /// - Remark: HTTP `DELETE /session/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/{sessionId}/delete(deleteSession)`.
+    func deleteSession(_ input: Operations.DeleteSession.Input) async throws -> Operations.DeleteSession.Output
+    /// - Remark: HTTP `PUT /session/mark-as-seen/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/mark-as-seen/{sessionId}/put(markSessionAsSeen)`.
+    func markSessionAsSeen(_ input: Operations.MarkSessionAsSeen.Input) async throws -> Operations.MarkSessionAsSeen.Output
     /// - Remark: HTTP `PUT /admin/mock-new-feedback-notification`.
     /// - Remark: Generated from `#/paths//admin/mock-new-feedback-notification/put(sendNotification)`.
     func sendNotification(_ input: Operations.SendNotification.Input) async throws -> Operations.SendNotification.Output
+    /// - Remark: HTTP `PUT /activity/{activityId}`.
+    /// - Remark: Generated from `#/paths//activity/{activityId}/put(updateActivity)`.
+    func updateActivity(_ input: Operations.UpdateActivity.Input) async throws -> Operations.UpdateActivity.Output
+    /// - Remark: HTTP `DELETE /activity/{activityId}`.
+    /// - Remark: Generated from `#/paths//activity/{activityId}/delete(deleteActivity)`.
+    func deleteActivity(_ input: Operations.DeleteActivity.Input) async throws -> Operations.DeleteActivity.Output
     /// - Remark: HTTP `POST /account`.
     /// - Remark: Generated from `#/paths//account/post(createAccount)`.
     func createAccount(_ input: Operations.CreateAccount.Input) async throws -> Operations.CreateAccount.Output
@@ -38,68 +44,71 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `PUT /account/fcm-token`.
     /// - Remark: Generated from `#/paths//account/fcm-token/put(linkFCMTokenToAccount)`.
     func linkFCMTokenToAccount(_ input: Operations.LinkFCMTokenToAccount.Input) async throws -> Operations.LinkFCMTokenToAccount.Output
+    /// - Remark: HTTP `POST /session`.
+    /// - Remark: Generated from `#/paths//session/post(createSession)`.
+    func createSession(_ input: Operations.CreateSession.Input) async throws -> Operations.CreateSession.Output
+    /// - Remark: HTTP `POST /session/join/{pinCode}`.
+    /// - Remark: Generated from `#/paths//session/join/{pinCode}/post(joinSession)`.
+    func joinSession(_ input: Operations.JoinSession.Input) async throws -> Operations.JoinSession.Output
     /// - Remark: HTTP `POST /feedback/submit`.
     /// - Remark: Generated from `#/paths//feedback/submit/post(submitFeedback)`.
     func submitFeedback(_ input: Operations.SubmitFeedback.Input) async throws -> Operations.SubmitFeedback.Output
     /// - Remark: HTTP `POST /feedback/start`.
     /// - Remark: Generated from `#/paths//feedback/start/post(startFeedbackSession)`.
     func startFeedbackSession(_ input: Operations.StartFeedbackSession.Input) async throws -> Operations.StartFeedbackSession.Output
-    /// - Remark: HTTP `POST /event`.
-    /// - Remark: Generated from `#/paths//event/post(createEvent)`.
-    func createEvent(_ input: Operations.CreateEvent.Input) async throws -> Operations.CreateEvent.Output
-    /// - Remark: HTTP `POST /event/join/{pinCode}`.
-    /// - Remark: Generated from `#/paths//event/join/{pinCode}/post(joinEvent)`.
-    func joinEvent(_ input: Operations.JoinEvent.Input) async throws -> Operations.JoinEvent.Output
     /// - Remark: HTTP `POST /admin/mock-id-token`.
     /// - Remark: Generated from `#/paths//admin/mock-id-token/post(mockIdToken)`.
     func mockIdToken(_ input: Operations.MockIdToken.Input) async throws -> Operations.MockIdToken.Output
+    /// - Remark: HTTP `POST /activity`.
+    /// - Remark: Generated from `#/paths//activity/post(createActivity)`.
+    func createActivity(_ input: Operations.CreateActivity.Input) async throws -> Operations.CreateActivity.Output
     /// - Remark: HTTP `POST /account/logout`.
     /// - Remark: Generated from `#/paths//account/logout/post(logout)`.
     func logout(_ input: Operations.Logout.Input) async throws -> Operations.Logout.Output
+    /// - Remark: HTTP `GET /notification-history/mark-as-seen`.
+    /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)`.
+    func markNotificationHistoryAsSeen(_ input: Operations.MarkNotificationHistoryAsSeen.Input) async throws -> Operations.MarkNotificationHistoryAsSeen.Output
     /// - Remark: HTTP `GET /bootstrap`.
     /// - Remark: Generated from `#/paths//bootstrap/get(getBootstrap)`.
     func getBootstrap(_ input: Operations.GetBootstrap.Input) async throws -> Operations.GetBootstrap.Output
     /// - Remark: HTTP `GET /bootstrap/bootstrap-update/{hash}`.
     /// - Remark: Generated from `#/paths//bootstrap/bootstrap-update/{hash}/get(getBoostrapUpdate)`.
     func getBoostrapUpdate(_ input: Operations.GetBoostrapUpdate.Input) async throws -> Operations.GetBoostrapUpdate.Output
-    /// - Remark: HTTP `GET /activity/mark-activity-as-seen`.
-    /// - Remark: Generated from `#/paths//activity/mark-activity-as-seen/get(markActivityAsSeen)`.
-    func markActivityAsSeen(_ input: Operations.MarkActivityAsSeen.Input) async throws -> Operations.MarkActivityAsSeen.Output
 }
 
 /// Convenience overloads for operation inputs.
 extension APIProtocol {
-    /// - Remark: HTTP `PUT /event/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/{eventId}/put(updateEvent)`.
-    public func updateEvent(
-        path: Operations.UpdateEvent.Input.Path,
-        headers: Operations.UpdateEvent.Input.Headers = .init(),
-        body: Operations.UpdateEvent.Input.Body
-    ) async throws -> Operations.UpdateEvent.Output {
-        try await updateEvent(Operations.UpdateEvent.Input(
+    /// - Remark: HTTP `PUT /session/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/{sessionId}/put(updateSession)`.
+    public func updateSession(
+        path: Operations.UpdateSession.Input.Path,
+        headers: Operations.UpdateSession.Input.Headers = .init(),
+        body: Operations.UpdateSession.Input.Body
+    ) async throws -> Operations.UpdateSession.Output {
+        try await updateSession(Operations.UpdateSession.Input(
             path: path,
             headers: headers,
             body: body
         ))
     }
-    /// - Remark: HTTP `DELETE /event/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/{eventId}/delete(deleteEvent)`.
-    public func deleteEvent(
-        path: Operations.DeleteEvent.Input.Path,
-        headers: Operations.DeleteEvent.Input.Headers = .init()
-    ) async throws -> Operations.DeleteEvent.Output {
-        try await deleteEvent(Operations.DeleteEvent.Input(
+    /// - Remark: HTTP `DELETE /session/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/{sessionId}/delete(deleteSession)`.
+    public func deleteSession(
+        path: Operations.DeleteSession.Input.Path,
+        headers: Operations.DeleteSession.Input.Headers = .init()
+    ) async throws -> Operations.DeleteSession.Output {
+        try await deleteSession(Operations.DeleteSession.Input(
             path: path,
             headers: headers
         ))
     }
-    /// - Remark: HTTP `PUT /event/mark-as-seen/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/mark-as-seen/{eventId}/put(markEventAsSeen)`.
-    public func markEventAsSeen(
-        path: Operations.MarkEventAsSeen.Input.Path,
-        headers: Operations.MarkEventAsSeen.Input.Headers = .init()
-    ) async throws -> Operations.MarkEventAsSeen.Output {
-        try await markEventAsSeen(Operations.MarkEventAsSeen.Input(
+    /// - Remark: HTTP `PUT /session/mark-as-seen/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/mark-as-seen/{sessionId}/put(markSessionAsSeen)`.
+    public func markSessionAsSeen(
+        path: Operations.MarkSessionAsSeen.Input.Path,
+        headers: Operations.MarkSessionAsSeen.Input.Headers = .init()
+    ) async throws -> Operations.MarkSessionAsSeen.Output {
+        try await markSessionAsSeen(Operations.MarkSessionAsSeen.Input(
             path: path,
             headers: headers
         ))
@@ -113,6 +122,30 @@ extension APIProtocol {
         try await sendNotification(Operations.SendNotification.Input(
             headers: headers,
             body: body
+        ))
+    }
+    /// - Remark: HTTP `PUT /activity/{activityId}`.
+    /// - Remark: Generated from `#/paths//activity/{activityId}/put(updateActivity)`.
+    public func updateActivity(
+        path: Operations.UpdateActivity.Input.Path,
+        headers: Operations.UpdateActivity.Input.Headers = .init(),
+        body: Operations.UpdateActivity.Input.Body
+    ) async throws -> Operations.UpdateActivity.Output {
+        try await updateActivity(Operations.UpdateActivity.Input(
+            path: path,
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `DELETE /activity/{activityId}`.
+    /// - Remark: Generated from `#/paths//activity/{activityId}/delete(deleteActivity)`.
+    public func deleteActivity(
+        path: Operations.DeleteActivity.Input.Path,
+        headers: Operations.DeleteActivity.Input.Headers = .init()
+    ) async throws -> Operations.DeleteActivity.Output {
+        try await deleteActivity(Operations.DeleteActivity.Input(
+            path: path,
+            headers: headers
         ))
     }
     /// - Remark: HTTP `POST /account`.
@@ -164,6 +197,28 @@ extension APIProtocol {
             body: body
         ))
     }
+    /// - Remark: HTTP `POST /session`.
+    /// - Remark: Generated from `#/paths//session/post(createSession)`.
+    public func createSession(
+        headers: Operations.CreateSession.Input.Headers = .init(),
+        body: Operations.CreateSession.Input.Body
+    ) async throws -> Operations.CreateSession.Output {
+        try await createSession(Operations.CreateSession.Input(
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `POST /session/join/{pinCode}`.
+    /// - Remark: Generated from `#/paths//session/join/{pinCode}/post(joinSession)`.
+    public func joinSession(
+        path: Operations.JoinSession.Input.Path,
+        headers: Operations.JoinSession.Input.Headers = .init()
+    ) async throws -> Operations.JoinSession.Output {
+        try await joinSession(Operations.JoinSession.Input(
+            path: path,
+            headers: headers
+        ))
+    }
     /// - Remark: HTTP `POST /feedback/submit`.
     /// - Remark: Generated from `#/paths//feedback/submit/post(submitFeedback)`.
     public func submitFeedback(
@@ -186,28 +241,6 @@ extension APIProtocol {
             body: body
         ))
     }
-    /// - Remark: HTTP `POST /event`.
-    /// - Remark: Generated from `#/paths//event/post(createEvent)`.
-    public func createEvent(
-        headers: Operations.CreateEvent.Input.Headers = .init(),
-        body: Operations.CreateEvent.Input.Body
-    ) async throws -> Operations.CreateEvent.Output {
-        try await createEvent(Operations.CreateEvent.Input(
-            headers: headers,
-            body: body
-        ))
-    }
-    /// - Remark: HTTP `POST /event/join/{pinCode}`.
-    /// - Remark: Generated from `#/paths//event/join/{pinCode}/post(joinEvent)`.
-    public func joinEvent(
-        path: Operations.JoinEvent.Input.Path,
-        headers: Operations.JoinEvent.Input.Headers = .init()
-    ) async throws -> Operations.JoinEvent.Output {
-        try await joinEvent(Operations.JoinEvent.Input(
-            path: path,
-            headers: headers
-        ))
-    }
     /// - Remark: HTTP `POST /admin/mock-id-token`.
     /// - Remark: Generated from `#/paths//admin/mock-id-token/post(mockIdToken)`.
     public func mockIdToken(
@@ -215,6 +248,17 @@ extension APIProtocol {
         body: Operations.MockIdToken.Input.Body
     ) async throws -> Operations.MockIdToken.Output {
         try await mockIdToken(Operations.MockIdToken.Input(
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `POST /activity`.
+    /// - Remark: Generated from `#/paths//activity/post(createActivity)`.
+    public func createActivity(
+        headers: Operations.CreateActivity.Input.Headers = .init(),
+        body: Operations.CreateActivity.Input.Body
+    ) async throws -> Operations.CreateActivity.Output {
+        try await createActivity(Operations.CreateActivity.Input(
             headers: headers,
             body: body
         ))
@@ -229,6 +273,11 @@ extension APIProtocol {
             headers: headers,
             body: body
         ))
+    }
+    /// - Remark: HTTP `GET /notification-history/mark-as-seen`.
+    /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)`.
+    public func markNotificationHistoryAsSeen(headers: Operations.MarkNotificationHistoryAsSeen.Input.Headers = .init()) async throws -> Operations.MarkNotificationHistoryAsSeen.Output {
+        try await markNotificationHistoryAsSeen(Operations.MarkNotificationHistoryAsSeen.Input(headers: headers))
     }
     /// - Remark: HTTP `GET /bootstrap`.
     /// - Remark: Generated from `#/paths//bootstrap/get(getBootstrap)`.
@@ -245,11 +294,6 @@ extension APIProtocol {
             path: path,
             headers: headers
         ))
-    }
-    /// - Remark: HTTP `GET /activity/mark-activity-as-seen`.
-    /// - Remark: Generated from `#/paths//activity/mark-activity-as-seen/get(markActivityAsSeen)`.
-    public func markActivityAsSeen(headers: Operations.MarkActivityAsSeen.Input.Headers = .init()) async throws -> Operations.MarkActivityAsSeen.Output {
-        try await markActivityAsSeen(Operations.MarkActivityAsSeen.Input(headers: headers))
     }
 }
 
@@ -279,242 +323,312 @@ public enum Servers {
 public enum Components {
     /// Types generated from the `#/components/schemas` section of the OpenAPI document.
     public enum Schemas {
-        /// - Remark: Generated from `#/components/schemas/EventInput`.
-        public struct EventInput: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/EventInput/title`.
-            public var title: Swift.String
-            /// - Remark: Generated from `#/components/schemas/EventInput/agenda`.
-            public var agenda: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/EventInput/date`.
+        /// - Remark: Generated from `#/components/schemas/SessionInput`.
+        public struct SessionInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SessionInput/activityId`.
+            public var activityId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SessionInput/date`.
             public var date: Foundation.Date
-            /// - Remark: Generated from `#/components/schemas/EventInput/durationInMinutes`.
+            /// - Remark: Generated from `#/components/schemas/SessionInput/durationInMinutes`.
             public var durationInMinutes: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/EventInput/location`.
+            /// - Remark: Generated from `#/components/schemas/SessionInput/location`.
             public var location: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/EventInput/invitedEmails`.
-            public var invitedEmails: [Swift.String]
-            /// - Remark: Generated from `#/components/schemas/EventInput/questions`.
-            public var questions: [Components.Schemas.QuestionInput]
-            /// Creates a new `EventInput`.
+            /// Creates a new `SessionInput`.
             ///
             /// - Parameters:
-            ///   - title:
-            ///   - agenda:
+            ///   - activityId:
             ///   - date:
             ///   - durationInMinutes:
             ///   - location:
-            ///   - invitedEmails:
-            ///   - questions:
             public init(
-                title: Swift.String,
-                agenda: Swift.String? = nil,
+                activityId: Swift.String,
                 date: Foundation.Date,
                 durationInMinutes: Swift.Int32,
-                location: Swift.String? = nil,
-                invitedEmails: [Swift.String],
-                questions: [Components.Schemas.QuestionInput]
+                location: Swift.String? = nil
             ) {
-                self.title = title
-                self.agenda = agenda
+                self.activityId = activityId
                 self.date = date
                 self.durationInMinutes = durationInMinutes
                 self.location = location
-                self.invitedEmails = invitedEmails
-                self.questions = questions
             }
             public enum CodingKeys: String, CodingKey {
-                case title
-                case agenda
+                case activityId
                 case date
                 case durationInMinutes
                 case location
-                case invitedEmails
-                case questions
             }
         }
-        /// - Remark: Generated from `#/components/schemas/QuestionInput`.
-        public struct QuestionInput: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/QuestionInput/questionText`.
-            public var questionText: Swift.String
-            /// - Remark: Generated from `#/components/schemas/QuestionInput/feedbackType`.
-            @frozen public enum FeedbackTypePayload: String, Codable, Hashable, Sendable, CaseIterable {
-                case emoji = "Emoji"
-                case comment = "Comment"
-                case thumpsUpThumpsDown = "ThumpsUpThumpsDown"
-                case opinion = "Opinion"
-                case zeroToTen = "ZeroToTen"
-            }
-            /// - Remark: Generated from `#/components/schemas/QuestionInput/feedbackType`.
-            public var feedbackType: Components.Schemas.QuestionInput.FeedbackTypePayload
-            /// Creates a new `QuestionInput`.
-            ///
-            /// - Parameters:
-            ///   - questionText:
-            ///   - feedbackType:
-            public init(
-                questionText: Swift.String,
-                feedbackType: Components.Schemas.QuestionInput.FeedbackTypePayload
-            ) {
-                self.questionText = questionText
-                self.feedbackType = feedbackType
-            }
-            public enum CodingKeys: String, CodingKey {
-                case questionText
-                case feedbackType
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/AutomationSettings`.
-        public struct AutomationSettings: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/AutomationSettings/botEmail`.
-            public var botEmail: Swift.String
-            /// - Remark: Generated from `#/components/schemas/AutomationSettings/isActive`.
-            public var isActive: Swift.Bool
-            /// Creates a new `AutomationSettings`.
-            ///
-            /// - Parameters:
-            ///   - botEmail:
-            ///   - isActive:
-            public init(
-                botEmail: Swift.String,
-                isActive: Swift.Bool
-            ) {
-                self.botEmail = botEmail
-                self.isActive = isActive
-            }
-            public enum CodingKeys: String, CodingKey {
-                case botEmail
-                case isActive
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto`.
-        public struct FeedbackFlowDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/id`.
+        /// Manager-facing activity payload and session history for a feedback activity.
+        ///
+        /// - Remark: Generated from `#/components/schemas/ActivityDto`.
+        public struct ActivityDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/id`.
             public var id: Swift.String
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/title`.
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/title`.
             public var title: Swift.String
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/owner`.
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/agenda`.
+            public var agenda: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/owner`.
             public var owner: Components.Schemas.OwnerDto
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/newFeedback`.
-            public var newFeedback: Swift.Bool
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/analytics`.
-            public var analytics: Components.Schemas.FlowAnalytics
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/insights`.
-            public var insights: Components.Schemas.FlowInsights
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/sessions`.
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/runMode`.
+            @frozen public enum RunModePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case manual = "MANUAL"
+                case automatic = "AUTOMATIC"
+            }
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/runMode`.
+            public var runMode: Components.Schemas.ActivityDto.RunModePayload
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/sendEmails`.
+            public var sendEmails: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/invitedEmails`.
+            public var invitedEmails: [Swift.String]
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/sessions`.
             public var sessions: [Components.Schemas.SessionDto]
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/sessionSettings`.
-            public var sessionSettings: Components.Schemas.SessionSettings
-            /// - Remark: Generated from `#/components/schemas/FeedbackFlowDto/currentQuestions`.
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/currentQuestions`.
             public var currentQuestions: [Components.Schemas.QuestionDto]
-            /// Creates a new `FeedbackFlowDto`.
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/trend`.
+            public var trend: Components.Schemas.ActivityTrendDto
+            /// Creates a new `ActivityDto`.
             ///
             /// - Parameters:
             ///   - id:
             ///   - title:
+            ///   - agenda:
             ///   - owner:
-            ///   - newFeedback:
-            ///   - analytics:
-            ///   - insights:
+            ///   - runMode:
+            ///   - sendEmails:
+            ///   - invitedEmails:
             ///   - sessions:
-            ///   - sessionSettings:
             ///   - currentQuestions:
+            ///   - trend:
             public init(
                 id: Swift.String,
                 title: Swift.String,
+                agenda: Swift.String? = nil,
                 owner: Components.Schemas.OwnerDto,
-                newFeedback: Swift.Bool,
-                analytics: Components.Schemas.FlowAnalytics,
-                insights: Components.Schemas.FlowInsights,
+                runMode: Components.Schemas.ActivityDto.RunModePayload,
+                sendEmails: Swift.Bool,
+                invitedEmails: [Swift.String],
                 sessions: [Components.Schemas.SessionDto],
-                sessionSettings: Components.Schemas.SessionSettings,
-                currentQuestions: [Components.Schemas.QuestionDto]
+                currentQuestions: [Components.Schemas.QuestionDto],
+                trend: Components.Schemas.ActivityTrendDto
             ) {
                 self.id = id
                 self.title = title
+                self.agenda = agenda
                 self.owner = owner
-                self.newFeedback = newFeedback
-                self.analytics = analytics
-                self.insights = insights
+                self.runMode = runMode
+                self.sendEmails = sendEmails
+                self.invitedEmails = invitedEmails
                 self.sessions = sessions
-                self.sessionSettings = sessionSettings
                 self.currentQuestions = currentQuestions
+                self.trend = trend
             }
             public enum CodingKeys: String, CodingKey {
                 case id
                 case title
+                case agenda
                 case owner
-                case newFeedback
-                case analytics
-                case insights
+                case runMode
+                case sendEmails
+                case invitedEmails
                 case sessions
-                case sessionSettings
                 case currentQuestions
+                case trend
             }
         }
-        /// - Remark: Generated from `#/components/schemas/FlowAnalytics`.
-        public struct FlowAnalytics: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/FlowAnalytics/averageRating`.
-            public var averageRating: Swift.Double?
-            /// - Remark: Generated from `#/components/schemas/FlowAnalytics/trendStatus`.
-            @frozen public enum TrendStatusPayload: String, Codable, Hashable, Sendable, CaseIterable {
-                case improving = "IMPROVING"
-                case stable = "STABLE"
-                case needsAttention = "NEEDS_ATTENTION"
+        /// Activity-level trend based on comparable session scores. Uses the latest sessions with numeric average rating normalized to 0-5.
+        ///
+        /// - Remark: Generated from `#/components/schemas/ActivityTrendDto`.
+        public struct ActivityTrendDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/direction`.
+            @frozen public enum DirectionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case improving = "improving"
+                case stable = "stable"
+                case declining = "declining"
+                case insufficientData = "insufficient_data"
             }
-            /// - Remark: Generated from `#/components/schemas/FlowAnalytics/trendStatus`.
-            public var trendStatus: Components.Schemas.FlowAnalytics.TrendStatusPayload?
-            /// - Remark: Generated from `#/components/schemas/FlowAnalytics/lastSessionAt`.
-            public var lastSessionAt: Foundation.Date?
-            /// - Remark: Generated from `#/components/schemas/FlowAnalytics/ratingTrend`.
-            public var ratingTrend: [Components.Schemas.RatingPoint]
-            /// Creates a new `FlowAnalytics`.
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/direction`.
+            public var direction: Components.Schemas.ActivityTrendDto.DirectionPayload
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/indicator`.
+            @frozen public enum IndicatorPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case positive = "positive"
+                case neutral = "neutral"
+                case negative = "negative"
+            }
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/indicator`.
+            public var indicator: Components.Schemas.ActivityTrendDto.IndicatorPayload
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/metric`.
+            @frozen public enum MetricPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case averageRating = "average_rating"
+            }
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/metric`.
+            public var metric: Components.Schemas.ActivityTrendDto.MetricPayload
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/latestValue`.
+            public var latestValue: Swift.Double?
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/previousValue`.
+            public var previousValue: Swift.Double?
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/delta`.
+            public var delta: Swift.Double?
+            /// - Remark: Generated from `#/components/schemas/ActivityTrendDto/comparedSessionCount`.
+            public var comparedSessionCount: Swift.Int32
+            /// Creates a new `ActivityTrendDto`.
             ///
             /// - Parameters:
-            ///   - averageRating:
-            ///   - trendStatus:
-            ///   - lastSessionAt:
-            ///   - ratingTrend:
+            ///   - direction:
+            ///   - indicator:
+            ///   - metric:
+            ///   - latestValue:
+            ///   - previousValue:
+            ///   - delta:
+            ///   - comparedSessionCount:
             public init(
-                averageRating: Swift.Double? = nil,
-                trendStatus: Components.Schemas.FlowAnalytics.TrendStatusPayload? = nil,
-                lastSessionAt: Foundation.Date? = nil,
-                ratingTrend: [Components.Schemas.RatingPoint]
+                direction: Components.Schemas.ActivityTrendDto.DirectionPayload,
+                indicator: Components.Schemas.ActivityTrendDto.IndicatorPayload,
+                metric: Components.Schemas.ActivityTrendDto.MetricPayload,
+                latestValue: Swift.Double? = nil,
+                previousValue: Swift.Double? = nil,
+                delta: Swift.Double? = nil,
+                comparedSessionCount: Swift.Int32
             ) {
-                self.averageRating = averageRating
-                self.trendStatus = trendStatus
-                self.lastSessionAt = lastSessionAt
-                self.ratingTrend = ratingTrend
+                self.direction = direction
+                self.indicator = indicator
+                self.metric = metric
+                self.latestValue = latestValue
+                self.previousValue = previousValue
+                self.delta = delta
+                self.comparedSessionCount = comparedSessionCount
             }
             public enum CodingKeys: String, CodingKey {
-                case averageRating
-                case trendStatus
-                case lastSessionAt
-                case ratingTrend
+                case direction
+                case indicator
+                case metric
+                case latestValue
+                case previousValue
+                case delta
+                case comparedSessionCount
             }
         }
-        /// - Remark: Generated from `#/components/schemas/FlowInsights`.
-        public struct FlowInsights: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/FlowInsights/summary`.
-            public var summary: Swift.String?
-            /// Creates a new `FlowInsights`.
+        /// - Remark: Generated from `#/components/schemas/OverallFeedbackCountStatsDto`.
+        public struct OverallFeedbackCountStatsDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackCountStatsDto/verySadCount`.
+            public var verySadCount: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackCountStatsDto/sadCount`.
+            public var sadCount: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackCountStatsDto/happyCount`.
+            public var happyCount: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackCountStatsDto/veryHappyCount`.
+            public var veryHappyCount: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackCountStatsDto/commentsCount`.
+            public var commentsCount: Swift.Int32
+            /// Creates a new `OverallFeedbackCountStatsDto`.
             ///
             /// - Parameters:
-            ///   - summary:
-            public init(summary: Swift.String? = nil) {
-                self.summary = summary
+            ///   - verySadCount:
+            ///   - sadCount:
+            ///   - happyCount:
+            ///   - veryHappyCount:
+            ///   - commentsCount:
+            public init(
+                verySadCount: Swift.Int32,
+                sadCount: Swift.Int32,
+                happyCount: Swift.Int32,
+                veryHappyCount: Swift.Int32,
+                commentsCount: Swift.Int32
+            ) {
+                self.verySadCount = verySadCount
+                self.sadCount = sadCount
+                self.happyCount = happyCount
+                self.veryHappyCount = veryHappyCount
+                self.commentsCount = commentsCount
             }
             public enum CodingKeys: String, CodingKey {
-                case summary
+                case verySadCount
+                case sadCount
+                case happyCount
+                case veryHappyCount
+                case commentsCount
             }
         }
+        /// - Remark: Generated from `#/components/schemas/OverallFeedbackSegmentationStatsDto`.
+        public struct OverallFeedbackSegmentationStatsDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackSegmentationStatsDto/verySadPercentage`.
+            public var verySadPercentage: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackSegmentationStatsDto/sadPercentage`.
+            public var sadPercentage: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackSegmentationStatsDto/happyPercentage`.
+            public var happyPercentage: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackSegmentationStatsDto/veryHappyPercentage`.
+            public var veryHappyPercentage: Swift.Double
+            /// Creates a new `OverallFeedbackSegmentationStatsDto`.
+            ///
+            /// - Parameters:
+            ///   - verySadPercentage:
+            ///   - sadPercentage:
+            ///   - happyPercentage:
+            ///   - veryHappyPercentage:
+            public init(
+                verySadPercentage: Swift.Double,
+                sadPercentage: Swift.Double,
+                happyPercentage: Swift.Double,
+                veryHappyPercentage: Swift.Double
+            ) {
+                self.verySadPercentage = verySadPercentage
+                self.sadPercentage = sadPercentage
+                self.happyPercentage = happyPercentage
+                self.veryHappyPercentage = veryHappyPercentage
+            }
+            public enum CodingKeys: String, CodingKey {
+                case verySadPercentage
+                case sadPercentage
+                case happyPercentage
+                case veryHappyPercentage
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/OverallFeedbackSummaryDto`.
+        public struct OverallFeedbackSummaryDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackSummaryDto/segmentationStats`.
+            public var segmentationStats: Components.Schemas.OverallFeedbackSegmentationStatsDto
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackSummaryDto/countStats`.
+            public var countStats: Components.Schemas.OverallFeedbackCountStatsDto
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackSummaryDto/unseenResponses`.
+            public var unseenResponses: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OverallFeedbackSummaryDto/responses`.
+            public var responses: Swift.Int32
+            /// Creates a new `OverallFeedbackSummaryDto`.
+            ///
+            /// - Parameters:
+            ///   - segmentationStats:
+            ///   - countStats:
+            ///   - unseenResponses:
+            ///   - responses:
+            public init(
+                segmentationStats: Components.Schemas.OverallFeedbackSegmentationStatsDto,
+                countStats: Components.Schemas.OverallFeedbackCountStatsDto,
+                unseenResponses: Swift.Int32,
+                responses: Swift.Int32
+            ) {
+                self.segmentationStats = segmentationStats
+                self.countStats = countStats
+                self.unseenResponses = unseenResponses
+                self.responses = responses
+            }
+            public enum CodingKeys: String, CodingKey {
+                case segmentationStats
+                case countStats
+                case unseenResponses
+                case responses
+            }
+        }
+        /// Basic owner metadata for an activity or session.
+        ///
         /// - Remark: Generated from `#/components/schemas/OwnerDto`.
         public struct OwnerDto: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/OwnerDto/id`.
             public var id: Swift.String
             /// - Remark: Generated from `#/components/schemas/OwnerDto/name`.
-            public var name: Swift.String
+            public var name: Swift.String?
             /// - Remark: Generated from `#/components/schemas/OwnerDto/email`.
-            public var email: Swift.String
+            public var email: Swift.String?
             /// Creates a new `OwnerDto`.
             ///
             /// - Parameters:
@@ -523,8 +637,8 @@ public enum Components {
             ///   - email:
             public init(
                 id: Swift.String,
-                name: Swift.String,
-                email: Swift.String
+                name: Swift.String? = nil,
+                email: Swift.String? = nil
             ) {
                 self.id = id
                 self.name = name
@@ -536,6 +650,8 @@ public enum Components {
                 case email
             }
         }
+        /// Activity question reference.
+        ///
         /// - Remark: Generated from `#/components/schemas/QuestionDto`.
         public struct QuestionDto: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/QuestionDto/id`.
@@ -559,182 +675,90 @@ public enum Components {
                 case text
             }
         }
-        /// - Remark: Generated from `#/components/schemas/QuestionSummaryDto`.
-        public struct QuestionSummaryDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/QuestionSummaryDto/positives`.
-            public var positives: [Swift.String]
-            /// - Remark: Generated from `#/components/schemas/QuestionSummaryDto/improvements`.
-            public var improvements: [Swift.String]
-            /// Creates a new `QuestionSummaryDto`.
-            ///
-            /// - Parameters:
-            ///   - positives:
-            ///   - improvements:
-            public init(
-                positives: [Swift.String],
-                improvements: [Swift.String]
-            ) {
-                self.positives = positives
-                self.improvements = improvements
-            }
-            public enum CodingKeys: String, CodingKey {
-                case positives
-                case improvements
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/RatingPoint`.
-        public struct RatingPoint: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/RatingPoint/value`.
-            public var value: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/RatingPoint/timestamp`.
-            public var timestamp: Foundation.Date
-            /// Creates a new `RatingPoint`.
-            ///
-            /// - Parameters:
-            ///   - value:
-            ///   - timestamp:
-            public init(
-                value: Swift.Double,
-                timestamp: Foundation.Date
-            ) {
-                self.value = value
-                self.timestamp = timestamp
-            }
-            public enum CodingKeys: String, CodingKey {
-                case value
-                case timestamp
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/RecurringSettings`.
-        public struct RecurringSettings: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/RecurringSettings/frequency`.
-            @frozen public enum FrequencyPayload: String, Codable, Hashable, Sendable, CaseIterable {
-                case weekly = "WEEKLY"
-                case monthly = "MONTHLY"
-            }
-            /// - Remark: Generated from `#/components/schemas/RecurringSettings/frequency`.
-            public var frequency: Components.Schemas.RecurringSettings.FrequencyPayload
-            /// - Remark: Generated from `#/components/schemas/RecurringSettings/dayOfWeek`.
-            @frozen public enum DayOfWeekPayload: String, Codable, Hashable, Sendable, CaseIterable {
-                case monday = "MONDAY"
-                case tuesday = "TUESDAY"
-                case wednesday = "WEDNESDAY"
-                case thursday = "THURSDAY"
-                case friday = "FRIDAY"
-                case saturday = "SATURDAY"
-                case sunday = "SUNDAY"
-            }
-            /// - Remark: Generated from `#/components/schemas/RecurringSettings/dayOfWeek`.
-            public var dayOfWeek: Components.Schemas.RecurringSettings.DayOfWeekPayload?
-            /// - Remark: Generated from `#/components/schemas/RecurringSettings/dayOfMonth`.
-            public var dayOfMonth: Swift.Int32?
-            /// - Remark: Generated from `#/components/schemas/RecurringSettings/time`.
-            public var time: Swift.String
-            /// Creates a new `RecurringSettings`.
-            ///
-            /// - Parameters:
-            ///   - frequency:
-            ///   - dayOfWeek:
-            ///   - dayOfMonth:
-            ///   - time:
-            public init(
-                frequency: Components.Schemas.RecurringSettings.FrequencyPayload,
-                dayOfWeek: Components.Schemas.RecurringSettings.DayOfWeekPayload? = nil,
-                dayOfMonth: Swift.Int32? = nil,
-                time: Swift.String
-            ) {
-                self.frequency = frequency
-                self.dayOfWeek = dayOfWeek
-                self.dayOfMonth = dayOfMonth
-                self.time = time
-            }
-            public enum CodingKeys: String, CodingKey {
-                case frequency
-                case dayOfWeek
-                case dayOfMonth
-                case time
-            }
-        }
+        /// Session summary for an activity. Includes scheduling and calendar metadata plus the feedback snapshot attached to the session.
+        ///
         /// - Remark: Generated from `#/components/schemas/SessionDto`.
         public struct SessionDto: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/SessionDto/id`.
             public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SessionDto/date`.
+            public var date: Foundation.Date
+            /// - Remark: Generated from `#/components/schemas/SessionDto/durationInMinutes`.
+            public var durationInMinutes: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/SessionDto/location`.
+            public var location: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/SessionDto/pinCode`.
+            public var pinCode: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/SessionDto/createdFromMailListener`.
+            public var createdFromMailListener: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/SessionDto/calendarProvider`.
+            @frozen public enum CalendarProviderPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case google = "GOOGLE"
+                case apple = "APPLE"
+                case microsoft = "MICROSOFT"
+                case zoom = "ZOOM"
+            }
+            /// - Remark: Generated from `#/components/schemas/SessionDto/calendarProvider`.
+            public var calendarProvider: Components.Schemas.SessionDto.CalendarProviderPayload?
+            /// - Remark: Generated from `#/components/schemas/SessionDto/calendarEventId`.
+            public var calendarEventId: Swift.String?
             /// - Remark: Generated from `#/components/schemas/SessionDto/averageRating`.
             public var averageRating: Swift.Double?
-            /// - Remark: Generated from `#/components/schemas/SessionDto/ratingDelta`.
-            public var ratingDelta: Swift.Double?
-            /// - Remark: Generated from `#/components/schemas/SessionDto/summary`.
-            public var summary: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/SessionDto/questionSummary`.
-            public var questionSummary: Components.Schemas.QuestionSummaryDto?
+            /// - Remark: Generated from `#/components/schemas/SessionDto/overallFeedbackSummary`.
+            public var overallFeedbackSummary: Components.Schemas.OverallFeedbackSummaryDto?
             /// - Remark: Generated from `#/components/schemas/SessionDto/questionsSnapshot`.
             public var questionsSnapshot: [Components.Schemas.QuestionDto]
             /// Creates a new `SessionDto`.
             ///
             /// - Parameters:
             ///   - id:
+            ///   - date:
+            ///   - durationInMinutes:
+            ///   - location:
+            ///   - pinCode:
+            ///   - createdFromMailListener:
+            ///   - calendarProvider:
+            ///   - calendarEventId:
             ///   - averageRating:
-            ///   - ratingDelta:
-            ///   - summary:
-            ///   - questionSummary:
+            ///   - overallFeedbackSummary:
             ///   - questionsSnapshot:
             public init(
                 id: Swift.String,
+                date: Foundation.Date,
+                durationInMinutes: Swift.Int32,
+                location: Swift.String? = nil,
+                pinCode: Swift.String? = nil,
+                createdFromMailListener: Swift.Bool,
+                calendarProvider: Components.Schemas.SessionDto.CalendarProviderPayload? = nil,
+                calendarEventId: Swift.String? = nil,
                 averageRating: Swift.Double? = nil,
-                ratingDelta: Swift.Double? = nil,
-                summary: Swift.String? = nil,
-                questionSummary: Components.Schemas.QuestionSummaryDto? = nil,
+                overallFeedbackSummary: Components.Schemas.OverallFeedbackSummaryDto? = nil,
                 questionsSnapshot: [Components.Schemas.QuestionDto]
             ) {
                 self.id = id
+                self.date = date
+                self.durationInMinutes = durationInMinutes
+                self.location = location
+                self.pinCode = pinCode
+                self.createdFromMailListener = createdFromMailListener
+                self.calendarProvider = calendarProvider
+                self.calendarEventId = calendarEventId
                 self.averageRating = averageRating
-                self.ratingDelta = ratingDelta
-                self.summary = summary
-                self.questionSummary = questionSummary
+                self.overallFeedbackSummary = overallFeedbackSummary
                 self.questionsSnapshot = questionsSnapshot
             }
             public enum CodingKeys: String, CodingKey {
                 case id
+                case date
+                case durationInMinutes
+                case location
+                case pinCode
+                case createdFromMailListener
+                case calendarProvider
+                case calendarEventId
                 case averageRating
-                case ratingDelta
-                case summary
-                case questionSummary
+                case overallFeedbackSummary
                 case questionsSnapshot
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/SessionSettings`.
-        public struct SessionSettings: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/SessionSettings/source`.
-            @frozen public enum SourcePayload: String, Codable, Hashable, Sendable, CaseIterable {
-                case manual = "MANUAL"
-                case recurring = "RECURRING"
-                case calendarAutomation = "CALENDAR_AUTOMATION"
-            }
-            /// - Remark: Generated from `#/components/schemas/SessionSettings/source`.
-            public var source: Components.Schemas.SessionSettings.SourcePayload
-            /// - Remark: Generated from `#/components/schemas/SessionSettings/recurring`.
-            public var recurring: Components.Schemas.RecurringSettings?
-            /// - Remark: Generated from `#/components/schemas/SessionSettings/automation`.
-            public var automation: Components.Schemas.AutomationSettings?
-            /// Creates a new `SessionSettings`.
-            ///
-            /// - Parameters:
-            ///   - source:
-            ///   - recurring:
-            ///   - automation:
-            public init(
-                source: Components.Schemas.SessionSettings.SourcePayload,
-                recurring: Components.Schemas.RecurringSettings? = nil,
-                automation: Components.Schemas.AutomationSettings? = nil
-            ) {
-                self.source = source
-                self.recurring = recurring
-                self.automation = automation
-            }
-            public enum CodingKeys: String, CodingKey {
-                case source
-                case recurring
-                case automation
             }
         }
         /// - Remark: Generated from `#/components/schemas/SendNotificationInput`.
@@ -770,6 +794,95 @@ public enum Components {
                 case title
                 case newFeedback
                 case eventId
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/ActivityInput`.
+        public struct ActivityInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ActivityInput/title`.
+            public var title: Swift.String
+            /// - Remark: Generated from `#/components/schemas/ActivityInput/agenda`.
+            public var agenda: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/ActivityInput/questions`.
+            public var questions: [Components.Schemas.QuestionInput]
+            /// - Remark: Generated from `#/components/schemas/ActivityInput/runMode`.
+            @frozen public enum RunModePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case manual = "MANUAL"
+                case automatic = "AUTOMATIC"
+            }
+            /// - Remark: Generated from `#/components/schemas/ActivityInput/runMode`.
+            public var runMode: Components.Schemas.ActivityInput.RunModePayload
+            /// - Remark: Generated from `#/components/schemas/ActivityInput/invitedEmails`.
+            public var invitedEmails: [Swift.String]
+            /// - Remark: Generated from `#/components/schemas/ActivityInput/sendEmails`.
+            public var sendEmails: Swift.Bool
+            /// Creates a new `ActivityInput`.
+            ///
+            /// - Parameters:
+            ///   - title:
+            ///   - agenda:
+            ///   - questions:
+            ///   - runMode:
+            ///   - invitedEmails:
+            ///   - sendEmails:
+            public init(
+                title: Swift.String,
+                agenda: Swift.String? = nil,
+                questions: [Components.Schemas.QuestionInput],
+                runMode: Components.Schemas.ActivityInput.RunModePayload,
+                invitedEmails: [Swift.String],
+                sendEmails: Swift.Bool
+            ) {
+                self.title = title
+                self.agenda = agenda
+                self.questions = questions
+                self.runMode = runMode
+                self.invitedEmails = invitedEmails
+                self.sendEmails = sendEmails
+            }
+            public enum CodingKeys: String, CodingKey {
+                case title
+                case agenda
+                case questions
+                case runMode
+                case invitedEmails
+                case sendEmails
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/QuestionInput`.
+        public struct QuestionInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/QuestionInput/id`.
+            public var id: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/QuestionInput/questionText`.
+            public var questionText: Swift.String
+            /// - Remark: Generated from `#/components/schemas/QuestionInput/feedbackType`.
+            @frozen public enum FeedbackTypePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case emoji = "Emoji"
+                case comment = "Comment"
+                case thumpsUpThumpsDown = "ThumpsUpThumpsDown"
+                case opinion = "Opinion"
+                case zeroToTen = "ZeroToTen"
+            }
+            /// - Remark: Generated from `#/components/schemas/QuestionInput/feedbackType`.
+            public var feedbackType: Components.Schemas.QuestionInput.FeedbackTypePayload
+            /// Creates a new `QuestionInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - questionText:
+            ///   - feedbackType:
+            public init(
+                id: Swift.String? = nil,
+                questionText: Swift.String,
+                feedbackType: Components.Schemas.QuestionInput.FeedbackTypePayload
+            ) {
+                self.id = id
+                self.questionText = questionText
+                self.feedbackType = feedbackType
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case questionText
+                case feedbackType
             }
         }
         /// - Remark: Generated from `#/components/schemas/ModifyAccountInput`.
@@ -829,6 +942,155 @@ public enum Components {
             }
             public enum CodingKeys: String, CodingKey {
                 case fcmToken
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/OwnerInfoDto`.
+        public struct OwnerInfoDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/OwnerInfoDto/name`.
+            public var name: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/OwnerInfoDto/email`.
+            public var email: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/OwnerInfoDto/phoneNumber`.
+            public var phoneNumber: Swift.String?
+            /// Creates a new `OwnerInfoDto`.
+            ///
+            /// - Parameters:
+            ///   - name:
+            ///   - email:
+            ///   - phoneNumber:
+            public init(
+                name: Swift.String? = nil,
+                email: Swift.String? = nil,
+                phoneNumber: Swift.String? = nil
+            ) {
+                self.name = name
+                self.email = email
+                self.phoneNumber = phoneNumber
+            }
+            public enum CodingKeys: String, CodingKey {
+                case name
+                case email
+                case phoneNumber
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto`.
+        public struct ParticipantQuestionDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto/questionText`.
+            public var questionText: Swift.String
+            /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto/feedbackType`.
+            @frozen public enum FeedbackTypePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case emoji = "Emoji"
+                case comment = "Comment"
+                case thumpsUpThumpsDown = "ThumpsUpThumpsDown"
+                case opinion = "Opinion"
+                case zeroToTen = "ZeroToTen"
+            }
+            /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto/feedbackType`.
+            public var feedbackType: Components.Schemas.ParticipantQuestionDto.FeedbackTypePayload
+            /// Creates a new `ParticipantQuestionDto`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - questionText:
+            ///   - feedbackType:
+            public init(
+                id: Swift.String,
+                questionText: Swift.String,
+                feedbackType: Components.Schemas.ParticipantQuestionDto.FeedbackTypePayload
+            ) {
+                self.id = id
+                self.questionText = questionText
+                self.feedbackType = feedbackType
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case questionText
+                case feedbackType
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto`.
+        public struct ParticipantSessionDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/title`.
+            public var title: Swift.String
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/agenda`.
+            public var agenda: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/date`.
+            public var date: Foundation.Date
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/pinCode`.
+            public var pinCode: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/durationInMinutes`.
+            public var durationInMinutes: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/location`.
+            public var location: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/createdFromMailListener`.
+            public var createdFromMailListener: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/ownerInfo`.
+            public var ownerInfo: Components.Schemas.OwnerInfoDto
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/questions`.
+            public var questions: [Components.Schemas.ParticipantQuestionDto]
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/feedbackSubmited`.
+            public var feedbackSubmited: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/ParticipantSessionDto/recentlyJoined`.
+            public var recentlyJoined: Swift.Bool
+            /// Creates a new `ParticipantSessionDto`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - title:
+            ///   - agenda:
+            ///   - date:
+            ///   - pinCode:
+            ///   - durationInMinutes:
+            ///   - location:
+            ///   - createdFromMailListener:
+            ///   - ownerInfo:
+            ///   - questions:
+            ///   - feedbackSubmited:
+            ///   - recentlyJoined:
+            public init(
+                id: Swift.String,
+                title: Swift.String,
+                agenda: Swift.String? = nil,
+                date: Foundation.Date,
+                pinCode: Swift.String? = nil,
+                durationInMinutes: Swift.Int32,
+                location: Swift.String? = nil,
+                createdFromMailListener: Swift.Bool,
+                ownerInfo: Components.Schemas.OwnerInfoDto,
+                questions: [Components.Schemas.ParticipantQuestionDto],
+                feedbackSubmited: Swift.Bool,
+                recentlyJoined: Swift.Bool
+            ) {
+                self.id = id
+                self.title = title
+                self.agenda = agenda
+                self.date = date
+                self.pinCode = pinCode
+                self.durationInMinutes = durationInMinutes
+                self.location = location
+                self.createdFromMailListener = createdFromMailListener
+                self.ownerInfo = ownerInfo
+                self.questions = questions
+                self.feedbackSubmited = feedbackSubmited
+                self.recentlyJoined = recentlyJoined
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case title
+                case agenda
+                case date
+                case pinCode
+                case durationInMinutes
+                case location
+                case createdFromMailListener
+                case ownerInfo
+                case questions
+                case feedbackSubmited
+                case recentlyJoined
             }
         }
         /// - Remark: Generated from `#/components/schemas/FeedbackInput`.
@@ -935,175 +1197,32 @@ public enum Components {
                 case pinCode
             }
         }
-        /// - Remark: Generated from `#/components/schemas/OwnerInfoDto`.
-        public struct OwnerInfoDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/OwnerInfoDto/name`.
-            public var name: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/OwnerInfoDto/email`.
-            public var email: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/OwnerInfoDto/phoneNumber`.
-            public var phoneNumber: Swift.String?
-            /// Creates a new `OwnerInfoDto`.
-            ///
-            /// - Parameters:
-            ///   - name:
-            ///   - email:
-            ///   - phoneNumber:
-            public init(
-                name: Swift.String? = nil,
-                email: Swift.String? = nil,
-                phoneNumber: Swift.String? = nil
-            ) {
-                self.name = name
-                self.email = email
-                self.phoneNumber = phoneNumber
-            }
-            public enum CodingKeys: String, CodingKey {
-                case name
-                case email
-                case phoneNumber
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/ParticipantEventDto`.
-        public struct ParticipantEventDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/id`.
-            public var id: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/title`.
-            public var title: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/agenda`.
-            public var agenda: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/date`.
-            public var date: Foundation.Date
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/pinCode`.
-            public var pinCode: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/durationInMinutes`.
-            public var durationInMinutes: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/location`.
-            public var location: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/createdFromMailListener`.
-            public var createdFromMailListener: Swift.Bool
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/ownerInfo`.
-            public var ownerInfo: Components.Schemas.OwnerInfoDto
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/questions`.
-            public var questions: [Components.Schemas.ParticipantQuestionDto]
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/feedbackSubmited`.
-            public var feedbackSubmited: Swift.Bool
-            /// - Remark: Generated from `#/components/schemas/ParticipantEventDto/recentlyJoined`.
-            public var recentlyJoined: Swift.Bool
-            /// Creates a new `ParticipantEventDto`.
-            ///
-            /// - Parameters:
-            ///   - id:
-            ///   - title:
-            ///   - agenda:
-            ///   - date:
-            ///   - pinCode:
-            ///   - durationInMinutes:
-            ///   - location:
-            ///   - createdFromMailListener:
-            ///   - ownerInfo:
-            ///   - questions:
-            ///   - feedbackSubmited:
-            ///   - recentlyJoined:
-            public init(
-                id: Swift.String,
-                title: Swift.String,
-                agenda: Swift.String? = nil,
-                date: Foundation.Date,
-                pinCode: Swift.String? = nil,
-                durationInMinutes: Swift.Int32,
-                location: Swift.String? = nil,
-                createdFromMailListener: Swift.Bool,
-                ownerInfo: Components.Schemas.OwnerInfoDto,
-                questions: [Components.Schemas.ParticipantQuestionDto],
-                feedbackSubmited: Swift.Bool,
-                recentlyJoined: Swift.Bool
-            ) {
-                self.id = id
-                self.title = title
-                self.agenda = agenda
-                self.date = date
-                self.pinCode = pinCode
-                self.durationInMinutes = durationInMinutes
-                self.location = location
-                self.createdFromMailListener = createdFromMailListener
-                self.ownerInfo = ownerInfo
-                self.questions = questions
-                self.feedbackSubmited = feedbackSubmited
-                self.recentlyJoined = recentlyJoined
-            }
-            public enum CodingKeys: String, CodingKey {
-                case id
-                case title
-                case agenda
-                case date
-                case pinCode
-                case durationInMinutes
-                case location
-                case createdFromMailListener
-                case ownerInfo
-                case questions
-                case feedbackSubmited
-                case recentlyJoined
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto`.
-        public struct ParticipantQuestionDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto/id`.
-            public var id: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto/questionText`.
-            public var questionText: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto/feedbackType`.
-            @frozen public enum FeedbackTypePayload: String, Codable, Hashable, Sendable, CaseIterable {
-                case emoji = "Emoji"
-                case comment = "Comment"
-                case thumpsUpThumpsDown = "ThumpsUpThumpsDown"
-                case opinion = "Opinion"
-                case zeroToTen = "ZeroToTen"
-            }
-            /// - Remark: Generated from `#/components/schemas/ParticipantQuestionDto/feedbackType`.
-            public var feedbackType: Components.Schemas.ParticipantQuestionDto.FeedbackTypePayload
-            /// Creates a new `ParticipantQuestionDto`.
-            ///
-            /// - Parameters:
-            ///   - id:
-            ///   - questionText:
-            ///   - feedbackType:
-            public init(
-                id: Swift.String,
-                questionText: Swift.String,
-                feedbackType: Components.Schemas.ParticipantQuestionDto.FeedbackTypePayload
-            ) {
-                self.id = id
-                self.questionText = questionText
-                self.feedbackType = feedbackType
-            }
-            public enum CodingKeys: String, CodingKey {
-                case id
-                case questionText
-                case feedbackType
-            }
-        }
         /// - Remark: Generated from `#/components/schemas/SubmitFeedbackResponseDto`.
         public struct SubmitFeedbackResponseDto: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/SubmitFeedbackResponseDto/shouldPresentRatingPrompt`.
             public var shouldPresentRatingPrompt: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/SubmitFeedbackResponseDto/session`.
+            public var session: Components.Schemas.ParticipantSessionDto
             /// - Remark: Generated from `#/components/schemas/SubmitFeedbackResponseDto/event`.
-            public var event: Components.Schemas.ParticipantEventDto
+            public var event: Components.Schemas.ParticipantSessionDto
             /// Creates a new `SubmitFeedbackResponseDto`.
             ///
             /// - Parameters:
             ///   - shouldPresentRatingPrompt:
+            ///   - session:
             ///   - event:
             public init(
                 shouldPresentRatingPrompt: Swift.Bool,
-                event: Components.Schemas.ParticipantEventDto
+                session: Components.Schemas.ParticipantSessionDto,
+                event: Components.Schemas.ParticipantSessionDto
             ) {
                 self.shouldPresentRatingPrompt = shouldPresentRatingPrompt
+                self.session = session
                 self.event = event
             }
             public enum CodingKeys: String, CodingKey {
                 case shouldPresentRatingPrompt
+                case session
                 case event
             }
         }
@@ -1261,21 +1380,6 @@ public enum Components {
                 case fcmToken
             }
         }
-        /// - Remark: Generated from `#/components/schemas/LogoutInput`.
-        public struct LogoutInput: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/LogoutInput/fcmToken`.
-            public var fcmToken: Swift.String
-            /// Creates a new `LogoutInput`.
-            ///
-            /// - Parameters:
-            ///   - fcmToken:
-            public init(fcmToken: Swift.String) {
-                self.fcmToken = fcmToken
-            }
-            public enum CodingKeys: String, CodingKey {
-                case fcmToken
-            }
-        }
         /// - Remark: Generated from `#/components/schemas/AccountInfoDto`.
         public struct AccountInfoDto: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/AccountInfoDto/name`.
@@ -1305,19 +1409,215 @@ public enum Components {
                 case phoneNumber
             }
         }
-        /// - Remark: Generated from `#/components/schemas/ActivityDto`.
-        public struct ActivityDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/ActivityDto/items`.
-            public var items: [Components.Schemas.ActivityItem]
-            /// - Remark: Generated from `#/components/schemas/ActivityDto/unseenTotal`.
+        /// - Remark: Generated from `#/components/schemas/BootstrapDto`.
+        public struct BootstrapDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/BootstrapDto/role`.
+            public var role: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/BootstrapDto/accountInfo`.
+            public var accountInfo: Components.Schemas.AccountInfoDto
+            /// - Remark: Generated from `#/components/schemas/BootstrapDto/participantSessions`.
+            public var participantSessions: [Components.Schemas.ParticipantSessionDto]
+            /// - Remark: Generated from `#/components/schemas/BootstrapDto/managerData`.
+            public var managerData: Components.Schemas.ManagerDataDto?
+            /// Creates a new `BootstrapDto`.
+            ///
+            /// - Parameters:
+            ///   - role:
+            ///   - accountInfo:
+            ///   - participantSessions:
+            ///   - managerData:
+            public init(
+                role: Swift.String? = nil,
+                accountInfo: Components.Schemas.AccountInfoDto,
+                participantSessions: [Components.Schemas.ParticipantSessionDto],
+                managerData: Components.Schemas.ManagerDataDto? = nil
+            ) {
+                self.role = role
+                self.accountInfo = accountInfo
+                self.participantSessions = participantSessions
+                self.managerData = managerData
+            }
+            public enum CodingKeys: String, CodingKey {
+                case role
+                case accountInfo
+                case participantSessions
+                case managerData
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary`.
+        public struct EmojiQuestionFeedbackSummary: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countVerySad`.
+            public var countVerySad: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countSad`.
+            public var countSad: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countHappy`.
+            public var countHappy: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countVeryHappy`.
+            public var countVeryHappy: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageVerySad`.
+            public var percentageVerySad: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageSad`.
+            public var percentageSad: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageHappy`.
+            public var percentageHappy: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageVeryHappy`.
+            public var percentageVeryHappy: Swift.Double
+            /// Creates a new `EmojiQuestionFeedbackSummary`.
+            ///
+            /// - Parameters:
+            ///   - countVerySad:
+            ///   - countSad:
+            ///   - countHappy:
+            ///   - countVeryHappy:
+            ///   - percentageVerySad:
+            ///   - percentageSad:
+            ///   - percentageHappy:
+            ///   - percentageVeryHappy:
+            public init(
+                countVerySad: Swift.Int32,
+                countSad: Swift.Int32,
+                countHappy: Swift.Int32,
+                countVeryHappy: Swift.Int32,
+                percentageVerySad: Swift.Double,
+                percentageSad: Swift.Double,
+                percentageHappy: Swift.Double,
+                percentageVeryHappy: Swift.Double
+            ) {
+                self.countVerySad = countVerySad
+                self.countSad = countSad
+                self.countHappy = countHappy
+                self.countVeryHappy = countVeryHappy
+                self.percentageVerySad = percentageVerySad
+                self.percentageSad = percentageSad
+                self.percentageHappy = percentageHappy
+                self.percentageVeryHappy = percentageVeryHappy
+            }
+            public enum CodingKeys: String, CodingKey {
+                case countVerySad
+                case countSad
+                case countHappy
+                case countVeryHappy
+                case percentageVerySad
+                case percentageSad
+                case percentageHappy
+                case percentageVeryHappy
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/ManagerDataDto`.
+        public struct ManagerDataDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ManagerDataDto/activities`.
+            public var activities: [Components.Schemas.ActivityDto]
+            /// - Remark: Generated from `#/components/schemas/ManagerDataDto/notificationHistory`.
+            public var notificationHistory: Components.Schemas.NotificationHistoryDto
+            /// - Remark: Generated from `#/components/schemas/ManagerDataDto/bootstrapHash`.
+            public var bootstrapHash: Swift.String
+            /// - Remark: Generated from `#/components/schemas/ManagerDataDto/questionAnalytics`.
+            public var questionAnalytics: [Components.Schemas.ManagerQuestionAnalyticsDto]
+            /// Creates a new `ManagerDataDto`.
+            ///
+            /// - Parameters:
+            ///   - activities:
+            ///   - notificationHistory:
+            ///   - bootstrapHash:
+            ///   - questionAnalytics:
+            public init(
+                activities: [Components.Schemas.ActivityDto],
+                notificationHistory: Components.Schemas.NotificationHistoryDto,
+                bootstrapHash: Swift.String,
+                questionAnalytics: [Components.Schemas.ManagerQuestionAnalyticsDto]
+            ) {
+                self.activities = activities
+                self.notificationHistory = notificationHistory
+                self.bootstrapHash = bootstrapHash
+                self.questionAnalytics = questionAnalytics
+            }
+            public enum CodingKeys: String, CodingKey {
+                case activities
+                case notificationHistory
+                case bootstrapHash
+                case questionAnalytics
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto`.
+        public struct ManagerQuestionAnalyticsDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/questionId`.
+            public var questionId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/questionText`.
+            public var questionText: Swift.String
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/feedbackType`.
+            @frozen public enum FeedbackTypePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case emoji = "Emoji"
+                case comment = "Comment"
+                case thumpsUpThumpsDown = "ThumpsUpThumpsDown"
+                case opinion = "Opinion"
+                case zeroToTen = "ZeroToTen"
+            }
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/feedbackType`.
+            public var feedbackType: Components.Schemas.ManagerQuestionAnalyticsDto.FeedbackTypePayload
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/sessionCount`.
+            public var sessionCount: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/responseCount`.
+            public var responseCount: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/latestAskedAt`.
+            public var latestAskedAt: Foundation.Date?
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/overallSummary`.
+            public var overallSummary: Components.Schemas.QuestionFeedbackSummaryDto?
+            /// - Remark: Generated from `#/components/schemas/ManagerQuestionAnalyticsDto/timeline`.
+            public var timeline: [Components.Schemas.QuestionTrendPointDto]
+            /// Creates a new `ManagerQuestionAnalyticsDto`.
+            ///
+            /// - Parameters:
+            ///   - questionId:
+            ///   - questionText:
+            ///   - feedbackType:
+            ///   - sessionCount:
+            ///   - responseCount:
+            ///   - latestAskedAt:
+            ///   - overallSummary:
+            ///   - timeline:
+            public init(
+                questionId: Swift.String,
+                questionText: Swift.String,
+                feedbackType: Components.Schemas.ManagerQuestionAnalyticsDto.FeedbackTypePayload,
+                sessionCount: Swift.Int32,
+                responseCount: Swift.Int32,
+                latestAskedAt: Foundation.Date? = nil,
+                overallSummary: Components.Schemas.QuestionFeedbackSummaryDto? = nil,
+                timeline: [Components.Schemas.QuestionTrendPointDto]
+            ) {
+                self.questionId = questionId
+                self.questionText = questionText
+                self.feedbackType = feedbackType
+                self.sessionCount = sessionCount
+                self.responseCount = responseCount
+                self.latestAskedAt = latestAskedAt
+                self.overallSummary = overallSummary
+                self.timeline = timeline
+            }
+            public enum CodingKeys: String, CodingKey {
+                case questionId
+                case questionText
+                case feedbackType
+                case sessionCount
+                case responseCount
+                case latestAskedAt
+                case overallSummary
+                case timeline
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/NotificationHistoryDto`.
+        public struct NotificationHistoryDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/NotificationHistoryDto/items`.
+            public var items: [Components.Schemas.NotificationHistoryItem]
+            /// - Remark: Generated from `#/components/schemas/NotificationHistoryDto/unseenTotal`.
             public var unseenTotal: Swift.Int32
-            /// Creates a new `ActivityDto`.
+            /// Creates a new `NotificationHistoryDto`.
             ///
             /// - Parameters:
             ///   - items:
             ///   - unseenTotal:
             public init(
-                items: [Components.Schemas.ActivityItem],
+                items: [Components.Schemas.NotificationHistoryItem],
                 unseenTotal: Swift.Int32
             ) {
                 self.items = items
@@ -1328,21 +1628,21 @@ public enum Components {
                 case unseenTotal
             }
         }
-        /// - Remark: Generated from `#/components/schemas/ActivityItem`.
-        public struct ActivityItem: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/ActivityItem/id`.
+        /// - Remark: Generated from `#/components/schemas/NotificationHistoryItem`.
+        public struct NotificationHistoryItem: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/NotificationHistoryItem/id`.
             public var id: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ActivityItem/date`.
+            /// - Remark: Generated from `#/components/schemas/NotificationHistoryItem/date`.
             public var date: Foundation.Date
-            /// - Remark: Generated from `#/components/schemas/ActivityItem/eventTitle`.
+            /// - Remark: Generated from `#/components/schemas/NotificationHistoryItem/eventTitle`.
             public var eventTitle: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ActivityItem/eventId`.
+            /// - Remark: Generated from `#/components/schemas/NotificationHistoryItem/eventId`.
             public var eventId: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ActivityItem/newFeedbackCount`.
+            /// - Remark: Generated from `#/components/schemas/NotificationHistoryItem/newFeedbackCount`.
             public var newFeedbackCount: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ActivityItem/seenByManager`.
+            /// - Remark: Generated from `#/components/schemas/NotificationHistoryItem/seenByManager`.
             public var seenByManager: Swift.Bool
-            /// Creates a new `ActivityItem`.
+            /// Creates a new `NotificationHistoryItem`.
             ///
             /// - Parameters:
             ///   - id:
@@ -1375,62 +1675,326 @@ public enum Components {
                 case seenByManager
             }
         }
-        /// - Remark: Generated from `#/components/schemas/BootstrapDto`.
-        public struct BootstrapDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/BootstrapDto/role`.
-            public var role: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/BootstrapDto/accountInfo`.
-            public var accountInfo: Components.Schemas.AccountInfoDto
-            /// - Remark: Generated from `#/components/schemas/BootstrapDto/managerData`.
-            public var managerData: Components.Schemas.ManagerDataDto?
-            /// Creates a new `BootstrapDto`.
+        /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary`.
+        public struct OpinionQuestionFeedbackSummary: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countStronglyAgree`.
+            public var countStronglyAgree: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countAgree`.
+            public var countAgree: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countStronglyDisagree`.
+            public var countStronglyDisagree: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countDisagree`.
+            public var countDisagree: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageStronglyAgree`.
+            public var percentageStronglyAgree: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageAgree`.
+            public var percentageAgree: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageStronglyDisagree`.
+            public var percentageStronglyDisagree: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageDisagree`.
+            public var percentageDisagree: Swift.Double
+            /// Creates a new `OpinionQuestionFeedbackSummary`.
             ///
             /// - Parameters:
-            ///   - role:
-            ///   - accountInfo:
-            ///   - managerData:
+            ///   - countStronglyAgree:
+            ///   - countAgree:
+            ///   - countStronglyDisagree:
+            ///   - countDisagree:
+            ///   - percentageStronglyAgree:
+            ///   - percentageAgree:
+            ///   - percentageStronglyDisagree:
+            ///   - percentageDisagree:
             public init(
-                role: Swift.String? = nil,
-                accountInfo: Components.Schemas.AccountInfoDto,
-                managerData: Components.Schemas.ManagerDataDto? = nil
+                countStronglyAgree: Swift.Int32,
+                countAgree: Swift.Int32,
+                countStronglyDisagree: Swift.Int32,
+                countDisagree: Swift.Int32,
+                percentageStronglyAgree: Swift.Double,
+                percentageAgree: Swift.Double,
+                percentageStronglyDisagree: Swift.Double,
+                percentageDisagree: Swift.Double
             ) {
-                self.role = role
-                self.accountInfo = accountInfo
-                self.managerData = managerData
+                self.countStronglyAgree = countStronglyAgree
+                self.countAgree = countAgree
+                self.countStronglyDisagree = countStronglyDisagree
+                self.countDisagree = countDisagree
+                self.percentageStronglyAgree = percentageStronglyAgree
+                self.percentageAgree = percentageAgree
+                self.percentageStronglyDisagree = percentageStronglyDisagree
+                self.percentageDisagree = percentageDisagree
             }
             public enum CodingKeys: String, CodingKey {
-                case role
-                case accountInfo
-                case managerData
+                case countStronglyAgree
+                case countAgree
+                case countStronglyDisagree
+                case countDisagree
+                case percentageStronglyAgree
+                case percentageAgree
+                case percentageStronglyDisagree
+                case percentageDisagree
             }
         }
-        /// - Remark: Generated from `#/components/schemas/ManagerDataDto`.
-        public struct ManagerDataDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/ManagerDataDto/feedbackFlows`.
-            public var feedbackFlows: [Components.Schemas.FeedbackFlowDto]
-            /// - Remark: Generated from `#/components/schemas/ManagerDataDto/activity`.
-            public var activity: Components.Schemas.ActivityDto
-            /// - Remark: Generated from `#/components/schemas/ManagerDataDto/sessionHash`.
-            public var sessionHash: Swift.String
-            /// Creates a new `ManagerDataDto`.
+        /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto`.
+        public struct QuestionFeedbackSummaryDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/emojiQuestionFeedbackSummary`.
+            public var emojiQuestionFeedbackSummary: Components.Schemas.EmojiQuestionFeedbackSummary?
+            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/thumpsQuestionFeedbackSummary`.
+            public var thumpsQuestionFeedbackSummary: Components.Schemas.ThumpsQuestionFeedbackSummary?
+            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/opinionQuestionFeedbackSummary`.
+            public var opinionQuestionFeedbackSummary: Components.Schemas.OpinionQuestionFeedbackSummary?
+            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/zeroToTenQuestionFeedbackSummary`.
+            public var zeroToTenQuestionFeedbackSummary: Components.Schemas.ZeroToTenQuestionFeedbackSummary?
+            /// Creates a new `QuestionFeedbackSummaryDto`.
             ///
             /// - Parameters:
-            ///   - feedbackFlows:
-            ///   - activity:
-            ///   - sessionHash:
+            ///   - emojiQuestionFeedbackSummary:
+            ///   - thumpsQuestionFeedbackSummary:
+            ///   - opinionQuestionFeedbackSummary:
+            ///   - zeroToTenQuestionFeedbackSummary:
             public init(
-                feedbackFlows: [Components.Schemas.FeedbackFlowDto],
-                activity: Components.Schemas.ActivityDto,
-                sessionHash: Swift.String
+                emojiQuestionFeedbackSummary: Components.Schemas.EmojiQuestionFeedbackSummary? = nil,
+                thumpsQuestionFeedbackSummary: Components.Schemas.ThumpsQuestionFeedbackSummary? = nil,
+                opinionQuestionFeedbackSummary: Components.Schemas.OpinionQuestionFeedbackSummary? = nil,
+                zeroToTenQuestionFeedbackSummary: Components.Schemas.ZeroToTenQuestionFeedbackSummary? = nil
             ) {
-                self.feedbackFlows = feedbackFlows
-                self.activity = activity
-                self.sessionHash = sessionHash
+                self.emojiQuestionFeedbackSummary = emojiQuestionFeedbackSummary
+                self.thumpsQuestionFeedbackSummary = thumpsQuestionFeedbackSummary
+                self.opinionQuestionFeedbackSummary = opinionQuestionFeedbackSummary
+                self.zeroToTenQuestionFeedbackSummary = zeroToTenQuestionFeedbackSummary
             }
             public enum CodingKeys: String, CodingKey {
-                case feedbackFlows
-                case activity
-                case sessionHash
+                case emojiQuestionFeedbackSummary
+                case thumpsQuestionFeedbackSummary
+                case opinionQuestionFeedbackSummary
+                case zeroToTenQuestionFeedbackSummary
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/QuestionTrendPointDto`.
+        public struct QuestionTrendPointDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/QuestionTrendPointDto/sessionId`.
+            public var sessionId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/QuestionTrendPointDto/sessionDate`.
+            public var sessionDate: Foundation.Date
+            /// - Remark: Generated from `#/components/schemas/QuestionTrendPointDto/responseCount`.
+            public var responseCount: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/QuestionTrendPointDto/summary`.
+            public var summary: Components.Schemas.QuestionFeedbackSummaryDto?
+            /// Creates a new `QuestionTrendPointDto`.
+            ///
+            /// - Parameters:
+            ///   - sessionId:
+            ///   - sessionDate:
+            ///   - responseCount:
+            ///   - summary:
+            public init(
+                sessionId: Swift.String,
+                sessionDate: Foundation.Date,
+                responseCount: Swift.Int32,
+                summary: Components.Schemas.QuestionFeedbackSummaryDto? = nil
+            ) {
+                self.sessionId = sessionId
+                self.sessionDate = sessionDate
+                self.responseCount = responseCount
+                self.summary = summary
+            }
+            public enum CodingKeys: String, CodingKey {
+                case sessionId
+                case sessionDate
+                case responseCount
+                case summary
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary`.
+        public struct ThumpsQuestionFeedbackSummary: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/countUp`.
+            public var countUp: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/countDown`.
+            public var countDown: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/percentageUp`.
+            public var percentageUp: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/percentageDown`.
+            public var percentageDown: Swift.Double
+            /// Creates a new `ThumpsQuestionFeedbackSummary`.
+            ///
+            /// - Parameters:
+            ///   - countUp:
+            ///   - countDown:
+            ///   - percentageUp:
+            ///   - percentageDown:
+            public init(
+                countUp: Swift.Int32,
+                countDown: Swift.Int32,
+                percentageUp: Swift.Double,
+                percentageDown: Swift.Double
+            ) {
+                self.countUp = countUp
+                self.countDown = countDown
+                self.percentageUp = percentageUp
+                self.percentageDown = percentageDown
+            }
+            public enum CodingKeys: String, CodingKey {
+                case countUp
+                case countDown
+                case percentageUp
+                case percentageDown
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary`.
+        public struct ZeroToTenQuestionFeedbackSummary: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue0`.
+            public var countValue0: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue1`.
+            public var countValue1: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue2`.
+            public var countValue2: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue3`.
+            public var countValue3: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue4`.
+            public var countValue4: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue5`.
+            public var countValue5: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue6`.
+            public var countValue6: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue7`.
+            public var countValue7: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue8`.
+            public var countValue8: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue9`.
+            public var countValue9: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue10`.
+            public var countValue10: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue0`.
+            public var percentageValue0: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue1`.
+            public var percentageValue1: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue2`.
+            public var percentageValue2: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue3`.
+            public var percentageValue3: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue4`.
+            public var percentageValue4: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue5`.
+            public var percentageValue5: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue6`.
+            public var percentageValue6: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue7`.
+            public var percentageValue7: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue8`.
+            public var percentageValue8: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue9`.
+            public var percentageValue9: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue10`.
+            public var percentageValue10: Swift.Double
+            /// Creates a new `ZeroToTenQuestionFeedbackSummary`.
+            ///
+            /// - Parameters:
+            ///   - countValue0:
+            ///   - countValue1:
+            ///   - countValue2:
+            ///   - countValue3:
+            ///   - countValue4:
+            ///   - countValue5:
+            ///   - countValue6:
+            ///   - countValue7:
+            ///   - countValue8:
+            ///   - countValue9:
+            ///   - countValue10:
+            ///   - percentageValue0:
+            ///   - percentageValue1:
+            ///   - percentageValue2:
+            ///   - percentageValue3:
+            ///   - percentageValue4:
+            ///   - percentageValue5:
+            ///   - percentageValue6:
+            ///   - percentageValue7:
+            ///   - percentageValue8:
+            ///   - percentageValue9:
+            ///   - percentageValue10:
+            public init(
+                countValue0: Swift.Int32,
+                countValue1: Swift.Int32,
+                countValue2: Swift.Int32,
+                countValue3: Swift.Int32,
+                countValue4: Swift.Int32,
+                countValue5: Swift.Int32,
+                countValue6: Swift.Int32,
+                countValue7: Swift.Int32,
+                countValue8: Swift.Int32,
+                countValue9: Swift.Int32,
+                countValue10: Swift.Int32,
+                percentageValue0: Swift.Double,
+                percentageValue1: Swift.Double,
+                percentageValue2: Swift.Double,
+                percentageValue3: Swift.Double,
+                percentageValue4: Swift.Double,
+                percentageValue5: Swift.Double,
+                percentageValue6: Swift.Double,
+                percentageValue7: Swift.Double,
+                percentageValue8: Swift.Double,
+                percentageValue9: Swift.Double,
+                percentageValue10: Swift.Double
+            ) {
+                self.countValue0 = countValue0
+                self.countValue1 = countValue1
+                self.countValue2 = countValue2
+                self.countValue3 = countValue3
+                self.countValue4 = countValue4
+                self.countValue5 = countValue5
+                self.countValue6 = countValue6
+                self.countValue7 = countValue7
+                self.countValue8 = countValue8
+                self.countValue9 = countValue9
+                self.countValue10 = countValue10
+                self.percentageValue0 = percentageValue0
+                self.percentageValue1 = percentageValue1
+                self.percentageValue2 = percentageValue2
+                self.percentageValue3 = percentageValue3
+                self.percentageValue4 = percentageValue4
+                self.percentageValue5 = percentageValue5
+                self.percentageValue6 = percentageValue6
+                self.percentageValue7 = percentageValue7
+                self.percentageValue8 = percentageValue8
+                self.percentageValue9 = percentageValue9
+                self.percentageValue10 = percentageValue10
+            }
+            public enum CodingKeys: String, CodingKey {
+                case countValue0
+                case countValue1
+                case countValue2
+                case countValue3
+                case countValue4
+                case countValue5
+                case countValue6
+                case countValue7
+                case countValue8
+                case countValue9
+                case countValue10
+                case percentageValue0
+                case percentageValue1
+                case percentageValue2
+                case percentageValue3
+                case percentageValue4
+                case percentageValue5
+                case percentageValue6
+                case percentageValue7
+                case percentageValue8
+                case percentageValue9
+                case percentageValue10
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/LogoutInput`.
+        public struct LogoutInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/LogoutInput/fcmToken`.
+            public var fcmToken: Swift.String
+            /// Creates a new `LogoutInput`.
+            ///
+            /// - Parameters:
+            ///   - fcmToken:
+            public init(fcmToken: Swift.String) {
+                self.fcmToken = fcmToken
+            }
+            public enum CodingKeys: String, CodingKey {
+                case fcmToken
             }
         }
         /// - Remark: Generated from `#/components/schemas/ApiError`.
@@ -1495,42 +2059,42 @@ public enum Components {
 
 /// API operations, with input and output types, generated from `#/paths` in the OpenAPI document.
 public enum Operations {
-    /// - Remark: HTTP `PUT /event/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/{eventId}/put(updateEvent)`.
-    public enum UpdateEvent {
-        public static let id: Swift.String = "updateEvent"
+    /// - Remark: HTTP `PUT /session/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/{sessionId}/put(updateSession)`.
+    public enum UpdateSession {
+        public static let id: Swift.String = "updateSession"
         public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/event/{eventId}/PUT/path`.
+            /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/path`.
             public struct Path: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/{eventId}/PUT/path/eventId`.
-                public var eventId: Swift.String
+                /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/path/sessionId`.
+                public var sessionId: Swift.String
                 /// Creates a new `Path`.
                 ///
                 /// - Parameters:
-                ///   - eventId:
-                public init(eventId: Swift.String) {
-                    self.eventId = eventId
+                ///   - sessionId:
+                public init(sessionId: Swift.String) {
+                    self.sessionId = sessionId
                 }
             }
-            public var path: Operations.UpdateEvent.Input.Path
-            /// - Remark: Generated from `#/paths/event/{eventId}/PUT/header`.
+            public var path: Operations.UpdateSession.Input.Path
+            /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/header`.
             public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.UpdateEvent.AcceptableContentType>]
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.UpdateSession.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.UpdateEvent.AcceptableContentType>] = .defaultValues()) {
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.UpdateSession.AcceptableContentType>] = .defaultValues()) {
                     self.accept = accept
                 }
             }
-            public var headers: Operations.UpdateEvent.Input.Headers
-            /// - Remark: Generated from `#/paths/event/{eventId}/PUT/requestBody`.
+            public var headers: Operations.UpdateSession.Input.Headers
+            /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/requestBody`.
             @frozen public enum Body: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/{eventId}/PUT/requestBody/content/application\/json`.
-                case json(Components.Schemas.EventInput)
+                /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/requestBody/content/application\/json`.
+                case json(Components.Schemas.SessionInput)
             }
-            public var body: Operations.UpdateEvent.Input.Body
+            public var body: Operations.UpdateSession.Input.Body
             /// Creates a new `Input`.
             ///
             /// - Parameters:
@@ -1538,9 +2102,9 @@ public enum Operations {
             ///   - headers:
             ///   - body:
             public init(
-                path: Operations.UpdateEvent.Input.Path,
-                headers: Operations.UpdateEvent.Input.Headers = .init(),
-                body: Operations.UpdateEvent.Input.Body
+                path: Operations.UpdateSession.Input.Path,
+                headers: Operations.UpdateSession.Input.Headers = .init(),
+                body: Operations.UpdateSession.Input.Body
             ) {
                 self.path = path
                 self.headers = headers
@@ -1549,15 +2113,15 @@ public enum Operations {
         }
         @frozen public enum Output: Sendable, Hashable {
             public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/{eventId}/PUT/responses/200/content`.
+                /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/responses/200/content`.
                 @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/event/{eventId}/PUT/responses/200/content/application\/json`.
-                    case json(Components.Schemas.FeedbackFlowDto)
+                    /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/responses/200/content/application\/json`.
+                    case json(Components.Schemas.ActivityDto)
                     /// The associated value of the enum case if `self` is `.json`.
                     ///
                     /// - Throws: An error if `self` is not `.json`.
                     /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.FeedbackFlowDto {
+                    public var json: Components.Schemas.ActivityDto {
                         get throws {
                             switch self {
                             case let .json(body):
@@ -1567,26 +2131,26 @@ public enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                public var body: Operations.UpdateEvent.Output.Ok.Body
+                public var body: Operations.UpdateSession.Output.Ok.Body
                 /// Creates a new `Ok`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                public init(body: Operations.UpdateEvent.Output.Ok.Body) {
+                public init(body: Operations.UpdateSession.Output.Ok.Body) {
                     self.body = body
                 }
             }
             /// OK
             ///
-            /// - Remark: Generated from `#/paths//event/{eventId}/put(updateEvent)/responses/200`.
+            /// - Remark: Generated from `#/paths//session/{sessionId}/put(updateSession)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.UpdateEvent.Output.Ok)
+            case ok(Operations.UpdateSession.Output.Ok)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.UpdateEvent.Output.Ok {
+            public var ok: Operations.UpdateSession.Output.Ok {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1600,9 +2164,9 @@ public enum Operations {
                 }
             }
             public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/{eventId}/PUT/responses/500/content`.
+                /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/responses/500/content`.
                 @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/event/{eventId}/PUT/responses/500/content/application\/json`.
+                    /// - Remark: Generated from `#/paths/session/{sessionId}/PUT/responses/500/content/application\/json`.
                     case json(Components.Schemas.ApiError)
                     /// The associated value of the enum case if `self` is `.json`.
                     ///
@@ -1618,26 +2182,26 @@ public enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                public var body: Operations.UpdateEvent.Output.InternalServerError.Body
+                public var body: Operations.UpdateSession.Output.InternalServerError.Body
                 /// Creates a new `InternalServerError`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                public init(body: Operations.UpdateEvent.Output.InternalServerError.Body) {
+                public init(body: Operations.UpdateSession.Output.InternalServerError.Body) {
                     self.body = body
                 }
             }
             /// Internal Server Error
             ///
-            /// - Remark: Generated from `#/paths//event/{eventId}/put(updateEvent)/responses/500`.
+            /// - Remark: Generated from `#/paths//session/{sessionId}/put(updateSession)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.UpdateEvent.Output.InternalServerError)
+            case internalServerError(Operations.UpdateSession.Output.InternalServerError)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.UpdateEvent.Output.InternalServerError {
+            public var internalServerError: Operations.UpdateSession.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -1681,44 +2245,44 @@ public enum Operations {
             }
         }
     }
-    /// - Remark: HTTP `DELETE /event/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/{eventId}/delete(deleteEvent)`.
-    public enum DeleteEvent {
-        public static let id: Swift.String = "deleteEvent"
+    /// - Remark: HTTP `DELETE /session/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/{sessionId}/delete(deleteSession)`.
+    public enum DeleteSession {
+        public static let id: Swift.String = "deleteSession"
         public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/event/{eventId}/DELETE/path`.
+            /// - Remark: Generated from `#/paths/session/{sessionId}/DELETE/path`.
             public struct Path: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/{eventId}/DELETE/path/eventId`.
-                public var eventId: Swift.String
+                /// - Remark: Generated from `#/paths/session/{sessionId}/DELETE/path/sessionId`.
+                public var sessionId: Swift.String
                 /// Creates a new `Path`.
                 ///
                 /// - Parameters:
-                ///   - eventId:
-                public init(eventId: Swift.String) {
-                    self.eventId = eventId
+                ///   - sessionId:
+                public init(sessionId: Swift.String) {
+                    self.sessionId = sessionId
                 }
             }
-            public var path: Operations.DeleteEvent.Input.Path
-            /// - Remark: Generated from `#/paths/event/{eventId}/DELETE/header`.
+            public var path: Operations.DeleteSession.Input.Path
+            /// - Remark: Generated from `#/paths/session/{sessionId}/DELETE/header`.
             public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.DeleteEvent.AcceptableContentType>]
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.DeleteSession.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.DeleteEvent.AcceptableContentType>] = .defaultValues()) {
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.DeleteSession.AcceptableContentType>] = .defaultValues()) {
                     self.accept = accept
                 }
             }
-            public var headers: Operations.DeleteEvent.Input.Headers
+            public var headers: Operations.DeleteSession.Input.Headers
             /// Creates a new `Input`.
             ///
             /// - Parameters:
             ///   - path:
             ///   - headers:
             public init(
-                path: Operations.DeleteEvent.Input.Path,
-                headers: Operations.DeleteEvent.Input.Headers = .init()
+                path: Operations.DeleteSession.Input.Path,
+                headers: Operations.DeleteSession.Input.Headers = .init()
             ) {
                 self.path = path
                 self.headers = headers
@@ -1731,13 +2295,13 @@ public enum Operations {
             }
             /// OK
             ///
-            /// - Remark: Generated from `#/paths//event/{eventId}/delete(deleteEvent)/responses/200`.
+            /// - Remark: Generated from `#/paths//session/{sessionId}/delete(deleteSession)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.DeleteEvent.Output.Ok)
+            case ok(Operations.DeleteSession.Output.Ok)
             /// OK
             ///
-            /// - Remark: Generated from `#/paths//event/{eventId}/delete(deleteEvent)/responses/200`.
+            /// - Remark: Generated from `#/paths//session/{sessionId}/delete(deleteSession)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
             public static var ok: Self {
@@ -1747,7 +2311,7 @@ public enum Operations {
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.DeleteEvent.Output.Ok {
+            public var ok: Operations.DeleteSession.Output.Ok {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1761,9 +2325,9 @@ public enum Operations {
                 }
             }
             public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/{eventId}/DELETE/responses/500/content`.
+                /// - Remark: Generated from `#/paths/session/{sessionId}/DELETE/responses/500/content`.
                 @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/event/{eventId}/DELETE/responses/500/content/application\/json`.
+                    /// - Remark: Generated from `#/paths/session/{sessionId}/DELETE/responses/500/content/application\/json`.
                     case json(Components.Schemas.ApiError)
                     /// The associated value of the enum case if `self` is `.json`.
                     ///
@@ -1779,26 +2343,26 @@ public enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                public var body: Operations.DeleteEvent.Output.InternalServerError.Body
+                public var body: Operations.DeleteSession.Output.InternalServerError.Body
                 /// Creates a new `InternalServerError`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                public init(body: Operations.DeleteEvent.Output.InternalServerError.Body) {
+                public init(body: Operations.DeleteSession.Output.InternalServerError.Body) {
                     self.body = body
                 }
             }
             /// Internal Server Error
             ///
-            /// - Remark: Generated from `#/paths//event/{eventId}/delete(deleteEvent)/responses/500`.
+            /// - Remark: Generated from `#/paths//session/{sessionId}/delete(deleteSession)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.DeleteEvent.Output.InternalServerError)
+            case internalServerError(Operations.DeleteSession.Output.InternalServerError)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.DeleteEvent.Output.InternalServerError {
+            public var internalServerError: Operations.DeleteSession.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -1842,44 +2406,44 @@ public enum Operations {
             }
         }
     }
-    /// - Remark: HTTP `PUT /event/mark-as-seen/{eventId}`.
-    /// - Remark: Generated from `#/paths//event/mark-as-seen/{eventId}/put(markEventAsSeen)`.
-    public enum MarkEventAsSeen {
-        public static let id: Swift.String = "markEventAsSeen"
+    /// - Remark: HTTP `PUT /session/mark-as-seen/{sessionId}`.
+    /// - Remark: Generated from `#/paths//session/mark-as-seen/{sessionId}/put(markSessionAsSeen)`.
+    public enum MarkSessionAsSeen {
+        public static let id: Swift.String = "markSessionAsSeen"
         public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/event/mark-as-seen/{eventId}/PUT/path`.
+            /// - Remark: Generated from `#/paths/session/mark-as-seen/{sessionId}/PUT/path`.
             public struct Path: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/mark-as-seen/{eventId}/PUT/path/eventId`.
-                public var eventId: Swift.String
+                /// - Remark: Generated from `#/paths/session/mark-as-seen/{sessionId}/PUT/path/sessionId`.
+                public var sessionId: Swift.String
                 /// Creates a new `Path`.
                 ///
                 /// - Parameters:
-                ///   - eventId:
-                public init(eventId: Swift.String) {
-                    self.eventId = eventId
+                ///   - sessionId:
+                public init(sessionId: Swift.String) {
+                    self.sessionId = sessionId
                 }
             }
-            public var path: Operations.MarkEventAsSeen.Input.Path
-            /// - Remark: Generated from `#/paths/event/mark-as-seen/{eventId}/PUT/header`.
+            public var path: Operations.MarkSessionAsSeen.Input.Path
+            /// - Remark: Generated from `#/paths/session/mark-as-seen/{sessionId}/PUT/header`.
             public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.MarkEventAsSeen.AcceptableContentType>]
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.MarkSessionAsSeen.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.MarkEventAsSeen.AcceptableContentType>] = .defaultValues()) {
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.MarkSessionAsSeen.AcceptableContentType>] = .defaultValues()) {
                     self.accept = accept
                 }
             }
-            public var headers: Operations.MarkEventAsSeen.Input.Headers
+            public var headers: Operations.MarkSessionAsSeen.Input.Headers
             /// Creates a new `Input`.
             ///
             /// - Parameters:
             ///   - path:
             ///   - headers:
             public init(
-                path: Operations.MarkEventAsSeen.Input.Path,
-                headers: Operations.MarkEventAsSeen.Input.Headers = .init()
+                path: Operations.MarkSessionAsSeen.Input.Path,
+                headers: Operations.MarkSessionAsSeen.Input.Headers = .init()
             ) {
                 self.path = path
                 self.headers = headers
@@ -1892,13 +2456,13 @@ public enum Operations {
             }
             /// OK
             ///
-            /// - Remark: Generated from `#/paths//event/mark-as-seen/{eventId}/put(markEventAsSeen)/responses/200`.
+            /// - Remark: Generated from `#/paths//session/mark-as-seen/{sessionId}/put(markSessionAsSeen)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.MarkEventAsSeen.Output.Ok)
+            case ok(Operations.MarkSessionAsSeen.Output.Ok)
             /// OK
             ///
-            /// - Remark: Generated from `#/paths//event/mark-as-seen/{eventId}/put(markEventAsSeen)/responses/200`.
+            /// - Remark: Generated from `#/paths//session/mark-as-seen/{sessionId}/put(markSessionAsSeen)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
             public static var ok: Self {
@@ -1908,7 +2472,7 @@ public enum Operations {
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.MarkEventAsSeen.Output.Ok {
+            public var ok: Operations.MarkSessionAsSeen.Output.Ok {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1922,9 +2486,9 @@ public enum Operations {
                 }
             }
             public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/mark-as-seen/{eventId}/PUT/responses/500/content`.
+                /// - Remark: Generated from `#/paths/session/mark-as-seen/{sessionId}/PUT/responses/500/content`.
                 @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/event/mark-as-seen/{eventId}/PUT/responses/500/content/application\/json`.
+                    /// - Remark: Generated from `#/paths/session/mark-as-seen/{sessionId}/PUT/responses/500/content/application\/json`.
                     case json(Components.Schemas.ApiError)
                     /// The associated value of the enum case if `self` is `.json`.
                     ///
@@ -1940,26 +2504,26 @@ public enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                public var body: Operations.MarkEventAsSeen.Output.InternalServerError.Body
+                public var body: Operations.MarkSessionAsSeen.Output.InternalServerError.Body
                 /// Creates a new `InternalServerError`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                public init(body: Operations.MarkEventAsSeen.Output.InternalServerError.Body) {
+                public init(body: Operations.MarkSessionAsSeen.Output.InternalServerError.Body) {
                     self.body = body
                 }
             }
             /// Internal Server Error
             ///
-            /// - Remark: Generated from `#/paths//event/mark-as-seen/{eventId}/put(markEventAsSeen)/responses/500`.
+            /// - Remark: Generated from `#/paths//session/mark-as-seen/{sessionId}/put(markSessionAsSeen)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.MarkEventAsSeen.Output.InternalServerError)
+            case internalServerError(Operations.MarkSessionAsSeen.Output.InternalServerError)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.MarkEventAsSeen.Output.InternalServerError {
+            public var internalServerError: Operations.MarkSessionAsSeen.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -2157,6 +2721,353 @@ public enum Operations {
             }
         }
     }
+    /// - Remark: HTTP `PUT /activity/{activityId}`.
+    /// - Remark: Generated from `#/paths//activity/{activityId}/put(updateActivity)`.
+    public enum UpdateActivity {
+        public static let id: Swift.String = "updateActivity"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/path/activityId`.
+                public var activityId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - activityId:
+                public init(activityId: Swift.String) {
+                    self.activityId = activityId
+                }
+            }
+            public var path: Operations.UpdateActivity.Input.Path
+            /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.UpdateActivity.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.UpdateActivity.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.UpdateActivity.Input.Headers
+            /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/requestBody/content/application\/json`.
+                case json(Components.Schemas.ActivityInput)
+            }
+            public var body: Operations.UpdateActivity.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            ///   - body:
+            public init(
+                path: Operations.UpdateActivity.Input.Path,
+                headers: Operations.UpdateActivity.Input.Headers = .init(),
+                body: Operations.UpdateActivity.Input.Body
+            ) {
+                self.path = path
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/responses/200/content/application\/json`.
+                    case json(Components.Schemas.ActivityDto)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ActivityDto {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.UpdateActivity.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.UpdateActivity.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//activity/{activityId}/put(updateActivity)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.UpdateActivity.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.UpdateActivity.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/activity/{activityId}/PUT/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.UpdateActivity.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.UpdateActivity.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//activity/{activityId}/put(updateActivity)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.UpdateActivity.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.UpdateActivity.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `DELETE /activity/{activityId}`.
+    /// - Remark: Generated from `#/paths//activity/{activityId}/delete(deleteActivity)`.
+    public enum DeleteActivity {
+        public static let id: Swift.String = "deleteActivity"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/activity/{activityId}/DELETE/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/{activityId}/DELETE/path/activityId`.
+                public var activityId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - activityId:
+                public init(activityId: Swift.String) {
+                    self.activityId = activityId
+                }
+            }
+            public var path: Operations.DeleteActivity.Input.Path
+            /// - Remark: Generated from `#/paths/activity/{activityId}/DELETE/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.DeleteActivity.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.DeleteActivity.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.DeleteActivity.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.DeleteActivity.Input.Path,
+                headers: Operations.DeleteActivity.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// Creates a new `Ok`.
+                public init() {}
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//activity/{activityId}/delete(deleteActivity)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.DeleteActivity.Output.Ok)
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//activity/{activityId}/delete(deleteActivity)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            public static var ok: Self {
+                .ok(.init())
+            }
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.DeleteActivity.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/{activityId}/DELETE/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/activity/{activityId}/DELETE/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.DeleteActivity.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.DeleteActivity.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//activity/{activityId}/delete(deleteActivity)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.DeleteActivity.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.DeleteActivity.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
     /// - Remark: HTTP `POST /account`.
     /// - Remark: Generated from `#/paths//account/post(createAccount)`.
     public enum CreateAccount {
@@ -2198,12 +3109,12 @@ public enum Operations {
                 /// - Remark: Generated from `#/paths/account/POST/responses/200/content`.
                 @frozen public enum Body: Sendable, Hashable {
                     /// - Remark: Generated from `#/paths/account/POST/responses/200/content/application\/json`.
-                    case json(Components.Schemas.SessionDto)
+                    case json(Components.Schemas.BootstrapDto)
                     /// The associated value of the enum case if `self` is `.json`.
                     ///
                     /// - Throws: An error if `self` is not `.json`.
                     /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.SessionDto {
+                    public var json: Components.Schemas.BootstrapDto {
                         get throws {
                             switch self {
                             case let .json(body):
@@ -2932,6 +3843,353 @@ public enum Operations {
             }
         }
     }
+    /// - Remark: HTTP `POST /session`.
+    /// - Remark: Generated from `#/paths//session/post(createSession)`.
+    public enum CreateSession {
+        public static let id: Swift.String = "createSession"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/session/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateSession.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateSession.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.CreateSession.Input.Headers
+            /// - Remark: Generated from `#/paths/session/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/session/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.SessionInput)
+            }
+            public var body: Operations.CreateSession.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            ///   - body:
+            public init(
+                headers: Operations.CreateSession.Input.Headers = .init(),
+                body: Operations.CreateSession.Input.Body
+            ) {
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/session/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/session/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.ActivityDto)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ActivityDto {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateSession.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateSession.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//session/post(createSession)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.CreateSession.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.CreateSession.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/session/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/session/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateSession.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateSession.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//session/post(createSession)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.CreateSession.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.CreateSession.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /session/join/{pinCode}`.
+    /// - Remark: Generated from `#/paths//session/join/{pinCode}/post(joinSession)`.
+    public enum JoinSession {
+        public static let id: Swift.String = "joinSession"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/session/join/{pinCode}/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/session/join/{pinCode}/POST/path/pinCode`.
+                public var pinCode: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - pinCode:
+                public init(pinCode: Swift.String) {
+                    self.pinCode = pinCode
+                }
+            }
+            public var path: Operations.JoinSession.Input.Path
+            /// - Remark: Generated from `#/paths/session/join/{pinCode}/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.JoinSession.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.JoinSession.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.JoinSession.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.JoinSession.Input.Path,
+                headers: Operations.JoinSession.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/session/join/{pinCode}/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/session/join/{pinCode}/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.ParticipantSessionDto)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ParticipantSessionDto {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.JoinSession.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.JoinSession.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//session/join/{pinCode}/post(joinSession)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.JoinSession.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.JoinSession.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/session/join/{pinCode}/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/session/join/{pinCode}/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.JoinSession.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.JoinSession.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//session/join/{pinCode}/post(joinSession)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.JoinSession.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.JoinSession.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
     /// - Remark: HTTP `POST /feedback/submit`.
     /// - Remark: Generated from `#/paths//feedback/submit/post(submitFeedback)`.
     public enum SubmitFeedback {
@@ -3272,353 +4530,6 @@ public enum Operations {
             }
         }
     }
-    /// - Remark: HTTP `POST /event`.
-    /// - Remark: Generated from `#/paths//event/post(createEvent)`.
-    public enum CreateEvent {
-        public static let id: Swift.String = "createEvent"
-        public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/event/POST/header`.
-            public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateEvent.AcceptableContentType>]
-                /// Creates a new `Headers`.
-                ///
-                /// - Parameters:
-                ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateEvent.AcceptableContentType>] = .defaultValues()) {
-                    self.accept = accept
-                }
-            }
-            public var headers: Operations.CreateEvent.Input.Headers
-            /// - Remark: Generated from `#/paths/event/POST/requestBody`.
-            @frozen public enum Body: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/POST/requestBody/content/application\/json`.
-                case json(Components.Schemas.EventInput)
-            }
-            public var body: Operations.CreateEvent.Input.Body
-            /// Creates a new `Input`.
-            ///
-            /// - Parameters:
-            ///   - headers:
-            ///   - body:
-            public init(
-                headers: Operations.CreateEvent.Input.Headers = .init(),
-                body: Operations.CreateEvent.Input.Body
-            ) {
-                self.headers = headers
-                self.body = body
-            }
-        }
-        @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/POST/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/event/POST/responses/200/content/application\/json`.
-                    case json(Components.Schemas.FeedbackFlowDto)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.FeedbackFlowDto {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.CreateEvent.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.CreateEvent.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// OK
-            ///
-            /// - Remark: Generated from `#/paths//event/post(createEvent)/responses/200`.
-            ///
-            /// HTTP response code: `200 ok`.
-            case ok(Operations.CreateEvent.Output.Ok)
-            /// The associated value of the enum case if `self` is `.ok`.
-            ///
-            /// - Throws: An error if `self` is not `.ok`.
-            /// - SeeAlso: `.ok`.
-            public var ok: Operations.CreateEvent.Output.Ok {
-                get throws {
-                    switch self {
-                    case let .ok(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "ok",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/POST/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/event/POST/responses/500/content/application\/json`.
-                    case json(Components.Schemas.ApiError)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.ApiError {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.CreateEvent.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.CreateEvent.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
-            /// Internal Server Error
-            ///
-            /// - Remark: Generated from `#/paths//event/post(createEvent)/responses/500`.
-            ///
-            /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.CreateEvent.Output.InternalServerError)
-            /// The associated value of the enum case if `self` is `.internalServerError`.
-            ///
-            /// - Throws: An error if `self` is not `.internalServerError`.
-            /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.CreateEvent.Output.InternalServerError {
-                get throws {
-                    switch self {
-                    case let .internalServerError(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "internalServerError",
-                            response: self
-                        )
-                    }
-                }
-            }
-            /// Undocumented response.
-            ///
-            /// A response with a code that is not documented in the OpenAPI document.
-            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
-        }
-        @frozen public enum AcceptableContentType: AcceptableProtocol {
-            case json
-            case other(Swift.String)
-            public init?(rawValue: Swift.String) {
-                switch rawValue.lowercased() {
-                case "application/json":
-                    self = .json
-                default:
-                    self = .other(rawValue)
-                }
-            }
-            public var rawValue: Swift.String {
-                switch self {
-                case let .other(string):
-                    return string
-                case .json:
-                    return "application/json"
-                }
-            }
-            public static var allCases: [Self] {
-                [
-                    .json
-                ]
-            }
-        }
-    }
-    /// - Remark: HTTP `POST /event/join/{pinCode}`.
-    /// - Remark: Generated from `#/paths//event/join/{pinCode}/post(joinEvent)`.
-    public enum JoinEvent {
-        public static let id: Swift.String = "joinEvent"
-        public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/event/join/{pinCode}/POST/path`.
-            public struct Path: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/join/{pinCode}/POST/path/pinCode`.
-                public var pinCode: Swift.String
-                /// Creates a new `Path`.
-                ///
-                /// - Parameters:
-                ///   - pinCode:
-                public init(pinCode: Swift.String) {
-                    self.pinCode = pinCode
-                }
-            }
-            public var path: Operations.JoinEvent.Input.Path
-            /// - Remark: Generated from `#/paths/event/join/{pinCode}/POST/header`.
-            public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.JoinEvent.AcceptableContentType>]
-                /// Creates a new `Headers`.
-                ///
-                /// - Parameters:
-                ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.JoinEvent.AcceptableContentType>] = .defaultValues()) {
-                    self.accept = accept
-                }
-            }
-            public var headers: Operations.JoinEvent.Input.Headers
-            /// Creates a new `Input`.
-            ///
-            /// - Parameters:
-            ///   - path:
-            ///   - headers:
-            public init(
-                path: Operations.JoinEvent.Input.Path,
-                headers: Operations.JoinEvent.Input.Headers = .init()
-            ) {
-                self.path = path
-                self.headers = headers
-            }
-        }
-        @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/join/{pinCode}/POST/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/event/join/{pinCode}/POST/responses/200/content/application\/json`.
-                    case json(Components.Schemas.ParticipantEventDto)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.ParticipantEventDto {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.JoinEvent.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.JoinEvent.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// OK
-            ///
-            /// - Remark: Generated from `#/paths//event/join/{pinCode}/post(joinEvent)/responses/200`.
-            ///
-            /// HTTP response code: `200 ok`.
-            case ok(Operations.JoinEvent.Output.Ok)
-            /// The associated value of the enum case if `self` is `.ok`.
-            ///
-            /// - Throws: An error if `self` is not `.ok`.
-            /// - SeeAlso: `.ok`.
-            public var ok: Operations.JoinEvent.Output.Ok {
-                get throws {
-                    switch self {
-                    case let .ok(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "ok",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/event/join/{pinCode}/POST/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/event/join/{pinCode}/POST/responses/500/content/application\/json`.
-                    case json(Components.Schemas.ApiError)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.ApiError {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.JoinEvent.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.JoinEvent.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
-            /// Internal Server Error
-            ///
-            /// - Remark: Generated from `#/paths//event/join/{pinCode}/post(joinEvent)/responses/500`.
-            ///
-            /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.JoinEvent.Output.InternalServerError)
-            /// The associated value of the enum case if `self` is `.internalServerError`.
-            ///
-            /// - Throws: An error if `self` is not `.internalServerError`.
-            /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.JoinEvent.Output.InternalServerError {
-                get throws {
-                    switch self {
-                    case let .internalServerError(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "internalServerError",
-                            response: self
-                        )
-                    }
-                }
-            }
-            /// Undocumented response.
-            ///
-            /// A response with a code that is not documented in the OpenAPI document.
-            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
-        }
-        @frozen public enum AcceptableContentType: AcceptableProtocol {
-            case json
-            case other(Swift.String)
-            public init?(rawValue: Swift.String) {
-                switch rawValue.lowercased() {
-                case "application/json":
-                    self = .json
-                default:
-                    self = .other(rawValue)
-                }
-            }
-            public var rawValue: Swift.String {
-                switch self {
-                case let .other(string):
-                    return string
-                case .json:
-                    return "application/json"
-                }
-            }
-            public static var allCases: [Self] {
-                [
-                    .json
-                ]
-            }
-        }
-    }
     /// - Remark: HTTP `POST /admin/mock-id-token`.
     /// - Remark: Generated from `#/paths//admin/mock-id-token/post(mockIdToken)`.
     public enum MockIdToken {
@@ -3789,6 +4700,176 @@ public enum Operations {
             }
         }
     }
+    /// - Remark: HTTP `POST /activity`.
+    /// - Remark: Generated from `#/paths//activity/post(createActivity)`.
+    public enum CreateActivity {
+        public static let id: Swift.String = "createActivity"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/activity/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateActivity.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateActivity.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.CreateActivity.Input.Headers
+            /// - Remark: Generated from `#/paths/activity/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.ActivityInput)
+            }
+            public var body: Operations.CreateActivity.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            ///   - body:
+            public init(
+                headers: Operations.CreateActivity.Input.Headers = .init(),
+                body: Operations.CreateActivity.Input.Body
+            ) {
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/activity/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.ActivityDto)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ActivityDto {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateActivity.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateActivity.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//activity/post(createActivity)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.CreateActivity.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.CreateActivity.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/activity/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/activity/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateActivity.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateActivity.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//activity/post(createActivity)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.CreateActivity.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.CreateActivity.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
     /// - Remark: HTTP `POST /account/logout`.
     /// - Remark: Generated from `#/paths//account/logout/post(logout)`.
     public enum Logout {
@@ -3900,6 +4981,149 @@ public enum Operations {
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
             public var internalServerError: Operations.Logout.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `GET /notification-history/mark-as-seen`.
+    /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)`.
+    public enum MarkNotificationHistoryAsSeen {
+        public static let id: Swift.String = "markNotificationHistoryAsSeen"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/notification-history/mark-as-seen/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.MarkNotificationHistoryAsSeen.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.MarkNotificationHistoryAsSeen.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.MarkNotificationHistoryAsSeen.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            public init(headers: Operations.MarkNotificationHistoryAsSeen.Input.Headers = .init()) {
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// Creates a new `Ok`.
+                public init() {}
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.MarkNotificationHistoryAsSeen.Output.Ok)
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            public static var ok: Self {
+                .ok(.init())
+            }
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.MarkNotificationHistoryAsSeen.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/notification-history/mark-as-seen/GET/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/notification-history/mark-as-seen/GET/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.MarkNotificationHistoryAsSeen.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.MarkNotificationHistoryAsSeen.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.MarkNotificationHistoryAsSeen.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.MarkNotificationHistoryAsSeen.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -4236,149 +5460,6 @@ public enum Operations {
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
             public var internalServerError: Operations.GetBoostrapUpdate.Output.InternalServerError {
-                get throws {
-                    switch self {
-                    case let .internalServerError(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "internalServerError",
-                            response: self
-                        )
-                    }
-                }
-            }
-            /// Undocumented response.
-            ///
-            /// A response with a code that is not documented in the OpenAPI document.
-            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
-        }
-        @frozen public enum AcceptableContentType: AcceptableProtocol {
-            case json
-            case other(Swift.String)
-            public init?(rawValue: Swift.String) {
-                switch rawValue.lowercased() {
-                case "application/json":
-                    self = .json
-                default:
-                    self = .other(rawValue)
-                }
-            }
-            public var rawValue: Swift.String {
-                switch self {
-                case let .other(string):
-                    return string
-                case .json:
-                    return "application/json"
-                }
-            }
-            public static var allCases: [Self] {
-                [
-                    .json
-                ]
-            }
-        }
-    }
-    /// - Remark: HTTP `GET /activity/mark-activity-as-seen`.
-    /// - Remark: Generated from `#/paths//activity/mark-activity-as-seen/get(markActivityAsSeen)`.
-    public enum MarkActivityAsSeen {
-        public static let id: Swift.String = "markActivityAsSeen"
-        public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/activity/mark-activity-as-seen/GET/header`.
-            public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.MarkActivityAsSeen.AcceptableContentType>]
-                /// Creates a new `Headers`.
-                ///
-                /// - Parameters:
-                ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.MarkActivityAsSeen.AcceptableContentType>] = .defaultValues()) {
-                    self.accept = accept
-                }
-            }
-            public var headers: Operations.MarkActivityAsSeen.Input.Headers
-            /// Creates a new `Input`.
-            ///
-            /// - Parameters:
-            ///   - headers:
-            public init(headers: Operations.MarkActivityAsSeen.Input.Headers = .init()) {
-                self.headers = headers
-            }
-        }
-        @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// Creates a new `Ok`.
-                public init() {}
-            }
-            /// OK
-            ///
-            /// - Remark: Generated from `#/paths//activity/mark-activity-as-seen/get(markActivityAsSeen)/responses/200`.
-            ///
-            /// HTTP response code: `200 ok`.
-            case ok(Operations.MarkActivityAsSeen.Output.Ok)
-            /// OK
-            ///
-            /// - Remark: Generated from `#/paths//activity/mark-activity-as-seen/get(markActivityAsSeen)/responses/200`.
-            ///
-            /// HTTP response code: `200 ok`.
-            public static var ok: Self {
-                .ok(.init())
-            }
-            /// The associated value of the enum case if `self` is `.ok`.
-            ///
-            /// - Throws: An error if `self` is not `.ok`.
-            /// - SeeAlso: `.ok`.
-            public var ok: Operations.MarkActivityAsSeen.Output.Ok {
-                get throws {
-                    switch self {
-                    case let .ok(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "ok",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/activity/mark-activity-as-seen/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/activity/mark-activity-as-seen/GET/responses/500/content/application\/json`.
-                    case json(Components.Schemas.ApiError)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.ApiError {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.MarkActivityAsSeen.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.MarkActivityAsSeen.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
-            /// Internal Server Error
-            ///
-            /// - Remark: Generated from `#/paths//activity/mark-activity-as-seen/get(markActivityAsSeen)/responses/500`.
-            ///
-            /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.MarkActivityAsSeen.Output.InternalServerError)
-            /// The associated value of the enum case if `self` is `.internalServerError`.
-            ///
-            /// - Throws: An error if `self` is not `.internalServerError`.
-            /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.MarkActivityAsSeen.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):

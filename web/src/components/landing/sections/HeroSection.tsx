@@ -2,22 +2,20 @@
 
 import { motion } from "framer-motion"
 import type { MouseEventHandler, Ref } from "react"
-import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import PhoneFrames from "@/components/landing/PhoneFrames"
 import { appStoreUrl, calendarPlatforms } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
-import EarlyAccessButton from "@/components/ui/EarlyAccessButton"
+import PrimaryButton from "@/components/ui/PrimaryButton"
 import SecondaryButton from "@/components/ui/SecondaryButton"
+import { navbarSurfaceShadowClass } from "@/lib/letsgrow"
 
 type HeroSectionProps = {
-  earlyAccessUrl: string
   heroSectionRef: Ref<HTMLElement>
   onHowItWorksClick: MouseEventHandler<HTMLAnchorElement>
 }
 
 function HeroSection({
-  earlyAccessUrl,
   heroSectionRef,
   onHowItWorksClick,
 }: HeroSectionProps) {
@@ -34,11 +32,41 @@ function HeroSection({
           variants={stagger}
         >
           <motion.div className="space-y-7" variants={fadeInUp}>
-            <h1 className="max-w-3xl bg-linear-to-b from-[#4A4D69] via-[#282A47] to-[#1F2140] bg-clip-text pb-1 text-4xl font-bold leading-[1.08] text-transparent sm:text-5xl lg:text-6xl">
-                Få feedback – hver gang I samler folk
-            </h1>
+            <div className="relative isolate max-w-3xl">
+              <div
+                aria-hidden="true"
+                className="hero-heading-glow pointer-events-none absolute -inset-x-8 -inset-y-6 -z-10 rounded-full blur-2xl"
+              />
+              <h1 className="pb-1 text-4xl font-bold leading-[1.14] tracking-tight sm:text-5xl sm:leading-[1.1] lg:text-6xl">
+                <span className="block text-hero-heading">
+                  Bliv klogere på
+                </span>
+                <span className="mt-2 block text-hero-heading">
+                  hvad der{" "}
+                  <span className="relative inline-block">
+                    virker
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 144 14"
+                      preserveAspectRatio="none"
+                      className="absolute -bottom-1 left-0 right-0 -z-10 h-3 w-full text-primary"
+                    >
+                      <path
+                        d="M3 9.2C24 6.8 38 9.7 56 7.4C78 4.7 96 7.1 113 6.4C126 5.9 135 6.8 141 5.9"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeWidth="5"
+                        opacity="1"
+                      />
+                    </svg>
+                  </span>
+                </span>
+              </h1>
+            </div>
+
             <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-                Få enkel feedback efter møder, workshops og oplæg – og se hvad der virker over tid.
+                Få ærlig feedback efter møder, workshops, oplæg og andre aktiviteter, så du kan se mønstre, justere undervejs og blive bedre til det, der gør en forskel.
             </p>
           </motion.div>
 
@@ -46,25 +74,28 @@ function HeroSection({
             className="flex flex-col gap-4 sm:flex-row sm:items-center"
             variants={fadeInUp}
           >
-            <EarlyAccessButton className="h-12 px-6" href={earlyAccessUrl} size="lg" />
+            <PrimaryButton asChild className="h-12 px-6" size="lg">
+              <a href={appStoreUrl} target="_blank" rel="noopener noreferrer">
+                Hent på App Store
+              </a>
+            </PrimaryButton>
             <SecondaryButton
               asChild
               size="lg"
-              className="h-12 px-6"
+              className={`h-12 border-[#DCE3F4] bg-transparent px-6 ${navbarSurfaceShadowClass} hover:bg-transparent active:bg-transparent`}
             >
               <a href="#how-it-works" onClick={onHowItWorksClick}>
                 Se hvordan det virker
-                <ArrowRight className="ml-2 h-4 w-4" />
               </a>
             </SecondaryButton>
           </motion.div>
 
           <motion.div
-            className="rounded-3xl border border-white/70 bg-white/55 px-4 py-4 shadow-[0_18px_50px_-40px_rgba(40,42,71,0.7)] backdrop-blur-sm sm:max-w-136"
+            className="rounded-3xl border border-gray-200/80 bg-white/55 px-4 py-4 shadow-[0_18px_50px_-40px_rgba(40,42,71,0.7)] backdrop-blur-sm sm:max-w-136"
             variants={fadeInUp}
           >
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#6A6D88]">
-              Fungerer med de værktøjer, I allerede bruger
+              Integreret med disse kalenderværktøjer
             </p>
             <div className="mt-4 flex flex-wrap items-start gap-x-4 gap-y-3 sm:gap-x-5">
               {calendarPlatforms.map((platform) => (
@@ -100,22 +131,6 @@ function HeroSection({
           transition={{ duration: 0.8, delay: 0.15 }}
         >
           <PhoneFrames />
-          <div className="flex justify-center">
-            <a
-              href={appStoreUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative block h-14 w-45"
-            >
-              <Image
-                src="/appstore.png"
-                alt="Download on the App Store"
-                fill
-                sizes="180px"
-                className="object-contain transition-opacity duration-200 hover:opacity-85"
-              />
-            </a>
-          </div>
         </motion.div>
       </div>
     </section>

@@ -25,7 +25,7 @@ public struct ChangeUserType: Sendable {
         case binding(BindingAction<State>)
         case presentError(Error)
         case saveButtonTap
-        case updateAccountRoleResponse
+        case updateRoleResponse
         case closeButtonTap
         case delegate(Delegate)
         public enum Delegate {
@@ -61,14 +61,14 @@ public struct ChangeUserType: Sendable {
                 state.isLoading = true
                 return .run { send in
                     do {
-                        try await apiClient.updateAccountRole(role)
-                        await send(.updateAccountRoleResponse)
+                        try await apiClient.updateRole(role)
+                        await send(.updateRoleResponse)
                     } catch {
                         await send(.presentError(error))
                     }
                 }
                 
-            case .updateAccountRoleResponse:
+            case .updateRoleResponse:
                 state.isLoading = false
                 return .run { send in
                     await send(.delegate(.refreshSession))

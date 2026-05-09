@@ -14,7 +14,10 @@ class QuestionDao(id: EntityID<UUID>): CommonColumns<QuestionEntity>(id, Questio
 
     var questionText by QuestionTable.questionText
     var feedbackType by QuestionTable.feedbackType
-    var event by EventDao optionalReferencedOn QuestionTable.event
+    var activity by ActivityDao optionalReferencedOn QuestionTable.activity
+    var session by SessionDao optionalReferencedOn QuestionTable.session
+    var event by SessionDao optionalReferencedOn QuestionTable.event
+    var activityQuestionId by QuestionTable.activityQuestionId
     var index by QuestionTable.index
     val feedback by FeedbackDao referrersOn FeedbackTable.question
     var manager by AccountDao referencedOn QuestionTable.manager
@@ -22,6 +25,7 @@ class QuestionDao(id: EntityID<UUID>): CommonColumns<QuestionEntity>(id, Questio
     override fun toModel(): QuestionEntity {
         return QuestionEntity(
             id = id.value,
+            activityQuestionId = activityQuestionId,
             questionText = questionText,
             feedbackType = feedbackType,
             createdAt = dateCreated,

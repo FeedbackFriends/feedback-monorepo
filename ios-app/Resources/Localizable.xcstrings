@@ -1,30 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Crash" : {
-
-    },
-    "Debug session" : {
-
-    },
-    "Failed to encode session" : {
-
-    },
-    "Hide" : {
-
-    },
-    "Local mock notification" : {
-
-    },
-    "Local session" : {
-
-    },
-    "Logout" : {
-
-    },
-    "No local session" : {
-
-    },
     "notification_feedback_received_body" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -90,21 +66,6 @@
           }
         }
       }
-    },
-    "Print fcm token" : {
-
-    },
-    "Print id token" : {
-
-    },
-    "Server session" : {
-
-    },
-    "Show session data" : {
-
-    },
-    "Sign in with Mock" : {
-
     }
   },
   "version" : "1.0"

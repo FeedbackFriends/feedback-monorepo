@@ -33,9 +33,17 @@ public struct EventDetailFeatureView: View {
             action: \.destination.deleteConfirmation
         )
         
-        DetailSectionView(
-            event: store.event
-        )
+        Group {
+            if let detail = store.detail {
+                DetailSectionView(detail: detail)
+            } else {
+                EmptyStateView(
+                    title: "Session unavailable",
+                    message: "This session is no longer available."
+                )
+                .padding(.horizontal, Theme.padding)
+            }
+        }
         .sheet(
             item: inviteStore
         ) { state in
@@ -77,6 +85,6 @@ public struct EventDetailFeatureView: View {
             DeleteConfirmationView(store: store)
                 .presentationDetents([.height(300)])
         }
-        .animation(.default, value: store.event)
+        .animation(.default, value: store.detail)
     }
 }

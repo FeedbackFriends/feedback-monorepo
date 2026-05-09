@@ -1,7 +1,6 @@
 package dk.example.feedback.controller
 
 import dk.example.feedback.dto.BootstrapDto
-import dk.example.feedback.dto.SessionDto
 import dk.example.feedback.service.BootstrapService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
@@ -23,8 +22,7 @@ class BootstrapController(val bootstrapService: BootstrapService) {
     fun getBootstrap(
         @AuthenticationPrincipal principal: Jwt
     ): BootstrapDto {
-        TODO()
-//        return sessionService.getSession(jwt = principal)
+        return bootstrapService.getSession(jwt = principal)
     }
 
     @GetMapping("/bootstrap-update/{hash}")
@@ -32,16 +30,9 @@ class BootstrapController(val bootstrapService: BootstrapService) {
         @AuthenticationPrincipal principal: Jwt,
         @PathVariable("hash") feedbackSessionHash: UUID,
     ): BootstrapDto {
-        TODO()
-//        return UpdatedSessionResponse(
-//            session = bootstrapService.getUpdatedSession(
-//                jwt = principal,
-//                feedbackSessionHash = feedbackSessionHash
-//            )
-//        )
+        return bootstrapService.getUpdatedSession(
+            jwt = principal,
+            feedbackSessionHash = feedbackSessionHash,
+        ) ?: bootstrapService.getSession(jwt = principal)
     }
-//
-//    data class UpdatedSessionResponse(
-//        val BootstrapDto: SessionDto?
-//    )
 }

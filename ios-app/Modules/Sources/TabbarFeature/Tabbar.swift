@@ -15,7 +15,7 @@ public enum Tab: Hashable, Sendable {
 
 public extension Tabbar.State {
     init(
-        session: Shared<Session>,
+        session: Shared<Bootstrap>,
         tabbarLifecyle: TabbarLifecycle.State,
         enterCode: EnterCode.State,
         moreSection: MoreSection.State,
@@ -37,11 +37,12 @@ public extension Tabbar.State {
         self.managerEvents = managerEvents
         self.participantEvents = participantEvents
         self.deleteAccount = deleteAccount
+        self.createActivity = nil
         self.destination = destination
     }
     
     init(
-        session: Shared<Session>,
+        session: Shared<Bootstrap>,
         selectedTab: Tab = .events,
         destination: Tabbar.Destination.State? = nil,
     ) {
@@ -53,6 +54,7 @@ public extension Tabbar.State {
         self.initialiseFeedback = .init()
         self.participantEvents = .init(session: session)
         self.deleteAccount = .init()
+        self.createActivity = nil
         self.managerEvents = .init(session: session)
         self.tabbarLifecyle = .init(session: session)
         self.destination = destination
@@ -67,7 +69,7 @@ public struct Tabbar: Sendable {
         case alert(AlertState<AlertAction>)
         case joinEvent(JoinEvent)
         @ReducerCaseIgnored
-        case activity([ActivityItems])
+        case notificationHistory([NotificationHistoryItem])
         public enum AlertAction: Equatable, Sendable {
             case confirmedToCreateUser
         }
@@ -76,7 +78,7 @@ public struct Tabbar: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         
-        @Shared public var session: Session
+        @Shared public var session: Bootstrap
         var tabbarLifecyle: TabbarLifecycle.State
         var enterCode: EnterCode.State
         var moreSection: MoreSection.State
@@ -86,6 +88,7 @@ public struct Tabbar: Sendable {
         public var managerEvents: ManagerEvents.State
         var participantEvents: ParticipantEvents.State
         var deleteAccount: DeleteAccount.State
+        @Presents var createActivity: CreateActivity.State?
         @Presents var destination: Destination.State?
     }
     public enum Action: BindableAction {
@@ -100,13 +103,15 @@ public struct Tabbar: Sendable {
         case toolbar(Toolbar)
         case delegate(Delegate)
         case signUpButtonTap
-        case activityManagerEventButtonTap(ActivityItems)
+        case activityManagerEventButtonTap(NotificationHistoryItem)
         case tabbarLifecyle(TabbarLifecycle.Action)
         case deleteAccount(DeleteAccount.Action)
+        case createActivity(PresentationAction<CreateActivity.Action>)
+        case createActivityButtonTap
         case dismissFeedbackFlow
         public enum Toolbar: Equatable {
             case joinEventButtonTap
-            case activityButtonTap
+            case notificationHistoryButtonTap
         }
         public enum Delegate: Equatable {
             case startFeedback(pinCode: PinCode)
@@ -143,8 +148,17 @@ public struct Tabbar: Sendable {
         Scope(state: \.deleteAccount, action: \.deleteAccount) {
             DeleteAccount()
         }
+        .ifLet(\.$createActivity, action: \.createActivity) {
+            CreateActivity()
+        }
         Reduce { state, action in
             switch action {
+            case .createActivityButtonTap:
+                state.createActivity = .init()
+                return .none
+
+            case .createActivity:
+                return .none
              
             case .dismissFeedbackFlow:
                 state.initialiseFeedback.destination = nil
@@ -156,13 +170,14 @@ public struct Tabbar: Sendable {
             case .activityManagerEventButtonTap(let activityItem):
                 state.managerEvents.destination = .eventDetail(
                     EventDetailFeature.State(
-                        event: state.session.unwrappedManagerSession.managerData.managerEvents[id: activityItem.eventId]!,
+                        eventId: activityItem.eventId,
+                        detail: state.session.unwrappedManagerSession.managerData.activities[id: activityItem.eventId],
                         session: state.$session
                     )
                 )
                 return .run { _ in
                     do {
-                        try await apiClient.markEventAsSeen(activityItem.id)
+                        try await apiClient.markSessionAsSeen(activityItem.id)
                     } catch {
                         Logger.debug("Reset new feedback failed with error: \(error.localizedDescription)")
                     }
@@ -216,11 +231,11 @@ public struct Tabbar: Sendable {
                     
                 case .joinEventButtonTap:
                     state.destination = .joinEvent(.init())
-                case .activityButtonTap:
-                    state.destination = .activity(state.session.activity.items)
+                case .notificationHistoryButtonTap:
+                    state.destination = .notificationHistory(state.session.notificationHistory.items)
                     return .run { _ in
                         do {
-                            try await apiClient.markActivityAsSeen()
+                            try await apiClient.markNotificationHistoryAsSeen()
                         } catch {
                             Logger.debug("Reset new feedback failed with error: \(error.localizedDescription)")
                         }

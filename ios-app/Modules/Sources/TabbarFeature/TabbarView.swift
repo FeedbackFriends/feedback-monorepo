@@ -11,15 +11,15 @@ public struct TabbarView: View {
     
     @Environment(\.scenePhase) private var scenePhase
     @Bindable var store: StoreOf<Tabbar>
-    @StateObject private var viewModel = GrowthViewModel()
-    
+
     public init(store: StoreOf<Tabbar>) {
         self.store = store
     }
     
     public var body: some View {
         let joinEventStore = $store.scope(state: \.destination?.joinEvent, action: \.destination.joinEvent)
-        let activityStore = $store.scope(state: \.destination?.activity, action: \.destination.activity)
+        let notificationHistoryStore = $store.scope(state: \.destination?.notificationHistory, action: \.destination.notificationHistory)
+        let createActivityStore = $store.scope(state: \.createActivity, action: \.createActivity)
         tabView
             .task {
                 await self.store.send(.tabbarLifecyle(.onTask)).finish()
@@ -51,16 +51,19 @@ public struct TabbarView: View {
                 JoinEventView(store: store)
                     .presentationDetents([.height(300)])
             }
-            .sheet(item: activityStore) { activityItems in
-                activityItems.withState { activityItems in
-                    ActivityView(
-                        activityItems: activityItems,
+            .sheet(item: notificationHistoryStore) { notificationHistoryItems in
+                notificationHistoryItems.withState { notificationHistoryItems in
+                    NotificationHistoryView(
+                        notificationHistoryItems: notificationHistoryItems,
                         activityManagerEventButtonTap: {
                             store.send(.activityManagerEventButtonTap($0))
                         }
                     )
                     .presentationDetents([.medium, .large])
                 }
+            }
+            .sheet(item: createActivityStore) { store in
+                CreateActivityView(store: store)
             }
             .animation(.bouncy, value: store.session)
             .banner(unwrapping: store.tabbarLifecyle.bannerState)
@@ -107,8 +110,12 @@ private extension TabbarView {
             .tag(Tab.feedback)
             
             if isManager {
-                GrowView()
-                    .environmentObject(viewModel)
+                ActivitiesView(
+                    session: store.session,
+                    onCreateActivityTap: {
+                        store.send(.createActivityButtonTap)
+                    }
+                )
                     .tabItem {
                         Label("Activities", systemImage: "calendar")
                     }
@@ -220,7 +227,7 @@ private extension TabbarView {
     func activityToolbarItem(_ badgeCount: Int) -> some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             Button {
-                store.send(.toolbar(.activityButtonTap))
+                store.send(.toolbar(.notificationHistoryButtonTap))
             } label: {
                 Image.sparkles
                     .resizable()

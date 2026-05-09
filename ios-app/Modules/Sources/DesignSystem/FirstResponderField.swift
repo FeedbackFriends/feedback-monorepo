@@ -1,4 +1,5 @@
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
 
 public class FirstResponderField: UITextField {
@@ -17,6 +18,15 @@ public struct FirstResponderFieldView: UIViewRepresentable {
     public func makeUIView(context: Context) -> FirstResponderField {
         return FirstResponderField()
     }
-    
+
     public func updateUIView(_ uiView: FirstResponderField, context: Context) {}
 }
+#else
+public struct FirstResponderFieldView: View {
+    public init() {}
+
+    public var body: some View {
+        EmptyView()
+    }
+}
+#endif

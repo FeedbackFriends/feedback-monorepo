@@ -2,7 +2,6 @@ import Domain
 import DesignSystem
 import Foundation
 import ComposableArchitecture
-import UIKit
 import Utility
 
 @Reducer
@@ -15,7 +14,7 @@ public struct EventDetailFeature: Sendable {
         @ReducerCaseEphemeral
         case confirmationDialog(ConfirmationDialogState<ConfirmationDialog>)
         @ReducerCaseIgnored
-        case invite(ManagerEvent)
+        case invite(Activity)
         public enum ConfirmationDialog: Equatable, Sendable {
             case edit
             case delete
@@ -25,39 +24,44 @@ public struct EventDetailFeature: Sendable {
     
     @ObservableState
     public struct State: Equatable, Sendable {
-        public var event: ManagerEvent
+        public let eventId: UUID
+        public var detail: Activity?
         @Presents var destination: Destination.State?
         var fetchEventDetailInFlight = true
         var webBaseUrl: URL?
         var inviteUrl: String {
-            guard let pinCode = event.pinCode?.value else { return "PINCODE_NOT_FOUND" }
             guard let webBaseUrl = webBaseUrl else { return "WEB_BASE_URL_NOT_FOUND" }
-            return AppWebURLProvider.invite(forPinCode: pinCode, baseUrl: webBaseUrl)?.absoluteString ?? "COULD_NOT_GENERATE_INVITE_LINK"
+            return detail?.inviteUrl(webBaseUrl: webBaseUrl) ?? "PINCODE_NOT_FOUND"
         }
         var navigationTitle: String {
-            event.title
+            detail?.title ?? "Session"
         }
         var navigationSubTitle: String {
-            "\(event.overallFeedbackSummary?.responses ?? 0) responses"
+            "\(detail?.overallFeedbackSummary?.responses ?? 0) responses"
         }
         var shareText: String {
-        """
-        You’re invited to \(event.title)!   
-        Use pin code \(event.pinCode?.value ?? "PINCODE_NOT_FOUND") to join.
-        
-        👇🏼 Tap the link to join:  
-        \(inviteUrl)
-        """
+            guard let webBaseUrl, let detail else {
+                return """
+                You’re invited to \(detail?.title ?? "this session")!
+                Use pin code \(detail?.pinCode?.value ?? "PINCODE_NOT_FOUND") to join.
+
+                👇🏼 Tap the link to join:
+                \(inviteUrl)
+                """
+            }
+            return detail.shareText(webBaseUrl: webBaseUrl)
         }
-        @Shared var session: Session
+        @Shared var session: Bootstrap
         
         public init(
-            event: ManagerEvent,
+            eventId: UUID,
+            detail: Activity? = nil,
             destination: Destination.State? = nil,
             fetchEventDetailInFlight: Bool = true,
-            session: Shared<Session>
+            session: Shared<Bootstrap>
         ) {
-            self.event = event
+            self.eventId = eventId
+            self.detail = detail ?? session.wrappedValue.managerData?.activities[id: eventId]
             self.destination = destination
             self.fetchEventDetailInFlight = fetchEventDetailInFlight
             self._session = session
@@ -71,7 +75,7 @@ public struct EventDetailFeature: Sendable {
         case onTask
         case retryButtonTap
         case refresh
-        case sessionUpdated(Session)
+        case sessionUpdated(Bootstrap)
     }
     
     public init() {}
@@ -100,6 +104,7 @@ public struct EventDetailFeature: Sendable {
                 switch confirmationDialogAction {
                     
                 case .edit:
+                    guard let detail = state.detail else { return .none }
                     let recentlyUsedQuestions = if let managerData = state.session.managerData {
                         Set<RecentlyUsedQuestions>(managerData.recentlyUsedQuestions)
                     } else {
@@ -108,19 +113,20 @@ public struct EventDetailFeature: Sendable {
                     state.destination = .editEvent(
                         EditEvent.State(
                             eventForm: EventForm.State.init(
-                                eventInput: EventInput(state.event),
+                                eventInput: EventInput(detail),
                                 shouldOpenKeyboardOnAppear: false,
                                 recentlyUsedQuestions: recentlyUsedQuestions,
                                 successOverlayMessage: "Session edited"
                             ),
-                            eventId: state.event.id,
+                            eventId: state.eventId,
                             recentlyUsedQuestions: recentlyUsedQuestions
                         )
                     )
                 case .delete:
-                    state.destination = .deleteConfirmation(.init(eventId: state.event.id))
+                    state.destination = .deleteConfirmation(.init(eventId: state.eventId))
                 case .invite:
-                    state.destination = .invite(state.event)
+                    guard let detail = state.detail else { return .none }
+                    state.destination = .invite(detail)
                 }
                 return .none
                 
@@ -128,17 +134,18 @@ public struct EventDetailFeature: Sendable {
                 return .none
                 
             case .moreButtonTapped:
+                guard let detail = state.detail else { return .none }
                 state.destination = .confirmationDialog(
                     ConfirmationDialogState<Destination.ConfirmationDialog>.init(
                         titleVisibility: .hidden,
                         title: { TextState("") },
                         actions: {
-                            if state.event.overallFeedbackSummary == nil && state.event.pinCode != nil {
+                            if detail.overallFeedbackSummary == nil && detail.pinCode != nil {
                                 ButtonState(action: .send(.edit)) {
                                     TextState("Edit ✏️")
                                 }
                             }
-                            if state.event.pinCode != nil {
+                            if detail.pinCode != nil {
                                 ButtonState(action: .send(.invite)) {
                                     TextState("Invite 👥")
                                 }
@@ -162,13 +169,7 @@ public struct EventDetailFeature: Sendable {
                 }
                 
             case .sessionUpdated(let updatedSession):
-                guard
-                    let managerData = updatedSession.managerData,
-                    let event = managerData.managerEvents[id: state.event.id]
-                else {
-                    return .none
-                }
-                state.event = event
+                state.detail = updatedSession.managerData?.activities[id: state.eventId]
                 return .none
                 
             case .retryButtonTap:

@@ -1,6 +1,8 @@
 import SwiftUI
 import DesignSystem
+#if canImport(UIKit)
 import UIKit
+#endif
 
 struct InviteView: View {
     let inviteLink: String
@@ -83,6 +85,7 @@ struct InviteView: View {
 }
 
 /// ShareSheet is needed in InviteView since there is a problem with ShareLink when presenting from a sheet
+#if canImport(UIKit)
 struct ShareSheet: UIViewControllerRepresentable {
     let activityItems: [Any]
     let applicationActivities: [UIActivity]? = nil
@@ -94,6 +97,15 @@ struct ShareSheet: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
     }
 }
+#else
+struct ShareSheet: View {
+    let activityItems: [Any]
+
+    var body: some View {
+        EmptyView()
+    }
+}
+#endif
 
 #Preview {
     InviteView(

@@ -13,16 +13,18 @@ Kotlin + Spring Boot services powering the Feedback platform. The backend is spl
 
 ## Prerequisites
 - JDK 21
-- Docker for the full local stack or local Postgres
+- Docker for the full local stack
+- A local Postgres instance for Compose-based development
 - Firebase service account JSON exposed via `FIREBASE_SERVICE_ACCOUNT_JSON_B64`
 
 ## Local Development
 
 ### Full Stack From The Repo Root
-Run the full stack from the monorepo root:
+Build the local backend images with Jib, then run the full stack from the monorepo root:
 
 ```bash
-docker compose up -d
+./gradlew --no-configuration-cache buildLocalImages
+docker compose up --build -d
 ```
 
 Services:
@@ -30,7 +32,7 @@ Services:
 - `api` at `http://localhost:8080`
 - API health at `http://localhost:8090/actuator/health`
 - scheduler health at `http://localhost:8091/actuator/health`
-- Postgres at `localhost:5432` with database `feedback`
+- Postgres must already be running locally at the host and port configured in `.env`
 
 The root [`.env.example`](../.env.example) includes every environment variable Compose needs for a local run. Copy it to `.env` at the repo root and fill in the real values you need.
 
@@ -43,6 +45,8 @@ export POSTGRES_PORT=5432
 export POSTGRES_DB=feedback
 export POSTGRES_USER=feedback
 export POSTGRES_PASSWORD=feedback
+export JWK_SET_URL=https://www.googleapis.com/oauth2/v3/certs
+export JWT_ISSUER_URI=https://securetoken.google.com/feedback2-a4dd9
 export FIREBASE_API_KEY=...
 export FIREBASE_SERVICE_ACCOUNT_JSON_B64="$(base64 < ../firebase_config.json | tr -d '\n')"
 export ZOHO_ACCOUNT_ID=...
@@ -61,6 +65,30 @@ Run the services:
 
 Swagger UI is served at `http://localhost:8080/` and the OpenAPI YAML at `http://localhost:8080/v3/api-docs.yaml`.
 
+### Direct IntelliJ API Run
+Create a Spring Boot run configuration for `dk.example.feedback.FeedbackApplication`.
+
+Use these settings:
+- Module: `feedback.api.main`
+- JRE: 21
+- Main class: `dk.example.feedback.FeedbackApplicationKt`
+- Working directory: `$PROJECT_DIR$/backend`
+- Environment variables:
+
+```text
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=feedback
+POSTGRES_USER=feedback
+POSTGRES_PASSWORD=feedback
+JWK_SET_URL=https://www.googleapis.com/oauth2/v3/certs
+JWT_ISSUER_URI=https://securetoken.google.com/feedback2-a4dd9
+FIREBASE_API_KEY=...
+FIREBASE_SERVICE_ACCOUNT_JSON_B64=...
+```
+
+Start Postgres before running the configuration. Use the same host, port, database, and credentials as your local database setup.
+
 ### OpenAPI Generation
 Generate and sync the canonical API spec with the dedicated `openapi` profile:
 
@@ -74,8 +102,7 @@ This writes the committed monorepo contract to `../contracts/openapi/feedback-ap
 - `./gradlew test` runs all backend tests.
 - `./gradlew :api:test` runs only API tests.
 - `./gradlew clean build` builds all backend modules and fails on warnings.
-- `docker build -f backend/apps/api/Dockerfile .` builds the API image.
-- `docker build -f backend/apps/scheduler/Dockerfile .` builds the scheduler image.
+- `./gradlew --no-configuration-cache buildLocalImages` builds the API and scheduler images into the local Docker daemon.
 
 ## Database And Migrations
 - Postgres is the runtime datasource for the application services.
@@ -85,6 +112,8 @@ This writes the committed monorepo contract to `../contracts/openapi/feedback-ap
 - Missing Firebase config: ensure `FIREBASE_SERVICE_ACCOUNT_JSON_B64` contains a valid base64-encoded service account JSON.
 - Connection refused to Postgres: verify the container is running and `POSTGRES_HOST` / `POSTGRES_PORT` point at the right server.
 - Ports in use: override Spring ports with standard Spring Boot properties when running directly.
+- Local Compose startup fails with missing images: run `./gradlew --no-configuration-cache buildLocalImages` from `backend/` first.
+- Liquibase checksum mismatch after editing an existing changelog: reset or recreate the local Postgres database that Compose is pointing at.
 
 ## Zoho Notes
 Zoho OAuth scopes for Self Client should use `ZohoMail.messages.READ` for the scheduler runtime. If Zoho rejects multiple scopes in a Self Client grant, obtain `ZOHO_ACCOUNT_ID` and `ZOHO_FOLDER_ID` with one-off access tokens using `ZohoMail.accounts.READ` and `ZohoMail.folders.READ`, then switch the refresh token to `ZohoMail.messages.READ` for the runtime path.

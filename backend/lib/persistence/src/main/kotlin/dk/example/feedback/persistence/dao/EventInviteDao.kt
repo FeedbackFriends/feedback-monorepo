@@ -1,21 +1,21 @@
 package dk.example.feedback.persistence.dao
 
-import dk.example.feedback.model.database.EventInviteEntity
+import dk.example.feedback.model.database.ActivityInviteEntity
 import dk.example.feedback.persistence.dao.utility.BaseCompanion
 import dk.example.feedback.persistence.dao.utility.CommonColumns
-import dk.example.feedback.persistence.table.EventInviteTable
+import dk.example.feedback.persistence.table.ActivityInviteTable
 import java.util.UUID
 import org.jetbrains.exposed.dao.id.EntityID
 
-class EventInviteDao(id: EntityID<UUID>) : CommonColumns<EventInviteEntity>(id, EventInviteTable) {
+class ActivityInviteDao(id: EntityID<UUID>) : CommonColumns<ActivityInviteEntity>(id, ActivityInviteTable) {
 
-    companion object : BaseCompanion<EventInviteEntity, EventInviteDao>(EventInviteTable)
+    companion object : BaseCompanion<ActivityInviteEntity, ActivityInviteDao>(ActivityInviteTable)
 
-    var event by EventInviteTable.event
-    var email by EventInviteTable.email
+    var activity by ActivityInviteTable.activity
+    var email by ActivityInviteTable.email
 
-    override fun toModel(): EventInviteEntity {
-        return EventInviteEntity(
+    override fun toModel(): ActivityInviteEntity {
+        return ActivityInviteEntity(
             id = id.value,
             email = email,
             createdAt = dateCreated,
@@ -23,3 +23,5 @@ class EventInviteDao(id: EntityID<UUID>) : CommonColumns<EventInviteEntity>(id, 
         )
     }
 }
+
+typealias EventInviteDao = ActivityInviteDao

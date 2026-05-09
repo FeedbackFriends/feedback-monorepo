@@ -96,6 +96,11 @@
 		28A050122E786F9E00CC7316 /* Preview App Question Picker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Preview App Question Picker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		28A050142E786FCA00CC7316 /* QuestionPickerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionPickerApp.swift; sourceTree = "<group>"; };
 		28A0501E2E78910A00CC7316 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		28A8CA152F7D103E0028C59C /* openai.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openai.yaml; sourceTree = "<group>"; };
+		28A8CA172F7D103E0028C59C /* design-system.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "design-system.md"; sourceTree = "<group>"; };
+		28A8CA192F7D103E0028C59C /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
+		28A8CA1B2F7D103E0028C59C /* inventory_openapi_domain_sync.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = inventory_openapi_domain_sync.py; sourceTree = "<group>"; };
+		28A8CA1D2F7D103E0028C59C /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
 		28BDE9D92E918A2C00BFD81D /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		28D8884C2E6788FF00F0B6BE /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28DB6A3A2E5E054700F90EA0 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
@@ -202,9 +207,62 @@
 		2871CF602F7012820059E0D2 /* .codex */ = {
 			isa = PBXGroup;
 			children = (
+				28A8CA1F2F7D103E0028C59C /* skills */,
 				2871CF5F2F7012820059E0D2 /* config.toml */,
 			);
 			path = .codex;
+			sourceTree = "<group>";
+		};
+		28A8CA162F7D103E0028C59C /* agents */ = {
+			isa = PBXGroup;
+			children = (
+				28A8CA152F7D103E0028C59C /* openai.yaml */,
+			);
+			path = agents;
+			sourceTree = "<group>";
+		};
+		28A8CA182F7D103E0028C59C /* references */ = {
+			isa = PBXGroup;
+			children = (
+				28A8CA172F7D103E0028C59C /* design-system.md */,
+			);
+			path = references;
+			sourceTree = "<group>";
+		};
+		28A8CA1A2F7D103E0028C59C /* feedback-ios-design-system */ = {
+			isa = PBXGroup;
+			children = (
+				28A8CA162F7D103E0028C59C /* agents */,
+				28A8CA182F7D103E0028C59C /* references */,
+				28A8CA192F7D103E0028C59C /* SKILL.md */,
+			);
+			path = "feedback-ios-design-system";
+			sourceTree = "<group>";
+		};
+		28A8CA1C2F7D103E0028C59C /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				28A8CA1B2F7D103E0028C59C /* inventory_openapi_domain_sync.py */,
+			);
+			path = scripts;
+			sourceTree = "<group>";
+		};
+		28A8CA1E2F7D103E0028C59C /* openapi-domain-sync */ = {
+			isa = PBXGroup;
+			children = (
+				28A8CA1C2F7D103E0028C59C /* scripts */,
+				28A8CA1D2F7D103E0028C59C /* SKILL.md */,
+			);
+			path = "openapi-domain-sync";
+			sourceTree = "<group>";
+		};
+		28A8CA1F2F7D103E0028C59C /* skills */ = {
+			isa = PBXGroup;
+			children = (
+				28A8CA1A2F7D103E0028C59C /* feedback-ios-design-system */,
+				28A8CA1E2F7D103E0028C59C /* openapi-domain-sync */,
+			);
+			path = skills;
 			sourceTree = "<group>";
 		};
 		28BDE9DB2E918A2C00BFD81D /* CI_scripts */ = {

@@ -15,7 +15,7 @@ extension APIClient {
                 try await Task.sleep(for: .seconds(delay))
                 return ()
             },
-            updateAccount: { _, _, _ in
+            modifyAccount: { _, _, _ in
                 try await Task.sleep(for: .seconds(delay))
                 return ()
             },
@@ -27,7 +27,7 @@ extension APIClient {
                 try await Task.sleep(for: .seconds(delay))
                 return ()
             },
-            getSession: {
+            getBootstrap: {
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
                 
@@ -40,35 +40,51 @@ extension APIClient {
                 try await Task.sleep(for: .seconds(delay))
                 return true
             },
-            createEvent: { _ in
+            createActivity: { _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },
-            updateEvent: { _, _ in
+            updateActivity: { _, _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },
-            deleteEvent: { _ in },
+            deleteActivity: { _ in },
+            createSession: { _ in
+                try await Task.sleep(for: .seconds(delay))
+                return .mock()
+            },
+            updateSession: { _, _ in
+                try await Task.sleep(for: .seconds(delay))
+                return .mock()
+            },
+            deleteSession: { _ in },
             createAccount: { _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },
             sessionChangedListener: { .never },
-            joinEvent: { _ in },
-            markEventAsSeen: { _ in
-                try await Task.sleep(for: .seconds(delay))
-                return ()
-            },
-            updateAccountRole: { _ in
-                try await Task.sleep(for: .seconds(delay))
-                return ()
-            },
-            getMockToken: { "" },
-            getUpdatedSession: {
+            joinSession: { _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },
-            markActivityAsSeen: {
+            markSessionAsSeen: { _ in
+                try await Task.sleep(for: .seconds(delay))
+                return ()
+            },
+            sendNotification: { _ in
+                try await Task.sleep(for: .seconds(delay))
+                return ()
+            },
+            updateRole: { _ in
+                try await Task.sleep(for: .seconds(delay))
+                return ()
+            },
+            mockIdToken: { "" },
+            getBoostrapUpdate: {
+                try await Task.sleep(for: .seconds(delay))
+                return .mock()
+            },
+            markNotificationHistoryAsSeen: {
                 try await Task.sleep(for: .seconds(delay))
                 return ()
             }

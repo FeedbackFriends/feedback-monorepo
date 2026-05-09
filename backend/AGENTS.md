@@ -12,9 +12,9 @@
 -  – run all tests.
 -  or  – run scheduler tests or just compile the scheduler.
 -  – start the scheduler service; shares the same env vars as the API.
--  – build Docker images locally.
+-  – build the API and scheduler Docker images locally with Jib; use `--no-configuration-cache`.
 -  – generate the OpenAPI spec.
-- Production deployment is defined in ; keep backend runtime expectations aligned with the Render Dockerfiles under .
+- Production deployment is defined in ; keep backend runtime expectations aligned with the Jib image config and release workflow.
 - Local env vars live in  (monorepo root); source it or export needed variables before running services.
 
 ## Coding Style & Naming Conventions

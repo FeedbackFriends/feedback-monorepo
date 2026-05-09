@@ -4,10 +4,10 @@ import DesignSystem
 
 public struct QuestionPickerView: View {
     
-    let existingQuestionIndex: Int?
-    let questionSelected: (_ input: EventInput.QuestionInput, _ optionalIndex: Int?) -> Void
+    let existingQuestionID: EventInput.QuestionInput.ID?
+    let questionSelected: (_ input: EventInput.QuestionInput) -> Void
     var text: String {
-        if existingQuestionIndex != nil {
+        if existingQuestionID != nil {
             "Edit"
         } else {
             "Add"
@@ -20,12 +20,12 @@ public struct QuestionPickerView: View {
     @FocusState private var isQuestionFocused: Bool
     
     public init(
-        existingQuestionIndex: Int?,
+        existingQuestionID: EventInput.QuestionInput.ID?,
         feedbackTypeSelected: FeedbackType,
         questionTextField: String,
-        questionSelected: @escaping (_ input: EventInput.QuestionInput, _ optionalIndex: Int?) -> Void
+        questionSelected: @escaping (_ input: EventInput.QuestionInput) -> Void
     ) {
-        self.existingQuestionIndex = existingQuestionIndex
+        self.existingQuestionID = existingQuestionID
         self._feedbackTypeSelected = State(initialValue: feedbackTypeSelected)
         self._questionTextField = State(initialValue: questionTextField)
         self.questionSelected = questionSelected
@@ -43,9 +43,12 @@ public struct QuestionPickerView: View {
             try await Task.sleep(for: .seconds(0.3))
             let trimmed = questionTextField.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmed.isEmpty else { return }
-            let input = EventInput.QuestionInput(questionText: trimmed, feedbackType: feedbackTypeSelected)
+            var input = EventInput.QuestionInput(questionText: trimmed, feedbackType: feedbackTypeSelected)
+            if let existingQuestionID {
+                input.id = existingQuestionID
+            }
             withAnimation {
-                questionSelected(input, existingQuestionIndex)
+                questionSelected(input)
             }
         }
     }
@@ -169,27 +172,27 @@ public struct QuestionPickerView: View {
 
 #Preview("Empty - Create") {
     QuestionPickerView(
-        existingQuestionIndex: nil,
+        existingQuestionID: nil,
         feedbackTypeSelected: .emoji,
         questionTextField: "",
-        questionSelected: { _, _ in }
+        questionSelected: { _ in }
     )
 }
 
 #Preview("Empty - Edit") {
     QuestionPickerView(
-        existingQuestionIndex: 3,
+        existingQuestionID: UUID(),
         feedbackTypeSelected: .emoji,
         questionTextField: "",
-        questionSelected: { _, _ in }
+        questionSelected: { _ in }
     )
 }
 
 #Preview("Long input") {
     QuestionPickerView(
-        existingQuestionIndex: nil,
+        existingQuestionID: nil,
         feedbackTypeSelected: .emoji,
         questionTextField: "Aslkdjska lsak slksak sakaksl kaskask sa kask sak sak as k kask as kask kas kask ask ask k as kas k sdjdsjds sd js djs sjd",
-        questionSelected: { _, _ in }
+        questionSelected: { _ in }
     )
 }

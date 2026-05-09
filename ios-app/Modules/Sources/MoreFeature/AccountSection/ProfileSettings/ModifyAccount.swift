@@ -52,7 +52,7 @@ public struct ModifyAccount: Sendable {
                 state.isLoading = true
                 return .run { [state = state] send in
                     do {
-                        _ = try await self.apiClient.updateAccount(
+                        _ = try await self.apiClient.modifyAccount(
                             name: state.nameInput,
                             email: state.emailInput,
                             phoneNumber: state.phoneNumberInput

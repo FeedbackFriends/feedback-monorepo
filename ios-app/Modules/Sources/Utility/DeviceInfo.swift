@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 @MainActor
 public struct DeviceInfo {
@@ -17,12 +19,21 @@ public struct DeviceInfo {
     let internalBundleIdentifier: String
     
     public init() {
+        #if canImport(UIKit)
         let device = UIDevice.current
         self.deviceName = device.name
         self.deviceModel = device.model
         self.systemName = device.systemName
         self.systemVersion = device.systemVersion
         self.identifierForVendor = device.identifierForVendor?.uuidString ?? "Unknown"
+        #else
+        let processInfo = ProcessInfo.processInfo
+        self.deviceName = processInfo.hostName
+        self.deviceModel = "Mac"
+        self.systemName = "macOS"
+        self.systemVersion = processInfo.operatingSystemVersionString
+        self.identifierForVendor = Bundle.main.bundleIdentifier ?? "Unknown"
+        #endif
         
         let bundle = Bundle.main
         self.appName = bundle.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Unknown"

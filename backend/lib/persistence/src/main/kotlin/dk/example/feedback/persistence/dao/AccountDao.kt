@@ -2,9 +2,10 @@ package dk.example.feedback.persistence.dao
 
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.persistence.table.AccountTable
-import dk.example.feedback.persistence.table.EventTable
+import dk.example.feedback.persistence.table.ActivityTable
 import dk.example.feedback.persistence.table.FCMTokenTable
 import dk.example.feedback.persistence.table.QuestionTable
+import dk.example.feedback.persistence.table.SessionTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -21,7 +22,8 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
     var updatedAt by AccountTable.updatedAt
     var feedbackSessionHash by AccountTable.feedbackSessionHash
     var ratingPrompted by AccountTable.ratingPrompted
-    val events by EventDao referrersOn EventTable.manager
+    val activities by ActivityDao referrersOn ActivityTable.manager
+    val sessions by SessionDao referrersOn SessionTable.manager
     val questions by QuestionDao referrersOn QuestionTable.manager
     val fcmTokens by FCMTokenDao referrersOn FCMTokenTable.account
 
@@ -35,6 +37,4 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
         feedbackSessionHash = feedbackSessionHash,
     )
 }
-
-
 

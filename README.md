@@ -9,7 +9,7 @@ The root of the repo is for shared orchestration only. Product work should usual
 - `web/` contains the Next.js frontend.
 - `backend/` contains the Kotlin services, shared backend libraries, and database tooling.
 - `docker-compose.yml` is the canonical stack for shared and production wiring using published images.
-- `docker-compose.override.yml` adds only local development concerns: Postgres, host ports, and a locally built web app.
+- `docker-compose.override.yml` adds only local development concerns: host ports, local backend startup wiring, and locally built images for the backend and web app.
 - `.github/workflows/` contains CI and release automation.
 
 ## Tech Stack
@@ -72,8 +72,10 @@ The backend setup and day-to-day commands now live directly in `backend/README.m
 For full-stack local development from the repo root:
 
 ```bash
-docker compose up --build
+./scripts/run -d
 ```
+
+The override starts a local `db` service (Postgres 16) inside Compose. The backend services connect to that container (`POSTGRES_HOST=db`, `POSTGRES_PORT=5432`) and still use your root `.env` for database name, user, password, and host port mapping.
 
 Useful root-level commands:
 
@@ -104,8 +106,8 @@ Both generated clients read from that file:
 How Compose is wired:
 
 - `docker-compose.yml` contains the shared service definitions, explicit runtime env contract, and published images.
-- `docker-compose.override.yml` adds the local Postgres container, local host ports, local backend startup ordering, and local builds for `api`, `scheduler`, and `web`.
-- Local Compose still expects the full env contract to exist in `.env`, and [`.env.example`](./.env.example) now includes every variable needed for a local run with explicit values or intentionally blank placeholders. There are no Compose fallbacks.
+- `docker-compose.override.yml` connects the backend services to a local Postgres instance outside Compose, publishes local ports, and uses locally built images for `api`, `scheduler`, and `web`.
+- Local Compose still expects the full env contract to exist in `.env`, and [`.env.example`](./.env.example) includes every variable needed for a local run with explicit values or intentionally blank placeholders. There are no Compose fallbacks. The developer is responsible for running a reachable local Postgres instance, and Compose uses `host.docker.internal` to reach it from containers.
 - For the API docs: `SPRING_DOC_API_DOCS_ENABLED` controls the raw OpenAPI document at `/v3/api-docs` and `/v3/api-docs.yaml`, while `SPRING_DOC_SWAGGER_UI_ENABLED` controls the interactive Swagger UI served at `/`.
 
 For feature work inside a single app, switch into that app directory and use its local README and AGENTS instructions.

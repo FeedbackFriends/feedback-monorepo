@@ -40,15 +40,15 @@ public struct EventInput: Equatable, Sendable {
 
 public extension EventInput {
      init(
-        _ managerEvent: ManagerEvent
+        _ activity: Activity
     ) {
         self.init(
-            title: managerEvent.title,
-            agenda: managerEvent.agenda,
-            date: managerEvent.date,
-            durationInMinutes: managerEvent.durationInMinutes,
-            location: managerEvent.location,
-            questions: managerEvent.questions.map { .init(questionText: $0.questionText, feedbackType: $0.feedbackType) }
+            title: activity.title,
+            agenda: activity.agenda,
+            date: activity.date,
+            durationInMinutes: activity.durationInMinutes,
+            location: activity.location,
+            questions: activity.questions.map { .init(questionText: $0.questionText, feedbackType: $0.feedbackType) }
         )
     }
 }

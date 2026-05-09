@@ -51,14 +51,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         $0.apiClient = self.apiClient
     }
     
-    var isDebug: Bool {
-        #if DEBUG
-        return true
-        #else
-        return false
-        #endif
-    }
-    
     /// On app launch
     func application(
         _ application: UIApplication,
@@ -74,7 +66,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         InfoPlistConfig().logConfigurations()
         SentrySDK.start { options in
             options.dsn = InfoPlistConfig().sentryDsnUrl.absoluteString
-            options.debug = self.isDebug
             options.tracesSampleRate = 1.0
             options.tracePropagationTargets = [
                 InfoPlistConfig().apiBaseUrl.absoluteString

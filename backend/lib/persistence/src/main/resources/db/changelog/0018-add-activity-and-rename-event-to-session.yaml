@@ -1,0 +1,212 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0018-add-activity-and-rename-event-to-session
+      author: codex
+      changes:
+        - createTable:
+            tableName: activity
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: source_session_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
+                  name: title
+                  type: varchar(1024)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: agenda
+                  type: varchar(4096)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: run_mode
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: send_emails
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: manager_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: activity
+            baseColumnNames: manager_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_activity_manager_id
+        - sql:
+            sql: |
+              insert into activity (
+                id,
+                source_session_id,
+                title,
+                agenda,
+                run_mode,
+                send_emails,
+                manager_id,
+                created_at,
+                updated_at
+              )
+              select
+                ${uuid},
+                id,
+                title,
+                agenda,
+                'MANUAL',
+                false,
+                manager_id,
+                created_at,
+                updated_at
+              from event;
+        - renameTable:
+            oldTableName: event
+            newTableName: session
+        - addColumn:
+            tableName: session
+            columns:
+              - column:
+                  name: activity_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+        - sql:
+            sql: |
+              update session
+              set activity_id = (
+                select activity.id
+                from activity
+                where activity.source_session_id = session.id
+              );
+        - addNotNullConstraint:
+            tableName: session
+            columnName: activity_id
+            columnDataType: uuid
+        - addForeignKeyConstraint:
+            baseTableName: session
+            baseColumnNames: activity_id
+            referencedTableName: activity
+            referencedColumnNames: id
+            constraintName: fk_session_activity_id
+        - renameTable:
+            oldTableName: event_participant
+            newTableName: session_participant
+        - renameColumn:
+            tableName: session_participant
+            oldColumnName: event_id
+            newColumnName: session_id
+            columnDataType: uuid
+        - renameTable:
+            oldTableName: event_invite
+            newTableName: activity_invite
+        - renameColumn:
+            tableName: activity_invite
+            oldColumnName: event_id
+            newColumnName: activity_id
+            columnDataType: uuid
+        - dropForeignKeyConstraint:
+            baseTableName: activity_invite
+            constraintName: fk_event_invite_event_id
+        - sql:
+            sql: |
+              update activity_invite
+              set activity_id = (
+                select session.activity_id
+                from session
+                where session.id = activity_invite.activity_id
+              );
+        - addForeignKeyConstraint:
+            baseTableName: activity_invite
+            baseColumnNames: activity_id
+            referencedTableName: activity
+            referencedColumnNames: id
+            constraintName: fk_activity_invite_activity_id
+            onDelete: CASCADE
+        - renameColumn:
+            tableName: question
+            oldColumnName: event_id
+            newColumnName: session_id
+            columnDataType: uuid
+        - addColumn:
+            tableName: question
+            columns:
+              - column:
+                  name: activity_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: question
+            baseColumnNames: activity_id
+            referencedTableName: activity
+            referencedColumnNames: id
+            constraintName: fk_question_activity_id
+            onDelete: CASCADE
+        - sql:
+            sql: |
+              insert into question (
+                id,
+                question_text,
+                feedback_type,
+                manager_id,
+                session_id,
+                activity_id,
+                index,
+                created_at,
+                updated_at
+              )
+              select
+                ${uuid},
+                question.question_text,
+                question.feedback_type,
+                question.manager_id,
+                null,
+                session.activity_id,
+                question.index,
+                question.created_at,
+                question.updated_at
+              from question
+              join session on question.session_id = session.id
+              where question.session_id is not null;
+        - renameColumn:
+            tableName: pin_code
+            oldColumnName: event_id
+            newColumnName: session_id
+            columnDataType: uuid
+        - renameColumn:
+            tableName: new_feedback_notification
+            oldColumnName: event_id
+            newColumnName: session_id
+            columnDataType: uuid
+        - renameColumn:
+            tableName: notification_history
+            oldColumnName: event_id
+            newColumnName: session_id
+            columnDataType: uuid
+        - dropColumn:
+            tableName: activity
+            columnName: source_session_id

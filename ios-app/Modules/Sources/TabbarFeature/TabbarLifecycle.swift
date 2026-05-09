@@ -14,17 +14,17 @@ public struct TabbarLifecycle: Sendable {
     
     @ObservableState
     public struct State: Equatable, Sendable {
-        @Shared var session: Session
+        @Shared var session: Bootstrap
         var bannerState: BannerState?
 		var appLoaded = false
-        public init(session: Shared<Session>) {
+        public init(session: Shared<Bootstrap>) {
             self._session = session
         }
     }
     
     public enum Action {
         case onTask
-        case sessionUpdated(Session)
+        case sessionUpdated(Bootstrap)
         case removeBanner
         case presentNotificationPermissionPrompt
         case delegate(Delegate)
@@ -77,7 +77,7 @@ public struct TabbarLifecycle: Sendable {
                     .run { _ in
                         for await _ in self.clock.timer(interval: .seconds(10)) {
                             do {
-                                _ = try await apiClient.getUpdatedSession()
+                                _ = try await apiClient.getBoostrapUpdate()
                             } catch {
                                 Logger
                                     .debug(

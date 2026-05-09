@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import MarketingShell from "@/components/layout/MarketingShell"
 import { GlassCard } from "@/components/ui/glass-card"
 import { Button } from "@/components/ui/button"
-import { readEarlyAccessUrlFromEnv } from "@/lib/letsgrow-server"
+import { appStoreUrl } from "@/components/landing/content"
 
 type InvitePageProps = {
   params: Promise<{
@@ -18,13 +18,11 @@ export const dynamic = "force-dynamic"
 
 export default async function InvitePage({ params }: InvitePageProps) {
   const { id } = await params
-  const appStoreUrl = "https://apps.apple.com/app/lets-grow/id6742420307"
   const deepLink = `letsgrow://invite?pin_code=${id}`
-  const earlyAccessUrl = readEarlyAccessUrlFromEnv()
 
   return (
-    <MarketingShell earlyAccessUrl={earlyAccessUrl}>
-      <div className="container mx-auto max-w-2xl px-6 py-8 sm:px-8 sm:py-12">
+    <MarketingShell>
+      <div className="container mx-auto max-w-2xl px-6 pb-8 pt-28 sm:px-8 sm:pb-12 sm:pt-32">
         <GlassCard>
           <div className="relative z-10 space-y-6 p-6 sm:p-8">
             <div className="space-y-3">

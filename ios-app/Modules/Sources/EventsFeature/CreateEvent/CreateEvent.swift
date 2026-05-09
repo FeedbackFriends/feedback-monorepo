@@ -25,12 +25,12 @@ public struct CreateEvent: Sendable {
         case binding(BindingAction<State>)
         case createEventButtonTap
         case alert(PresentationAction<Never>)
-        case createEventResponse(ManagerEvent)
+        case createEventResponse(Activity)
         case presentError(Error)
         case delegate(Delegate)
         case eventForm(EventForm.Action)
         public enum Delegate: Equatable {
-            case dismissAndNavigateToDetail(ManagerEvent)
+            case dismissAndNavigateToDetail(Activity)
         }
     }
     
@@ -57,7 +57,7 @@ public struct CreateEvent: Sendable {
                 state.createEventRequestInFlight = true
                 return .run { [state = state] send in
                     do {
-                        let event = try await apiClient.createEvent(state.eventForm.eventInput)
+                        let event = try await apiClient.createActivity(.init(state.eventForm.eventInput))
                         await send(.createEventResponse(event))
                     } catch {
                         await send(.presentError(error))

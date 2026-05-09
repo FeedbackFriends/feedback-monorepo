@@ -118,12 +118,12 @@ public extension ManagerSession {
     static let mock = Self(
         participantEvents: .init(uniqueElements: (0...100).map { _ in .mock() }),
         managerData: .init(
-            managerEvents: .init(
+            activities: .init(
                 uniqueElements: [
-                    ManagerEvent.mock()
+                    Activity.mock()
                 ]
             ),
-            activity: .mock,
+            notificationHistory: .mock,
             recentlyUsedQuestions: [.init(questionText: "Hello world", feedbackType: .emoji, updatedAt: Date())],
             feedbackSessionHash: UUID()
         ),
@@ -132,10 +132,10 @@ public extension ManagerSession {
     static let empty = Self(
         participantEvents: .init(uniqueElements: []),
         managerData: .init(
-            managerEvents: .init(
+            activities: .init(
                 uniqueElements: []
             ),
-            activity: .mock,
+            notificationHistory: .mock,
             recentlyUsedQuestions: [],
             feedbackSessionHash: UUID()
         ),
@@ -143,17 +143,17 @@ public extension ManagerSession {
     )
 }
 
-public extension Session {
+public extension Bootstrap {
     static func mock(numberOfManagerEvents: Int = 99) -> Self {
         Self(
             participantEvents: .init(uniqueElements: (0...100).map { _ in .mock() }),
             managerData: .init(
-                managerEvents: .init(
+                activities: .init(
                     uniqueElements: [
-                        ManagerEvent.mock()
+                        Activity.mock()
                     ]
                 ),
-                activity: .mock,
+                notificationHistory: .mock,
                 recentlyUsedQuestions: [],
                 feedbackSessionHash: UUID()
             ),
@@ -165,10 +165,10 @@ public extension Session {
         Self(
             participantEvents: .init(uniqueElements: []),
             managerData: .init(
-                managerEvents: .init(
+                activities: .init(
                     uniqueElements: []
                 ),
-                activity: .mock,
+                notificationHistory: .mock,
                 recentlyUsedQuestions: [],
                 feedbackSessionHash: UUID()
             ),
@@ -234,7 +234,7 @@ extension UUID {
     }
 }
 
-public extension ManagerEvent {
+public extension Activity {
     static func mock() -> Self {
         
         let questions: [ManagerQuestion] = [
@@ -368,7 +368,7 @@ private func generateFeedbackSummary(total: Int) -> OverallFeedbackSummary {
     )
 }
 
-public extension ManagerEvent {
+public extension Activity {
     static let mockEmpty = Self.init(
         id: nextDeterministicUUID(),
         title: "Standup Meeting",
@@ -587,7 +587,7 @@ extension Feedback {
     }
 }
 
-public extension Activity {
+public extension NotificationHistory {
     static let mock = Self.init(
         items: [],
         unseenTotal: 5

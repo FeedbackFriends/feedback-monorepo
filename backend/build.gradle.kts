@@ -52,3 +52,10 @@ tasks.register<Copy>("syncOpenApiSpec") {
     }
     into(layout.projectDirectory.dir("../contracts/openapi"))
 }
+
+tasks.register("buildLocalImages") {
+    group = "docker"
+    description = "Builds the API and scheduler Docker images locally with Jib."
+
+    dependsOn(":api:jibDockerBuild", ":scheduler:jibDockerBuild")
+}

@@ -1,436 +1,988 @@
 @testable import Domain
-import Testing
+import Adapters
 import ComposableArchitecture
 import Foundation
-import Adapters
 import OpenAPI
+import Testing
 
 @MainActor
 struct APIClientLiveTests {
-    
+    @Test
+    func `Delete account delegates to generated client`() async throws {
+        let deleteCalled = LockIsolated(false)
+        let client = Self.makeClient(
+            api: MockAPI(
+                deleteAccountHandler: { _ in
+                    deleteCalled.setValue(true)
+                    return .ok
+                }
+            )
+        )
+
+        try await client.deleteAccount()
+
+        #expect(deleteCalled.value)
+    }
+
+    @Test
+    func `Update account normalizes empty fields and updates cache`() async throws {
+        let input = LockIsolated<Operations.ModifyAccount.Input?>(nil)
+        let cache = APIClientCache(session: Self.managerSession())
+        let client = Self.makeClient(
+            api: MockAPI(
+                modifyAccountHandler: { request in
+                    input.setValue(request)
+                    return .ok
+                }
+            ),
+            cache: cache
+        )
+
+        try await client.updateAccount("", "updated@example.com", "")
+
+        guard let captured = input.value else {
+            Issue.record("Expected modifyAccount request")
+            return
+        }
+        guard case .json(let body) = captured.body else {
+            Issue.record("Expected JSON modifyAccount body")
+            return
+        }
+        let snapshot = await cache.getSession()
+        #expect(body.name == nil)
+        #expect(body.email == "updated@example.com")
+        #expect(body.phoneNumber == nil)
+        #expect(snapshot?.accountInfo.name == nil)
+        #expect(snapshot?.accountInfo.email == "updated@example.com")
+        #expect(snapshot?.accountInfo.phoneNumber == nil)
+    }
+
+    @Test
+    func `Account related generated inputs are forwarded correctly`() async throws {
+        let fcmInput = LockIsolated<Operations.LinkFCMTokenToAccount.Input?>(nil)
+        let roleInput = LockIsolated<Operations.UpdateRole.Input?>(nil)
+        let mockTokenInput = LockIsolated<Operations.MockIdToken.Input?>(nil)
+        let client = Self.makeClient(
+            api: MockAPI(
+                linkFCMTokenToAccountHandler: { request in
+                    fcmInput.setValue(request)
+                    return .ok
+                },
+                updateRoleHandler: { request in
+                    roleInput.setValue(request)
+                    return .ok
+                },
+                mockIdTokenHandler: { request in
+                    mockTokenInput.setValue(request)
+                    return .ok(
+                        .init(
+                            body: .json(
+                                .init(
+                                    firebaseResponse: .init(idToken: "id", refreshToken: "refresh", expiresIn: "3600"),
+                                    token: "mock-token"
+                                )
+                            )
+                        )
+                    )
+                }
+            )
+        )
+
+        try await client.linkFCMTokenToAccount("fcm-123")
+        try await client.updateAccountRole(.manager)
+        let token = try await client.getMockToken()
+
+        guard let capturedFCMInput = fcmInput.value, case .json(let fcmBody) = capturedFCMInput.body else {
+            Issue.record("Expected linkFCMTokenToAccount JSON body")
+            return
+        }
+        guard let capturedRoleInput = roleInput.value, case .json(let roleBody) = capturedRoleInput.body else {
+            Issue.record("Expected updateRole JSON body")
+            return
+        }
+        guard let capturedMockTokenInput = mockTokenInput.value, case .json(let mockTokenBody) = capturedMockTokenInput.body else {
+            Issue.record("Expected mockIdToken JSON body")
+            return
+        }
+
+        #expect(fcmBody.fcmToken == "fcm-123")
+        #expect(roleBody.role == "Manager")
+        #expect(mockTokenBody.role == "Manager")
+        #expect(mockTokenBody.id == "mock_id")
+        #expect(token == "mock-token")
+    }
+
+    @Test
+    func `Logout does not call API when FCM token is unavailable`() async throws {
+        let logoutCalled = LockIsolated(false)
+        let client = Self.makeClient(
+            api: MockAPI(
+                logoutHandler: { _ in
+                    logoutCalled.setValue(true)
+                    return .ok
+                }
+            ),
+            provideFcmToken: { nil }
+        )
+
+        try await client.logout()
+
+        #expect(logoutCalled.value == false)
+    }
+
+    @Test
+    func `Logout forwards the current FCM token`() async throws {
+        let input = LockIsolated<Operations.Logout.Input?>(nil)
+        let client = Self.makeClient(
+            api: MockAPI(
+                logoutHandler: { request in
+                    input.setValue(request)
+                    return .ok
+                }
+            ),
+            provideFcmToken: { "fcm-logout" }
+        )
+
+        try await client.logout()
+
+        guard let captured = input.value, case .json(let body) = captured.body else {
+            Issue.record("Expected logout JSON body")
+            return
+        }
+        #expect(body.fcmToken == "fcm-logout")
+    }
+
     @Test
     func `Session is returned and saved in cache after being fetched`() async throws {
-        
-        let apiResponse: Components.Schemas.SessionDto = .init(
-            role: "Manager",
-            accountInfo: .init(),
-            participantEvents: [],
-            managerData: .init(
-                managerEvents: [],
-                activity: .init(
-                    items: [],
-                    unseenTotal: 5
-                ),
-                recentlyUsedQuestions: [
-                    .init(
-                        questionText: "Hello world",
-                        feedbackType: .emoji,
-                        updatedAt: Date(timeIntervalSince1970: 0)
-                    )
-                ],
-                feedbackSessionHash: UUID().uuidString
-            )
-        )
-        let cache = SessionCache(session: nil)
-        let client = APIClient.live(
-            client: MockAPI(
-                getSessionHandler: { _ in
-                        .ok(
-                            .init(
-                                body: .json(
-                                    apiResponse
-                                )
-                            )
-                        )
+        let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
+        let cache = APIClientCache(session: nil)
+        let client = Self.makeClient(
+            api: MockAPI(
+                getBootstrapHandler: { _ in
+                    .ok(.init(body: .json(bootstrap)))
                 }
             ),
-            provideFcmToken: { "" },
-            sessionCache: cache
+            cache: cache
         )
+
         let result = try await client.getSession()
         let snapshot = await cache.getSession()
-        #expect(result == Session(apiResponse))
-        #expect(snapshot == Session(apiResponse))
+
+        #expect(result == Bootstrap(bootstrap))
+        #expect(snapshot == Bootstrap(bootstrap))
     }
-    
+
     @Test
-    func `Event is removed from cache after deletion and stream is triggered with updated session`() async throws {
-        
-        let event1 = ManagerEvent.mock()
-        let event2 = ManagerEvent.mock()
-        
-        let cache = SessionCache(
-            session: .init(
-                participantEvents: .init(),
-                managerData: .init(
-                    managerEvents: .init(arrayLiteral: event1, event2),
-                    activity: .mock,
-                    recentlyUsedQuestions: [],
-                    feedbackSessionHash: UUID()
-                ),
-                accountInfo: .init(
-                    name: nil,
-                    email: nil,
-                    phoneNumber: nil
-                ),
-                role: .manager
-            )
-        )
-        
-        let client = APIClient.live(
-            client: MockAPI(
-                deleteEventHandler: { _ in
-                        .ok(.init())
+    func `Start feedback session maps the generated DTO`() async throws {
+        let input = LockIsolated<Operations.StartFeedbackSession.Input?>(nil)
+        let pinCode = PinCode(value: "456789")
+        let client = Self.makeClient(
+            api: MockAPI(
+                startFeedbackSessionHandler: { request in
+                    input.setValue(request)
+                    return .ok(.init(body: .json(Self.feedbackSessionDto())))
                 }
-            ),
-            provideFcmToken: { "" },
-            sessionCache: cache
-        )
-        
-        var sessionChangedListener = await cache.sessionChangedListener().makeAsyncIterator()
-        try await client.deleteEvent(event1.id)
-        let snapshot = await cache.getSession()
-        #expect(snapshot?.managerData?.managerEvents.count == 1)
-        #expect(snapshot?.managerData?.managerEvents.first?.id == event2.id)
-        let updatedSession = await sessionChangedListener.next()
-        #expect(updatedSession == snapshot)
-        
-        try await client.deleteEvent(id: event2.id)
-        let snapshot2 = await cache.getSession()
-        #expect(snapshot2?.managerData?.managerEvents.isEmpty == true)
-        let updatedSession2 = await sessionChangedListener.next()
-        #expect(updatedSession2 == snapshot2)
-    }
-    
-    @Test
-    func `Updating an event apicall also updates the cache and stream is triggered with updated session`() async throws {
-        
-        let originalEvent = ManagerEvent(
-            id: UUID(),
-            title: "Original Title",
-            agenda: nil,
-            date: .now,
-            pinCode: PinCode(value: "123456"),
-            durationInMinutes: 30,
-            location: "Room 1",
-            ownerInfo: .init(name: nil, email: nil, phoneNumber: nil),
-            overallFeedbackSummary: nil,
-            questions: [],
-            isDraft: false,
-            invitedEmails: [],
-            participants: [],
-            calendarProvider: nil
-        )
-        let now: Date = .now
-        
-        let cache = SessionCache(
-            session: .init(
-                participantEvents: [],
-                managerData: .init(
-                    managerEvents: [originalEvent],
-                    activity: .mock,
-                    recentlyUsedQuestions: [],
-                    feedbackSessionHash: UUID()
-                ),
-                accountInfo: .init(name: nil, email: nil, phoneNumber: nil),
-                role: .manager
             )
         )
-        
-        let client = APIClient.live(
-            client: MockAPI(
-                updateEventHandler: { input in
-                    switch input.body {
-                    case .json(let body):
-                        return .ok(
-                            .init(
-                                body: .json(
-                                    .init(
-                                        event: .init(
-                                            id: input.path.eventId,
-                                            title: input.path.eventId,
-                                            agenda: body.agenda,
-                                            date: body.date,
-                                            pinCode: originalEvent.pinCode!.value,
-                                            durationInMinutes: body.durationInMinutes,
-                                            location: body.location,
-                                            calendarProvider: nil,
-                                            isDraft: false,
-                                            ownerInfo: .init(
-                                                name: originalEvent.ownerInfo.name,
-                                                email: originalEvent.ownerInfo.email,
-                                                phoneNumber: originalEvent.ownerInfo.phoneNumber
-                                            ),
-                                            overallFeedbackSummary: nil,
-                                            invitedEmails: [],
-                                            participants: [],
-                                            questions: []
-                                            
-                                        ),
-                                        recentlyUsedQuestions: [
-                                            .init(
-                                                questionText: "What you think?",
-                                                feedbackType: .emoji,
-                                                updatedAt: now
-                                            )
-                                        ]
-                                    )
+
+        let session = try await client.startFeedbackSession(pinCode)
+
+        guard let captured = input.value, case .json(let body) = captured.body else {
+            Issue.record("Expected startFeedbackSession JSON body")
+            return
+        }
+        #expect(body.pinCode == "456789")
+        #expect(session == FeedbackSession(Self.feedbackSessionDto(), pinCode: pinCode))
+    }
+
+    @Test
+    func `Submit feedback forwards mapped payload and updates participant cache`() async throws {
+        let input = LockIsolated<Operations.SubmitFeedback.Input?>(nil)
+        let cache = APIClientCache(session: Self.participantSession())
+        let feedback = FeedbackInput(
+            type: .emoji(emoji: .veryHappy, comment: "Great"),
+            questionId: Self.questionId
+        )
+        let client = Self.makeClient(
+            api: MockAPI(
+                submitFeedbackHandler: { request in
+                    input.setValue(request)
+                    return .ok(
+                        .init(
+                            body: .json(
+                                .init(
+                                    shouldPresentRatingPrompt: true,
+                                    event: Self.participantEventDto(feedbackSubmitted: true)
                                 )
                             )
                         )
-                    }
+                    )
                 }
             ),
-            provideFcmToken: { ""
-            },
-            sessionCache: cache
+            cache: cache
         )
-        
-        var sessionChangedListener = await cache.sessionChangedListener().makeAsyncIterator()
-        let response = try await client.updateEvent(
-            eventInput: EventInput(
-                title: "New title",
-                agenda: "New agenda",
-                date: Date(timeIntervalSince1970: 0),
-                durationInMinutes: 1000,
-                location: "New location",
-                questions: [
-                    EventInput.QuestionInput(
-                        questionText: "New question",
-                        feedbackType: FeedbackType.emoji
-                    )
-                ]
-            ),
-            id: originalEvent.id
-        )
+
+        let shouldPresentRatingPrompt = try await client.submitFeedback([feedback], PinCode(value: "456789"))
+
+        guard let captured = input.value, case .json(let body) = captured.body else {
+            Issue.record("Expected submitFeedback JSON body")
+            return
+        }
         let snapshot = await cache.getSession()
-        #expect(snapshot?.managerData?.managerEvents.first == response)
+        #expect(body.pinCode == "456789")
+        #expect(body.feedback == [Components.Schemas.FeedbackInput(feedback)])
+        #expect(shouldPresentRatingPrompt)
+        #expect(snapshot?.participantEvents[id: Self.eventId]?.feedbackSubmitted == true)
+    }
+
+    @Test
+    func `Create and update event calls refresh the cached manager event`() async throws {
+        let createInput = LockIsolated<Operations.CreateEvent.Input?>(nil)
+        let updateInput = LockIsolated<Operations.UpdateEvent.Input?>(nil)
+        let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(title: "Original title")]))
+        let client = Self.makeClient(
+            api: MockAPI(
+                createEventHandler: { request in
+                    createInput.setValue(request)
+                    return .ok(.init(body: .json(Self.feedbackFlowDto(title: "Created title"))))
+                },
+                updateEventHandler: { request in
+                    updateInput.setValue(request)
+                    return .ok(.init(body: .json(Self.feedbackFlowDto(title: "Updated title", id: request.path.eventId))))
+                }
+            ),
+            cache: cache
+        )
+
+        let created = try await client.createEvent(Self.eventInput(title: "Created title"))
+        let updated = try await client.updateEvent(Self.eventInput(title: "Updated title"), Self.eventId)
+
+        guard let capturedCreateInput = createInput.value, case .json(let createBody) = capturedCreateInput.body else {
+            Issue.record("Expected createEvent JSON body")
+            return
+        }
+        guard let capturedUpdateInput = updateInput.value, case .json(let updateBody) = capturedUpdateInput.body else {
+            Issue.record("Expected updateEvent JSON body")
+            return
+        }
+        let snapshot = await cache.getSession()
+        #expect(createBody.title == "Created title")
+        #expect(updateBody.title == "Updated title")
+        #expect(created.title == "Created title")
+        #expect(updated.title == "Updated title")
+        #expect(snapshot?.managerData?.managerEvents[id: Self.eventId]?.title == "Updated title")
+    }
+
+    @Test
+    func `Event is removed from cache after deletion and stream is triggered with updated session`() async throws {
+        let first = Self.managerEvent(id: Self.eventId, title: "First")
+        let secondId = UUID(uuidString: "00000000-0000-0000-0000-000000000099")!
+        let second = Self.managerEvent(id: secondId, title: "Second")
+        let cache = APIClientCache(session: Self.managerSession(events: [first, second]))
+        let client = Self.makeClient(
+            api: MockAPI(
+                deleteEventHandler: { _ in .ok }
+            ),
+            cache: cache
+        )
+
+        var listener = await client.sessionChangedListener().makeAsyncIterator()
+        try await client.deleteEvent(Self.eventId)
+        let snapshot = await cache.getSession()
+        let updatedSession = await listener.next()
+
         #expect(snapshot?.managerData?.managerEvents.count == 1)
-        let onChangeSession = await sessionChangedListener.next()
-        #expect(onChangeSession?.managerData?.managerEvents.first == snapshot?.managerData?.managerEvents.first)
+        #expect(snapshot?.managerData?.managerEvents.first?.id == secondId)
+        #expect(updatedSession == snapshot)
     }
-    
+
     @Test
-    func `Recently used questions are updated in cache`() async {
-        let initialQuestions: Set<RecentlyUsedQuestions> = [
-            .init(questionText: "Old question", feedbackType: .emoji, updatedAt: .distantPast)
-        ]
-        let newQuestions: Set<RecentlyUsedQuestions> = [
-            .init(questionText: "New question", feedbackType: .emoji, updatedAt: .now)
-        ]
-        
-        let session = Session(
-            participantEvents: [],
-            managerData: .init(
-                managerEvents: [],
-                activity: .init(items: [], unseenTotal: 0),
-                recentlyUsedQuestions: initialQuestions,
-                feedbackSessionHash: UUID()
+    func `Create account forwards role and FCM token then refreshes bootstrap`() async throws {
+        let createInput = LockIsolated<Operations.CreateAccount.Input?>(nil)
+        let bootstrapCalls = LockIsolated(0)
+        let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
+        let cache = APIClientCache(session: nil)
+        let client = Self.makeClient(
+            api: MockAPI(
+                createAccountHandler: { request in
+                    createInput.setValue(request)
+                    return .ok(.init(body: .json(Self.sessionDto())))
+                },
+                getBootstrapHandler: { _ in
+                    bootstrapCalls.setValue(bootstrapCalls.value + 1)
+                    return .ok(.init(body: .json(bootstrap)))
+                }
             ),
-            accountInfo: .init(name: nil, email: nil, phoneNumber: nil),
-            role: .manager
+            cache: cache,
+            provideFcmToken: { "fcm-create" }
         )
-        
-        let cache = SessionCache(session: session)
-        await cache.updateRecentlyUsedQuestions(recentlyUsedQuestions: newQuestions)
-        
-        let updatedSession = await cache.getSession()
-        #expect(updatedSession?.managerData?.recentlyUsedQuestions == newQuestions)
+
+        let session = try await client.createAccount(.manager)
+
+        guard let captured = createInput.value, case .json(let body) = captured.body else {
+            Issue.record("Expected createAccount JSON body")
+            return
+        }
+        let snapshot = await cache.getSession()
+        #expect(body.requestedRole == "Manager")
+        #expect(body.fcmToken == "fcm-create")
+        #expect(bootstrapCalls.value == 1)
+        #expect(session == Bootstrap(bootstrap))
+        #expect(snapshot == Bootstrap(bootstrap))
     }
-    
+
     @Test
-    func `Participant event is appended to session`() async {
-        let event = ParticipantEvent(
-            id: UUID(),
-            title: "Title",
-            agenda: nil,
-            date: .now,
-            pinCode: PinCode(value: "000000"),
-            location: nil,
-            durationInMinutes: 30,
-            questions: [],
-            feedbackSubmitted: false,
-            ownerInfo: .init(name: "Owner", email: nil, phoneNumber: nil),
-            recentlyJoined: false
+    func `Join event appends the participant event to session`() async throws {
+        let input = LockIsolated<Operations.JoinEvent.Input?>(nil)
+        let cache = APIClientCache(session: Self.participantSession())
+        let client = Self.makeClient(
+            api: MockAPI(
+                joinEventHandler: { request in
+                    input.setValue(request)
+                    return .ok(.init(body: .json(Self.participantEventDto())))
+                }
+            ),
+            cache: cache
         )
-        
-        let session = Session(
-            participantEvents: [],
-            managerData: nil,
-            accountInfo: .init(name: nil, email: nil, phoneNumber: nil),
-            role: .participant
+
+        try await client.joinEvent(PinCode(value: "456789"))
+
+        let snapshot = await cache.getSession()
+        #expect(input.value?.path.pinCode == "456789")
+        #expect(snapshot?.participantEvents[id: Self.eventId] != nil)
+    }
+
+    @Test
+    func `Manager event is marked as seen`() async throws {
+        let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(unseenResponses: 1)], unseenTotal: 1))
+        let client = Self.makeClient(
+            api: MockAPI(
+                markEventAsSeenHandler: { _ in .ok }
+            ),
+            cache: cache
         )
-        
-        let cache = SessionCache(session: session)
-        await cache.updateOrAppendParticipantEvent(event)
-        
+
+        try await client.markEventAsSeen(Self.eventId)
+
         let updated = await cache.getSession()
-        #expect(updated?.participantEvents.contains(where: { $0.id == event.id }) == true)
+        #expect(updated?.managerData?.managerEvents[id: Self.eventId]?.overallFeedbackSummary?.unseenResponses == 0)
+        #expect(updated?.managerData?.activity.unseenTotal == 0)
+        #expect(updated?.managerData?.activity.items.allSatisfy { $0.seenByManager } == true)
     }
-    
+
     @Test
-    func `Account information is updated in cache`() async {
-        let session = Session.mock()
-        let cache = SessionCache(session: session)
-        
-        await cache.updateAccount(name: "Jane", email: "jane@ai.dk", phoneNumber: "42424242")
+    func `Updated session returns nil without a cached hash`() async throws {
+        let client = Self.makeClient(api: MockAPI(), cache: APIClientCache(session: Bootstrap.mockParticipant()))
+
+        let result = try await client.getUpdatedSession()
+
+        #expect(result == nil)
+    }
+
+    @Test
+    func `Updated session fetches bootstrap update and refreshes the cache`() async throws {
+        let input = LockIsolated<Operations.GetBoostrapUpdate.Input?>(nil)
+        let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
+        let cache = APIClientCache(session: Self.managerSession())
+        let client = Self.makeClient(
+            api: MockAPI(
+                getBoostrapUpdateHandler: { request in
+                    input.setValue(request)
+                    return .ok(.init(body: .json(bootstrap)))
+                }
+            ),
+            cache: cache
+        )
+
+        let result = try await client.getUpdatedSession()
+        let snapshot = await cache.getSession()
+
+        #expect(input.value?.path.hash == Self.sessionHash.uuidString)
+        #expect(result == Bootstrap(bootstrap))
+        #expect(snapshot == Bootstrap(bootstrap))
+    }
+
+    @Test
+    func `Manager activity is marked as seen`() async throws {
+        let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(unseenResponses: 1)], unseenTotal: 2))
+        let client = Self.makeClient(
+            api: MockAPI(
+                markActivityAsSeenHandler: { _ in .ok }
+            ),
+            cache: cache
+        )
+
+        try await client.markActivityAsSeen()
+
         let updated = await cache.getSession()
-        
-        #expect(updated?.accountInfo.name == "Jane")
-        #expect(updated?.accountInfo.email == "jane@ai.dk")
-        #expect(updated?.accountInfo.phoneNumber == "42424242")
+        #expect(updated?.managerData?.activity.unseenTotal == 0)
+        #expect(updated?.managerData?.activity.items.allSatisfy { $0.seenByManager } == true)
     }
-    
-    @Test
-    func `Manager event is marked as seen`() async {
-        let eventId = UUID()
-        let emojiFeedbackSummary = EmojiQuestionFeedbackSummary(
-            countVerySad: 0,
-            countSad: 0,
-            countHappy: 0,
-            countVeryHappy: 0,
-            percentageVerySad: 0,
-            percentageSad: 0,
-            percentageHappy: 0,
-            percentageVeryHappy: 0
+}
+
+private extension APIClientLiveTests {
+    static let referenceDate = Date(timeIntervalSince1970: 1_710_000_000)
+    static let eventId = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+    static let questionId = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+    static let activityItemId = UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
+    static let sessionHash = UUID(uuidString: "00000000-0000-0000-0000-000000000004")!
+
+    static func makeClient(
+        api: MockAPI,
+        cache: APIClientCache = APIClientCache(),
+        provideFcmToken: @escaping @Sendable () async -> String? = { "fcm-default" }
+    ) -> APIClient {
+        APIClient.live(client: api, provideFcmToken: provideFcmToken, sessionCache: cache)
+    }
+
+    static func ownerDto() -> Components.Schemas.OwnerDto {
+        .init(id: UUID().uuidString, name: "Owner", email: "owner@example.com")
+    }
+
+    static func ownerInfoDto() -> Components.Schemas.OwnerInfoDto {
+        .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678")
+    }
+
+    static func questionDto() -> Components.Schemas.QuestionDto {
+        .init(id: questionId.uuidString, text: "How did it go?")
+    }
+
+    static func participantQuestionDto() -> Components.Schemas.ParticipantQuestionDto {
+        .init(id: questionId.uuidString, questionText: "How did it go?", feedbackType: .emoji)
+    }
+
+    static func participantEventDto(feedbackSubmitted: Bool = false) -> Components.Schemas.ParticipantEventDto {
+        .init(
+            id: eventId.uuidString,
+            title: "Weekly retro",
+            agenda: "Talk through wins and blockers",
+            date: referenceDate,
+            pinCode: "456789",
+            durationInMinutes: 45,
+            location: "Room Blue",
+            createdFromMailListener: false,
+            ownerInfo: ownerInfoDto(),
+            questions: [participantQuestionDto()],
+            feedbackSubmited: feedbackSubmitted,
+            recentlyJoined: true
         )
-        let questionFeedbackSummary = QuestionFeedbackSummary(
-            emojiQuestionFeedbackSummary: emojiFeedbackSummary
+    }
+
+    static func feedbackSessionDto() -> Components.Schemas.FeedbackSessionDto {
+        .init(
+            title: "Weekly retro",
+            agenda: "Talk through wins and blockers",
+            questions: [participantQuestionDto()],
+            ownerInfo: ownerInfoDto(),
+            date: referenceDate
         )
-        
-        let question = ManagerQuestion(
-            id: UUID(),
-            questionText: "Q",
-            feedbackType: .emoji,
-            feedback: [],
-            feedbackSummary: questionFeedbackSummary
+    }
+
+    static func feedbackFlowDto(title: String, id: String = eventId.uuidString) -> Components.Schemas.FeedbackFlowDto {
+        .init(
+            id: id,
+            title: title,
+            owner: ownerDto(),
+            newFeedback: true,
+            analytics: .init(averageRating: 4.2, trendStatus: .stable, lastSessionAt: referenceDate, ratingTrend: []),
+            insights: .init(summary: "Talk through wins and blockers"),
+            sessions: [],
+            sessionSettings: .init(source: .manual),
+            currentQuestions: [questionDto()]
         )
-        let overallFeedbackSummary: OverallFeedbackSummary = .init(
-            segmentationStats: FeedbackSegmentationStats(
-                verySadPercentage: 0,
-                sadPercentage: 0,
-                happyPercentage: 0,
-                veryHappyPercentage: 0
+    }
+
+    static func activityDto(unseenTotal: Int) -> Activity {
+        .init(
+            items: [
+                .init(
+                    id: activityItemId,
+                    date: referenceDate,
+                    eventTitle: "Weekly retro",
+                    eventId: eventId,
+                    newFeedbackCount: 2,
+                    seenByManager: false
+                )
+            ],
+            unseenTotal: unseenTotal
+        )
+    }
+
+    static func managerEvent(
+        id: UUID = eventId,
+        title: String = "Weekly retro",
+        unseenResponses: Int = 0
+    ) -> ManagerEvent {
+        .init(
+            id: id,
+            title: title,
+            agenda: "Talk through wins and blockers",
+            date: referenceDate,
+            pinCode: .init(value: "456789"),
+            durationInMinutes: 45,
+            location: "Room Blue",
+            ownerInfo: .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678"),
+            overallFeedbackSummary: .init(
+                segmentationStats: .init(verySadPercentage: 0, sadPercentage: 0, happyPercentage: 100, veryHappyPercentage: 0),
+                countStats: .init(verySadCount: 0, sadCount: 0, happyCount: 1, veryHappyCount: 0, commentsCount: 0),
+                unseenResponses: unseenResponses,
+                responses: 1
             ),
-            countStats: FeedbackCountStats(
-                verySadCount: 0,
-                sadCount: 0,
-                happyCount: 0,
-                veryHappyCount: 0,
-                commentsCount: 0
-            ),
-            unseenResponses: 0,
-            responses: 0
-        )
-        let event = ManagerEvent(
-            id: eventId,
-            title: "Event",
-            agenda: nil,
-            date: .now,
-            pinCode: PinCode(value: "111111"),
-            durationInMinutes: 60,
-            location: nil,
-            ownerInfo: .init(name: nil, email: nil, phoneNumber: nil),
-            overallFeedbackSummary: overallFeedbackSummary,
-            questions: [question],
+            questions: [
+                .init(
+                    id: questionId,
+                    questionText: "How did it go?",
+                    feedbackType: .emoji,
+                    feedback: [],
+                    feedbackSummary: nil
+                )
+            ],
             isDraft: false,
             invitedEmails: [],
             participants: [],
             calendarProvider: nil
         )
-        let activityItem = ActivityItems(
-            id: UUID(),
-            date: .now,
-            eventTitle: "Event",
-            eventId: eventId,
-            newFeedbackCount: 1,
-            seenByManager: false
-        )
-        let activity = Activity(items: [activityItem], unseenTotal: 1)
-        let managerData = ManagerData(
-            managerEvents: [event],
-            activity: activity,
-            recentlyUsedQuestions: [],
-            feedbackSessionHash: UUID()
-        )
-        let session = Session(participantEvents: [], managerData: managerData, accountInfo: .init(name: nil, email: nil, phoneNumber: nil), role: .manager)
-        let cache = SessionCache(session: session)
-        
-        await cache.markEventAsSeen(eventId: eventId)
-        let updated = await cache.getSession()
-        
-        #expect(updated?.managerData?.managerEvents[id: eventId]?.overallFeedbackSummary?.unseenResponses == 0)
-        #expect(updated?.managerData?.activity.unseenTotal == 0)
-        #expect(updated?.managerData?.activity.items.allSatisfy { $0.seenByManager } == true)
     }
-    
-    @Test
-    func `Activity is updated in cache`() async {
-        let eventId = UUID()
-        let activityItem = ActivityItems(
-            id: UUID(),
-            date: .now,
-            eventTitle: "Event",
-            eventId: eventId,
-            newFeedbackCount: 1,
-            seenByManager: false
-        )
-        let activity = Activity(items: [activityItem], unseenTotal: 1)
-        let managerData = ManagerData(
-            managerEvents: [],
-            activity: .init(items: [], unseenTotal: 0),
-            recentlyUsedQuestions: [],
-            feedbackSessionHash: UUID()
-        )
-        let session = Session(participantEvents: [], managerData: managerData, accountInfo: .init(name: nil, email: nil, phoneNumber: nil), role: .manager)
-        let cache = SessionCache(session: session)
-        
-        await cache.updateActivity(activity)
-        let updated = await cache.getSession()
-        
-        #expect(updated?.managerData?.activity == activity)
-    }
-    
-    @Test
-    func `Manager activity is marked as seen`() async {
-        let eventId = UUID()
-        let activityItem = ActivityItems(
-            id: UUID(),
-            date: .now,
-            eventTitle: "Event",
-            eventId: eventId,
-            newFeedbackCount: 1,
-            seenByManager: false
-        )
-        let unseenActivity = Activity(items: [activityItem], unseenTotal: 1)
-        let session = Session(
+
+    static func managerSession(events: [ManagerEvent] = [managerEvent()], unseenTotal: Int = 0) -> Bootstrap {
+        .init(
             participantEvents: [],
             managerData: .init(
-                managerEvents: [],
-                activity: unseenActivity,
+                managerEvents: .init(uniqueElements: events),
+                activity: activityDto(unseenTotal: unseenTotal),
                 recentlyUsedQuestions: [],
-                feedbackSessionHash: UUID()
+                feedbackSessionHash: sessionHash
             ),
-            accountInfo: .init(name: nil, email: nil, phoneNumber: nil),
+            accountInfo: .init(name: "Account", email: "account@example.com", phoneNumber: "12345678"),
             role: .manager
         )
-        let cache = SessionCache(session: session)
-        
-        await cache.markActivityAsSeen()
-        let updated = await cache.getSession()
-        
-        #expect(updated?.managerData?.activity.unseenTotal == 0)
-        #expect(updated?.managerData?.activity.items.allSatisfy { $0.seenByManager } == true)
     }
-    
+
+    static func participantSession() -> Bootstrap {
+        .init(
+            participantEvents: [],
+            managerData: nil,
+            accountInfo: .init(name: "Participant", email: "participant@example.com", phoneNumber: nil),
+            role: .participant
+        )
+    }
+
+    static func managerDataDto() -> Components.Schemas.ManagerDataDto {
+        .init(
+            feedbackFlows: [feedbackFlowDto(title: "Weekly retro")],
+            activity: .init(
+                items: [
+                    .init(
+                        id: activityItemId.uuidString,
+                        date: referenceDate,
+                        eventTitle: "Weekly retro",
+                        eventId: eventId.uuidString,
+                        newFeedbackCount: 2,
+                        seenByManager: false
+                    )
+                ],
+                unseenTotal: 2
+            ),
+            sessionHash: sessionHash.uuidString
+        )
+    }
+
+    static func bootstrapDto(role: String?, managerData: Components.Schemas.ManagerDataDto? = nil) -> Components.Schemas.BootstrapDto {
+        .init(
+            role: role,
+            accountInfo: .init(name: "Account", email: "account@example.com", phoneNumber: "12345678"),
+            managerData: managerData
+        )
+    }
+
+    static func sessionDto() -> Components.Schemas.SessionDto {
+        .init(
+            id: UUID().uuidString,
+            averageRating: 3.5,
+            ratingDelta: 0.4,
+            summary: "Summary",
+            questionSummary: .init(positives: ["Good"], improvements: ["Faster"]),
+            questionsSnapshot: [questionDto()]
+        )
+    }
+
+    static func eventInput(title: String) -> EventInput {
+        .init(
+            title: title,
+            agenda: "Talk through wins and blockers",
+            date: referenceDate,
+            durationInMinutes: 45,
+            location: "Room Blue",
+            questions: [
+                .init(id: questionId, questionText: "How did it go?", feedbackType: .emoji)
+            ]
+        )
+    }
+}
+
+struct APIClientMappingTests {
     @Test
-    func `Session cache is reset correctly`() async {
-        let session = Session.mock()
-        let cache = SessionCache(session: session)
-        
-        await cache.reset()
-        let result = await cache.getSession()
-        
-        #expect(result == nil)
+    func `Event input question maps to generated question input`() {
+        let question = EventInput.QuestionInput(
+            id: Self.questionId,
+            questionText: "How did it go?",
+            feedbackType: .emoji
+        )
+
+        let feedbackTypePayload = Components.Schemas.QuestionInput.FeedbackTypePayload(.emoji)
+        let dto = Components.Schemas.QuestionInput(question)
+
+        #expect(feedbackTypePayload == .emoji)
+        #expect(dto.questionText == question.questionText)
+        #expect(dto.feedbackType == .emoji)
+    }
+
+    @Test
+    func `Event input maps to generated DTO`() {
+        let event = EventInput(
+            title: "Weekly retro",
+            agenda: "Talk through wins and blockers",
+            date: Self.referenceDate,
+            durationInMinutes: 45,
+            location: "Room Blue",
+            questions: [
+                .init(id: Self.questionId, questionText: "How did it go?", feedbackType: .emoji),
+                .init(id: Self.secondQuestionId, questionText: "What should improve?", feedbackType: .comment)
+            ]
+        )
+
+        let dto = Components.Schemas.EventInput(event)
+
+        #expect(dto.title == event.title)
+        #expect(dto.agenda == event.agenda)
+        #expect(dto.date == event.date)
+        #expect(dto.durationInMinutes == 45)
+        #expect(dto.location == event.location)
+        #expect(dto.invitedEmails.isEmpty)
+        #expect(dto.questions.count == 2)
+        #expect(dto.questions[0].feedbackType == .emoji)
+        #expect(dto.questions[1].feedbackType == .comment)
+    }
+
+    @Test
+    func `Feedback enum payloads map from domain enums`() {
+        #expect(Components.Schemas.FeedbackInput.ThumbsUpThumpsDownPayload(input: .down) == .down)
+        #expect(Components.Schemas.FeedbackInput.EmojiPayload(input: .veryHappy) == .veryHappy)
+        #expect(Components.Schemas.FeedbackInput.OpinionPayload(input: .stronglyAgree) == .stronglyAgree)
+    }
+
+    @Test
+    func `Feedback inputs map to generated DTOs for every type`() {
+        let cases: [(FeedbackInput, Components.Schemas.FeedbackInput)] = [
+            (
+                .init(type: .emoji(emoji: .happy, comment: "Nice"), questionId: Self.questionId),
+                .init(comment: "Nice", emoji: .happy, questionId: Self.questionId.uuidString, feedbackType: .emoji)
+            ),
+            (
+                .init(type: .comment(comment: "Hello"), questionId: Self.questionId),
+                .init(comment: "Hello", questionId: Self.questionId.uuidString, feedbackType: .comment)
+            ),
+            (
+                .init(type: .thumpsUpThumpsDown(thumbsUpThumpsDown: .up, comment: "Works"), questionId: Self.questionId),
+                .init(comment: "Works", thumbsUpThumpsDown: .up, questionId: Self.questionId.uuidString, feedbackType: .thumpsUpThumpsDown)
+            ),
+            (
+                .init(type: .opinion(opinion: .neutral, comment: "Mixed"), questionId: Self.questionId),
+                .init(comment: "Mixed", opinion: .neutral, questionId: Self.questionId.uuidString, feedbackType: .opinion)
+            ),
+            (
+                .init(type: .zeroToTen(zeroToTen: 8, comment: "Solid"), questionId: Self.questionId),
+                .init(comment: "Solid", zeroToTen: 8, questionId: Self.questionId.uuidString, feedbackType: .zeroToTen)
+            )
+        ]
+
+        for (input, expected) in cases {
+            #expect(Components.Schemas.FeedbackInput(input) == expected)
+        }
+    }
+
+    @Test
+    func `Owner and account DTOs map to domain models`() {
+        let owner = OwnerInfo(Self.ownerDto())
+        let ownerInfo = OwnerInfo(Self.ownerInfoDto())
+        let accountInfo = AccountInfo(Self.accountInfoDto())
+
+        #expect(owner.name == "Owner")
+        #expect(owner.email == "owner@example.com")
+        #expect(owner.phoneNumber == nil)
+        #expect(ownerInfo.phoneNumber == "12345678")
+        #expect(accountInfo.name == "Account")
+        #expect(accountInfo.email == "account@example.com")
+        #expect(accountInfo.phoneNumber == "87654321")
+    }
+
+    @Test
+    func `Participant DTOs map to domain models`() {
+        let question = ParticipantQuestion(Self.participantQuestionDto())
+        let event = ParticipantEvent(Self.participantEventDto())
+
+        #expect(question.id == Self.questionId)
+        #expect(question.questionText == "How did it go?")
+        #expect(question.feedbackType == .emoji)
+        #expect(event.id == Self.eventId)
+        #expect(event.pinCode == .init(value: "456789"))
+        #expect(event.questions == [question])
+        #expect(event.ownerInfo == .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678"))
+        #expect(event.feedbackSubmitted == false)
+        #expect(event.recentlyJoined == true)
+    }
+
+    @Test
+    func `Activity DTOs map to domain models`() {
+        let item = ActivityItems(Self.activityItemDto())
+        let activity = Activity(Self.activityDto())
+
+        #expect(item.id == Self.activityItemId)
+        #expect(item.eventId == Self.eventId)
+        #expect(item.newFeedbackCount == 3)
+        #expect(activity.items == [item])
+        #expect(activity.unseenTotal == 4)
+    }
+
+    @Test
+    func `Feedback flow DTOs map to manager models`() {
+        let question = ManagerQuestion(Self.questionDto())
+        let event = ManagerEvent(Self.feedbackFlowDto())
+        let wrapper = EventWrapper(Self.feedbackFlowDto())
+
+        #expect(question.id == Self.questionId)
+        #expect(question.questionText == "How did it go?")
+        #expect(question.feedbackType == .comment)
+        #expect(question.feedback.isEmpty)
+        #expect(question.feedbackSummary == nil)
+        #expect(event.id == Self.eventId)
+        #expect(event.title == "Weekly retro")
+        #expect(event.agenda == "Talk through wins and blockers")
+        #expect(event.date == Self.referenceDate)
+        #expect(event.ownerInfo == .init(name: "Owner", email: "owner@example.com", phoneNumber: nil))
+        #expect(event.questions == [question])
+        #expect(wrapper.event == event)
+        #expect(wrapper.recentlyUsedQuestions.isEmpty)
+    }
+
+    @Test
+    func `Feedback session DTO maps to feedback session`() {
+        let pinCode = PinCode(value: "456789")
+        let session = FeedbackSession(Self.feedbackSessionDto(), pinCode: pinCode)
+
+        #expect(session.title == "Weekly retro")
+        #expect(session.agenda == "Talk through wins and blockers")
+        #expect(session.questions.count == 1)
+        #expect(session.ownerInfo == .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678"))
+        #expect(session.pinCode == pinCode)
+        #expect(session.date == Self.referenceDate)
+    }
+
+    @Test
+    func `Domain codes and API error map from generated error DTOs`() {
+        let domainCodeCases: [(Components.Schemas.ApiError.DomainCodePayload, DomainCode)] = [
+            (.feedbackAlreadySubmitted, .feedbackAlreadySubmitted),
+            (.eventAlreadyJoined, .eventAlreadyJoined),
+            (.cannotJoinOwnEvent, .cannotJoinOwnEvent),
+            (.cannotGiveFeedbackToSelf, .cannotGiveFeedbackToSelf),
+            (.pincodeNotFound, .pincodeNotFound)
+        ]
+
+        for (dto, expected) in domainCodeCases {
+            let actual = DomainCode(domainCodeDto: dto)
+            switch (actual, expected) {
+            case (.feedbackAlreadySubmitted, .feedbackAlreadySubmitted),
+                (.eventAlreadyJoined, .eventAlreadyJoined),
+                (.cannotJoinOwnEvent, .cannotJoinOwnEvent),
+                (.cannotGiveFeedbackToSelf, .cannotGiveFeedbackToSelf),
+                (.pincodeNotFound, .pincodeNotFound):
+                #expect(true)
+            default:
+                Issue.record("Unexpected domain code mapping for \(dto)")
+            }
+        }
+
+        let error = ApiError(
+            apiErrorDto: .init(
+                timestamp: "2026-03-22T10:00:00Z",
+                message: "No such event",
+                domainCode: .pincodeNotFound,
+                exceptionType: "IllegalStateException",
+                path: "/event/join"
+            )
+        )
+
+        #expect(error.timestamp == "2026-03-22T10:00:00Z")
+        #expect(error.message == "No such event")
+        #expect(error.exceptionType == "IllegalStateException")
+        #expect(error.path == "/event/join")
+        switch error.domainCode {
+        case .some(.pincodeNotFound):
+            #expect(true)
+        default:
+            Issue.record("Expected pincodeNotFound domain code")
+        }
+    }
+
+    @Test
+    func `Bootstrap, manager data and session DTOs map to sessions`() {
+        let managerData = ManagerData(Self.managerDataDto())
+        let managerBootstrap = Bootstrap(Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto()))
+        let participantBootstrap = Bootstrap(Self.bootstrapDto(role: "Participant"))
+        let anonymousBootstrap = Bootstrap(Self.bootstrapDto(role: nil))
+        let sessionDto = Bootstrap(Self.sessionDto())
+
+        #expect(managerData.managerEvents.count == 1)
+        #expect(managerData.activity == Activity(Self.activityDto()))
+        #expect(managerData.feedbackSessionHash == Self.sessionHash)
+        #expect(managerBootstrap.role == .manager)
+        #expect(managerBootstrap.managerData == managerData)
+        #expect(managerBootstrap.accountInfo == AccountInfo(Self.accountInfoDto()))
+        #expect(participantBootstrap.role == .participant)
+        #expect(participantBootstrap.managerData == nil)
+        #expect(anonymousBootstrap.role == nil)
+        #expect(sessionDto.participantEvents.isEmpty)
+        #expect(sessionDto.managerData == nil)
+        #expect(sessionDto.accountInfo == .init(name: nil, email: nil, phoneNumber: nil))
+        #expect(sessionDto.role == nil)
+    }
+}
+
+private extension APIClientMappingTests {
+    static let referenceDate = Date(timeIntervalSince1970: 1_710_000_000)
+    static let eventId = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+    static let questionId = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+    static let secondQuestionId = UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
+    static let activityItemId = UUID(uuidString: "00000000-0000-0000-0000-000000000004")!
+    static let sessionHash = UUID(uuidString: "00000000-0000-0000-0000-000000000005")!
+
+    static func ownerDto() -> Components.Schemas.OwnerDto {
+        .init(
+            id: UUID().uuidString,
+            name: "Owner",
+            email: "owner@example.com"
+        )
+    }
+
+    static func ownerInfoDto() -> Components.Schemas.OwnerInfoDto {
+        .init(
+            name: "Owner",
+            email: "owner@example.com",
+            phoneNumber: "12345678"
+        )
+    }
+
+    static func accountInfoDto() -> Components.Schemas.AccountInfoDto {
+        .init(
+            name: "Account",
+            email: "account@example.com",
+            phoneNumber: "87654321"
+        )
+    }
+
+    static func questionDto() -> Components.Schemas.QuestionDto {
+        .init(
+            id: questionId.uuidString,
+            text: "How did it go?"
+        )
+    }
+
+    static func participantQuestionDto() -> Components.Schemas.ParticipantQuestionDto {
+        .init(
+            id: questionId.uuidString,
+            questionText: "How did it go?",
+            feedbackType: .emoji
+        )
+    }
+
+    static func participantEventDto() -> Components.Schemas.ParticipantEventDto {
+        .init(
+            id: eventId.uuidString,
+            title: "Weekly retro",
+            agenda: "Talk through wins and blockers",
+            date: referenceDate,
+            pinCode: "456789",
+            durationInMinutes: 45,
+            location: "Room Blue",
+            createdFromMailListener: false,
+            ownerInfo: ownerInfoDto(),
+            questions: [participantQuestionDto()],
+            feedbackSubmited: false,
+            recentlyJoined: true
+        )
+    }
+
+    static func activityItemDto() -> Components.Schemas.ActivityItem {
+        .init(
+            id: activityItemId.uuidString,
+            date: referenceDate,
+            eventTitle: "Weekly retro",
+            eventId: eventId.uuidString,
+            newFeedbackCount: 3,
+            seenByManager: false
+        )
+    }
+
+    static func activityDto() -> Components.Schemas.ActivityDto {
+        .init(
+            items: [activityItemDto()],
+            unseenTotal: 4
+        )
+    }
+
+    static func feedbackFlowDto() -> Components.Schemas.FeedbackFlowDto {
+        .init(
+            id: eventId.uuidString,
+            title: "Weekly retro",
+            owner: ownerDto(),
+            newFeedback: true,
+            analytics: .init(
+                averageRating: 4.2,
+                trendStatus: .stable,
+                lastSessionAt: referenceDate,
+                ratingTrend: []
+            ),
+            insights: .init(summary: "Talk through wins and blockers"),
+            sessions: [],
+            sessionSettings: .init(source: .manual),
+            currentQuestions: [questionDto()]
+        )
+    }
+
+    static func feedbackSessionDto() -> Components.Schemas.FeedbackSessionDto {
+        .init(
+            title: "Weekly retro",
+            agenda: "Talk through wins and blockers",
+            questions: [participantQuestionDto()],
+            ownerInfo: ownerInfoDto(),
+            date: referenceDate
+        )
+    }
+
+    static func managerDataDto() -> Components.Schemas.ManagerDataDto {
+        .init(
+            feedbackFlows: [feedbackFlowDto()],
+            activity: activityDto(),
+            sessionHash: sessionHash.uuidString
+        )
+    }
+
+    static func bootstrapDto(role: String?, managerData: Components.Schemas.ManagerDataDto? = nil) -> Components.Schemas.BootstrapDto {
+        .init(
+            role: role,
+            accountInfo: accountInfoDto(),
+            managerData: managerData
+        )
+    }
+
+    static func sessionDto() -> Components.Schemas.SessionDto {
+        .init(
+            id: UUID().uuidString,
+            averageRating: 3.5,
+            ratingDelta: 0.5,
+            summary: "Summary",
+            questionSummary: .init(positives: ["Good"], improvements: ["Faster"]),
+            questionsSnapshot: [questionDto()]
+        )
     }
 }

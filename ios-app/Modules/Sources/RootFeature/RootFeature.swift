@@ -60,10 +60,10 @@ public struct RootFeature: Sendable {
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case destination(Destination.Action)
-        case getSessionResponse(session: Session, deeplink: Deeplink? = nil)
+        case getSessionResponse(session: Bootstrap, deeplink: Deeplink? = nil)
         case presentError(ErrorType)
         case tryAgainButtonTap(ErrorType)
-        case createAccountResponse(Session, Role?)
+        case createAccountResponse(Bootstrap, Role?)
         case navigateToSelectUserType
         case logout(Logout.Action)
         case onNotificationTap(Deeplink)
@@ -229,7 +229,7 @@ public struct RootFeature: Sendable {
 }
 
 extension RootFeature.State {
-    static func fromDeeplink(deeplink: Deeplink, sharedSession: Shared<Session>) -> Self {
+    static func fromDeeplink(deeplink: Deeplink, sharedSession: Shared<Bootstrap>) -> Self {
         switch deeplink {
         case .joinEvent(let pinCodeInput):
             return RootFeature.State(
@@ -246,10 +246,11 @@ extension RootFeature.State {
             var newTabbarState = Tabbar.State(
                 session: sharedSession
             )
-            if let managerEvent = sharedSession.wrappedValue.managerData?.managerEvents[id: eventId] {
+            if let managerEvent = sharedSession.wrappedValue.managerData?.activities[id: eventId] {
                 newTabbarState.managerEvents.destination = .eventDetail(
                     EventDetailFeature.State(
-                        event: managerEvent,
+                        eventId: managerEvent.id,
+                        detail: .init(managerEvent),
                         session: sharedSession
                     )
                 )
@@ -301,7 +302,7 @@ private extension RootFeature {
         state.destination = .isLoading
         return .run { send in
             do {
-                let session = try await apiClient.getSession()
+                let session = try await apiClient.getBootstrap()
                 await send(.getSessionResponse(session: session, deeplink: deeplink))
             } catch {
                 await send(.presentError(ErrorType.getSessionError(error: error.localized)))

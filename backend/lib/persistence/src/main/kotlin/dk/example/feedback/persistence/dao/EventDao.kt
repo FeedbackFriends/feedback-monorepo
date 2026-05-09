@@ -1,33 +1,33 @@
 package dk.example.feedback.persistence.dao
 
-import dk.example.feedback.model.database.EventEntity
+import dk.example.feedback.model.database.SessionEntity
 import dk.example.feedback.persistence.dao.utility.BaseCompanion
 import dk.example.feedback.persistence.dao.utility.CommonColumns
-import dk.example.feedback.persistence.table.EventInviteTable
-import dk.example.feedback.persistence.table.EventTable
 import dk.example.feedback.persistence.table.QuestionTable
+import dk.example.feedback.persistence.table.SessionTable
 import java.util.*
 import org.jetbrains.exposed.dao.id.EntityID
 
-class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
+class SessionDao(id: EntityID<UUID>): CommonColumns<SessionEntity>(id, SessionTable) {
 
-    companion object : BaseCompanion<EventEntity, EventDao>(EventTable)
+    companion object : BaseCompanion<SessionEntity, SessionDao>(SessionTable)
 
-    var title by EventTable.title
-    var agenda by EventTable.agenda
-    var date by EventTable.startDate
-    var durationInMinutes by EventTable.durationInMinutes
-    var location by EventTable.location
-    var createdFromMailListener by EventTable.createdFromMailListener
-    var calendarProvider by EventTable.calendarProvider
-    var calendarEventId by EventTable.calendarEventId
-    var manager by AccountDao referencedOn EventTable.manager
-    val questions by QuestionDao optionalReferrersOn QuestionTable.event
-    val invites by EventInviteDao referrersOn EventInviteTable.event
+    var title by SessionTable.title
+    var agenda by SessionTable.agenda
+    var date by SessionTable.startDate
+    var durationInMinutes by SessionTable.durationInMinutes
+    var location by SessionTable.location
+    var createdFromMailListener by SessionTable.createdFromMailListener
+    var calendarProvider by SessionTable.calendarProvider
+    var calendarEventId by SessionTable.calendarEventId
+    var manager by AccountDao referencedOn SessionTable.manager
+    var activity by ActivityDao referencedOn SessionTable.activity
+    val questions by QuestionDao optionalReferrersOn QuestionTable.session
 
-    override fun toModel(): EventEntity {
-        return EventEntity(
+    override fun toModel(): SessionEntity {
+        return SessionEntity(
             id = id.value,
+            activity = activity.toModel(),
             title = title,
             agenda = agenda,
             date = date,
@@ -41,7 +41,8 @@ class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
             feedback = questions.flatMap { it.feedback }.map { it.toModel() },
             questions = questions.map { it.toModel() },
             manager = manager.toModel(),
-            invites = invites.map { it.toModel() },
         )
     }
 }
+
+typealias EventDao = SessionDao

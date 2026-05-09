@@ -1,5 +1,8 @@
 package dk.example.feedback.dto
 
+import io.swagger.v3.oas.annotations.media.Schema
+
+@Schema(description = "Question feedback summary where only one subtype is populated per feedback type.")
 data class QuestionFeedbackSummaryDto(
     val emojiQuestionFeedbackSummary: EmojiQuestionFeedbackSummary? = null,
     val thumpsQuestionFeedbackSummary: ThumpsQuestionFeedbackSummary? = null,
@@ -7,6 +10,7 @@ data class QuestionFeedbackSummaryDto(
     val zeroToTenQuestionFeedbackSummary: ZeroToTenQuestionFeedbackSummary? = null,
 )
 
+@Schema(description = "Distribution summary for zero-to-ten rating feedback.")
 data class ZeroToTenQuestionFeedbackSummary(
     val countValue0: Int,
     val countValue1: Int,
@@ -32,6 +36,7 @@ data class ZeroToTenQuestionFeedbackSummary(
     val percentageValue10: Double,
 )
 
+@Schema(description = "Distribution summary for agree/disagree opinion feedback.")
 data class OpinionQuestionFeedbackSummary(
     val countStronglyAgree: Int,
     val countAgree: Int,
@@ -43,6 +48,7 @@ data class OpinionQuestionFeedbackSummary(
     val percentageDisagree: Double,
 )
 
+@Schema(description = "Distribution summary for thumbs up/down feedback.")
 data class ThumpsQuestionFeedbackSummary(
     val countUp: Int,
     val countDown: Int,
@@ -50,6 +56,7 @@ data class ThumpsQuestionFeedbackSummary(
     val percentageDown: Double,
 )
 
+@Schema(description = "Distribution summary for emoji feedback.")
 data class EmojiQuestionFeedbackSummary(
     val countVerySad: Int,
     val countSad: Int,

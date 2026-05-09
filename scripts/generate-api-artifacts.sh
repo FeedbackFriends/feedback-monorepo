@@ -13,6 +13,6 @@ npm run generate:api-types
 
 echo "Generating Swift OpenAPI sources..."
 cd "$REPO_ROOT/ios-app/Modules"
-swift package plugin --allow-writing-to-package-directory generate-code-from-openapi --target OpenAPI
+swift package plugin --allow-writing-to-package-directory generate-code-from-openapi --target OpenAPIGeneratorInput
 
 echo "API artifacts are up to date."

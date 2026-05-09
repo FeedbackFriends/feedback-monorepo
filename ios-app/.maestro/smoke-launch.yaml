@@ -1,0 +1,10 @@
+# Initial iOS smoke flow.
+# Verifies the app launches successfully on simulator.
+
+appId: dk.nicolaidam.letsgrow
+---
+- launchApp
+- swipe:
+    direction: DOWN
+    duration: 100
+- takeScreenshot: smoke-launch

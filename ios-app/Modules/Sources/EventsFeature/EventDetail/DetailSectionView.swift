@@ -4,7 +4,7 @@ import SwiftUI
 
 struct DetailSectionView: View {
     
-    let event: ManagerEvent
+    let detail: Activity
     
     var body: some View {
         ScrollView {
@@ -34,7 +34,7 @@ private extension DetailSectionView {
                 .padding(.leading, 18)
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
-                    if let agenda = event.agenda {
+                    if let agenda = detail.agenda, !agenda.isEmpty {
                         Text("Agenda")
                             .font(.montserratSemiBold, 13)
                         Text(agenda)
@@ -43,9 +43,25 @@ private extension DetailSectionView {
                     }
                     Text("Date")
                         .font(.montserratSemiBold, 13)
-                    Text(event.formattedDate)
+                    Text(detail.formattedDate)
                         .font(.montserratRegular, 13)
-                    if let totalFeedback = event.overallFeedbackSummary {
+                    Text("Duration")
+                        .font(.montserratSemiBold, 13)
+                    Text(detail.durationText)
+                        .font(.montserratRegular, 13)
+                    if let location = detail.location, !location.isEmpty {
+                        Text("Location")
+                            .font(.montserratSemiBold, 13)
+                        Text(location)
+                            .font(.montserratRegular, 13)
+                    }
+                    if let calendarProviderName = detail.calendarProviderName {
+                        Text("Calendar")
+                            .font(.montserratSemiBold, 13)
+                        Text(calendarProviderName)
+                            .font(.montserratRegular, 13)
+                    }
+                    if let totalFeedback = detail.overallFeedbackSummary {
                         HStack {
                             Text("\(totalFeedback.responses) responses")
                                 .font(.montserratMedium, 12)
@@ -58,7 +74,7 @@ private extension DetailSectionView {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(15)
-                if let feedback = event.overallFeedbackSummary {
+                if let feedback = detail.overallFeedbackSummary {
                     FeedbackPercentageBarView(feedback: feedback.segmentationStats)
                 } else {
                     EmptyFeedbackSegmentationStatsView()
@@ -77,7 +93,7 @@ private extension DetailSectionView {
                 .sectionHeaderStyle()
                 .padding(.leading, 18)
             VStack(alignment: .trailing, spacing: 12) {
-                if let pinCode = event.pinCode?.value {
+                if let pinCode = detail.pinCode?.value {
                     Text("\(pinCode)")
                         .frame(maxWidth: .infinity)
                         .font(.montserratMedium, 30)
@@ -102,12 +118,12 @@ private extension DetailSectionView {
                 } else {
                     HStack(spacing: 6) {
                         Image.clockBadgeXmark
-                            .foregroundColor(.red)
+                            .foregroundColor(Color.themeVerySad)
                             .font(.system(size: 14, weight: .semibold))
                         
                         Text("Expired")
                             .font(.montserratRegular, 12)
-                            .foregroundColor(.red)
+                            .foregroundColor(Color.themeVerySad)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .frame(maxWidth: .infinity)
@@ -128,9 +144,9 @@ private extension DetailSectionView {
             Text("QUESTIONS")
                 .sectionHeaderStyle()
                 .padding(.leading, 18)
-            ForEach(Array(zip(event.questions.indices, event.questions)), id: \.0) { index, question in
+            ForEach(Array(zip(detail.questions.indices, detail.questions)), id: \.0) { index, question in
                 QuestionView(question: question, index: index)
-                    .disabled(event.overallFeedbackSummary == nil)
+                    .disabled(detail.overallFeedbackSummary == nil)
                 
             }
         }
@@ -216,7 +232,7 @@ struct QuestionView: View {
 #Preview("With feedback") {
     NavigationStack {
         DetailSectionView(
-            event: .mock()
+            detail: .mock()
         )
         .navigationTitle("Session with feedback")
     }
@@ -225,7 +241,7 @@ struct QuestionView: View {
 #Preview("Empty feedback") {
     NavigationStack {
         DetailSectionView(
-            event: .mockEmpty
+            detail: .mockEmpty
         )
         .navigationTitle("Session empty feedback")
     }

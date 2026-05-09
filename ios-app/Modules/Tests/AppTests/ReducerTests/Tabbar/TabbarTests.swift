@@ -41,7 +41,7 @@ struct TabbarTests {
     @Test
     func `Activity button opens activity list and navigates to event detail`() async {
         let event: ManagerEvent = .mock()
-        let sharedSession = Shared<Session>(
+        let sharedSession = Shared<Bootstrap>(
             value: .init(
                 participantEvents: .init(uniqueElements: []),
                 managerData: .init(
@@ -74,17 +74,17 @@ struct TabbarTests {
         } withDependencies: {
             $0.apiClient.markActivityAsSeen = {}
         }
-        await store.send(.toolbar(.activityButtonTap)) {
+        await store.send(.toolbar(.notificationHistoryButtonTap)) {
             $0.destination = .activity(session.activity.items.wrappedValue)
         }
         await store.send(.activityManagerEventButtonTap(session.activity.items.wrappedValue.first!)) {
-            $0.managerEvents.destination = .eventDetail(.init(event: event, session: sharedSession))
+            $0.managerEvents.destination = .eventDetail(.init(eventId: event.id, detail: .init(event), session: sharedSession))
         }
     }
     
     @Test
     func `Create event button as manager navigates to create screen and event detail`() async {
-        let sharedSession = Shared<Session>(
+        let sharedSession = Shared<Bootstrap>(
             value: .mock()
         )
         let createdEvent = ManagerEvent.mock()
@@ -109,8 +109,9 @@ struct TabbarTests {
             $0.destination = nil
             $0.managerEvents.destination = .eventDetail(
                 .init(
-                    event: createdEvent,
-                    destination: .invite(createdEvent),
+                    eventId: createdEvent.id,
+                    detail: .init(createdEvent),
+                    destination: .invite(.init(createdEvent)),
                     session: $0.$session
                 )
             )
@@ -119,7 +120,7 @@ struct TabbarTests {
     
     @Test
     func `Create event button as anonymous shows login required alert`() async {
-        let sharedSession = Shared<Session>(
+        let sharedSession = Shared<Bootstrap>(
             value: .mockAnonymous()
         )
         let session = sharedSession
@@ -148,7 +149,7 @@ struct TabbarTests {
     
     @Test
     func `Join event as anonymous starts feedback flow successfully`() async {
-        let session = Shared<Session>(
+        let session = Shared<Bootstrap>(
             value: .mockAnonymous()
         )
         let feedbackSession: FeedbackSession = .mock

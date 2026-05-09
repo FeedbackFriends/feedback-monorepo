@@ -32,7 +32,7 @@ public struct ProfileSettings: Sendable {
         case destination(PresentationAction<Destination.Action>)
         case updateProfileButtonTap
         case organizerModeToggleChanged(Bool)
-        case updateAccountRoleResponse(Role)
+        case updateRoleResponse(Role)
         case inAppNotificationsToggleChanged(Bool)
         case emailEventsToggleChanged(Bool)
         case presentError(Error)
@@ -44,7 +44,7 @@ public struct ProfileSettings: Sendable {
     }
 
     private enum CancelID {
-        case updateAccountRole
+        case updateRole
     }
 
     public init() {}
@@ -73,15 +73,15 @@ public struct ProfileSettings: Sendable {
                 state.isLoading = true
                 return .run { send in
                     do {
-                        try await apiClient.updateAccountRole(newRole)
-                        await send(.updateAccountRoleResponse(newRole))
+                        try await apiClient.updateRole(newRole)
+                        await send(.updateRoleResponse(newRole))
                     } catch {
                         await send(.presentError(error))
                     }
                 }
-                .cancellable(id: CancelID.updateAccountRole, cancelInFlight: true)
+                .cancellable(id: CancelID.updateRole, cancelInFlight: true)
 
-            case .updateAccountRoleResponse(let role):
+            case .updateRoleResponse(let role):
                 state.isLoading = false
                 state.persistedRole = role
                 return .send(.delegate(.refreshSession))
