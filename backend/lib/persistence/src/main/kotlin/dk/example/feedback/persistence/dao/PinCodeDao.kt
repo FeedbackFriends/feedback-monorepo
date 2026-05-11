@@ -11,14 +11,12 @@ class PinCodeDao(id: EntityID<String>) : Entity<String>(id) {
     companion object : EntityClass<String, PinCodeDao>(PinCodeTable)
 
     var pinCode by PinCodeTable.id
-    var session by SessionDao referencedOn PinCodeTable.session
-    var event by SessionDao referencedOn PinCodeTable.event
+    var event by EventDao referencedOn PinCodeTable.event
 
     fun toModel(): PinCodeEntity {
         return PinCodeEntity(
             pinCode = pinCode.value,
-            session = session.toModel()
+            event = event.toModel()
         )
     }
 }
-

@@ -9,7 +9,7 @@ import java.time.OffsetDateTime
 import java.util.UUID
 
 @Schema(
-    description = "Manager-facing activity with configuration, active questions, session history, and trend analytics.",
+    description = "Manager-facing activity with configuration, active questions, event history, and trend analytics.",
 )
 data class ActivityDto(
     @field:Schema(description = "Stable identifier for the activity.")
@@ -18,20 +18,20 @@ data class ActivityDto(
     val title: String,
     val agenda: String?,
     val owner: OwnerDto,
-    @field:Schema(description = "Run mode that controls how sessions are joined and processed.")
+    @field:Schema(description = "Run mode that controls how events are joined and processed.")
     val runMode: ActivityRunMode,
     val sendEmails: Boolean,
     val invitedEmails: List<String>,
-    val sessions: List<SessionDto>,
+    val events: List<EventDto>,
     val currentQuestions: List<QuestionDto>,
     val trend: ActivityTrendDto,
 )
 
 @Schema(
-    description = "Activity trend computed from comparable session ratings normalized to the 0-5 scale.",
+    description = "Activity trend computed from comparable event ratings normalized to the 0-5 scale.",
 )
 data class ActivityTrendDto(
-    @field:Schema(description = "Trend direction across comparable sessions.")
+    @field:Schema(description = "Trend direction across comparable events.")
     val direction: ActivityTrendDirectionDto,
     @field:Schema(description = "UI indicator derived from the trend direction.")
     val indicator: ActivityIndicatorDto,
@@ -40,8 +40,8 @@ data class ActivityTrendDto(
     val latestValue: Double?,
     val previousValue: Double?,
     val delta: Double?,
-    @field:Schema(description = "Number of sessions used for trend comparison.")
-    val comparedSessionCount: Int,
+    @field:Schema(description = "Number of events used for trend comparison.")
+    val comparedEventCount: Int,
 )
 
 enum class ActivityTrendDirectionDto {
@@ -62,12 +62,12 @@ enum class ActivityTrendMetricDto {
 }
 
 @Schema(
-    description = "Manager-facing session summary with schedule, join details, and question snapshot.",
+    description = "Manager-facing event summary with schedule, join details, and question snapshot.",
 )
-data class SessionDto(
-    @field:Schema(description = "Stable identifier for the session.")
+data class EventDto(
+    @field:Schema(description = "Stable identifier for the event.")
     val id: UUID,
-    @field:Schema(description = "Scheduled start timestamp for the session.")
+    @field:Schema(description = "Scheduled start timestamp for the event.")
     val date: OffsetDateTime,
     val durationInMinutes: Int,
     val location: String?,
@@ -82,7 +82,7 @@ data class SessionDto(
     val questionsSnapshot: List<QuestionDto>,
 )
 
-@Schema(description = "Owner identity attached to activities and sessions.")
+@Schema(description = "Owner identity attached to activities and events.")
 data class OwnerDto(
     @field:Schema(description = "Account identifier for the owner.")
     val id: String,
@@ -90,7 +90,7 @@ data class OwnerDto(
     val email: String?,
 )
 
-@Schema(description = "Question reference used in activity and session snapshots.")
+@Schema(description = "Question reference used in activity and event snapshots.")
 data class QuestionDto(
     @field:Schema(description = "Stable identifier for the question.")
     val id: UUID,
@@ -99,17 +99,14 @@ data class QuestionDto(
 )
 
 @Schema(
-    description = "Detailed session view with participant list and question-level feedback breakdown.",
+    description = "Detailed event view with participant list and question-level feedback breakdown.",
 )
-data class SessionDetailDto(
-    @field:Schema(description = "Stable identifier for the session.")
+data class EventDetailDto(
+    @field:Schema(description = "Stable identifier for the event.")
     val id: UUID,
-    @field:Schema(description = "Activity title tied to this session.")
-    val title: String,
-    val agenda: String?,
-    @field:Schema(description = "Scheduled start timestamp for the session.")
+    @field:Schema(description = "Scheduled start timestamp for the event.")
     val date: OffsetDateTime,
-    @field:Schema(description = "Participant join code for the session.")
+    @field:Schema(description = "Participant join code for the event.")
     val pinCode: String?,
     val durationInMinutes: Int,
     val location: String?,
@@ -117,14 +114,14 @@ data class SessionDetailDto(
     val owner: OwnerDto,
     val overallFeedbackSummary: OverallFeedbackSummaryDto?,
     val participants: List<ParticipantSummaryDto>,
-    val questions: List<SessionQuestionDto>
+    val questions: List<EventQuestionDto>
 )
 
-@Schema(description = "Feedback results for a single question in a specific session.")
-data class SessionQuestionDto(
+@Schema(description = "Feedback results for a single question in a specific event.")
+data class EventQuestionDto(
     @field:Schema(description = "Stable identifier for the question instance.")
     val id: UUID,
-    @field:Schema(description = "Question text used in the session snapshot.")
+    @field:Schema(description = "Question text used in the event snapshot.")
     val text: String,
     @field:Schema(description = "Feedback format expected for this question.")
     val feedbackType: FeedbackType,

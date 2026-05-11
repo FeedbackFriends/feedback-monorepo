@@ -1,35 +1,31 @@
 package dk.example.feedback.persistence.dao
 
-import dk.example.feedback.model.database.SessionEntity
+import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.persistence.dao.utility.BaseCompanion
 import dk.example.feedback.persistence.dao.utility.CommonColumns
 import dk.example.feedback.persistence.table.QuestionTable
-import dk.example.feedback.persistence.table.SessionTable
+import dk.example.feedback.persistence.table.EventTable
 import java.util.*
 import org.jetbrains.exposed.dao.id.EntityID
 
-class SessionDao(id: EntityID<UUID>): CommonColumns<SessionEntity>(id, SessionTable) {
+class EventDao(id: EntityID<UUID>): CommonColumns<EventEntity>(id, EventTable) {
 
-    companion object : BaseCompanion<SessionEntity, SessionDao>(SessionTable)
+    companion object : BaseCompanion<EventEntity, EventDao>(EventTable)
 
-    var title by SessionTable.title
-    var agenda by SessionTable.agenda
-    var date by SessionTable.startDate
-    var durationInMinutes by SessionTable.durationInMinutes
-    var location by SessionTable.location
-    var createdFromMailListener by SessionTable.createdFromMailListener
-    var calendarProvider by SessionTable.calendarProvider
-    var calendarEventId by SessionTable.calendarEventId
-    var manager by AccountDao referencedOn SessionTable.manager
-    var activity by ActivityDao referencedOn SessionTable.activity
-    val questions by QuestionDao optionalReferrersOn QuestionTable.session
+    var date by EventTable.startDate
+    var durationInMinutes by EventTable.durationInMinutes
+    var location by EventTable.location
+    var createdFromMailListener by EventTable.createdFromMailListener
+    var calendarProvider by EventTable.calendarProvider
+    var calendarEventId by EventTable.calendarEventId
+    var manager by AccountDao referencedOn EventTable.manager
+    var activity by ActivityDao referencedOn EventTable.activity
+    val questions by QuestionDao optionalReferrersOn QuestionTable.event
 
-    override fun toModel(): SessionEntity {
-        return SessionEntity(
+    override fun toModel(): EventEntity {
+        return EventEntity(
             id = id.value,
             activity = activity.toModel(),
-            title = title,
-            agenda = agenda,
             date = date,
             durationInMinutes = durationInMinutes,
             location = location,
@@ -44,5 +40,3 @@ class SessionDao(id: EntityID<UUID>): CommonColumns<SessionEntity>(id, SessionTa
         )
     }
 }
-
-typealias EventDao = SessionDao

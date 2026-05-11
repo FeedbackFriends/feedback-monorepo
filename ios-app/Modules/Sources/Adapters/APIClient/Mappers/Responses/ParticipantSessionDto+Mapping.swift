@@ -2,12 +2,10 @@ import Foundation
 import Domain
 import OpenAPI
 
-public extension ParticipantSessionDto {
-    init(_ dto: Components.Schemas.ParticipantSessionDto) {
+public extension ParticipantEventDto {
+    init(_ dto: Components.Schemas.ParticipantEventDto) {
         self.init(
-            id: UUID(uuidString: dto.id) ?? UUID(),
-            title: dto.title,
-            agenda: dto.agenda,
+            id: UUID(uuidString: dto.id)!,
             date: dto.date,
             pinCode: dto.pinCode.map { PinCode(value: $0) },
             location: dto.location,

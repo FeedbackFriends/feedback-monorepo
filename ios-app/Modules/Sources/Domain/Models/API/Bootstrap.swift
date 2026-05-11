@@ -132,8 +132,6 @@ public struct AccountInfo: Equatable, Sendable {
 
 public struct ParticipantEvent: Equatable, Identifiable, Sendable {
     public let id: UUID
-    public let title: String
-    public let agenda: String?
     public let date: Date
     public let pinCode: PinCode?
     public let location: String?
@@ -142,11 +140,11 @@ public struct ParticipantEvent: Equatable, Identifiable, Sendable {
     public let feedbackSubmitted: Bool
     public let ownerInfo: OwnerInfo
     public let recentlyJoined: Bool
+    public var title: String { "Event" }
+    public var agenda: String? { nil }
     
     public init(
         id: UUID,
-        title: String,
-        agenda: String?,
         date: Date,
         pinCode: PinCode?,
         location: String?,
@@ -157,8 +155,6 @@ public struct ParticipantEvent: Equatable, Identifiable, Sendable {
         recentlyJoined: Bool
     ) {
         self.id = id
-        self.title = title
-        self.agenda = agenda
         self.date = date
         self.pinCode = pinCode
         self.location = location
@@ -342,6 +338,101 @@ public struct EventWrapper: Equatable, Sendable {
     }
 }
 
+public struct Event: Equatable, Identifiable, Sendable {
+    public let id: UUID
+    public var date: Date
+    public let pinCode: PinCode?
+    public let createdFromMailListener: Bool
+    public var durationInMinutes: Int
+    public var location: String?
+    public let calendarEventId: String?
+    public let averageRating: Double?
+    public var overallFeedbackSummary: OverallFeedbackSummary?
+    public var questionsSnapshot: [ManagerQuestion]
+    public let calendarProvider: CalendarProvider?
+
+    public init(
+        id: UUID,
+        date: Date,
+        pinCode: PinCode?,
+        createdFromMailListener: Bool = false,
+        durationInMinutes: Int,
+        location: String? = nil,
+        calendarEventId: String? = nil,
+        averageRating: Double? = nil,
+        overallFeedbackSummary: OverallFeedbackSummary?,
+        questionsSnapshot: [ManagerQuestion],
+        calendarProvider: CalendarProvider?
+    ) {
+        self.id = id
+        self.date = date
+        self.pinCode = pinCode
+        self.createdFromMailListener = createdFromMailListener
+        self.durationInMinutes = durationInMinutes
+        self.location = location
+        self.calendarEventId = calendarEventId
+        self.averageRating = averageRating
+        self.overallFeedbackSummary = overallFeedbackSummary
+        self.questionsSnapshot = questionsSnapshot
+        self.calendarProvider = calendarProvider
+    }
+
+    public var end: Date {
+        date + TimeInterval(durationInMinutes * 60)
+    }
+
+    public var formattedDate: String {
+        if Calendar.current.dateComponents([.minute], from: date, to: end).minute == 1440 {
+            return "\(date.dateAndYear()) - All day"
+        } else if Calendar.current.isDate(date, inSameDayAs: end) {
+            return "\(date.dateAndYear()) at \(date.timeFormatted())-\(end.timeFormatted())"
+        } else {
+            return "\(date.dateAndYear()) \(end.timeFormatted()) to \(end.formatted(.dateTime.day())) \(end.formatted(.dateTime.month())) \(end.timeFormatted())"
+        }
+    }
+
+    public var durationText: String {
+        if durationInMinutes == 60 * 24 {
+            return "All day"
+        }
+
+        let hours = durationInMinutes / 60
+        let minutes = durationInMinutes % 60
+
+        switch (hours, minutes) {
+        case (0, let minutes):
+            return "\(minutes) min"
+        case (let hours, 0):
+            return hours == 1 ? "1 hour" : "\(hours) hours"
+        default:
+            let hourText = hours == 1 ? "1 hour" : "\(hours) hours"
+            return "\(hourText) \(minutes) min"
+        }
+    }
+
+    public var calendarProviderName: String? {
+        guard let calendarProvider else { return nil }
+
+        switch calendarProvider {
+        case .APPLE:
+            return "Apple Calendar"
+        case .GOOGLE:
+            return "Google Calendar"
+        case .MICROSOFT:
+            return "Microsoft Outlook"
+        case .ZOOM:
+            return "Zoom"
+        }
+    }
+
+    public var questions: [ManagerQuestion] {
+        get { questionsSnapshot }
+        set { questionsSnapshot = newValue }
+    }
+}
+
+public typealias ManagerEvent = Event
+
 public struct Activity: Equatable, Identifiable, Sendable {
     public let id: UUID
     public var title: String
@@ -356,7 +447,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
     public var questions: [ManagerQuestion]
     public var invitedEmails: [String]
     public var participants: [ParticipantSummary]
-    public var relatedSessions: [Activity]
+    public var relatedSessions: [Event]
     public let isDraft: Bool
     public let calendarProvider: CalendarProvider?
     public func inviteUrl(webBaseUrl: URL) -> String {
@@ -416,6 +507,27 @@ public struct Activity: Equatable, Identifiable, Sendable {
             return "Zoom"
         }
     }
+
+    public func relatedSessionActivity(_ event: Event) -> Activity {
+        Activity(
+            id: event.id,
+            title: title,
+            agenda: agenda,
+            date: event.date,
+            pinCode: event.pinCode,
+            durationInMinutes: event.durationInMinutes,
+            location: event.location,
+            ownerInfo: ownerInfo,
+            trend: .insufficientData,
+            overallFeedbackSummary: event.overallFeedbackSummary,
+            questions: event.questionsSnapshot,
+            relatedSessions: [],
+            isDraft: false,
+            invitedEmails: invitedEmails,
+            participants: [],
+            calendarProvider: event.calendarProvider
+        )
+    }
     
     public init(
         id: UUID,
@@ -429,7 +541,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
         trend: ActivityTrend = .insufficientData,
         overallFeedbackSummary: OverallFeedbackSummary?,
         questions: [ManagerQuestion],
-        relatedSessions: [Activity] = [],
+        relatedSessions: [Event] = [],
         isDraft: Bool,
         invitedEmails: [String],
         participants: [ParticipantSummary],
@@ -452,6 +564,19 @@ public struct Activity: Equatable, Identifiable, Sendable {
         self.participants = participants
         self.calendarProvider = calendarProvider
     }
+
+    public var event: Event {
+        Event(
+            id: id,
+            date: date,
+            pinCode: pinCode,
+            durationInMinutes: durationInMinutes,
+            location: location,
+            overallFeedbackSummary: overallFeedbackSummary,
+            questionsSnapshot: questions,
+            calendarProvider: calendarProvider
+        )
+    }
 }
 
 public struct ManagerData: Equatable, Sendable {
@@ -469,6 +594,32 @@ public struct ManagerData: Equatable, Sendable {
         self.notificationHistory = notificationHistory
         self.recentlyUsedQuestions = recentlyUsedQuestions
         self.feedbackSessionHash = feedbackSessionHash
+    }
+
+    public var managerEvents: IdentifiedArrayOf<Activity> {
+        get { activities }
+        set { activities = newValue }
+    }
+
+    public var activity: NotificationHistory {
+        get { notificationHistory }
+        set { notificationHistory = newValue }
+    }
+}
+
+public extension ManagerData {
+    init(
+        managerEvents: IdentifiedArrayOf<Activity>,
+        activity: NotificationHistory,
+        recentlyUsedQuestions: Set<RecentlyUsedQuestions>,
+        feedbackSessionHash: UUID
+    ) {
+        self.init(
+            activities: managerEvents,
+            notificationHistory: activity,
+            recentlyUsedQuestions: recentlyUsedQuestions,
+            feedbackSessionHash: feedbackSessionHash
+        )
     }
 }
 

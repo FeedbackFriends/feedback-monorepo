@@ -6,8 +6,5 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class SubmitFeedbackResponseDto(
     @field:Schema(description = "Signals whether the client should show an app-rating prompt.")
     val shouldPresentRatingPrompt: Boolean,
-    val session: ParticipantSessionDto,
-) {
-    val event: ParticipantSessionDto
-        get() = session
-}
+    val event: ParticipantEventDto,
+)

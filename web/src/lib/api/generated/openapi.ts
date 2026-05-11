@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/session/{sessionId}": {
+    "/event/{eventId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -12,15 +12,15 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["updateSession"];
+        put: operations["updateEvent"];
         post?: never;
-        delete: operations["deleteSession"];
+        delete: operations["deleteEvent"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/session/mark-as-seen/{sessionId}": {
+    "/event/mark-as-seen/{eventId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -28,7 +28,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["markSessionAsSeen"];
+        put: operations["markEventAsSeen"];
         post?: never;
         delete?: never;
         options?: never;
@@ -116,38 +116,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/session": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["createSession"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/session/join/{pinCode}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["joinSession"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/feedback/submit": {
         parameters: {
             query?: never;
@@ -173,14 +141,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["startFeedbackSession"];
+        post: operations["startFeedbackEvent"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/admin/mock-id-token": {
+    "/event": {
         parameters: {
             query?: never;
             header?: never;
@@ -189,7 +157,135 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["mockIdToken"];
+        post: operations["createEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/event/join/{pinCode}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["joinEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/seed-participant-with-data": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["seedParticipantWithData"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/seed-participant-empty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["seedParticipantEmpty"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/seed-manager-with-data": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["seedManagerWithData"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/seed-manager-empty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["seedManagerEmpty"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/seed-empty-account": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["seedEmptyAccount"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["resetDatabase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["login"];
         delete?: never;
         options?: never;
         head?: never;
@@ -267,6 +363,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Get bootstrap update by hash
+         * @description Returns a full bootstrap payload when the provided hash is stale; returns 204 when unchanged.
+         */
         get: operations["getBoostrapUpdate"];
         put?: never;
         post?: never;
@@ -280,37 +380,60 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        SessionInput: {
-            /** Format: uuid */
+        /** @description Input payload for creating a new feedback event for an activity. */
+        EventInput: {
+            /**
+             * Format: uuid
+             * @description Identifier of the activity the event belongs to.
+             */
             activityId: string;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description Scheduled start timestamp for the event.
+             */
             date: string;
             /** Format: int32 */
             durationInMinutes: number;
             location?: string;
         };
-        /** @description Manager-facing activity payload and session history for a feedback activity. */
+        /** @description Manager-facing activity with configuration, active questions, event history, and trend analytics. */
         ActivityDto: {
-            /** Format: uuid */
+            /**
+             * Format: uuid
+             * @description Stable identifier for the activity.
+             */
             id: string;
+            /** @description Display title shown to managers and participants. */
             title: string;
             agenda?: string;
             owner: components["schemas"]["OwnerDto"];
-            /** @enum {string} */
+            /**
+             * @description Run mode that controls how events are joined and processed.
+             * @enum {string}
+             */
             runMode: "MANUAL" | "AUTOMATIC";
             sendEmails: boolean;
             invitedEmails: string[];
-            sessions: components["schemas"]["SessionDto"][];
+            events: components["schemas"]["EventDto"][];
             currentQuestions: components["schemas"]["QuestionDto"][];
             trend: components["schemas"]["ActivityTrendDto"];
         };
-        /** @description Activity-level trend based on comparable session scores. Uses the latest sessions with numeric average rating normalized to 0-5. */
+        /** @description Activity trend computed from comparable event ratings normalized to the 0-5 scale. */
         ActivityTrendDto: {
-            /** @enum {string} */
+            /**
+             * @description Trend direction across comparable events.
+             * @enum {string}
+             */
             direction: "improving" | "stable" | "declining" | "insufficient_data";
-            /** @enum {string} */
+            /**
+             * @description UI indicator derived from the trend direction.
+             * @enum {string}
+             */
             indicator: "positive" | "neutral" | "negative";
-            /** @enum {string} */
+            /**
+             * @description Metric used to compute the trend.
+             * @enum {string}
+             */
             metric: "average_rating";
             /** Format: double */
             latestValue?: number;
@@ -318,9 +441,42 @@ export interface components {
             previousValue?: number;
             /** Format: double */
             delta?: number;
-            /** Format: int32 */
-            comparedSessionCount: number;
+            /**
+             * Format: int32
+             * @description Number of events used for trend comparison.
+             */
+            comparedEventCount: number;
         };
+        /** @description Manager-facing event summary with schedule, join details, and question snapshot. */
+        EventDto: {
+            /**
+             * Format: uuid
+             * @description Stable identifier for the event.
+             */
+            id: string;
+            /**
+             * Format: date-time
+             * @description Scheduled start timestamp for the event.
+             */
+            date: string;
+            /** Format: int32 */
+            durationInMinutes: number;
+            location?: string;
+            /** @description Participant join code for submitting feedback. */
+            pinCode?: string;
+            createdFromMailListener: boolean;
+            /** @enum {string} */
+            calendarProvider?: "GOOGLE" | "APPLE" | "MICROSOFT" | "ZOOM";
+            calendarEventId?: string;
+            /**
+             * Format: double
+             * @description Average rating normalized to 0-5 when comparable feedback exists.
+             */
+            averageRating?: number;
+            overallFeedbackSummary?: components["schemas"]["OverallFeedbackSummaryDto"];
+            questionsSnapshot: components["schemas"]["QuestionDto"][];
+        };
+        /** @description Absolute counts of feedback outcomes in a event summary. */
         OverallFeedbackCountStatsDto: {
             /** Format: int32 */
             verySadCount: number;
@@ -333,6 +489,7 @@ export interface components {
             /** Format: int32 */
             commentsCount: number;
         };
+        /** @description Percentage distribution of emoji feedback outcomes in a event summary. */
         OverallFeedbackSegmentationStatsDto: {
             /** Format: double */
             verySadPercentage: number;
@@ -343,6 +500,7 @@ export interface components {
             /** Format: double */
             veryHappyPercentage: number;
         };
+        /** @description Aggregated feedback summary for a event across all questions. */
         OverallFeedbackSummaryDto: {
             segmentationStats: components["schemas"]["OverallFeedbackSegmentationStatsDto"];
             countStats: components["schemas"]["OverallFeedbackCountStatsDto"];
@@ -351,36 +509,22 @@ export interface components {
             /** Format: int32 */
             responses: number;
         };
-        /** @description Basic owner metadata for an activity or session. */
+        /** @description Owner identity attached to activities and events. */
         OwnerDto: {
+            /** @description Account identifier for the owner. */
             id: string;
             name?: string;
             email?: string;
         };
-        /** @description Activity question reference. */
+        /** @description Question reference used in activity and event snapshots. */
         QuestionDto: {
-            /** Format: uuid */
+            /**
+             * Format: uuid
+             * @description Stable identifier for the question.
+             */
             id: string;
+            /** @description Question text shown to participants. */
             text: string;
-        };
-        /** @description Session summary for an activity. Includes scheduling and calendar metadata plus the feedback snapshot attached to the session. */
-        SessionDto: {
-            /** Format: uuid */
-            id: string;
-            /** Format: date-time */
-            date: string;
-            /** Format: int32 */
-            durationInMinutes: number;
-            location?: string;
-            pinCode?: string;
-            createdFromMailListener: boolean;
-            /** @enum {string} */
-            calendarProvider?: "GOOGLE" | "APPLE" | "MICROSOFT" | "ZOOM";
-            calendarEventId?: string;
-            /** Format: double */
-            averageRating?: number;
-            overallFeedbackSummary?: components["schemas"]["OverallFeedbackSummaryDto"];
-            questionsSnapshot: components["schemas"]["QuestionDto"][];
         };
         SendNotificationInput: {
             fcmToken: string;
@@ -390,62 +534,53 @@ export interface components {
             /** Format: uuid */
             eventId: string;
         };
+        /** @description Manager request payload for creating or updating an activity. */
         ActivityInput: {
+            /** @description Activity title shown in manager and participant views. */
             title: string;
             agenda?: string;
+            /** @description Ordered list of activity questions. */
             questions: components["schemas"]["QuestionInput"][];
-            /** @enum {string} */
+            /**
+             * @description Run mode controlling event participation behavior.
+             * @enum {string}
+             */
             runMode: "MANUAL" | "AUTOMATIC";
             invitedEmails: string[];
             sendEmails: boolean;
         };
+        /** @description Input payload for a question in activity create/update requests. */
         QuestionInput: {
-            /** Format: uuid */
+            /**
+             * Format: uuid
+             * @description Canonical question identifier when updating an existing question.
+             */
             id?: string;
+            /** @description Question text shown to participants. */
             questionText: string;
-            /** @enum {string} */
+            /**
+             * @description Feedback format expected for this question.
+             * @enum {string}
+             */
             feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
         };
+        /** @description Input payload for updating account profile information. */
         ModifyAccountInput: {
             name?: string;
             email?: string;
             phoneNumber?: string;
         };
+        /** @description Input payload for changing the authenticated account role. */
         UpdateRoleInput: {
+            /** @description Target role for the account. */
             role: string;
         };
+        /** @description Input payload to link an FCM token to the authenticated account. */
         LinkFCMTokenToAccountInput: {
+            /** @description Firebase Cloud Messaging token for push notifications. */
             fcmToken: string;
         };
-        OwnerInfoDto: {
-            name?: string;
-            email?: string;
-            phoneNumber?: string;
-        };
-        ParticipantQuestionDto: {
-            /** Format: uuid */
-            id: string;
-            questionText: string;
-            /** @enum {string} */
-            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
-        };
-        ParticipantSessionDto: {
-            /** Format: uuid */
-            id: string;
-            title: string;
-            agenda?: string;
-            /** Format: date-time */
-            date: string;
-            pinCode?: string;
-            /** Format: int32 */
-            durationInMinutes: number;
-            location?: string;
-            createdFromMailListener: boolean;
-            ownerInfo: components["schemas"]["OwnerInfoDto"];
-            questions: components["schemas"]["ParticipantQuestionDto"][];
-            feedbackSubmited: boolean;
-            recentlyJoined: boolean;
-        };
+        /** @description Single feedback answer submitted for one question in a event. */
         FeedbackInput: {
             comment?: string;
             /** @enum {string} */
@@ -456,34 +591,88 @@ export interface components {
             opinion?: "StronglyDisagree" | "Disagree" | "Neutral" | "Agree" | "StronglyAgree";
             /** Format: int32 */
             zeroToTen?: number;
-            /** Format: uuid */
+            /**
+             * Format: uuid
+             * @description Question identifier this feedback answer targets.
+             */
             questionId: string;
-            /** @enum {string} */
+            /**
+             * @description Feedback type that determines which answer field is expected.
+             * @enum {string}
+             */
             feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
         };
+        /** @description Input payload for submitting participant feedback to a event. */
         SubmitFeedbackInput: {
+            /** @description Collection of feedback answers keyed by question id. */
             feedback: components["schemas"]["FeedbackInput"][];
+            /** @description Event pin code the feedback belongs to. */
             pinCode: string;
         };
+        /** @description Owner profile metadata shown to participants. */
+        OwnerInfoDto: {
+            name?: string;
+            email?: string;
+            phoneNumber?: string;
+        };
+        /** @description Participant-visible event payload including join and feedback status. */
+        ParticipantEventDto: {
+            /**
+             * Format: uuid
+             * @description Stable identifier for the event.
+             */
+            id: string;
+            /**
+             * Format: date-time
+             * @description Scheduled start timestamp for the event.
+             */
+            date: string;
+            /** @description Pin code used to join the event. */
+            pinCode?: string;
+            /** Format: int32 */
+            durationInMinutes: number;
+            location?: string;
+            createdFromMailListener: boolean;
+            ownerInfo: components["schemas"]["OwnerInfoDto"];
+            questions: components["schemas"]["ParticipantQuestionDto"][];
+            feedbackSubmited: boolean;
+            recentlyJoined: boolean;
+        };
+        /** @description Participant-facing question payload for feedback submission. */
+        ParticipantQuestionDto: {
+            /**
+             * Format: uuid
+             * @description Question identifier used when submitting feedback.
+             */
+            id: string;
+            /** @description Question text presented to the participant. */
+            questionText: string;
+            /**
+             * @description Feedback format expected for this question.
+             * @enum {string}
+             */
+            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
+        };
+        /** @description Response returned after participant feedback submission. */
         SubmitFeedbackResponseDto: {
+            /** @description Signals whether the client should show an app-rating prompt. */
             shouldPresentRatingPrompt: boolean;
-            session: components["schemas"]["ParticipantSessionDto"];
-            event: components["schemas"]["ParticipantSessionDto"];
+            event: components["schemas"]["ParticipantEventDto"];
         };
-        StartFeedbackSessionInput: {
+        /** @description Input payload for joining a feedback event by pin code. */
+        StartFeedbackEventInput: {
+            /** @description Event pin code entered by the participant. */
             pinCode: string;
         };
-        FeedbackSessionDto: {
-            title: string;
-            agenda?: string;
+        /** @description Participant-facing event payload returned after joining by pin code. */
+        FeedbackEventDto: {
             questions: components["schemas"]["ParticipantQuestionDto"][];
             ownerInfo: components["schemas"]["OwnerInfoDto"];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description Scheduled timestamp for the joined event.
+             */
             date: string;
-        };
-        MockIdTokenRequestDto: {
-            role?: string;
-            id: string;
         };
         MockTokenDto: {
             firebaseResponse: components["schemas"]["SignInFirebaseResponseDto"];
@@ -494,21 +683,30 @@ export interface components {
             refreshToken: string;
             expiresIn: string;
         };
+        AdminLoginRequestDto: {
+            id: string;
+        };
+        /** @description Input payload for account creation during first authentication. */
         CreateAccountInput: {
+            /** @description Requested role for the new account. */
             requestedRole?: string;
             fcmToken?: string;
         };
+        /** @description Authenticated account profile metadata. */
         AccountInfoDto: {
             name?: string;
             email?: string;
             phoneNumber?: string;
         };
+        /** @description Bootstrap response payload for authenticated clients. */
         BootstrapDto: {
+            /** @description Resolved role for the authenticated account. */
             role?: string;
             accountInfo: components["schemas"]["AccountInfoDto"];
-            participantSessions: components["schemas"]["ParticipantSessionDto"][];
+            participantEvents: components["schemas"]["ParticipantEventDto"][];
             managerData?: components["schemas"]["ManagerDataDto"];
         };
+        /** @description Distribution summary for emoji feedback. */
         EmojiQuestionFeedbackSummary: {
             /** Format: int32 */
             countVerySad: number;
@@ -527,45 +725,75 @@ export interface components {
             /** Format: double */
             percentageVeryHappy: number;
         };
+        /** @description Manager-only bootstrap section with activities and analytics. */
         ManagerDataDto: {
             activities: components["schemas"]["ActivityDto"][];
             notificationHistory: components["schemas"]["NotificationHistoryDto"];
-            /** Format: uuid */
+            /**
+             * Format: uuid
+             * @description Hash used by clients to detect manager data updates.
+             */
             bootstrapHash: string;
             questionAnalytics: components["schemas"]["ManagerQuestionAnalyticsDto"][];
         };
+        /** @description Per-question analytics aggregated across manager events. */
         ManagerQuestionAnalyticsDto: {
-            /** Format: uuid */
+            /**
+             * Format: uuid
+             * @description Canonical question identifier across event snapshots.
+             */
             questionId: string;
+            /** @description Latest question text used for the canonical question. */
             questionText: string;
-            /** @enum {string} */
+            /**
+             * @description Feedback format for this question.
+             * @enum {string}
+             */
             feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
             /** Format: int32 */
-            sessionCount: number;
+            eventCount: number;
             /** Format: int32 */
             responseCount: number;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description Timestamp when this question was most recently asked.
+             */
             latestAskedAt?: string;
             overallSummary?: components["schemas"]["QuestionFeedbackSummaryDto"];
             timeline: components["schemas"]["QuestionTrendPointDto"][];
         };
+        /** @description Manager notification history summary for newly received feedback. */
         NotificationHistoryDto: {
             items: components["schemas"]["NotificationHistoryItem"][];
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description Total unseen notification items for the manager.
+             */
             unseenTotal: number;
         };
+        /** @description Single notification history item linked to an activity event. */
         NotificationHistoryItem: {
-            /** Format: uuid */
+            /**
+             * Format: uuid
+             * @description Stable identifier for the notification history item.
+             */
             id: string;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description Timestamp when the notification was created.
+             */
             date: string;
             eventTitle: string;
-            /** Format: uuid */
+            /**
+             * Format: uuid
+             * @description Identifier of the related event or event.
+             */
             eventId: string;
             /** Format: int32 */
             newFeedbackCount: number;
             seenByManager: boolean;
         };
+        /** @description Distribution summary for agree/disagree opinion feedback. */
         OpinionQuestionFeedbackSummary: {
             /** Format: int32 */
             countStronglyAgree: number;
@@ -584,21 +812,30 @@ export interface components {
             /** Format: double */
             percentageDisagree: number;
         };
+        /** @description Question feedback summary where only one subtype is populated per feedback type. */
         QuestionFeedbackSummaryDto: {
             emojiQuestionFeedbackSummary?: components["schemas"]["EmojiQuestionFeedbackSummary"];
             thumpsQuestionFeedbackSummary?: components["schemas"]["ThumpsQuestionFeedbackSummary"];
             opinionQuestionFeedbackSummary?: components["schemas"]["OpinionQuestionFeedbackSummary"];
             zeroToTenQuestionFeedbackSummary?: components["schemas"]["ZeroToTenQuestionFeedbackSummary"];
         };
+        /** @description Single event trend point for question analytics. */
         QuestionTrendPointDto: {
-            /** Format: uuid */
-            sessionId: string;
-            /** Format: date-time */
-            sessionDate: string;
+            /**
+             * Format: uuid
+             * @description Identifier of the event represented by this trend point.
+             */
+            eventId: string;
+            /**
+             * Format: date-time
+             * @description Event timestamp represented by this trend point.
+             */
+            eventDate: string;
             /** Format: int32 */
             responseCount: number;
             summary?: components["schemas"]["QuestionFeedbackSummaryDto"];
         };
+        /** @description Distribution summary for thumbs up/down feedback. */
         ThumpsQuestionFeedbackSummary: {
             /** Format: int32 */
             countUp: number;
@@ -609,6 +846,7 @@ export interface components {
             /** Format: double */
             percentageDown: number;
         };
+        /** @description Distribution summary for zero-to-ten rating feedback. */
         ZeroToTenQuestionFeedbackSummary: {
             /** Format: int32 */
             countValue0: number;
@@ -655,7 +893,9 @@ export interface components {
             /** Format: double */
             percentageValue10: number;
         };
+        /** @description Input payload for account logout and device token unlink. */
         LogoutInput: {
+            /** @description Firebase Cloud Messaging token to remove from the account. */
             fcmToken: string;
         };
         ApiError: {
@@ -675,18 +915,18 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    updateSession: {
+    updateEvent: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                sessionId: string;
+                eventId: string;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SessionInput"];
+                "application/json": components["schemas"]["EventInput"];
             };
         };
         responses: {
@@ -710,12 +950,12 @@ export interface operations {
             };
         };
     };
-    deleteSession: {
+    deleteEvent: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                sessionId: string;
+                eventId: string;
             };
             cookie?: never;
         };
@@ -739,12 +979,12 @@ export interface operations {
             };
         };
     };
-    markSessionAsSeen: {
+    markEventAsSeen: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                sessionId: string;
+                eventId: string;
             };
             cookie?: never;
         };
@@ -1016,70 +1256,6 @@ export interface operations {
             };
         };
     };
-    createSession: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SessionInput"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ActivityDto"];
-                };
-            };
-            /** @description Internal Server Error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiError"];
-                };
-            };
-        };
-    };
-    joinSession: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                pinCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ParticipantSessionDto"];
-                };
-            };
-            /** @description Internal Server Error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiError"];
-                };
-            };
-        };
-    };
     submitFeedback: {
         parameters: {
             query?: never;
@@ -1113,7 +1289,7 @@ export interface operations {
             };
         };
     };
-    startFeedbackSession: {
+    startFeedbackEvent: {
         parameters: {
             query?: never;
             header?: never;
@@ -1122,7 +1298,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["StartFeedbackSessionInput"];
+                "application/json": components["schemas"]["StartFeedbackEventInput"];
             };
         };
         responses: {
@@ -1132,7 +1308,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FeedbackSessionDto"];
+                    "application/json": components["schemas"]["FeedbackEventDto"];
                 };
             };
             /** @description Internal Server Error */
@@ -1146,7 +1322,7 @@ export interface operations {
             };
         };
     };
-    mockIdToken: {
+    createEvent: {
         parameters: {
             query?: never;
             header?: never;
@@ -1155,7 +1331,243 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["MockIdTokenRequestDto"];
+                "application/json": components["schemas"]["EventInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ActivityDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    joinEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pinCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParticipantEventDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    seedParticipantWithData: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockTokenDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    seedParticipantEmpty: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockTokenDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    seedManagerWithData: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockTokenDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    seedManagerEmpty: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockTokenDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    seedEmptyAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockTokenDto"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    resetDatabase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminLoginRequestDto"];
             };
         };
         responses: {
@@ -1310,7 +1722,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description OK */
+            /** @description Bootstrap updated; full bootstrap payload returned. */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1318,6 +1730,13 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["BootstrapDto"];
                 };
+            };
+            /** @description Bootstrap hash unchanged; no response body. */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Internal Server Error */
             500: {

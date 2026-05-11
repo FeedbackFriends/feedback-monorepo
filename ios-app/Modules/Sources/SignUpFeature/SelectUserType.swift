@@ -29,7 +29,7 @@ public struct SelectUserType: Sendable {
         case createAccountButtonTap
         case delegate(Delegate)
         public enum Delegate {
-            case getSession
+            case getSession(Bootstrap)
         }
     }
     
@@ -60,8 +60,8 @@ public struct SelectUserType: Sendable {
                 state.isLoading = true
                 return .run { [role = state.selectedUserType, apiClient = self.apiClient] send in
                     do {
-                        _ = try await apiClient.createAccount(role)
-                        await send(.delegate(.getSession))
+                        let bootstrap = try await apiClient.createAccount(role)
+                        await send(.delegate(.getSession(bootstrap)))
                     } catch {
                         await send(.presentError(error))
                     }

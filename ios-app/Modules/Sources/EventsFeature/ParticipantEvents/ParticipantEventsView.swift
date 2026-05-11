@@ -89,7 +89,7 @@ extension ParticipantEventsView {
                             .font(.montserratSemiBold, 14)
                         Spacer()
                         if event.recentlyJoined {
-                            Text("Recently joined")
+                            Text("New feedback")
                                 .font(.montserratBold, 10)
                                 .padding(4)
                                 .padding(.horizontal, 4)
@@ -122,14 +122,14 @@ extension ParticipantEventsView {
                     .frame(maxWidth: .infinity, minHeight: 40)
                     Divider()
                     if event.feedbackSubmitted {
-                        Text("Submitted")
+                        Text("Sent")
                             .font(.montserratSemiBold, 14)
                             .frame(maxWidth: .infinity, minHeight: 40)
                             .foregroundStyle(Color.themeText.gradient.opacity(0.5))
                     } else {
                         if let pinCode = event.pinCode {
                             let startFeedbackPincodeInFlight = store.startFeedbackPincodeInFlight == event.pinCode
-                            Button("Start") {
+                            Button("Give feedback") {
                                 store.send(.startFeedbackButtonTap(pinCode: pinCode))
                             }
                             .disabled(startFeedbackPincodeInFlight)

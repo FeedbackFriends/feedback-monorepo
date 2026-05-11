@@ -135,4 +135,19 @@ class FirebaseServiceImpl : FirebaseService, FirebaseAdminService {
     override fun createCustomToken(uid: String): String {
         return FirebaseAuth.getInstance().createCustomTokenAsync(uid).get()
     }
+
+    override fun deleteUsers(uids: Set<String>) {
+        val auth = FirebaseAuth.getInstance()
+        var page = auth.listUsers(null)
+        do {
+            val userIds = page.values.map { it.uid }.filter { uids.contains(it) }
+            if (userIds.isNotEmpty()) {
+                val result = auth.deleteUsers(userIds.toList())
+                if (result.failureCount > 0) {
+                    throw RuntimeException("Failed to delete Firebase users. failures=${result.failureCount}")
+                }
+            }
+            page = page.nextPage ?: break
+        } while (true)
+    }
 }

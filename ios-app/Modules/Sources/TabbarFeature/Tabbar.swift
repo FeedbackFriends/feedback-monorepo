@@ -171,13 +171,13 @@ public struct Tabbar: Sendable {
                 state.managerEvents.destination = .eventDetail(
                     EventDetailFeature.State(
                         eventId: activityItem.eventId,
-                        detail: state.session.unwrappedManagerSession.managerData.activities[id: activityItem.eventId],
+                        detail: state.session.unwrappedManagerSession.managerData.activities[id: activityItem.eventId]?.event,
                         session: state.$session
                     )
                 )
                 return .run { _ in
                     do {
-                        try await apiClient.markSessionAsSeen(activityItem.id)
+                        try await apiClient.markEventAsSeen(activityItem.id)
                     } catch {
                         Logger.debug("Reset new feedback failed with error: \(error.localizedDescription)")
                     }

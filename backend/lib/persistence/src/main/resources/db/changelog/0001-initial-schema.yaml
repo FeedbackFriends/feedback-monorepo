@@ -14,7 +14,7 @@ databaseChangeLog:
                     unique: true
                     nullable: false
               - column:
-                  name: feedback_session_hash
+                  name: bootstrap_version
                   type: uuid
                   constraints:
                     nullable: false

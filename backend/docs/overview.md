@@ -1,7 +1,7 @@
 # Architecture Overview
 
 ## Services
-- **API (`apps/api`)**: Spring Boot REST endpoints for feedback sessions, events, accounts, and questions. Uses JWT validation against Google/Firebase. Controllers delegate to services, which call persistence DAOs and emit notifications.
+- **API (`apps/api`)**: Spring Boot REST endpoints for feedback events, events, accounts, and questions. Uses JWT validation against Google/Firebase. Controllers delegate to services, which call persistence DAOs and emit notifications.
 - **Scheduler (`apps/scheduler`)**: Background jobs that batch/remind owners about new feedback and handle delayed notifications.
 
 ## Shared Libraries

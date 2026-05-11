@@ -1,22 +1,18 @@
 import Foundation
 
-public struct FeedbackSession: Equatable, Sendable {
-    public let title: String
-    public let agenda: String?
+public struct FeedbackEventDto: Equatable, Sendable {
     public let questions: [ParticipantQuestion]
     public let ownerInfo: OwnerInfo
     public let pinCode: PinCode
     public let date: Date
+    public var title: String { "Event" }
+    public var agenda: String? { nil }
     public init(
-        title: String,
-        agenda: String?,
         questions: [ParticipantQuestion],
         ownerInfo: OwnerInfo,
         pinCode: PinCode,
         date: Date
     ) {
-        self.title = title
-        self.agenda = agenda
         self.questions = questions
         self.ownerInfo = ownerInfo
         self.pinCode = pinCode

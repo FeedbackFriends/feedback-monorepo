@@ -6,29 +6,24 @@ import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
 
 /**
- * Table for storing feedback sessions.
+ * Table for storing feedback events.
  *
- * Each row represents a concrete session that can receive feedback. Title and agenda are snapshots from the parent activity at
- * creation time so historical sessions remain stable when the activity changes later.
+ * Each row represents a concrete event that can receive feedback.
  *
  * Relationships:
  * - References [ActivityTable] (activity) and [AccountTable] (manager).
- * - Linked to questions ([QuestionTable]) and participants ([SessionParticipantTable]).
- * - Deleting a manager cascades and removes their sessions.
+ * - Linked to questions ([QuestionTable]) and participants ([EventParticipantTable]).
+ * - Deleting a manager cascades and removes their events.
  *
  * Columns:
- * @property title Snapshot title of the session.
- * @property agenda Snapshot agenda/description of the session.
- * @property startDate Timestamp when the session starts.
- * @property durationInMinutes Duration of the session in minutes.
+ * @property startDate Timestamp when the event starts.
+ * @property durationInMinutes Duration of the event in minutes.
  * @property location Optional location (physical or virtual).
- * @property manager Foreign key to [AccountTable.id] for the session owner.
+ * @property manager Foreign key to [AccountTable.id] for the event owner.
  * @property activity Foreign key to [ActivityTable.id] for the parent activity.
- * @property createdFromMailListener Flag indicating if the session originated from the mail listener.
+ * @property createdFromMailListener Flag indicating if the event originated from the mail listener.
  */
-object SessionTable : CommonColumnsTbl("session") {
-    val title = text("title")
-    val agenda = text("agenda").nullable()
+object EventTable : CommonColumnsTbl("event") {
     val startDate = timestampWithTimeZone("start_date")
     val durationInMinutes = integer("duration_in_minutes")
     val location = text("location").nullable().default(null)
@@ -39,8 +34,6 @@ object SessionTable : CommonColumnsTbl("session") {
     val calendarEventId = text("calendar_event_id").nullable()
 
     init {
-        uniqueIndex("uk_session_activity_start_date", activity, startDate)
+        uniqueIndex("uk_event_activity_start_date", activity, startDate)
     }
 }
-
-typealias EventTable = SessionTable

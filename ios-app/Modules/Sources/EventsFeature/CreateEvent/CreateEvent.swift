@@ -8,6 +8,7 @@ import Utility
 public struct CreateEvent: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
+        let activityId: UUID
         var createEventRequestInFlight = false
         var eventForm: EventForm.State
         @Presents var alert: AlertState<Never>?
@@ -16,7 +17,11 @@ public struct CreateEvent: Sendable {
         var createEventButtonDisabled: Bool {
             eventForm.eventInput.title.isEmpty || eventForm.eventInput.questions.isEmpty || createEventRequestInFlight || showSuccessOverlay
         }
-		public init(eventForm: EventForm.State) {
+		public init(
+            activityId: UUID,
+            eventForm: EventForm.State
+        ) {
+            self.activityId = activityId
             self.eventForm = eventForm
 		}
     }
@@ -57,7 +62,14 @@ public struct CreateEvent: Sendable {
                 state.createEventRequestInFlight = true
                 return .run { [state = state] send in
                     do {
-                        let event = try await apiClient.createActivity(.init(state.eventForm.eventInput))
+                        let event = try await apiClient.createEvent(
+                            .init(
+                                activityId: state.activityId,
+                                date: state.eventForm.eventInput.date,
+                                durationInMinutes: state.eventForm.eventInput.durationInMinutes,
+                                location: state.eventForm.eventInput.location
+                            )
+                        )
                         await send(.createEventResponse(event))
                     } catch {
                         await send(.presentError(error))

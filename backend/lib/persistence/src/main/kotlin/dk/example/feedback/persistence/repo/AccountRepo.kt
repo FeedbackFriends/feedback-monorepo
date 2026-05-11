@@ -43,7 +43,7 @@ class AccountRepo {
             this.createdAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.updatedAt = OffsetDateTime.now(ZoneOffset.UTC)
             this.ratingPrompted = false
-            this.feedbackSessionHash = UUID.randomUUID()
+            this.bootstrapVersion = UUID.randomUUID()
         }.toModel()
     }
 
@@ -70,6 +70,10 @@ class AccountRepo {
     fun deleteAccount(accountId: String) {
         AccountDao.findById(accountId)?.delete()
             ?: throw NoSuchElementException("Account not found with id: $accountId")
+    }
+
+    fun deleteAccountIfExists(accountId: String) {
+        AccountDao.findById(accountId)?.delete()
     }
 
     fun getAccount(accountId: String): AccountEntity {
@@ -110,11 +114,11 @@ class AccountRepo {
         }
     }
 
-    fun updateSessionHash(accountId: String) {
+    fun updateBootstrapVersion(accountId: String) {
         val found =
             AccountDao.findById(accountId) ?: throw NoSuchElementException("Account not found with id: $accountId")
         found.apply {
-            this.feedbackSessionHash = UUID.randomUUID()
+            this.bootstrapVersion = UUID.randomUUID()
         }
     }
 

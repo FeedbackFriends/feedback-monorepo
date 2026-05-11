@@ -2,33 +2,41 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+export PATH="/usr/local/bin:/opt/homebrew/bin:${PATH}"
+DETACHED=false
+COMPOSE_UP_ARGS=()
+
+for arg in "$@"; do
+  if [ "$arg" = "-d" ] || [ "$arg" = "--detach" ]; then
+    DETACHED=true
+  else
+    COMPOSE_UP_ARGS+=("$arg")
+  fi
+done
 
 require_docker_daemon() {
-  local current_context
-  current_context="$(docker context show 2>/dev/null || echo "unknown")"
-
+  local current_context="${1:-$(docker context show 2>/dev/null || echo unknown)}"
   if ! docker info >/dev/null 2>&1; then
-    cat >&2 <<EOF
-Docker daemon is not reachable (context: ${current_context}).
-Start your Docker runtime and verify connectivity before running ./scripts/run.
-
-Quick checks:
-  docker context ls
-  docker info
-
-If you use OrbStack, ensure it is running and the '${current_context}' context is healthy.
-EOF
+    echo "Docker daemon is not reachable (context: ${current_context}). Start Docker and retry ./scripts/run." >&2
     exit 1
   fi
 }
 
 cd "$REPO_ROOT"
 require_docker_daemon
-
+docker compose down --volumes --remove-orphans
 ./scripts/generate-api-artifacts.sh
-
-cd "$REPO_ROOT/backend"
-./gradlew --no-configuration-cache buildLocalImages
-
-cd "$REPO_ROOT"
-docker compose up --build "$@"
+(cd backend && ./gradlew --no-daemon --no-configuration-cache buildLocalImages)
+if [ "$DETACHED" = true ]; then
+  if [ "${#COMPOSE_UP_ARGS[@]}" -gt 0 ]; then
+    docker compose up --build -d "${COMPOSE_UP_ARGS[@]}"
+  else
+    docker compose up --build -d
+  fi
+else
+  if [ "${#COMPOSE_UP_ARGS[@]}" -gt 0 ]; then
+    docker compose up --build "${COMPOSE_UP_ARGS[@]}"
+  else
+    docker compose up --build
+  fi
+fi

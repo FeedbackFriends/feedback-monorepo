@@ -13,15 +13,14 @@ class NewFeedbackNotificationDao(id: EntityID<UUID>) : Entity<UUID>(id) {
 
     var lastFeedbackAt by NewFeedbackNotificationTable.lastFeedbackAt
     var newFeedback by NewFeedbackNotificationTable.newFeedback
-    var session by SessionDao referencedOn NewFeedbackNotificationTable.session
-    var event by SessionDao referencedOn NewFeedbackNotificationTable.event
+    var event by EventDao referencedOn NewFeedbackNotificationTable.event
     var account by AccountDao referencedOn NewFeedbackNotificationTable.account
 
     fun toModel(): NewFeedbackNotificationEntity {
         return NewFeedbackNotificationEntity(
             lastFeedbackAt = this.lastFeedbackAt,
             newFeedback = this.newFeedback,
-            session = this.session.toModel(),
+            event = this.event.toModel(),
             account = this.account.toModel()
         )
     }

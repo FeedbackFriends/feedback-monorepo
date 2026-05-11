@@ -52,7 +52,7 @@ class ScheduleService(
                     notificationsToPush += FeedbackReceivedNotification(
                         fcmToken = fcmToken,
                         newFeedback = notification.newFeedback,
-                        eventTitle = notification.event.title,
+                        eventTitle = notification.event.activity.title,
                         eventId = notification.event.id,
                     )
                 }

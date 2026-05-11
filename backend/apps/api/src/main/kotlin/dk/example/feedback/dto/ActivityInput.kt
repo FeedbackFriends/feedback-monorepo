@@ -11,7 +11,7 @@ data class ActivityInput(
     val agenda: String?,
     @field:Schema(description = "Ordered list of activity questions.")
     val questions: List<QuestionInput>,
-    @field:Schema(description = "Run mode controlling session participation behavior.")
+    @field:Schema(description = "Run mode controlling event participation behavior.")
     val runMode: ActivityRunMode,
     val invitedEmails: List<String> = emptyList(),
     val sendEmails: Boolean,

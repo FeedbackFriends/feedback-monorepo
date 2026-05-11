@@ -4,11 +4,9 @@ import dk.example.feedback.model.enumerations.CalendarProvider
 import java.time.OffsetDateTime
 import java.util.UUID
 
-data class SessionEntity(
+data class EventEntity(
     val id: UUID,
     val activity: ActivityEntity,
-    val title: String,
-    val agenda: String?,
     val date: OffsetDateTime,
     val durationInMinutes: Int,
     val location: String?,
@@ -21,5 +19,3 @@ data class SessionEntity(
     val feedback: List<FeedbackEntity>,
     val manager: AccountEntity,
 )
-
-typealias EventEntity = SessionEntity

@@ -57,7 +57,7 @@ public struct FeedbackFlowCoordinator: Sendable {
         var date: Date {
             feedbackSession.date
         }
-        let feedbackSession: FeedbackSession
+        let feedbackSession: FeedbackEventDto
         var commentTextfieldFocused: Bool
         public var title: String {
             feedbackSession.title
@@ -224,7 +224,7 @@ extension Collection {
 }
 
 extension FeedbackFlowCoordinator.State {
-    public static func initialState(feedbackSession: FeedbackSession) -> Self {
+    public static func initialState(feedbackSession: FeedbackEventDto) -> Self {
         let questionStates = IdentifiedArrayOf(uniqueElements: feedbackSession.questions.map { FeedbackFlowCoordinator.Path.State($0) })
         guard let first = questionStates.first else {
             fatalError("There should be at least one question in a feedback session")

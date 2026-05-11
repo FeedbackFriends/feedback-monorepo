@@ -29,7 +29,7 @@ class NotificationHistoryService(
             NotificationHistoryItem(
                 id = it.id,
                 date = it.createdAt,
-                eventTitle = it.event.title,
+                eventTitle = it.event.activity.title,
                 eventId = it.event.id,
                 newFeedbackCount = it.newFeedback,
                 seenByManager = it.seenByManager,

@@ -7,12 +7,18 @@ public extension ManagerQuestion {
         _ dto: Components.Schemas.QuestionDto,
         analytics: Components.Schemas.ManagerQuestionAnalyticsDto? = nil
     ) {
+        let feedbackSummary = analytics?.overallSummary.map(QuestionFeedbackSummary.init)
+        let feedbackType = analytics
+            .map { FeedbackType($0.feedbackType.rawValue) }
+            ?? FeedbackType.inferred(from: feedbackSummary)
+            ?? .comment
+
         self.init(
-            id: UUID(uuidString: dto.id) ?? UUID(),
+            id: UUID(uuidString: dto.id)!,
             questionText: dto.text,
-            feedbackType: analytics.map { .init($0.feedbackType.rawValue) } ?? .comment,
+            feedbackType: feedbackType,
             feedback: [],
-            feedbackSummary: analytics?.overallSummary.map(QuestionFeedbackSummary.init)
+            feedbackSummary: feedbackSummary
         )
     }
 }
@@ -26,51 +32,54 @@ public extension Activity {
             guard let questionId = UUID(uuidString: analytics.questionId) else { return }
             partialResult[questionId] = analytics
         }
-        let currentSession = dto.latestSession
-        let relatedSessions = dto.sessions
+        let analyticsByNormalizedText = questionAnalytics.reduce(into: [String: Components.Schemas.ManagerQuestionAnalyticsDto]()) { partialResult, analytics in
+            let key = analytics.questionText.normalizedQuestionKey
+            guard partialResult[key] == nil else { return }
+            partialResult[key] = analytics
+        }
+        let currentEvent = dto.latestEvent
+        let relatedSessions = dto.events
             .sorted(by: { $0.date > $1.date })
-            .map { sessionDto in
-                Activity(
-                    id: UUID(uuidString: sessionDto.id) ?? UUID(),
-                    title: dto.title,
-                    agenda: dto.agenda,
-                    date: sessionDto.date,
-                    pinCode: sessionDto.pinCode.map(PinCode.init(value:)),
-                    durationInMinutes: Int(sessionDto.durationInMinutes),
-                    location: sessionDto.location,
-                    ownerInfo: .init(dto.owner),
-                    trend: .insufficientData,
-                    overallFeedbackSummary: sessionDto.overallFeedbackSummary.map(OverallFeedbackSummary.init),
-                    questions: dto.currentQuestions.map { question in
+            .map { eventDto in
+                Event(
+                    id: UUID(uuidString: eventDto.id)!,
+                    date: eventDto.date,
+                    pinCode: eventDto.pinCode.map(PinCode.init(value:)),
+                    createdFromMailListener: eventDto.createdFromMailListener,
+                    durationInMinutes: Int(eventDto.durationInMinutes),
+                    location: eventDto.location,
+                    calendarEventId: eventDto.calendarEventId,
+                    averageRating: eventDto.averageRating,
+                    overallFeedbackSummary: eventDto.overallFeedbackSummary.map(OverallFeedbackSummary.init),
+                    questionsSnapshot: eventDto.questionsSnapshot.map { question in
                         let analytics = UUID(uuidString: question.id).flatMap { analyticsById[$0] }
+                            ?? analyticsByNormalizedText[question.text.normalizedQuestionKey]
                         return .init(question, analytics: analytics)
                     },
-                    isDraft: false,
-                    invitedEmails: dto.invitedEmails,
-                    participants: [],
-                    calendarProvider: sessionDto.calendarProvider.map(CalendarProvider.init)
+                    calendarProvider: eventDto.calendarProvider.map(CalendarProvider.init)
                 )
             }
         self.init(
-            id: UUID(uuidString: dto.id) ?? UUID(),
+            id: UUID(uuidString: dto.id)!,
             title: dto.title,
             agenda: dto.agenda,
-            date: currentSession?.date ?? .distantPast,
-            pinCode: currentSession?.pinCode.map(PinCode.init(value:)),
-            durationInMinutes: Int(currentSession?.durationInMinutes ?? 0),
-            location: currentSession?.location,
+            date: currentEvent?.date ?? .distantPast,
+            pinCode: currentEvent?.pinCode.map(PinCode.init(value:)),
+            durationInMinutes: Int(currentEvent?.durationInMinutes ?? 0),
+            location: currentEvent?.location,
             ownerInfo: .init(dto.owner),
             trend: .init(dto.trend),
-            overallFeedbackSummary: currentSession?.overallFeedbackSummary.map(OverallFeedbackSummary.init),
+            overallFeedbackSummary: currentEvent?.overallFeedbackSummary.map(OverallFeedbackSummary.init),
             questions: dto.currentQuestions.map { question in
                 let analytics = UUID(uuidString: question.id).flatMap { analyticsById[$0] }
+                    ?? analyticsByNormalizedText[question.text.normalizedQuestionKey]
                 return .init(question, analytics: analytics)
             },
             relatedSessions: relatedSessions,
-            isDraft: currentSession == nil,
+            isDraft: currentEvent == nil,
             invitedEmails: dto.invitedEmails,
             participants: [],
-            calendarProvider: currentSession?.calendarProvider.map(CalendarProvider.init)
+            calendarProvider: currentEvent?.calendarProvider.map(CalendarProvider.init)
         )
     }
 }
@@ -88,7 +97,24 @@ public extension EventWrapper {
 }
 
 private extension Components.Schemas.ActivityDto {
-    var latestSession: Components.Schemas.SessionDto? {
-        sessions.max(by: { $0.date < $1.date })
+    var latestEvent: Components.Schemas.EventDto? {
+        events.max(by: { $0.date < $1.date })
+    }
+}
+
+private extension String {
+    var normalizedQuestionKey: String {
+        trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
+}
+
+private extension FeedbackType {
+    static func inferred(from summary: QuestionFeedbackSummary?) -> FeedbackType? {
+        guard let summary else { return nil }
+        if summary.emojiQuestionFeedbackSummary != nil { return .emoji }
+        if summary.thumpsQuestionFeedbackSummary != nil { return .thumpsUpThumpsDown }
+        if summary.opinionQuestionFeedbackSummary != nil { return .opinion }
+        if summary.zeroToTenQuestionFeedbackSummary != nil { return .zeroToTen }
+        return nil
     }
 }

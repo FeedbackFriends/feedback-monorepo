@@ -114,7 +114,11 @@ private extension TabbarView {
                     session: store.session,
                     onCreateActivityTap: {
                         store.send(.createActivityButtonTap)
-                    }
+                    },
+                    managerEventsStore: store.scope(
+                        state: \.managerEvents,
+                        action: \.managerEvents
+                    )
                 )
                     .tabItem {
                         Label("Activities", systemImage: "calendar")

@@ -6,28 +6,25 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
 
 /**
- * Table for managing session participants and their engagement.
+ * Table for managing event participants and their engagement.
  *
- * Represents the many-to-many relationship between sessions and accounts (participants).
- * Tracks which users have joined a session and whether they submitted feedback.
+ * Represents the many-to-many relationship between events and accounts (participants).
+ * Tracks which users have joined a event and whether they submitted feedback.
  *
  * Relationships:
- * - References [SessionTable] (session) and [AccountTable] (participant).
- * - Deleting a session or participant cascades and removes corresponding entries.
+ * - References [EventTable] (event) and [AccountTable] (participant).
+ * - Deleting a event or participant cascades and removes corresponding entries.
  *
  * Columns:
- * @property session Foreign key to [SessionTable.id].
+ * @property event Foreign key to [EventTable.id].
  * @property participant Foreign key to [AccountTable.id].
- * @property feedbackSubmitted Whether the participant submitted feedback for the session.
- * @property dateCreated Timestamp when the participant was associated with the session.
+ * @property feedbackSubmitted Whether the participant submitted feedback for the event.
+ * @property dateCreated Timestamp when the participant was associated with the event.
  */
-object SessionParticipantTable : Table("session_participant") {
-    val session = reference("session_id", SessionTable.id, onDelete = ReferenceOption.CASCADE)
-    val event = session
+object EventParticipantTable : Table("event_participant") {
+    val event = reference("event_id", EventTable.id, onDelete = ReferenceOption.CASCADE)
     val participant = reference("participant_id", AccountTable.id, onDelete = ReferenceOption.CASCADE)
     val feedbackSubmitted = bool("feedback_submitted").default(false)
     val dateCreated = timestampWithTimeZone("created_at").clientDefault { OffsetDateTime.now() }
-    override val primaryKey = PrimaryKey(session, participant)
+    override val primaryKey = PrimaryKey(event, participant)
 }
-
-typealias EventParticipantTable = SessionParticipantTable

@@ -13,7 +13,7 @@ public extension ManagerData {
             ),
             notificationHistory: .init(dto.notificationHistory),
             recentlyUsedQuestions: Set(dto.questionAnalytics.map(RecentlyUsedQuestions.init)),
-            feedbackSessionHash: UUID(uuidString: dto.bootstrapHash) ?? UUID()
+            feedbackSessionHash: UUID(uuidString: dto.bootstrapHash)!
         )
     }
 }

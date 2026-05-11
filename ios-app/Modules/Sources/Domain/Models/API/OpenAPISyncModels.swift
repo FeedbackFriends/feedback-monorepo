@@ -2,21 +2,18 @@ import Foundation
 
 public typealias ActivityDto = Activity
 public typealias BootstrapDto = Bootstrap
-public typealias ParticipantSessionDto = ParticipantEvent
-public typealias FeedbackSessionDto = FeedbackSession
+public typealias EventDto = Event
+public typealias ParticipantEventDto = ParticipantEvent
 
 public struct SubmitFeedbackResponseDto: Equatable, Sendable {
     public let shouldPresentRatingPrompt: Bool
-    public let session: ParticipantSessionDto
-    public let event: ParticipantSessionDto
+    public let event: ParticipantEventDto
 
     public init(
         shouldPresentRatingPrompt: Bool,
-        session: ParticipantSessionDto,
-        event: ParticipantSessionDto
+        event: ParticipantEventDto
     ) {
         self.shouldPresentRatingPrompt = shouldPresentRatingPrompt
-        self.session = session
         self.event = event
     }
 }

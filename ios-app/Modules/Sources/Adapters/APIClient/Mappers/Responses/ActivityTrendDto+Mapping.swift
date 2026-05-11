@@ -10,7 +10,7 @@ public extension ActivityTrend {
             latestValue: dto.latestValue,
             previousValue: dto.previousValue,
             delta: dto.delta,
-            comparedSessionCount: Int(dto.comparedSessionCount)
+            comparedSessionCount: Int(dto.comparedEventCount)
         )
     }
 }

@@ -1,102 +1,100 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.dto.ActivityDto
-import dk.example.feedback.dto.ParticipantSessionDto
+import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
-import dk.example.feedback.model.exceptions.SessionAlreadyJoinedException
-import dk.example.feedback.payloads.SessionInput
+import dk.example.feedback.model.exceptions.EventAlreadyJoinedException
+import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.persistence.pincodegenerator.PinCodeGenerator
 import dk.example.feedback.persistence.repo.NotificationHistoryRepo
-import dk.example.feedback.persistence.repo.SessionRepo
+import dk.example.feedback.persistence.repo.EventRepo
 import java.util.UUID
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
 
 @Service
-class SessionService(
-    private val sessionRepo: SessionRepo,
+class EventService(
+    private val eventRepo: EventRepo,
     private val activityService: ActivityService,
     private val notificationHistoryRepo: NotificationHistoryRepo,
 ) {
 
-    fun createSession(sessionInput: SessionInput, jwt: Jwt): ActivityDto {
-        val activity = activityService.toActivityDto(sessionInput.activityId)
+    fun createEvent(eventInput: EventInput, jwt: Jwt): ActivityDto {
+        val activity = activityService.toActivityDto(eventInput.activityId)
         jwt.verifyAccountHasId(activity.owner.id)
-        val pinCode = PinCodeGenerator(eventRepo = sessionRepo).generate()
-        sessionRepo.persistSession(
-            activityId = sessionInput.activityId,
-            date = sessionInput.date,
-            location = sessionInput.location,
-            durationInMinutes = sessionInput.durationInMinutes,
+        val pinCode = PinCodeGenerator(eventRepo = eventRepo).generate()
+        eventRepo.persistEvent(
+            activityId = eventInput.activityId,
+            date = eventInput.date,
+            location = eventInput.location,
+            durationInMinutes = eventInput.durationInMinutes,
             generatedPinCode = pinCode,
             managerId = jwt.getAccountId(),
         )
-        return activityService.toActivityDto(sessionInput.activityId)
+        return activityService.toActivityDto(eventInput.activityId)
     }
 
-    fun updateSession(sessionInput: SessionInput, sessionId: UUID, jwt: Jwt): ActivityDto {
-        val session = sessionRepo.getSession(sessionId)
-        jwt.verifyAccountHasId(session.manager.id)
-        if (session.feedback.isNotEmpty()) {
-            throw IllegalArgumentException("Cannot update session with feedback")
+    fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): ActivityDto {
+        val event = eventRepo.getEvent(eventId)
+        jwt.verifyAccountHasId(event.manager.id)
+        if (event.feedback.isNotEmpty()) {
+            throw IllegalArgumentException("Cannot update event with feedback")
         }
-        sessionRepo.updateSession(
-            sessionId = sessionId,
-            date = sessionInput.date,
-            location = sessionInput.location,
-            durationInMinutes = sessionInput.durationInMinutes,
+        eventRepo.updateEvent(
+            eventId = eventId,
+            date = eventInput.date,
+            location = eventInput.location,
+            durationInMinutes = eventInput.durationInMinutes,
         )
-        return activityService.toActivityDto(session.activity.id)
+        return activityService.toActivityDto(event.activity.id)
     }
 
-    fun deleteSession(sessionId: UUID, jwt: Jwt) {
-        val session = sessionRepo.getSession(sessionId)
-        jwt.verifyAccountHasId(session.manager.id)
-        sessionRepo.deleteSession(sessionId)
+    fun deleteEvent(eventId: UUID, jwt: Jwt) {
+        val event = eventRepo.getEvent(eventId)
+        jwt.verifyAccountHasId(event.manager.id)
+        eventRepo.deleteEvent(eventId)
     }
 
-    fun joinSession(pinCode: String, jwt: Jwt): ParticipantSessionDto {
+    fun joinEvent(pinCode: String, jwt: Jwt): ParticipantEventDto {
         val accountId = jwt.getAccountId()
-        val session = sessionRepo.getSessionByPinCode(pinCode)
-        if (session.manager.id == accountId) {
-            throw IllegalArgumentException("Owner of session cannot give feedback")
+        val event = eventRepo.getEventByPinCode(pinCode)
+        if (event.manager.id == accountId) {
+            throw IllegalArgumentException("Owner of event cannot give feedback")
         }
-        if (sessionRepo.isParticipant(session.id, accountId)) {
-            throw SessionAlreadyJoinedException(session.id, accountId)
+        if (eventRepo.isParticipant(event.id, accountId)) {
+            throw EventAlreadyJoinedException(event.id, accountId)
         }
-        if (session.feedback.any { it.participantId == accountId }) {
-            throw FeedbackAlreadySubmittedException(session.id, accountId)
+        if (event.feedback.any { it.participantId == accountId }) {
+            throw FeedbackAlreadySubmittedException(event.id, accountId)
         }
-        sessionRepo.updateOrCreateParticipant(sessionId = session.id, accountId = accountId, feedbackSubmitted = false)
-        return session.toParticipantSessionDto(
-            pinCode = sessionRepo.getPinCodeForSession(session.id),
+        eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = false)
+        return event.toParticipantEventDto(
+            pinCode = eventRepo.getPinCodeForEvent(event.id),
             feedbackSubmitted = false,
             recentlyJoined = true,
         )
     }
 
-    fun markSessionAsSeen(sessionId: UUID, jwt: Jwt) {
-        val session = sessionRepo.getSession(sessionId)
-        jwt.verifyAccountHasId(session.manager.id)
-        sessionRepo.markSessionAsSeen(sessionId)
+    fun markEventAsSeen(eventId: UUID, jwt: Jwt) {
+        val event = eventRepo.getEvent(eventId)
+        jwt.verifyAccountHasId(event.manager.id)
+        eventRepo.markEventAsSeen(eventId)
         notificationHistoryRepo.markNotificationHistoryAsSeen(
             accountId = jwt.getAccountId(),
-            eventId = sessionId,
+            eventId = eventId,
         )
     }
 
-    fun getParticipantSessions(accountId: String): List<ParticipantSessionDto> {
-        return sessionRepo.getParticipantSessions(accountId).map { wrapped ->
-            val feedbackSubmitted = sessionRepo.accountDidSubmitFeedbackForSession(wrapped.session.id, accountId)
-            wrapped.session.toParticipantSessionDto(
-                pinCode = sessionRepo.getPinCodeForSession(wrapped.session.id),
+    fun getParticipantEvents(accountId: String): List<ParticipantEventDto> {
+        return eventRepo.getParticipantEvents(accountId).map { wrapped ->
+            val feedbackSubmitted = eventRepo.accountDidSubmitFeedbackForEvent(wrapped.event.id, accountId)
+            wrapped.event.toParticipantEventDto(
+                pinCode = eventRepo.getPinCodeForEvent(wrapped.event.id),
                 feedbackSubmitted = feedbackSubmitted,
                 recentlyJoined = wrapped.recentlyJoined,
             )
         }
     }
 }
-
-typealias EventService = SessionService

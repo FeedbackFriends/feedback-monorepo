@@ -86,10 +86,8 @@ public func generateRandomQuestions() -> [ParticipantQuestion] {
     ]
 }
 
-public extension FeedbackSession {
+public extension FeedbackEventDto {
     static let mock = Self(
-        title: generateFeedbackEventTitle(),
-        agenda: generateAgenda(),
         questions: generateRandomQuestions(),
         ownerInfo: .init(
             name: "Nicolai",
@@ -196,8 +194,6 @@ public extension ParticipantEvent {
     static func mock() -> Self {
         ParticipantEvent(
             id: nextDeterministicUUID(),
-            title: generateFeedbackEventTitle(),
-            agenda: generateAgenda(),
             date: .init(timeIntervalSince1970: 0),
             pinCode: generateRandomPin(),
             location: generateRandomLocation(),

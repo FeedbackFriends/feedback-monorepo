@@ -5,7 +5,7 @@ import dk.example.feedback.persistence.table.AccountTable
 import dk.example.feedback.persistence.table.ActivityTable
 import dk.example.feedback.persistence.table.FCMTokenTable
 import dk.example.feedback.persistence.table.QuestionTable
-import dk.example.feedback.persistence.table.SessionTable
+import dk.example.feedback.persistence.table.EventTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -20,10 +20,10 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
     var phoneNumber by AccountTable.phoneNumber
     var createdAt by AccountTable.createdAt
     var updatedAt by AccountTable.updatedAt
-    var feedbackSessionHash by AccountTable.feedbackSessionHash
+    var bootstrapVersion by AccountTable.bootstrapVersion
     var ratingPrompted by AccountTable.ratingPrompted
     val activities by ActivityDao referrersOn ActivityTable.manager
-    val sessions by SessionDao referrersOn SessionTable.manager
+    val events by EventDao referrersOn EventTable.manager
     val questions by QuestionDao referrersOn QuestionTable.manager
     val fcmTokens by FCMTokenDao referrersOn FCMTokenTable.account
 
@@ -34,7 +34,7 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
         fcmTokens = fcmTokens.map { it.id.value },
         phoneNumber = phoneNumber,
         ratingPrompted = ratingPrompted,
-        feedbackSessionHash = feedbackSessionHash,
+        bootstrapVersion = bootstrapVersion,
     )
 }
 

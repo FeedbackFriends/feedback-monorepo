@@ -8,7 +8,7 @@ import dk.example.feedback.model.interfaces.Feedback
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
 
-@Schema(description = "Single feedback answer submitted for one question in a session.")
+@Schema(description = "Single feedback answer submitted for one question in a event.")
 data class FeedbackInput(
     override val comment: String?,
     override val emoji: Emoji?,

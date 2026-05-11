@@ -2,7 +2,7 @@ package dk.example.feedback.persistence.repo
 
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.model.database.QuestionEntity
-import dk.example.feedback.model.database.SessionEntity
+import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.enumerations.CalendarProvider
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.exceptions.PinCodeNotFoundException
@@ -12,12 +12,12 @@ import dk.example.feedback.persistence.dao.ActivityDao
 import dk.example.feedback.persistence.dao.ActivityInviteDao
 import dk.example.feedback.persistence.dao.PinCodeDao
 import dk.example.feedback.persistence.dao.QuestionDao
-import dk.example.feedback.persistence.dao.SessionDao
+import dk.example.feedback.persistence.dao.EventDao
 import dk.example.feedback.persistence.table.AccountTable
 import dk.example.feedback.persistence.table.ActivityInviteTable
 import dk.example.feedback.persistence.table.QuestionTable
-import dk.example.feedback.persistence.table.SessionParticipantTable
-import dk.example.feedback.persistence.table.SessionTable
+import dk.example.feedback.persistence.table.EventParticipantTable
+import dk.example.feedback.persistence.table.EventTable
 import java.time.Duration
 import java.time.Instant
 import java.time.OffsetDateTime
@@ -39,21 +39,17 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional
-class SessionRepo {
+class EventRepo {
 
-    private val logger = LoggerFactory.getLogger(SessionRepo::class.java)
+    private val logger = LoggerFactory.getLogger(EventRepo::class.java)
 
     fun cleanUpPinCodesWithStopTimeOlderThan(duration: Duration) {
         val now = OffsetDateTime.now(ZoneOffset.UTC)
-        SessionDao.all().forEach { sessionDao ->
-            val sessionStopTime = sessionDao.date.plusMinutes(sessionDao.durationInMinutes.toLong())
-            val durationFromStartToStop = Duration.between(sessionStopTime, now)
-            if (sessionStopTime.isBefore(now) && durationFromStartToStop > duration) {
-                sessionDao.questions.forEach { question ->
-                    question.feedback.forEach { it.delete() }
-                    question.delete()
-                }
-                PinCodeDao.findById(getPinCodeForSession(sessionDao.id.value) ?: return@forEach)?.delete()
+        EventDao.all().forEach { eventDao ->
+            val eventStopTime = eventDao.date.plusMinutes(eventDao.durationInMinutes.toLong())
+            val durationFromStartToStop = Duration.between(eventStopTime, now)
+            if (eventStopTime.isBefore(now) && durationFromStartToStop > duration) {
+                PinCodeDao.findById(getPinCodeForEvent(eventDao.id.value) ?: return@forEach)?.delete()
             }
         }
     }
@@ -62,7 +58,7 @@ class SessionRepo {
         return PinCodeDao.findById(pinCode) != null
     }
 
-    fun persistSession(
+    fun persistEvent(
         activityId: UUID,
         date: OffsetDateTime,
         location: String?,
@@ -72,16 +68,14 @@ class SessionRepo {
         createdFromMailListener: Boolean = false,
         calendarProvider: CalendarProvider? = null,
         calendarEventId: String? = null,
-    ): SessionEntity {
+    ): EventEntity {
         val activity = ActivityDao.findById(activityId) ?: throw IllegalArgumentException("Could not find activity id: $activityId")
         if (activity.manager.id.value != managerId) {
             throw IllegalArgumentException("Activity $activityId does not belong to manager $managerId")
         }
         val manager = AccountDao.findById(managerId) ?: throw IllegalArgumentException("Could not find manager id: $managerId")
-        val createdSession = SessionDao.new {
+        val createdEvent = EventDao.new {
             this.activity = activity
-            this.title = activity.title
-            this.agenda = activity.agenda
             this.date = date
             this.location = location
             this.durationInMinutes = durationInMinutes
@@ -91,30 +85,30 @@ class SessionRepo {
             this.calendarEventId = calendarEventId
         }
         PinCodeDao.new(id = generatedPinCode) {
-            this.session = createdSession
+            this.event = createdEvent
         }
         snapshotQuestionsFromActivity(
-            sessionId = createdSession.id.value,
+            eventId = createdEvent.id.value,
             activityId = activityId,
             managerId = managerId,
         )
         joinParticipantsFromActivityInvites(
-            sessionId = createdSession.id.value,
+            eventId = createdEvent.id.value,
             activityId = activityId,
             managerId = managerId,
         )
-        return createdSession.toModel()
+        return createdEvent.toModel()
     }
 
-    fun getSessionByCalendarEventId(managerId: String, calendarEventId: String): SessionEntity? {
-        return SessionDao
-            .find { (SessionTable.manager eq managerId) and (SessionTable.calendarEventId eq calendarEventId) }
+    fun getEventByCalendarEventId(managerId: String, calendarEventId: String): EventEntity? {
+        return EventDao
+            .find { (EventTable.manager eq managerId) and (EventTable.calendarEventId eq calendarEventId) }
             .firstOrNull()
             ?.toModel()
     }
 
-    fun updateSessionFromMailListener(
-        sessionId: UUID,
+    fun updateEventFromMailListener(
+        eventId: UUID,
         title: String,
         agenda: String?,
         date: OffsetDateTime,
@@ -123,11 +117,9 @@ class SessionRepo {
         invitedEmails: List<String>,
         calendarProvider: CalendarProvider?,
         calendarEventId: String?,
-    ): SessionEntity {
-        val foundSession = SessionDao.findById(sessionId) ?: throw IllegalArgumentException("Could not find session id: $sessionId")
-        foundSession.apply {
-            this.title = title
-            this.agenda = agenda
+    ): EventEntity {
+        val foundEvent = EventDao.findById(eventId) ?: throw IllegalArgumentException("Could not find event id: $eventId")
+        foundEvent.apply {
             this.date = date
             this.location = location
             this.durationInMinutes = durationInMinutes
@@ -136,61 +128,61 @@ class SessionRepo {
             this.createdFromMailListener = true
         }
 
-        val activity = foundSession.activity
+        val activity = foundEvent.activity
         activity.title = title
         activity.agenda = agenda
         replaceActivityInvites(activity.id.value, activity.manager.id.value, invitedEmails)
 
-        return foundSession.toModel()
+        return foundEvent.toModel()
     }
 
-    fun deleteSession(sessionId: UUID) {
-        val foundSession = SessionDao.findById(sessionId) ?: throw IllegalArgumentException("Could not find session id: $sessionId")
-        foundSession.delete()
+    fun deleteEvent(eventId: UUID) {
+        val foundEvent = EventDao.findById(eventId) ?: throw IllegalArgumentException("Could not find event id: $eventId")
+        foundEvent.delete()
     }
 
-    fun updateSession(
-        sessionId: UUID,
+    fun updateEvent(
+        eventId: UUID,
         date: OffsetDateTime,
         location: String?,
         durationInMinutes: Int,
-    ): SessionEntity {
-        val foundSession = SessionDao.findById(sessionId) ?: throw IllegalArgumentException("Could not find session id: $sessionId")
-        foundSession.apply {
+    ): EventEntity {
+        val foundEvent = EventDao.findById(eventId) ?: throw IllegalArgumentException("Could not find event id: $eventId")
+        foundEvent.apply {
             this.date = date
             this.location = location
             this.durationInMinutes = durationInMinutes
         }
-        return foundSession.toModel()
+        return foundEvent.toModel()
     }
 
-    fun getSessionByPinCode(pinCode: String): SessionEntity {
-        return PinCodeDao.findById(pinCode)?.session?.toModel() ?: throw PinCodeNotFoundException(pinCode = pinCode)
+    fun getEventByPinCode(pinCode: String): EventEntity {
+        return PinCodeDao.findById(pinCode)?.event?.toModel() ?: throw PinCodeNotFoundException(pinCode = pinCode)
     }
 
-    fun getSession(sessionId: UUID): SessionEntity {
-        return SessionDao.findById(sessionId)?.toModel() ?: throw IllegalArgumentException("Could not find session id: $sessionId")
+    fun getEvent(eventId: UUID): EventEntity {
+        return EventDao.findById(eventId)?.toModel() ?: throw IllegalArgumentException("Could not find event id: $eventId")
     }
 
-    fun getManagerSessions(managerId: String): List<SessionEntity> {
-        return SessionDao.find { SessionTable.manager eq managerId }.map { it.toModel() }
+    fun getManagerEvents(managerId: String): List<EventEntity> {
+        return EventDao.find { EventTable.manager eq managerId }.map { it.toModel() }
     }
 
-    fun getSessionsForActivity(activityId: UUID): List<SessionEntity> {
-        return SessionDao.find { SessionTable.activity eq activityId }.map { it.toModel() }
+    fun getEventsForActivity(activityId: UUID): List<EventEntity> {
+        return EventDao.find { EventTable.activity eq activityId }.map { it.toModel() }
     }
 
-    fun getSessionsForActivityStartingAtOrAfter(activityId: UUID, fromDate: OffsetDateTime): List<SessionEntity> {
-        return SessionDao
-            .find { (SessionTable.activity eq activityId) and (SessionTable.startDate greaterEq fromDate) }
+    fun getEventsForActivityStartingAtOrAfter(activityId: UUID, fromDate: OffsetDateTime): List<EventEntity> {
+        return EventDao
+            .find { (EventTable.activity eq activityId) and (EventTable.startDate greaterEq fromDate) }
             .map { it.toModel() }
     }
 
-    fun getParticipantsForSession(sessionId: UUID, managerId: String): List<AccountEntity> {
-        val participantIds = SessionParticipantTable
+    fun getParticipantsForEvent(eventId: UUID, managerId: String): List<AccountEntity> {
+        val participantIds = EventParticipantTable
             .selectAll()
-            .where { SessionParticipantTable.session eq sessionId }
-            .map { it[SessionParticipantTable.participant].value }
+            .where { EventParticipantTable.event eq eventId }
+            .map { it[EventParticipantTable.participant].value }
             .filterNot { it == managerId }
 
         if (participantIds.isEmpty()) {
@@ -204,15 +196,15 @@ class SessionRepo {
         return participantIds.mapNotNull { accountsById[it]?.toModel() }
     }
 
-    fun isParticipant(sessionId: UUID, accountId: String): Boolean {
-        return SessionParticipantTable
+    fun isParticipant(eventId: UUID, accountId: String): Boolean {
+        return EventParticipantTable
             .selectAll()
-            .where { (SessionParticipantTable.session eq sessionId) and (SessionParticipantTable.participant eq accountId) }
+            .where { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
             .limit(1)
             .firstOrNull() != null
     }
 
-    fun joinInvitedSessionsForEmail(accountId: String, email: String) {
+    fun joinInvitedEventsForEmail(accountId: String, email: String) {
         val normalizedEmail = email.normalizedEmail() ?: return
         val activityIds = ActivityInviteTable
             .selectAll()
@@ -224,12 +216,12 @@ class SessionRepo {
             return
         }
 
-        SessionDao
-            .find { SessionTable.activity inList activityIds }
-            .forEach { session ->
-                if (session.manager.id.value != accountId) {
+        EventDao
+            .find { EventTable.activity inList activityIds }
+            .forEach { event ->
+                if (event.manager.id.value != accountId) {
                     updateOrCreateParticipant(
-                        sessionId = session.id.value,
+                        eventId = event.id.value,
                         accountId = accountId,
                         feedbackSubmitted = false,
                     )
@@ -237,63 +229,60 @@ class SessionRepo {
             }
     }
 
-    data class ParticipantSessionsWithRecentlyJoined(
-        val session: SessionEntity,
+    data class ParticipantEventsWithRecentlyJoined(
+        val event: EventEntity,
         val recentlyJoined: Boolean,
-    ) {
-        val event: SessionEntity
-            get() = session
-    }
+    )
 
-    fun getParticipantSessions(participantId: String): List<ParticipantSessionsWithRecentlyJoined> {
-        return SessionParticipantTable
+    fun getParticipantEvents(participantId: String): List<ParticipantEventsWithRecentlyJoined> {
+        return EventParticipantTable
             .selectAll()
-            .where { SessionParticipantTable.participant eq participantId }
+            .where { EventParticipantTable.participant eq participantId }
             .map { row ->
-                val recentlyJoined = if (!row[SessionParticipantTable.feedbackSubmitted]) {
+                val recentlyJoined = if (!row[EventParticipantTable.feedbackSubmitted]) {
                     val oneHourAgo = Instant.now().minus(1, ChronoUnit.HOURS)
-                    row[SessionParticipantTable.dateCreated].toInstant().isAfter(oneHourAgo)
+                    row[EventParticipantTable.dateCreated].toInstant().isAfter(oneHourAgo)
                 } else {
                     false
                 }
-                ParticipantSessionsWithRecentlyJoined(
-                    session = getSession(row[SessionParticipantTable.session].value),
+                ParticipantEventsWithRecentlyJoined(
+                    event = getEvent(row[EventParticipantTable.event].value),
                     recentlyJoined = recentlyJoined,
                 )
             }
     }
 
-    fun accountDidSubmitFeedbackForSession(sessionId: UUID, accountId: String): Boolean {
-        return SessionParticipantTable
+    fun accountDidSubmitFeedbackForEvent(eventId: UUID, accountId: String): Boolean {
+        return EventParticipantTable
             .selectAll()
-            .where { (SessionParticipantTable.session eq sessionId) and (SessionParticipantTable.participant eq accountId) }
+            .where { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
             .singleOrNull()
-            ?.get(SessionParticipantTable.feedbackSubmitted)
+            ?.get(EventParticipantTable.feedbackSubmitted)
             ?: false
     }
 
-    fun updateOrCreateParticipant(sessionId: UUID, accountId: String, feedbackSubmitted: Boolean) {
-        val existingRow = SessionParticipantTable
+    fun updateOrCreateParticipant(eventId: UUID, accountId: String, feedbackSubmitted: Boolean) {
+        val existingRow = EventParticipantTable
             .selectAll()
-            .where { (SessionParticipantTable.session eq sessionId) and (SessionParticipantTable.participant eq accountId) }
+            .where { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
             .singleOrNull()
         if (existingRow == null) {
-            SessionParticipantTable.insert {
-                it[session] = sessionId
-                it[participant] = accountId
-                it[SessionParticipantTable.feedbackSubmitted] = feedbackSubmitted
+            EventParticipantTable.insert {
+                it[EventParticipantTable.event] = eventId
+                it[EventParticipantTable.participant] = accountId
+                it[EventParticipantTable.feedbackSubmitted] = feedbackSubmitted
             }
         } else {
-            SessionParticipantTable.update(
-                { (SessionParticipantTable.session eq sessionId) and (SessionParticipantTable.participant eq accountId) }
+            EventParticipantTable.update(
+                { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
             ) {
-                it[SessionParticipantTable.feedbackSubmitted] = feedbackSubmitted
+                it[EventParticipantTable.feedbackSubmitted] = feedbackSubmitted
             }
         }
     }
 
-    fun markSessionAsSeen(sessionId: UUID) {
-        SessionDao.findById(sessionId)?.questions?.forEach { question ->
+    fun markEventAsSeen(eventId: UUID) {
+        EventDao.findById(eventId)?.questions?.forEach { question ->
             question.feedback.forEach { feedback ->
                 feedback.seenByManager = true
                 feedback.flush()
@@ -301,8 +290,8 @@ class SessionRepo {
         }
     }
 
-    fun getPinCodeForSession(sessionId: UUID): String? {
-        return PinCodeDao.find { dk.example.feedback.persistence.table.PinCodeTable.session eq sessionId }
+    fun getPinCodeForEvent(eventId: UUID): String? {
+        return PinCodeDao.find { dk.example.feedback.persistence.table.PinCodeTable.event eq eventId }
             .firstOrNull()
             ?.pinCode
             ?.value
@@ -318,7 +307,7 @@ class SessionRepo {
     }
 
     private fun snapshotQuestionsFromActivity(
-        sessionId: UUID,
+        eventId: UUID,
         activityId: UUID,
         managerId: String,
     ) {
@@ -330,14 +319,14 @@ class SessionRepo {
             this[QuestionTable.questionText] = question.questionText
             this[QuestionTable.feedbackType] = question.feedbackType
             this[QuestionTable.manager] = managerId
-            this[QuestionTable.session] = EntityID(sessionId, SessionTable)
+            this[QuestionTable.event] = EntityID(eventId, EventTable)
             this[QuestionTable.activityQuestionId] = question.activityQuestionId ?: question.id.value
             this[QuestionTable.index] = question.index
         }
     }
 
     private fun joinParticipantsFromActivityInvites(
-        sessionId: UUID,
+        eventId: UUID,
         activityId: UUID,
         managerId: String,
     ) {
@@ -350,7 +339,7 @@ class SessionRepo {
                 return@forEach
             }
             updateOrCreateParticipant(
-                sessionId = sessionId,
+                eventId = eventId,
                 accountId = account.id.value,
                 feedbackSubmitted = false,
             )
@@ -382,11 +371,11 @@ class SessionRepo {
             }
 
         val accountsByEmail = lookupAccountsByEmail(cleanedEmails)
-        SessionDao.find { SessionTable.activity eq activityId }.forEach { session ->
+        EventDao.find { EventTable.activity eq activityId }.forEach { event ->
             accountsByEmail.values.forEach { account ->
                 if (account.id.value != managerId) {
                     updateOrCreateParticipant(
-                        sessionId = session.id.value,
+                        eventId = event.id.value,
                         accountId = account.id.value,
                         feedbackSubmitted = false,
                     )
@@ -428,7 +417,7 @@ class SessionRepo {
         invitedEmails: List<String> = emptyList(),
         calendarProvider: CalendarProvider? = null,
         calendarEventId: String? = null,
-    ): SessionEntity {
+    ): EventEntity {
         val activity = ActivityRepo().persistActivity(
             title = title,
             agenda = agenda,
@@ -444,7 +433,7 @@ class SessionRepo {
             invitedEmails = invitedEmails,
             managerId = managerId,
         )
-        return persistSession(
+        return persistEvent(
             activityId = activity.id,
             date = date,
             location = location,
@@ -457,55 +446,4 @@ class SessionRepo {
         )
     }
 
-    fun getEventByCalendarEventId(managerId: String, calendarEventId: String): SessionEntity? {
-        return getSessionByCalendarEventId(managerId, calendarEventId)
-    }
-
-    fun updateEventFromMailListener(
-        eventId: UUID,
-        title: String,
-        agenda: String?,
-        date: OffsetDateTime,
-        location: String?,
-        durationInMinutes: Int,
-        invitedEmails: List<String>,
-        calendarProvider: CalendarProvider?,
-        calendarEventId: String?,
-    ): SessionEntity {
-        return updateSessionFromMailListener(
-            sessionId = eventId,
-            title = title,
-            agenda = agenda,
-            date = date,
-            location = location,
-            durationInMinutes = durationInMinutes,
-            invitedEmails = invitedEmails,
-            calendarProvider = calendarProvider,
-            calendarEventId = calendarEventId,
-        )
-    }
-
-    fun deleteEvent(eventId: UUID) = deleteSession(eventId)
-
-    fun getEvent(eventId: UUID): SessionEntity = getSession(eventId)
-
-    fun getEventByPinCode(pinCode: String): SessionEntity = getSessionByPinCode(pinCode)
-
-    fun getParticipantEvents(participantId: String): List<ParticipantSessionsWithRecentlyJoined> {
-        return getParticipantSessions(participantId)
-    }
-
-    fun accountDidSubmitFeedbackForEvent(eventId: UUID, accountId: String): Boolean {
-        return accountDidSubmitFeedbackForSession(eventId, accountId)
-    }
-
-    fun markEventAsSeen(eventId: UUID) = markSessionAsSeen(eventId)
-
-    fun getPinCodeForEvent(eventId: UUID): String? = getPinCodeForSession(eventId)
-
-    fun joinInvitedEventsForEmail(accountId: String, email: String) {
-        joinInvitedSessionsForEmail(accountId, email)
-    }
 }
-
-typealias EventRepo = SessionRepo

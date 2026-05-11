@@ -1,14 +1,21 @@
 import Domain
 import EventsFeature
+import ComposableArchitecture
 import SwiftUI
 
 public struct ActivitiesView: View {
     let session: Bootstrap
     let onCreateActivityTap: () -> Void
+    @Bindable var managerEventsStore: StoreOf<ManagerEvents>
 
-    public init(session: Bootstrap, onCreateActivityTap: @escaping () -> Void) {
+    public init(
+        session: Bootstrap,
+        onCreateActivityTap: @escaping () -> Void,
+        managerEventsStore: StoreOf<ManagerEvents>
+    ) {
         self.session = session
         self.onCreateActivityTap = onCreateActivityTap
+        self.managerEventsStore = managerEventsStore
     }
 
     private var activities: [Activity] {
@@ -22,6 +29,14 @@ public struct ActivitiesView: View {
     }
 
     public var body: some View {
+        let eventDetailStore = $managerEventsStore.scope(
+            state: \.destination?.eventDetail,
+            action: \.destination.eventDetail
+        )
+        let createEventStore = $managerEventsStore.scope(
+            state: \.destination?.createEvent,
+            action: \.destination.createEvent
+        )
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
@@ -43,12 +58,29 @@ public struct ActivitiesView: View {
             .navigationTitle("Activities")
             .navigationDestination(for: UUID.self) { activityId in
                 if let activity = activities.first(where: { $0.id == activityId }) {
-                    ActivityDetailView(activity: activity)
+                    ActivityDetailView(
+                        activity: activity,
+                        onCreateSessionTap: {
+                            managerEventsStore.send(.activityCreateSessionTap(activity))
+                        },
+                        managerEventsStore: managerEventsStore,
+                        onDeleteActivityTap: {
+                            managerEventsStore.send(.deleteActivityTap(activity.id))
+                        }
+                    )
                 } else {
                     ContentUnavailableView(
                         "Activity not found",
                         systemImage: "exclamationmark.triangle"
                     )
+                }
+            }
+            .navigationDestination(item: eventDetailStore) { store in
+                EventDetailFeatureView(store: store)
+            }
+            .sheet(item: createEventStore) { store in
+                NavigationStack {
+                    CreateEventView(store: store)
                 }
             }
             .toolbar {
@@ -154,8 +186,12 @@ private struct ActivityCardView: View {
 
 private struct ActivityDetailView: View {
     let activity: Activity
+    let onCreateSessionTap: () -> Void
+    @Bindable var managerEventsStore: StoreOf<ManagerEvents>
+    let onDeleteActivityTap: () -> Void
+    @State private var showDeleteConfirmation = false
 
-    private var groupedSessions: (today: [Activity], comingUp: [Activity], previous: [Activity]) {
+    private var groupedSessions: (today: [ManagerEvent], comingUp: [ManagerEvent], previous: [ManagerEvent]) {
         let sessions = activity.relatedSessions.sorted(by: { $0.date > $1.date })
         return (
             today: sessions.filter { $0.date.isToday },
@@ -206,11 +242,7 @@ private struct ActivityDetailView: View {
                     Text("Related sessions")
                         .font(.headline)
 
-                    ManagerSessionsListView(
-                        todayEvents: groupedSessions.today,
-                        comingUpEvents: groupedSessions.comingUp,
-                        previousEvents: groupedSessions.previous
-                    )
+                    relatedSessionsSection
                 }
                 .padding(.top, 8)
             }
@@ -218,6 +250,46 @@ private struct ActivityDetailView: View {
         }
         .navigationTitle(activity.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                HStack {
+                    Button {
+                        onCreateSessionTap()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+
+                    Button(role: .destructive) {
+                        showDeleteConfirmation = true
+                    } label: {
+                        Image(systemName: "trash")
+                    }
+                }
+            }
+        }
+        .confirmationDialog(
+            "Delete activity?",
+            isPresented: $showDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Delete activity", role: .destructive) {
+                onDeleteActivityTap()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This removes the activity and all related sessions.")
+        }
+    }
+
+    private var relatedSessionsSection: some View {
+        ManagerSessionsListView(
+            todayEvents: groupedSessions.today.map { activity.relatedSessionActivity($0) },
+            comingUpEvents: groupedSessions.comingUp.map { activity.relatedSessionActivity($0) },
+            previousEvents: groupedSessions.previous.map { activity.relatedSessionActivity($0) },
+            onEventTap: { event in
+                managerEventsStore.send(.managerEventTap(event.event))
+            }
+        )
     }
 
     private func detailRow(title: String, value: String) -> some View {
@@ -290,5 +362,12 @@ private extension ActivityTrend.Direction {
 }
 
 #Preview {
-    ActivitiesView(session: .mock(), onCreateActivityTap: {})
+    ActivitiesView(
+        session: .mock(),
+        onCreateActivityTap: {},
+        managerEventsStore: .init(
+            initialState: .init(session: .init(value: .mock())),
+            reducer: { ManagerEvents() }
+        )
+    )
 }

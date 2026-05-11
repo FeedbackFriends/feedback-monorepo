@@ -24,7 +24,7 @@ public struct InitialiseFeedback: Sendable {
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
         case startFeedback(pinCode: PinCode)
-        case startFeedbackSessionResponse(FeedbackSession)
+        case startFeedbackEventResponse(FeedbackEventDto)
         case presentError(Error)
         case delegate(Delegate)
         public enum Delegate {
@@ -48,8 +48,8 @@ public struct InitialiseFeedback: Sendable {
             case .startFeedback(let pinCode):
                 return .run { send in
                     do {
-                        let feedbackSession = try await apiClient.startFeedbackSession(pinCode)
-                        await send(.startFeedbackSessionResponse(feedbackSession))
+                        let feedbackSession = try await apiClient.startFeedbackEvent(pinCode)
+                        await send(.startFeedbackEventResponse(feedbackSession))
                     } catch {
                         await send(.presentError(error))
                     }
@@ -58,7 +58,7 @@ public struct InitialiseFeedback: Sendable {
             case .destination:
                 return .none
                 
-            case .startFeedbackSessionResponse(let feedbackSession):
+            case .startFeedbackEventResponse(let feedbackSession):
                 state.destination = .feedbackFlowCoordinator(
                     FeedbackFlowCoordinator.State.initialState(feedbackSession: feedbackSession)
                 )

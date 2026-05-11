@@ -35,6 +35,7 @@ Use this skill when the user wants to:
 - Mapper files should be keyed by the generated schema name so they stay easy to locate. Prefer `Requests/<SchemaName>+Mapping.swift` and `Responses/<SchemaName>+Mapping.swift`.
 - Do not copy generated transport wrappers like `Operations.*`, status-code enums, response wrapper enums, or `APIProtocol` helper types into `Domain`.
 - Every `APIClient` change must be reflected in both `Modules/Sources/Adapters/APIClient/Live/` and `AppMock/ApiClientMock.swift` in the same change.
+- Do not introduce placeholder fallback values to satisfy schema drift (for example `title: ""`, `agenda: nil` just to keep old models, or `UUID(uuidString:) ?? UUID()`). Align the Domain model shape with the spec and fail fast (`fatalError`/force unwrap) when required contract values are invalid.
 
 ## Files To Inspect First
 

@@ -7,10 +7,7 @@ data class NotificationHistoryEntity(
     val id: UUID,
     val createdAt: OffsetDateTime,
     val newFeedback: Int,
-    val session: SessionEntity,
+    val event: EventEntity,
     val seenByManager: Boolean,
     val account: AccountEntity,
-) {
-    val event: SessionEntity
-        get() = session
-}
+)

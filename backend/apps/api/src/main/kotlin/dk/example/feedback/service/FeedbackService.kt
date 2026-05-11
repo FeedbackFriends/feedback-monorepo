@@ -1,6 +1,6 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.dto.FeedbackSessionDto
+import dk.example.feedback.dto.FeedbackEventDto
 import dk.example.feedback.dto.OwnerInfoDto
 import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.SubmitFeedbackResponseDto
@@ -13,7 +13,7 @@ import dk.example.feedback.payloads.FeedbackInput
 import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.FeedbackRepo
 import dk.example.feedback.persistence.repo.NewFeedbackNotificationRepo
-import dk.example.feedback.persistence.repo.SessionRepo
+import dk.example.feedback.persistence.repo.EventRepo
 import java.util.*
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
@@ -21,22 +21,20 @@ import org.springframework.stereotype.Service
 @Service
 class FeedbackService(
     val feedbackRepo: FeedbackRepo,
-    val sessionRepo: SessionRepo,
+    val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
     val newFeedbackNotificationRepo: NewFeedbackNotificationRepo,
 ) {
 
-    fun startSession(pinCode: String, jwt: Jwt): FeedbackSessionDto {
+    fun startEvent(pinCode: String, jwt: Jwt): FeedbackEventDto {
         val accountId = jwt.getAccountId()
-        val session = sessionRepo.getSessionByPinCode(pinCode = pinCode)
-        val feedback = session.feedback
-        val manager = session.manager
-        throwIfAccountAlreadyGivenFeedback(feedback = feedback, accountId = accountId, eventId = session.id)
-        throwIfAccountIsManager(events = session, accountId = accountId)
-        return FeedbackSessionDto(
-            title = session.title,
-            agenda = session.agenda,
-            questions = session.questions.map {
+        val event = eventRepo.getEventByPinCode(pinCode = pinCode)
+        val feedback = event.feedback
+        val manager = event.manager
+        throwIfAccountAlreadyGivenFeedback(feedback = feedback, accountId = accountId, eventId = event.id)
+        throwIfAccountIsManager(events = event, accountId = accountId)
+        return FeedbackEventDto(
+            questions = event.questions.map {
                 ParticipantQuestionDto(
                     id = it.id,
                     questionText = it.questionText,
@@ -48,7 +46,7 @@ class FeedbackService(
                 email = manager.email,
                 phoneNumber = manager.phoneNumber
             ),
-            date = session.date,
+            date = event.date,
         )
     }
 
@@ -58,28 +56,28 @@ class FeedbackService(
         jwt: Jwt
     ): SubmitFeedbackResponseDto {
         val accountId = jwt.getAccountId()
-        val session = sessionRepo.getSessionByPinCode(pinCode = pinCode)
-        val managerId = session.manager.id
-        throwIfAccountAlreadyGivenFeedback(feedback = session.feedback, accountId = accountId, eventId = session.id)
-        throwIfAccountIsManager(events = session, accountId = accountId)
+        val event = eventRepo.getEventByPinCode(pinCode = pinCode)
+        val managerId = event.manager.id
+        throwIfAccountAlreadyGivenFeedback(feedback = event.feedback, accountId = accountId, eventId = event.id)
+        throwIfAccountIsManager(events = event, accountId = accountId)
         val persistedFeedback = feedbackRepo.persistFeedback(
             feedbackList = feedbackInputList,
             participantId = accountId,
             managerId = managerId,
         )
-        sessionRepo.updateOrCreateParticipant(sessionId = session.id, accountId = accountId, feedbackSubmitted = true)
+        eventRepo.updateOrCreateParticipant(eventId = event.id, accountId = accountId, feedbackSubmitted = true)
         val shouldPresentRatingPrompt = persistedFeedback.participantResponses() >= 3
         if (shouldPresentRatingPrompt) {
             accountRepo.markRatingAsPrompted(accountId = accountId)
         }
         newFeedbackNotificationRepo.persistNewFeedbackNotification(
-            eventId = session.id,
-            accountId = session.manager.id
+            eventId = event.id,
+            accountId = event.manager.id
         )
-        accountRepo.updateSessionHash(accountId = managerId)
+        accountRepo.updateBootstrapVersion(accountId = managerId)
         return SubmitFeedbackResponseDto(
             shouldPresentRatingPrompt = shouldPresentRatingPrompt,
-            session = session.toParticipantSessionDto(
+            event = event.toParticipantEventDto(
                 pinCode = pinCode,
                 feedbackSubmitted = true,
                 recentlyJoined = false,

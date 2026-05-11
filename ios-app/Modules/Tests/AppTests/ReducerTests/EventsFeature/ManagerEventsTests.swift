@@ -23,7 +23,7 @@ struct ManagerEventsTests {
             $0.destination = .eventDetail(
                 EventDetailFeature.State.init(
                     eventId: mockEvent.id,
-                    detail: .init(mockEvent),
+                    detail: mockEvent,
                     session: session
                 )
             )

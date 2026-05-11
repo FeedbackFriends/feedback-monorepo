@@ -1,18 +1,9 @@
 import Domain
 import OpenAPI
-
-public extension Bootstrap {
-    init(_ session: Components.Schemas.SessionDto) {
-        self.init(
-            participantEvents: [],
-            accountInfo: .init(name: nil, email: nil, phoneNumber: nil),
-            role: nil
-        )
-    }
-}
+import Foundation
 
 public extension CalendarProvider {
-    init(_ payload: Components.Schemas.SessionDto.CalendarProviderPayload) {
+    init(_ payload: Components.Schemas.EventDto.CalendarProviderPayload) {
         self.init(payload.rawValue)
     }
 }
@@ -24,6 +15,24 @@ public extension OverallFeedbackSummary {
             countStats: .init(dto.countStats),
             unseenResponses: Int(dto.unseenResponses),
             responses: Int(dto.responses)
+        )
+    }
+}
+
+public extension Event {
+    init(_ dto: Components.Schemas.EventDto) {
+        self.init(
+            id: UUID(uuidString: dto.id)!,
+            date: dto.date,
+            pinCode: dto.pinCode.map(PinCode.init(value:)),
+            createdFromMailListener: dto.createdFromMailListener,
+            durationInMinutes: Int(dto.durationInMinutes),
+            location: dto.location,
+            calendarEventId: dto.calendarEventId,
+            averageRating: dto.averageRating,
+            overallFeedbackSummary: dto.overallFeedbackSummary.map(OverallFeedbackSummary.init),
+            questionsSnapshot: dto.questionsSnapshot.map { .init($0) },
+            calendarProvider: dto.calendarProvider.map(CalendarProvider.init)
         )
     }
 }

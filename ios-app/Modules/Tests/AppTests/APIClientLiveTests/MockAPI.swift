@@ -31,8 +31,8 @@ struct MockAPI: APIProtocol {
     var submitFeedbackHandler: @Sendable (Operations.SubmitFeedback.Input) async throws -> Operations.SubmitFeedback.Output = { _ in
         fatalError("MockAPI: submitFeedback unimplemented")
     }
-    var startFeedbackSessionHandler: @Sendable (Operations.StartFeedbackSession.Input) async throws -> Operations.StartFeedbackSession.Output = { _ in
-        fatalError("MockAPI: startFeedbackSession unimplemented")
+    var startFeedbackEventHandler: @Sendable (Operations.StartFeedbackEvent.Input) async throws -> Operations.StartFeedbackEvent.Output = { _ in
+        fatalError("MockAPI: startFeedbackEvent unimplemented")
     }
     var createEventHandler: @Sendable (Operations.CreateEvent.Input) async throws -> Operations.CreateEvent.Output = { _ in
         fatalError("MockAPI: createEvent unimplemented")
@@ -40,8 +40,26 @@ struct MockAPI: APIProtocol {
     var joinEventHandler: @Sendable (Operations.JoinEvent.Input) async throws -> Operations.JoinEvent.Output = { _ in
         fatalError("MockAPI: joinEvent unimplemented")
     }
-    var mockIdTokenHandler: @Sendable (Operations.MockIdToken.Input) async throws -> Operations.MockIdToken.Output = { _ in
-        fatalError("MockAPI: mockIdToken unimplemented")
+    var seedParticipantWithDataHandler: @Sendable (Operations.SeedParticipantWithData.Input) async throws -> Operations.SeedParticipantWithData.Output = { _ in
+        fatalError("MockAPI: seedParticipantWithData unimplemented")
+    }
+    var seedParticipantEmptyHandler: @Sendable (Operations.SeedParticipantEmpty.Input) async throws -> Operations.SeedParticipantEmpty.Output = { _ in
+        fatalError("MockAPI: seedParticipantEmpty unimplemented")
+    }
+    var seedManagerWithDataHandler: @Sendable (Operations.SeedManagerWithData.Input) async throws -> Operations.SeedManagerWithData.Output = { _ in
+        fatalError("MockAPI: seedManagerWithData unimplemented")
+    }
+    var seedManagerEmptyHandler: @Sendable (Operations.SeedManagerEmpty.Input) async throws -> Operations.SeedManagerEmpty.Output = { _ in
+        fatalError("MockAPI: seedManagerEmpty unimplemented")
+    }
+    var seedEmptyAccountHandler: @Sendable (Operations.SeedEmptyAccount.Input) async throws -> Operations.SeedEmptyAccount.Output = { _ in
+        fatalError("MockAPI: seedEmptyAccount unimplemented")
+    }
+    var resetDatabaseHandler: @Sendable (Operations.ResetDatabase.Input) async throws -> Operations.ResetDatabase.Output = { _ in
+        fatalError("MockAPI: resetDatabase unimplemented")
+    }
+    var loginHandler: @Sendable (Operations.Login.Input) async throws -> Operations.Login.Output = { _ in
+        fatalError("MockAPI: login unimplemented")
     }
     var logoutHandler: @Sendable (Operations.Logout.Input) async throws -> Operations.Logout.Output = { _ in
         fatalError("MockAPI: logout unimplemented")
@@ -96,8 +114,8 @@ struct MockAPI: APIProtocol {
         try await submitFeedbackHandler(input)
     }
 
-    func startFeedbackSession(_ input: Operations.StartFeedbackSession.Input) async throws -> Operations.StartFeedbackSession.Output {
-        try await startFeedbackSessionHandler(input)
+    func startFeedbackEvent(_ input: Operations.StartFeedbackEvent.Input) async throws -> Operations.StartFeedbackEvent.Output {
+        try await startFeedbackEventHandler(input)
     }
 
     func createEvent(_ input: Operations.CreateEvent.Input) async throws -> Operations.CreateEvent.Output {
@@ -108,8 +126,32 @@ struct MockAPI: APIProtocol {
         try await joinEventHandler(input)
     }
 
-    func mockIdToken(_ input: Operations.MockIdToken.Input) async throws -> Operations.MockIdToken.Output {
-        try await mockIdTokenHandler(input)
+    func seedParticipantWithData(_ input: Operations.SeedParticipantWithData.Input) async throws -> Operations.SeedParticipantWithData.Output {
+        try await seedParticipantWithDataHandler(input)
+    }
+
+    func seedParticipantEmpty(_ input: Operations.SeedParticipantEmpty.Input) async throws -> Operations.SeedParticipantEmpty.Output {
+        try await seedParticipantEmptyHandler(input)
+    }
+
+    func seedManagerWithData(_ input: Operations.SeedManagerWithData.Input) async throws -> Operations.SeedManagerWithData.Output {
+        try await seedManagerWithDataHandler(input)
+    }
+
+    func seedManagerEmpty(_ input: Operations.SeedManagerEmpty.Input) async throws -> Operations.SeedManagerEmpty.Output {
+        try await seedManagerEmptyHandler(input)
+    }
+
+    func seedEmptyAccount(_ input: Operations.SeedEmptyAccount.Input) async throws -> Operations.SeedEmptyAccount.Output {
+        try await seedEmptyAccountHandler(input)
+    }
+
+    func resetDatabase(_ input: Operations.ResetDatabase.Input) async throws -> Operations.ResetDatabase.Output {
+        try await resetDatabaseHandler(input)
+    }
+
+    func login(_ input: Operations.Login.Input) async throws -> Operations.Login.Output {
+        try await loginHandler(input)
     }
 
     func logout(_ input: Operations.Logout.Input) async throws -> Operations.Logout.Output {

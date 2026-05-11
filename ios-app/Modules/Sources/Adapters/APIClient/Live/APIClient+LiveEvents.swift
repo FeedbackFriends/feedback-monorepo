@@ -39,10 +39,10 @@ extension APIClient {
         }
     }
 
-    static func makeCreateSession(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput) async throws -> ActivityDto {
+    static func makeCreateEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput) async throws -> ActivityDto {
         { sessionInput in
             try await withAuthorization {
-                let activity = try await api.createSession(body: .json(.init(sessionInput))).ok.body.json
+                let activity = try await api.createEvent(.init(body: .json(.init(sessionInput)))).ok.body.json
                 let mappedActivity = ActivityDto(activity)
                 await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedActivity
@@ -50,13 +50,13 @@ extension APIClient {
         }
     }
 
-    static func makeUpdateSession(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput, UUID) async throws -> ActivityDto {
+    static func makeUpdateEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput, UUID) async throws -> ActivityDto {
         { sessionInput, sessionId in
             try await withAuthorization {
-                let activity = try await api.updateSession(
-                    path: .init(sessionId: sessionId.uuidString),
+                let activity = try await api.updateEvent(.init(
+                    path: .init(eventId: sessionId.uuidString),
                     body: .json(.init(sessionInput))
-                ).ok.body.json
+                )).ok.body.json
                 let mappedActivity = ActivityDto(activity)
                 await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedActivity
@@ -64,10 +64,10 @@ extension APIClient {
         }
     }
 
-    static func makeDeleteSession(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (UUID) async throws -> Void {
+    static func makeDeleteEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (UUID) async throws -> Void {
         { sessionId in
             try await withAuthorization {
-                _ = try await api.deleteSession(path: .init(sessionId: sessionId.uuidString)).ok
+                _ = try await api.deleteEvent(.init(path: .init(eventId: sessionId.uuidString))).ok
                 let bootstrap = try await api.getBootstrap().ok.body.json
                 await sessionCache.updateSession(Bootstrap(bootstrap))
                 return ()
@@ -75,16 +75,16 @@ extension APIClient {
         }
     }
 
-    static func makeJoinSession(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (PinCode) async throws -> ParticipantSessionDto {
+    static func makeJoinEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (PinCode) async throws -> ParticipantEventDto {
         { pinCode in
             try await withAuthorization {
-                let response = try await api.joinSession(.init(path: .init(pinCode: pinCode.value)))
+                let response = try await api.joinEvent(.init(path: .init(pinCode: pinCode.value)))
 
                 switch response {
                 case .ok(let output):
-                    let participantSession = ParticipantSessionDto(try output.body.json)
-                    await sessionCache.updateOrAppendParticipantEvent(participantSession)
-                    return participantSession
+                    let participantEvent = ParticipantEventDto(try output.body.json)
+                    await sessionCache.updateOrAppendParticipantEvent(participantEvent)
+                    return participantEvent
                 case .internalServerError(let internalError):
                     throw ApiError(try internalError.body.json)
                 case .undocumented:
@@ -94,10 +94,21 @@ extension APIClient {
         }
     }
 
-    static func makeMarkSessionAsSeen(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (UUID) async throws -> Void {
+    static func makeMarkEventAsSeen(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (UUID) async throws -> Void {
         { sessionId in
             try await withAuthorization {
-                _ = try await api.markSessionAsSeen(.init(path: .init(sessionId: sessionId.uuidString))).ok
+                _ = try await api.markEventAsSeen(.init(path: .init(eventId: sessionId.uuidString))).ok
+                let bootstrap = try await api.getBootstrap().ok.body.json
+                await sessionCache.updateSession(Bootstrap(bootstrap))
+                return ()
+            }
+        }
+    }
+
+    static func makeResetDatabase(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable () async throws -> Void {
+        {
+            try await withAuthorization {
+                _ = try await api.resetDatabase(.init()).ok
                 let bootstrap = try await api.getBootstrap().ok.body.json
                 await sessionCache.updateSession(Bootstrap(bootstrap))
                 return ()

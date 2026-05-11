@@ -78,7 +78,7 @@ struct TabbarTests {
             $0.destination = .activity(session.activity.items.wrappedValue)
         }
         await store.send(.activityManagerEventButtonTap(session.activity.items.wrappedValue.first!)) {
-            $0.managerEvents.destination = .eventDetail(.init(eventId: event.id, detail: .init(event), session: sharedSession))
+            $0.managerEvents.destination = .eventDetail(.init(eventId: event.id, detail: event, session: sharedSession))
         }
     }
     
@@ -110,8 +110,8 @@ struct TabbarTests {
             $0.managerEvents.destination = .eventDetail(
                 .init(
                     eventId: createdEvent.id,
-                    detail: .init(createdEvent),
-                    destination: .invite(.init(createdEvent)),
+                    detail: createdEvent,
+                    destination: .invite(createdEvent),
                     session: $0.$session
                 )
             )
@@ -152,7 +152,7 @@ struct TabbarTests {
         let session = Shared<Bootstrap>(
             value: .mockAnonymous()
         )
-        let feedbackSession: FeedbackSession = .mock
+        let feedbackSession: FeedbackEventDto = .mock
         var pinCode: PinCode {
             feedbackSession.pinCode
         }
@@ -165,7 +165,7 @@ struct TabbarTests {
         ) {
             Tabbar()
         } withDependencies: {
-            $0.apiClient.startFeedbackSession = { _ in
+            $0.apiClient.startFeedbackEvent = { _ in
                 feedbackSession
             }
         }
@@ -184,7 +184,7 @@ struct TabbarTests {
         await store.receive(\.participantEvents.delegate, .startFeedback(pinCode: pinCode))
         await store.receive(\.initialiseFeedback.startFeedback, pinCode)
         await store.withExhaustivity(.off) {
-            await store.receive(\.initialiseFeedback.startFeedbackSessionResponse, feedbackSession)
+            await store.receive(\.initialiseFeedback.startFeedbackEventResponse, feedbackSession)
         }
         #expect(store.state.initialiseFeedback.destination!.feedbackFlowCoordinator!.path.first!.id == feedbackSession.questions.first!.id)
         #expect(store.state.initialiseFeedback.destination!.feedbackFlowCoordinator!.path.first!.questionText == feedbackSession.questions.first!.questionText)

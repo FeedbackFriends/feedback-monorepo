@@ -1,8 +1,8 @@
 package dk.example.feedback.controller
 
-import dk.example.feedback.dto.FeedbackSessionDto
+import dk.example.feedback.dto.FeedbackEventDto
 import dk.example.feedback.dto.SubmitFeedbackResponseDto
-import dk.example.feedback.payloads.StartFeedbackSessionInput
+import dk.example.feedback.payloads.StartFeedbackEventInput
 import dk.example.feedback.payloads.SubmitFeedbackInput
 import dk.example.feedback.service.FeedbackService
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -21,11 +21,11 @@ class FeedbackController(val feedbackService: FeedbackService) {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/start")
-    fun startFeedbackSession(
-        @RequestBody startFeedbackSessionInput: StartFeedbackSessionInput,
+    fun startFeedbackEvent(
+        @RequestBody startFeedbackEventInput: StartFeedbackEventInput,
         @AuthenticationPrincipal principal: Jwt
-    ): FeedbackSessionDto {
-        return feedbackService.startSession(pinCode = startFeedbackSessionInput.pinCode, jwt = principal)
+    ): FeedbackEventDto {
+        return feedbackService.startEvent(pinCode = startFeedbackEventInput.pinCode, jwt = principal)
     }
 
     @PreAuthorize("isAuthenticated()")

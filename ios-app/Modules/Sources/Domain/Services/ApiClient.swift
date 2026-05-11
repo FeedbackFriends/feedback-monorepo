@@ -14,7 +14,7 @@ public struct APIClient: Sendable {
     public var logout: @Sendable () async throws -> Void
     public var getBootstrap: @Sendable () async throws -> Bootstrap
     @DependencyEndpoint
-    public var startFeedbackSession: @Sendable (_ pinCode: PinCode) async throws -> FeedbackSession
+    public var startFeedbackEvent: @Sendable (_ pinCode: PinCode) async throws -> FeedbackEventDto
     @DependencyEndpoint
     public var submitFeedback: @Sendable (_ feedback: [FeedbackInput], _ pinCode: PinCode) async throws -> Bool
     @DependencyEndpoint
@@ -24,23 +24,29 @@ public struct APIClient: Sendable {
     @DependencyEndpoint
     public var deleteActivity: @Sendable (_ id: UUID) async throws -> Void
     @DependencyEndpoint
-    public var createSession: @Sendable (_ sessionInput: SessionInput) async throws -> ActivityDto
+    public var createEvent: @Sendable (_ sessionInput: SessionInput) async throws -> ActivityDto
     @DependencyEndpoint
-    public var updateSession: @Sendable (_ sessionInput: SessionInput, _ id: UUID) async throws -> ActivityDto
+    public var updateEvent: @Sendable (_ sessionInput: SessionInput, _ id: UUID) async throws -> ActivityDto
     @DependencyEndpoint
-    public var deleteSession: @Sendable (_ id: UUID) async throws -> Void
+    public var deleteEvent: @Sendable (_ id: UUID) async throws -> Void
     @DependencyEndpoint
     public var createAccount: @Sendable (_ role: Role?) async throws -> Bootstrap
     public var sessionChangedListener: @Sendable () async -> AsyncStream<Bootstrap> = { .never }
     @DependencyEndpoint
-    public var joinSession: @Sendable (_ pinCode: PinCode) async throws -> ParticipantSessionDto
+    public var joinEvent: @Sendable (_ pinCode: PinCode) async throws -> ParticipantEventDto
     @DependencyEndpoint
-    public var markSessionAsSeen: @Sendable (_ sessionId: UUID) async throws -> Void
+    public var markEventAsSeen: @Sendable (_ sessionId: UUID) async throws -> Void
     @DependencyEndpoint
     public var sendNotification: @Sendable (_ input: SendNotificationInput) async throws -> Void
     @DependencyEndpoint
     public var updateRole: @Sendable (_ role: Role) async throws -> Void
-    public var mockIdToken: @Sendable () async throws -> (String)
+    public var seedParticipantWithData: @Sendable () async throws -> MockTokenDto
+    public var seedParticipantEmpty: @Sendable () async throws -> MockTokenDto
+    public var seedManagerWithData: @Sendable () async throws -> MockTokenDto
+    public var seedManagerEmpty: @Sendable () async throws -> MockTokenDto
+    public var seedEmptyAccount: @Sendable () async throws -> MockTokenDto
+    public var resetDatabase: @Sendable () async throws -> Void
+    public var login: @Sendable (_ id: String) async throws -> MockTokenDto
     public var getBoostrapUpdate: @Sendable () async throws -> Bootstrap?
     public var markNotificationHistoryAsSeen: @Sendable () async throws -> Void
 }

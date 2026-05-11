@@ -61,7 +61,7 @@ struct APIClientLiveTests {
     func `Account related generated inputs are forwarded correctly`() async throws {
         let fcmInput = LockIsolated<Operations.LinkFCMTokenToAccount.Input?>(nil)
         let roleInput = LockIsolated<Operations.UpdateRole.Input?>(nil)
-        let mockTokenInput = LockIsolated<Operations.MockIdToken.Input?>(nil)
+        let loginInput = LockIsolated<Operations.Login.Input?>(nil)
         let client = Self.makeClient(
             api: MockAPI(
                 linkFCMTokenToAccountHandler: { request in
@@ -72,8 +72,8 @@ struct APIClientLiveTests {
                     roleInput.setValue(request)
                     return .ok
                 },
-                mockIdTokenHandler: { request in
-                    mockTokenInput.setValue(request)
+                loginHandler: { request in
+                    loginInput.setValue(request)
                     return .ok(
                         .init(
                             body: .json(
@@ -90,7 +90,7 @@ struct APIClientLiveTests {
 
         try await client.linkFCMTokenToAccount("fcm-123")
         try await client.updateAccountRole(.manager)
-        let token = try await client.getMockToken()
+        let token = try await client.login("mock_id")
 
         guard let capturedFCMInput = fcmInput.value, case .json(let fcmBody) = capturedFCMInput.body else {
             Issue.record("Expected linkFCMTokenToAccount JSON body")
@@ -100,16 +100,15 @@ struct APIClientLiveTests {
             Issue.record("Expected updateRole JSON body")
             return
         }
-        guard let capturedMockTokenInput = mockTokenInput.value, case .json(let mockTokenBody) = capturedMockTokenInput.body else {
-            Issue.record("Expected mockIdToken JSON body")
+        guard let capturedLoginInput = loginInput.value, case .json(let loginBody) = capturedLoginInput.body else {
+            Issue.record("Expected login JSON body")
             return
         }
 
         #expect(fcmBody.fcmToken == "fcm-123")
         #expect(roleBody.role == "Manager")
-        #expect(mockTokenBody.role == "Manager")
-        #expect(mockTokenBody.id == "mock_id")
-        #expect(token == "mock-token")
+        #expect(loginBody.id == "mock_id")
+        #expect(token.token == "mock-token")
     }
 
     @Test
@@ -173,26 +172,26 @@ struct APIClientLiveTests {
     }
 
     @Test
-    func `Start feedback session maps the generated DTO`() async throws {
-        let input = LockIsolated<Operations.StartFeedbackSession.Input?>(nil)
+    func `Start feedback event maps the generated DTO`() async throws {
+        let input = LockIsolated<Operations.StartFeedbackEvent.Input?>(nil)
         let pinCode = PinCode(value: "456789")
         let client = Self.makeClient(
             api: MockAPI(
-                startFeedbackSessionHandler: { request in
+                startFeedbackEventHandler: { request in
                     input.setValue(request)
-                    return .ok(.init(body: .json(Self.feedbackSessionDto())))
+                    return .ok(.init(body: .json(Self.feedbackEventDto())))
                 }
             )
         )
 
-        let session = try await client.startFeedbackSession(pinCode)
+        let session = try await client.startFeedbackEvent(pinCode)
 
         guard let captured = input.value, case .json(let body) = captured.body else {
-            Issue.record("Expected startFeedbackSession JSON body")
+            Issue.record("Expected startFeedbackEvent JSON body")
             return
         }
         #expect(body.pinCode == "456789")
-        #expect(session == FeedbackSession(Self.feedbackSessionDto(), pinCode: pinCode))
+        #expect(session == FeedbackEventDto(Self.feedbackEventDto(), pinCode: pinCode))
     }
 
     @Test
@@ -403,6 +402,29 @@ struct APIClientLiveTests {
     }
 
     @Test
+    func `Updated session keeps cache unchanged when bootstrap hash is unchanged`() async throws {
+        let input = LockIsolated<Operations.GetBoostrapUpdate.Input?>(nil)
+        let existingSession = Self.managerSession()
+        let cache = APIClientCache(session: existingSession)
+        let client = Self.makeClient(
+            api: MockAPI(
+                getBoostrapUpdateHandler: { request in
+                    input.setValue(request)
+                    return .noContent
+                }
+            ),
+            cache: cache
+        )
+
+        let result = try await client.getUpdatedSession()
+        let snapshot = await cache.getSession()
+
+        #expect(input.value?.path.hash == Self.sessionHash.uuidString)
+        #expect(result == nil)
+        #expect(snapshot == existingSession)
+    }
+
+    @Test
     func `Manager activity is marked as seen`() async throws {
         let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(unseenResponses: 1)], unseenTotal: 2))
         let client = Self.makeClient(
@@ -454,8 +476,6 @@ private extension APIClientLiveTests {
     static func participantEventDto(feedbackSubmitted: Bool = false) -> Components.Schemas.ParticipantEventDto {
         .init(
             id: eventId.uuidString,
-            title: "Weekly retro",
-            agenda: "Talk through wins and blockers",
             date: referenceDate,
             pinCode: "456789",
             durationInMinutes: 45,
@@ -468,10 +488,8 @@ private extension APIClientLiveTests {
         )
     }
 
-    static func feedbackSessionDto() -> Components.Schemas.FeedbackSessionDto {
+    static func feedbackEventDto() -> Components.Schemas.FeedbackEventDto {
         .init(
-            title: "Weekly retro",
-            agenda: "Talk through wins and blockers",
             questions: [participantQuestionDto()],
             ownerInfo: ownerInfoDto(),
             date: referenceDate
@@ -766,12 +784,12 @@ struct APIClientMappingTests {
     }
 
     @Test
-    func `Feedback session DTO maps to feedback session`() {
+    func `Feedback event DTO maps to feedback event`() {
         let pinCode = PinCode(value: "456789")
-        let session = FeedbackSession(Self.feedbackSessionDto(), pinCode: pinCode)
+        let session = FeedbackEventDto(Self.feedbackEventDto(), pinCode: pinCode)
 
-        #expect(session.title == "Weekly retro")
-        #expect(session.agenda == "Talk through wins and blockers")
+        #expect(session.title == "Event")
+        #expect(session.agenda == nil)
         #expect(session.questions.count == 1)
         #expect(session.ownerInfo == .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678"))
         #expect(session.pinCode == pinCode)
@@ -898,8 +916,6 @@ private extension APIClientMappingTests {
     static func participantEventDto() -> Components.Schemas.ParticipantEventDto {
         .init(
             id: eventId.uuidString,
-            title: "Weekly retro",
-            agenda: "Talk through wins and blockers",
             date: referenceDate,
             pinCode: "456789",
             durationInMinutes: 45,
@@ -949,10 +965,8 @@ private extension APIClientMappingTests {
         )
     }
 
-    static func feedbackSessionDto() -> Components.Schemas.FeedbackSessionDto {
+    static func feedbackEventDto() -> Components.Schemas.FeedbackEventDto {
         .init(
-            title: "Weekly retro",
-            agenda: "Talk through wins and blockers",
             questions: [participantQuestionDto()],
             ownerInfo: ownerInfoDto(),
             date: referenceDate

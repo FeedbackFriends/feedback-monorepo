@@ -108,8 +108,6 @@ public struct QuestionsListView: View {
                             previewConfiguration.presentFeedbackFlowSession(
                                 .initialState(
                                     feedbackSession: .init(
-                                        title: previewConfiguration.title,
-                                        agenda: previewConfiguration.agenda,
                                         questions: self.questionsInputs.map {
                                             ParticipantQuestion(
                                                 id: $0.id,

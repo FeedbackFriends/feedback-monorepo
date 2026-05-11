@@ -73,3 +73,9 @@ databaseChangeLog:
   - include:
       file: 0019-add-activity-question-id.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0020-drop-session-title-and-agenda.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0021-rename-session-to-event.yaml
+      relativeToChangelogFile: true

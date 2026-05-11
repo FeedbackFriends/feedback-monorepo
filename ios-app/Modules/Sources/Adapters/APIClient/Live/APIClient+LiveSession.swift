@@ -1,5 +1,6 @@
 import Domain
 import OpenAPI
+import Foundation
 
 extension APIClient {
     static func makeGetBootstrap(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable () async throws -> Bootstrap {
@@ -22,16 +23,25 @@ extension APIClient {
     static func makeGetBoostrapUpdate(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable () async throws -> Bootstrap? {
         {
             guard let feedbackSessionHash = await sessionCache.feedbackSessionHash else { return .none }
-            let bootstrap = try await withAuthorization {
+            let response = try await withAuthorization {
                 try await api.getBoostrapUpdate(
                     .init(
                         path: .init(hash: feedbackSessionHash.uuidString)
                     )
-                ).ok.body.json
+                )
             }
-            let session = Bootstrap(bootstrap)
-            await sessionCache.updateSession(session)
-            return session
+            switch response {
+            case .ok(let payload):
+                let session = Bootstrap(try payload.body.json)
+                await sessionCache.updateSession(session)
+                return session
+            case .noContent:
+                return .none
+            case .internalServerError(let internalError):
+                throw ApiError(try internalError.body.json)
+            case .undocumented:
+                throw URLError(.unknown)
+            }
         }
     }
 

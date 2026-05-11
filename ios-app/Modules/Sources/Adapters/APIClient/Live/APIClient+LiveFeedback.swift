@@ -3,10 +3,10 @@ import Domain
 import OpenAPI
 
 extension APIClient {
-    static func makeStartFeedbackSession(api: APIProtocol) -> @Sendable (PinCode) async throws -> FeedbackSession {
+    static func makeStartFeedbackEvent(api: APIProtocol) -> @Sendable (PinCode) async throws -> FeedbackEventDto {
         { pinCode in
             try await withAuthorization {
-                let response = try await api.startFeedbackSession(.init(body: .json(.init(pinCode: pinCode.value))))
+                let response = try await api.startFeedbackEvent(.init(body: .json(.init(pinCode: pinCode.value))))
                 switch response {
                 case .ok(let output):
                     return .init(try output.body.json, pinCode: pinCode)

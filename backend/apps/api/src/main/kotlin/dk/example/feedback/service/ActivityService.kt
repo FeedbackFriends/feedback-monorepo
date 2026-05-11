@@ -6,7 +6,7 @@ import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.ActivityQuestionUpsert
-import dk.example.feedback.persistence.repo.SessionRepo
+import dk.example.feedback.persistence.repo.EventRepo
 import java.util.UUID
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class ActivityService(
     private val activityRepo: ActivityRepo,
-    private val sessionRepo: SessionRepo,
+    private val eventRepo: EventRepo,
 ) {
 
     fun createActivity(input: ActivityInput, jwt: Jwt): ActivityDto {
@@ -66,8 +66,8 @@ class ActivityService(
     fun getManagerActivities(managerId: String): List<ActivityDto> {
         return activityRepo.getManagerActivities(managerId).map { activity ->
             activity.toActivityDto(
-                sessions = sessionRepo.getSessionsForActivity(activity.id),
-                pinCodeProvider = sessionRepo::getPinCodeForSession,
+                events = eventRepo.getEventsForActivity(activity.id),
+                pinCodeProvider = eventRepo::getPinCodeForEvent,
             )
         }
     }
@@ -75,8 +75,8 @@ class ActivityService(
     fun toActivityDto(activityId: UUID): ActivityDto {
         val activity = activityRepo.getActivity(activityId)
         return activity.toActivityDto(
-            sessions = sessionRepo.getSessionsForActivity(activity.id),
-            pinCodeProvider = sessionRepo::getPinCodeForSession,
+            events = eventRepo.getEventsForActivity(activity.id),
+            pinCodeProvider = eventRepo::getPinCodeForEvent,
         )
     }
 }

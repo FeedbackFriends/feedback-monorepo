@@ -11,14 +11,14 @@ data class NotificationHistoryDto(
     val unseenTotal: Int,
 )
 
-@Schema(description = "Single notification history item linked to an activity session.")
+@Schema(description = "Single notification history item linked to an activity event.")
 data class NotificationHistoryItem(
     @field:Schema(description = "Stable identifier for the notification history item.")
     val id: UUID,
     @field:Schema(description = "Timestamp when the notification was created.")
     val date: OffsetDateTime,
     val eventTitle: String,
-    @field:Schema(description = "Identifier of the related session or event.")
+    @field:Schema(description = "Identifier of the related event or event.")
     val eventId: UUID,
     val newFeedbackCount: Int,
     val seenByManager: Boolean,

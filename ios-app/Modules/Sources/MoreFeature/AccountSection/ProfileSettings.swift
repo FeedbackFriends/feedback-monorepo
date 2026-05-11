@@ -15,13 +15,13 @@ public struct ProfileSettings: Sendable {
     public struct State: Equatable, Sendable {
         @Presents var destination: Destination.State?
         var isOrganizerModeEnabled: Bool
-        var persistedRole: Role
+        var persistedRole: Role?
         var accountInfo: AccountInfo
         var isLoading = false
         var isInAppNotificationsEnabled = false
         var isEmailEventsEnabled = false
 
-        public init(role: Role, accountInfo: AccountInfo) {
+        public init(role: Role?, accountInfo: AccountInfo) {
             self.persistedRole = role
             self.isOrganizerModeEnabled = role == .manager
             self.accountInfo = accountInfo

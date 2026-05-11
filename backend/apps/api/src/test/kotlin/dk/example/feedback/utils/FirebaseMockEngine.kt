@@ -60,6 +60,13 @@ class FirebaseMockEngine(userId: String) : FirebaseService, FirebaseAdminService
         return "mock-custom-token-$uid"
     }
 
+    override fun deleteUsers(uids: Set<String>) {
+        uids.forEach { uid ->
+            users.remove(uid)
+            roles.remove(uid)
+        }
+    }
+
 //    suspend fun getToken(): SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor {
 //        val token = mutex.withLock {
 //            when (role) {

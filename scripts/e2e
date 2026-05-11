@@ -6,13 +6,14 @@ SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 16}"
 SCHEME="Feedback Localhost"
 DERIVED_DATA_PATH="$REPO_ROOT/ios-app/.build/maestro"
 APP_PATH="$DERIVED_DATA_PATH/Build/Products/DebugLocalhost-iphonesimulator/App.app"
-MAESTRO_FLOW_PATH="$REPO_ROOT/ios-app/.maestro/smoke-launch.yaml"
+MANAGER_FLOW_PATH="$REPO_ROOT/ios-app/.maestro/seeded-manager-flow.yaml"
+PARTICIPANT_FLOW_PATH="$REPO_ROOT/ios-app/.maestro/seeded-participant-flow.yaml"
+API_BASE_URL="http://localhost:8080"
 API_HEALTH_URL="http://localhost:8090/actuator/health"
 API_HEALTH_TIMEOUT_SECONDS="240"
 
 cleanup() {
-  cd "$REPO_ROOT"
-  docker compose down
+  true
 }
 
 require_cmd() {
@@ -86,4 +87,11 @@ if [ ! -d "$APP_PATH" ]; then
 fi
 
 xcrun simctl install "$SIMULATOR_UDID" "$APP_PATH"
-maestro test --device "$SIMULATOR_UDID" "$MAESTRO_FLOW_PATH"
+
+MANAGER_TOKEN="$(curl -sS -X POST "$API_BASE_URL/admin/seed-manager-with-data" | tr -d ' \n' | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')"
+maestro test --device "$SIMULATOR_UDID" -e E2E_ENABLE_AUTO_LOGIN=1 -e E2E_CUSTOM_TOKEN="$MANAGER_TOKEN" "$MANAGER_FLOW_PATH"
+
+curl -sS -X POST "$API_BASE_URL/admin/reset-database" >/dev/null
+
+PARTICIPANT_TOKEN="$(curl -sS -X POST "$API_BASE_URL/admin/seed-participant-with-data" | tr -d ' \n' | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')"
+maestro test --device "$SIMULATOR_UDID" -e E2E_ENABLE_AUTO_LOGIN=1 -e E2E_CUSTOM_TOKEN="$PARTICIPANT_TOKEN" "$PARTICIPANT_FLOW_PATH"

@@ -26,6 +26,9 @@ public actor APIClientCache {
     }
     
     public func updateSession(_ newSession: Bootstrap) {
+        if let cachedSession = session, cachedSession != newSession {
+            Logger.debug("Cached session overwritten with new session data")
+        }
         session = newSession
     }
     

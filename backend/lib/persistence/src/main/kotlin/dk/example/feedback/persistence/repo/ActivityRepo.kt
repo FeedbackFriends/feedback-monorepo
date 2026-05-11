@@ -8,13 +8,13 @@ import dk.example.feedback.persistence.dao.AccountDao
 import dk.example.feedback.persistence.dao.ActivityDao
 import dk.example.feedback.persistence.dao.ActivityInviteDao
 import dk.example.feedback.persistence.dao.QuestionDao
-import dk.example.feedback.persistence.dao.SessionDao
+import dk.example.feedback.persistence.dao.EventDao
 import dk.example.feedback.persistence.table.AccountTable
 import dk.example.feedback.persistence.table.ActivityInviteTable
 import dk.example.feedback.persistence.table.ActivityTable
 import dk.example.feedback.persistence.table.QuestionTable
-import dk.example.feedback.persistence.table.SessionParticipantTable
-import dk.example.feedback.persistence.table.SessionTable
+import dk.example.feedback.persistence.table.EventParticipantTable
+import dk.example.feedback.persistence.table.EventTable
 import java.util.UUID
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -165,20 +165,20 @@ class ActivityRepo {
             }
 
         val accountsByEmail = lookupAccountsByEmail(cleanedEmails)
-        SessionDao.find { SessionTable.activity eq activityId }.forEach { session ->
+        EventDao.find { EventTable.activity eq activityId }.forEach { event ->
             accountsByEmail.values.forEach { account ->
                 if (account.id.value == managerId) {
                     return@forEach
                 }
-                val alreadyJoined = SessionParticipantTable.selectAll().where {
-                    (SessionParticipantTable.session eq session.id.value) and
-                        (SessionParticipantTable.participant eq account.id.value)
+                val alreadyJoined = EventParticipantTable.selectAll().where {
+                    (EventParticipantTable.event eq event.id.value) and
+                        (EventParticipantTable.participant eq account.id.value)
                 }.singleOrNull()
                 if (alreadyJoined == null) {
-                    SessionParticipantTable.insert {
-                        it[SessionParticipantTable.session] = EntityID(session.id.value, SessionTable)
-                        it[SessionParticipantTable.participant] = account.id.value
-                        it[SessionParticipantTable.feedbackSubmitted] = false
+                    EventParticipantTable.insert {
+                        it[EventParticipantTable.event] = EntityID(event.id.value, EventTable)
+                        it[EventParticipantTable.participant] = account.id.value
+                        it[EventParticipantTable.feedbackSubmitted] = false
                     }
                 }
             }

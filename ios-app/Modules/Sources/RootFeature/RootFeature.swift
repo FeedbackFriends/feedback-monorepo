@@ -47,7 +47,7 @@ public struct RootFeature: Sendable {
         var isLoading: Bool
         var logout: Logout.State
         public init(
-            destination: Destination.State = .isLoading,
+            destination: Destination.State = .signUp(.init()),
             isLoading: Bool = false,
             logout: Logout.State = .init(),
         ) {
@@ -90,23 +90,21 @@ public struct RootFeature: Sendable {
         Reduce { state, action in
             switch action {
                 
-//            case .destination(.signUp(.destination(.presented(.selectUserType(.delegate(.getSession)))))):
-//                return getSession(state: &state, deeplink: nil)
-//                
-//            case .destination(.loggedIn(.accountSection(.destination(.presented(.changeUserType(.delegate(.refreshSession))))))):
-//                return getSession(state: &state, deeplink: nil)
-//                
-//            case .destination(.loggedIn(.delegate(.navigateToSignUp))),
-//                .destination(.loggedIn(.participantEvents(.delegate(.navigateToSignUp)))):
-//                state.destination = .signUp(.init())
-//                return .none
+            case .destination(.signUp(.destination(.presented(.selectUserType(.delegate(.getSession(let bootstrap))))))):
+                return .send(.getSessionResponse(session: bootstrap, deeplink: nil))
+
+            case .destination(.loggedIn(.delegate(.navigateToSignUp))),
+                .destination(.loggedIn(.participantEvents(.delegate(.navigateToSignUp)))):
+                return .send(.logout(.logoutButtonTap))
                 
             case .tryAgainButtonTap(let errorType):
                 state.isLoading = true
                 switch errorType {
                     
                 case .anonymousSignUpError:
-                    return signUpAnonymously(state: &state)
+                    state.destination = .signUp(.init())
+                    state.isLoading = false
+                    return .none
                     
                 case .createAccountError(_, let role):
                     return createAccount(withRole: role, state: &state)
@@ -132,13 +130,9 @@ public struct RootFeature: Sendable {
                     return createAccount(withRole: nil, state: &state)
                     
                 case .loggedOut:
-                    /// This is triggered when app is opened
-                    if case .isLoading = state.destination {
-                        return signUpAnonymously(state: &state)
-                    } else {
-                        state.destination = .signUp(.init())
-                        return .none
-                    }
+                    state.destination = .signUp(.init())
+                    state.isLoading = false
+                    return .none
                 }
                 
             case .destination:
@@ -250,7 +244,7 @@ extension RootFeature.State {
                 newTabbarState.managerEvents.destination = .eventDetail(
                     EventDetailFeature.State(
                         eventId: managerEvent.id,
-                        detail: .init(managerEvent),
+                        detail: managerEvent.event,
                         session: sharedSession
                     )
                 )
@@ -279,20 +273,6 @@ private extension RootFeature {
                 await send(.createAccountResponse(session, role))
             } catch {
                 await send(.presentError(ErrorType.createAccountError(error: error.localized, role)))
-            }
-        }
-    }
-    
-    func signUpAnonymously(
-        state: inout State
-    ) -> EffectOf<Self> {
-        state.isLoading = true
-        state.destination = .isLoading
-        return .run { send in
-            do {
-                try await authClient.signInAnonymously()
-            } catch {
-                await send(.presentError(ErrorType.anonymousSignUpError(error: error.localized)))
             }
         }
     }

@@ -14,7 +14,7 @@ import dk.example.feedback.payloads.FeedbackInput
 import dk.example.feedback.payloads.CreateAccountInput
 import dk.example.feedback.payloads.ModifyAccountInput
 import dk.example.feedback.payloads.QuestionInput
-import dk.example.feedback.payloads.SessionInput
+import dk.example.feedback.payloads.EventInput
 import dk.example.feedback.payloads.SubmitFeedbackInput
 import dk.example.feedback.utils.MockJwtFactory
 import dk.example.feedback.utils.TestConfig
@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -45,17 +46,17 @@ class E2ETest(
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
     @Test
-    fun `manager creates activity then session from that activity`() {
-        val managerId = "manager-session-flow"
+    fun `manager creates activity then event from that activity`() {
+        val managerId = "manager-event-flow"
         createAccount(managerId = managerId)
 
         val activityId = createActivity(managerId = managerId)
 
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/session")
+            MockMvcRequestBuilders.post("/event")
                 .content(
                     objectMapper.writeValueAsString(
-                        SessionInput(
+                        EventInput(
                             activityId = java.util.UUID.fromString(activityId),
                             date = OffsetDateTime.parse("2026-04-01T09:00:00+00:00"),
                             durationInMinutes = 30,
@@ -68,13 +69,13 @@ class E2ETest(
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id").value(activityId))
-            .andExpect(jsonPath("$.sessions[0].location").value("Oslo"))
-            .andExpect(jsonPath("$.currentQuestions[0].text").value("How did the session go?"))
+            .andExpect(jsonPath("$.events[0].location").value("Oslo"))
+            .andExpect(jsonPath("$.currentQuestions[0].text").value("How did the event go?"))
             .andExpect(jsonPath("$.currentQuestions[1].text").value("What should we improve next time?"))
     }
 
     @Test
-    fun `invited existing account auto joins created session`() {
+    fun `invited existing account auto joins created event`() {
         val managerId = "manager-auto-join"
         val inviteeId = "invitee-auto-join"
         val inviteeEmail = "invitee@example.com"
@@ -85,10 +86,10 @@ class E2ETest(
         val activityId = createActivity(managerId = managerId, invitedEmails = listOf(inviteeEmail))
 
         val response = mockMvc.perform(
-            MockMvcRequestBuilders.post("/session")
+            MockMvcRequestBuilders.post("/event")
                 .content(
                     objectMapper.writeValueAsString(
-                        SessionInput(
+                        EventInput(
                             activityId = java.util.UUID.fromString(activityId),
                             date = OffsetDateTime.parse("2026-04-02T09:00:00+00:00"),
                             durationInMinutes = 45,
@@ -102,8 +103,8 @@ class E2ETest(
             .andExpect(status().isOk)
             .andReturn()
 
-        val sessionId = objectMapper.readTree(response.response.contentAsString)
-            .get("sessions")
+        val eventId = objectMapper.readTree(response.response.contentAsString)
+            .get("events")
             .get(0)
             .get("id")
             .asText()
@@ -114,7 +115,70 @@ class E2ETest(
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.participantSessions[*].id").value(hasItem(sessionId)))
+            .andExpect(jsonPath("$.participantEvents[*].id").value(hasItem(eventId)))
+    }
+
+    @Test
+    fun `bootstrap update returns 204 with empty body when hash is unchanged`() {
+        val managerId = "manager-bootstrap-update-unchanged"
+        createAccount(managerId = managerId)
+
+        val bootstrapResponse = mockMvc.perform(
+            MockMvcRequestBuilders.get("/bootstrap")
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val bootstrapHash = objectMapper.readTree(bootstrapResponse.response.contentAsString)
+            .get("managerData")
+            .get("bootstrapHash")
+            .asText()
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/bootstrap/bootstrap-update/$bootstrapHash")
+                .header("Authorization", "Bearer ${MockJwtFactory(managerId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isNoContent)
+            .andExpect(content().string(""))
+    }
+
+    @Test
+    fun `account post uses requested participant role for bootstrap even when jwt role is manager`() {
+        val accountId = "account-role-override-participant"
+
+        val response = mockMvc.perform(
+            MockMvcRequestBuilders.post("/account")
+                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(accountId).managerToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val body = objectMapper.readTree(response.response.contentAsString)
+        assertEquals(Role.Participant.value, body.get("role").asText())
+        assertEquals(true, body.get("managerData").isNull)
+    }
+
+    @Test
+    fun `account post uses requested manager role for bootstrap even when jwt role is participant`() {
+        val accountId = "account-role-override-manager"
+
+        val response = mockMvc.perform(
+            MockMvcRequestBuilders.post("/account")
+                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Manager, fcmToken = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(accountId).participantToken()}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val body = objectMapper.readTree(response.response.contentAsString)
+        assertEquals(Role.Manager.value, body.get("role").asText())
+        assertEquals(false, body.get("managerData").isNull)
     }
 
     
@@ -122,7 +186,7 @@ class E2ETest(
     
     
     @Test
-    fun `activity question update keeps old session snapshots and manager bootstrap aggregates question analytics`() {
+    fun `activity question update keeps old event snapshots and manager bootstrap aggregates question analytics`() {
         val managerId = "manager-question-analytics"
         val participantId = "participant-question-analytics"
         createAccount(managerId = managerId)
@@ -132,19 +196,19 @@ class E2ETest(
         val activityId = activityResponse.get("id").asText()
         val canonicalQuestionId = UUID.fromString(activityResponse.get("currentQuestions").get(0).get("id").asText())
 
-        val firstSession = createSession(
+        val firstEvent = createEvent(
             managerId = managerId,
             activityId = activityId,
             date = OffsetDateTime.parse("2026-04-03T09:00:00+00:00"),
             location = "Oslo",
         )
-        val firstSessionPinCode = firstSession.get("pinCode").asText()
-        val firstSessionQuestionId = UUID.fromString(firstSession.get("questionsSnapshot").get(0).get("id").asText())
+        val firstEventPinCode = firstEvent.get("pinCode").asText()
+        val firstEventQuestionId = UUID.fromString(firstEvent.get("questionsSnapshot").get(0).get("id").asText())
 
         submitEmojiFeedback(
             participantId = participantId,
-            pinCode = firstSessionPinCode,
-            questionId = firstSessionQuestionId,
+            pinCode = firstEventPinCode,
+            questionId = firstEventQuestionId,
         )
 
         val updatedActivity = updateActivity(
@@ -153,7 +217,7 @@ class E2ETest(
             questions = listOf(
                 QuestionInput(
                     id = canonicalQuestionId,
-                    questionText = "How did the session go?",
+                    questionText = "How did the event go?",
                     feedbackType = FeedbackType.Emoji,
                 ),
                 QuestionInput(
@@ -163,27 +227,27 @@ class E2ETest(
             ),
         )
 
-        val preservedFirstSession = updatedActivity
-            .get("sessions")
+        val preservedFirstEvent = updatedActivity
+            .get("events")
             .first { it.get("location").asText() == "Oslo" }
         assertEquals(
             "What should we improve next time?",
-            preservedFirstSession.get("questionsSnapshot").get(1).get("text").asText(),
+            preservedFirstEvent.get("questionsSnapshot").get(1).get("text").asText(),
         )
 
-        val secondSession = createSession(
+        val secondEvent = createEvent(
             managerId = managerId,
             activityId = activityId,
             date = OffsetDateTime.parse("2026-04-10T09:00:00+00:00"),
             location = "Bergen",
         )
-        val secondSessionPinCode = secondSession.get("pinCode").asText()
-        val secondSessionQuestionId = UUID.fromString(secondSession.get("questionsSnapshot").get(0).get("id").asText())
+        val secondEventPinCode = secondEvent.get("pinCode").asText()
+        val secondEventQuestionId = UUID.fromString(secondEvent.get("questionsSnapshot").get(0).get("id").asText())
 
         submitEmojiFeedback(
             participantId = participantId,
-            pinCode = secondSessionPinCode,
-            questionId = secondSessionQuestionId,
+            pinCode = secondEventPinCode,
+            questionId = secondEventQuestionId,
         )
 
         val bootstrapResponse = mockMvc.perform(
@@ -201,15 +265,15 @@ class E2ETest(
             .firstOrNull { it.get("questionId").asText() == canonicalQuestionId.toString() }
 
         assertNotNull(analyticsEntry)
-        assertEquals(2, analyticsEntry!!.get("sessionCount").asInt())
+        assertEquals(2, analyticsEntry!!.get("eventCount").asInt())
         assertEquals(2, analyticsEntry.get("responseCount").asInt())
-        assertEquals("How did the session go?", analyticsEntry.get("questionText").asText())
+        assertEquals("How did the event go?", analyticsEntry.get("questionText").asText())
         assertEquals(2, analyticsEntry.get("timeline").size())
         assertEquals(2, analyticsEntry.get("overallSummary").get("emojiQuestionFeedbackSummary").get("countHappy").asInt())
     }
 
     @Test
-    fun `activity trend uses latest two comparable zero-to-ten sessions with 0 to 5 normalization`() {
+    fun `activity trend uses latest two comparable zero-to-ten events with 0 to 5 normalization`() {
         val managerId = "manager-activity-trend"
         val participantId = "participant-activity-trend"
         createAccount(managerId = managerId)
@@ -217,7 +281,7 @@ class E2ETest(
 
         val activityId = createActivityWithZeroToTenQuestion(managerId = managerId)
 
-        val firstSession = createSession(
+        val firstEvent = createEvent(
             managerId = managerId,
             activityId = activityId,
             date = OffsetDateTime.parse("2026-04-12T09:00:00+00:00"),
@@ -225,21 +289,21 @@ class E2ETest(
         )
         submitZeroToTenFeedback(
             participantId = participantId,
-            pinCode = firstSession.get("pinCode").asText(),
-            questionId = UUID.fromString(firstSession.get("questionsSnapshot").get(0).get("id").asText()),
+            pinCode = firstEvent.get("pinCode").asText(),
+            questionId = UUID.fromString(firstEvent.get("questionsSnapshot").get(0).get("id").asText()),
             score = 6,
         )
 
-        val afterFirstSession = fetchActivityFromBootstrap(managerId = managerId, activityId = activityId)
-        assertEquals("insufficient_data", afterFirstSession.get("trend").get("direction").asText())
-        assertEquals("neutral", afterFirstSession.get("trend").get("indicator").asText())
-        assertEquals("average_rating", afterFirstSession.get("trend").get("metric").asText())
-        assertEquals(3.0, afterFirstSession.get("trend").get("latestValue").asDouble())
-        assertEquals(1, afterFirstSession.get("trend").get("comparedSessionCount").asInt())
-        assertEquals(true, afterFirstSession.get("trend").get("previousValue").isNull)
-        assertEquals(true, afterFirstSession.get("trend").get("delta").isNull)
+        val afterFirstEvent = fetchActivityFromBootstrap(managerId = managerId, activityId = activityId)
+        assertEquals("insufficient_data", afterFirstEvent.get("trend").get("direction").asText())
+        assertEquals("neutral", afterFirstEvent.get("trend").get("indicator").asText())
+        assertEquals("average_rating", afterFirstEvent.get("trend").get("metric").asText())
+        assertEquals(3.0, afterFirstEvent.get("trend").get("latestValue").asDouble())
+        assertEquals(1, afterFirstEvent.get("trend").get("comparedEventCount").asInt())
+        assertEquals(true, afterFirstEvent.get("trend").get("previousValue").isNull)
+        assertEquals(true, afterFirstEvent.get("trend").get("delta").isNull)
 
-        val secondSession = createSession(
+        val secondEvent = createEvent(
             managerId = managerId,
             activityId = activityId,
             date = OffsetDateTime.parse("2026-04-19T09:00:00+00:00"),
@@ -247,18 +311,18 @@ class E2ETest(
         )
         submitZeroToTenFeedback(
             participantId = participantId,
-            pinCode = secondSession.get("pinCode").asText(),
-            questionId = UUID.fromString(secondSession.get("questionsSnapshot").get(0).get("id").asText()),
+            pinCode = secondEvent.get("pinCode").asText(),
+            questionId = UUID.fromString(secondEvent.get("questionsSnapshot").get(0).get("id").asText()),
             score = 8,
         )
 
-        val afterSecondSession = fetchActivityFromBootstrap(managerId = managerId, activityId = activityId)
-        assertEquals("improving", afterSecondSession.get("trend").get("direction").asText())
-        assertEquals("positive", afterSecondSession.get("trend").get("indicator").asText())
-        assertEquals(4.0, afterSecondSession.get("trend").get("latestValue").asDouble())
-        assertEquals(3.0, afterSecondSession.get("trend").get("previousValue").asDouble())
-        assertEquals(1.0, afterSecondSession.get("trend").get("delta").asDouble())
-        assertEquals(2, afterSecondSession.get("trend").get("comparedSessionCount").asInt())
+        val afterSecondEvent = fetchActivityFromBootstrap(managerId = managerId, activityId = activityId)
+        assertEquals("improving", afterSecondEvent.get("trend").get("direction").asText())
+        assertEquals("positive", afterSecondEvent.get("trend").get("indicator").asText())
+        assertEquals(4.0, afterSecondEvent.get("trend").get("latestValue").asDouble())
+        assertEquals(3.0, afterSecondEvent.get("trend").get("previousValue").asDouble())
+        assertEquals(1.0, afterSecondEvent.get("trend").get("delta").asDouble())
+        assertEquals(2, afterSecondEvent.get("trend").get("comparedEventCount").asInt())
     }
 
     private fun createAccount(managerId: String) {
@@ -300,7 +364,7 @@ class E2ETest(
                             agenda = "Review the week",
                             questions = listOf(
                                 QuestionInput(
-                                    questionText = "How did the session go?",
+                                    questionText = "How did the event go?",
                                     feedbackType = dk.example.feedback.model.enumerations.FeedbackType.Emoji,
                                 ),
                                 QuestionInput(
@@ -333,7 +397,7 @@ class E2ETest(
                             agenda = "Track trend",
                             questions = listOf(
                                 QuestionInput(
-                                    questionText = "Rate this session",
+                                    questionText = "Rate this event",
                                     feedbackType = FeedbackType.ZeroToTen,
                                 )
                             ),
@@ -376,17 +440,17 @@ class E2ETest(
         return objectMapper.readTree(response.response.contentAsString)
     }
 
-    private fun createSession(
+    private fun createEvent(
         managerId: String,
         activityId: String,
         date: OffsetDateTime,
         location: String,
     ): JsonNode {
         val response = mockMvc.perform(
-            MockMvcRequestBuilders.post("/session")
+            MockMvcRequestBuilders.post("/event")
                 .content(
                     objectMapper.writeValueAsString(
-                        SessionInput(
+                        EventInput(
                             activityId = UUID.fromString(activityId),
                             date = date,
                             durationInMinutes = 30,
@@ -402,7 +466,7 @@ class E2ETest(
 
         return objectMapper
             .readTree(response.response.contentAsString)
-            .get("sessions")
+            .get("events")
             .first { it.get("location").asText() == location }
     }
 

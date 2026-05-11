@@ -5,7 +5,6 @@ import dk.example.feedback.persistence.repo.MockRepo
 import dk.example.feedback.utils.TestConfig
 import javax.sql.DataSource
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,7 +16,7 @@ import org.springframework.test.context.TestPropertySource
 @TestPropertySource(
     properties = [
         "spring.datasource.url=jdbc:h2:mem:mockseeddb;MODE=PostgreSQL;DATABASE_TO_UPPER=false",
-    ]
+    ],
 )
 class MockSeedDataTest(
     @Autowired private val dataSource: DataSource,
@@ -25,44 +24,40 @@ class MockSeedDataTest(
 ) {
 
     @Test
-    fun `mock seed inserts rich deterministic dataset and remains idempotent`() {
-        assertEquals(61, count("account"))
-        assertEquals(20, count("\"session\""))
-        assertEquals(20, count("activity"))
-        assertEquals(20, count("pin_code"))
-        assertEquals(120, count("session_participant"))
-        assertEquals(100, count("question"))
-        assertEquals(200, count("feedback"))
-
-        assertTrue(countWhere("session_participant", "feedback_submitted = true") > 0)
-        assertTrue(countWhere("session_participant", "feedback_submitted = false") > 0)
-
-        assertTrue(countWhere("feedback", "type = 'Comment'") > 0)
-        assertTrue(countWhere("feedback", "type = 'Emoji'") > 0)
-        assertTrue(countWhere("feedback", "type = 'ThumpsUpThumpsDown'") > 0)
-        assertTrue(countWhere("feedback", "type = 'Opinion'") > 0)
-        assertTrue(countWhere("feedback", "type = 'ZeroToTen'") > 0)
-
+    fun `manager with data seed inserts deterministic graph and is idempotent`() {
         val countsBefore = snapshotCounts()
-        mockRepo.insertMockData()
-        val countsAfter = snapshotCounts()
+        mockRepo.insertManagerWithData(managerId = "mock-manager-with-data")
+        val countsAfterFirst = snapshotCounts()
+        assertEquals(countsBefore["account"]!! + 2, countsAfterFirst["account"])
+        assertEquals(countsBefore["activity"]!! + 1, countsAfterFirst["activity"])
+        assertEquals(countsBefore["event"]!! + 1, countsAfterFirst["event"])
+        assertEquals(countsBefore["question"]!! + 5, countsAfterFirst["question"])
+        assertEquals(countsBefore["feedback"]!! + 20, countsAfterFirst["feedback"])
 
-        assertEquals(countsBefore, countsAfter)
+        mockRepo.insertManagerWithData(managerId = "mock-manager-with-data")
+        assertEquals(countsAfterFirst, snapshotCounts())
+    }
+
+    @Test
+    fun `participant with data seed inserts deterministic graph and is idempotent`() {
+        val countsBefore = snapshotCounts()
+        mockRepo.insertParticipantWithData(participantId = "mock-participant-with-data")
+        val countsAfterFirst = snapshotCounts()
+        assertEquals(countsBefore["account"]!! + 2, countsAfterFirst["account"])
+        assertEquals(countsBefore["activity"]!! + 1, countsAfterFirst["activity"])
+        assertEquals(countsBefore["event"]!! + 1, countsAfterFirst["event"])
+        assertEquals(countsBefore["question"]!! + 5, countsAfterFirst["question"])
+        assertEquals(countsBefore["feedback"]!! + 10, countsAfterFirst["feedback"])
+
+        mockRepo.insertParticipantWithData(participantId = "mock-participant-with-data")
+        assertEquals(countsAfterFirst, snapshotCounts())
     }
 
     private fun count(tableName: String): Int {
-        return querySingleInt("select count(*) from $tableName")
-    }
-
-    private fun countWhere(tableName: String, whereClause: String): Int {
-        return querySingleInt("select count(*) from $tableName where $whereClause")
-    }
-
-    private fun querySingleInt(sql: String): Int {
         dataSource.connection.use { connection ->
             connection.createStatement().use { statement ->
-                statement.executeQuery(sql).use { resultSet ->
-                    check(resultSet.next()) { "No row returned for query: $sql" }
+                statement.executeQuery("select count(*) from $tableName").use { resultSet ->
+                    check(resultSet.next()) { "No row returned for count query" }
                     return resultSet.getInt(1)
                 }
             }
@@ -72,10 +67,8 @@ class MockSeedDataTest(
     private fun snapshotCounts(): Map<String, Int> {
         return mapOf(
             "account" to count("account"),
-            "session" to count("\"session\""),
             "activity" to count("activity"),
-            "pin_code" to count("pin_code"),
-            "session_participant" to count("session_participant"),
+            "event" to count("\"event\""),
             "question" to count("question"),
             "feedback" to count("feedback"),
         )

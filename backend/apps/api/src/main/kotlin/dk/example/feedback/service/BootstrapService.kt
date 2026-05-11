@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class BootstrapService(
-    private val sessionService: SessionService,
+    private val eventService: EventService,
     private val activityService: ActivityService,
     private val managerQuestionAnalyticsService: ManagerQuestionAnalyticsService,
     val accountService: AccountService,
@@ -21,13 +21,13 @@ class BootstrapService(
 
     private val logger = LoggerFactory.getLogger(BootstrapService::class.java)
 
-    fun getUpdatedSession(jwt: Jwt, feedbackSessionHash: UUID): BootstrapDto? {
+    fun getUpdatedEvent(jwt: Jwt, bootstrapVersion: UUID): BootstrapDto? {
         val accountId = jwt.getAccountId()
         val role = jwt.role()
         val account = accountService.fetchAccount(accountId = accountId)
             ?: throw Exception("Account not found for id: $accountId")
-        if (account.feedbackSessionHash == feedbackSessionHash) {
-            logger.info("Session hash is the same, no need to provide updated session")
+        if (account.bootstrapVersion == bootstrapVersion) {
+            logger.info("Event hash is the same, no need to provide updated event")
             return null
         }
         return getBootstrapDto(
@@ -37,9 +37,13 @@ class BootstrapService(
         )
     }
 
-    fun getSession(jwt: Jwt): BootstrapDto {
+    fun getEvent(jwt: Jwt): BootstrapDto {
+        return getEvent(jwt = jwt, roleOverride = null)
+    }
+
+    fun getEvent(jwt: Jwt, roleOverride: Role?): BootstrapDto {
         val accountId = jwt.getAccountId()
-        val role = jwt.role()
+        val role = roleOverride ?: jwt.role()
         val account = accountService.fetchAccount(accountId = accountId)
             ?: throw Exception("Account not found for id: $accountId")
         return getBootstrapDto(
@@ -61,13 +65,13 @@ class BootstrapService(
             email = account.email,
             phoneNumber = account.phoneNumber,
         )
-        val participantSessions = sessionService.getParticipantSessions(accountId = accountId)
+        val participantEvents = eventService.getParticipantEvents(accountId = accountId)
         val managerData = when (role) {
             Role.Manager -> {
                 BootstrapDto.ManagerDataDto(
                     activities = activityService.getManagerActivities(accountId),
                     notificationHistory = notificationHistoryService.getNotificationHistory(accountId = accountId),
-                    bootstrapHash = account.feedbackSessionHash,
+                    bootstrapHash = account.bootstrapVersion,
                     questionAnalytics = managerQuestionAnalyticsService.getQuestionAnalytics(accountId),
                 )
             }
@@ -77,7 +81,7 @@ class BootstrapService(
         return BootstrapDto(
             role = role,
             accountInfo = accountDto,
-            participantSessions = participantSessions,
+            participantEvents = participantEvents,
             managerData = managerData,
         )
     }

@@ -70,7 +70,7 @@ extension ManagerEventsView {
             todayEvents: store.filterCollection.allEnabled || store.filterCollection.todayEnabled ? todayEvents : [],
             comingUpEvents: store.filterCollection.allEnabled || store.filterCollection.comingUpEnabled ? comingUpEvents : [],
             previousEvents: store.filterCollection.allEnabled || store.filterCollection.previousEnabled ? previousEvents : [],
-            onEventTap: { store.send(.managerEventTap($0)) }
+            onEventTap: { store.send(.managerEventTap($0.event)) }
         )
         .padding(.bottom, 80)
         .padding(.horizontal, Theme.padding)

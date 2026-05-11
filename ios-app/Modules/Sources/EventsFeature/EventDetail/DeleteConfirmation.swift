@@ -69,7 +69,7 @@ public struct DeleteConfirmation: Sendable {
                 state.deleteEventInFlight = true
                 return .run { [state] send in
                     do {
-                        try await apiClient.deleteActivity(state.eventId)
+                        try await apiClient.deleteEvent(state.eventId)
                         await send(.eventDeletedResponse)
                     } catch {
                         await send(.presentError(error))

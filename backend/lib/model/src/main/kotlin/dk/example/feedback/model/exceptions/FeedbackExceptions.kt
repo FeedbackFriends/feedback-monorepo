@@ -10,17 +10,15 @@ abstract class DomainException(
 
 class FeedbackAlreadySubmittedException(eventId: UUID, accountId: String) : DomainException(
     DomainCode.FEEDBACK_ALREADY_SUBMITTED,
-    "Feedback for session $eventId already submitted by user $accountId"
+    "Feedback for event $eventId already submitted by user $accountId"
 )
 
-class SessionAlreadyJoinedException(eventId: UUID, accountId: String) : DomainException(
+class EventAlreadyJoinedException(eventId: UUID, accountId: String) : DomainException(
     DomainCode.EVENT_ALREADY_JOINED,
-    "User $accountId has already joined session $eventId"
+    "User $accountId has already joined event $eventId"
 )
 
 class PinCodeNotFoundException(pinCode: String) : DomainException(
     DomainCode.PINCODE_NOT_FOUND,
-    "Could not find any session with pincode $pinCode"
+    "Could not find any event with pincode $pinCode"
 )
-
-typealias EventAlreadyJoinedException = SessionAlreadyJoinedException

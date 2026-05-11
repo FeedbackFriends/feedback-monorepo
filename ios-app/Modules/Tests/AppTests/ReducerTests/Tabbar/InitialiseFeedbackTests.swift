@@ -8,9 +8,7 @@ import Domain
 @MainActor
 struct InitialiseFeedbackTests {
     
-    let session = FeedbackSession.init(
-        title: "Hello",
-        agenda: nil,
+    let session = FeedbackEventDto.init(
         questions: [
             .init(
                 id: UUID(),
@@ -32,11 +30,11 @@ struct InitialiseFeedbackTests {
         let store = TestStore(initialState: InitialiseFeedback.State()) {
             InitialiseFeedback()
         } withDependencies: {
-            $0.apiClient.startFeedbackSession = { _ in session }
+            $0.apiClient.startFeedbackEvent = { _ in session }
         }
         await store.send(.startFeedback(pinCode: session.pinCode))
         await store.withExhaustivity(.off) {
-            await store.receive(\.startFeedbackSessionResponse) {
+            await store.receive(\.startFeedbackEventResponse) {
                 guard case let .feedbackFlowCoordinator(flowState) = $0.destination else {
                     XCTFail("Expected .feedbackFlowCoordinator")
                     return
@@ -60,7 +58,7 @@ struct InitialiseFeedbackTests {
         let store = TestStore(initialState: InitialiseFeedback.State()) {
             InitialiseFeedback()
         } withDependencies: {
-            $0.apiClient.startFeedbackSession = { _ in throw error }
+            $0.apiClient.startFeedbackEvent = { _ in throw error }
         }
 
         await store.send(.startFeedback(pinCode: PinCode(value: "1234")))

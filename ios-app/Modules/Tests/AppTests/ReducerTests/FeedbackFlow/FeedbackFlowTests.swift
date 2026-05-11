@@ -211,10 +211,8 @@ struct FeedbackFlowTests {
 }
 
 private extension FeedbackFlowTests {
-    var session: FeedbackSession {
+    var session: FeedbackEventDto {
         .init(
-            title: "Design Review",
-            agenda: "Discuss new UI components",
             questions: [
                 .init(
                     id: question1.questionId,

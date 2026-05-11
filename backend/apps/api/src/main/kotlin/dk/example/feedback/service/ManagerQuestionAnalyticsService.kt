@@ -4,10 +4,10 @@ import dk.example.feedback.dto.ManagerQuestionAnalyticsDto
 import dk.example.feedback.dto.QuestionTrendPointDto
 import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.database.QuestionEntity
-import dk.example.feedback.model.database.SessionEntity
+import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.persistence.repo.ActivityRepo
-import dk.example.feedback.persistence.repo.SessionRepo
+import dk.example.feedback.persistence.repo.EventRepo
 import java.time.OffsetDateTime
 import java.util.UUID
 import org.springframework.stereotype.Service
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 @Service
 class ManagerQuestionAnalyticsService(
     private val activityRepo: ActivityRepo,
-    private val sessionRepo: SessionRepo,
+    private val eventRepo: EventRepo,
 ) {
 
     fun getQuestionAnalytics(managerId: String): List<ManagerQuestionAnalyticsDto> {
@@ -33,11 +33,11 @@ class ManagerQuestionAnalyticsService(
             )
         }
 
-        sessionRepo
-            .getManagerSessions(managerId)
+        eventRepo
+            .getManagerEvents(managerId)
             .sortedBy { it.date }
-            .forEach { session ->
-                session.questions
+            .forEach { event ->
+                event.questions
                     .sortedBy { it.index }
                     .forEach { question ->
                         val canonicalQuestionId = question.canonicalQuestionId()
@@ -48,7 +48,7 @@ class ManagerQuestionAnalyticsService(
                                 feedbackType = question.feedbackType,
                             )
                         }
-                        aggregate.recordSessionQuestion(session = session, question = question)
+                        aggregate.recordEventQuestion(event = event, question = question)
                     }
             }
 
@@ -60,14 +60,14 @@ class ManagerQuestionAnalyticsService(
                     questionId = aggregate.canonicalQuestionId,
                     questionText = aggregate.questionText,
                     feedbackType = aggregate.feedbackType,
-                    sessionCount = aggregate.timeline.size,
+                    eventCount = aggregate.timeline.size,
                     responseCount = aggregate.feedback.size,
                     latestAskedAt = aggregate.latestAskedAt,
                     overallSummary = generateQuestionFeedbackSummary(
                         feedback = aggregate.feedback,
                         type = aggregate.feedbackType,
                     ),
-                    timeline = aggregate.timeline.sortedBy { it.sessionDate },
+                    timeline = aggregate.timeline.sortedBy { it.eventDate },
                 )
             }
     }
@@ -81,16 +81,16 @@ private data class QuestionAnalyticsAggregate(
     val timeline: MutableList<QuestionTrendPointDto> = mutableListOf(),
     var latestAskedAt: OffsetDateTime? = null,
 ) {
-    fun recordSessionQuestion(session: SessionEntity, question: QuestionEntity) {
-        if (latestAskedAt == null || session.date.isAfter(latestAskedAt)) {
-            latestAskedAt = session.date
+    fun recordEventQuestion(event: EventEntity, question: QuestionEntity) {
+        if (latestAskedAt == null || event.date.isAfter(latestAskedAt)) {
+            latestAskedAt = event.date
             questionText = question.questionText
             feedbackType = question.feedbackType
         }
         feedback.addAll(question.feedback)
         timeline += QuestionTrendPointDto(
-            sessionId = session.id,
-            sessionDate = session.date,
+            eventId = event.id,
+            eventDate = event.date,
             responseCount = question.feedback.size,
             summary = generateQuestionFeedbackSummary(
                 feedback = question.feedback,

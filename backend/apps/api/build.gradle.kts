@@ -22,12 +22,13 @@ dependencies {
 
     implementation(libs.bundles.jackson)
     implementation(libs.springdoc.openapi.starter.webmvc)
-    runtimeOnly(libs.liquibase.core)
+    implementation(libs.liquibase.core)
     runtimeOnly(libs.postgres)
 
     testImplementation(libs.springboot.starter.test)
     testImplementation(libs.springboot.testcontainers)
     testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.springboot.security.test)
     testImplementation(libs.kotlin.test.junit5)
     runtimeOnly(libs.h2)
     testRuntimeOnly(libs.junit.platform.launcher)

@@ -4,7 +4,8 @@ import SwiftUI
 
 struct DetailSectionView: View {
     
-    let detail: Activity
+    let detail: Event
+    let agenda: String?
     
     var body: some View {
         ScrollView {
@@ -34,7 +35,7 @@ private extension DetailSectionView {
                 .padding(.leading, 18)
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
-                    if let agenda = detail.agenda, !agenda.isEmpty {
+                    if let agenda, !agenda.isEmpty {
                         Text("Agenda")
                             .font(.montserratSemiBold, 13)
                         Text(agenda)
@@ -144,7 +145,7 @@ private extension DetailSectionView {
             Text("QUESTIONS")
                 .sectionHeaderStyle()
                 .padding(.leading, 18)
-            ForEach(Array(zip(detail.questions.indices, detail.questions)), id: \.0) { index, question in
+            ForEach(Array(zip(detail.questionsSnapshot.indices, detail.questionsSnapshot)), id: \.0) { index, question in
                 QuestionView(question: question, index: index)
                     .disabled(detail.overallFeedbackSummary == nil)
                 
@@ -230,18 +231,22 @@ struct QuestionView: View {
 }
 
 #Preview("With feedback") {
+    let activity = Activity.mock()
     NavigationStack {
         DetailSectionView(
-            detail: .mock()
+            detail: activity.event,
+            agenda: activity.agenda
         )
         .navigationTitle("Session with feedback")
     }
 }
 
 #Preview("Empty feedback") {
+    let activity = Activity.mockEmpty
     NavigationStack {
         DetailSectionView(
-            detail: .mockEmpty
+            detail: activity.event,
+            agenda: activity.agenda
         )
         .navigationTitle("Session empty feedback")
     }

@@ -32,7 +32,7 @@ extension APIClient {
                 return .mock()
                 
             },
-            startFeedbackSession: { _ in
+            startFeedbackEvent: { _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock
             },
@@ -49,25 +49,25 @@ extension APIClient {
                 return .mock()
             },
             deleteActivity: { _ in },
-            createSession: { _ in
+            createEvent: { _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },
-            updateSession: { _, _ in
+            updateEvent: { _, _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },
-            deleteSession: { _ in },
+            deleteEvent: { _ in },
             createAccount: { _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },
             sessionChangedListener: { .never },
-            joinSession: { _ in
+            joinEvent: { _ in
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },
-            markSessionAsSeen: { _ in
+            markEventAsSeen: { _ in
                 try await Task.sleep(for: .seconds(delay))
                 return ()
             },
@@ -79,7 +79,16 @@ extension APIClient {
                 try await Task.sleep(for: .seconds(delay))
                 return ()
             },
-            mockIdToken: { "" },
+            seedParticipantWithData: { .init(token: "mock-seed-participant-with-data") },
+            seedParticipantEmpty: { .init(token: "mock-seed-participant-empty") },
+            seedManagerWithData: { .init(token: "mock-seed-manager-with-data") },
+            seedManagerEmpty: { .init(token: "mock-seed-manager-empty") },
+            seedEmptyAccount: { .init(token: "mock-seed-empty-account") },
+            resetDatabase: {
+                try await Task.sleep(for: .seconds(delay))
+                return ()
+            },
+            login: { id in .init(token: "mock-login-\(id)") },
             getBoostrapUpdate: {
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()

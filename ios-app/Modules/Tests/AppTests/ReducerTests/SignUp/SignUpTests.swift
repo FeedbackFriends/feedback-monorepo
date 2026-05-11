@@ -102,4 +102,37 @@ struct SignUpTests {
             $0.googleLoginInFlight = false
         }
     }
+    
+    @Test
+    func `Skip login succeeds and updates state correctly`() async {
+        let store = await TestStore(initialState: SignUp.State()) {
+            SignUp()
+        } withDependencies: {
+            $0.authClient.signInAnonymously = { () }
+        }
+        
+        await store.send(.skipButtonTap) {
+            $0.anonymousLoginInFlight = true
+        }
+        await store.receive(\.signUpSuccess) {
+            $0.anonymousLoginInFlight = false
+        }
+    }
+    
+    @Test
+    func `Skip login fails and presents error alert`() async {
+        let store = await TestStore(initialState: SignUp.State()) {
+            SignUp()
+        } withDependencies: {
+            $0.authClient.signInAnonymously = { throw TestError.mock }
+        }
+        
+        await store.send(.skipButtonTap) {
+            $0.anonymousLoginInFlight = true
+        }
+        await store.receive(\.presentError) {
+            $0.destination = .alert(.init(error: TestError.mock))
+            $0.anonymousLoginInFlight = false
+        }
+    }
 }

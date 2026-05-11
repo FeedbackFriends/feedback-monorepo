@@ -14,8 +14,7 @@ class NotificationHistoryDao(id: EntityID<UUID>) : Entity<UUID>(id) {
     var createdAt by NotificationHistoryTable.dateCreated
     var newFeedback by NotificationHistoryTable.newFeedback
     var seenByManager by NotificationHistoryTable.seenByManager
-    var session by SessionDao referencedOn NotificationHistoryTable.session
-    var event by SessionDao referencedOn NotificationHistoryTable.event
+    var event by EventDao referencedOn NotificationHistoryTable.event
     var account by AccountDao referencedOn NotificationHistoryTable.account
 
     fun toModel(): NotificationHistoryEntity {
@@ -23,7 +22,7 @@ class NotificationHistoryDao(id: EntityID<UUID>) : Entity<UUID>(id) {
             id = this.id.value,
             createdAt = this.createdAt,
             newFeedback = this.newFeedback,
-            session = this.session.toModel(),
+            event = this.event.toModel(),
             account = this.account.toModel(),
             seenByManager = this.seenByManager,
         )

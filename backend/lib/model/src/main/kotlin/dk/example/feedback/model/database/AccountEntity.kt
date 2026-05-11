@@ -9,7 +9,7 @@ data class AccountEntity(
     val email: String?,
     val phoneNumber: String?,
     val ratingPrompted: Boolean,
-    val feedbackSessionHash: UUID,
+    val bootstrapVersion: UUID,
 )
 
 

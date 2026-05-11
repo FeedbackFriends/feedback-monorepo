@@ -45,6 +45,9 @@ springdoc:
 feedback:
   firebase-api-key: ${FIREBASE_API_KEY}
   firebase-service-account-json-b64: ${FIREBASE_SERVICE_ACCOUNT_JSON_B64:}
+  enable-test-admin-endpoints: false
+  enable-test-admin-database-reset: false
+  admin-emails: ${FEEDBACK_ADMIN_EMAILS:}
 logging:
   include-application-name: true
   level:

@@ -35,7 +35,10 @@ public struct EventDetailFeatureView: View {
         
         Group {
             if let detail = store.detail {
-                DetailSectionView(detail: detail)
+                DetailSectionView(
+                    detail: detail,
+                    agenda: store.activityDetail?.agenda
+                )
             } else {
                 EmptyStateView(
                     title: "Session unavailable",

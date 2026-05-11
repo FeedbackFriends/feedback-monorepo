@@ -6,3 +6,5 @@ spring:
 feedback:
   firebase-api-key: test-firebase-api-key
   firebase-service-account-json-b64: ""
+  enable-test-admin-database-reset: false
+  admin-emails: "test-admin@example.com"

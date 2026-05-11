@@ -7,13 +7,13 @@ import dk.example.feedback.dto.ActivityTrendDto
 import dk.example.feedback.dto.ActivityTrendMetricDto
 import dk.example.feedback.dto.OwnerDto
 import dk.example.feedback.dto.ParticipantQuestionDto
-import dk.example.feedback.dto.ParticipantSessionDto
+import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantSummaryDto
 import dk.example.feedback.dto.QuestionDto
 import dk.example.feedback.dto.QuestionFeedbackSummaryDto
-import dk.example.feedback.dto.SessionDetailDto
-import dk.example.feedback.dto.SessionDto
-import dk.example.feedback.dto.SessionQuestionDto
+import dk.example.feedback.dto.EventDetailDto
+import dk.example.feedback.dto.EventDto
+import dk.example.feedback.dto.EventQuestionDto
 import dk.example.feedback.dto.EmojiQuestionFeedbackSummary
 import dk.example.feedback.dto.OpinionQuestionFeedbackSummary
 import dk.example.feedback.dto.OverallFeedbackCountStatsDto
@@ -25,17 +25,17 @@ import dk.example.feedback.helpers.participantResponses
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.model.database.ActivityEntity
 import dk.example.feedback.model.database.FeedbackEntity
-import dk.example.feedback.model.database.SessionEntity
+import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.enumerations.Emoji
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.enumerations.Opinion
 import dk.example.feedback.model.enumerations.ThumbsUpThumpsDown
 
 fun ActivityEntity.toActivityDto(
-    sessions: List<SessionEntity>,
+    events: List<EventEntity>,
     pinCodeProvider: (java.util.UUID) -> String?,
 ): ActivityDto {
-    val sortedSessions = sessions.sortedByDescending { it.date }
+    val sortedEvents = events.sortedByDescending { it.date }
     return ActivityDto(
         id = id,
         title = title,
@@ -48,17 +48,17 @@ fun ActivityEntity.toActivityDto(
         runMode = runMode,
         sendEmails = sendEmails,
         invitedEmails = invites.map { it.email },
-        sessions = sortedSessions
-            .map { it.toActivitySessionDto(pinCodeProvider(it.id)) },
+        events = sortedEvents
+            .map { it.toActivityEventDto(pinCodeProvider(it.id)) },
         currentQuestions = questions
             .sortedBy { it.index }
             .map { QuestionDto(id = it.id, text = it.questionText) },
-        trend = sortedSessions.toActivityTrendDto(),
+        trend = sortedEvents.toActivityTrendDto(),
     )
 }
 
-fun SessionEntity.toActivitySessionDto(pinCode: String?): SessionDto {
-    return SessionDto(
+fun EventEntity.toActivityEventDto(pinCode: String?): EventDto {
+    return EventDto(
         id = id,
         date = date,
         durationInMinutes = durationInMinutes,
@@ -78,7 +78,7 @@ fun SessionEntity.toActivitySessionDto(pinCode: String?): SessionDto {
     )
 }
 
-private fun SessionEntity.averageZeroToTenRating(): Double? {
+private fun EventEntity.averageZeroToTenRating(): Double? {
     return questions
         .flatMap { it.feedback }
         .mapNotNull { it.zeroToTen?.toDouble() }
@@ -86,9 +86,9 @@ private fun SessionEntity.averageZeroToTenRating(): Double? {
         .takeUnless { it.isNaN() }
 }
 
-private fun List<SessionEntity>.toActivityTrendDto(): ActivityTrendDto {
-    val comparableScores = mapNotNull { session ->
-        session.averageZeroToTenRating()?.div(2.0)
+private fun List<EventEntity>.toActivityTrendDto(): ActivityTrendDto {
+    val comparableScores = mapNotNull { event ->
+        event.averageZeroToTenRating()?.div(2.0)
     }
     val latestValue = comparableScores.getOrNull(0)
     val previousValue = comparableScores.getOrNull(1)
@@ -112,19 +112,17 @@ private fun List<SessionEntity>.toActivityTrendDto(): ActivityTrendDto {
         latestValue = latestValue,
         previousValue = previousValue,
         delta = deltaValue,
-        comparedSessionCount = minOf(2, comparableScores.size),
+        comparedEventCount = minOf(2, comparableScores.size),
     )
 }
 
-fun SessionEntity.toParticipantSessionDto(
+fun EventEntity.toParticipantEventDto(
     pinCode: String?,
     feedbackSubmitted: Boolean,
     recentlyJoined: Boolean,
-): ParticipantSessionDto {
-    return ParticipantSessionDto(
+): ParticipantEventDto {
+    return ParticipantEventDto(
         id = id,
-        title = title,
-        agenda = agenda,
         date = date,
         pinCode = pinCode,
         durationInMinutes = durationInMinutes,
@@ -149,14 +147,12 @@ fun SessionEntity.toParticipantSessionDto(
     )
 }
 
-fun SessionEntity.toSessionDetailDto(
+fun EventEntity.toEventDetailDto(
     pinCode: String?,
     participants: List<AccountEntity>,
-): SessionDetailDto {
-    return SessionDetailDto(
+): EventDetailDto {
+    return EventDetailDto(
         id = id,
-        title = title,
-        agenda = agenda,
         date = date,
         pinCode = pinCode,
         durationInMinutes = durationInMinutes,
@@ -181,7 +177,7 @@ fun SessionEntity.toSessionDetailDto(
         questions = questions
             .sortedBy { it.index }
             .map { question ->
-                SessionQuestionDto(
+                EventQuestionDto(
                     id = question.id,
                     text = question.questionText,
                     feedbackType = question.feedbackType,

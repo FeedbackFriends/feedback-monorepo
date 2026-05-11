@@ -59,7 +59,7 @@ class AccountController(
             jwt = principal,
             fcmToken = input.fcmToken
         )
-        return bootstrapService.getSession(jwt = principal)
+        return bootstrapService.getEvent(jwt = principal, roleOverride = input.requestedRole)
     }
 
     @PutMapping

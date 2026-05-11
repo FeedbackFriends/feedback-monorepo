@@ -437,7 +437,7 @@ class ZohoMailPollingService(
                     calendarEventId = calendarEventId,
                 )
             }.onSuccess { event ->
-                accountRepo.updateSessionHash(accountId = account.id)
+                accountRepo.updateBootstrapVersion(accountId = account.id)
                 logger.info(
                     "Event updated id={} titleLength={} agendaLength={} locationLength={} subject={} messageId={}",
                     event.id,
@@ -491,7 +491,7 @@ class ZohoMailPollingService(
                 calendarEventId = calendarEventId,
             )
         }.onSuccess { event ->
-            accountRepo.updateSessionHash(accountId = account.id)
+            accountRepo.updateBootstrapVersion(accountId = account.id)
             logger.info(
                 "Event persisted id={} titleLength={} agendaLength={} locationLength={} subject={} messageId={}",
                 event.id,

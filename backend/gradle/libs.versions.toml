@@ -41,6 +41,7 @@ springboot-starter-web = { module = "org.springframework.boot:spring-boot-starte
 springboot-testcontainers = { module = "org.springframework.boot:spring-boot-testcontainers", version.ref = "springboot" }
 springboot-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "springboot" }
 springboot-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "springboot" }
+springboot-security-test = { module = "org.springframework.security:spring-security-test" }
 springboot-mail = { module = "org.springframework.boot:spring-boot-starter-mail", version.ref = "springboot" }
 #springboot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 #springboot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }

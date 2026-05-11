@@ -22,7 +22,7 @@ public extension Components.Schemas.QuestionInput {
     }
 }
 
-public extension Components.Schemas.SessionInput {
+public extension Components.Schemas.EventInput {
     init(_ session: SessionInput) {
         self.init(
             activityId: session.activityId.uuidString,

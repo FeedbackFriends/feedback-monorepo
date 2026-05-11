@@ -39,7 +39,7 @@ nesting:
     type_level: 3
 force_try: warning
 force_cast: warning
-reporter: "SwiftLint"
+reporter: "xcode"
 included:
   - App
   - Modules/Sources
