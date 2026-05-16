@@ -30,9 +30,9 @@ class MockSeedDataTest(
         val countsAfterFirst = snapshotCounts()
         assertEquals(countsBefore["account"]!! + 2, countsAfterFirst["account"])
         assertEquals(countsBefore["activity"]!! + 1, countsAfterFirst["activity"])
-        assertEquals(countsBefore["event"]!! + 1, countsAfterFirst["event"])
-        assertEquals(countsBefore["question"]!! + 5, countsAfterFirst["question"])
-        assertEquals(countsBefore["feedback"]!! + 20, countsAfterFirst["feedback"])
+        assertEquals(countsBefore["event"]!! + 9, countsAfterFirst["event"])
+        assertEquals(countsBefore["question"]!! + 45, countsAfterFirst["question"])
+        assertEquals(countsBefore["feedback"]!! + 180, countsAfterFirst["feedback"])
 
         mockRepo.insertManagerWithData(managerId = "mock-manager-with-data")
         assertEquals(countsAfterFirst, snapshotCounts())

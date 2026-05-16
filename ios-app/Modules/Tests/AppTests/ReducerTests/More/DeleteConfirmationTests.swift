@@ -1,4 +1,4 @@
-@testable import EventsFeature
+@testable import ActivitiesFeature
 import Testing
 import ComposableArchitecture
 import Foundation

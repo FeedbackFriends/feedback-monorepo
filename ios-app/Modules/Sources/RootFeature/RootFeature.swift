@@ -4,7 +4,7 @@ import Network
 import SignUpFeature
 import DesignSystem
 import Domain
-import EventsFeature
+import ActivitiesFeature
 import Logger
 import Foundation
 

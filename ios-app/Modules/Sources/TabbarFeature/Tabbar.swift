@@ -1,4 +1,4 @@
-import EventsFeature
+import ActivitiesFeature
 import EnterCodeFeature
 import SwiftUI
 import Foundation
@@ -22,7 +22,7 @@ public extension Tabbar.State {
         accountSection: AccountSection.State,
         selectedTab: Tab,
         initialiseFeedback: InitialiseFeedback.State,
-        managerEvents: ManagerEvents.State,
+        managerEvents: ActivitiesFeature.State,
         participantEvents: ParticipantEvents.State,
         deleteAccount: DeleteAccount.State,
         destination: Tabbar.Destination.State? = nil
@@ -37,7 +37,6 @@ public extension Tabbar.State {
         self.managerEvents = managerEvents
         self.participantEvents = participantEvents
         self.deleteAccount = deleteAccount
-        self.createActivity = nil
         self.destination = destination
     }
     
@@ -54,7 +53,6 @@ public extension Tabbar.State {
         self.initialiseFeedback = .init()
         self.participantEvents = .init(session: session)
         self.deleteAccount = .init()
-        self.createActivity = nil
         self.managerEvents = .init(session: session)
         self.tabbarLifecyle = .init(session: session)
         self.destination = destination
@@ -85,10 +83,9 @@ public struct Tabbar: Sendable {
         var accountSection: AccountSection.State
         public var selectedTab: Tab
         var initialiseFeedback: InitialiseFeedback.State
-        public var managerEvents: ManagerEvents.State
+        public var managerEvents: ActivitiesFeature.State
         var participantEvents: ParticipantEvents.State
         var deleteAccount: DeleteAccount.State
-        @Presents var createActivity: CreateActivity.State?
         @Presents var destination: Destination.State?
     }
     public enum Action: BindableAction {
@@ -98,16 +95,13 @@ public struct Tabbar: Sendable {
         case accountSection(AccountSection.Action)
         case initialiseFeedback(InitialiseFeedback.Action)
         case participantEvents(ParticipantEvents.Action)
-        case managerEvents(ManagerEvents.Action)
+        case managerEvents(ActivitiesFeature.Action)
         case destination(PresentationAction<Destination.Action>)
         case toolbar(Toolbar)
         case delegate(Delegate)
         case signUpButtonTap
-        case activityManagerEventButtonTap(NotificationHistoryItem)
         case tabbarLifecyle(TabbarLifecycle.Action)
         case deleteAccount(DeleteAccount.Action)
-        case createActivity(PresentationAction<CreateActivity.Action>)
-        case createActivityButtonTap
         case dismissFeedbackFlow
         public enum Toolbar: Equatable {
             case joinEventButtonTap
@@ -134,7 +128,7 @@ public struct Tabbar: Sendable {
             ParticipantEvents()
         }
         Scope(state: \.managerEvents, action: \.managerEvents) {
-            ManagerEvents()
+            ActivitiesFeature()
         }
         Scope(state: \.accountSection, action: \.accountSection) {
             AccountSection()
@@ -148,40 +142,14 @@ public struct Tabbar: Sendable {
         Scope(state: \.deleteAccount, action: \.deleteAccount) {
             DeleteAccount()
         }
-        .ifLet(\.$createActivity, action: \.createActivity) {
-            CreateActivity()
-        }
         Reduce { state, action in
             switch action {
-            case .createActivityButtonTap:
-                state.createActivity = .init()
-                return .none
-
-            case .createActivity:
-                return .none
-             
             case .dismissFeedbackFlow:
                 state.initialiseFeedback.destination = nil
                 return .none
                 
             case .tabbarLifecyle:
                 return .none
-                
-            case .activityManagerEventButtonTap(let activityItem):
-                state.managerEvents.destination = .eventDetail(
-                    EventDetailFeature.State(
-                        eventId: activityItem.eventId,
-                        detail: state.session.unwrappedManagerSession.managerData.activities[id: activityItem.eventId]?.event,
-                        session: state.$session
-                    )
-                )
-                return .run { _ in
-                    do {
-                        try await apiClient.markEventAsSeen(activityItem.id)
-                    } catch {
-                        Logger.debug("Reset new feedback failed with error: \(error.localizedDescription)")
-                    }
-                }
                 
             case .accountSection(.delegate(.navigateToSignUp)):
                 return .send(.delegate(.navigateToSignUp))

@@ -20,6 +20,7 @@ public struct SignUpView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 160, height: 160)
+                    .accessibilityIdentifier("sign_up_logo")
                     .onTapGesture(count: 10) {
                         store.send(.iconTenTimesTap)
                     }
@@ -175,6 +176,7 @@ private struct E2EAuthenticationDebugView: View {
                     Button("Seed manager empty") {
                         store.send(.e2eSeedManagerEmptyTap)
                     }
+                    .accessibilityIdentifier("e2e_seed_manager_empty")
                     Button("Seed empty account") {
                         store.send(.e2eSeedEmptyAccountTap)
                     }

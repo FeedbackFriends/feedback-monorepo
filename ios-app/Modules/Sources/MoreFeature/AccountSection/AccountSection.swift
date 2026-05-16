@@ -8,11 +8,6 @@ public struct AccountSection: Sendable {
     @Reducer
     public enum Destination {
         case profileSettings(ProfileSettings)
-        @ReducerCaseEphemeral
-        case confirmationDialog(ConfirmationDialogState<ConfirmationDialog>)
-        public enum ConfirmationDialog: Equatable, Sendable {
-            case logoutConfirmed
-        }
     }
     
     @ObservableState
@@ -56,26 +51,10 @@ public struct AccountSection: Sendable {
                 return .none
                 
             case .signOutButtonTapped:
-                state.destination = .confirmationDialog(
-                    ConfirmationDialogState<Destination.ConfirmationDialog>(
-                        title: { TextState("Logout") },
-                        actions: {
-                            ButtonState(role: .destructive, action: .logoutConfirmed, label: { TextState("Logout") })
-                            ButtonState(label: { TextState("Cancel") })
-                        },
-                        message: { TextState("Are you sure you want to logout?") }
-                    )
-                )
-                return .none
+                return .send(.delegate(.navigateToSignUp))
                 
             case .deleteAccountButtonTapped:
                 return .send(.delegate(.deleteAccountButtonTapped))
-                
-            case .destination(.presented(.confirmationDialog(let confirmationDialogAction))):
-                switch confirmationDialogAction {
-                case .logoutConfirmed:
-                    return .send(.delegate(.navigateToSignUp))
-                }
                 
             case .binding:
                 return .none
@@ -116,12 +95,6 @@ private struct AccountSectionDestinationsModifier: ViewModifier {
                     isDeleteAccountLoading: isDeleteAccountLoading,
                 )
             }
-            .confirmationDialog(
-                $store.scope(
-                    state: \.destination?.confirmationDialog,
-                    action: \.destination.confirmationDialog
-                )
-            )
     }
 }
 

@@ -1,4 +1,4 @@
-import EventsFeature
+import ActivitiesFeature
 import MoreFeature
 import DesignSystem
 import SwiftUI
@@ -19,7 +19,10 @@ public struct TabbarView: View {
     public var body: some View {
         let joinEventStore = $store.scope(state: \.destination?.joinEvent, action: \.destination.joinEvent)
         let notificationHistoryStore = $store.scope(state: \.destination?.notificationHistory, action: \.destination.notificationHistory)
-        let createActivityStore = $store.scope(state: \.createActivity, action: \.createActivity)
+        let createActivityStore = $store.scope(
+            state: \.managerEvents.destination?.createActivity,
+            action: \.managerEvents.destination.createActivity
+        )
         tabView
             .task {
                 await self.store.send(.tabbarLifecyle(.onTask)).finish()
@@ -56,7 +59,7 @@ public struct TabbarView: View {
                     NotificationHistoryView(
                         notificationHistoryItems: notificationHistoryItems,
                         activityManagerEventButtonTap: {
-                            store.send(.activityManagerEventButtonTap($0))
+                            store.send(.managerEvents(.activityManagerEventButtonTap($0)))
                         }
                     )
                     .presentationDetents([.medium, .large])
@@ -110,10 +113,10 @@ private extension TabbarView {
             .tag(Tab.feedback)
             
             if isManager {
-                ActivitiesView(
+                MyActivitiesView(
                     session: store.session,
                     onCreateActivityTap: {
-                        store.send(.createActivityButtonTap)
+                        store.send(.managerEvents(.createActivityButtonTap))
                     },
                     managerEventsStore: store.scope(
                         state: \.managerEvents,
@@ -121,66 +124,8 @@ private extension TabbarView {
                     )
                 )
                     .tabItem {
-                        Label("Activities", systemImage: "calendar")
+                        Label("My Activities", systemImage: "scope")
                     }
-//                NavigationStack {
-//                    ContentView()
-////                    List {
-////                        WorkshopsView()
-////    //                    switch store.session.account {
-////    //                    case .manager:
-////    //                        managerEventsView
-////    //                            .navigationTitle("Sessions")
-////    //                            .toolbar {
-////    //                                activityToolbarItem(store.session.activityBadgeCount)
-////    //                                ToolbarSpacer(.flexible)
-////    //                                draftsToolbarItem(store.session.managerData?.draftEvents.count ?? 0)
-////    //                                createEventToolbarItem
-////    //                            }
-////    //                    case .participant:
-////    //                        participantEventsView
-////    //                            .navigationTitle("Sessions")
-////    //                            .toolbar {
-////    //                                joinEventToolbarItem
-////    //                                activityToolbarItem(store.session.activityBadgeCount)
-////    //                            }
-////    //                    case .anonymous:
-////    //                        participantEventsView
-////    //                            .navigationTitle("Sessions")
-////    //                            .toolbar {
-////    //                                createEventToolbarItem
-////    //                                activityToolbarItem(store.session.activityBadgeCount)
-////    //                            }
-////    //                    }
-////                    }
-////                    .navigationTitle("Workshops")
-//                }
-//                .tabItem {
-//                    Image.calendar
-//                    Text("Workshops")
-//                }
-                .tag(Tab.events)
-                
-                NavigationStack {
-                    managerEventsView
-                        .navigationTitle("My sessions")
-//                        .navigationDestination(isPresented: $isShowingWelcomeOnboarding) {
-//                            WelcomeOnboardingView(
-//                                accountEmail: store.session.accountInfo.email,
-//                                primaryAction: {
-//                                    isShowingWelcomeOnboarding = false
-//                                }
-//                            )
-//                        }
-//                        .toolbar {
-//                            activityToolbarItem(store.session.activityBadgeCount)
-//                            welcomeOnboardingToolbarItem
-//                        }
-                }
-                .tabItem {
-                    Image.calendar
-                    Text("My sessions")
-                }
                 .tag(Tab.events)
             }
             
@@ -222,26 +167,6 @@ private extension TabbarView {
         )
     }
     
-    var managerEventsView: some View {
-        ManagerEventsView(
-            store: store.scope(state: \.managerEvents, action: \.managerEvents)
-        )
-    }
-    
-    func activityToolbarItem(_ badgeCount: Int) -> some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            Button {
-                store.send(.toolbar(.notificationHistoryButtonTap))
-            } label: {
-                Image.sparkles
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 16, height: 16)
-            }
-            .badge(badgeCount)
-        }
-    }
-
     var profileSettingsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {

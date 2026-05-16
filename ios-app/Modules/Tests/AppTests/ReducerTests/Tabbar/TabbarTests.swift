@@ -5,7 +5,7 @@ import Foundation
 import Testing
 @testable import Domain
 @testable import MoreFeature
-@testable import EventsFeature
+@testable import ActivitiesFeature
 
 @MainActor
 struct TabbarTests {
@@ -77,7 +77,7 @@ struct TabbarTests {
         await store.send(.toolbar(.notificationHistoryButtonTap)) {
             $0.destination = .activity(session.activity.items.wrappedValue)
         }
-        await store.send(.activityManagerEventButtonTap(session.activity.items.wrappedValue.first!)) {
+        await store.send(.managerEvents(.activityManagerEventButtonTap(session.activity.items.wrappedValue.first!))) {
             $0.managerEvents.destination = .eventDetail(.init(eventId: event.id, detail: event, session: sharedSession))
         }
     }

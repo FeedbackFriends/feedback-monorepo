@@ -32,16 +32,22 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class MockRepo {
 
+    private data class ManagerSeedEventDefinition(
+        val pinCode: String,
+        val eventId: UUID,
+    )
+
     fun resetManagerWithData(managerId: String) {
         transaction {
-            val eventId = deterministicUuid("manager-with-data-event-$managerId")
-            val activityId = deterministicUuid("manager-with-data-activity-$managerId")
             val syntheticParticipantId = "$managerId-participant"
-            resetSeedGraph(
-                accountIds = setOf(managerId, syntheticParticipantId),
-                eventId = eventId,
-                activityId = activityId,
-            )
+            val activityId = managerSeedActivityId(managerId)
+            managerSeedEvents(managerId).forEach { seedEvent ->
+                resetSeedGraph(
+                    accountIds = setOf(managerId, syntheticParticipantId),
+                    eventId = seedEvent.eventId,
+                    activityId = activityId,
+                )
+            }
         }
     }
 
@@ -82,48 +88,70 @@ class MockRepo {
 
             val managerEntityId = EntityID(managerId, AccountTable)
             val participantEntityId = EntityID(syntheticParticipantId, AccountTable)
-            val activityId = deterministicUuid("manager-with-data-activity-$managerId")
-            val eventId = deterministicUuid("manager-with-data-event-$managerId")
-            if (EventTable.selectAll().where { EventTable.id eq EntityID(eventId, EventTable) }.firstOrNull() != null) {
-                return@transaction
-            }
-
-            insertActivity(
-                activityId = activityId,
-                title = "Mock Manager Activity",
-                agenda = "Deterministic manager seed data.",
-                manager = managerEntityId,
-                timestamp = seededAt,
-            )
-            val questions = insertEventWithQuestions(
-                eventId = eventId,
-                activityId = activityId,
-                location = "Copenhagen HQ",
-                durationInMinutes = 45,
-                manager = managerEntityId,
-                startDate = OffsetDateTime.now(UTC).plusDays(1),
-                timestamp = seededAt,
-            )
-            insertPinCode(eventId = eventId, code = "2000")
-            insertEventParticipant(
-                eventId = eventId,
-                participantId = participantEntityId,
-                feedbackSubmitted = true,
-                timestamp = seededAt.plusMinutes(2),
-            )
-            repeat(20) { index ->
-                val questionOffset = index % questionTypes.size
-                insertFeedback(
-                    feedbackSeed = index,
-                    questionOffset = questionOffset,
-                    questionId = questions[questionOffset],
-                    feedbackType = questionTypes[questionOffset],
+            val activityId = managerSeedActivityId(managerId)
+            val activityExists = ActivityTable.selectAll()
+                .where { ActivityTable.id eq EntityID(activityId, ActivityTable) }
+                .firstOrNull() != null
+            if (!activityExists) {
+                insertActivity(
+                    activityId = activityId,
+                    title = "Mock Manager Activity",
+                    agenda = "Deterministic manager seed data.",
                     manager = managerEntityId,
-                    participantId = syntheticParticipantId,
                     timestamp = seededAt,
                 )
             }
+            managerSeedEvents(managerId).forEachIndexed { eventIndex, seedEvent ->
+                if (EventTable.selectAll().where { EventTable.id eq EntityID(seedEvent.eventId, EventTable) }.firstOrNull() != null) {
+                    return@forEachIndexed
+                }
+
+                val eventSeededAt = seededAt.plusMinutes(eventIndex.toLong())
+                val questions = insertEventWithQuestions(
+                    eventId = seedEvent.eventId,
+                    activityId = activityId,
+                    location = "Copenhagen HQ",
+                    durationInMinutes = 45,
+                    manager = managerEntityId,
+                    startDate = OffsetDateTime.now(UTC).plusDays((eventIndex + 1).toLong()),
+                    timestamp = eventSeededAt,
+                )
+                insertPinCode(eventId = seedEvent.eventId, code = seedEvent.pinCode)
+                insertEventParticipant(
+                    eventId = seedEvent.eventId,
+                    participantId = participantEntityId,
+                    feedbackSubmitted = true,
+                    timestamp = eventSeededAt.plusMinutes(2),
+                )
+                repeat(20) { index ->
+                    val feedbackSeed = eventIndex * 20 + index
+                    val questionOffset = index % questionTypes.size
+                    insertFeedback(
+                        feedbackSeed = feedbackSeed,
+                        questionOffset = questionOffset,
+                        questionId = questions[questionOffset],
+                        feedbackType = questionTypes[questionOffset],
+                        manager = managerEntityId,
+                        participantId = syntheticParticipantId,
+                        timestamp = eventSeededAt,
+                    )
+                }
+            }
         }
+    }
+
+    private fun managerSeedEvents(managerId: String): List<ManagerSeedEventDefinition> {
+        return (1..9).map { pinNumber ->
+            val pinCode = pinNumber.toString().padStart(4, '0')
+            ManagerSeedEventDefinition(
+                pinCode = pinCode,
+                eventId = deterministicUuid("manager-with-data-event-$managerId-$pinCode"),
+            )
+        }
+    }
+
+    private fun managerSeedActivityId(managerId: String): UUID {
+        return deterministicUuid("manager-with-data-activity-$managerId")
     }
 
     fun insertParticipantWithData(participantId: String) {
@@ -169,7 +197,7 @@ class MockRepo {
                 location = "Remote",
                 durationInMinutes = 30,
                 manager = managerEntityId,
-                startDate = OffsetDateTime.of(2026, 1, 21, 10, 0, 0, 0, UTC),
+                startDate = OffsetDateTime.now(UTC).plusDays(1),
                 timestamp = seededAt,
             )
             insertPinCode(eventId = eventId, code = "2001")

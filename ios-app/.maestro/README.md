@@ -22,19 +22,12 @@ What it does:
 1. Starts local stack via `./scripts/run -d`
 2. Waits for API health on `http://localhost:8090/actuator/health`
 3. Builds and installs iOS app with `Feedback Localhost` scheme
-4. Calls `/admin/seed-manager-with-data` and runs `seeded-manager-flow.yaml`
-5. Calls `/admin/reset-database`
-6. Calls `/admin/seed-participant-with-data` and runs `seeded-participant-flow.yaml`
-7. Stops stack with `docker compose down`
+4. Runs `manager-create-event-flow.yaml`
+5. The flow opens the E2E authentication sheet from sign-up and taps `Seed manager empty`
 
-## Runtime Auth Injection
+## Runtime Auth
 
-The two seeded flows pass launch arguments into the iOS app:
-
-- `E2E_ENABLE_AUTO_LOGIN=1`
-- `E2E_CUSTOM_TOKEN=<custom token from seed endpoint>`
-
-The app reads these arguments in debug builds and performs Firebase custom-token sign-in automatically.
+The manager flow performs auth through the debug E2E sheet in the sign-up UI, not launch arguments.
 
 ## Notes
 

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+API_BASE_URL="${API_BASE_URL:-http://localhost:8080}"
+RESET_URL="${API_BASE_URL}/admin/reset"
+
+require_cmd() {
+  local cmd="$1"
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Required command not found: $cmd" >&2
+    exit 1
+  fi
+}
+
+require_cmd curl
+
+cd "$REPO_ROOT"
+curl --fail --silent --show-error -X POST "$RESET_URL" >/dev/null
+echo "Database reset completed via POST $RESET_URL"

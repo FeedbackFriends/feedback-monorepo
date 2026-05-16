@@ -1,0 +1,86 @@
+# Manager flow (localhost):
+# - Seed manager-empty via /admin/seed-manager-empty
+# - Login via E2E authentication debug sheet
+# - Create focus: "AIW1"
+# - Create session: "DINERO1"
+# - Open invite sheet and copy invite link
+
+appId: dk.nicolaidam.letsgrow
+---
+- launchApp:
+    clearState: true
+
+# Open E2E authentication sheet from LetsGrow icon on sign-up when needed.
+- tapOn:
+    id: "sign_up_logo"
+    optional: true
+
+- tapOn:
+    id: "e2e_seed_manager_empty"
+    optional: true
+
+# Wait until logged-in manager UI is visible.
+- extendedWaitUntil:
+    visible: "My Focus"
+    timeout: 30000
+
+# Ensure My Focus tab content is active.
+- tapOn: "My Focus"
+
+# Open Create Focus.
+- extendedWaitUntil:
+    visible:
+      id: "my_focus_create_cta"
+    timeout: 10000
+- tapOn:
+    id: "my_focus_create_cta"
+
+- extendedWaitUntil:
+    visible: "Create Focus"
+    timeout: 10000
+
+# Create focus named "AIW1".
+- tapOn:
+    id: "create_focus_title_input"
+- inputText: "AIW1"
+- pressKey: Enter
+- tapOn:
+    id: "create_focus_template_quickFeedback"
+- tapOn: "Create"
+
+# Open the focus and create a new session.
+- extendedWaitUntil:
+    visible:
+      id: "my_focus_create_cta"
+    timeout: 20000
+- tapOn: "AIW1"
+- extendedWaitUntil:
+    visible:
+      id: "focus_detail_add_session_button"
+    timeout: 10000
+- tapOn:
+    id: "focus_detail_add_session_button"
+
+- extendedWaitUntil:
+    visible: "New session"
+    timeout: 10000
+
+# Create session titled "DINERO1".
+- tapOn:
+    id: "event_form_title_input"
+- inputText: "DINERO1"
+- tapOn:
+    id: "event_form_next"
+- tapOn: "Finish"
+
+# Open session detail and copy invite link.
+- extendedWaitUntil:
+    visible:
+      id: "event_detail_more"
+    timeout: 20000
+- tapOn:
+    id: "event_detail_more"
+- tapOn: "Invite 👥"
+- tapOn:
+    id: "invite_copy_link"
+- takeScreenshot: manager-created-event-invite

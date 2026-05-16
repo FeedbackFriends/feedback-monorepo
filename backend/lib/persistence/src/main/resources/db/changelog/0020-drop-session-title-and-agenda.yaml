@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0020-drop-session-title-and-agenda
+      author: codex
+      changes:
+        - dropColumn:
+            tableName: session
+            columnName: title
+        - dropColumn:
+            tableName: session
+            columnName: agenda
