@@ -94,44 +94,7 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
     }
 }
 
-public enum RunMode: String, CaseIterable, Identifiable, Sendable {
-    case manual, automatic
-    public var id: String { rawValue }
-
-    var title: String {
-        switch self {
-        case .manual: return "Standard"
-        case .automatic: return "Automatic"
-        }
-    }
-
-    var subtitle: String {
-        switch self {
-        case .manual: return "Create session one ny one"
-        case .automatic: return "Use your calendar"
-        }
-    }
-
-    var icon: String {
-        switch self {
-        case .manual: return "hand.tap"
-        case .automatic: return "envelope.badge"
-        }
-    }
-}
-
 struct FocusPreviewSession: Equatable, Sendable, Identifiable {
     let id = UUID()
     let state: FeedbackFlowCoordinator.State
-}
-
-private extension ActivityInput.RunMode {
-    init(_ runMode: RunMode) {
-        switch runMode {
-        case .manual:
-            self = .manual
-        case .automatic:
-            self = .automatic
-        }
-    }
 }
