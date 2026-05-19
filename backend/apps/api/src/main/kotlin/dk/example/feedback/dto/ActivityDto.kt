@@ -95,7 +95,9 @@ data class QuestionDto(
     @field:Schema(description = "Stable identifier for the question.")
     val id: UUID,
     @field:Schema(description = "Question text shown to participants.")
-    val text: String
+    val text: String,
+    @field:Schema(description = "Feedback format expected for this question.")
+    val feedbackType: FeedbackType,
 )
 
 @Schema(

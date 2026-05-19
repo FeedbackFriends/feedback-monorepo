@@ -16,7 +16,13 @@ public extension Components.Schemas.ActivityInput {
         self.init(
             title: activity.title,
             agenda: activity.agenda,
-            questions: activity.questions.map(Components.Schemas.QuestionInput.init),
+            questions: activity.questions.map {
+                .init(
+                    id: activity.existingQuestionIds.contains($0.id) ? $0.id.uuidString : nil,
+                    questionText: $0.questionText,
+                    feedbackType: .init($0.feedbackType)
+                )
+            },
             runMode: .init(activity.runMode),
             invitedEmails: activity.invitedEmails,
             sendEmails: activity.sendEmails

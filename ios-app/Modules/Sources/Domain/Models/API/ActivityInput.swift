@@ -1,26 +1,28 @@
 import Foundation
 
 public struct ActivityInput: Equatable, Sendable {
-    
+
     public var title: String
     public var agenda: String?
     public var questions: [EventInput.QuestionInput]
     public var runMode: RunMode
     public var invitedEmails: [String]
     public var sendEmails: Bool
+    public var existingQuestionIds: Set<UUID>
 
     public enum RunMode: String, CaseIterable, Hashable, Sendable {
         case manual
         case automatic
     }
-    
+
     public init(
         title: String,
         agenda: String? = nil,
         questions: [EventInput.QuestionInput] = [],
         runMode: RunMode = .manual,
         invitedEmails: [String] = [],
-        sendEmails: Bool = false
+        sendEmails: Bool = false,
+        existingQuestionIds: Set<UUID> = []
     ) {
         self.title = title
         self.agenda = agenda
@@ -28,6 +30,7 @@ public struct ActivityInput: Equatable, Sendable {
         self.runMode = runMode
         self.invitedEmails = invitedEmails
         self.sendEmails = sendEmails
+        self.existingQuestionIds = existingQuestionIds
     }
 }
 

@@ -12,7 +12,7 @@ public struct ActivityDetail: Sendable {
         case deleteConfirmation(DeleteConfirmation)
         case createEvent(CreateEvent)
         case editEvent(EditEvent)
-        case editActivity(EditActivity)
+        case editActivity(ManageActivity)
         @ReducerCaseEphemeral
         case confirmationDialog(ConfirmationDialogState<ConfirmationDialog>)
         @ReducerCaseIgnored
@@ -87,6 +87,7 @@ public struct ActivityDetail: Sendable {
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
         case createEventButtonTapped(Activity)
+        case editActivityButtonTapped
         case moreButtonTapped
         case onTask
         case retryButtonTap
@@ -148,7 +149,12 @@ public struct ActivityDetail: Sendable {
                 
             case .destination:
                 return .none
-                
+
+            case .editActivityButtonTapped:
+                guard let activity = state.activityDetail else { return .none }
+                state.destination = .editActivity(ManageActivity.State(activity: activity))
+                return .none
+
             case .createEventButtonTapped(let activity):
                 var eventInput = EventInput(activity)
                 eventInput.date = Date().roundedUpcoming5Min()

@@ -525,6 +525,11 @@ export interface components {
             id: string;
             /** @description Question text shown to participants. */
             text: string;
+            /**
+             * @description Feedback format expected for this question.
+             * @enum {string}
+             */
+            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
         };
         SendNotificationInput: {
             fcmToken: string;

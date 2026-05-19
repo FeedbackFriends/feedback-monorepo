@@ -86,6 +86,13 @@ struct ActivityDetailView: View {
                     }
                     .accessibilityIdentifier("activity_detail_add_session_button")
 
+                    Button {
+                        store.send(.editActivityButtonTapped)
+                    } label: {
+                        Image(systemName: "pencil")
+                    }
+                    .accessibilityIdentifier("activity_detail_edit_button")
+
                     Button(role: .destructive) {
                         showDeleteConfirmation = true
                     } label: {
@@ -93,6 +100,14 @@ struct ActivityDetailView: View {
                     }
                 }
             }
+        }
+        .sheet(
+            item: $store.scope(
+                state: \.destination?.editActivity,
+                action: \.destination.editActivity
+            )
+        ) { editStore in
+            ManageActivityView(store: editStore)
         }
         .confirmationDialog(
             "Delete activity?",

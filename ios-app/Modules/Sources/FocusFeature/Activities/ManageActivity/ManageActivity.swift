@@ -13,6 +13,8 @@ public struct ManageActivity: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         public var mode: Mode
+        var activityId: UUID?
+        var originalQuestionIds: Set<UUID> = []
         var title = ""
         var description = ""
         var selectedTemplate: FeedbackTemplate?
@@ -32,6 +34,24 @@ public struct ManageActivity: Sendable {
 
         public init(mode: Mode = .create) {
             self.mode = mode
+        }
+
+        public init(activity: Activity) {
+            self.mode = .edit
+            self.activityId = activity.id
+            self.originalQuestionIds = Set(activity.questions.map(\.id))
+            self.title = activity.title
+            self.description = activity.agenda ?? ""
+            self.questions = activity.questions.map {
+                EventInput.QuestionInput(
+                    id: $0.id,
+                    questionText: $0.questionText,
+                    feedbackType: $0.feedbackType
+                )
+            }
+            self.selectedTemplate = FeedbackTemplate.inferred(from: self.questions)
+            self.sendEmails = !activity.invitedEmails.isEmpty
+            self.participants = activity.invitedEmails
         }
 
         var navigationTitle: String {
@@ -74,7 +94,8 @@ public struct ManageActivity: Sendable {
                 questions: questions,
                 runMode: .manual,
                 invitedEmails: sendEmails ? participants : [],
-                sendEmails: sendEmails
+                sendEmails: sendEmails,
+                existingQuestionIds: originalQuestionIds
             )
         }
 
@@ -91,6 +112,7 @@ public struct ManageActivity: Sendable {
         case binding(BindingAction<State>)
         case createButtonTapped
         case createResponse(Activity)
+        case updateResponse(Activity)
         case presentError(Error)
         case templateSelected(FeedbackTemplate)
         case clearTemplateTapped
@@ -106,6 +128,7 @@ public struct ManageActivity: Sendable {
     public init() {}
 
     @Dependency(\.apiClient) var apiClient
+    @Dependency(\.dismiss) var dismiss
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -130,12 +153,25 @@ public struct ManageActivity: Sendable {
             case .createButtonTapped:
                 guard let activityInput = state.activityInput else { return .none }
                 state.createActivityRequestInFlight = true
-                return .run { send in
-                    do {
-                        let activity = try await apiClient.createActivity(activityInput)
-                        await send(.createResponse(activity))
-                    } catch {
-                        await send(.presentError(error))
+                switch state.mode {
+                case .create:
+                    return .run { send in
+                        do {
+                            let activity = try await apiClient.createActivity(activityInput)
+                            await send(.createResponse(activity))
+                        } catch {
+                            await send(.presentError(error))
+                        }
+                    }
+                case .edit:
+                    guard let activityId = state.activityId else { return .none }
+                    return .run { send in
+                        do {
+                            let activity = try await apiClient.updateActivity(activityInput, activityId)
+                            await send(.updateResponse(activity))
+                        } catch {
+                            await send(.presentError(error))
+                        }
                     }
                 }
 
@@ -143,10 +179,19 @@ public struct ManageActivity: Sendable {
                 state.createActivityRequestInFlight = false
                 return .send(.delegate(.dismissAndNavigateToDetail(activity)))
 
+            case .updateResponse:
+                state.createActivityRequestInFlight = false
+                return .run { _ in await dismiss() }
+
             case .presentError(let error):
                 state.createActivityRequestInFlight = false
+                let title: String
+                switch state.mode {
+                case .create: title = "Could not create activity"
+                case .edit: title = "Could not save activity"
+                }
                 state.alert = AlertState {
-                    TextState("Could not create activity")
+                    TextState(title)
                 } actions: {
                     ButtonState(role: .cancel) {
                         TextState("OK")

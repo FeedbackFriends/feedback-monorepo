@@ -848,21 +848,39 @@ public enum Components {
             ///
             /// - Remark: Generated from `#/components/schemas/QuestionDto/text`.
             public var text: Swift.String
+            /// Feedback format expected for this question.
+            ///
+            /// - Remark: Generated from `#/components/schemas/QuestionDto/feedbackType`.
+            @frozen public enum FeedbackTypePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case emoji = "Emoji"
+                case comment = "Comment"
+                case thumpsUpThumpsDown = "ThumpsUpThumpsDown"
+                case opinion = "Opinion"
+                case zeroToTen = "ZeroToTen"
+            }
+            /// Feedback format expected for this question.
+            ///
+            /// - Remark: Generated from `#/components/schemas/QuestionDto/feedbackType`.
+            public var feedbackType: Components.Schemas.QuestionDto.FeedbackTypePayload
             /// Creates a new `QuestionDto`.
             ///
             /// - Parameters:
             ///   - id: Stable identifier for the question.
             ///   - text: Question text shown to participants.
+            ///   - feedbackType: Feedback format expected for this question.
             public init(
                 id: Swift.String,
-                text: Swift.String
+                text: Swift.String,
+                feedbackType: Components.Schemas.QuestionDto.FeedbackTypePayload
             ) {
                 self.id = id
                 self.text = text
+                self.feedbackType = feedbackType
             }
             public enum CodingKeys: String, CodingKey {
                 case id
                 case text
+                case feedbackType
             }
         }
         /// - Remark: Generated from `#/components/schemas/SendNotificationInput`.

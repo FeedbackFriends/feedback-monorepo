@@ -830,7 +830,17 @@ components:
         text:
           type: string
           description: Question text shown to participants.
+        feedbackType:
+          type: string
+          description: Feedback format expected for this question.
+          enum:
+          - Emoji
+          - Comment
+          - ThumpsUpThumpsDown
+          - Opinion
+          - ZeroToTen
       required:
+      - feedbackType
       - id
       - text
     SendNotificationInput:

@@ -7,18 +7,12 @@ public extension ManagerQuestion {
         _ dto: Components.Schemas.QuestionDto,
         analytics: Components.Schemas.ManagerQuestionAnalyticsDto? = nil
     ) {
-        let feedbackSummary = analytics?.overallSummary.map(QuestionFeedbackSummary.init)
-        let feedbackType = analytics
-            .map { FeedbackType($0.feedbackType.rawValue) }
-            ?? FeedbackType.inferred(from: feedbackSummary)
-            ?? .comment
-
         self.init(
             id: UUID(uuidString: dto.id)!,
             questionText: dto.text,
-            feedbackType: feedbackType,
+            feedbackType: FeedbackType(dto.feedbackType.rawValue),
             feedback: [],
-            feedbackSummary: feedbackSummary
+            feedbackSummary: analytics?.overallSummary.map(QuestionFeedbackSummary.init)
         )
     }
 }
@@ -105,16 +99,5 @@ private extension Components.Schemas.ActivityDto {
 private extension String {
     var normalizedQuestionKey: String {
         trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-    }
-}
-
-private extension FeedbackType {
-    static func inferred(from summary: QuestionFeedbackSummary?) -> FeedbackType? {
-        guard let summary else { return nil }
-        if summary.emojiQuestionFeedbackSummary != nil { return .emoji }
-        if summary.thumpsQuestionFeedbackSummary != nil { return .thumpsUpThumpsDown }
-        if summary.opinionQuestionFeedbackSummary != nil { return .opinion }
-        if summary.zeroToTenQuestionFeedbackSummary != nil { return .zeroToTen }
-        return nil
     }
 }

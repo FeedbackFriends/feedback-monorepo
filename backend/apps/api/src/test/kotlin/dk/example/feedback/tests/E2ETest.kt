@@ -71,7 +71,9 @@ class E2ETest(
             .andExpect(jsonPath("$.id").value(activityId))
             .andExpect(jsonPath("$.events[0].location").value("Oslo"))
             .andExpect(jsonPath("$.currentQuestions[0].text").value("How did the event go?"))
+            .andExpect(jsonPath("$.currentQuestions[0].feedbackType").value("Emoji"))
             .andExpect(jsonPath("$.currentQuestions[1].text").value("What should we improve next time?"))
+            .andExpect(jsonPath("$.currentQuestions[1].feedbackType").value("Comment"))
     }
 
     @Test
@@ -234,6 +236,10 @@ class E2ETest(
             "What should we improve next time?",
             preservedFirstEvent.get("questionsSnapshot").get(1).get("text").asText(),
         )
+        assertEquals(
+            "Comment",
+            preservedFirstEvent.get("questionsSnapshot").get(1).get("feedbackType").asText(),
+        )
 
         val secondEvent = createEvent(
             managerId = managerId,
@@ -243,6 +249,7 @@ class E2ETest(
         )
         val secondEventPinCode = secondEvent.get("pinCode").asText()
         val secondEventQuestionId = UUID.fromString(secondEvent.get("questionsSnapshot").get(0).get("id").asText())
+        assertEquals("Emoji", secondEvent.get("questionsSnapshot").get(0).get("feedbackType").asText())
 
         submitEmojiFeedback(
             participantId = participantId,

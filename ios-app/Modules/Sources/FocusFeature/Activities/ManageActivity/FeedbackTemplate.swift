@@ -92,6 +92,24 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
             return []
         }
     }
+
+    static func inferred(from questions: [EventInput.QuestionInput]) -> FeedbackTemplate {
+        let signature = questions.map { Signature(text: $0.questionText, type: $0.feedbackType) }
+        for template in FeedbackTemplate.allCases where template != .buildYourOwn {
+            let templateSignature = template.defaultQuestions.map {
+                Signature(text: $0.questionText, type: $0.feedbackType)
+            }
+            if signature == templateSignature {
+                return template
+            }
+        }
+        return .buildYourOwn
+    }
+
+    private struct Signature: Equatable {
+        let text: String
+        let type: FeedbackType
+    }
 }
 
 struct FocusPreviewSession: Equatable, Sendable, Identifiable {

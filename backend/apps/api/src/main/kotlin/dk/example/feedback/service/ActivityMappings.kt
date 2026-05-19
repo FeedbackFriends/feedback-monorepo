@@ -52,7 +52,7 @@ fun ActivityEntity.toActivityDto(
             .map { it.toActivityEventDto(pinCodeProvider(it.id)) },
         currentQuestions = questions
             .sortedBy { it.index }
-            .map { QuestionDto(id = it.id, text = it.questionText) },
+            .map { QuestionDto(id = it.id, text = it.questionText, feedbackType = it.feedbackType) },
         trend = sortedEvents.toActivityTrendDto(),
     )
 }
@@ -74,7 +74,7 @@ fun EventEntity.toActivityEventDto(pinCode: String?): EventDto {
         ),
         questionsSnapshot = questions
             .sortedBy { it.index }
-            .map { QuestionDto(id = it.id, text = it.questionText) },
+            .map { QuestionDto(id = it.id, text = it.questionText, feedbackType = it.feedbackType) },
     )
 }
 
