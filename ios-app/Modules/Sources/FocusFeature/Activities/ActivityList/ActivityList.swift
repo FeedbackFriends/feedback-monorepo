@@ -65,35 +65,36 @@ public struct ActivityList: Sendable {
             case .navigateToCreatedActivity(let activity):
                 state.destination = .activityDetail(
                     ActivityDetail.State(
-                        eventId: activity.id,
+                        activity: activity,
                         detail: activity.event,
                         session: state.$session
                     )
                 )
                 return .none
-                
+
             case .destination(.dismiss):
                 if case .activityDetail(let activityDetailState) = state.destination,
                    let overallFeedbackSummary = activityDetailState.detail?.overallFeedbackSummary,
                    overallFeedbackSummary.unseenResponses > 0 {
                     return .run { _ in
                         do {
-                            try await self.apiClient.markEventAsSeen(activityDetailState.eventId)
+                            try await self.apiClient.markEventAsSeen(activityDetailState.activity.id)
                         } catch {
                             Logger.debug("Mark session as seen failed: \(error.localizedDescription)")
                         }
                     }
-                    
+
                 }
                 return .none
-                
+
             case .binding:
                 return .none
-                
+
             case .activityTap(let event):
+                guard let activity = state.session.managerData?.activities[id: event.id] else { return .none }
                 state.destination = .activityDetail(
                     ActivityDetail.State(
-                        eventId: event.id,
+                        activity: activity,
                         detail: event,
                         session: state.$session
                     )

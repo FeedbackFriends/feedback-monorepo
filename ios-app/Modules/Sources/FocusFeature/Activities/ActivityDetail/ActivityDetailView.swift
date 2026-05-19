@@ -4,6 +4,7 @@ import Domain
 import SwiftUI
 
 struct ActivityDetailView: View {
+    
     private struct GroupedSessions {
         let today: [Event]
         let comingUp: [Event]
@@ -12,13 +13,13 @@ struct ActivityDetailView: View {
 
     @Bindable var store: StoreOf<ActivityDetail>
     @State private var showDeleteConfirmation = false
-    
-    private var activity: Activity? {
-        store.activityDetail
+
+    private var activity: Activity {
+        store.activity
     }
 
     private var groupedSessions: GroupedSessions {
-        let sessions = (activity?.relatedSessions ?? []).sorted(by: { $0.date > $1.date })
+        let sessions = activity.relatedSessions.sorted(by: { $0.date > $1.date })
         return GroupedSessions(
             today: sessions.filter { $0.date.isToday },
             comingUp: sessions.filter { $0.date.isAfterToday },
@@ -30,29 +31,29 @@ struct ActivityDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
-                    LegacyTrendBadge(direction: activity?.trend.direction ?? .insufficientData)
+                    LegacyTrendBadge(direction: activity.trend.direction)
                     Spacer()
-                    Text(activity?.durationText ?? "")
+                    Text(activity.durationText)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
 
-                detailRow(title: "Date", value: activity?.formattedDate ?? "")
+                detailRow(title: "Date", value: activity.formattedDate)
 
-                if let location = activity?.location, !location.isEmpty {
+                if let location = activity.location, !location.isEmpty {
                     detailRow(title: "Location", value: location)
                 }
 
-                if let pinCode = activity?.pinCode?.value {
+                if let pinCode = activity.pinCode?.value {
                     detailRow(title: "PIN", value: "#\(pinCode)")
                 }
 
-                if let summary = activity?.overallFeedbackSummary {
+                if let summary = activity.overallFeedbackSummary {
                     detailRow(title: "Responses", value: "\(summary.responses)")
                     detailRow(title: "New responses", value: "\(summary.unseenResponses)")
                 }
 
-                if let agenda = activity?.agenda, !agenda.isEmpty {
+                if let agenda = activity.agenda, !agenda.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Agenda")
                             .font(.headline)
@@ -74,13 +75,13 @@ struct ActivityDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(activity?.title ?? "Session")
+        .navigationTitle(activity.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {
                     Button {
-//                        onCreateSessionTap()
+                        store.send(.createEventButtonTapped)
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -94,7 +95,7 @@ struct ActivityDetailView: View {
                     .accessibilityIdentifier("activity_detail_edit_button")
 
                     Button(role: .destructive) {
-                        showDeleteConfirmation = true
+                        store.send(.deleteActivityButtonTap)
                     } label: {
                         Image(systemName: "trash")
                     }
@@ -109,25 +110,21 @@ struct ActivityDetailView: View {
         ) { editStore in
             ManageActivityView(store: editStore)
         }
-        .confirmationDialog(
-            "Delete activity?",
-            isPresented: $showDeleteConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button("Delete activity", role: .destructive) {
-//                onDeleteActivityTap()
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("This removes the activity and all related sessions.")
+        .sheet(
+            item: $store.scope(
+                state: \.destination?.deleteConfirmation,
+                action: \.destination.deleteConfirmation
+            )
+        ) { deleteStore in
+            DeleteConfirmationView(store: deleteStore)
         }
     }
 
     private var relatedSessionsSection: some View {
         ManagerSessionsListView(
-            todayEvents: groupedSessions.today.map { activity?.relatedSessionActivity($0) }.compactMap { $0 },
-            comingUpEvents: groupedSessions.comingUp.map { activity?.relatedSessionActivity($0) }.compactMap { $0 },
-            previousEvents: groupedSessions.previous.map { activity?.relatedSessionActivity($0) }.compactMap { $0 },
+            todayEvents: groupedSessions.today.map { activity.relatedSessionActivity($0) },
+            comingUpEvents: groupedSessions.comingUp.map { activity.relatedSessionActivity($0) },
+            previousEvents: groupedSessions.previous.map { activity.relatedSessionActivity($0) },
             onEventTap: { _ in }
         )
     }
