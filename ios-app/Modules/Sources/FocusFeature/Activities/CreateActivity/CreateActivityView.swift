@@ -4,8 +4,6 @@ import Domain
 import FeedbackFlowFeature
 import ComposableArchitecture
 
-// MARK: - View
-
 public struct CreateActivityView: View {
     @Bindable var store: StoreOf<CreateActivity>
     @Environment(\.dismiss) private var dismiss

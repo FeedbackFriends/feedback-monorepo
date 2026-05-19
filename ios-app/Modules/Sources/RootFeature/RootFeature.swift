@@ -93,8 +93,7 @@ public struct RootFeature: Sendable {
             case .destination(.signUp(.destination(.presented(.selectUserType(.delegate(.getSession(let bootstrap))))))):
                 return .send(.getSessionResponse(session: bootstrap, deeplink: nil))
 
-            case .destination(.loggedIn(.delegate(.navigateToSignUp))),
-                .destination(.loggedIn(.participantEvents(.delegate(.navigateToSignUp)))):
+            case .destination(.loggedIn(.delegate(.navigateToSignUp))):
                 return .send(.logout(.logoutButtonTap))
                 
             case .tryAgainButtonTap(let errorType):

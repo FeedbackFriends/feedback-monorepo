@@ -18,23 +18,11 @@ public struct TabbarView: View {
     
     public var body: some View {
         let joinEventStore = $store.scope(state: \.destination?.joinEvent, action: \.destination.joinEvent)
-        let notificationHistoryStore = $store.scope(state: \.destination?.notificationHistory, action: \.destination.notificationHistory)
-        let createActivityStore = $store.scope(
-            state: \.managerEvents.destination?.createActivity,
-            action: \.managerEvents.destination.createActivity
-        )
         tabView
             .task {
                 await self.store.send(.tabbarLifecyle(.onTask)).finish()
                 resetSelectedTabIfNeeded()
             }
-//            .overlay(alignment: .bottomTrailing) {
-//                if shouldShowJoinFloatingActionButton {
-//                    joinFloatingActionButton
-//                        .padding(.trailing, 20)
-//                        .padding(.bottom, 80)
-//                }
-//            }
             .onChange(of: scenePhase) { _, newValue in
                 switch newValue {
                 case .active:
@@ -53,9 +41,6 @@ public struct TabbarView: View {
             .sheet(item: joinEventStore) { store in
                 JoinEventView(store: store)
                     .presentationDetents([.height(300)])
-            }
-            .sheet(item: createActivityStore) { store in
-                CreateActivityView(store: store)
             }
             .animation(.bouncy, value: store.session)
             .banner(unwrapping: store.tabbarLifecyle.bannerState)
@@ -143,15 +128,6 @@ private extension TabbarView {
         
     }
     
-    var participantEventsView: some View {
-        ParticipantEventsView(
-            store: store.scope(
-                state: \.participantEvents,
-                action: \.participantEvents
-            )
-        )
-    }
-    
     var profileSettingsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
@@ -166,31 +142,6 @@ private extension TabbarView {
         }
     }
 
-    var feedbackTabContent: some View {
-        Group {
-            participantEventsView
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.themeBackground.ignoresSafeArea())
-    }
-
-    var shouldShowJoinFloatingActionButton: Bool {
-        store.selectedTab == .feedback
-    }
-    
-    var joinFloatingActionButton: some View {
-        Button {
-            store.send(.toolbar(.joinEventButtonTap))
-        } label: {
-            Text("Join with PIN")
-            .font(.montserratSemiBold, 15)
-            .padding(.horizontal, 18)
-            .padding(.vertical, 12)
-            .foregroundStyle(Color.themeOnPrimaryAction)
-            .background(Color.themePrimaryAction.gradient, in: Capsule())
-        }
-    }
-
     func resetSelectedTabIfNeeded() {
         guard !isManager else { return }
         guard store.selectedTab == .events else { return }
@@ -198,11 +149,3 @@ private extension TabbarView {
     }
 }
 
-#warning("Fix me")
-//#Preview {
-//    TabbarView(
-//        store: StoreOf<Tabbar>.init(initialState: .init(session: .init(value: .mock()))) {
-//            Tabbar()
-//        }
-//    )
-//}

@@ -7,7 +7,6 @@ import DesignSystem
 import Domain
 import ComposableArchitecture
 import Utility
-import Logger
 
 public enum Tab: Hashable, Sendable {
     case feedback, events, more
@@ -23,7 +22,6 @@ public extension Tabbar.State {
         selectedTab: Tab,
         initialiseFeedback: InitialiseFeedback.State,
         managerEvents: ActivityList.State,
-        participantEvents: ParticipantEvents.State,
         deleteAccount: DeleteAccount.State,
         destination: Tabbar.Destination.State? = nil
     ) {
@@ -35,7 +33,6 @@ public extension Tabbar.State {
         self.selectedTab = selectedTab
         self.initialiseFeedback = initialiseFeedback
         self.managerEvents = managerEvents
-        self.participantEvents = participantEvents
         self.deleteAccount = deleteAccount
         self.destination = destination
     }
@@ -51,7 +48,6 @@ public extension Tabbar.State {
         self.moreSection = .init()
         self.accountSection = .init(session: session)
         self.initialiseFeedback = .init()
-        self.participantEvents = .init(session: session)
         self.deleteAccount = .init()
         self.managerEvents = .init(session: session)
         self.tabbarLifecyle = .init(session: session)
@@ -66,8 +62,6 @@ public struct Tabbar: Sendable {
     public enum Destination {
         case alert(AlertState<AlertAction>)
         case joinEvent(JoinEvent)
-        @ReducerCaseIgnored
-        case notificationHistory([NotificationHistoryItem])
         public enum AlertAction: Equatable, Sendable {
             case confirmedToCreateUser
         }
@@ -84,7 +78,6 @@ public struct Tabbar: Sendable {
         public var selectedTab: Tab
         var initialiseFeedback: InitialiseFeedback.State
         public var managerEvents: ActivityList.State
-        var participantEvents: ParticipantEvents.State
         var deleteAccount: DeleteAccount.State
         @Presents var destination: Destination.State?
     }
@@ -94,7 +87,6 @@ public struct Tabbar: Sendable {
         case moreSection(MoreSection.Action)
         case accountSection(AccountSection.Action)
         case initialiseFeedback(InitialiseFeedback.Action)
-        case participantEvents(ParticipantEvents.Action)
         case managerEvents(ActivityList.Action)
         case destination(PresentationAction<Destination.Action>)
         case toolbar(Toolbar)
@@ -105,7 +97,6 @@ public struct Tabbar: Sendable {
         case dismissFeedbackFlow
         public enum Toolbar: Equatable {
             case joinEventButtonTap
-            case notificationHistoryButtonTap
         }
         public enum Delegate: Equatable {
             case startFeedback(pinCode: PinCode)
@@ -113,7 +104,6 @@ public struct Tabbar: Sendable {
         }
     }
     
-    @Dependency(\.apiClient) var apiClient
     public init() {}
     
     public var body: some ReducerOf<Self> {
@@ -123,9 +113,6 @@ public struct Tabbar: Sendable {
         }
         Scope(state: \.enterCode, action: \.enterCode) {
             EnterCode()
-        }
-        Scope(state: \.participantEvents, action: \.participantEvents) {
-            ParticipantEvents()
         }
         Scope(state: \.managerEvents, action: \.managerEvents) {
             ActivityList()
@@ -165,18 +152,13 @@ public struct Tabbar: Sendable {
                 case .confirmedToCreateUser:
                     return .send(.delegate(.navigateToSignUp))
                 }
-                
-            case .destination(.presented(.joinEvent(.delegate(.navigateToParticipantEvent(let pinCode))))):
-                return .send(.participantEvents(.startFeedbackButtonTap(pinCode: pinCode)))
-
             case .destination:
                 return .none
                 
             case .binding:
                 return .none
                 
-            case .enterCode(.delegate(.startFeedback(let pinCode))),
-                    .participantEvents(.delegate(.startFeedback(let pinCode))):
+            case .enterCode(.delegate(.startFeedback(let pinCode))):
                 return .send(.initialiseFeedback(.startFeedback(pinCode: pinCode)))
                 
             case .initialiseFeedback(.delegate(let delegateAction)):
@@ -184,11 +166,7 @@ public struct Tabbar: Sendable {
                 case .stopLoading:
                     state.enterCode.startFeedbackPincodeInFlight = false
                     state.enterCode.pinCodeInput.value = ""
-                    state.participantEvents.startFeedbackPincodeInFlight = nil
                 }
-                return .none
-                
-            case .participantEvents:
                 return .none
                 
             case .enterCode:
@@ -196,18 +174,8 @@ public struct Tabbar: Sendable {
                 
             case .toolbar(let toolbarButtonAction):
                 switch toolbarButtonAction {
-                    
                 case .joinEventButtonTap:
                     state.destination = .joinEvent(.init())
-                case .notificationHistoryButtonTap:
-                    state.destination = .notificationHistory(state.session.notificationHistory.items)
-                    return .run { _ in
-                        do {
-                            try await apiClient.markNotificationHistoryAsSeen()
-                        } catch {
-                            Logger.debug("Reset new feedback failed with error: \(error.localizedDescription)")
-                        }
-                    }
                 }
                 return .none
                 
