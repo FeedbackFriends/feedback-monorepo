@@ -3,25 +3,25 @@ import Domain
 import OpenAPI
 
 extension APIClient {
-    static func makeCreateActivity(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (ActivityInput) async throws -> ActivityDto {
+    static func makeCreateActivity(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (ActivityInput) async throws -> Activity {
         { activityInput in
             try await withAuthorization {
                 let activity = try await api.createActivity(body: .json(.init(forCreate: activityInput))).ok.body.json
-                let mappedActivity = ActivityDto(activity)
+                let mappedActivity = Activity(activity)
                 await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedActivity
             }
         }
     }
 
-    static func makeUpdateActivity(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (ActivityInput, UUID) async throws -> ActivityDto {
+    static func makeUpdateActivity(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (ActivityInput, UUID) async throws -> Activity {
         { activityInput, activityId in
             try await withAuthorization {
                 let activity = try await api.updateActivity(
                     path: .init(activityId: activityId.uuidString),
                     body: .json(.init(activityInput))
                 ).ok.body.json
-                let mappedActivity = ActivityDto(activity)
+                let mappedActivity = Activity(activity)
                 await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedActivity
             }
@@ -39,27 +39,33 @@ extension APIClient {
         }
     }
 
-    static func makeCreateEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput) async throws -> ActivityDto {
+    static func makeCreateEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput) async throws -> Event {
         { sessionInput in
             try await withAuthorization {
                 let activity = try await api.createEvent(.init(body: .json(.init(sessionInput)))).ok.body.json
-                let mappedActivity = ActivityDto(activity)
-                await sessionCache.updateOrAppendActivity(mappedActivity)
-                return mappedActivity
+                guard let latestEvent = activity.events.max(by: { $0.date < $1.date }) else {
+                    throw URLError(.cannotParseResponse)
+                }
+                let mappedEvent = Event(latestEvent)
+                try await sessionCache.updateOrAppendEvent(mappedEvent)
+                return mappedEvent
             }
         }
     }
 
-    static func makeUpdateEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput, UUID) async throws -> ActivityDto {
+    static func makeUpdateEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput, UUID) async throws -> Event {
         { sessionInput, sessionId in
             try await withAuthorization {
                 let activity = try await api.updateEvent(.init(
                     path: .init(eventId: sessionId.uuidString),
                     body: .json(.init(sessionInput))
                 )).ok.body.json
-                let mappedActivity = ActivityDto(activity)
-                await sessionCache.updateOrAppendActivity(mappedActivity)
-                return mappedActivity
+                guard let updatedEvent = activity.events.first(where: { $0.id == sessionId.uuidString }) else {
+                    throw URLError(.cannotParseResponse)
+                }
+                let mappedEvent = Event(updatedEvent)
+                try await sessionCache.updateOrAppendEvent(mappedEvent)
+                return mappedEvent
             }
         }
     }
@@ -75,14 +81,14 @@ extension APIClient {
         }
     }
 
-    static func makeJoinEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (PinCode) async throws -> ParticipantEventDto {
+    static func makeJoinEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (PinCode) async throws -> ParticipantEvent {
         { pinCode in
             try await withAuthorization {
                 let response = try await api.joinEvent(.init(path: .init(pinCode: pinCode.value)))
 
                 switch response {
                 case .ok(let output):
-                    let participantEvent = ParticipantEventDto(try output.body.json)
+                    let participantEvent = ParticipantEvent(try output.body.json)
                     await sessionCache.updateOrAppendParticipantEvent(participantEvent)
                     return participantEvent
                 case .internalServerError(let internalError):

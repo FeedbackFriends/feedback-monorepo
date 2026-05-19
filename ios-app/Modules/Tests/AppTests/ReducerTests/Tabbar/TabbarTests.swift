@@ -5,7 +5,7 @@ import Foundation
 import Testing
 @testable import Domain
 @testable import MoreFeature
-@testable import ActivitiesFeature
+@testable import FocusFeature
 
 @MainActor
 struct TabbarTests {
@@ -78,7 +78,7 @@ struct TabbarTests {
             $0.destination = .activity(session.activity.items.wrappedValue)
         }
         await store.send(.managerEvents(.activityManagerEventButtonTap(session.activity.items.wrappedValue.first!))) {
-            $0.managerEvents.destination = .eventDetail(.init(eventId: event.id, detail: event, session: sharedSession))
+            $0.managerEvents.destination = .activityDetail(.init(eventId: event.id, detail: event, session: sharedSession))
         }
     }
     
@@ -107,7 +107,7 @@ struct TabbarTests {
         }
         await store.send(.destination(.presented(.createEvent(.delegate(.dismissAndNavigateToDetail(createdEvent)))))) {
             $0.destination = nil
-            $0.managerEvents.destination = .eventDetail(
+            $0.managerEvents.destination = .activityDetail(
                 .init(
                     eventId: createdEvent.id,
                     detail: createdEvent,

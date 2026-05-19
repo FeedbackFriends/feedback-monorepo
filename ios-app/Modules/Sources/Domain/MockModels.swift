@@ -261,6 +261,20 @@ public extension Activity {
     
 }
 
+public extension Event {
+    static func mock() -> Self {
+        Self.init(
+            id: UUID(),
+            date: Date(),
+            pinCode: nil,
+            durationInMinutes: 30,
+            overallFeedbackSummary: nil,
+            questionsSnapshot: [],
+            calendarProvider: nil
+        )
+    }
+}
+
 func generateRandomDate() -> Date {
     let today = Date()
     let daysOffset = Int.random(in: -365...365) // Range: -365 days to +365 days (1 year before to 1 year after)

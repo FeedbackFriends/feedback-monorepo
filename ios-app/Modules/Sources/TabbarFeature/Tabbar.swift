@@ -1,4 +1,4 @@
-import ActivitiesFeature
+import FocusFeature
 import EnterCodeFeature
 import SwiftUI
 import Foundation
@@ -22,7 +22,7 @@ public extension Tabbar.State {
         accountSection: AccountSection.State,
         selectedTab: Tab,
         initialiseFeedback: InitialiseFeedback.State,
-        managerEvents: ActivitiesFeature.State,
+        managerEvents: ActivityList.State,
         participantEvents: ParticipantEvents.State,
         deleteAccount: DeleteAccount.State,
         destination: Tabbar.Destination.State? = nil
@@ -83,7 +83,7 @@ public struct Tabbar: Sendable {
         var accountSection: AccountSection.State
         public var selectedTab: Tab
         var initialiseFeedback: InitialiseFeedback.State
-        public var managerEvents: ActivitiesFeature.State
+        public var managerEvents: ActivityList.State
         var participantEvents: ParticipantEvents.State
         var deleteAccount: DeleteAccount.State
         @Presents var destination: Destination.State?
@@ -95,7 +95,7 @@ public struct Tabbar: Sendable {
         case accountSection(AccountSection.Action)
         case initialiseFeedback(InitialiseFeedback.Action)
         case participantEvents(ParticipantEvents.Action)
-        case managerEvents(ActivitiesFeature.Action)
+        case managerEvents(ActivityList.Action)
         case destination(PresentationAction<Destination.Action>)
         case toolbar(Toolbar)
         case delegate(Delegate)
@@ -128,7 +128,7 @@ public struct Tabbar: Sendable {
             ParticipantEvents()
         }
         Scope(state: \.managerEvents, action: \.managerEvents) {
-            ActivitiesFeature()
+            ActivityList()
         }
         Scope(state: \.accountSection, action: \.accountSection) {
             AccountSection()

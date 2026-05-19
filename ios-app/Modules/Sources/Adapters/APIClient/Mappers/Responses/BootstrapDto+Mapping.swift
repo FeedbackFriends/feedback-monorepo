@@ -13,7 +13,7 @@ public extension Bootstrap {
         }
 
         self.init(
-            participantEvents: .init(uniqueElements: bootstrap.participantEvents.map(ParticipantEventDto.init)),
+            participantEvents: .init(uniqueElements: bootstrap.participantEvents.map(ParticipantEvent.init)),
             managerData: bootstrap.managerData.map(ManagerData.init),
             accountInfo: .init(bootstrap.accountInfo),
             role: role

@@ -1,4 +1,18 @@
-# Repository Guidelines
+# Project: [Lets Grow iOS]
+
+## Quick Reference
+- **Platform**: iOS 26+ 
+- **Language**: Swift 6.2
+- **UI Framework**: SwiftUI
+- **Architecture**: The composable architecture (TCA)
+- **Minimum Deployment**: iOS 26.0
+- **Package Manager**: Swift Package Manager
+
+## XcodeBuildMCP Integration
+**IMPORTANT**: This project uses XcodeBuildMCP for all Xcode operations.
+- Build: `mcp__xcodebuildmcp__build_sim_name_proj`
+- Test: `mcp__xcodebuildmcp__test_sim_name_proj`
+- Clean: `mcp__xcodebuildmcp__clean`
 
 ## Project Structure & Module Organization
 - `App/` holds the app entry point, AppDelegate, and composition root.
@@ -7,27 +21,27 @@
 - `Resources/` contains assets, localization, and launch assets.
 - `PreviewApps/` hosts focused SwiftUI preview apps.
 
-## Build, Test, and Development Commands
-- Use the the xcode MCP to communicate with XCode, build app, run tests etc.
-- Linting: `swiftlint lint` (uses `.swiftlint.yml`).
-
-## Coding Style & Naming Conventions
-- Swift 6.2, SwiftUI, and TCA patterns; follow Swift API Design Guidelines.
-- Indentation: spaces only, Xcode default (4 spaces); no tabs.
-- Types in `UpperCamelCase`, functions/properties in `lowerCamelCase`, enum cases in `lowerCamelCase`.
-- SwiftLint is the source of truth: `.swiftlint.yml` (line length warn 200/error 250, function body warn 200/error 300, nesting type level 3). Tests under `Modules/Tests/` are excluded from linting.
-- Keep reducers and dependencies scoped to their feature module; prefer `Domain` protocols with live adapters.
-- When a function returning some View has any non-view statements (like let status = …) before the body, Swift can’t use the implicit return, so you must explicitly return the Button.
-
 ## Testing Guidelines
-- Frameworks: XCTest, TCA `TestStore`, and `swift-snapshot-testing`.
-- Place tests under `Modules/Tests/` mirroring source module names.
-- Name tests descriptively (e.g., `testSubmitFeedbackHappyPath`).
+- Frameworks: Swift Testing, TCA `TestStore`, and `Maestro` for UI tests.
+- Place unittests under `Modules/Tests/` mirroring source module names. Maestro lives in the .maestro folder.
 
-## Commit & Pull Request Guidelines
-- Commit messages are short and imperative (e.g., `Fix ci unit tests`, `Fix keyboard on join event`).
-- PRs should be focused, with a clear description and linked issue if available.
-- Add tests for reducer/business logic changes; include screenshots or screen recordings for UI changes.
+## Naming
+
+All SwiftUI views must use the `View` suffix.
+
+The reducer associated with a view should use the same base name without the `View` suffix.
+
+### Examples
+
+| View | Reducer |
+
+|---|---|
+
+| `FocusListView` | `FocusList` |
+
+| `SettingsView` | `Settings` |
+
+| `ProfileView` | `Profile` | 
 
 ## Collaboration Notes
 - When you learn something about the project that is likely to be useful again, such as overall app architecture, framework choices, conventions, or ways of working, suggest adding it to `AGENTS.md`.

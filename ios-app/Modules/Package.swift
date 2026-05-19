@@ -26,8 +26,8 @@ let package = Package(
             name: "MoreFeature",
             targets: ["MoreFeature"]),
         .library(
-            name: "ActivitiesFeature",
-            targets: ["ActivitiesFeature"]),
+            name: "FocusFeature",
+            targets: ["FocusFeature"]),
         .library(
             name: "TabbarFeature",
             targets: ["TabbarFeature"]),
@@ -140,7 +140,7 @@ let package = Package(
                 "TabbarFeature",
                 "Domain",
                 "Utility",
-                "ActivitiesFeature",
+                "FocusFeature",
                 "Logger",
                 "SignUpFeature"
             ]
@@ -187,7 +187,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "ActivitiesFeature",
+            name: "FocusFeature",
             dependencies: [
                 "DesignSystem",
                 "Domain",
@@ -201,7 +201,7 @@ let package = Package(
             dependencies: [
                 "DesignSystem",
                 "EnterCodeFeature",
-                "ActivitiesFeature",
+                "FocusFeature",
                 "MoreFeature",
                 "Domain",
                 "Utility",

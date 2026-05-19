@@ -1,4 +1,4 @@
-@testable import ActivitiesFeature
+@testable import FocusFeature
 import Testing
 import ComposableArchitecture
 import Foundation

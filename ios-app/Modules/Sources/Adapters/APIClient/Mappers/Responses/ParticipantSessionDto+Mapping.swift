@@ -2,7 +2,7 @@ import Foundation
 import Domain
 import OpenAPI
 
-public extension ParticipantEventDto {
+public extension ParticipantEvent {
     init(_ dto: Components.Schemas.ParticipantEventDto) {
         self.init(
             id: UUID(uuidString: dto.id)!,

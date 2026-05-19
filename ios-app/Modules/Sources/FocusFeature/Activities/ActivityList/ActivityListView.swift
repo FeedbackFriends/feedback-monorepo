@@ -2,92 +2,59 @@ import Domain
 import ComposableArchitecture
 import SwiftUI
 
-public struct MyActivitiesView: View {
-    let session: Bootstrap
-    let onCreateActivityTap: () -> Void
-    @Bindable var managerEventsStore: StoreOf<ActivitiesFeature>
+public struct ActivityListView: View {
+    @Bindable var store: StoreOf<ActivityList>
 
     public init(
-        session: Bootstrap,
-        onCreateActivityTap: @escaping () -> Void,
-        managerEventsStore: StoreOf<ActivitiesFeature>
+        store: StoreOf<ActivityList>
     ) {
-        self.session = session
-        self.onCreateActivityTap = onCreateActivityTap
-        self.managerEventsStore = managerEventsStore
-    }
-
-    private var activities: [Activity] {
-        guard let managerData = session.managerData else {
-            return []
-        }
-
-        return managerData.activities.sorted { lhs, rhs in
-            lhs.date > rhs.date
-        }
+        self.store = store
     }
 
     public var body: some View {
-        let eventDetailStore = $managerEventsStore.scope(
-            state: \.destination?.eventDetail,
-            action: \.destination.eventDetail
-        )
-        let createEventStore = $managerEventsStore.scope(
-            state: \.destination?.createEvent,
-            action: \.destination.createEvent
-        )
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
                     createCTA
                         .accessibilityIdentifier("my_activity_create_cta")
-
-                    if activities.isEmpty {
+                    if store.activities.isEmpty {
                         emptyState
                     } else {
-                        ForEach(activities) { activity in
-                            NavigationLink(value: activity.id) {
-                                FocusCardView(activity: activity)
+                        ForEach(store.activities) { activity in
+                            Button {
+                                store.send(.activityTap(activity.event))
+                            } label: {
+                                ActivityCardView(activity: activity)
                             }
-                            .accessibilityIdentifier("activity_row_\(activity.title)")
                             .buttonStyle(.plain)
                         }
                     }
                 }
                 .padding()
             }
-            .navigationTitle("My Activities")
-//            .navigationDestination(for: UUID.self) { activityId in
-//                if let activity = activities.first(where: { $0.id == activityId }) {
-//                    FocusDetailView(
-//                        activity: activity,
-//                        onCreateSessionTap: {
-//                            managerEventsStore.send(.activityCreateSessionTap(activity))
-//                        },
-//                        managerEventsStore: managerEventsStore,
-//                        onDeleteFocusTap: {
-//                            managerEventsStore.send(.deleteActivityTap(activity.id))
-//                        }
-//                    )
-//                } else {
-//                    ContentUnavailableView(
-//                        "Focus not found",
-//                        systemImage: "exclamationmark.triangle"
-//                    )
-//                }
-//            }
-            .navigationDestination(item: eventDetailStore) { store in
-                EventDetailFeatureView(store: store)
+            .navigationTitle("My focus")
+            .navigationDestination(
+                item: $store.scope(
+                    state: \.destination?.activityDetail,
+                    action: \.destination.activityDetail
+                )
+            ) { store in
+                ActivityDetailView(store: store)
             }
-            .sheet(item: createEventStore) { store in
+            .sheet(
+                item: $store.scope(
+                    state: \.destination?.createActivity,
+                    action: \.destination.createActivity
+                )
+            ) { store in
                 NavigationStack {
-                    CreateEventView(store: store)
+                    CreateActivityView(store: store)
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        onCreateActivityTap()
+                        self.store.send(.createActivityButtonTap)
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -99,7 +66,7 @@ public struct MyActivitiesView: View {
 
     private var createCTA: some View {
         Button {
-            onCreateActivityTap()
+            self.store.send(.createActivityButtonTap)
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "sparkles")
@@ -136,7 +103,7 @@ public struct MyActivitiesView: View {
     }
 }
 
-private struct FocusCardView: View {
+private struct ActivityCardView: View {
     let activity: Activity
 
     var body: some View {
@@ -144,10 +111,7 @@ private struct FocusCardView: View {
             HStack(alignment: .top) {
                 Text(activity.title)
                     .font(.headline)
-
                 Spacer()
-
-//                TrendBadge(direction: activity.trend.direction)
             }
 
             HStack(spacing: 10) {
@@ -185,8 +149,6 @@ private struct FocusCardView: View {
         )
     }
 }
-
-
 
 private extension ActivityTrend.Direction {
     var title: String {
@@ -229,13 +191,12 @@ private extension ActivityTrend.Direction {
     }
 }
 
-#Preview {
-    MyActivitiesView(
-        session: .mock(),
-        onCreateActivityTap: {},
-        managerEventsStore: .init(
-            initialState: .init(session: .init(value: .mock())),
-            reducer: { ActivitiesFeature() }
-        )
-    )
-}
+//#Preview {
+//    ActivityListView(
+//        session: .mock(),
+//        store: .init(
+//            initialState: .init(session: .init(value: .mock()), activities: []),
+//            reducer: { ActivityList() }
+//        )
+//    )
+//}

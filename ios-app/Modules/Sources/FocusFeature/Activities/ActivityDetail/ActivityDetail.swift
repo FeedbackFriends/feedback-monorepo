@@ -5,12 +5,14 @@ import ComposableArchitecture
 import Utility
 
 @Reducer
-public struct EventDetailFeature: Sendable {
+public struct ActivityDetail: Sendable {
     
     @Reducer
     public enum Destination {
         case deleteConfirmation(DeleteConfirmation)
+        case createEvent(CreateEvent)
         case editEvent(EditEvent)
+        case editActivity(EditActivity)
         @ReducerCaseEphemeral
         case confirmationDialog(ConfirmationDialogState<ConfirmationDialog>)
         @ReducerCaseIgnored
@@ -27,6 +29,7 @@ public struct EventDetailFeature: Sendable {
         public let eventId: UUID
         public var detail: Event?
         @Presents var destination: Destination.State?
+        var pendingAutoInvite = false
         var fetchEventDetailInFlight = true
         @Shared var session: Bootstrap
         var webBaseUrl: URL?
@@ -49,7 +52,7 @@ public struct EventDetailFeature: Sendable {
                 return """
                 You’re invited to \(activityDetail?.title ?? "this session")!
                 Use pin code \(detail?.pinCode?.value ?? "PINCODE_NOT_FOUND") to join.
-
+                
                 👇🏼 Tap the link to join:
                 \(inviteUrl)
                 """
@@ -57,7 +60,7 @@ public struct EventDetailFeature: Sendable {
             return """
             You’re invited to \(activityDetail?.title ?? "this session")!
             Use pin code \(detail.pinCode?.value ?? "PINCODE_NOT_FOUND") to join.
-
+            
             👇🏼 Tap the link to join:
             \(inviteUrl)
             """
@@ -67,12 +70,14 @@ public struct EventDetailFeature: Sendable {
             eventId: UUID,
             detail: Event? = nil,
             destination: Destination.State? = nil,
+            pendingAutoInvite: Bool = false,
             fetchEventDetailInFlight: Bool = true,
             session: Shared<Bootstrap>
         ) {
             self.eventId = eventId
             self.detail = detail ?? session.wrappedValue.managerData?.activities[id: eventId]?.event
             self.destination = destination
+            self.pendingAutoInvite = pendingAutoInvite
             self.fetchEventDetailInFlight = fetchEventDetailInFlight
             self._session = session
         }
@@ -81,6 +86,7 @@ public struct EventDetailFeature: Sendable {
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
+        case createEventButtonTapped(Activity)
         case moreButtonTapped
         case onTask
         case retryButtonTap
@@ -143,6 +149,23 @@ public struct EventDetailFeature: Sendable {
             case .destination:
                 return .none
                 
+            case .createEventButtonTapped(let activity):
+                var eventInput = EventInput(activity)
+                eventInput.date = Date().roundedUpcoming5Min()
+                let recentlyUsedQuestions = state.session.managerData?.recentlyUsedQuestions ?? []
+                state.destination = .createEvent(
+                    CreateEvent.State(
+                        activityId: activity.id,
+                        eventForm: EventForm.State(
+                            eventInput: eventInput,
+                            shouldOpenKeyboardOnAppear: false,
+                            recentlyUsedQuestions: recentlyUsedQuestions,
+                            successOverlayMessage: "Session created"
+                        )
+                    )
+                )
+                return .none
+                
             case .moreButtonTapped:
                 guard let detail = state.detail else { return .none }
                 state.destination = .confirmationDialog(
@@ -173,10 +196,16 @@ public struct EventDetailFeature: Sendable {
                 
             case .onTask:
                 state.webBaseUrl = self.systemClient.webBaseUrl()
-                return .publisher {
+                let sessionPublisher = Effect.publisher {
                     state.$session.publisher
                         .map(Action.sessionUpdated)
                 }
+                var effects: [Effect<Action>] = [sessionPublisher]
+                if state.pendingAutoInvite, let detail = state.detail {
+                    state.pendingAutoInvite = false
+                    state.destination = .invite(detail)
+                }
+                return .merge(effects)
                 
             case .sessionUpdated(let updatedSession):
                 if let updatedDetail = updatedSession.managerData?.activities[id: state.eventId]?.event {
@@ -195,4 +224,4 @@ public struct EventDetailFeature: Sendable {
     }
 }
 
-extension EventDetailFeature.Destination.State: Equatable, Sendable {}
+extension ActivityDetail.Destination.State: Equatable, Sendable {}

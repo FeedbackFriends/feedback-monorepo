@@ -4,7 +4,7 @@ import Network
 import SignUpFeature
 import DesignSystem
 import Domain
-import ActivitiesFeature
+import FocusFeature
 import Logger
 import Foundation
 
@@ -241,8 +241,8 @@ extension RootFeature.State {
                 session: sharedSession
             )
             if let managerEvent = sharedSession.wrappedValue.managerData?.activities[id: eventId] {
-                newTabbarState.managerEvents.destination = .eventDetail(
-                    EventDetailFeature.State(
+                newTabbarState.managerEvents.destination = .activityDetail(
+                    ActivityDetail.State(
                         eventId: managerEvent.id,
                         detail: managerEvent.event,
                         session: sharedSession

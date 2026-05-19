@@ -1,4 +1,4 @@
-import ActivitiesFeature
+import FocusFeature
 import MoreFeature
 import DesignSystem
 import SwiftUI
@@ -54,17 +54,6 @@ public struct TabbarView: View {
                 JoinEventView(store: store)
                     .presentationDetents([.height(300)])
             }
-            .sheet(item: notificationHistoryStore) { notificationHistoryItems in
-                notificationHistoryItems.withState { notificationHistoryItems in
-                    NotificationHistoryView(
-                        notificationHistoryItems: notificationHistoryItems,
-                        activityManagerEventButtonTap: {
-                            store.send(.managerEvents(.activityManagerEventButtonTap($0)))
-                        }
-                    )
-                    .presentationDetents([.medium, .large])
-                }
-            }
             .sheet(item: createActivityStore) { store in
                 CreateActivityView(store: store)
             }
@@ -113,12 +102,8 @@ private extension TabbarView {
             .tag(Tab.feedback)
             
             if isManager {
-                MyActivitiesView(
-                    session: store.session,
-                    onCreateActivityTap: {
-                        store.send(.managerEvents(.createActivityButtonTap))
-                    },
-                    managerEventsStore: store.scope(
+                ActivityListView(
+                    store: store.scope(
                         state: \.managerEvents,
                         action: \.managerEvents
                     )

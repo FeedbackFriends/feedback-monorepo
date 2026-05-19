@@ -8,7 +8,7 @@ public extension ManagerData {
         self.init(
             activities: .init(
                 uniqueElements: dto.activities.map { activity in
-                    ActivityDto(activity, questionAnalytics: dto.questionAnalytics)
+                    Activity(activity, questionAnalytics: dto.questionAnalytics)
                 }
             ),
             notificationHistory: .init(dto.notificationHistory),

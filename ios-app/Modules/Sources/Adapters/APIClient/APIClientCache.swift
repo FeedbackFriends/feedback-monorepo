@@ -3,6 +3,17 @@ import Domain
 import Logger
 
 public actor APIClientCache {
+    public enum CacheMutationError: Error, LocalizedError {
+        case eventNotFound(UUID)
+
+        public var errorDescription: String? {
+            switch self {
+            case .eventNotFound(let id):
+                return "Could not update event in cache. Event with id \(id) was not found."
+            }
+        }
+    }
+
     private var session: Bootstrap? {
         didSet {
             if let session, session != oldValue {
@@ -38,6 +49,12 @@ public actor APIClientCache {
     
     public func updateOrAppendActivity(_ activity: Activity) {
         session?.updateOrAppendActivity(activity)
+    }
+    
+    public func updateOrAppendEvent(_ event: Event) throws {
+        guard var mutableSession = session else { return }
+        try mutableSession.updateOrAppendEvent(event)
+        session = mutableSession
     }
     
     public func updateRecentlyUsedQuestions(recentlyUsedQuestions: Set<RecentlyUsedQuestions>) {
@@ -83,6 +100,34 @@ public extension Bootstrap {
     
     mutating func updateOrAppendActivity(_ activity: Activity) {
         self.managerData?.activities.updateOrAppend(activity)
+    }
+
+    mutating func updateOrAppendEvent(_ event: Event) throws {
+        guard var managerData else {
+            throw APIClientCache.CacheMutationError.eventNotFound(event.id)
+        }
+
+        for index in managerData.activities.indices {
+            if managerData.activities[index].id == event.id {
+                var activity = managerData.activities[index]
+                activity.date = event.date
+                activity.durationInMinutes = event.durationInMinutes
+                activity.location = event.location
+                activity.overallFeedbackSummary = event.overallFeedbackSummary
+                activity.questions = event.questionsSnapshot
+                managerData.activities[index] = activity
+                self.managerData = managerData
+                return
+            }
+
+            if let relatedIndex = managerData.activities[index].relatedSessions.firstIndex(where: { $0.id == event.id }) {
+                managerData.activities[index].relatedSessions[relatedIndex] = event
+                self.managerData = managerData
+                return
+            }
+        }
+
+        throw APIClientCache.CacheMutationError.eventNotFound(event.id)
     }
     
     mutating func updateOrAppendParticipantEvent(_ event: ParticipantEvent) {
