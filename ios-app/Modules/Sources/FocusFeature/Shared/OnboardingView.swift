@@ -9,24 +9,18 @@ struct OnboardingView: View {
     var body: some View {
         VStack {
             TabView(selection: $page) {
-
-                // MARK: - Page 1
                 OnboardingPage(
                     icon: "leaf.fill",
                     title: "Grow with feedback",
                     subtitle: "Turn everyday moments into opportunities to improve."
                 )
                 .tag(0)
-
-                // MARK: - Page 2
                 OnboardingPage(
                     icon: "bubble.left.and.bubble.right.fill",
                     title: "Get insights from others",
                     subtitle: "Ask for feedback after meetings, workshops, or presentations."
                 )
                 .tag(1)
-
-                // MARK: - Page 3
                 OnboardingPage(
                     icon: "chart.line.uptrend.xyaxis",
                     title: "Track your progress",
@@ -45,9 +39,6 @@ struct OnboardingView: View {
             }
         }
     }
-
-    // MARK: - Bottom Controls
-
     private var bottomControls: some View {
         VStack(spacing: 12) {
             Button {
@@ -72,9 +63,6 @@ struct OnboardingView: View {
         }
     }
 }
-
-// MARK: - Onboarding Page
-
 struct OnboardingPage: View {
     let icon: String
     let title: String
@@ -103,9 +91,6 @@ struct OnboardingPage: View {
         }
     }
 }
-
-// MARK: - First Focus (Activation Screen)
-
 struct FirstFocusOnboardingView: View {
     var onComplete: () -> Void
 
@@ -153,9 +138,6 @@ struct FirstFocusOnboardingView: View {
         }
     }
 }
-
-// MARK: - Preview
-
 #Preview {
     OnboardingView {
         print("Finished onboarding")

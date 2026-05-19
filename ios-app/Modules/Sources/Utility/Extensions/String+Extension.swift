@@ -2,6 +2,11 @@ public extension String {
     var nilIfEmpty: String? {
         return self.isEmpty ? nil : self
     }
+
+    var nilIfBlank: String? {
+        let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
 }
 
 public extension String {

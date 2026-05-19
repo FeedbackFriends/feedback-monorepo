@@ -20,7 +20,6 @@ public struct ActivityList: Sendable {
         
         @Presents public var destination: Destination.State?
         @Shared var session: Bootstrap
-        var searchTextfield: String
         var activities: [Activity] {
             guard let managerData = session.managerData else { return [] }
             return managerData.activities.elements
@@ -28,11 +27,9 @@ public struct ActivityList: Sendable {
         public init(
             destination: Destination.State? = nil,
             session: Shared<Bootstrap>,
-            searchTextfield: String = "",
         ) {
             self.destination = destination
             self._session = session
-            self.searchTextfield = searchTextfield
         }
     }
     

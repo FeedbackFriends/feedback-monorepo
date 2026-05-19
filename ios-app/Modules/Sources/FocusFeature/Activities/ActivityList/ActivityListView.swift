@@ -3,6 +3,7 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct ActivityListView: View {
+    
     @Bindable var store: StoreOf<ActivityList>
 
     public init(

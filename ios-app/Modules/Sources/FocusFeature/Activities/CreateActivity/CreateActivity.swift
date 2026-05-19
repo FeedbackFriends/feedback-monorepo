@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import Domain
 import Foundation
+import Utility
 
 @Reducer
 public struct CreateActivity: Sendable {
@@ -43,13 +44,9 @@ public struct CreateActivity: Sendable {
 
         var activityInput: ActivityInput? {
             guard selectedTemplate != nil else { return nil }
-            let agenda = {
-                let trimmed = description.trimmingCharacters(in: .whitespacesAndNewlines)
-                return trimmed.isEmpty ? nil : trimmed
-            }()
             return ActivityInput(
                 title: title,
-                agenda: agenda,
+                agenda: description.nilIfBlank,
                 questions: questions,
                 runMode: .manual,
                 invitedEmails: sendEmails ? participants : [],
