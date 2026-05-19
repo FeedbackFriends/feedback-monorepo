@@ -81,16 +81,16 @@ private extension CreateActivityView {
     @ToolbarContentBuilder
     var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button("Cancel") { dismiss() }
-                .buttonStyle(SecondaryTextButtonStyle())
+            CloseButtonView { dismiss() }
         }
 
         ToolbarItem(placement: .topBarTrailing) {
-            Button(store.createActivityRequestInFlight ? "Creating..." : "Create") {
+            Button("Create") {
                 store.send(.createButtonTapped)
             }
             .accessibilityIdentifier("create_activity_submit")
             .buttonStyle(PrimaryTextButtonStyle())
+            .isLoading(store.createActivityRequestInFlight)
             .disabled(store.isCreateDisabled)
         }
         .sharedBackgroundVisibility(.hidden)

@@ -1,6 +1,7 @@
 import Foundation
 
 public struct ActivityInput: Equatable, Sendable {
+    
     public var title: String
     public var agenda: String?
     public var questions: [EventInput.QuestionInput]
@@ -8,6 +9,11 @@ public struct ActivityInput: Equatable, Sendable {
     public var invitedEmails: [String]
     public var sendEmails: Bool
 
+    public enum RunMode: String, CaseIterable, Hashable, Sendable {
+        case manual
+        case automatic
+    }
+    
     public init(
         title: String,
         agenda: String? = nil,
@@ -35,10 +41,5 @@ public extension ActivityInput {
             invitedEmails: [],
             sendEmails: false
         )
-    }
-
-    enum RunMode: String, CaseIterable, Hashable, Sendable {
-        case manual
-        case automatic
     }
 }

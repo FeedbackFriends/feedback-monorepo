@@ -124,7 +124,13 @@ Inventory:
 
 Rules:
 - Prefer these styles instead of rebuilding button interactions, disabled states, and loading spinners.
-- Loading-aware button styles rely on the `\.isLoading` environment value, so supply `.isLoading(isLoading)` from the caller.
+- Loading-aware button styles rely on the `\.isLoading` environment value, so supply `.isLoading(isLoading)` from the caller. The style swaps the label for a `ProgressView` automatically — keep the title stable. Canonical pattern (same inside or outside `ToolbarItem`):
+  ```swift
+  Button("Save") { store.send(.saveTapped) }
+      .buttonStyle(PrimaryTextButtonStyle())
+      .isLoading(store.requestInFlight)
+      .disabled(store.isDisabled)
+  ```
 
 ## Reusable Views
 
@@ -139,7 +145,7 @@ Files:
 
 Inventory:
 - `banner(unwrapping:)`: top banner for offline or server-error states.
-- `CloseButtonView`: standardized dismiss button wrapper.
+- `CloseButtonView`: standardized dismiss button wrapper (`Button(role: .close)` tinted with `themeText`).
 - `EmptyStateView`: icon plus title/message empty state.
 - `ErrorView`: presentable error with optional retry button and loading support.
 - `EventInfoView`: packaged event details screen using surface, padding, and typography tokens.
@@ -149,6 +155,14 @@ Inventory:
 Rules:
 - Reuse these for the matching UI shape before creating a new feature-local version.
 - Follow their composition patterns when designing new reusable views: DesignSystem image helpers, Montserrat typography, semantic colors, shared paddings, and capsule or rounded-surface containers.
+- Sheet/modal dismissal in toolbars uses `CloseButtonView` in the `.cancellationAction` slot:
+  ```swift
+  .toolbar {
+      ToolbarItem(placement: .cancellationAction) {
+          CloseButtonView { dismiss() }
+      }
+  }
+  ```
 
 ## View Modifiers And Environment
 
