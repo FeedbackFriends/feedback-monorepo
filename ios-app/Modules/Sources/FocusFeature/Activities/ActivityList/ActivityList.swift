@@ -12,7 +12,7 @@ public struct ActivityList: Sendable {
     @Reducer
     public enum Destination {
         case activityDetail(ActivityDetail)
-        case createActivity(CreateActivity)
+        case createActivity(ManageActivity)
     }
     
     @ObservableState
@@ -52,7 +52,7 @@ public struct ActivityList: Sendable {
             switch action {
                 
             case .createActivityButtonTap:
-                state.destination = .createActivity(.init())
+                state.destination = .createActivity(.init(mode: .create))
                 return .none
 
             case .destination(.presented(.createActivity(.delegate(.dismissAndNavigateToDetail(let activity))))):

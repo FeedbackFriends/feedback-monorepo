@@ -5,11 +5,11 @@ import FeedbackFlowFeature
 import ComposableArchitecture
 import Utility
 
-public struct CreateActivityView: View {
-    @Bindable var store: StoreOf<CreateActivity>
+public struct ManageActivityView: View {
+    @Bindable var store: StoreOf<ManageActivity>
     @Environment(\.dismiss) private var dismiss
 
-    public init(store: StoreOf<CreateActivity>) {
+    public init(store: StoreOf<ManageActivity>) {
         self.store = store
     }
 
@@ -29,7 +29,7 @@ public struct CreateActivityView: View {
             }
             .background(Color.themeBackground.ignoresSafeArea())
             .foregroundStyle(Color.themeText)
-            .navigationTitle("Create Activity")
+            .navigationTitle(store.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 toolbarContent
@@ -77,7 +77,7 @@ public struct CreateActivityView: View {
     }
 }
 
-private extension CreateActivityView {
+private extension ManageActivityView {
     @ToolbarContentBuilder
     var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
@@ -85,7 +85,7 @@ private extension CreateActivityView {
         }
 
         ToolbarItem(placement: .topBarTrailing) {
-            Button("Create") {
+            Button(store.actionButtonTitle) {
                 store.send(.createButtonTapped)
             }
             .accessibilityIdentifier("create_activity_submit")
@@ -530,9 +530,9 @@ struct AutomaticInfoSheet: View {
 }
 
 #Preview {
-    CreateActivityView(
+    ManageActivityView(
         store: Store(initialState: .init()) {
-            CreateActivity()
+            ManageActivity()
         }
     )
 }

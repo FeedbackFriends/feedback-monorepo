@@ -4,9 +4,15 @@ import Foundation
 import Utility
 
 @Reducer
-public struct CreateActivity: Sendable {
+public struct ManageActivity: Sendable {
+    public enum Mode: Equatable, Sendable {
+        case create
+        case edit
+    }
+
     @ObservableState
     public struct State: Equatable, Sendable {
+        public var mode: Mode
         var title = ""
         var description = ""
         var selectedTemplate: FeedbackTemplate?
@@ -23,6 +29,24 @@ public struct CreateActivity: Sendable {
         var sendEmails = false
         var participants: [String] = []
         var newEmail = ""
+
+        public init(mode: Mode = .create) {
+            self.mode = mode
+        }
+
+        var navigationTitle: String {
+            switch mode {
+            case .create: return "Create focus"
+            case .edit: return "Edit focus"
+            }
+        }
+
+        var actionButtonTitle: String {
+            switch mode {
+            case .create: return "Create"
+            case .edit: return "Save"
+            }
+        }
 
         var isCreateDisabled: Bool {
             title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || selectedTemplate == nil || questions.isEmpty || createActivityRequestInFlight

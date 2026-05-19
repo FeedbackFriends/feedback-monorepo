@@ -49,7 +49,7 @@ public struct ActivityListView: View {
                 )
             ) { store in
                 NavigationStack {
-                    CreateActivityView(store: store)
+                    ManageActivityView(store: store)
                 }
             }
             .toolbar {

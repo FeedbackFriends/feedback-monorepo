@@ -1,3 +1,3 @@
 import SwiftUI
 
-public typealias EditActivityView = CreateActivityView
+public typealias EditActivityView = ManageActivityView

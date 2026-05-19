@@ -1,3 +1,3 @@
 import Foundation
 
-public typealias EditActivity = CreateActivity
+public typealias EditActivity = ManageActivity
