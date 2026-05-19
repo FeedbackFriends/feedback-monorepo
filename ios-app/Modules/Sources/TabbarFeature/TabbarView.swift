@@ -96,7 +96,7 @@ private extension TabbarView {
                     .tabItem {
                         Label("My Activities", systemImage: "scope")
                     }
-                .tag(Tab.events)
+                .tag(Tab.activities)
             }
             
             NavigationStack {
@@ -144,7 +144,7 @@ private extension TabbarView {
 
     func resetSelectedTabIfNeeded() {
         guard !isManager else { return }
-        guard store.selectedTab == .events else { return }
+        guard store.selectedTab == .activities else { return }
         store.selectedTab = .feedback
     }
 }

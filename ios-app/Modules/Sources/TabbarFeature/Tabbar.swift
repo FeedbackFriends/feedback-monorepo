@@ -9,7 +9,7 @@ import ComposableArchitecture
 import Utility
 
 public enum Tab: Hashable, Sendable {
-    case feedback, events, more
+    case feedback, activities, more
 }
 
 public extension Tabbar.State {
@@ -39,7 +39,7 @@ public extension Tabbar.State {
     
     init(
         session: Shared<Bootstrap>,
-        selectedTab: Tab = .events,
+        selectedTab: Tab = .activities,
         destination: Tabbar.Destination.State? = nil,
     ) {
         self._session = session
