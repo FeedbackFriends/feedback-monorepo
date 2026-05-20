@@ -9,40 +9,41 @@ public struct ActivityDetail: Sendable {
     
     @Reducer
     public enum Destination {
-        case deleteConfirmation(DeleteConfirmation)
         case createEvent(CreateEvent)
         case editActivity(ManageActivity)
     }
     
     @ObservableState
     public struct State: Equatable, Sendable {
-        public var activity: Activity
-        public var detail: Event?
+        let activityId: UUID
+        public var activity: Activity? {
+            guard let activity = self.session.managerData?.activities.first(where: { $0.id == self.activityId }) else {
+                return nil
+            }
+            return activity
+        }
+        public var detail: Event? {
+            guard let activity else { return nil }
+            return activity.event
+        }
         @Presents var destination: Destination.State?
-        var pendingAutoInvite = false
-        var fetchEventDetailInFlight = true
+        var showDeleteConfirmation = false
         @Shared var session: Bootstrap
         
         var navigationTitle: String {
-            activity.title
+            activity?.title ?? "Unknown Activity"
         }
         var navigationSubTitle: String {
             "\(detail?.overallFeedbackSummary?.responses ?? 0) responses"
         }
 
         public init(
-            activity: Activity,
-            detail: Event? = nil,
+            activityId: UUID,
             destination: Destination.State? = nil,
-            pendingAutoInvite: Bool = false,
-            fetchEventDetailInFlight: Bool = true,
             session: Shared<Bootstrap>
         ) {
-            self.activity = activity
-            self.detail = detail ?? activity.event
+            self.activityId = activityId
             self.destination = destination
-            self.pendingAutoInvite = pendingAutoInvite
-            self.fetchEventDetailInFlight = fetchEventDetailInFlight
             self._session = session
         }
     }
@@ -52,10 +53,9 @@ public struct ActivityDetail: Sendable {
         case destination(PresentationAction<Destination.Action>)
         case createEventButtonTapped
         case editActivityButtonTapped
-        case retryButtonTap
-        case refresh
-        case sessionUpdated(Bootstrap)
         case deleteActivityButtonTap
+        case deleteActivitySuccess
+        case refresh
     }
     
     public init() {}
@@ -71,16 +71,6 @@ public struct ActivityDetail: Sendable {
         Reduce { state, action in
             switch action {
                 
-            case .deleteActivityButtonTap:
-                state.destination = .deleteConfirmation(.init(eventId: state.activity.id))
-                return .none
-                
-            case .destination(.presented(.deleteConfirmation(.delegate(.dismissEventDetail)))):
-                return .run { _ in
-                    try await clock.sleep(for: .seconds(2.5))
-                    await dismiss()
-                }
-                
             case .binding:
                 return .none
                 
@@ -88,16 +78,26 @@ public struct ActivityDetail: Sendable {
                 return .none
 
             case .editActivityButtonTapped:
-                state.destination = .editActivity(ManageActivity.State(activity: state.activity))
+                guard let activity = state.activity else { return .none }
+                state.destination = .editActivity(ManageActivity.State(activity: activity))
                 return .none
 
+            case .deleteActivityButtonTap:
+                state.showDeleteConfirmation = true
+                return .none
+
+            case .deleteActivitySuccess:
+                state.showDeleteConfirmation = false
+                return .run { _ in await dismiss() }
+
             case .createEventButtonTapped:
-                var eventInput = EventInput(state.activity)
+                guard let activity = state.activity else { return .none }
+                var eventInput = EventInput(activity)
                 eventInput.date = Date().roundedUpcoming5Min()
                 let recentlyUsedQuestions = state.session.managerData?.recentlyUsedQuestions ?? []
                 state.destination = .createEvent(
                     CreateEvent.State(
-                        activityId: state.activity.id,
+                        activityId: activity.id,
                         eventForm: EventForm.State(
                             eventInput: eventInput,
                             shouldOpenKeyboardOnAppear: false,
@@ -107,17 +107,7 @@ public struct ActivityDetail: Sendable {
                     )
                 )
                 return .none
-                
-            case .sessionUpdated(let updatedSession):
-                if let updatedActivity = updatedSession.managerData?.activities[id: state.activity.id] {
-                    state.activity = updatedActivity
-                    state.detail = updatedActivity.event
-                }
-                return .none
-                
-            case .retryButtonTap:
-                return .none
-                
+            
             case .refresh:
                 return .none
             }
@@ -127,3 +117,12 @@ public struct ActivityDetail: Sendable {
 }
 
 extension ActivityDetail.Destination.State: Equatable, Sendable {}
+
+public extension ActivityDetail.State {
+    static func deleteActivity(id: UUID) -> @Sendable () async throws -> Void {
+        {
+            @Dependency(\.apiClient) var apiClient
+            try await apiClient.deleteActivity(id)
+        }
+    }
+}

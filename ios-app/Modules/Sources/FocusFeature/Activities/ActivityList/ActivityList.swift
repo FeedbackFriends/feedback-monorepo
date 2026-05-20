@@ -36,7 +36,7 @@ public struct ActivityList: Sendable {
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
-        case activityTap(Event)
+        case activityTap(Activity)
         case createActivityButtonTap
         case navigateToCreatedActivity(Activity)
     }
@@ -65,37 +65,35 @@ public struct ActivityList: Sendable {
             case .navigateToCreatedActivity(let activity):
                 state.destination = .activityDetail(
                     ActivityDetail.State(
-                        activity: activity,
-                        detail: activity.event,
+                        activityId: activity.id,
                         session: state.$session
                     )
                 )
                 return .none
 
             case .destination(.dismiss):
-                if case .activityDetail(let activityDetailState) = state.destination,
-                   let overallFeedbackSummary = activityDetailState.detail?.overallFeedbackSummary,
-                   overallFeedbackSummary.unseenResponses > 0 {
-                    return .run { _ in
-                        do {
-                            try await self.apiClient.markEventAsSeen(activityDetailState.activity.id)
-                        } catch {
-                            Logger.debug("Mark session as seen failed: \(error.localizedDescription)")
-                        }
-                    }
-
-                }
+//                if case .activityDetail(let activityDetailState) = state.destination,
+//                   let overallFeedbackSummary = activityDetailState.detail?.overallFeedbackSummary,
+//                   overallFeedbackSummary.unseenResponses > 0 {
+//                    return .run { _ in
+//                        do {
+//                            try await self.apiClient.markEventAsSeen(activityDetailState.activity.id)
+//                        } catch {
+//                            Logger.debug("Mark session as seen failed: \(error.localizedDescription)")
+//                        }
+//                    }
+//
+//                }
                 return .none
 
             case .binding:
                 return .none
 
-            case .activityTap(let event):
-                guard let activity = state.session.managerData?.activities[id: event.id] else { return .none }
+            case .activityTap(let activity):
+                guard let activity = state.session.managerData?.activities[id: activity.id] else { return .none }
                 state.destination = .activityDetail(
                     ActivityDetail.State(
-                        activity: activity,
-                        detail: event,
+                        activityId: activity.id,
                         session: state.$session
                     )
                 )

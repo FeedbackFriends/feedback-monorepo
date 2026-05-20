@@ -242,8 +242,7 @@ extension RootFeature.State {
             if let managerEvent = sharedSession.wrappedValue.managerData?.activities[id: eventId] {
                 newTabbarState.managerEvents.destination = .activityDetail(
                     ActivityDetail.State(
-                        activity: managerEvent,
-                        detail: managerEvent.event,
+                        activityId: managerEvent.id,
                         session: sharedSession
                     )
                 )

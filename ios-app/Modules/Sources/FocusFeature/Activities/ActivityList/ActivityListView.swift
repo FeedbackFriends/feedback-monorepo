@@ -23,7 +23,7 @@ public struct ActivityListView: View {
                     } else {
                         ForEach(store.activities) { activity in
                             Button {
-                                store.send(.activityTap(activity.event))
+                                store.send(.activityTap(activity))
                             } label: {
                                 ActivityCardView(activity: activity)
                             }
