@@ -52,9 +52,7 @@ public actor APIClientCache {
     }
     
     public func updateOrAppendEvent(_ event: Event) throws {
-        guard var mutableSession = session else { return }
-        try mutableSession.updateOrAppendEvent(event)
-        session = mutableSession
+        try session?.updateOrAppendEvent(event)
     }
     
     public func updateRecentlyUsedQuestions(recentlyUsedQuestions: Set<RecentlyUsedQuestions>) {

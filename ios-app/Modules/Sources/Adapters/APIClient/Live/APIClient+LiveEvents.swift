@@ -32,8 +32,7 @@ extension APIClient {
         { activityId in
             try await withAuthorization {
                 _ = try await api.deleteActivity(path: .init(activityId: activityId.uuidString)).ok
-                let bootstrap = try await api.getBootstrap().ok.body.json
-                await sessionCache.updateSession(Bootstrap(bootstrap))
+                await sessionCache.deleteActivity(activityId)
                 return ()
             }
         }

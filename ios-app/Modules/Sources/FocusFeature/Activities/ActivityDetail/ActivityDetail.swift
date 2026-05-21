@@ -16,6 +16,7 @@ public struct ActivityDetail: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         let activityId: UUID
+        @Presents var alert: AlertState<Never>?
         public var activity: Activity? {
             guard let activity = self.session.managerData?.activities.first(where: { $0.id == self.activityId }) else {
                 return nil
@@ -28,6 +29,7 @@ public struct ActivityDetail: Sendable {
         }
         @Presents var destination: Destination.State?
         var showDeleteConfirmation = false
+        var deleteActivityInFlight = false
         @Shared var session: Bootstrap
         
         var navigationTitle: String {
@@ -51,11 +53,15 @@ public struct ActivityDetail: Sendable {
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
+        case alert(PresentationAction<Never>)
         case createEventButtonTapped
         case editActivityButtonTapped
         case deleteActivityButtonTap
-        case deleteActivitySuccess
+        case deleteActivityCancelButtonTap
+        case deleteActivityConfirmButtonTap
         case refresh
+        case deleteActivitySuccess
+        case presentError(Error)
     }
     
     public init() {}
@@ -77,6 +83,9 @@ public struct ActivityDetail: Sendable {
             case .destination:
                 return .none
 
+            case .alert:
+                return .none
+
             case .editActivityButtonTapped:
                 guard let activity = state.activity else { return .none }
                 state.destination = .editActivity(ManageActivity.State(activity: activity))
@@ -86,9 +95,21 @@ public struct ActivityDetail: Sendable {
                 state.showDeleteConfirmation = true
                 return .none
 
-            case .deleteActivitySuccess:
+            case .deleteActivityCancelButtonTap:
                 state.showDeleteConfirmation = false
-                return .run { _ in await dismiss() }
+                return .none
+
+            case .deleteActivityConfirmButtonTap:
+                state.deleteActivityInFlight = true
+                let activityId = state.activityId
+                return .run { send in
+                    do {
+                        try await self.apiClient.deleteActivity(activityId)
+                        await send(.deleteActivitySuccess)
+                    } catch {
+                        await send(.presentError(error))
+                    }
+                }
 
             case .createEventButtonTapped:
                 guard let activity = state.activity else { return .none }
@@ -110,19 +131,24 @@ public struct ActivityDetail: Sendable {
             
             case .refresh:
                 return .none
+                
+            case .deleteActivitySuccess:
+                state.deleteActivityInFlight = false
+                state.showDeleteConfirmation = false
+                return .run { _ in
+                    try await clock.sleep(for: Constants.successOverlayDuration)
+                    await self.dismiss()
+                }
+
+            case .presentError(let error):
+                state.deleteActivityInFlight = false
+                state.alert = .init(error: error)
+                return .none
             }
         }
         .ifLet(\.$destination, action: \.destination)
+        .ifLet(\.$alert, action: \.alert)
     }
 }
 
 extension ActivityDetail.Destination.State: Equatable, Sendable {}
-
-public extension ActivityDetail.State {
-    static func deleteActivity(id: UUID) -> @Sendable () async throws -> Void {
-        {
-            @Dependency(\.apiClient) var apiClient
-            try await apiClient.deleteActivity(id)
-        }
-    }
-}

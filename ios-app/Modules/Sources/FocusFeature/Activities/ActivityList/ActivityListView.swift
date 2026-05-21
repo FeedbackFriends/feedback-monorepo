@@ -22,12 +22,9 @@ public struct ActivityListView: View {
                         emptyState
                     } else {
                         ForEach(store.activities) { activity in
-                            Button {
+                            ActivityRowButton(activity: activity) {
                                 store.send(.activityTap(activity))
-                            } label: {
-                                ActivityCardView(activity: activity)
                             }
-                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -148,6 +145,18 @@ private struct ActivityCardView: View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color(.secondarySystemBackground))
         )
+    }
+}
+
+private struct ActivityRowButton: View {
+    let activity: Activity
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            ActivityCardView(activity: activity)
+        }
+        .buttonStyle(.plain)
     }
 }
 
