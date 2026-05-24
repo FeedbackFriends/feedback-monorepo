@@ -20,6 +20,7 @@
 - `Modules/Tests/` contains unit, reducer, and snapshot tests.
 - `Resources/` contains assets, localization, and launch assets.
 - `PreviewApps/` hosts focused SwiftUI preview apps.
+- Use `Modules/Sources/Domain/AlertState+Extension.swift` when presenting errors with `AlertState(error:)`.
 
 #Schemes
 - `Feedback Localhost` always use this when developing.

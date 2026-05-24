@@ -10,8 +10,6 @@ public struct ManageEvent: Sendable {
     @Reducer
     public enum Destination {
         case alert(AlertState<Never>)
-        @ReducerCaseIgnored
-        case eventDetail(Event)
     }
 
     public enum Mode: Equatable, Sendable {

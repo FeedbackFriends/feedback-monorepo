@@ -186,20 +186,7 @@ public struct ManageActivity: Sendable {
 
             case .presentError(let error):
                 state.createActivityRequestInFlight = false
-                let title: String
-                switch state.mode {
-                case .create: title = "Could not create activity"
-                case .edit: title = "Could not save activity"
-                }
-                state.alert = AlertState {
-                    TextState(title)
-                } actions: {
-                    ButtonState(role: .cancel) {
-                        TextState("OK")
-                    }
-                } message: {
-                    TextState(error.localizedDescription)
-                }
+                state.alert = AlertState(error: error)
                 return .none
 
             case .alert:
