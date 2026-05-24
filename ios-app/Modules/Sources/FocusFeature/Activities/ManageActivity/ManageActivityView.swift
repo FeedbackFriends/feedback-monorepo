@@ -531,7 +531,7 @@ struct AutomaticInfoSheet: View {
 
 #Preview {
     ManageActivityView(
-        store: Store(initialState: .init()) {
+        store: Store(initialState: ManageActivity.State.create()) {
             ManageActivity()
         }
     )

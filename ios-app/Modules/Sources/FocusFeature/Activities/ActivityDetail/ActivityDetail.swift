@@ -88,7 +88,7 @@ public struct ActivityDetail: Sendable {
 
             case .editActivityButtonTapped:
                 guard let activity = state.activity else { return .none }
-                state.destination = .editActivity(ManageActivity.State(activity: activity))
+                state.destination = .editActivity(ManageActivity.State.edit(activity: activity))
                 return .none
 
             case .deleteActivityButtonTap:

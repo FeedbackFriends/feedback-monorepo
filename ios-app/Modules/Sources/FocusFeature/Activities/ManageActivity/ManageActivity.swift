@@ -32,26 +32,27 @@ public struct ManageActivity: Sendable {
         var participants: [String] = []
         var newEmail = ""
 
-        public init() {
-            self.mode = .create
+        public static func create() -> Self {
+            .init(mode: .create)
         }
 
-        public init(activity: Activity) {
-            self.mode = .edit
-            self.activityId = activity.id
-            self.originalQuestionIds = Set(activity.questions.map(\.id))
-            self.title = activity.title
-            self.description = activity.agenda ?? ""
-            self.questions = activity.questions.map {
+        public static func edit(activity: Activity) -> Self {
+            var state = Self(mode: .edit)
+            state.activityId = activity.id
+            state.originalQuestionIds = Set(activity.questions.map(\.id))
+            state.title = activity.title
+            state.description = activity.agenda ?? ""
+            state.questions = activity.questions.map {
                 EventInput.QuestionInput(
                     id: $0.id,
                     questionText: $0.questionText,
                     feedbackType: $0.feedbackType
                 )
             }
-            self.selectedTemplate = FeedbackTemplate.inferred(from: self.questions)
-            self.sendEmails = !activity.invitedEmails.isEmpty
-            self.participants = activity.invitedEmails
+            state.selectedTemplate = FeedbackTemplate.inferred(from: state.questions)
+            state.sendEmails = !activity.invitedEmails.isEmpty
+            state.participants = activity.invitedEmails
+            return state
         }
 
         var navigationTitle: String {

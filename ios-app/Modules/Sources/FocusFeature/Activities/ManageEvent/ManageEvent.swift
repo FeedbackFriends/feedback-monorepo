@@ -49,44 +49,46 @@ public struct ManageEvent: Sendable {
             "Save"
         }
 
-        public init(
+        public static func create(
             activity: Activity,
             recentlyUsedQuestions: Set<RecentlyUsedQuestions> = []
-        ) {
-            self.mode = .create
-            self.activityId = activity.id
-            self.eventId = nil
-
+        ) -> Self {
             var eventInput = EventInput(activity)
             eventInput.date = Date().roundedUpcoming5Min()
 
-            self.eventForm = .init(
-                eventInput: eventInput,
-                shouldOpenKeyboardOnAppear: false,
-                recentlyUsedQuestions: recentlyUsedQuestions,
-                successOverlayMessage: "Session created"
+            return Self(
+                mode: .create,
+                activityId: activity.id,
+                eventId: nil,
+                eventForm: .init(
+                    eventInput: eventInput,
+                    shouldOpenKeyboardOnAppear: false,
+                    recentlyUsedQuestions: recentlyUsedQuestions,
+                    successOverlayMessage: "Session created"
+                )
             )
         }
 
-        public init(
+        public static func edit(
             activity: Activity,
             event: Event,
             recentlyUsedQuestions: Set<RecentlyUsedQuestions> = []
-        ) {
-            self.mode = .edit
-            self.activityId = activity.id
-            self.eventId = event.id
-
+        ) -> Self {
             var eventInput = EventInput(activity)
             eventInput.date = event.date
             eventInput.durationInMinutes = event.durationInMinutes
             eventInput.location = event.location
 
-            self.eventForm = .init(
-                eventInput: eventInput,
-                shouldOpenKeyboardOnAppear: false,
-                recentlyUsedQuestions: recentlyUsedQuestions,
-                successOverlayMessage: "Session saved"
+            return Self(
+                mode: .edit,
+                activityId: activity.id,
+                eventId: event.id,
+                eventForm: .init(
+                    eventInput: eventInput,
+                    shouldOpenKeyboardOnAppear: false,
+                    recentlyUsedQuestions: recentlyUsedQuestions,
+                    successOverlayMessage: "Session saved"
+                )
             )
         }
     }
