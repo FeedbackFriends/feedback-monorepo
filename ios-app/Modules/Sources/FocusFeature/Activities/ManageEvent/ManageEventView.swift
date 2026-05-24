@@ -26,6 +26,6 @@ public struct ManageEventView: View {
         .navigationBarTitle(store.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .scrollContentBackground(.hidden)
-        .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
+        .alert($store.scope(state: \.alert, action: \.alert))
     }
 }

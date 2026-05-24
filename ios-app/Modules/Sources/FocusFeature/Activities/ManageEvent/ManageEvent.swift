@@ -6,12 +6,6 @@ import DesignSystem
 
 @Reducer
 public struct ManageEvent: Sendable {
-
-    @Reducer
-    public enum Destination {
-        case alert(AlertState<Never>)
-    }
-
     public enum Mode: Equatable, Sendable {
         case create
         case edit
@@ -24,7 +18,7 @@ public struct ManageEvent: Sendable {
         let eventId: UUID?
         var manageEventInFlight = false
         var eventForm: EventForm.State
-        @Presents var destination: Destination.State?
+        @Presents var alert: AlertState<Never>?
         var showSuccessOverlay = false
 
         var manageEventButtonDisabled: Bool {
@@ -94,7 +88,6 @@ public struct ManageEvent: Sendable {
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case actionButtonTap
-        case destination(PresentationAction<Destination.Action>)
         case alert(PresentationAction<Never>)
         case manageEventResponse(Event)
         case presentError(Error)
@@ -119,7 +112,7 @@ public struct ManageEvent: Sendable {
         }
         Reduce { state, action in
             switch action {
-            case .binding, .eventForm, .destination, .alert, .delegate:
+            case .binding, .eventForm, .alert, .delegate:
                 return .none
 
             case .actionButtonTap:
@@ -146,7 +139,7 @@ public struct ManageEvent: Sendable {
                 case .edit:
                     guard let eventId = state.eventId else {
                         state.manageEventInFlight = false
-                        state.destination = .alert(.init(error: MissingEventIdentifierError()))
+                        state.alert = .init(error: MissingEventIdentifierError())
                         return .none
                     }
 
@@ -175,11 +168,11 @@ public struct ManageEvent: Sendable {
 
             case .presentError(let error):
                 state.manageEventInFlight = false
-                state.destination = .alert(.init(error: error))
+                state.alert = .init(error: error)
                 return .none
             }
         }
-        .ifLet(\.$destination, action: \.destination)
+        .ifLet(\.$alert, action: \.alert)
     }
 }
 
@@ -188,5 +181,3 @@ private struct MissingEventIdentifierError: LocalizedError {
         "Missing event identifier."
     }
 }
-
-extension ManageEvent.Destination.State: Equatable, Sendable {}
