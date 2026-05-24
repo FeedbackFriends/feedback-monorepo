@@ -41,8 +41,8 @@ public struct ActivityListView: View {
             }
             .sheet(
                 item: $store.scope(
-                    state: \.destination?.createActivity,
-                    action: \.destination.createActivity
+                    state: \.destination?.manageActivity,
+                    action: \.destination.manageActivity
                 )
             ) { store in
                 NavigationStack {

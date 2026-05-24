@@ -9,7 +9,7 @@ public struct ActivityDetail: Sendable {
     
     @Reducer
     public enum Destination {
-        case createEvent(CreateEvent)
+        case manageEvent(ManageEvent)
         case editActivity(ManageActivity)
     }
     
@@ -113,18 +113,11 @@ public struct ActivityDetail: Sendable {
 
             case .createEventButtonTapped:
                 guard let activity = state.activity else { return .none }
-                var eventInput = EventInput(activity)
-                eventInput.date = Date().roundedUpcoming5Min()
                 let recentlyUsedQuestions = state.session.managerData?.recentlyUsedQuestions ?? []
-                state.destination = .createEvent(
-                    CreateEvent.State(
-                        activityId: activity.id,
-                        eventForm: EventForm.State(
-                            eventInput: eventInput,
-                            shouldOpenKeyboardOnAppear: false,
-                            recentlyUsedQuestions: recentlyUsedQuestions,
-                            successOverlayMessage: "Session created"
-                        )
+                state.destination = .manageEvent(
+                    ManageEvent.State.create(
+                        activity: activity,
+                        recentlyUsedQuestions: recentlyUsedQuestions
                     )
                 )
                 return .none

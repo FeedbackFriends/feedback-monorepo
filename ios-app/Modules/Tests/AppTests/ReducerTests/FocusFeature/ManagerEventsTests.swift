@@ -47,10 +47,10 @@ struct ManagerEventsTests {
         }
 
         await store.send(.createActivityButtonTap) {
-            $0.destination = .createActivity(.init())
+            $0.destination = .manageActivity(.init())
         }
 
-        await store.send(.destination(.presented(.createActivity(.delegate(.dismissAndNavigateToDetail(createdActivity)))))) {
+        await store.send(.destination(.presented(.manageActivity(.delegate(.dismissAndNavigateToDetail(createdActivity)))))) {
             $0.destination = nil
         }
 

@@ -114,12 +114,12 @@ struct ActivityDetailView: View {
                 }
                 .sheet(
                     item: $store.scope(
-                        state: \.destination?.createEvent,
-                        action: \.destination.createEvent
+                        state: \.destination?.manageEvent,
+                        action: \.destination.manageEvent
                     )
-                ) { createStore in
+                ) { manageStore in
                     NavigationStack {
-                        CreateEventView(store: createStore)
+                        ManageEventView(store: manageStore)
                     }
                 }
                 .alert($store.scope(state: \.alert, action: \.alert))
