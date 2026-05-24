@@ -16,14 +16,14 @@ public struct CreateEventView: View {
             showSuccessOverlay: $store.showSuccessOverlay,
             store: store.scope(state: \.eventForm, action: \.eventForm)
         ) {
-            Button("Finish") {
+            Button("Save") {
                 store.send(.createEventButtonTap)
             }
             .buttonStyle(PrimaryTextButtonStyle())
-            .isLoading(store.createEventRequestInFlight)
+            .isLoading(store.manageActivityInFlight)
             .disabled(store.createEventButtonDisabled)
         }
-        .navigationBarTitle("New session")
+        .navigationBarTitle("New")
         .navigationBarTitleDisplayMode(.inline)
         .scrollContentBackground(.hidden)
         .alert($store.scope(state: \.alert, action: \.alert))

@@ -52,7 +52,7 @@ public struct ActivityList: Sendable {
             switch action {
                 
             case .createActivityButtonTap:
-                state.destination = .createActivity(.init(mode: .create))
+//                state.destination = .createActivity(.init(mode: .create))
                 return .none
 
             case .destination(.presented(.createActivity(.delegate(.dismissAndNavigateToDetail(let activity))))):
@@ -90,13 +90,13 @@ public struct ActivityList: Sendable {
                 return .none
 
             case .activityTap(let activity):
-                guard let activity = state.session.managerData?.activities[id: activity.id] else { return .none }
-                state.destination = .activityDetail(
-                    ActivityDetail.State(
-                        activityId: activity.id,
-                        session: state.$session
-                    )
-                )
+//                guard let activity = state.session.managerData?.activities[id: activity.id] else { return .none }
+//                state.destination = .activityDetail(
+//                    ActivityDetail.State(
+//                        activityId: activity.id,
+//                        session: state.$session
+//                    )
+//                )
                 return .none
                 
             case .destination:

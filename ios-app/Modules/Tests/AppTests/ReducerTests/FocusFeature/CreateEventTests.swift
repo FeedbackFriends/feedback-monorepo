@@ -26,11 +26,11 @@ struct CreateEventTests {
         }
         
         await store.send(.createEventButtonTap) {
-            $0.createEventRequestInFlight = true
+            $0.manageActivityInFlight = true
         }
         
         await store.receive(\.createEventResponse) {
-            $0.createEventRequestInFlight = false
+            $0.manageActivityInFlight = false
             $0.showSuccessOverlay = true
         }
         await store.receive(\.delegate, .dismissAndNavigateToDetail(mockEvent))
@@ -53,11 +53,11 @@ struct CreateEventTests {
         }
         
         await store.send(.createEventButtonTap) {
-            $0.createEventRequestInFlight = true
+            $0.manageActivityInFlight = true
         }
         
         await store.receive(\.presentError) {
-            $0.createEventRequestInFlight = false
+            $0.manageActivityInFlight = false
             $0.alert = .init(error: Failure())
         }
     }

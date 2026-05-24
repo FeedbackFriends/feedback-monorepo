@@ -12,7 +12,7 @@ public struct ManageActivity: Sendable {
 
     @ObservableState
     public struct State: Equatable, Sendable {
-        public var mode: Mode
+        let mode: Mode
         var activityId: UUID?
         var originalQuestionIds: Set<UUID> = []
         var title = ""
@@ -32,8 +32,8 @@ public struct ManageActivity: Sendable {
         var participants: [String] = []
         var newEmail = ""
 
-        public init(mode: Mode = .create) {
-            self.mode = mode
+        public init() {
+            self.mode = .create
         }
 
         public init(activity: Activity) {
@@ -110,7 +110,7 @@ public struct ManageActivity: Sendable {
 
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
-        case createButtonTapped
+        case actionButtonTap
         case createResponse(Activity)
         case updateResponse(Activity)
         case presentError(Error)
@@ -150,7 +150,7 @@ public struct ManageActivity: Sendable {
                 state.didCopyEmail = true
                 return .none
 
-            case .createButtonTapped:
+            case .actionButtonTap:
                 guard let activityInput = state.activityInput else { return .none }
                 state.createActivityRequestInFlight = true
                 switch state.mode {

@@ -9,13 +9,13 @@ public struct CreateEvent: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         let activityId: UUID
-        var createEventRequestInFlight = false
+        var manageActivityInFlight = false
         var eventForm: EventForm.State
         @Presents var alert: AlertState<Never>?
         var showSuccessOverlay: Bool = false
         
         var createEventButtonDisabled: Bool {
-            eventForm.eventInput.title.isEmpty || eventForm.eventInput.questions.isEmpty || createEventRequestInFlight || showSuccessOverlay
+            eventForm.eventInput.title.isEmpty || eventForm.eventInput.questions.isEmpty || manageActivityInFlight || showSuccessOverlay
         }
 		public init(
             activityId: UUID,
@@ -59,7 +59,7 @@ public struct CreateEvent: Sendable {
                 return .none
                 
             case .createEventButtonTap:
-                state.createEventRequestInFlight = true
+                state.manageActivityInFlight = true
                 return .run { [state = state] send in
                     do {
                         let event = try await apiClient.createEvent(
@@ -83,7 +83,7 @@ public struct CreateEvent: Sendable {
                 return .none
                 
             case .createEventResponse(let event):
-                state.createEventRequestInFlight = false
+                state.manageActivityInFlight = false
                 state.showSuccessOverlay = true
                 return .run { send in
                     try await clock.sleep(for: Constants.successOverlayDuration)
@@ -91,7 +91,7 @@ public struct CreateEvent: Sendable {
                 }
                 
             case .presentError(let error):
-                state.createEventRequestInFlight = false
+                state.manageActivityInFlight = false
                 state.alert = .init(error: error)
                 return .none
                 

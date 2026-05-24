@@ -112,6 +112,16 @@ struct ActivityDetailView: View {
                 ) { editStore in
                     ManageActivityView(store: editStore)
                 }
+                .sheet(
+                    item: $store.scope(
+                        state: \.destination?.createEvent,
+                        action: \.destination.createEvent
+                    )
+                ) { createStore in
+                    NavigationStack {
+                        CreateEventView(store: createStore)
+                    }
+                }
                 .alert($store.scope(state: \.alert, action: \.alert))
             } else {
                 EmptyView()
