@@ -9,9 +9,9 @@ struct ManagerEventsTests {
     
     @Test
     func `Activity tap pushes activity detail`() async {
-        let session: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 2))
-        let activity = session.wrappedValue.managerData!.activities[0]
-        let store = TestStore(initialState: ActivityList.State(session: session)) {
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 2))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
+        let store = TestStore(initialState: ActivityList.State(bootstrap: bootstrap)) {
             ActivityList()
         }
 
@@ -19,7 +19,7 @@ struct ManagerEventsTests {
             $0.destination = .activityDetail(
                 ActivityDetail.State(
                     activityId: activity.id,
-                    session: session
+                    bootstrap: bootstrap
                 )
             )
         }
@@ -27,9 +27,9 @@ struct ManagerEventsTests {
 
     @Test
     func `Create activity success navigates to new activity detail`() async {
-        let session: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
         let createdActivity = Activity.mock()
-        let store = TestStore(initialState: ActivityList.State(session: session)) {
+        let store = TestStore(initialState: ActivityList.State(bootstrap: bootstrap)) {
             ActivityList()
         } withDependencies: {
             $0.continuousClock = ImmediateClock()
@@ -47,7 +47,7 @@ struct ManagerEventsTests {
             $0.destination = .activityDetail(
                 ActivityDetail.State(
                     activityId: createdActivity.id,
-                    session: session
+                    bootstrap: bootstrap
                 )
             )
         }

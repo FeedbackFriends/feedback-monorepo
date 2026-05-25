@@ -60,7 +60,7 @@ public struct RootFeature: Sendable {
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case destination(Destination.Action)
-        case getSessionResponse(session: Bootstrap, deeplink: Deeplink? = nil)
+        case getSessionResponse(bootstrap: Bootstrap, deeplink: Deeplink? = nil)
         case presentError(ErrorType)
         case tryAgainButtonTap(ErrorType)
         case createAccountResponse(Bootstrap, Role?)
@@ -91,7 +91,7 @@ public struct RootFeature: Sendable {
             switch action {
                 
             case .destination(.signUp(.destination(.presented(.selectUserType(.delegate(.getSession(let bootstrap))))))):
-                return .send(.getSessionResponse(session: bootstrap, deeplink: nil))
+                return .send(.getSessionResponse(bootstrap: bootstrap, deeplink: nil))
 
             case .destination(.loggedIn(.delegate(.navigateToSignUp))):
                 return .send(.logout(.logoutButtonTap))
@@ -140,14 +140,14 @@ public struct RootFeature: Sendable {
             case .binding:
                 return .none
                 
-            case .getSessionResponse(let session, let deeplink):
+            case .getSessionResponse(let bootstrap, let deeplink):
                 state.isLoading = false
-                let sharedSession = Shared(value: session)
+                let sharedBootstrap = Shared(value: bootstrap)
                 state.notificationDeeplinkInFlight = false
                 guard let deeplink else {
                     state.destination = Destination.State.loggedIn(
                         Tabbar.State(
-                            session: sharedSession,
+                            bootstrap: sharedBootstrap,
                             selectedTab: .feedback,
                         )
                     )
@@ -155,7 +155,7 @@ public struct RootFeature: Sendable {
                 }
                 state = .fromDeeplink(
                     deeplink: deeplink,
-                    sharedSession: sharedSession
+                    sharedBootstrap: sharedBootstrap
                 )
                 return .none
                 
@@ -170,10 +170,10 @@ public struct RootFeature: Sendable {
                 state.isLoading = false
                 return .none
                 
-            case .createAccountResponse(let session, _):
+            case .createAccountResponse(let bootstrap, _):
                 state.destination = Destination.State.loggedIn(
                     Tabbar.State(
-                        session: Shared(value: session),
+                        bootstrap: Shared(value: bootstrap),
                         selectedTab: .feedback
                     )
                 )
@@ -194,7 +194,7 @@ public struct RootFeature: Sendable {
                 }
                 state = .fromDeeplink(
                     deeplink: deeplink,
-                    sharedSession: Shared(value: existingState.session)
+                    sharedBootstrap: Shared(value: existingState.bootstrap)
                 )
                 return .none
                 
@@ -222,13 +222,13 @@ public struct RootFeature: Sendable {
 }
 
 extension RootFeature.State {
-    static func fromDeeplink(deeplink: Deeplink, sharedSession: Shared<Bootstrap>) -> Self {
+    static func fromDeeplink(deeplink: Deeplink, sharedBootstrap: Shared<Bootstrap>) -> Self {
         switch deeplink {
         case .joinEvent(let pinCodeInput):
             return RootFeature.State(
                 destination: RootFeature.Destination.State.loggedIn(
                     Tabbar.State(
-                        session: sharedSession,
+                        bootstrap: sharedBootstrap,
                         destination: .joinEvent(
                             .init(pinCodeInput: pinCodeInput)
                         )
@@ -237,13 +237,13 @@ extension RootFeature.State {
             )
         case .managerEvent(let eventId):
             var newTabbarState = Tabbar.State(
-                session: sharedSession
+                bootstrap: sharedBootstrap
             )
-            if let managerEvent = sharedSession.wrappedValue.managerData?.activities[id: eventId] {
+            if let managerEvent = sharedBootstrap.wrappedValue.managerData?.activities[id: eventId] {
                 newTabbarState.managerEvents.destination = .activityDetail(
                     ActivityDetail.State(
                         activityId: managerEvent.id,
-                        session: sharedSession
+                        bootstrap: sharedBootstrap
                     )
                 )
             }
@@ -267,8 +267,8 @@ private extension RootFeature {
         state.isLoading = true
         return .run { send in
             do {
-                let session = try await apiClient.createAccount(role)
-                await send(.createAccountResponse(session, role))
+                let bootstrap = try await apiClient.createAccount(role)
+                await send(.createAccountResponse(bootstrap, role))
             } catch {
                 await send(.presentError(ErrorType.createAccountError(error: error.localized, role)))
             }
@@ -280,8 +280,8 @@ private extension RootFeature {
         state.destination = .isLoading
         return .run { send in
             do {
-                let session = try await apiClient.getBootstrap()
-                await send(.getSessionResponse(session: session, deeplink: deeplink))
+                let bootstrap = try await apiClient.getBootstrap()
+                await send(.getSessionResponse(bootstrap: bootstrap, deeplink: deeplink))
             } catch {
                 await send(.presentError(ErrorType.getSessionError(error: error.localized)))
             }
@@ -298,8 +298,8 @@ private extension RootFeature {
                     await send(.navigateToSelectUserType)
                     return
                 }
-                let session = try await apiClient.createAccount(existingRole)
-                await send(.createAccountResponse(session, existingRole))
+                let bootstrap = try await apiClient.createAccount(existingRole)
+                await send(.createAccountResponse(bootstrap, existingRole))
             } catch {
                 await send(.presentError(.handleAuthenticatedAccountError(error: error.localized)))
             }

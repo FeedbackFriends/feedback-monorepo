@@ -19,17 +19,17 @@ public struct ActivityList: Sendable {
     public struct State: Equatable, Sendable {
         
         @Presents public var destination: Destination.State?
-        @Shared var session: Bootstrap
+        @Shared var bootstrap: Bootstrap
         var activities: [Activity] {
-            guard let managerData = session.managerData else { return [] }
+            guard let managerData = bootstrap.managerData else { return [] }
             return managerData.activities.elements
         }
         public init(
             destination: Destination.State? = nil,
-            session: Shared<Bootstrap>,
+            bootstrap: Shared<Bootstrap>,
         ) {
             self.destination = destination
-            self._session = session
+            self._bootstrap = bootstrap
         }
     }
     
@@ -66,7 +66,7 @@ public struct ActivityList: Sendable {
                 state.destination = .activityDetail(
                     ActivityDetail.State(
                         activityId: activity.id,
-                        session: state.$session
+                        bootstrap: state.$bootstrap
                     )
                 )
                 return .none
@@ -75,11 +75,11 @@ public struct ActivityList: Sendable {
                 return .none
 
             case .activityTap(let activity):
-                guard let activity = state.session.managerData?.activities[id: activity.id] else { return .none }
+                guard let activity = state.bootstrap.managerData?.activities[id: activity.id] else { return .none }
                 state.destination = .activityDetail(
                     ActivityDetail.State(
                         activityId: activity.id,
-                        session: state.$session
+                        bootstrap: state.$bootstrap
                     )
                 )
                 return .none

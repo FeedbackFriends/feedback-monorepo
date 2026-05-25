@@ -35,14 +35,14 @@ public struct TabbarView: View {
                     break
                 }
             }
-            .onChange(of: store.session.role) { _, _ in
+            .onChange(of: store.bootstrap.role) { _, _ in
                 resetSelectedTabIfNeeded()
             }
             .sheet(item: joinEventStore) { store in
                 JoinEventView(store: store)
                     .presentationDetents([.height(300)])
             }
-            .animation(.bouncy, value: store.session)
+            .animation(.bouncy, value: store.bootstrap)
             .banner(unwrapping: store.tabbarLifecyle.bannerState)
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
             .alert($store.scope(state: \.initialiseFeedback.destination?.alert, action: \.initialiseFeedback.destination.alert))
@@ -69,7 +69,7 @@ public struct TabbarView: View {
 
 private extension TabbarView {
     var isManager: Bool {
-        if case .manager = store.session.account {
+        if case .manager = store.bootstrap.account {
             return true
         }
         return false
@@ -148,4 +148,3 @@ private extension TabbarView {
         store.selectedTab = .feedback
     }
 }
-

@@ -205,7 +205,7 @@ private extension ActivityTrend.Direction {
 //    ActivityListView(
 //        session: .mock(),
 //        store: .init(
-//            initialState: .init(session: .init(value: .mock()), activities: []),
+//            initialState: .init(bootstrap: .init(value: .mock()), activities: []),
 //            reducer: { ActivityList() }
 //        )
 //    )

@@ -9,15 +9,15 @@ struct ActivityDetailTests {
 
     @Test
     func `Delete confirmation button deletes activity and dismisses detail`() async {
-        let session: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
-        let activity = session.wrappedValue.managerData!.activities[0]
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
         let deletedActivityId = LockIsolated<UUID?>(nil)
         let didDismiss = LockIsolated(false)
 
         let store = await TestStore(
             initialState: ActivityDetail.State(
                 activityId: activity.id,
-                session: session
+                bootstrap: bootstrap
             )
         ) {
             ActivityDetail()
@@ -53,13 +53,13 @@ struct ActivityDetailTests {
     func `Delete confirmation button shows alert when deletion fails`() async {
         struct Failure: Error, Equatable {}
 
-        let session: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
-        let activity = session.wrappedValue.managerData!.activities[0]
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
 
         let store = await TestStore(
             initialState: ActivityDetail.State(
                 activityId: activity.id,
-                session: session
+                bootstrap: bootstrap
             )
         ) {
             ActivityDetail()
@@ -87,13 +87,13 @@ struct ActivityDetailTests {
 
     @Test
     func `Cancel button closes delete confirmation`() async {
-        let session: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
-        let activity = session.wrappedValue.managerData!.activities[0]
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
 
         let store = await TestStore(
             initialState: ActivityDetail.State(
                 activityId: activity.id,
-                session: session
+                bootstrap: bootstrap
             )
         ) {
             ActivityDetail()
@@ -125,12 +125,12 @@ struct ActivityDetailTests {
         var activity = bootstrap.managerData!.activities[0]
         activity.events = [event]
         bootstrap.managerData!.activities[id: activity.id] = activity
-        let session: Shared<Bootstrap> = .init(value: bootstrap)
+        let sharedBootstrap: Shared<Bootstrap> = .init(value: bootstrap)
 
         let store = TestStore(
             initialState: ActivityDetail.State(
                 activityId: activity.id,
-                session: session
+                bootstrap: sharedBootstrap
             )
         ) {
             ActivityDetail()
@@ -141,7 +141,7 @@ struct ActivityDetailTests {
                 EventDetailFeature.State(
                     activityId: activity.id,
                     eventId: event.id,
-                    session: session
+                    bootstrap: sharedBootstrap
                 )
             )
         }
@@ -158,14 +158,14 @@ struct ActivityDetailTests {
             questionsSnapshot: [],
             calendarProvider: nil
         )
-        let session: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
-        let activity = session.wrappedValue.managerData!.activities[0]
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
 
         let store = TestStore(
             initialState: ActivityDetail.State(
                 activityId: activity.id,
                 destination: .manageEvent(.create(activity: activity)),
-                session: session
+                bootstrap: bootstrap
             )
         ) {
             ActivityDetail()
@@ -180,7 +180,7 @@ struct ActivityDetailTests {
         await store.receive(.navigateToEvent(event, presentInvite: true)) {
             var updatedActivity = activity
             updatedActivity.events = [event]
-            $0.$session.withLock {
+            $0.$bootstrap.withLock {
                 $0.managerData!.activities[id: activity.id] = updatedActivity
             }
             $0.destination = .eventDetail(
@@ -188,7 +188,7 @@ struct ActivityDetailTests {
                     activityId: activity.id,
                     eventId: event.id,
                     destination: .invite(event),
-                    session: session
+                    bootstrap: bootstrap
                 )
             )
         }

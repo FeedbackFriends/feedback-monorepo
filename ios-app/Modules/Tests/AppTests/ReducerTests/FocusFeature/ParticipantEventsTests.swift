@@ -11,7 +11,7 @@ struct ParticipantEventsTests {
     func infoButtonTap() async {
         let mockEvent = ParticipantEvent.mock()
         
-        let store = TestStore(initialState: ParticipantEvents.State(session: .init(value: .mock()))) {
+        let store = TestStore(initialState: ParticipantEvents.State(bootstrap: .init(value: .mock()))) {
             ParticipantEvents()
         }
         
@@ -27,7 +27,7 @@ struct ParticipantEventsTests {
     func `Start feedback button triggers delegate with correct pin code`() async {
         let pinCode = PinCode(value: "1234")
         
-        let store = TestStore(initialState: ParticipantEvents.State(session: .init(value: .mock()))) {
+        let store = TestStore(initialState: ParticipantEvents.State(bootstrap: .init(value: .mock()))) {
             ParticipantEvents()
         }
         
@@ -42,7 +42,7 @@ struct ParticipantEventsTests {
     func confirmedToStartFeedback() async {
         let pinCode = PinCode(value: "1234")
         
-        let store = TestStore(initialState: ParticipantEvents.State(session: .init(value: .mock()))) {
+        let store = TestStore(initialState: ParticipantEvents.State(bootstrap: .init(value: .mock()))) {
             ParticipantEvents()
         }
         

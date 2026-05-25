@@ -14,11 +14,11 @@ public struct TabbarLifecycle: Sendable {
     
     @ObservableState
     public struct State: Equatable, Sendable {
-        @Shared var session: Bootstrap
+        @Shared var bootstrap: Bootstrap
         var bannerState: BannerState?
 		var appLoaded = false
-        public init(session: Shared<Bootstrap>) {
-            self._session = session
+        public init(bootstrap: Shared<Bootstrap>) {
+            self._bootstrap = bootstrap
         }
     }
     
@@ -53,7 +53,7 @@ public struct TabbarLifecycle: Sendable {
                 return .send(.delegate(.presentNotificationPermissionPrompt))
                 
             case .sessionUpdated(let session):
-                state.$session.withLock {
+                state.$bootstrap.withLock {
                     $0 = session
                 }
                 return .none
@@ -62,9 +62,9 @@ public struct TabbarLifecycle: Sendable {
 				if state.appLoaded {
 					return .none
 				}
-				state.appLoaded = true
+                state.appLoaded = true
                 return .merge(
-                    .run { [role = state.session.role] send in
+                    .run { [role = state.bootstrap.role] send in
                         if await notificationClient
                             .shouldPromptForAuthorization(role: role) {
                             await send(.presentNotificationPermissionPrompt)

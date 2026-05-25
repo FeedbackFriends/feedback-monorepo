@@ -16,7 +16,7 @@ public struct ParticipantEventsView: View {
         )
         ScrollView {
             LazyVStack(spacing: 12, pinnedViews: [.sectionHeaders]) {
-                let participantEvents = store.session.participantEvents
+                let participantEvents = store.bootstrap.participantEvents
                 if participantEvents.isEmpty {
                     EmptyStateView(
                         message: "Sessions you are attending will be visible here."
@@ -163,7 +163,7 @@ extension ParticipantEventsView {
         ParticipantEventsView(
             store: StoreOf<ParticipantEvents>.init(
                 initialState: ParticipantEvents.State(
-                    session: .init(value: .mock())
+                    bootstrap: .init(value: .mock())
                 ),
                 reducer: {
                     ParticipantEvents()

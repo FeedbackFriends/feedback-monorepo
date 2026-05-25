@@ -13,12 +13,12 @@ public struct AccountSection: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         @Presents public var destination: Destination.State?
-        @Shared var session: Bootstrap
+        @Shared var bootstrap: Bootstrap
         var accountInfo: AccountInfo {
-            session.accountInfo
+            bootstrap.accountInfo
         }
-        public init(session: Shared<Bootstrap>) {
-            self._session = session
+        public init(bootstrap: Shared<Bootstrap>) {
+            self._bootstrap = bootstrap
         }
     }
     
@@ -44,8 +44,8 @@ public struct AccountSection: Sendable {
             case .settingsButtonTap:
                 state.destination = .profileSettings(
                     .init(
-                        role: state.session.role,
-                        accountInfo: state.session.accountInfo
+                        role: state.bootstrap.role,
+                        accountInfo: state.bootstrap.accountInfo
                     )
                 )
                 return .none

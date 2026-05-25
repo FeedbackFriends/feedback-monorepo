@@ -19,14 +19,14 @@ public struct EventDetailFeature: Sendable {
         public let eventId: UUID
         @Presents var alert: AlertState<Never>?
         @Presents var destination: Destination.State?
-        @Shared var session: Bootstrap
+        @Shared var bootstrap: Bootstrap
         var webBaseUrl: URL?
         var hasMarkedAsSeen: Bool
         var showDeleteConfirmation = false
         var deleteEventInFlight = false
 
         var activity: Activity? {
-            session.managerData?.activities.first { $0.id == activityId }
+            bootstrap.managerData?.activities.first { $0.id == activityId }
         }
 
         var event: Event? {
@@ -71,14 +71,14 @@ public struct EventDetailFeature: Sendable {
             activityId: UUID,
             eventId: UUID,
             destination: Destination.State? = nil,
-            session: Shared<Bootstrap>,
+            bootstrap: Shared<Bootstrap>,
             webBaseUrl: URL? = nil,
             hasMarkedAsSeen: Bool = false
         ) {
             self.activityId = activityId
             self.eventId = eventId
             self.destination = destination
-            self._session = session
+            self._bootstrap = bootstrap
             self.webBaseUrl = webBaseUrl
             self.hasMarkedAsSeen = hasMarkedAsSeen
         }
