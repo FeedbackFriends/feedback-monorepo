@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/nicolaidam/Documents/Projects/Feedback/feedback-monorepo/ios-app/.codex/scripts/allow_xcode_mcp.js",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
