@@ -201,12 +201,12 @@ private extension ActivityTrend.Direction {
     }
 }
 
-//#Preview {
-//    ActivityListView(
-//        session: .mock(),
-//        store: .init(
-//            initialState: .init(bootstrap: .init(value: .mock()), activities: []),
-//            reducer: { ActivityList() }
-//        )
-//    )
-//}
+// #Preview {
+//     ActivityListView(
+//         session: .mock(),
+//         store: .init(
+//             initialState: .init(bootstrap: .init(value: .mock()), activities: []),
+//             reducer: { ActivityList() }
+//         )
+//     )
+// }

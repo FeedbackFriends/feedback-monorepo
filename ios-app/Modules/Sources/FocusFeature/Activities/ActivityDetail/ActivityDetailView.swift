@@ -4,7 +4,7 @@ import Domain
 import Foundation
 import SwiftUI
 
-fileprivate struct GroupedSessions {
+private struct GroupedSessions {
     let today: [Event]
     let comingUp: [Event]
     let previous: [Event]

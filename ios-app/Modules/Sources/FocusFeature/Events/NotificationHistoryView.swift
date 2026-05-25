@@ -6,15 +6,15 @@ public struct NotificationHistoryView: View {
     let notificationHistoryItems: [NotificationHistoryItem]
     let activityManagerEventButtonTap: (NotificationHistoryItem) -> Void
     @Environment(\.dismiss) var dismiss
-    
-	public init(
+
+    public init(
         notificationHistoryItems: [NotificationHistoryItem],
-		activityManagerEventButtonTap: @escaping (NotificationHistoryItem) -> Void
-	) {
+        activityManagerEventButtonTap: @escaping (NotificationHistoryItem) -> Void
+    ) {
         self.notificationHistoryItems = notificationHistoryItems
         self.activityManagerEventButtonTap = activityManagerEventButtonTap
     }
-    
+
     public var body: some View {
         NavigationStack {
             Group {

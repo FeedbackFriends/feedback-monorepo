@@ -29,14 +29,12 @@ public struct ParticipantSession: Equatable, Sendable {
     }
 }
 
-
 public struct Bootstrap: Equatable, Sendable {
-    
     public var participantEvents: IdentifiedArrayOf<ParticipantEvent>
     public var managerData: ManagerData?
     public var accountInfo: AccountInfo
     public var role: Role?
-    
+
     public init(
         participantEvents: IdentifiedArrayOf<ParticipantEvent>,
         managerData: ManagerData? = nil,
@@ -48,12 +46,12 @@ public struct Bootstrap: Equatable, Sendable {
         self.accountInfo = accountInfo
         self.role = role
     }
-    
+
     public enum Account: Equatable, Sendable {
         case manager(ManagerSession)
         case participant(ParticipantSession)
     }
-    
+
     public var account: Account {
         switch role {
         case .participant:
@@ -80,7 +78,7 @@ public struct Bootstrap: Equatable, Sendable {
             )
         }
     }
-    
+
     public var notificationHistory: NotificationHistory {
         switch self.account {
         case .manager(let managerSession):
@@ -95,7 +93,7 @@ public struct Bootstrap: Equatable, Sendable {
         }
         fatalError("Could not unwrap manager session")
     }
-    
+
     public var notificationHistoryBadgeCount: Int {
         if case .manager(let managerSession) = self.account {
             return managerSession.managerData.notificationHistory.unseenTotal
@@ -103,8 +101,6 @@ public struct Bootstrap: Equatable, Sendable {
         return 0
     }
 }
-
-
 
 public enum UserType: Equatable, Sendable {
     case manager(managerData: ManagerData, accountInfo: AccountInfo)

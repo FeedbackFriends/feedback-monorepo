@@ -106,11 +106,11 @@ public extension ParticipantSession {
     )
 }
 //
-//public extension AnonymousSession {
-//    static let mock = Self(
-//        participantEvents: .init(uniqueElements: (0...100).map { _ in .mock() })
-//    )
-//}
+// public extension AnonymousSession {
+//     static let mock = Self(
+//         participantEvents: .init(uniqueElements: (0...100).map { _ in .mock() })
+//     )
+// }
 
 public extension ManagerSession {
     static let mock = Self(
