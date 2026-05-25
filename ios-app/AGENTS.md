@@ -39,6 +39,13 @@
 - Frameworks: Swift Testing, TCA `TestStore`, and `Maestro` for UI tests.
 - Place unittests under `Modules/Tests/` mirroring source module names. Maestro lives in the .maestro folder.
 
+## Linting Workflow
+- When changing Swift code, run `swiftlint lint --reporter xcode` before finishing.
+- Fix SwiftLint warnings before the final response. The goal is always 0 SwiftLint warnings.
+- Do not run auto-fix commands such as `swiftlint lint --fix` unless the user explicitly asks, because they may rewrite unrelated code.
+- If SwiftLint warnings remain, keep working until they are fixed. Only report remaining warnings if they are genuinely blocked.
+- Final responses for Swift code changes should include the lint command result.
+
 ## Naming
 
 All SwiftUI views must use the `View` suffix.
