@@ -77,6 +77,17 @@ public struct ActivityDetail: Sendable {
         Reduce { state, action in
             switch action {
                 
+            case .destination(.presented(.manageEvent(.delegate(let delegate)))):
+                switch delegate {
+                
+                case .dismissAndNavigateToEvent(let event):
+                    state.destination = nil
+                    return .none
+                case .dismiss:
+                    state.destination = nil
+                    return .none
+                }
+                
             case .binding:
                 return .none
                 

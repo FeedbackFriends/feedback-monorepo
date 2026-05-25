@@ -3,6 +3,7 @@ import Domain
 import Foundation
 import Utility
 import DesignSystem
+import FeedbackFlowFeature
 
 @Reducer
 public struct ManageEvent: Sendable {
@@ -13,32 +14,68 @@ public struct ManageEvent: Sendable {
 
     @ObservableState
     public struct State: Equatable, Sendable {
+        enum FocusedField: Equatable, Sendable {
+            case title
+            case description
+        }
+
+        public enum DurationPicker: Equatable, Hashable, Sendable {
+            init(durationInMinutes: Int) {
+                switch durationInMinutes {
+                case 15: self = .minutes15
+                case 30: self = .minutes30
+                case 45: self = .minutes45
+                case 60: self = .minutes60
+                case 90: self = .minutes90
+                case 120: self = .minutes120
+                default: self = .other
+                }
+            }
+
+            case minutes15, minutes30, minutes45, minutes60, minutes90, minutes120, other
+
+            var localization: String {
+                switch self {
+                case .minutes15:
+                    "15 minutter"
+                case .minutes30:
+                    "30 minutter"
+                case .minutes45:
+                    "45 minutter"
+                case .minutes60:
+                    "1 time"
+                case .minutes90:
+                    "1,5 timer"
+                case .minutes120:
+                    "2 timer"
+                case .other:
+                    "Andet"
+                }
+            }
+        }
+
         let mode: Mode
         let activityId: UUID
         let eventId: UUID?
         var manageEventInFlight = false
-        var eventForm: EventForm.State
+        var eventInput: EventInput
+        var startNowEnabled = false
+        var durationPicker: DurationPicker
+        var allDay: Bool
+        var minutePicker: Int
+        var hourPicker: Int
+        var focus: FocusedField?
+        let recentlyUsedQuestions: Set<RecentlyUsedQuestions>
+        let successOverlayMessage: String
+        @Presents var feedbackFlowCoordinator: FeedbackFlowCoordinator.State?
         @Presents var alert: AlertState<Never>?
         var showSuccessOverlay = false
 
         var manageEventButtonDisabled: Bool {
-            eventForm.eventInput.title.isEmpty
-                || eventForm.eventInput.questions.isEmpty
+            eventInput.title.isEmpty
+                || eventInput.questions.isEmpty
                 || manageEventInFlight
                 || showSuccessOverlay
-        }
-
-        var navigationTitle: String {
-            switch mode {
-            case .create:
-                "New session"
-            case .edit:
-                "Edit session"
-            }
-        }
-
-        var actionButtonTitle: String {
-            "Save"
         }
 
         public static func create(
@@ -52,12 +89,9 @@ public struct ManageEvent: Sendable {
                 mode: .create,
                 activityId: activity.id,
                 eventId: nil,
-                eventForm: .init(
-                    eventInput: eventInput,
-                    shouldOpenKeyboardOnAppear: false,
-                    recentlyUsedQuestions: recentlyUsedQuestions,
-                    successOverlayMessage: "Session created"
-                )
+                eventInput: eventInput,
+                recentlyUsedQuestions: recentlyUsedQuestions,
+                successOverlayMessage: "Session created"
             )
         }
 
@@ -75,24 +109,70 @@ public struct ManageEvent: Sendable {
                 mode: .edit,
                 activityId: activity.id,
                 eventId: event.id,
-                eventForm: .init(
-                    eventInput: eventInput,
-                    shouldOpenKeyboardOnAppear: false,
-                    recentlyUsedQuestions: recentlyUsedQuestions,
-                    successOverlayMessage: "Session saved"
-                )
+                eventInput: eventInput,
+                recentlyUsedQuestions: recentlyUsedQuestions,
+                successOverlayMessage: "Session saved"
             )
+        }
+
+        init(
+            mode: Mode,
+            activityId: UUID,
+            eventId: UUID?,
+            eventInput: EventInput,
+            recentlyUsedQuestions: Set<RecentlyUsedQuestions>,
+            successOverlayMessage: String,
+            startNowEnabled: Bool = false,
+            focus: FocusedField? = nil
+        ) {
+            self.mode = mode
+            self.activityId = activityId
+            self.eventId = eventId
+            self.eventInput = eventInput
+            self.startNowEnabled = startNowEnabled
+            self.durationPicker = DurationPicker(durationInMinutes: eventInput.durationInMinutes)
+            self.allDay = eventInput.durationInMinutes == .minutesOneDay
+            self.minutePicker = eventInput.durationInMinutes % 60
+            self.hourPicker = eventInput.durationInMinutes / 60
+            self.focus = focus
+            self.recentlyUsedQuestions = recentlyUsedQuestions
+            self.successOverlayMessage = successOverlayMessage
+        }
+
+        var date: Date {
+            @Dependency(\.date) var date
+            return date.now
+        }
+
+        var navigationTitle: String {
+            switch mode {
+            case .create:
+                "New session"
+            case .edit:
+                "Edit session"
+            }
+        }
+
+        var actionButtonTitle: String {
+            "Save"
         }
     }
 
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
+        case onSubmitTitleTextField
+        case minutePickerChanged
+        case hourPickerChanged
+        case allDayChanged
+        case closeButtonTap
+        case durationPickerChanged(State.DurationPicker)
+        case presentFeedbackFlowSession(FeedbackFlowCoordinator.State)
+        case feedbackFlowCoordinator(PresentationAction<FeedbackFlowCoordinator.Action>)
         case actionButtonTap
-        case alert(PresentationAction<Never>)
         case manageEventResponse(Event)
         case presentError(Error)
+        case alert(PresentationAction<Never>)
         case delegate(Delegate)
-        case eventForm(EventForm.Action)
 
         public enum Delegate: Equatable {
             case dismissAndNavigateToEvent(Event)
@@ -103,21 +183,73 @@ public struct ManageEvent: Sendable {
     public init() {}
 
     @Dependency(\.apiClient) var apiClient
+    @Dependency(\.dismiss) var dismiss
     @Dependency(\.continuousClock) var clock
+
+    private func calculateMinutes(hours: Int, minutes: Int) -> Int {
+        (hours * 60) + minutes
+    }
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
-        Scope(state: \.eventForm, action: \.eventForm) {
-            EventForm()
-        }
         Reduce { state, action in
             switch action {
-            case .binding, .eventForm, .alert, .delegate:
+
+            case .binding:
+                return .none
+
+            case .onSubmitTitleTextField:
+                state.focus = .description
+                return .none
+
+            case .minutePickerChanged:
+                state.eventInput.durationInMinutes = calculateMinutes(
+                    hours: state.hourPicker,
+                    minutes: state.minutePicker
+                )
+                return .none
+
+            case .hourPickerChanged:
+                state.eventInput.durationInMinutes = calculateMinutes(
+                    hours: state.hourPicker,
+                    minutes: state.minutePicker
+                )
+                return .none
+
+            case .allDayChanged:
+                state.eventInput.durationInMinutes = .minutesOneDay
+                return .none
+
+            case .closeButtonTap:
+                return .run { _ in
+                    await self.dismiss()
+                }
+
+            case .durationPickerChanged(let newValue):
+                state.eventInput.durationInMinutes = switch newValue {
+                case .minutes15: 15
+                case .minutes30: 30
+                case .minutes45: 45
+                case .minutes60: 60
+                case .minutes90: 90
+                case .minutes120: 120
+                case .other: calculateMinutes(
+                    hours: state.hourPicker,
+                    minutes: state.minutePicker
+                )
+                }
+                return .none
+
+            case .presentFeedbackFlowSession(let feedbackFlowSession):
+                state.feedbackFlowCoordinator = feedbackFlowSession
+                return .none
+
+            case .feedbackFlowCoordinator:
                 return .none
 
             case .actionButtonTap:
                 state.manageEventInFlight = true
-                let eventInput = state.eventForm.eventInput
+                let eventInput = state.eventInput
                 let sessionInput = SessionInput(
                     activityId: state.activityId,
                     date: eventInput.date,
@@ -170,7 +302,17 @@ public struct ManageEvent: Sendable {
                 state.manageEventInFlight = false
                 state.alert = .init(error: error)
                 return .none
+
+            case .alert, .delegate:
+                return .none
             }
+        }
+        .ifLet(\.$feedbackFlowCoordinator, action: \.feedbackFlowCoordinator) {
+            FeedbackFlowCoordinator()
+                .transformDependency(\.apiClient) { apiClient in
+                    apiClient.submitFeedback = { _, _ in false }
+                    return ()
+                }
         }
         .ifLet(\.$alert, action: \.alert)
     }

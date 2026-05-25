@@ -238,12 +238,12 @@ struct APIClientLiveTests {
     func `Create and update event calls refresh the cached manager event`() async throws {
         let createInput = LockIsolated<Operations.CreateEvent.Input?>(nil)
         let updateInput = LockIsolated<Operations.UpdateEvent.Input?>(nil)
-        let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(title: "Original title")]))
+        let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(id: Self.existingEventId, title: "Original title")]))
         let client = Self.makeClient(
             api: MockAPI(
                 createEventHandler: { request in
                     createInput.setValue(request)
-                    return .ok(.init(body: .json(Self.feedbackFlowDto(title: "Created title"))))
+                    return .ok(.init(body: .json(Self.createdActivityDto(title: "Created title"))))
                 },
                 updateEventHandler: { request in
                     updateInput.setValue(request)
@@ -270,6 +270,7 @@ struct APIClientLiveTests {
         #expect(created.title == "Created title")
         #expect(updated.title == "Updated title")
         #expect(snapshot?.managerData?.managerEvents[id: Self.eventId]?.title == "Updated title")
+        #expect(snapshot?.managerData?.activities[id: Self.createdActivityId]?.title == "Created title")
     }
 
     @Test
@@ -448,6 +449,9 @@ private extension APIClientLiveTests {
     static let questionId = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
     static let activityItemId = UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
     static let sessionHash = UUID(uuidString: "00000000-0000-0000-0000-000000000004")!
+    static let existingEventId = UUID(uuidString: "00000000-0000-0000-0000-000000000005")!
+    static let createdActivityId = UUID(uuidString: "00000000-0000-0000-0000-000000000006")!
+    static let createdSessionId = UUID(uuidString: "00000000-0000-0000-0000-000000000007")!
 
     static func makeClient(
         api: MockAPI,
@@ -620,6 +624,37 @@ private extension APIClientLiveTests {
             ratingDelta: 0.4,
             summary: "Summary",
             questionSummary: .init(positives: ["Good"], improvements: ["Faster"]),
+            questionsSnapshot: [questionDto()]
+        )
+    }
+
+    static func createdActivityDto(title: String) -> Components.Schemas.ActivityDto {
+        .init(
+            id: createdActivityId.uuidString,
+            title: title,
+            owner: ownerDto(),
+            runMode: .manual,
+            sendEmails: false,
+            invitedEmails: [],
+            events: [createdEventDto()],
+            currentQuestions: [questionDto()],
+            trend: .init(
+                direction: .stable,
+                indicator: .neutral,
+                metric: .averageRating,
+                comparedEventCount: 1
+            )
+        )
+    }
+
+    static func createdEventDto() -> Components.Schemas.EventDto {
+        .init(
+            id: createdSessionId.uuidString,
+            date: referenceDate,
+            durationInMinutes: 45,
+            location: "Room Blue",
+            pinCode: "456789",
+            createdFromMailListener: false,
             questionsSnapshot: [questionDto()]
         )
     }
