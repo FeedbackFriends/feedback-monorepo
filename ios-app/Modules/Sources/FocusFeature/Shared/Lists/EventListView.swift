@@ -27,7 +27,8 @@ public struct EventListView: View {
         LazyVStack(alignment: .leading, spacing: 18, pinnedViews: [.sectionHeaders]) {
             if todayEvents.isEmpty && comingUpEvents.isEmpty && previousEvents.isEmpty {
                 EmptyStateView(
-                    message: "No sessions yet."
+                    title: "No sessions yet.",
+                    message: "Add a session to collect feedback for this focus."
                 )
             } else {
                 if !todayEvents.isEmpty {
@@ -61,56 +62,148 @@ private extension EventListView {
         Button {
             onEventTap?(event)
         } label: {
-            VStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text(eventTitle)
-                            .font(.montserratSemiBold, 14)
-                        Spacer()
-                        if let overallFeedbackSummary = event.overallFeedbackSummary, overallFeedbackSummary.unseenResponses > 0 {
-                            Text("\(overallFeedbackSummary.unseenResponses) new")
-                                .font(.montserratBold, 10)
-                                .padding(4)
-                                .padding(.horizontal, 4)
-                                .foregroundStyle(Color.themeOnPrimaryAction)
-                                .background(Color.themeBlue)
-                                .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-                        }
-                    }
-                    HStack {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("\(event.date.formatted(date: .abbreviated, time: .omitted))")
-                                .font(.montserratRegular, 10)
-                            if let pinCode = event.pinCode?.value {
-                                Text("#\(pinCode)")
-                                    .font(.montserratSemiBold, 10)
-                            }
-                        }
-                        Spacer()
-                        Image.chevronRight
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 10, height: 10)
-                            .foregroundColor(.themeText.opacity(0.8))
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.montserratRegular, 12)
-                .foregroundColor(Color.themeText)
-                .padding(.all, 10)
-                if let overallFeedbackSummary = event.overallFeedbackSummary {
-                    FeedbackPercentageBarView(feedback: overallFeedbackSummary.segmentationStats)
-                        .frame(height: 10)
-                } else {
-                    EmptyFeedbackSegmentationStatsView()
-                }
-            }
-            .background(Color.themeSurface)
-            .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+            EventListItemView(event: event, eventTitle: eventTitle)
         }
         .buttonStyle(OpacityButtonStyle())
         .accessibilityIdentifier("manager_session_row_\(event.id)")
         .disabled(onEventTap == nil)
         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: Theme.cornerRadius))
+    }
+}
+
+private struct EventListItemView: View {
+    let event: Event
+    let eventTitle: String
+
+    var body: some View {
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 12) {
+                header
+                Divider()
+                metadata
+                feedbackSummary
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundColor(Color.themeText)
+            .padding(.all, 12)
+
+            feedbackBar
+        }
+        .background(Color.themeSurface)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private var header: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 10) {
+            Text(eventTitle)
+                .font(.montserratSemiBold, 14)
+                .lineLimit(2)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            if let overallFeedbackSummary = event.overallFeedbackSummary, overallFeedbackSummary.unseenResponses > 0 {
+                Text("\(overallFeedbackSummary.unseenResponses) new")
+                    .font(.montserratBold, 10)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 5)
+                    .foregroundStyle(Color.themeOnPrimaryAction)
+                    .background(Color.themeBlue)
+                    .clipShape(Capsule())
+                    .accessibilityLabel("\(overallFeedbackSummary.unseenResponses) new responses")
+            }
+
+            Image.chevronRight
+                .resizable()
+                .scaledToFit()
+                .frame(width: 9, height: 9)
+                .foregroundColor(.themeText.opacity(0.55))
+        }
+    }
+
+    private var metadata: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            metadataRow(
+                image: Image.calendar,
+                text: event.date.formatted(date: .abbreviated, time: .shortened)
+            )
+
+            metadataRow(
+                image: Image(systemName: "clock"),
+                text: event.durationText
+            )
+
+            if let location = event.location, !location.isEmpty {
+                metadataRow(
+                    image: Image(systemName: "mappin.and.ellipse"),
+                    text: location
+                )
+            }
+        }
+    }
+
+    private var feedbackSummary: some View {
+        HStack(spacing: 8) {
+            if let pinCode = event.pinCode?.value {
+                pill(text: "#\(pinCode)", foregroundColor: Color.themeText)
+            } else {
+                pill(text: "Expired", foregroundColor: Color.themeVerySad)
+            }
+
+            Spacer(minLength: 8)
+
+            Text(responseText)
+                .font(.montserratSemiBold, 11)
+                .foregroundStyle(Color.themeTextSecondary)
+        }
+    }
+
+    @ViewBuilder
+    private var feedbackBar: some View {
+        if let overallFeedbackSummary = event.overallFeedbackSummary {
+            FeedbackPercentageBarView(feedback: overallFeedbackSummary.segmentationStats)
+                .frame(height: 10)
+        } else {
+            EmptyFeedbackSegmentationStatsView()
+                .frame(height: 24)
+        }
+    }
+
+    private var responseText: String {
+        guard let responses = event.overallFeedbackSummary?.responses else {
+            return "No responses yet"
+        }
+
+        return responses == 1 ? "1 response" : "\(responses) responses"
+    }
+
+    private var accessibilityLabel: String {
+        "\(eventTitle), \(event.formattedDate), \(responseText)"
+    }
+
+    private func metadataRow(image: Image, text: String) -> some View {
+        HStack(spacing: 8) {
+            image
+                .resizable()
+                .scaledToFit()
+                .frame(width: 13, height: 13)
+                .foregroundStyle(Color.themeTextSecondary)
+
+            Text(text)
+                .font(.montserratRegular, 11)
+                .foregroundStyle(Color.themeTextSecondary)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private func pill(text: String, foregroundColor: Color) -> some View {
+        Text(text)
+            .font(.montserratSemiBold, 10)
+            .foregroundStyle(foregroundColor)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .background(Color.themeBackground)
+            .clipShape(Capsule())
     }
 }

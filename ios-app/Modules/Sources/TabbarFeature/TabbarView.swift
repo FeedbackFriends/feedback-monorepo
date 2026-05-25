@@ -94,8 +94,9 @@ private extension TabbarView {
                     )
                 )
                     .tabItem {
-                        Label("My Activities", systemImage: "scope")
+                        Label("Focus", systemImage: "scope")
                     }
+                .badge(managerUnseenResponses)
                 .tag(Tab.activities)
             }
             
@@ -140,6 +141,12 @@ private extension TabbarView {
             }
             .foregroundStyle(Color.themeText)
         }
+    }
+
+    var managerUnseenResponses: Int {
+        store.bootstrap.managerData?.activities.reduce(0) { total, activity in
+            total + (activity.overallFeedbackSummary?.unseenResponses ?? 0)
+        } ?? 0
     }
 
     func resetSelectedTabIfNeeded() {
