@@ -20,7 +20,7 @@ public struct EventDetailFeatureView: View {
             } else {
                 EmptyStateView(
                     title: "Session unavailable",
-                    message: "This session is no longer available."
+                    message: "This session can no longer be opened."
                 )
                 .padding(.horizontal, Theme.padding)
             }
@@ -67,7 +67,7 @@ public struct EventDetailFeatureView: View {
         .sheet(isPresented: $store.showDeleteConfirmation) {
             DeleteConfirmationViewSheet(
                 title: "Delete session",
-                message: "Are you sure you want to delete this session?",
+                message: "Delete this session and its feedback?",
                 actionButton: {
                     Button("Delete") {
                         store.send(.deleteEventConfirmButtonTapped)
@@ -93,7 +93,7 @@ public struct EventDetailFeatureView: View {
             } else {
                 EmptyStateView(
                     title: "Invite unavailable",
-                    message: "This session cannot be invited to right now."
+                    message: "Invites are not available for this session right now."
                 )
                 .padding(.horizontal, Theme.padding)
                 .presentationDetents([.height(350)])

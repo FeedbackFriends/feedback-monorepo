@@ -30,7 +30,7 @@ public struct ActivityListView: View {
                 }
                 .padding()
             }
-            .navigationTitle("My focus")
+            .navigationTitle("Focus")
             .navigationDestination(
                 item: $store.scope(
                     state: \.destination?.activityDetail,
@@ -71,10 +71,10 @@ public struct ActivityListView: View {
                     .font(.title3)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("What do you want feedback on?")
+                    Text("Create a focus")
                         .font(.headline)
 
-                    Text("Create an activity and collect feedback after each session.")
+                    Text("Choose what you want feedback on, then collect responses after each session.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -92,9 +92,9 @@ public struct ActivityListView: View {
 
     private var emptyState: some View {
         ContentUnavailableView(
-            "No activities yet",
+            "No focus areas yet",
             systemImage: "calendar.badge.plus",
-            description: Text("Create your first activity to start gathering feedback.")
+            description: Text("Create a focus to start gathering feedback across sessions.")
         )
         .frame(maxWidth: .infinity)
         .padding(.vertical, 24)

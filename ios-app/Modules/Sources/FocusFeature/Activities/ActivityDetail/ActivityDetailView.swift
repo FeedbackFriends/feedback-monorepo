@@ -20,15 +20,15 @@ struct ActivityDetailView: View {
             } else {
                 EmptyView()
                     .successOverlay(
-                        message: "Activity deleted",
+                        message: "Focus deleted",
                         show: .constant(true),
                         enableAutomaticDismissal: true
                     )
             }
         }.sheet(isPresented: $store.showDeleteConfirmation) {
             DeleteConfirmationViewSheet(
-                title: "Delete activity",
-                message: "Are you sure you want to delete this activity?",
+                title: "Delete focus",
+                message: "Delete this focus and its sessions?",
                 actionButton: {
                     Button("Delete") {
                         store.send(.deleteActivityConfirmButtonTap)
@@ -106,7 +106,7 @@ private struct ActivityDetailContentView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Related sessions")
+                    Text("Sessions")
                         .font(.headline)
 
                     EventListView(
