@@ -65,6 +65,11 @@ The reducer associated with a view should use the same base name without the `Vi
 - When you learn something about the project that is likely to be useful again, such as overall app architecture, framework choices, conventions, or ways of working, suggest adding it to `AGENTS.md`.
 - Do not update `AGENTS.md` for that kind of newly learned project knowledge without asking the user first.
 
+## Git Usage
+- Only commit and push when the user explicitly asks for it.
+- Never create or switch to a new branch unless the user explicitly asks for a branch.
+- When asked to commit and push, commit the intended changes and push directly to the current `main` or `master` branch instead of creating a new branch.
+
 ## OpenAPI Way Of Working
 - Treat `Modules/Sources/OpenAPI/GeneratedSources/Client.swift` and `Modules/Sources/OpenAPI/GeneratedSources/Types.swift` as generated contract code only. Never hand-edit generated files.
 - Keep a single handwritten app-facing `APIClient` in `Modules/Sources/Domain/Services/ApiClient.swift`. It should represent the app-facing endpoint surface used by features.
