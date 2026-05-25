@@ -23,11 +23,11 @@
 - Use `Modules/Sources/Domain/AlertState+Extension.swift` when presenting errors with `AlertState(error:)`.
 
 ## App State Architecture
-- Authenticated app state is held as a shared `Bootstrap` value. Feature state should name this `@Shared var bootstrap: Bootstrap`, not `session`, to avoid colliding with the user-facing Session term for `Event`.
+- Authenticated app state is held as a shared `Bootstrap` value. Feature state should name this `@Shared var bootstrap: Bootstrap`.
 - `RootFeature` creates the shared `Bootstrap` after account/bootstrap loading and passes the same `Shared<Bootstrap>` through the logged-in feature tree.
-- UI and reducers should derive account, role, activity, event, participant-event, and notification data directly from `bootstrap` whenever possible. Do not copy `Bootstrap` subtrees into independent feature state unless the feature truly needs isolated draft/editing state.
+- UI and reducers should derive account, role, activity, event, participant-event, and notification data directly from `bootstrap`.
 - Because features read from the same shared `Bootstrap`, updates from polling, CRUD responses, notification-history changes, or other refresh mechanisms should propagate through the app without manual per-screen refresh wiring.
-- `Modules/Sources/Adapters/APIClient/Live/` owns the live API side effects that keep local app state fresh. After successful create/update/delete/join/feedback/mark-seen endpoints, update `APIClientCache` locally with the returned or implied change instead of waiting for a later full bootstrap reload.
+- `Modules/Sources/Adapters/APIClient/Live/` owns the live API side effects that keep local app state fresh.
 - `APIClientCache` is the bridge between live API calls and shared app state updates. Keep cache mutations deterministic and single-path: if a cache update cannot be applied to the current `Bootstrap`, throw an error instead of silently falling back to a refetch or alternate path.
 
 #Schemes
@@ -59,10 +59,7 @@ The reducer associated with a view should use the same base name without the `Vi
 - `Activity` is the canonical code and domain term. Use `Activity` in models, reducers, services, API mappers, tests, and type/file names.
 - `Focus` is the user-facing UI name for an `Activity`. Use "focus" in visible copy when referring to this concept.
 - `Event` is the canonical code and API domain term for an occurrence under an `Activity`.
-- `Session` is the user-facing UI name for an `Event`, for now. Use "session" in visible copy when referring to this concept.
-- One `Activity` has zero or more `Event`s.
-- Avoid using "event" in visible copy for the manager-facing session detail flow.
-- Do not confuse user-facing feedback sessions with technical bootstrap/auth session state already named `session` in code.
+- `Session` is the user-facing UI name for an `Event`. Use "session" in visible copy when referring to this concept.
 
 ## Collaboration Notes
 - When you learn something about the project that is likely to be useful again, such as overall app architecture, framework choices, conventions, or ways of working, suggest adding it to `AGENTS.md`.
