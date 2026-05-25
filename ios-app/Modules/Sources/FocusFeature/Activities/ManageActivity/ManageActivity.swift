@@ -12,7 +12,7 @@ public struct ManageActivity: Sendable {
 
     @ObservableState
     public struct State: Equatable, Sendable {
-        public var mode: Mode
+        let mode: Mode
         var activityId: UUID?
         var originalQuestionIds: Set<UUID> = []
         var title = ""
@@ -32,26 +32,27 @@ public struct ManageActivity: Sendable {
         var participants: [String] = []
         var newEmail = ""
 
-        public init(mode: Mode = .create) {
-            self.mode = mode
+        public static func create() -> Self {
+            .init(mode: .create)
         }
 
-        public init(activity: Activity) {
-            self.mode = .edit
-            self.activityId = activity.id
-            self.originalQuestionIds = Set(activity.questions.map(\.id))
-            self.title = activity.title
-            self.description = activity.agenda ?? ""
-            self.questions = activity.questions.map {
+        public static func edit(activity: Activity) -> Self {
+            var state = Self(mode: .edit)
+            state.activityId = activity.id
+            state.originalQuestionIds = Set(activity.questions.map(\.id))
+            state.title = activity.title
+            state.description = activity.agenda ?? ""
+            state.questions = activity.questions.map {
                 EventInput.QuestionInput(
                     id: $0.id,
                     questionText: $0.questionText,
                     feedbackType: $0.feedbackType
                 )
             }
-            self.selectedTemplate = FeedbackTemplate.inferred(from: self.questions)
-            self.sendEmails = !activity.invitedEmails.isEmpty
-            self.participants = activity.invitedEmails
+            state.selectedTemplate = FeedbackTemplate.inferred(from: state.questions)
+            state.sendEmails = !activity.invitedEmails.isEmpty
+            state.participants = activity.invitedEmails
+            return state
         }
 
         var navigationTitle: String {
@@ -110,7 +111,7 @@ public struct ManageActivity: Sendable {
 
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
-        case createButtonTapped
+        case actionButtonTap
         case createResponse(Activity)
         case updateResponse(Activity)
         case presentError(Error)
@@ -150,7 +151,7 @@ public struct ManageActivity: Sendable {
                 state.didCopyEmail = true
                 return .none
 
-            case .createButtonTapped:
+            case .actionButtonTap:
                 guard let activityInput = state.activityInput else { return .none }
                 state.createActivityRequestInFlight = true
                 switch state.mode {
@@ -185,20 +186,7 @@ public struct ManageActivity: Sendable {
 
             case .presentError(let error):
                 state.createActivityRequestInFlight = false
-                let title: String
-                switch state.mode {
-                case .create: title = "Could not create activity"
-                case .edit: title = "Could not save activity"
-                }
-                state.alert = AlertState {
-                    TextState(title)
-                } actions: {
-                    ButtonState(role: .cancel) {
-                        TextState("OK")
-                    }
-                } message: {
-                    TextState(error.localizedDescription)
-                }
+                state.alert = AlertState(error: error)
                 return .none
 
             case .alert:

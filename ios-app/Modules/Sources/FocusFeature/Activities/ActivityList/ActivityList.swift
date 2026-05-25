@@ -12,7 +12,7 @@ public struct ActivityList: Sendable {
     @Reducer
     public enum Destination {
         case activityDetail(ActivityDetail)
-        case createActivity(ManageActivity)
+        case manageActivity(ManageActivity)
     }
     
     @ObservableState
@@ -52,10 +52,10 @@ public struct ActivityList: Sendable {
             switch action {
                 
             case .createActivityButtonTap:
-                state.destination = .createActivity(.init(mode: .create))
+                state.destination = .manageActivity(.create())
                 return .none
 
-            case .destination(.presented(.createActivity(.delegate(.dismissAndNavigateToDetail(let activity))))):
+            case .destination(.presented(.manageActivity(.delegate(.dismissAndNavigateToDetail(let activity))))):
                 state.destination = nil
                 return .run { send in
                     try await clock.sleep(for: .seconds(0.5))
@@ -69,21 +69,6 @@ public struct ActivityList: Sendable {
                         session: state.$session
                     )
                 )
-                return .none
-
-            case .destination(.dismiss):
-//                if case .activityDetail(let activityDetailState) = state.destination,
-//                   let overallFeedbackSummary = activityDetailState.detail?.overallFeedbackSummary,
-//                   overallFeedbackSummary.unseenResponses > 0 {
-//                    return .run { _ in
-//                        do {
-//                            try await self.apiClient.markEventAsSeen(activityDetailState.activity.id)
-//                        } catch {
-//                            Logger.debug("Mark session as seen failed: \(error.localizedDescription)")
-//                        }
-//                    }
-//
-//                }
                 return .none
 
             case .binding:

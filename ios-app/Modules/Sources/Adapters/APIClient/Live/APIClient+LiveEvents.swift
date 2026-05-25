@@ -45,8 +45,9 @@ extension APIClient {
                 guard let latestEvent = activity.events.max(by: { $0.date < $1.date }) else {
                     throw URLError(.cannotParseResponse)
                 }
+                let mappedActivity = Activity(activity)
                 let mappedEvent = Event(latestEvent)
-                try await sessionCache.updateOrAppendEvent(mappedEvent)
+                await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedEvent
             }
         }

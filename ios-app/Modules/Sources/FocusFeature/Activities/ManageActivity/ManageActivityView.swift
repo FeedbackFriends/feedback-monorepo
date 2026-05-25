@@ -86,7 +86,7 @@ private extension ManageActivityView {
 
         ToolbarItem(placement: .topBarTrailing) {
             Button(store.actionButtonTitle) {
-                store.send(.createButtonTapped)
+                store.send(.actionButtonTap)
             }
             .accessibilityIdentifier("create_activity_submit")
             .buttonStyle(PrimaryTextButtonStyle())
@@ -531,7 +531,7 @@ struct AutomaticInfoSheet: View {
 
 #Preview {
     ManageActivityView(
-        store: Store(initialState: .init()) {
+        store: Store(initialState: ManageActivity.State.create()) {
             ManageActivity()
         }
     )

@@ -1,30 +1,18 @@
 import ComposableArchitecture
-import SwiftUI
-import Domain
-import Utility
 import DesignSystem
+import Domain
 import FeedbackFlowFeature
+import Utility
+import SwiftUI
 
-public struct EventFormView<ActionView: View>: View {
-    
-    @ViewBuilder let action: () -> ActionView
-    @FocusState var focus: EventForm.FocusedField?
-    @Bindable var store: StoreOf<EventForm>
-    @Binding var showSuccessOverlay: Bool
-    init(
-        showSuccessOverlay: Binding<Bool>,
-        store: StoreOf<EventForm>,
-        action: @escaping () -> ActionView
-        
-    ) {
-        self._showSuccessOverlay = showSuccessOverlay
+public struct ManageEventView: View {
+    @Bindable var store: StoreOf<ManageEvent>
+    @FocusState private var focus: ManageEvent.State.FocusedField?
+
+    public init(store: StoreOf<ManageEvent>) {
         self.store = store
-        self.action = action
     }
-    
-    @Dependency(\.calendar) var calendar
-    @Dependency(\.date) var date
-    
+
     public var body: some View {
         Form {
             content
@@ -38,7 +26,6 @@ public struct EventFormView<ActionView: View>: View {
         .font(.montserratMedium, 14)
         .onAppear {
             UIDatePicker.appearance().minuteInterval = 5
-            store.send(.onAppear)
         }
         .onChange(of: store.minutePicker) { _, _ in
             store.send(.minutePickerChanged)
@@ -71,8 +58,13 @@ public struct EventFormView<ActionView: View>: View {
                 }
             )
         }
+        .navigationBarTitle(store.navigationTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .scrollContentBackground(.hidden)
     }
-    
+}
+
+private extension ManageEventView {
     var toolbarItems: some ToolbarContent {
         Group {
             ToolbarItem(placement: .cancellationAction) {
@@ -84,27 +76,33 @@ public struct EventFormView<ActionView: View>: View {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
                     QuestionsListView(
-                        recentlyUsedQuestions: self.store.recentlyUsedQuestions,
-                        questionsInputs: self.$store.eventInput.questions,
+                        recentlyUsedQuestions: store.recentlyUsedQuestions,
+                        questionsInputs: $store.eventInput.questions,
                         previewConfiguration: .init(
-                            title: self.store.eventInput.title,
-                            agenda: self.store.eventInput.agenda,
+                            title: store.eventInput.title,
+                            agenda: store.eventInput.agenda,
                             presentFeedbackFlowSession: { feedbackSessionState in
-                                self.store.send(.presentFeedbackFlowSession(feedbackSessionState))
+                                store.send(.presentFeedbackFlowSession(feedbackSessionState))
                             }
                         )
                     )
                     .successOverlay(
                         message: store.successOverlayMessage,
-                        show: $showSuccessOverlay,
+                        show: $store.showSuccessOverlay,
                         enableAutomaticDismissal: false
                     )
                     .toolbar {
                         ToolbarItem(placement: .primaryAction) {
-                            action()
+                            Button(store.actionButtonTitle) {
+                                store.send(.actionButtonTap)
+                            }
+                            .buttonStyle(PrimaryTextButtonStyle())
+                            .isLoading(store.manageEventInFlight)
+                            .disabled(store.manageEventButtonDisabled)
                         }
                         .sharedBackgroundVisibility(.hidden)
                     }
+                    .alert($store.scope(state: \.alert, action: \.alert))
                 } label: {
                     Text("Next")
                 }
@@ -115,9 +113,7 @@ public struct EventFormView<ActionView: View>: View {
             .sharedBackgroundVisibility(.hidden)
         }
     }
-}
 
-private extension EventFormView {
     var content: some View {
         Section {
             TextField("Title", text: $store.eventInput.title)
@@ -143,7 +139,7 @@ private extension EventFormView {
         .animation(.default, value: store.startNowEnabled)
         .scrollContentBackground(.hidden)
     }
-    
+
     @ViewBuilder
     var durationPickerView: some View {
         if !store.allDay {
@@ -160,15 +156,17 @@ private extension EventFormView {
                 }
             }
             Picker(
-                selection: $store.durationPicker, content: {
-                    Text(EventForm.DurationPicker.minutes15.localization).tag(EventForm.DurationPicker.minutes15)
-                    Text(EventForm.DurationPicker.minutes30.localization).tag(EventForm.DurationPicker.minutes30)
-                    Text(EventForm.DurationPicker.minutes45.localization).tag(EventForm.DurationPicker.minutes45)
-                    Text(EventForm.DurationPicker.minutes60.localization).tag(EventForm.DurationPicker.minutes60)
-                    Text(EventForm.DurationPicker.minutes90.localization).tag(EventForm.DurationPicker.minutes90)
-                    Text(EventForm.DurationPicker.minutes120.localization).tag(EventForm.DurationPicker.minutes120)
-                    Text(EventForm.DurationPicker.other.localization).tag(EventForm.DurationPicker.other)
-                }, label: {
+                selection: $store.durationPicker,
+                content: {
+                    Text(ManageEvent.State.DurationPicker.minutes15.localization).tag(ManageEvent.State.DurationPicker.minutes15)
+                    Text(ManageEvent.State.DurationPicker.minutes30.localization).tag(ManageEvent.State.DurationPicker.minutes30)
+                    Text(ManageEvent.State.DurationPicker.minutes45.localization).tag(ManageEvent.State.DurationPicker.minutes45)
+                    Text(ManageEvent.State.DurationPicker.minutes60.localization).tag(ManageEvent.State.DurationPicker.minutes60)
+                    Text(ManageEvent.State.DurationPicker.minutes90.localization).tag(ManageEvent.State.DurationPicker.minutes90)
+                    Text(ManageEvent.State.DurationPicker.minutes120.localization).tag(ManageEvent.State.DurationPicker.minutes120)
+                    Text(ManageEvent.State.DurationPicker.other.localization).tag(ManageEvent.State.DurationPicker.other)
+                },
+                label: {
                     Text("Duration")
                         .foregroundColor(.themeText)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -180,15 +178,18 @@ private extension EventFormView {
                         ForEach(0..<24, id: \.self) { number in
                             Text("\(number) hours").tag(number)
                         }
-                    }.pickerStyle(WheelPickerStyle())
+                    }
+                    .pickerStyle(WheelPickerStyle())
                     Picker("", selection: $store.minutePicker) {
                         ForEach(0..<60, id: \.self) { number in
                             Text("\(number) min").tag(number)
                         }
-                    }.pickerStyle(WheelPickerStyle())
-                }.padding(.horizontal)
-                    .font(.montserratRegular, 12)
-                    .frame(height: 140)
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                }
+                .padding(.horizontal)
+                .font(.montserratRegular, 12)
+                .frame(height: 140)
             }
         } else {
             DatePicker(
@@ -197,28 +198,6 @@ private extension EventFormView {
                 displayedComponents: [DatePickerComponents.date]
             ) {
                 Text("Time")
-            }
-        }
-    }
-}
-
-#Preview {
-    NavigationStack {
-        EventFormView(
-            showSuccessOverlay: .constant(false),
-            store: StoreOf<EventForm>(initialState: .init(
-                eventInput: EventInput(.mock()),
-                startNowEnabled: false,
-                focus: nil,
-                shouldOpenKeyboardOnAppear: true,
-                recentlyUsedQuestions: Set<RecentlyUsedQuestions>([]),
-                successOverlayMessage: "Dope",
-            )) {
-                EventForm()
-            }
-        ) {
-            Button {} label: {
-                Text("Action")
             }
         }
     }
