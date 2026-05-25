@@ -16,10 +16,10 @@ public struct ParticipantEvents: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         @Presents public var destination: Destination.State?
-        @Shared var session: Bootstrap
+        @Shared var bootstrap: Bootstrap
         public var startFeedbackPincodeInFlight: PinCode?
-        public init(session: Shared<Bootstrap>) {
-            self._session = session
+        public init(bootstrap: Shared<Bootstrap>) {
+            self._bootstrap = bootstrap
         }
     }
     

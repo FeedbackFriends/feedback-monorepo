@@ -9,22 +9,22 @@ struct AccountSectionTests {
     
     @Test
     func `Tap on update profile button`() async {
-        let session: Bootstrap = .mock()
-        let store = TestStore(initialState: AccountSection.State(session: .init(value: session))) {
+        let bootstrap: Bootstrap = .mock()
+        let store = TestStore(initialState: AccountSection.State(bootstrap: .init(value: bootstrap))) {
             AccountSection()
         }
         await store.send(.updateProfileButtonTap) {
             $0.destination = .modifyAccount(ModifyAccount.State(
-                nameInput: session.accountInfo.name ?? "",
-                emailInput: session.accountInfo.email ?? "",
-                phoneNumberInput: session.accountInfo.phoneNumber ?? ""
+                nameInput: bootstrap.accountInfo.name ?? "",
+                emailInput: bootstrap.accountInfo.email ?? "",
+                phoneNumberInput: bootstrap.accountInfo.phoneNumber ?? ""
             ))
         }
     }
     
     @Test
     func `Change user button tap`() async {
-        let store = TestStore(initialState: AccountSection.State(session: .init(value: .mock()))) {
+        let store = TestStore(initialState: AccountSection.State(bootstrap: .init(value: .mock()))) {
             AccountSection()
         }
         await store.send(.changeUserTypeButtonTap) {

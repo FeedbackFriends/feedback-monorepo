@@ -14,7 +14,7 @@ public enum Tab: Hashable, Sendable {
 
 public extension Tabbar.State {
     init(
-        session: Shared<Bootstrap>,
+        bootstrap: Shared<Bootstrap>,
         tabbarLifecyle: TabbarLifecycle.State,
         enterCode: EnterCode.State,
         moreSection: MoreSection.State,
@@ -25,7 +25,7 @@ public extension Tabbar.State {
         deleteAccount: DeleteAccount.State,
         destination: Tabbar.Destination.State? = nil
     ) {
-        self._session = session
+        self._bootstrap = bootstrap
         self.tabbarLifecyle = tabbarLifecyle
         self.enterCode = enterCode
         self.moreSection = moreSection
@@ -38,19 +38,19 @@ public extension Tabbar.State {
     }
     
     init(
-        session: Shared<Bootstrap>,
+        bootstrap: Shared<Bootstrap>,
         selectedTab: Tab = .activities,
         destination: Tabbar.Destination.State? = nil,
     ) {
-        self._session = session
+        self._bootstrap = bootstrap
         self.enterCode = .init()
         self.selectedTab = selectedTab
         self.moreSection = .init()
-        self.accountSection = .init(session: session)
+        self.accountSection = .init(bootstrap: bootstrap)
         self.initialiseFeedback = .init()
         self.deleteAccount = .init()
-        self.managerEvents = .init(session: session)
-        self.tabbarLifecyle = .init(session: session)
+        self.managerEvents = .init(bootstrap: bootstrap)
+        self.tabbarLifecyle = .init(bootstrap: bootstrap)
         self.destination = destination
     }
 }
@@ -70,7 +70,7 @@ public struct Tabbar: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         
-        @Shared public var session: Bootstrap
+        @Shared public var bootstrap: Bootstrap
         var tabbarLifecyle: TabbarLifecycle.State
         var enterCode: EnterCode.State
         var moreSection: MoreSection.State

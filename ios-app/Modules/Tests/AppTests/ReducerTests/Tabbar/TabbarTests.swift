@@ -15,7 +15,7 @@ struct TabbarTests {
         
         let store = TestStore(
             initialState: .init(
-                session: .init(value: .mock())
+                bootstrap: .init(value: .mock())
             )
         ) {
             Tabbar()
@@ -41,7 +41,7 @@ struct TabbarTests {
     @Test
     func `Activity button opens activity list and navigates to event detail`() async {
         let event: Event = .mock()
-        let sharedSession = Shared<Bootstrap>(
+        let sharedBootstrap = Shared<Bootstrap>(
             value: .init(
                 participantEvents: .init(uniqueElements: []),
                 managerData: .init(
@@ -68,28 +68,28 @@ struct TabbarTests {
                 role: .manager
             )
         )
-        let session = sharedSession
-        let store = TestStore(initialState: .init(session: session)) {
+        let bootstrap = sharedBootstrap
+        let store = TestStore(initialState: .init(bootstrap: bootstrap)) {
             Tabbar()
         } withDependencies: {
             $0.apiClient.markActivityAsSeen = {}
         }
         await store.send(.toolbar(.notificationHistoryButtonTap)) {
-            $0.destination = .activity(session.notificationHistory.items)
+            $0.destination = .activity(bootstrap.notificationHistory.items)
         }
-        await store.send(.managerEvents(.activityManagerEventButtonTap(session.notificationHistory.items.first!))) {
-            $0.managerEvents.destination = .activityDetail(.init(eventId: event.id, detail: event, session: sharedSession))
+        await store.send(.managerEvents(.activityManagerEventButtonTap(bootstrap.notificationHistory.items.first!))) {
+            $0.managerEvents.destination = .activityDetail(.init(eventId: event.id, detail: event, bootstrap: sharedBootstrap))
         }
     }
     
     @Test
     func `Create event button as manager navigates to create screen and event detail`() async {
-        let sharedSession = Shared<Bootstrap>(
+        let sharedBootstrap = Shared<Bootstrap>(
             value: .mock()
         )
         let createdEvent = Event.mock()
-        let session = sharedSession
-        let store = TestStore(initialState: .init(session: session)) {
+        let bootstrap = sharedBootstrap
+        let store = TestStore(initialState: .init(bootstrap: bootstrap)) {
             Tabbar()
         }
         await store.send(.toolbar(.createEventButtonTap)) {
@@ -111,7 +111,7 @@ struct TabbarTests {
                     eventId: createdEvent.id,
                     detail: createdEvent,
                     destination: .invite(createdEvent),
-                    session: $0.$session
+                    bootstrap: $0.$bootstrap
                 )
             )
         }
@@ -119,13 +119,13 @@ struct TabbarTests {
     
     @Test
     func `Create event button as anonymous shows login required alert`() async {
-        let sharedSession = Shared<Bootstrap>(
+        let sharedBootstrap = Shared<Bootstrap>(
             value: .mockAnonymous()
         )
-        let session = sharedSession
+        let bootstrap = sharedBootstrap
         let store = TestStore(
             initialState: .init(
-                session: session
+                bootstrap: bootstrap
             )
         ) {
             Tabbar()
@@ -148,7 +148,7 @@ struct TabbarTests {
     
     @Test
     func `Join event as anonymous starts feedback flow successfully`() async {
-        let session = Shared<Bootstrap>(
+        let bootstrap = Shared<Bootstrap>(
             value: .mockAnonymous()
         )
         let feedbackSession: FeedbackEventDto = .mock
@@ -157,7 +157,7 @@ struct TabbarTests {
         }
         let store = TestStore(
             initialState: Tabbar.State(
-                session: session,
+                bootstrap: bootstrap,
                 selectedTab: .events,
                 destination: nil
             )
@@ -199,7 +199,7 @@ struct TabbarTests {
     func `Notification permission prompt cancel button dismisses prompt`() async {
         let store = TestStore(
             initialState: .init(
-                session: .init(value: .mock())
+                bootstrap: .init(value: .mock())
             )
         ) {
             Tabbar()
@@ -217,7 +217,7 @@ struct TabbarTests {
         let notificationAuthorizationRequested = LockIsolated(false)
         let store = TestStore(
             initialState: .init(
-                session: .init(value: .mock())
+                bootstrap: .init(value: .mock())
             )
         ) {
             Tabbar()
@@ -241,7 +241,7 @@ struct TabbarTests {
         let pin = PinCode(value: "123456")
         let store = TestStore(
             initialState: .init(
-                session: .init(value: .mock())
+                bootstrap: .init(value: .mock())
             )
         ) {
             Tabbar()
@@ -256,7 +256,7 @@ struct TabbarTests {
         let pin = PinCode(value: "654321")
         let store = TestStore(
             initialState: .init(
-                session: .init(value: .mock())
+                bootstrap: .init(value: .mock())
             )
         ) {
             Tabbar()
@@ -271,7 +271,7 @@ struct TabbarTests {
         let pin = PinCode(value: "111111")
         let store = TestStore(
             initialState: .init(
-                session: .init(value: .mockAnonymous())
+                bootstrap: .init(value: .mockAnonymous())
             )
         ) {
             Tabbar()

@@ -19,7 +19,7 @@ public struct ActivityDetail: Sendable {
         let activityId: UUID
         @Presents var alert: AlertState<Never>?
         public var activity: Activity? {
-            guard let activity = self.session.managerData?.activities.first(where: { $0.id == self.activityId }) else {
+            guard let activity = self.bootstrap.managerData?.activities.first(where: { $0.id == self.activityId }) else {
                 return nil
             }
             return activity
@@ -27,7 +27,7 @@ public struct ActivityDetail: Sendable {
         @Presents var destination: Destination.State?
         var showDeleteConfirmation = false
         var deleteActivityInFlight = false
-        @Shared var session: Bootstrap
+        @Shared var bootstrap: Bootstrap
         
         var navigationTitle: String {
             activity?.title ?? "Unknown Activity"
@@ -39,11 +39,11 @@ public struct ActivityDetail: Sendable {
         public init(
             activityId: UUID,
             destination: Destination.State? = nil,
-            session: Shared<Bootstrap>
+            bootstrap: Shared<Bootstrap>
         ) {
             self.activityId = activityId
             self.destination = destination
-            self._session = session
+            self._bootstrap = bootstrap
         }
     }
     
@@ -146,7 +146,7 @@ public struct ActivityDetail: Sendable {
                     EventDetailFeature.State(
                         activityId: state.activityId,
                         eventId: event.id,
-                        session: state.$session
+                        bootstrap: state.$bootstrap
                     )
                 )
                 return .none
@@ -158,7 +158,7 @@ public struct ActivityDetail: Sendable {
                         activityId: state.activityId,
                         eventId: event.id,
                         destination: destination,
-                        session: state.$session
+                        bootstrap: state.$bootstrap
                     )
                 )
                 return .none
