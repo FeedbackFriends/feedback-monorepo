@@ -5,6 +5,7 @@ Source of truth: `Modules/Sources/DesignSystem/`
 ## Core Direction
 
 - Build on shared SwiftUI primitives rather than styling feature views inline.
+- Invoke the `feedback-ios-design-system` skill before any work on a SwiftUI file in this app, including adding, editing, reviewing, or refactoring a view.
 - Reuse semantic tokens and component APIs instead of hardcoding colors, fonts, radii, or assets.
 - Keep new DesignSystem additions near similar code:
   `Resources/` for tokens and assets, `Styles/` for style wrappers, `ReusableViews/` for packaged UI, `ViewModifiers/` for cross-cutting behavior.
@@ -55,6 +56,7 @@ Semantic color surface:
 - `themeSurfaceSecondary`: darker secondary surface with dark variant
 - `themeText`: dark brown text in light mode, near-white in dark mode
 - `themeTextSecondary`: muted gray text in both modes
+- `themeNeutral`: alias of `themeTextSecondary` for neutral sentiment or empty-state fills
 - `themeSad`: orange tone
 - `themeVerySad`: stronger red-orange tone
 - `themeHappy`: bright mint tone
@@ -68,11 +70,12 @@ Semantic color surface:
 - `themeHoverOverlay`
 
 Domain mappings:
-- `Opinion.color` maps strongly negative to `themeVerySad`, negative to `themeSad`, positive to `themeHappy`, strongly positive to `themeVeryHappy`, neutral to gray.
-- `Int.ratingColor` maps `0...2`, `3...4`, `5`, `6...7`, `8...10` to the same sentiment palette.
+- `Opinion.color` maps strongly negative to `themeVerySad`, negative to `themeSad`, positive to `themeHappy`, strongly positive to `themeVeryHappy`, neutral to `themeNeutral`.
+- `Int.ratingColor` maps `0...2`, `3...4`, `5`, `6...7`, `8...10` to the same sentiment palette, with `5` using `themeNeutral`.
 
 Rules:
-- Use semantic `theme...` names, not raw color math, in app code.
+- Use only semantic colors exposed from `Colors.swift`, not SwiftUI/UIKit system colors, raw palette colors, or raw color math, in app code.
+- Avoid platform color/style shortcuts such as `.secondarySystemBackground`, `.systemGray`, `.secondary`, `.tertiary`, `.green`, `Color.gray`, `Color.black`, `Color.white`, and `UIColor.white`; map them to the closest `theme...` token or add a new semantic token in the DesignSystem first.
 - Reuse the sentiment colors for ratings and opinion UI to stay consistent with existing meaning.
 
 ## App Theme

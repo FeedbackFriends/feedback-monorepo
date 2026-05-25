@@ -1,11 +1,15 @@
 ---
 name: feedback-ios-design-system
-description: Expert guidance for the Feedback iOS app design system in `Modules/Sources/DesignSystem/`, including reusable SwiftUI components, button styles, view modifiers, typography, colors, images, Lottie assets, and theme conventions. Use when building, reviewing, or refactoring UI in this app and you need to reuse or extend the existing DesignSystem instead of inventing new styling.
+description: Expert guidance for the Feedback iOS app design system in `Modules/Sources/DesignSystem/`, including reusable SwiftUI components, button styles, view modifiers, typography, colors, images, Lottie assets, and theme conventions. Use for any work on SwiftUI files, including building, reviewing, or refactoring UI in this app, and reuse or extend the existing DesignSystem instead of inventing new styling.
 ---
 
 # Feedback iOS Design System
 
 Use `Modules/Sources/DesignSystem/` as the source of truth. Prefer reusing existing tokens, styles, and reusable views before introducing new UI primitives.
+
+## Invocation Rule
+
+If you are touching a SwiftUI file in this app, invoke this skill first. This includes adding a view, editing a view, refactoring a view, reviewing SwiftUI code, or changing UI styling in a `.swift` file that contains SwiftUI.
 
 ## Workflow
 
@@ -16,7 +20,7 @@ Use `Modules/Sources/DesignSystem/` as the source of truth. Prefer reusing exist
 
 ## Rules
 
-- Use `Color.theme...` tokens from `Resources/Colors/Colors.swift`. Do not hardcode new colors in feature code.
+- Use only semantic colors exposed from `Resources/Colors/Colors.swift`, such as `Color.theme...` and UIKit bridges defined there. Do not use SwiftUI/UIKit system colors or raw palette colors in app UI, including `.secondarySystemBackground`, `.systemGray`, `.secondary`, `.tertiary`, `.green`, `Color.gray`, `Color.black`, `Color.white`, or `UIColor.white`.
 - Use Montserrat through the DesignSystem font helpers such as `.font(.montserratSemiBold, 16)`. Do not introduce ad hoc font families.
 - Prefer existing button styles from `Styles/ButtonStyles/` over custom inline button styling.
 - Prefer existing reusable views from `ReusableViews/` for common empty, error, banner, close, picker, and event-info UI.
