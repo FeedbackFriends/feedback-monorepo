@@ -109,11 +109,12 @@ private struct ActivityDetailContentView: View {
                     Text("Related sessions")
                         .font(.headline)
 
-                    ManagerSessionsListView(
-                        todayEvents: groupedSessions.today.map { activity.relatedEventActivity($0) },
-                        comingUpEvents: groupedSessions.comingUp.map { activity.relatedEventActivity($0) },
-                        previousEvents: groupedSessions.previous.map { activity.relatedEventActivity($0) },
-                        onEventTap: { _ in }
+                    EventListView(
+                        todayEvents: groupedSessions.today,
+                        comingUpEvents: groupedSessions.comingUp,
+                        previousEvents: groupedSessions.previous,
+                        eventTitle: activity.title,
+                        onEventTap: { store.send(.eventTapped($0)) }
                     )
                 }
                 .padding(.top, 8)
@@ -164,6 +165,14 @@ private struct ActivityDetailContentView: View {
             NavigationStack {
                 ManageEventView(store: manageStore)
             }
+        }
+        .navigationDestination(
+            item: $store.scope(
+                state: \.destination?.eventDetail,
+                action: \.destination.eventDetail
+            )
+        ) { eventDetailStore in
+            EventDetailFeatureView(store: eventDetailStore)
         }
         .alert($store.scope(state: \.alert, action: \.alert))
     }

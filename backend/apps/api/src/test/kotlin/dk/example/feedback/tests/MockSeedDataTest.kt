@@ -1,6 +1,7 @@
 package dk.example.feedback.tests
 
 import dk.example.feedback.config.SecurityConfig
+import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.MockRepo
 import dk.example.feedback.utils.TestConfig
 import javax.sql.DataSource
@@ -19,8 +20,9 @@ import org.springframework.test.context.TestPropertySource
     ],
 )
 class MockSeedDataTest(
-    @Autowired private val dataSource: DataSource,
-    @Autowired private val mockRepo: MockRepo,
+    @param:Autowired private val dataSource: DataSource,
+    @param:Autowired private val accountRepo: AccountRepo,
+    @param:Autowired private val mockRepo: MockRepo,
 ) {
 
     @Test
@@ -53,6 +55,18 @@ class MockSeedDataTest(
         assertEquals(countsAfterFirst, snapshotCounts())
     }
 
+    @Test
+    fun `manager account deletion cascades through seeded graph`() {
+        val managerId = "mock-manager-with-data"
+        mockRepo.insertManagerWithData(managerId = managerId)
+
+        accountRepo.deleteAccountIfExists(accountId = managerId)
+
+        assertEquals(0, countSeededEventsForManager(managerId))
+        assertEquals(0, countSeededActivitiesForManager(managerId))
+        assertEquals(0, countSeededQuestionsForManager(managerId))
+    }
+
     private fun count(tableName: String): Int {
         dataSource.connection.use { connection ->
             connection.createStatement().use { statement ->
@@ -72,5 +86,28 @@ class MockSeedDataTest(
             "question" to count("question"),
             "feedback" to count("feedback"),
         )
+    }
+
+    private fun countSeededEventsForManager(managerId: String): Int {
+        return countWhere("\"event\"", "manager_id = '$managerId'")
+    }
+
+    private fun countSeededActivitiesForManager(managerId: String): Int {
+        return countWhere("activity", "manager_id = '$managerId'")
+    }
+
+    private fun countSeededQuestionsForManager(managerId: String): Int {
+        return countWhere("question", "manager_id = '$managerId'")
+    }
+
+    private fun countWhere(tableName: String, condition: String): Int {
+        dataSource.connection.use { connection ->
+            connection.createStatement().use { statement ->
+                statement.executeQuery("select count(*) from $tableName where $condition").use { resultSet ->
+                    check(resultSet.next()) { "No row returned for count query" }
+                    return resultSet.getInt(1)
+                }
+            }
+        }
     }
 }

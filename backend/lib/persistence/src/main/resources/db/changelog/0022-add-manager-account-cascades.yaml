@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0022-add-manager-account-cascades
+      author: codex
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: event
+            constraintName: fk_event_manager_id
+        - addForeignKeyConstraint:
+            baseTableName: event
+            baseColumnNames: manager_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_event_manager_id
+            onDelete: CASCADE
+        - dropForeignKeyConstraint:
+            baseTableName: activity
+            constraintName: fk_activity_manager_id
+        - addForeignKeyConstraint:
+            baseTableName: activity
+            baseColumnNames: manager_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_activity_manager_id
+            onDelete: CASCADE
+        - dropForeignKeyConstraint:
+            baseTableName: question
+            constraintName: fk_question_manager_id
+        - addForeignKeyConstraint:
+            baseTableName: question
+            baseColumnNames: manager_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_question_manager_id
+            onDelete: CASCADE

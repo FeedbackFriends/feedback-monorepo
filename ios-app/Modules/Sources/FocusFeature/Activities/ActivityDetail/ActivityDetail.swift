@@ -11,6 +11,7 @@ public struct ActivityDetail: Sendable {
     public enum Destination {
         case manageEvent(ManageEvent)
         case editActivity(ManageActivity)
+        case eventDetail(EventDetailFeature)
     }
     
     @ObservableState
@@ -23,10 +24,6 @@ public struct ActivityDetail: Sendable {
             }
             return activity
         }
-        public var detail: Event? {
-            guard let activity else { return nil }
-            return activity.event
-        }
         @Presents var destination: Destination.State?
         var showDeleteConfirmation = false
         var deleteActivityInFlight = false
@@ -36,7 +33,7 @@ public struct ActivityDetail: Sendable {
             activity?.title ?? "Unknown Activity"
         }
         var navigationSubTitle: String {
-            "\(detail?.overallFeedbackSummary?.responses ?? 0) responses"
+            "\(activity?.overallFeedbackSummary?.responses ?? 0) responses"
         }
 
         public init(
@@ -55,10 +52,12 @@ public struct ActivityDetail: Sendable {
         case destination(PresentationAction<Destination.Action>)
         case alert(PresentationAction<Never>)
         case createEventButtonTapped
+        case eventTapped(Event)
         case editActivityButtonTapped
         case deleteActivityButtonTap
         case deleteActivityCancelButtonTap
         case deleteActivityConfirmButtonTap
+        case navigateToEvent(Event, presentInvite: Bool)
         case refresh
         case deleteActivitySuccess
         case presentError(Error)
@@ -82,7 +81,13 @@ public struct ActivityDetail: Sendable {
                 
                 case .dismissAndNavigateToEvent(let event):
                     state.destination = nil
-                    return .none
+                    return .run { send in
+                        try await clock.sleep(for: .seconds(0.2))
+                        await send(.navigateToEvent(event, presentInvite: true))
+                    }
+                case .dismissAndUpdateEvent(let event):
+                    state.destination = nil
+                    return .send(.navigateToEvent(event, presentInvite: false))
                 case .dismiss:
                     state.destination = nil
                     return .none
@@ -126,6 +131,35 @@ public struct ActivityDetail: Sendable {
                 guard let activity = state.activity else { return .none }
                 state.destination = .manageEvent(
                     ManageEvent.State.create(activity: activity)
+                )
+                return .none
+
+            case .eventTapped(let selectedEvent):
+                guard
+                    let activity = state.activity,
+                    let event = activity.events.first(where: { $0.id == selectedEvent.id })
+                else {
+                    return .none
+                }
+
+                state.destination = .eventDetail(
+                    EventDetailFeature.State(
+                        activityId: state.activityId,
+                        eventId: event.id,
+                        session: state.$session
+                    )
+                )
+                return .none
+
+            case .navigateToEvent(let event, let presentInvite):
+                let destination: EventDetailFeature.Destination.State? = presentInvite ? .invite(event) : nil
+                state.destination = .eventDetail(
+                    EventDetailFeature.State(
+                        activityId: state.activityId,
+                        eventId: event.id,
+                        destination: destination,
+                        session: state.$session
+                    )
                 )
                 return .none
             

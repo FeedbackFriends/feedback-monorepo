@@ -169,6 +169,7 @@ public struct ManageEvent: Sendable {
 
         public enum Delegate: Equatable {
             case dismissAndNavigateToEvent(Event)
+            case dismissAndUpdateEvent(Event)
             case dismiss
         }
     }
@@ -287,7 +288,7 @@ public struct ManageEvent: Sendable {
                     case .create:
                         await send(.delegate(.dismissAndNavigateToEvent(event)))
                     case .edit:
-                        await send(.delegate(.dismiss))
+                        await send(.delegate(.dismissAndUpdateEvent(event)))
                     }
                 }
 

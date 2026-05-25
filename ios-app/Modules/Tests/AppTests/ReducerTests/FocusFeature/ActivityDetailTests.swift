@@ -43,7 +43,6 @@ struct ActivityDetailTests {
         await store.receive(\.deleteActivitySuccess) {
             $0.deleteActivityInFlight = false
             $0.showDeleteConfirmation = false
-            $0.showDeleteSuccessOverlay = true
         }
 
         #expect(deletedActivityId.value == activity.id)
@@ -108,6 +107,90 @@ struct ActivityDetailTests {
         await store.send(.deleteActivityCancelButtonTap) {
             $0.showDeleteConfirmation = false
             $0.deleteActivityInFlight = false
+        }
+    }
+
+    @Test
+    func `Event tap pushes session detail`() async {
+        let event = Event(
+            id: UUID(),
+            date: Date(timeIntervalSince1970: 1_000),
+            pinCode: PinCode(value: "1234"),
+            durationInMinutes: 30,
+            overallFeedbackSummary: nil,
+            questionsSnapshot: [],
+            calendarProvider: nil
+        )
+        var bootstrap = Bootstrap.mock(numberOfManagerEvents: 1)
+        var activity = bootstrap.managerData!.activities[0]
+        activity.events = [event]
+        bootstrap.managerData!.activities[id: activity.id] = activity
+        let session: Shared<Bootstrap> = .init(value: bootstrap)
+
+        let store = TestStore(
+            initialState: ActivityDetail.State(
+                activityId: activity.id,
+                session: session
+            )
+        ) {
+            ActivityDetail()
+        }
+
+        await store.send(.eventTapped(event)) {
+            $0.destination = .eventDetail(
+                EventDetailFeature.State(
+                    activityId: activity.id,
+                    eventId: event.id,
+                    session: session
+                )
+            )
+        }
+    }
+
+    @Test
+    func `Create session delegate closes sheet and navigates to session detail with invite`() async {
+        let event = Event(
+            id: UUID(),
+            date: Date(timeIntervalSince1970: 1_000),
+            pinCode: PinCode(value: "1234"),
+            durationInMinutes: 30,
+            overallFeedbackSummary: nil,
+            questionsSnapshot: [],
+            calendarProvider: nil
+        )
+        let session: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = session.wrappedValue.managerData!.activities[0]
+
+        let store = TestStore(
+            initialState: ActivityDetail.State(
+                activityId: activity.id,
+                destination: .manageEvent(.create(activity: activity)),
+                session: session
+            )
+        ) {
+            ActivityDetail()
+        } withDependencies: {
+            $0.continuousClock = ImmediateClock()
+        }
+
+        await store.send(.destination(.presented(.manageEvent(.delegate(.dismissAndNavigateToEvent(event)))))) {
+            $0.destination = nil
+        }
+
+        await store.receive(.navigateToEvent(event, presentInvite: true)) {
+            var updatedActivity = activity
+            updatedActivity.events = [event]
+            $0.$session.withLock {
+                $0.managerData!.activities[id: activity.id] = updatedActivity
+            }
+            $0.destination = .eventDetail(
+                EventDetailFeature.State(
+                    activityId: activity.id,
+                    eventId: event.id,
+                    destination: .invite(event),
+                    session: session
+                )
+            )
         }
     }
 }

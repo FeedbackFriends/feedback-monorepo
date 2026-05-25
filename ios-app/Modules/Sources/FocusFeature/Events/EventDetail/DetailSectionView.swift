@@ -234,7 +234,7 @@ struct QuestionView: View {
     let activity = Activity.mock()
     NavigationStack {
         DetailSectionView(
-            detail: activity.event,
+            detail: Event.mock(),
             agenda: activity.agenda
         )
         .navigationTitle("Session with feedback")
@@ -245,7 +245,7 @@ struct QuestionView: View {
     let activity = Activity.mockEmpty
     NavigationStack {
         DetailSectionView(
-            detail: activity.event,
+            detail: Event.mock(),
             agenda: activity.agenda
         )
         .navigationTitle("Session empty feedback")

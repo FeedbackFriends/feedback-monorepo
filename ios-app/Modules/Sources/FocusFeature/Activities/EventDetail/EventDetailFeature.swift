@@ -1,161 +1,205 @@
-//import Domain
-//import DesignSystem
-//import Foundation
-//import ComposableArchitecture
-//import Utility
-//
-//@Reducer
-//public struct EventDetailFeature: Sendable {
-//    
-//    @Reducer
-//    public enum Destination {
-////        case deleteConfirmation(DeleteConfirmation)
-////        case editEvent(EditEvent)
-//        @ReducerCaseEphemeral
-//        case confirmationDialog(ConfirmationDialogState<ConfirmationDialog>)
-//        @ReducerCaseIgnored
-//        case invite(Event)
-//        public enum ConfirmationDialog: Equatable, Sendable {
-//            case edit
-//            case delete
-//            case invite
-//        }
-//    }
-//    
-//    @ObservableState
-//    public struct State: Equatable, Sendable {
-//        public let eventId: UUID
-//        public var detail: Event?
-//        @Presents var destination: Destination.State?
-//        var fetchEventDetailInFlight = true
-//        @Shared var session: Bootstrap
-//        var webBaseUrl: URL?
-//        var event: Event? {
-//            let activity = session.managerData?.activities.first(where: { $0.id == eventId })
-////            return activity.?.eve
-//            fatalError()
-//        }
-//        var inviteUrl: String {
-//            guard let webBaseUrl = webBaseUrl else { return "WEB_BASE_URL_NOT_FOUND" }
-//            guard let pinCode = detail?.pinCode?.value else { return "PINCODE_NOT_FOUND" }
-//            return AppWebURLProvider.invite(forPinCode: pinCode, baseUrl: webBaseUrl)?.absoluteString ?? "COULD_NOT_GENERATE_INVITE_LINK"
-//        }
-//        var navigationTitle: String {
-////            activityDetail?.title ?? "Session"
-//            fatalError()
-//        }
-//        var navigationSubTitle: String {
-//            "\(detail?.overallFeedbackSummary?.responses ?? 0) responses"
-//        }
-//        var shareText: String {
-//            fatalError()
-////            guard let detail else {
-////                return "Error"
-////            }
-////            return """
-////            You’re invited to \(activityDetail?.title ?? "this session")!
-////            Use pin code \(detail.pinCode?.value ?? "PINCODE_NOT_FOUND") to join.
-////
-////            👇🏼 Tap the link to join:
-////            \(inviteUrl)
-////            """
-//        }
-//        
-//        public init(
-//            eventId: UUID,
-//            detail: Event? = nil,
-//            destination: Destination.State? = nil,
-//            fetchEventDetailInFlight: Bool = true,
-//            session: Shared<Bootstrap>
-//        ) {
-//            self.eventId = eventId
-//            self.detail = detail ?? session.wrappedValue.managerData?.activities[id: eventId]?.event
-//            self.destination = destination
-//            self.fetchEventDetailInFlight = fetchEventDetailInFlight
-//            self._session = session
-//        }
-//    }
-//    
-//    public enum Action: BindableAction {
-//        case binding(BindingAction<State>)
-//        case destination(PresentationAction<Destination.Action>)
-//        case moreButtonTapped
-//        case onTask
-//        case sessionUpdated(Bootstrap)
-//    }
-//    
-//    public init() {}
-//    
-//    @Dependency(\.calendar) var calendar
-//    @Dependency(\.dismiss) var dismiss
-//    @Dependency(\.continuousClock) var clock
-//    @Dependency(\.apiClient) var apiClient
-//    @Dependency(\.systemClient) var systemClient
-//    
-//    public var body: some ReducerOf<Self> {
-//        BindingReducer()
-//        Reduce { state, action in
-//            switch action {
-//                
-////            case .destination(.presented(.deleteConfirmation(.delegate(.dismissEventDetail)))):
-////                return .run { _ in
-////                    try await clock.sleep(for: .seconds(2.5))
-////                    await dismiss()
-////                }
-//                
-//            case .binding:
-//                return .none
-//                
-//            case .destination(.presented(.confirmationDialog(let confirmationDialogAction))):
-//                return .none
-//
-//            case .destination:
-//                return .none
-//                
-//            case .moreButtonTapped:
-//                guard let detail = state.detail else { return .none }
-////                state.destination = .confirmationDialog(
-////                    ConfirmationDialogState<Destination.ConfirmationDialog>.init(
-////                        titleVisibility: .hidden,
-////                        title: { TextState("") },
-////                        actions: {
-////                            if detail.overallFeedbackSummary == nil && detail.pinCode != nil {
-////                                ButtonState(action: .send(.edit)) {
-////                                    TextState("Edit ✏️")
-////                                }
-////                            }
-////                            if detail.pinCode != nil {
-////                                ButtonState(action: .send(.invite)) {
-////                                    TextState("Invite 👥")
-////                                }
-////                            }
-////                            ButtonState(role: .destructive, action: .send(.delete)) {
-////                                TextState("Delete 🗑️")
-////                            }
-////                            ButtonState(role: .cancel) {
-////                                TextState("Cancel")
-////                            }
-////                        }
-////                    )
-////                )
-//                return .none
-//                
-//            case .onTask:
-//                state.webBaseUrl = self.systemClient.webBaseUrl()
-//                return .publisher {
-//                    state.$session.publisher
-//                        .map(Action.sessionUpdated)
-//                }
-//                
-//            case .sessionUpdated(let updatedSession):
-////                if let updatedDetail = updatedSession.managerData?.activities[id: state.eventId]?.event {
-////                    state.detail = updatedDetail
-////                }
-//                return .none
-//            }
-//        }
-//        .ifLet(\.$destination, action: \.destination)
-//    }
-//}
-//
-//extension EventDetailFeature.Destination.State: Equatable, Sendable {}
+import ComposableArchitecture
+import DesignSystem
+import Domain
+import Foundation
+import Utility
+
+@Reducer
+public struct EventDetailFeature: Sendable {
+    @Reducer
+    public enum Destination {
+        @ReducerCaseIgnored
+        case invite(Event)
+        case manageEvent(ManageEvent)
+    }
+
+    @ObservableState
+    public struct State: Equatable, Sendable {
+        public let activityId: UUID
+        public let eventId: UUID
+        @Presents var alert: AlertState<Never>?
+        @Presents var destination: Destination.State?
+        @Shared var session: Bootstrap
+        var webBaseUrl: URL?
+        var hasMarkedAsSeen: Bool
+        var showDeleteConfirmation = false
+        var deleteEventInFlight = false
+
+        var activity: Activity? {
+            session.managerData?.activities.first { $0.id == activityId }
+        }
+
+        var event: Event? {
+            activity?.events.first { $0.id == eventId }
+        }
+
+        var inviteUrl: String? {
+            guard
+                let webBaseUrl,
+                let pinCode = event?.pinCode?.value,
+                let url = AppWebURLProvider.invite(forPinCode: pinCode, baseUrl: webBaseUrl)
+            else {
+                return nil
+            }
+
+            return url.absoluteString
+        }
+
+        var navigationTitle: String {
+            activity?.title ?? "Session"
+        }
+
+        var navigationSubTitle: String {
+            "\(event?.overallFeedbackSummary?.responses ?? 0) responses"
+        }
+
+        var shareText: String? {
+            guard let event, let pinCode = event.pinCode?.value, let inviteUrl else {
+                return nil
+            }
+
+            return """
+            You are invited to \(navigationTitle)!
+            Use pin code \(pinCode) to join.
+
+            Tap the link to join:
+            \(inviteUrl)
+            """
+        }
+
+        public init(
+            activityId: UUID,
+            eventId: UUID,
+            destination: Destination.State? = nil,
+            session: Shared<Bootstrap>,
+            webBaseUrl: URL? = nil,
+            hasMarkedAsSeen: Bool = false
+        ) {
+            self.activityId = activityId
+            self.eventId = eventId
+            self.destination = destination
+            self._session = session
+            self.webBaseUrl = webBaseUrl
+            self.hasMarkedAsSeen = hasMarkedAsSeen
+        }
+    }
+
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
+        case destination(PresentationAction<Destination.Action>)
+        case alert(PresentationAction<Never>)
+        case deleteEventButtonTapped
+        case deleteEventCancelButtonTapped
+        case deleteEventConfirmButtonTapped
+        case deleteEventSuccess
+        case editButtonTapped
+        case inviteButtonTapped
+        case onTask
+        case presentError(Error)
+    }
+
+    public init() {}
+
+    @Dependency(\.apiClient) var apiClient
+    @Dependency(\.dismiss) var dismiss
+    @Dependency(\.systemClient) var systemClient
+
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .binding:
+                return .none
+
+            case .destination(.presented(.manageEvent(.delegate(let delegate)))):
+                switch delegate {
+                case .dismissAndUpdateEvent(let event), .dismissAndNavigateToEvent(let event):
+                    state.destination = nil
+                    return .none
+
+                case .dismiss:
+                    state.destination = nil
+                    return .none
+                }
+
+            case .destination:
+                return .none
+
+            case .alert:
+                return .none
+
+            case .deleteEventButtonTapped:
+                state.showDeleteConfirmation = true
+                return .none
+
+            case .deleteEventCancelButtonTapped:
+                state.showDeleteConfirmation = false
+                return .none
+
+            case .deleteEventConfirmButtonTapped:
+                guard state.event != nil else { return .none }
+                state.deleteEventInFlight = true
+                let eventId = state.eventId
+                return .run { send in
+                    do {
+                        try await apiClient.deleteEvent(eventId)
+                        await send(.deleteEventSuccess)
+                    } catch {
+                        await send(.presentError(error))
+                    }
+                }
+
+            case .deleteEventSuccess:
+                state.deleteEventInFlight = false
+                state.showDeleteConfirmation = false
+                return .run { _ in
+                    await dismiss()
+                }
+
+            case .editButtonTapped:
+                guard let activity = state.activity, let event = state.event else { return .none }
+                state.destination = .manageEvent(.edit(activity: activity, event: event))
+                return .none
+
+            case .inviteButtonTapped:
+                guard let event = state.event else { return .none }
+                guard state.inviteUrl != nil, state.shareText != nil else {
+                    state.alert = .init(error: MissingInviteLinkError())
+                    return .none
+                }
+                state.destination = .invite(event)
+                return .none
+
+            case .onTask:
+                state.webBaseUrl = systemClient.webBaseUrl()
+                guard !state.hasMarkedAsSeen, state.event != nil else {
+                    return .none
+                }
+                state.hasMarkedAsSeen = true
+                let eventId = state.eventId
+                return .run { send in
+                    do {
+                        try await apiClient.markEventAsSeen(eventId)
+                    } catch {
+                        await send(.presentError(error))
+                    }
+                }
+
+            case .presentError(let error):
+                state.deleteEventInFlight = false
+                state.alert = .init(error: error)
+                return .none
+            }
+        }
+        .ifLet(\.$destination, action: \.destination)
+        .ifLet(\.$alert, action: \.alert)
+    }
+}
+
+extension EventDetailFeature.Destination.State: Equatable, Sendable {}
+
+private struct MissingInviteLinkError: LocalizedError {
+    var errorDescription: String? {
+        "Could not create invite link."
+    }
+}

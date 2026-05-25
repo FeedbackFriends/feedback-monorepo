@@ -47,6 +47,15 @@ The reducer associated with a view should use the same base name without the `Vi
 
 | `ProfileView` | `Profile` | 
 
+## Domain Language
+- `Activity` is the canonical code and domain term. Use `Activity` in models, reducers, services, API mappers, tests, and type/file names.
+- `Focus` is the user-facing UI name for an `Activity`. Use "focus" in visible copy when referring to this concept.
+- `Event` is the canonical code and API domain term for an occurrence under an `Activity`.
+- `Session` is the user-facing UI name for an `Event`, for now. Use "session" in visible copy when referring to this concept.
+- One `Activity` has zero or more `Event`s.
+- Avoid using "event" in visible copy for the manager-facing session detail flow.
+- Do not confuse user-facing feedback sessions with technical bootstrap/auth session state already named `session` in code.
+
 ## Collaboration Notes
 - When you learn something about the project that is likely to be useful again, such as overall app architecture, framework choices, conventions, or ways of working, suggest adding it to `AGENTS.md`.
 - Do not update `AGENTS.md` for that kind of newly learned project knowledge without asking the user first.

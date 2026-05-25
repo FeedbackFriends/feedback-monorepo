@@ -2,21 +2,24 @@ import Domain
 import DesignSystem
 import SwiftUI
 
-public struct ManagerSessionsListView: View {
-    let todayEvents: [Activity]
-    let comingUpEvents: [Activity]
-    let previousEvents: [Activity]
-    let onEventTap: ((Activity) -> Void)?
+public struct EventListView: View {
+    let todayEvents: [Event]
+    let comingUpEvents: [Event]
+    let previousEvents: [Event]
+    let eventTitle: String
+    let onEventTap: ((Event) -> Void)?
 
     public init(
-        todayEvents: [Activity],
-        comingUpEvents: [Activity],
-        previousEvents: [Activity],
-        onEventTap: ((Activity) -> Void)? = nil
+        todayEvents: [Event],
+        comingUpEvents: [Event],
+        previousEvents: [Event],
+        eventTitle: String,
+        onEventTap: ((Event) -> Void)? = nil
     ) {
         self.todayEvents = todayEvents
         self.comingUpEvents = comingUpEvents
         self.previousEvents = previousEvents
+        self.eventTitle = eventTitle
         self.onEventTap = onEventTap
     }
 
@@ -30,21 +33,21 @@ public struct ManagerSessionsListView: View {
                 if !todayEvents.isEmpty {
                     CustomSection(title: "Today") {
                         ForEach(todayEvents) { event in
-                            managerEventListItem(event)
+                            eventListItem(event)
                         }
                     }
                 }
                 if !comingUpEvents.isEmpty {
                     CustomSection(title: "Coming up") {
                         ForEach(comingUpEvents) { event in
-                            managerEventListItem(event)
+                            eventListItem(event)
                         }
                     }
                 }
                 if !previousEvents.isEmpty {
                     CustomSection(title: "Previous") {
                         ForEach(previousEvents) { event in
-                            managerEventListItem(event)
+                            eventListItem(event)
                         }
                     }
                 }
@@ -53,15 +56,15 @@ public struct ManagerSessionsListView: View {
     }
 }
 
-private extension ManagerSessionsListView {
-    func managerEventListItem(_ event: Activity) -> some View {
+private extension EventListView {
+    func eventListItem(_ event: Event) -> some View {
         Button {
             onEventTap?(event)
         } label: {
             VStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text(event.title)
+                        Text(eventTitle)
                             .font(.montserratSemiBold, 14)
                         Spacer()
                         if let overallFeedbackSummary = event.overallFeedbackSummary, overallFeedbackSummary.unseenResponses > 0 {
@@ -106,7 +109,7 @@ private extension ManagerSessionsListView {
             .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         }
         .buttonStyle(OpacityButtonStyle())
-        .accessibilityIdentifier("manager_session_row_\(event.title)")
+        .accessibilityIdentifier("manager_session_row_\(event.id)")
         .disabled(onEventTap == nil)
         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: Theme.cornerRadius))
     }

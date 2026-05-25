@@ -481,27 +481,6 @@ public struct Activity: Equatable, Identifiable, Sendable {
         }
     }
 
-    public func relatedEventActivity(_ event: Event) -> Activity {
-        Activity(
-            id: event.id,
-            title: title,
-            agenda: agenda,
-            date: event.date,
-            pinCode: event.pinCode,
-            durationInMinutes: event.durationInMinutes,
-            location: event.location,
-            ownerInfo: ownerInfo,
-            trend: .insufficientData,
-            overallFeedbackSummary: event.overallFeedbackSummary,
-            questions: event.questionsSnapshot,
-            events: [],
-            isDraft: false,
-            invitedEmails: invitedEmails,
-            participants: [],
-            calendarProvider: event.calendarProvider
-        )
-    }
-    
     public init(
         id: UUID,
         title: String,
@@ -538,18 +517,6 @@ public struct Activity: Equatable, Identifiable, Sendable {
         self.calendarProvider = calendarProvider
     }
 
-    public var event: Event {
-        Event(
-            id: id,
-            date: date,
-            pinCode: pinCode,
-            durationInMinutes: durationInMinutes,
-            location: location,
-            overallFeedbackSummary: overallFeedbackSummary,
-            questionsSnapshot: questions,
-            calendarProvider: calendarProvider
-        )
-    }
 }
 
 public struct ManagerData: Equatable, Sendable {

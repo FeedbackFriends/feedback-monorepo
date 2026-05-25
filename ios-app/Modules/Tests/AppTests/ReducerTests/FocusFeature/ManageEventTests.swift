@@ -54,9 +54,10 @@ struct ManageEventTests {
     }
 
     @Test
-    func `Edit event succeeds and dismisses`() async {
+    func `Edit event succeeds and returns updated event`() async {
         let activity = Activity.mock()
         let event = Event.mock()
+        let updatedEvent = Event.mock()
 
         let store = TestStore(
             initialState: ManageEvent.State.edit(
@@ -66,7 +67,7 @@ struct ManageEventTests {
         ) {
             ManageEvent()
         } withDependencies: {
-            $0.apiClient.updateEvent = { _, _ in .mock() }
+            $0.apiClient.updateEvent = { _, _ in updatedEvent }
             $0.continuousClock = ImmediateClock()
         }
 
@@ -78,7 +79,7 @@ struct ManageEventTests {
             $0.manageEventInFlight = false
             $0.showSuccessOverlay = true
         }
-        await store.receive(\.delegate, .dismiss)
+        await store.receive(\.delegate, .dismissAndUpdateEvent(updatedEvent))
     }
 
     @Test
