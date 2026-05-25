@@ -450,19 +450,6 @@ public struct Activity: Equatable, Identifiable, Sendable {
     public var relatedSessions: [Event]
     public let isDraft: Bool
     public let calendarProvider: CalendarProvider?
-    public func inviteUrl(webBaseUrl: URL) -> String {
-        guard let pinCode = self.pinCode?.value else { return "PINCODE_NOT_FOUND" }
-        return AppWebURLProvider.invite(forPinCode: pinCode, baseUrl: webBaseUrl)?.absoluteString ?? "COULD_NOT_GENERATE_INVITE_LINK"
-    }
-    public func shareText(webBaseUrl: URL) -> String {
-        """
-        You’re invited to \(self.title)!
-        Use pin code \(self.pinCode?.value ?? "PINCODE_NOT_FOUND") to join.
-
-        👇🏼 Tap the link to join:
-        \(inviteUrl(webBaseUrl: webBaseUrl))
-        """
-    }
     public var end: Date {
         date + TimeInterval(durationInMinutes * 60)
     }
