@@ -121,7 +121,7 @@ extension ParticipantEventsView {
                     .foregroundStyle(Color.themeText)
                     .frame(maxWidth: .infinity, minHeight: 40)
                     Divider()
-                    if event.feedbackSubmitted {
+                    if event.feedbackSubmited {
                         Text("Sent")
                             .font(.montserratSemiBold, 14)
                             .frame(maxWidth: .infinity, minHeight: 40)

@@ -211,7 +211,7 @@ struct APIClientLiveTests {
                             body: .json(
                                 .init(
                                     shouldPresentRatingPrompt: true,
-                                    event: Self.participantEventDto(feedbackSubmitted: true)
+                                    event: Self.participantEventDto(feedbackSubmited: true)
                                 )
                             )
                         )
@@ -231,14 +231,14 @@ struct APIClientLiveTests {
         #expect(body.pinCode == "456789")
         #expect(body.feedback == [Components.Schemas.FeedbackInput(feedback)])
         #expect(shouldPresentRatingPrompt)
-        #expect(snapshot?.participantEvents[id: Self.eventId]?.feedbackSubmitted == true)
+        #expect(snapshot?.participantEvents[id: Self.eventId]?.feedbackSubmited == true)
     }
 
     @Test
     func `Create and update event calls refresh the cached manager event`() async throws {
         let createInput = LockIsolated<Operations.CreateEvent.Input?>(nil)
         let updateInput = LockIsolated<Operations.UpdateEvent.Input?>(nil)
-        let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(id: Self.existingEventId, title: "Original title")]))
+        let cache = APIClientCache(session: Self.managerSession(events: [Self.event(id: Self.existingEventId, title: "Original title")]))
         let client = Self.makeClient(
             api: MockAPI(
                 createEventHandler: { request in
@@ -269,15 +269,15 @@ struct APIClientLiveTests {
         #expect(updateBody.title == "Updated title")
         #expect(created.title == "Created title")
         #expect(updated.title == "Updated title")
-        #expect(snapshot?.managerData?.managerEvents[id: Self.eventId]?.title == "Updated title")
+        #expect(snapshot?.managerData?.activities[id: Self.eventId]?.title == "Updated title")
         #expect(snapshot?.managerData?.activities[id: Self.createdActivityId]?.title == "Created title")
     }
 
     @Test
     func `Event is removed from cache after deletion and stream is triggered with updated session`() async throws {
-        let first = Self.managerEvent(id: Self.eventId, title: "First")
+        let first = Self.event(id: Self.eventId, title: "First")
         let secondId = UUID(uuidString: "00000000-0000-0000-0000-000000000099")!
-        let second = Self.managerEvent(id: secondId, title: "Second")
+        let second = Self.event(id: secondId, title: "Second")
         let cache = APIClientCache(session: Self.managerSession(events: [first, second]))
         let client = Self.makeClient(
             api: MockAPI(
@@ -291,8 +291,8 @@ struct APIClientLiveTests {
         let snapshot = await cache.getSession()
         let updatedSession = await listener.next()
 
-        #expect(snapshot?.managerData?.managerEvents.count == 1)
-        #expect(snapshot?.managerData?.managerEvents.first?.id == secondId)
+        #expect(snapshot?.managerData?.activities.count == 1)
+        #expect(snapshot?.managerData?.activities.first?.id == secondId)
         #expect(updatedSession == snapshot)
     }
 
@@ -354,7 +354,7 @@ struct APIClientLiveTests {
 
     @Test
     func `Manager event is marked as seen`() async throws {
-        let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(unseenResponses: 1)], unseenTotal: 1))
+        let cache = APIClientCache(session: Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 1))
         let client = Self.makeClient(
             api: MockAPI(
                 markEventAsSeenHandler: { _ in .ok }
@@ -365,9 +365,9 @@ struct APIClientLiveTests {
         try await client.markEventAsSeen(Self.eventId)
 
         let updated = await cache.getSession()
-        #expect(updated?.managerData?.managerEvents[id: Self.eventId]?.overallFeedbackSummary?.unseenResponses == 0)
-        #expect(updated?.managerData?.activity.unseenTotal == 0)
-        #expect(updated?.managerData?.activity.items.allSatisfy { $0.seenByManager } == true)
+        #expect(updated?.managerData?.activities[id: Self.eventId]?.overallFeedbackSummary?.unseenResponses == 0)
+        #expect(updated?.managerData?.notificationHistory.unseenTotal == 0)
+        #expect(updated?.managerData?.notificationHistory.items.allSatisfy { $0.seenByManager } == true)
     }
 
     @Test
@@ -427,7 +427,7 @@ struct APIClientLiveTests {
 
     @Test
     func `Manager activity is marked as seen`() async throws {
-        let cache = APIClientCache(session: Self.managerSession(events: [Self.managerEvent(unseenResponses: 1)], unseenTotal: 2))
+        let cache = APIClientCache(session: Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 2))
         let client = Self.makeClient(
             api: MockAPI(
                 markActivityAsSeenHandler: { _ in .ok }
@@ -438,8 +438,8 @@ struct APIClientLiveTests {
         try await client.markActivityAsSeen()
 
         let updated = await cache.getSession()
-        #expect(updated?.managerData?.activity.unseenTotal == 0)
-        #expect(updated?.managerData?.activity.items.allSatisfy { $0.seenByManager } == true)
+        #expect(updated?.managerData?.notificationHistory.unseenTotal == 0)
+        #expect(updated?.managerData?.notificationHistory.items.allSatisfy { $0.seenByManager } == true)
     }
 }
 
@@ -477,7 +477,7 @@ private extension APIClientLiveTests {
         .init(id: questionId.uuidString, questionText: "How did it go?", feedbackType: .emoji)
     }
 
-    static func participantEventDto(feedbackSubmitted: Bool = false) -> Components.Schemas.ParticipantEventDto {
+    static func participantEventDto(feedbackSubmited: Bool = false) -> Components.Schemas.ParticipantEventDto {
         .init(
             id: eventId.uuidString,
             date: referenceDate,
@@ -487,7 +487,7 @@ private extension APIClientLiveTests {
             createdFromMailListener: false,
             ownerInfo: ownerInfoDto(),
             questions: [participantQuestionDto()],
-            feedbackSubmited: feedbackSubmitted,
+            feedbackSubmited: feedbackSubmited,
             recentlyJoined: true
         )
     }
@@ -514,7 +514,7 @@ private extension APIClientLiveTests {
         )
     }
 
-    static func activityDto(unseenTotal: Int) -> Activity {
+    static func notificationHistory(unseenTotal: Int) -> NotificationHistory {
         .init(
             items: [
                 .init(
@@ -530,11 +530,11 @@ private extension APIClientLiveTests {
         )
     }
 
-    static func managerEvent(
+    static func event(
         id: UUID = eventId,
         title: String = "Weekly retro",
         unseenResponses: Int = 0
-    ) -> ManagerEvent {
+    ) -> Event {
         .init(
             id: id,
             title: title,
@@ -566,14 +566,14 @@ private extension APIClientLiveTests {
         )
     }
 
-    static func managerSession(events: [ManagerEvent] = [managerEvent()], unseenTotal: Int = 0) -> Bootstrap {
+    static func managerSession(events: [Event] = [event()], unseenTotal: Int = 0) -> Bootstrap {
         .init(
             participantEvents: [],
             managerData: .init(
-                managerEvents: .init(uniqueElements: events),
-                activity: activityDto(unseenTotal: unseenTotal),
-                recentlyUsedQuestions: [],
-                feedbackSessionHash: sessionHash
+                activities: .init(uniqueElements: events),
+                notificationHistory: notificationHistory(unseenTotal: unseenTotal),
+                questionAnalytics: [.mock()],
+                bootstrapHash: sessionHash
             ),
             accountInfo: .init(name: "Account", email: "account@example.com", phoneNumber: "12345678"),
             role: .manager
@@ -591,8 +591,8 @@ private extension APIClientLiveTests {
 
     static func managerDataDto() -> Components.Schemas.ManagerDataDto {
         .init(
-            feedbackFlows: [feedbackFlowDto(title: "Weekly retro")],
-            activity: .init(
+            activities: [createdActivityDto(title: "Weekly retro")],
+            notificationHistory: .init(
                 items: [
                     .init(
                         id: activityItemId.uuidString,
@@ -605,7 +605,21 @@ private extension APIClientLiveTests {
                 ],
                 unseenTotal: 2
             ),
-            sessionHash: sessionHash.uuidString
+            bootstrapHash: sessionHash.uuidString,
+            questionAnalytics: [questionAnalyticsDto()]
+        )
+    }
+
+    static func questionAnalyticsDto() -> Components.Schemas.ManagerQuestionAnalyticsDto {
+        .init(
+            questionId: questionId.uuidString,
+            questionText: "How did it go?",
+            feedbackType: .emoji,
+            eventCount: 1,
+            responseCount: 1,
+            latestAskedAt: referenceDate,
+            overallSummary: nil,
+            timeline: []
         )
     }
 
@@ -781,7 +795,7 @@ struct APIClientMappingTests {
         #expect(event.pinCode == .init(value: "456789"))
         #expect(event.questions == [question])
         #expect(event.ownerInfo == .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678"))
-        #expect(event.feedbackSubmitted == false)
+        #expect(event.feedbackSubmited == false)
         #expect(event.recentlyJoined == true)
     }
 
@@ -800,22 +814,25 @@ struct APIClientMappingTests {
     @Test
     func `Feedback flow DTOs map to manager models`() {
         let question = ManagerQuestion(Self.questionDto())
-        let event = ManagerEvent(Self.feedbackFlowDto())
-        let wrapper = EventWrapper(Self.feedbackFlowDto())
+        let analytics = ManagerQuestionAnalytics(Self.questionAnalyticsDto())
+        let activity = Activity(Self.createdActivityDto(title: "Weekly retro"), questionAnalytics: [analytics])
 
         #expect(question.id == Self.questionId)
         #expect(question.questionText == "How did it go?")
         #expect(question.feedbackType == .comment)
         #expect(question.feedback.isEmpty)
         #expect(question.feedbackSummary == nil)
-        #expect(event.id == Self.eventId)
-        #expect(event.title == "Weekly retro")
-        #expect(event.agenda == "Talk through wins and blockers")
-        #expect(event.date == Self.referenceDate)
-        #expect(event.ownerInfo == .init(name: "Owner", email: "owner@example.com", phoneNumber: nil))
-        #expect(event.questions == [question])
-        #expect(wrapper.event == event)
-        #expect(wrapper.recentlyUsedQuestions.isEmpty)
+        #expect(analytics.questionId == Self.questionId)
+        #expect(analytics.questionText == "How did it go?")
+        #expect(analytics.feedbackType == .emoji)
+        #expect(analytics.eventCount == 1)
+        #expect(analytics.responseCount == 1)
+        #expect(activity.id == Self.createdActivityId)
+        #expect(activity.title == "Weekly retro")
+        #expect(activity.agenda == "Talk through wins and blockers")
+        #expect(activity.events.count == 1)
+        #expect(activity.questions.count == 1)
+        #expect(activity.questions[0].feedbackSummary == nil)
     }
 
     @Test
@@ -885,9 +902,10 @@ struct APIClientMappingTests {
         let anonymousBootstrap = Bootstrap(Self.bootstrapDto(role: nil))
         let sessionDto = Bootstrap(Self.sessionDto())
 
-        #expect(managerData.managerEvents.count == 1)
-        #expect(managerData.activity == Activity(Self.activityDto()))
-        #expect(managerData.feedbackSessionHash == Self.sessionHash)
+        #expect(managerData.activities.count == 1)
+        #expect(managerData.notificationHistory == Self.notificationHistory(unseenTotal: 4))
+        #expect(managerData.bootstrapHash == Self.sessionHash)
+        #expect(managerData.questionAnalytics.count == 1)
         #expect(managerBootstrap.role == .manager)
         #expect(managerBootstrap.managerData == managerData)
         #expect(managerBootstrap.accountInfo == AccountInfo(Self.accountInfoDto()))

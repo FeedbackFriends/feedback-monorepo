@@ -11,7 +11,7 @@ public extension ParticipantEvent {
             location: dto.location,
             durationInMinutes: Int(dto.durationInMinutes),
             questions: dto.questions.map(ParticipantQuestion.init),
-            feedbackSubmitted: dto.feedbackSubmited,
+            feedbackSubmited: dto.feedbackSubmited,
             ownerInfo: .init(dto.ownerInfo),
             recentlyJoined: dto.recentlyJoined
         )

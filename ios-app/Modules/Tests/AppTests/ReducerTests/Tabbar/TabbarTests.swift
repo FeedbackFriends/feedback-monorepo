@@ -40,13 +40,13 @@ struct TabbarTests {
     
     @Test
     func `Activity button opens activity list and navigates to event detail`() async {
-        let event: ManagerEvent = .mock()
+        let event: Event = .mock()
         let sharedSession = Shared<Bootstrap>(
             value: .init(
                 participantEvents: .init(uniqueElements: []),
                 managerData: .init(
-                    managerEvents: .init(uniqueElements: [event]),
-                    activity: .init(
+                    activities: .init(uniqueElements: [event]),
+                    notificationHistory: .init(
                         items: [.init(
                             id: UUID(),
                             date: Date(),
@@ -57,8 +57,8 @@ struct TabbarTests {
                         )],
                         unseenTotal: 2
                     ),
-                    recentlyUsedQuestions: .init(),
-                    feedbackSessionHash: UUID()
+                    questionAnalytics: [],
+                    bootstrapHash: UUID()
                 ),
                 accountInfo: .init(
                     name: nil,
@@ -75,9 +75,9 @@ struct TabbarTests {
             $0.apiClient.markActivityAsSeen = {}
         }
         await store.send(.toolbar(.notificationHistoryButtonTap)) {
-            $0.destination = .activity(session.activity.items.wrappedValue)
+            $0.destination = .activity(session.notificationHistory.items)
         }
-        await store.send(.managerEvents(.activityManagerEventButtonTap(session.activity.items.wrappedValue.first!))) {
+        await store.send(.managerEvents(.activityManagerEventButtonTap(session.notificationHistory.items.first!))) {
             $0.managerEvents.destination = .activityDetail(.init(eventId: event.id, detail: event, session: sharedSession))
         }
     }
@@ -87,7 +87,7 @@ struct TabbarTests {
         let sharedSession = Shared<Bootstrap>(
             value: .mock()
         )
-        let createdEvent = ManagerEvent.mock()
+        let createdEvent = Event.mock()
         let session = sharedSession
         let store = TestStore(initialState: .init(session: session)) {
             Tabbar()
@@ -99,7 +99,6 @@ struct TabbarTests {
                         initialFocus: .title,
                         eventInput: .init(),
                         shouldOpenKeyboardOnAppear: true,
-                        recentlyUsedQuestions: .init([]),
                         successOverlayMessage: "Session created"
                     )
                 )

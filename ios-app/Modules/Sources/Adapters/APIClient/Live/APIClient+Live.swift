@@ -34,7 +34,7 @@ public extension APIClient {
             seedEmptyAccount: makeSeedEmptyAccount(api: api),
             resetDatabase: makeResetDatabase(api: api, sessionCache: sessionCache),
             login: makeLogin(api: api),
-            getBoostrapUpdate: makeGetBoostrapUpdate(api: api, sessionCache: sessionCache),
+            getBootstrapUpdate: makeGetBootstrapUpdate(api: api, sessionCache: sessionCache),
             markNotificationHistoryAsSeen: makeMarkNotificationHistoryAsSeen(api: api, sessionCache: sessionCache)
         )
     }

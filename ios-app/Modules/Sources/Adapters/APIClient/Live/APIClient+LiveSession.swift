@@ -20,13 +20,13 @@ extension APIClient {
         }
     }
 
-    static func makeGetBoostrapUpdate(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable () async throws -> Bootstrap? {
+    static func makeGetBootstrapUpdate(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable () async throws -> Bootstrap? {
         {
-            guard let feedbackSessionHash = await sessionCache.feedbackSessionHash else { return .none }
+            guard let bootstrapHash = await sessionCache.bootstrapHash else { return .none }
             let response = try await withAuthorization {
                 try await api.getBoostrapUpdate(
                     .init(
-                        path: .init(hash: feedbackSessionHash.uuidString)
+                        path: .init(hash: bootstrapHash.uuidString)
                     )
                 )
             }

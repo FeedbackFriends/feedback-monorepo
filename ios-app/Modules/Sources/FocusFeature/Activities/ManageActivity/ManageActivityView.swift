@@ -62,7 +62,6 @@ public struct ManageActivityView: View {
             }
             .navigationDestination(isPresented: $store.showQuestionsList) {
                 QuestionsListView(
-                    recentlyUsedQuestions: [],
                     questionsInputs: $store.questions,
                     previewConfiguration: .init(
                         title: store.title,

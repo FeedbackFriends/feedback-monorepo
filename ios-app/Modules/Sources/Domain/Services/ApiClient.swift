@@ -47,6 +47,6 @@ public struct APIClient: Sendable {
     public var seedEmptyAccount: @Sendable () async throws -> MockTokenDto
     public var resetDatabase: @Sendable () async throws -> Void
     public var login: @Sendable (_ id: String) async throws -> MockTokenDto
-    public var getBoostrapUpdate: @Sendable () async throws -> Bootstrap?
+    public var getBootstrapUpdate: @Sendable () async throws -> Bootstrap?
     public var markNotificationHistoryAsSeen: @Sendable () async throws -> Void
 }

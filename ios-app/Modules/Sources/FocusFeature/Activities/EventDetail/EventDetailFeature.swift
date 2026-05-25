@@ -107,35 +107,8 @@
 //                return .none
 //                
 //            case .destination(.presented(.confirmationDialog(let confirmationDialogAction))):
-////                switch confirmationDialogAction {
-////                    
-////                case .edit:
-////                    guard let activity = state.activityDetail else { return .none }
-////                    let recentlyUsedQuestions = if let managerData = state.session.managerData {
-////                        Set<RecentlyUsedQuestions>(managerData.recentlyUsedQuestions)
-////                    } else {
-////                        Set<RecentlyUsedQuestions>()
-////                    }
-////                    state.destination = .editEvent(
-////                        EditEvent.State(
-////                            eventForm: EventForm.State.init(
-////                                eventInput: EventInput(activity),
-////                                shouldOpenKeyboardOnAppear: false,
-////                                recentlyUsedQuestions: recentlyUsedQuestions,
-////                                successOverlayMessage: "Session edited"
-////                            ),
-////                            eventId: state.eventId,
-////                            recentlyUsedQuestions: recentlyUsedQuestions
-////                        )
-////                    )
-////                case .delete:
-////                    state.destination = .deleteConfirmation(.init(eventId: state.eventId))
-////                case .invite:
-////                    guard let detail = state.detail else { return .none }
-////                    state.destination = .invite(detail)
-////                }
 //                return .none
-//                
+//
 //            case .destination:
 //                return .none
 //                

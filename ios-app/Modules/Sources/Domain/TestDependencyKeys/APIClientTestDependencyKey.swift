@@ -29,7 +29,7 @@ extension APIClient: TestDependencyKey {
         seedEmptyAccount: { .init(token: "test-seed-empty-account") },
         resetDatabase: {},
         login: { _ in .init(token: "test-login") },
-        getBoostrapUpdate: { .mock() },
+        getBootstrapUpdate: { .mock() },
         markNotificationHistoryAsSeen: { }
     )
 }

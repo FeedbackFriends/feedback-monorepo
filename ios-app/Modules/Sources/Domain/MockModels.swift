@@ -122,8 +122,8 @@ public extension ManagerSession {
                 ]
             ),
             notificationHistory: .mock,
-            recentlyUsedQuestions: [.init(questionText: "Hello world", feedbackType: .emoji, updatedAt: Date())],
-            feedbackSessionHash: UUID()
+            questionAnalytics: [.mock()],
+            bootstrapHash: UUID()
         ),
         accountInfo: .init(name: "Nicolai", email: "Nicolai@letsgrow.dk", phoneNumber: "88888888")
     )
@@ -134,8 +134,8 @@ public extension ManagerSession {
                 uniqueElements: []
             ),
             notificationHistory: .mock,
-            recentlyUsedQuestions: [],
-            feedbackSessionHash: UUID()
+            questionAnalytics: [],
+            bootstrapHash: UUID()
         ),
         accountInfo: .init(name: "Nicolai", email: "Nicolai@letsgrow.dk", phoneNumber: "88888888")
     )
@@ -152,8 +152,8 @@ public extension Bootstrap {
                     ]
                 ),
                 notificationHistory: .mock,
-                recentlyUsedQuestions: [],
-                feedbackSessionHash: UUID()
+                questionAnalytics: [],
+                bootstrapHash: UUID()
             ),
             accountInfo: .init(name: "Nicolai", email: "Nicolai@letsgrow.dk", phoneNumber: "88888888"),
             role: .manager
@@ -167,8 +167,8 @@ public extension Bootstrap {
                     uniqueElements: []
                 ),
                 notificationHistory: .mock,
-                recentlyUsedQuestions: [],
-                feedbackSessionHash: UUID()
+                questionAnalytics: [],
+                bootstrapHash: UUID()
             ),
             accountInfo: .init(name: "Nicolai", email: "Nicolai@letsgrow.dk", phoneNumber: "88888888"),
             role: .manager
@@ -205,9 +205,24 @@ public extension ParticipantEvent {
                     feedbackType: .emoji
                 )
             ],
-            feedbackSubmitted: Bool.random(),
+            feedbackSubmited: Bool.random(),
             ownerInfo: .mock(),
             recentlyJoined: Bool.random()
+        )
+    }
+}
+
+public extension ManagerQuestionAnalytics {
+    static func mock() -> Self {
+        .init(
+            questionId: UUID(),
+            questionText: "How do you feel about the meeting duration?",
+            feedbackType: .emoji,
+            eventCount: 1,
+            responseCount: 1,
+            latestAskedAt: Date(),
+            overallSummary: nil,
+            timeline: []
         )
     }
 }

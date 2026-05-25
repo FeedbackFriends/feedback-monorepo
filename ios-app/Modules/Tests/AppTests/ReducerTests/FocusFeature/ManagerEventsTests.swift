@@ -11,7 +11,7 @@ struct ManagerEventsTests {
     @Test
     func `Manager event detail view is shown and event is marked as seen when dismissed`() async {
         let session: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 2))
-        let mockEvent = session.wrappedValue.managerData!.managerEvents[0]
+        let mockEvent = session.wrappedValue.managerData!.activities[0]
         let eventMarkedAsSeen = LockIsolated<UUID?>(nil)
         let store = TestStore(initialState: ActivityList.State(session: session)) {
             ActivityList()

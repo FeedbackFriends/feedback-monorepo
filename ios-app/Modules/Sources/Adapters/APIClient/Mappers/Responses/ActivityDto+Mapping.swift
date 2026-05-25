@@ -5,14 +5,14 @@ import OpenAPI
 public extension ManagerQuestion {
     init(
         _ dto: Components.Schemas.QuestionDto,
-        analytics: Components.Schemas.ManagerQuestionAnalyticsDto? = nil
+        analytics: ManagerQuestionAnalytics? = nil
     ) {
         self.init(
             id: UUID(uuidString: dto.id)!,
             questionText: dto.text,
             feedbackType: FeedbackType(dto.feedbackType.rawValue),
             feedback: [],
-            feedbackSummary: analytics?.overallSummary.map(QuestionFeedbackSummary.init)
+            feedbackSummary: analytics?.overallSummary
         )
     }
 }
@@ -20,19 +20,18 @@ public extension ManagerQuestion {
 public extension Activity {
     init(
         _ dto: Components.Schemas.ActivityDto,
-        questionAnalytics: [Components.Schemas.ManagerQuestionAnalyticsDto] = []
+        questionAnalytics: [ManagerQuestionAnalytics] = []
     ) {
-        let analyticsById = questionAnalytics.reduce(into: [UUID: Components.Schemas.ManagerQuestionAnalyticsDto]()) { partialResult, analytics in
-            guard let questionId = UUID(uuidString: analytics.questionId) else { return }
-            partialResult[questionId] = analytics
+        let analyticsById = questionAnalytics.reduce(into: [UUID: ManagerQuestionAnalytics]()) { partialResult, analytics in
+            partialResult[analytics.questionId] = analytics
         }
-        let analyticsByNormalizedText = questionAnalytics.reduce(into: [String: Components.Schemas.ManagerQuestionAnalyticsDto]()) { partialResult, analytics in
+        let analyticsByNormalizedText = questionAnalytics.reduce(into: [String: ManagerQuestionAnalytics]()) { partialResult, analytics in
             let key = analytics.questionText.normalizedQuestionKey
             guard partialResult[key] == nil else { return }
             partialResult[key] = analytics
         }
         let currentEvent = dto.latestEvent
-        let relatedSessions = dto.events
+        let events = dto.events
             .sorted(by: { $0.date > $1.date })
             .map { eventDto in
                 Event(
@@ -69,23 +68,11 @@ public extension Activity {
                     ?? analyticsByNormalizedText[question.text.normalizedQuestionKey]
                 return .init(question, analytics: analytics)
             },
-            relatedSessions: relatedSessions,
+            events: events,
             isDraft: currentEvent == nil,
             invitedEmails: dto.invitedEmails,
             participants: [],
             calendarProvider: currentEvent?.calendarProvider.map(CalendarProvider.init)
-        )
-    }
-}
-
-public extension EventWrapper {
-    init(
-        _ dto: Components.Schemas.ActivityDto,
-        questionAnalytics: [Components.Schemas.ManagerQuestionAnalyticsDto] = []
-    ) {
-        self.init(
-            activity: .init(dto, questionAnalytics: questionAnalytics),
-            recentlyUsedQuestions: Set(questionAnalytics.map(RecentlyUsedQuestions.init))
         )
     }
 }

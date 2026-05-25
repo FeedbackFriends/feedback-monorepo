@@ -89,7 +89,7 @@ extension APIClient {
                 return ()
             },
             login: { id in .init(token: "mock-login-\(id)") },
-            getBoostrapUpdate: {
+            getBootstrapUpdate: {
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()
             },

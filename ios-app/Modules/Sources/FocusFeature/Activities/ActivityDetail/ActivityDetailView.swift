@@ -60,7 +60,7 @@ private struct ActivityDetailContentView: View {
     let activity: Activity
 
     var body: some View {
-        let sessions = activity.relatedSessions.sorted(by: { $0.date > $1.date })
+        let sessions = activity.events.sorted(by: { $0.date > $1.date })
         let groupedSessions = GroupedSessions(
             today: sessions.filter { $0.date.isToday },
             comingUp: sessions.filter { $0.date.isAfterToday },
@@ -110,9 +110,9 @@ private struct ActivityDetailContentView: View {
                         .font(.headline)
 
                     ManagerSessionsListView(
-                        todayEvents: groupedSessions.today.map { activity.relatedSessionActivity($0) },
-                        comingUpEvents: groupedSessions.comingUp.map { activity.relatedSessionActivity($0) },
-                        previousEvents: groupedSessions.previous.map { activity.relatedSessionActivity($0) },
+                        todayEvents: groupedSessions.today.map { activity.relatedEventActivity($0) },
+                        comingUpEvents: groupedSessions.comingUp.map { activity.relatedEventActivity($0) },
+                        previousEvents: groupedSessions.previous.map { activity.relatedEventActivity($0) },
                         onEventTap: { _ in }
                     )
                 }

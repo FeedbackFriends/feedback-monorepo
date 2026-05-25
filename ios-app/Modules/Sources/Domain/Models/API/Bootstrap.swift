@@ -137,7 +137,7 @@ public struct ParticipantEvent: Equatable, Identifiable, Sendable {
     public let location: String?
     public let durationInMinutes: Int
     public let questions: [ParticipantQuestion]
-    public let feedbackSubmitted: Bool
+    public let feedbackSubmited: Bool
     public let ownerInfo: OwnerInfo
     public let recentlyJoined: Bool
     public var title: String { "Event" }
@@ -150,7 +150,7 @@ public struct ParticipantEvent: Equatable, Identifiable, Sendable {
         location: String?,
         durationInMinutes: Int,
         questions: [ParticipantQuestion],
-        feedbackSubmitted: Bool,
+        feedbackSubmited: Bool,
         ownerInfo: OwnerInfo,
         recentlyJoined: Bool
     ) {
@@ -160,7 +160,7 @@ public struct ParticipantEvent: Equatable, Identifiable, Sendable {
         self.location = location
         self.durationInMinutes = durationInMinutes
         self.questions = questions
-        self.feedbackSubmitted = feedbackSubmitted
+        self.feedbackSubmited = feedbackSubmited
         self.ownerInfo = ownerInfo
         self.recentlyJoined = recentlyJoined
     }
@@ -225,7 +225,7 @@ public struct ActivityTrend: Equatable, Sendable {
     public let latestValue: Double?
     public let previousValue: Double?
     public let delta: Double?
-    public let comparedSessionCount: Int
+    public let comparedEventCount: Int
 
     public init(
         direction: Direction,
@@ -234,7 +234,7 @@ public struct ActivityTrend: Equatable, Sendable {
         latestValue: Double?,
         previousValue: Double?,
         delta: Double?,
-        comparedSessionCount: Int
+        comparedEventCount: Int
     ) {
         self.direction = direction
         self.indicator = indicator
@@ -242,7 +242,7 @@ public struct ActivityTrend: Equatable, Sendable {
         self.latestValue = latestValue
         self.previousValue = previousValue
         self.delta = delta
-        self.comparedSessionCount = comparedSessionCount
+        self.comparedEventCount = comparedEventCount
     }
 
     public static let insufficientData = Self(
@@ -252,7 +252,7 @@ public struct ActivityTrend: Equatable, Sendable {
         latestValue: nil,
         previousValue: nil,
         delta: nil,
-        comparedSessionCount: 0
+        comparedEventCount: 0
     )
 }
 
@@ -323,18 +323,6 @@ public struct ManagerQuestion: Equatable, Hashable, Sendable {
         self.feedbackType = feedbackType
         self.feedback = feedback
         self.feedbackSummary = feedbackSummary
-    }
-}
-
-public struct EventWrapper: Equatable, Sendable {
-    public let activity: Activity
-    public let recentlyUsedQuestions: Set<RecentlyUsedQuestions>
-    public init(
-        activity: Activity,
-        recentlyUsedQuestions: Set<RecentlyUsedQuestions>
-    ) {
-        self.activity = activity
-        self.recentlyUsedQuestions = recentlyUsedQuestions
     }
 }
 
@@ -431,8 +419,6 @@ public struct Event: Equatable, Identifiable, Sendable {
     }
 }
 
-public typealias ManagerEvent = Event
-
 public struct Activity: Equatable, Identifiable, Sendable {
     public let id: UUID
     public var title: String
@@ -447,7 +433,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
     public var questions: [ManagerQuestion]
     public var invitedEmails: [String]
     public var participants: [ParticipantSummary]
-    public var relatedSessions: [Event]
+    public var events: [Event]
     public let isDraft: Bool
     public let calendarProvider: CalendarProvider?
     public var end: Date {
@@ -495,7 +481,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
         }
     }
 
-    public func relatedSessionActivity(_ event: Event) -> Activity {
+    public func relatedEventActivity(_ event: Event) -> Activity {
         Activity(
             id: event.id,
             title: title,
@@ -508,7 +494,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
             trend: .insufficientData,
             overallFeedbackSummary: event.overallFeedbackSummary,
             questions: event.questionsSnapshot,
-            relatedSessions: [],
+            events: [],
             isDraft: false,
             invitedEmails: invitedEmails,
             participants: [],
@@ -528,7 +514,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
         trend: ActivityTrend = .insufficientData,
         overallFeedbackSummary: OverallFeedbackSummary?,
         questions: [ManagerQuestion],
-        relatedSessions: [Event] = [],
+        events: [Event] = [],
         isDraft: Bool,
         invitedEmails: [String],
         participants: [ParticipantSummary],
@@ -545,7 +531,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
         self.trend = trend
         self.overallFeedbackSummary = overallFeedbackSummary
         self.questions = questions
-        self.relatedSessions = relatedSessions
+        self.events = events
         self.isDraft = isDraft
         self.invitedEmails = invitedEmails
         self.participants = participants
@@ -569,60 +555,68 @@ public struct Activity: Equatable, Identifiable, Sendable {
 public struct ManagerData: Equatable, Sendable {
     public var activities: IdentifiedArrayOf<Activity>
     public var notificationHistory: NotificationHistory
-    public var recentlyUsedQuestions: Set<RecentlyUsedQuestions>
-    public var feedbackSessionHash: UUID
+    public var questionAnalytics: [ManagerQuestionAnalytics]
+    public var bootstrapHash: UUID
     public init(
         activities: IdentifiedArrayOf<Activity>,
         notificationHistory: NotificationHistory,
-        recentlyUsedQuestions: Set<RecentlyUsedQuestions>,
-        feedbackSessionHash: UUID
+        questionAnalytics: [ManagerQuestionAnalytics],
+        bootstrapHash: UUID
     ) {
         self.activities = activities
         self.notificationHistory = notificationHistory
-        self.recentlyUsedQuestions = recentlyUsedQuestions
-        self.feedbackSessionHash = feedbackSessionHash
-    }
-
-    public var managerEvents: IdentifiedArrayOf<Activity> {
-        get { activities }
-        set { activities = newValue }
-    }
-
-    public var activity: NotificationHistory {
-        get { notificationHistory }
-        set { notificationHistory = newValue }
+        self.questionAnalytics = questionAnalytics
+        self.bootstrapHash = bootstrapHash
     }
 }
 
-public extension ManagerData {
-    init(
-        managerEvents: IdentifiedArrayOf<Activity>,
-        activity: NotificationHistory,
-        recentlyUsedQuestions: Set<RecentlyUsedQuestions>,
-        feedbackSessionHash: UUID
-    ) {
-        self.init(
-            activities: managerEvents,
-            notificationHistory: activity,
-            recentlyUsedQuestions: recentlyUsedQuestions,
-            feedbackSessionHash: feedbackSessionHash
-        )
-    }
-}
-
-public struct RecentlyUsedQuestions: Equatable, Sendable, Hashable {
+public struct ManagerQuestionAnalytics: Equatable, Sendable {
+    public let questionId: UUID
     public let questionText: String
     public let feedbackType: FeedbackType
-    public let updatedAt: Date
-    
+    public let eventCount: Int
+    public let responseCount: Int
+    public let latestAskedAt: Date?
+    public let overallSummary: QuestionFeedbackSummary?
+    public let timeline: [QuestionTrendPoint]
+
     public init(
+        questionId: UUID,
         questionText: String,
         feedbackType: FeedbackType,
-        updatedAt: Date
+        eventCount: Int,
+        responseCount: Int,
+        latestAskedAt: Date?,
+        overallSummary: QuestionFeedbackSummary?,
+        timeline: [QuestionTrendPoint]
     ) {
+        self.questionId = questionId
         self.questionText = questionText
         self.feedbackType = feedbackType
-        self.updatedAt = updatedAt
+        self.eventCount = eventCount
+        self.responseCount = responseCount
+        self.latestAskedAt = latestAskedAt
+        self.overallSummary = overallSummary
+        self.timeline = timeline
+    }
+}
+
+public struct QuestionTrendPoint: Equatable, Sendable {
+    public let eventId: String
+    public let eventDate: Date
+    public let responseCount: Int
+    public let summary: QuestionFeedbackSummary?
+
+    public init(
+        eventId: String,
+        eventDate: Date,
+        responseCount: Int,
+        summary: QuestionFeedbackSummary?
+    ) {
+        self.eventId = eventId
+        self.eventDate = eventDate
+        self.responseCount = responseCount
+        self.summary = summary
     }
 }
 

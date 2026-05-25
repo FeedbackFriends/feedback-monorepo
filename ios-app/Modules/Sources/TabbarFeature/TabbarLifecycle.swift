@@ -77,7 +77,7 @@ public struct TabbarLifecycle: Sendable {
                     .run { _ in
                         for await _ in self.clock.timer(interval: .seconds(10)) {
                             do {
-                                _ = try await apiClient.getBoostrapUpdate()
+                                _ = try await apiClient.getBootstrapUpdate()
                             } catch {
                                 Logger
                                     .debug(

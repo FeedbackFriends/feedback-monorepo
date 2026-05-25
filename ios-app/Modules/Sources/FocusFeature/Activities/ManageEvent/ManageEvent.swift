@@ -65,7 +65,6 @@ public struct ManageEvent: Sendable {
         var minutePicker: Int
         var hourPicker: Int
         var focus: FocusedField?
-        let recentlyUsedQuestions: Set<RecentlyUsedQuestions>
         let successOverlayMessage: String
         @Presents var feedbackFlowCoordinator: FeedbackFlowCoordinator.State?
         @Presents var alert: AlertState<Never>?
@@ -79,8 +78,7 @@ public struct ManageEvent: Sendable {
         }
 
         public static func create(
-            activity: Activity,
-            recentlyUsedQuestions: Set<RecentlyUsedQuestions> = []
+            activity: Activity
         ) -> Self {
             var eventInput = EventInput(activity)
             eventInput.date = Date().roundedUpcoming5Min()
@@ -90,15 +88,13 @@ public struct ManageEvent: Sendable {
                 activityId: activity.id,
                 eventId: nil,
                 eventInput: eventInput,
-                recentlyUsedQuestions: recentlyUsedQuestions,
                 successOverlayMessage: "Session created"
             )
         }
 
         public static func edit(
             activity: Activity,
-            event: Event,
-            recentlyUsedQuestions: Set<RecentlyUsedQuestions> = []
+            event: Event
         ) -> Self {
             var eventInput = EventInput(activity)
             eventInput.date = event.date
@@ -110,7 +106,6 @@ public struct ManageEvent: Sendable {
                 activityId: activity.id,
                 eventId: event.id,
                 eventInput: eventInput,
-                recentlyUsedQuestions: recentlyUsedQuestions,
                 successOverlayMessage: "Session saved"
             )
         }
@@ -120,7 +115,6 @@ public struct ManageEvent: Sendable {
             activityId: UUID,
             eventId: UUID?,
             eventInput: EventInput,
-            recentlyUsedQuestions: Set<RecentlyUsedQuestions>,
             successOverlayMessage: String,
             startNowEnabled: Bool = false,
             focus: FocusedField? = nil
@@ -135,7 +129,6 @@ public struct ManageEvent: Sendable {
             self.minutePicker = eventInput.durationInMinutes % 60
             self.hourPicker = eventInput.durationInMinutes / 60
             self.focus = focus
-            self.recentlyUsedQuestions = recentlyUsedQuestions
             self.successOverlayMessage = successOverlayMessage
         }
 

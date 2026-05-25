@@ -124,12 +124,8 @@ public struct ActivityDetail: Sendable {
 
             case .createEventButtonTapped:
                 guard let activity = state.activity else { return .none }
-                let recentlyUsedQuestions = state.session.managerData?.recentlyUsedQuestions ?? []
                 state.destination = .manageEvent(
-                    ManageEvent.State.create(
-                        activity: activity,
-                        recentlyUsedQuestions: recentlyUsedQuestions
-                    )
+                    ManageEvent.State.create(activity: activity)
                 )
                 return .none
             

@@ -55,10 +55,6 @@ public actor APIClientCache {
         try session?.updateOrAppendEvent(event)
     }
     
-    public func updateRecentlyUsedQuestions(recentlyUsedQuestions: Set<RecentlyUsedQuestions>) {
-        session?.updateRecentlyUsedQuestions(recentlyUsedQuestions)
-    }
-    
     public func sessionChangedListener() -> AsyncStream<Bootstrap> {
         AsyncStream { continuation in
             self.sessionContinuation = continuation
@@ -89,8 +85,8 @@ public actor APIClientCache {
         self.session = nil
     }
     
-    public var feedbackSessionHash: UUID? {
-        self.session?.managerData?.feedbackSessionHash
+    public var bootstrapHash: UUID? {
+        self.session?.managerData?.bootstrapHash
     }
 }
 
@@ -118,8 +114,8 @@ public extension Bootstrap {
                 return
             }
 
-            if let relatedIndex = managerData.activities[index].relatedSessions.firstIndex(where: { $0.id == event.id }) {
-                managerData.activities[index].relatedSessions[relatedIndex] = event
+            if let relatedIndex = managerData.activities[index].events.firstIndex(where: { $0.id == event.id }) {
+                managerData.activities[index].events[relatedIndex] = event
                 self.managerData = managerData
                 return
             }
@@ -144,10 +140,6 @@ public extension Bootstrap {
     
     func getActivityId(_ id: UUID) -> Activity {
         return self.managerData!.activities[id: id]!
-    }
-    
-    func recentlyUsedQuestions() -> Set<RecentlyUsedQuestions> {
-        return self.managerData!.recentlyUsedQuestions
     }
     
     mutating func markActivityAsSeen(activityId: UUID) {
@@ -198,7 +190,4 @@ public extension Bootstrap {
         self.managerData?.notificationHistory = mutableNotificationHistory
     }
     
-    mutating func updateRecentlyUsedQuestions(_ questions: Set<RecentlyUsedQuestions>) {
-        self.managerData?.recentlyUsedQuestions = questions
-    }
 }

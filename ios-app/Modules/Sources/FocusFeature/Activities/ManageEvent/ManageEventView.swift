@@ -76,7 +76,6 @@ private extension ManageEventView {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
                     QuestionsListView(
-                        recentlyUsedQuestions: store.recentlyUsedQuestions,
                         questionsInputs: $store.eventInput.questions,
                         previewConfiguration: .init(
                             title: store.eventInput.title,
