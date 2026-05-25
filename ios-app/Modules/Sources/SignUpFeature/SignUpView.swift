@@ -95,7 +95,7 @@ private extension SignUpView {
                 }
                 .padding(.leading, 24)
             }
-            .buttonStyle(LargeButtonStyle(backgroundColor: Color.black))
+            .buttonStyle(LargeButtonStyle(backgroundColor: Color.themeText, foregroundColor: Color.themeBackground))
             .disabled(store.googleLoginInFlight || store.appleLoginInFlight || store.anonymousLoginInFlight)
             Button {
                 store.send(.signUpWithGoogleButtonTap)

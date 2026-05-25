@@ -1,5 +1,6 @@
 import Domain
 import ComposableArchitecture
+import DesignSystem
 import SwiftUI
 
 public struct ActivityListView: View {
@@ -76,16 +77,16 @@ public struct ActivityListView: View {
 
                     Text("Choose what you want feedback on, then collect responses after each session.")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.themeTextSecondary)
                 }
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Color.themeTextSecondary.opacity(0.7))
             }
             .padding()
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 20))
+            .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: 20))
         }
         .buttonStyle(.plain)
     }
@@ -121,29 +122,29 @@ private struct ActivityCardView: View {
 
                 if let location = activity.location, !location.isEmpty {
                     Text("•")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.themeTextSecondary)
 
                     Label(location, systemImage: "mappin.and.ellipse")
                         .font(.subheadline)
                         .lineLimit(1)
                 }
             }
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Color.themeTextSecondary)
 
             if let summary = activity.overallFeedbackSummary {
                 Text("\(summary.responses) responses")
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.themeTextSecondary)
             } else {
                 Text("No feedback yet")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.themeTextSecondary)
             }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.secondarySystemBackground))
+                .fill(Color.themeSurface)
         )
     }
 }
@@ -190,13 +191,13 @@ private extension ActivityTrend.Direction {
     var color: Color {
         switch self {
         case .improving:
-            return .green
+            return Color.themeSuccess
         case .stable:
-            return .orange
+            return Color.themeNeutral
         case .declining:
-            return .red
+            return Color.themeVerySad
         case .insufficientData:
-            return .gray
+            return Color.themeNeutral
         }
     }
 }

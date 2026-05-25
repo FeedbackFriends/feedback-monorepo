@@ -21,8 +21,8 @@ struct ProfileSectionView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 40, height: 40)
-                            .foregroundStyle(Color(.systemGray2))
-                            .background(Color(.systemGray5))
+                            .foregroundStyle(Color.themeTextSecondary)
+                            .background(Color.themeSurfaceSecondary)
                             .clipShape(Circle())
                         VStack(alignment: .leading, spacing: 4) {
                             Text(email ?? "Not found")
@@ -35,7 +35,7 @@ struct ProfileSectionView: View {
                             .scaledToFit()
                             .frame(width: 14, height: 14)
                             .padding(10)
-                            .foregroundStyle(Color(.systemGray2))
+                            .foregroundStyle(Color.themeTextSecondary)
                     }
                 }
                 .foregroundStyle(Color.themeText)

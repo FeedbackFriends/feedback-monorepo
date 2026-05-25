@@ -48,7 +48,7 @@ struct ActivityDetailView: View {
 
             Text(value)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.themeTextSecondary)
 
             Spacer()
         }
@@ -74,7 +74,7 @@ private struct ActivityDetailContentView: View {
                     Spacer()
                     Text(activity.durationText)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.themeTextSecondary)
                 }
 
                 detailRow(title: "Date", value: activity.formattedDate)
@@ -100,7 +100,7 @@ private struct ActivityDetailContentView: View {
 
                         Text(agenda)
                             .font(.body)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.themeTextSecondary)
                     }
                     .padding(.top, 8)
                 }
@@ -185,7 +185,7 @@ private struct ActivityDetailContentView: View {
 
             Text(value)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.themeTextSecondary)
 
             Spacer()
         }
@@ -233,13 +233,13 @@ private struct LegacyTrendBadge: View {
     private var color: Color {
         switch direction {
         case .improving:
-            return .green
+            return Color.themeSuccess
         case .stable:
-            return .gray
+            return Color.themeTextSecondary
         case .declining:
-            return .orange
+            return Color.themeSad
         case .insufficientData:
-            return .secondary
+            return Color.themeTextSecondary
         }
     }
 }

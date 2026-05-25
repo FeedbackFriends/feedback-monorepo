@@ -23,6 +23,7 @@ public extension Color {
 	static let themeSurfaceSecondary = Color("surfaceSecondary", bundle: Bundle.module)
 	static let themeText = Color("text", bundle: Bundle.module)
 	static let themeTextSecondary = Color("textSecondary", bundle: Bundle.module)
+    static let themeNeutral = Color("textSecondary", bundle: Bundle.module)
     static let themeGradientRed = Color("themeGradientRed", bundle: Bundle.module)
     static let themeGradientBlue = Color("themeGradientBlue", bundle: Bundle.module)
     static let themeChartHighlighted = Color("themeChartHighlighted", bundle: Bundle.module)
@@ -34,5 +35,6 @@ public extension Color {
 public extension UIColor {
     static var themeText: UIColor { UIColor(.themeText) }
     static var themeBackground: UIColor { UIColor(.themeBackground) }
+    static var themeOnPrimaryAction: UIColor { UIColor(.themeOnPrimaryAction) }
 }
 #endif

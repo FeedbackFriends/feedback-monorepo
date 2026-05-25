@@ -1,3 +1,4 @@
+import DesignSystem
 import SwiftUI
 
 struct OnboardingView: View {
@@ -58,7 +59,7 @@ struct OnboardingView: View {
                     showCreateActivity = true
                 }
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.themeTextSecondary)
             }
         }
     }
@@ -74,7 +75,7 @@ struct OnboardingPage: View {
 
             Image(systemName: icon)
                 .font(.system(size: 64))
-                .foregroundStyle(.green)
+                .foregroundStyle(Color.themeSuccess)
 
             VStack(spacing: 12) {
                 Text(title)
@@ -82,7 +83,7 @@ struct OnboardingPage: View {
 
                 Text(subtitle)
                     .font(.body)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.themeTextSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }
@@ -104,14 +105,14 @@ struct FirstFocusOnboardingView: View {
 
                 Image(systemName: "leaf.fill")
                     .font(.system(size: 50))
-                    .foregroundStyle(.green)
+                    .foregroundStyle(Color.themeSuccess)
 
                 VStack(spacing: 8) {
                     Text("What do you want to grow?")
                         .font(.title.bold())
 
                     Text("Start by choosing something you'd like feedback on.")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.themeTextSecondary)
                         .multilineTextAlignment(.center)
                 }
 

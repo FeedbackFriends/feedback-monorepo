@@ -195,7 +195,7 @@ struct DebugMenuView: View {
                     localSession = newSession
                 }
             }
-            .background(Color.blue)
+            .background(Color.themeBlue)
             .cornerRadius(8)
             .foregroundStyle(Color.themeText)
         }

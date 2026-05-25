@@ -94,7 +94,7 @@ extension ParticipantEventsView {
                                 .padding(4)
                                 .padding(.horizontal, 4)
                                 .foregroundStyle(Color.themeOnPrimaryAction)
-                                .background(Color.blue.opacity(0.5).gradient)
+                                .background(Color.themeBlue.opacity(0.5).gradient)
                                 .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
                         }
                     }

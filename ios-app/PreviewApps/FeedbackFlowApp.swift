@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DesignSystem
 import SwiftUI
 import FeedbackFlowFeature
 import EventsFeature
@@ -22,12 +23,11 @@ struct FeedbackFlowApp: App {
                         .font(.montserratBold, 12)
                         .padding(.vertical, 4)
                         .padding(.horizontal, 12)
-                        .background(Color.yellow.opacity(0.9))
+                        .background(Color.themeSad.opacity(0.9))
                         .cornerRadius(8)
                 }
             )
         }
     }
 }
-
 

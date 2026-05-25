@@ -9,7 +9,7 @@ public extension Opinion {
         case .disagree:
             return Color.themeSad
         case .neutral:
-            return Color.gray
+            return Color.themeNeutral
         case .agree:
             return Color.themeHappy
         case .stronglyAgree:
@@ -23,7 +23,7 @@ public extension Int {
         switch Int(self) {
         case 0...2:  return Color.themeVerySad
         case 3...4:  return Color.themeSad
-        case 5:  return Color.gray
+        case 5:  return Color.themeNeutral
         case 6...7:  return Color.themeHappy
         case 8...10:  return Color.themeVeryHappy
         default:

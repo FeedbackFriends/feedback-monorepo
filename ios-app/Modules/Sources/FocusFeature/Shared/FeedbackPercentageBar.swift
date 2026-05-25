@@ -23,7 +23,7 @@ struct EmptyFeedbackSegmentationStatsView: View {
     var body: some View {
         GeometryReader { proxy in
             HStack(spacing: 0) {
-                Color.gray.opacity(0.2).frame(width: proxy.size.width)
+                Color.themeNeutral.opacity(0.2).frame(width: proxy.size.width)
             }
             .unredacted()
         }

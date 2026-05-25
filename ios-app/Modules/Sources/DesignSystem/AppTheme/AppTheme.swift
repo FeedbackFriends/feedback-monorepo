@@ -24,7 +24,7 @@ public struct AppTheme {
             ],
             for: UIControl.State.normal
         )
-        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.white
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor.themeOnPrimaryAction
 
         UIBarButtonItem.appearance().setTitleTextAttributes(
             [
