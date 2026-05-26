@@ -39,7 +39,7 @@ struct UnseenResponseBadgeTests {
 
         try await cache.markEventAsSeen(eventId: Self.firstEventId)
 
-        let updated = await cache.getSession()
+        let updated = await cache.getBootstrap()
         let updatedActivity = try #require(updated?.managerData?.activities[id: Self.activityId])
         let updatedFirstEvent = updatedActivity.events.first { $0.id == Self.firstEventId }
         let updatedSecondEvent = updatedActivity.events.first { $0.id == Self.secondEventId }

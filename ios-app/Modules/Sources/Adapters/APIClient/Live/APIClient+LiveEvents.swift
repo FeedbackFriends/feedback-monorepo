@@ -8,7 +8,7 @@ extension APIClient {
             try await withAuthorization {
                 let activity = try await api.createActivity(body: .json(.init(forCreate: activityInput))).ok.body.json
                 let mappedActivity = Activity(activity)
-                await sessionCache.updateOrAppendActivity(mappedActivity)
+                try await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedActivity
             }
         }
@@ -22,7 +22,7 @@ extension APIClient {
                     body: .json(.init(activityInput))
                 ).ok.body.json
                 let mappedActivity = Activity(activity)
-                await sessionCache.updateOrAppendActivity(mappedActivity)
+                try await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedActivity
             }
         }
@@ -32,7 +32,7 @@ extension APIClient {
         { activityId in
             try await withAuthorization {
                 _ = try await api.deleteActivity(path: .init(activityId: activityId.uuidString)).ok
-                await sessionCache.deleteActivity(activityId)
+                try await sessionCache.deleteActivity(activityId)
                 return ()
             }
         }
@@ -47,7 +47,7 @@ extension APIClient {
                 }
                 let mappedActivity = Activity(activity)
                 let mappedEvent = Event(latestEvent)
-                await sessionCache.updateOrAppendActivity(mappedActivity)
+                try await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedEvent
             }
         }
@@ -63,8 +63,9 @@ extension APIClient {
                 guard let updatedEvent = activity.events.first(where: { $0.id == sessionId.uuidString }) else {
                     throw URLError(.cannotParseResponse)
                 }
+                let mappedActivity = Activity(activity)
                 let mappedEvent = Event(updatedEvent)
-                try await sessionCache.updateOrAppendEvent(mappedEvent)
+                try await sessionCache.updateOrAppendActivity(mappedActivity)
                 return mappedEvent
             }
         }
@@ -75,7 +76,7 @@ extension APIClient {
             try await withAuthorization {
                 _ = try await api.deleteEvent(.init(path: .init(eventId: sessionId.uuidString))).ok
                 let bootstrap = try await api.getBootstrap().ok.body.json
-                await sessionCache.updateSession(Bootstrap(bootstrap))
+                await sessionCache.updateBootstrap(Bootstrap(bootstrap))
                 return ()
             }
         }
@@ -115,7 +116,7 @@ extension APIClient {
             try await withAuthorization {
                 _ = try await api.resetDatabase(.init()).ok
                 let bootstrap = try await api.getBootstrap().ok.body.json
-                await sessionCache.updateSession(Bootstrap(bootstrap))
+                await sessionCache.updateBootstrap(Bootstrap(bootstrap))
                 return ()
             }
         }

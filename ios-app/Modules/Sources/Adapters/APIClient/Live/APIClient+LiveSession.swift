@@ -8,7 +8,7 @@ extension APIClient {
             try await withAuthorization {
                 let bootstrap = try await api.getBootstrap().ok.body.json
                 let newSession = Bootstrap(bootstrap)
-                await sessionCache.updateSession(newSession)
+                await sessionCache.updateBootstrap(newSession)
                 return newSession
             }
         }
@@ -16,7 +16,7 @@ extension APIClient {
 
     static func makeSessionChangedListener(sessionCache: APIClientCache) -> @Sendable () async -> AsyncStream<Bootstrap> {
         {
-            await sessionCache.sessionChangedListener()
+            await sessionCache.bootstrapChangedListener()
         }
     }
 
@@ -33,7 +33,7 @@ extension APIClient {
             switch response {
             case .ok(let payload):
                 let session = Bootstrap(try payload.body.json)
-                await sessionCache.updateSession(session)
+                await sessionCache.updateBootstrap(session)
                 return session
             case .noContent:
                 return .none
@@ -49,7 +49,7 @@ extension APIClient {
         {
             try await withAuthorization {
                 _ = try await api.markNotificationHistoryAsSeen().ok
-                await sessionCache.markNotificationHistoryAsSeen()
+                try await sessionCache.markNotificationHistoryAsSeen()
                 return ()
             }
         }

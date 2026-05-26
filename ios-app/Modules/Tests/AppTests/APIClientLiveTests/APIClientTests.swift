@@ -27,7 +27,7 @@ struct APIClientLiveTests {
     @Test
     func `Update account normalizes empty fields and updates cache`() async throws {
         let input = LockIsolated<Operations.ModifyAccount.Input?>(nil)
-        let cache = APIClientCache(session: Self.managerSession())
+        let cache = APIClientCache(bootstrap: Self.managerSession())
         let client = Self.makeClient(
             api: MockAPI(
                 modifyAccountHandler: { request in
@@ -48,7 +48,7 @@ struct APIClientLiveTests {
             Issue.record("Expected JSON modifyAccount body")
             return
         }
-        let snapshot = await cache.getSession()
+        let snapshot = await cache.getBootstrap()
         #expect(body.name == nil)
         #expect(body.email == "updated@example.com")
         #expect(body.phoneNumber == nil)
@@ -154,7 +154,7 @@ struct APIClientLiveTests {
     @Test
     func `Session is returned and saved in cache after being fetched`() async throws {
         let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
-        let cache = APIClientCache(session: nil)
+        let cache = APIClientCache(bootstrap: nil)
         let client = Self.makeClient(
             api: MockAPI(
                 getBootstrapHandler: { _ in
@@ -164,8 +164,8 @@ struct APIClientLiveTests {
             cache: cache
         )
 
-        let result = try await client.getSession()
-        let snapshot = await cache.getSession()
+        let result = try await client.getBootstrap()
+        let snapshot = await cache.getBootstrap()
 
         #expect(result == Bootstrap(bootstrap))
         #expect(snapshot == Bootstrap(bootstrap))
@@ -197,7 +197,7 @@ struct APIClientLiveTests {
     @Test
     func `Submit feedback forwards mapped payload and updates participant cache`() async throws {
         let input = LockIsolated<Operations.SubmitFeedback.Input?>(nil)
-        let cache = APIClientCache(session: Self.participantSession())
+        let cache = APIClientCache(bootstrap: Self.participantSession())
         let feedback = FeedbackInput(
             type: .emoji(emoji: .veryHappy, comment: "Great"),
             questionId: Self.questionId
@@ -227,7 +227,7 @@ struct APIClientLiveTests {
             Issue.record("Expected submitFeedback JSON body")
             return
         }
-        let snapshot = await cache.getSession()
+        let snapshot = await cache.getBootstrap()
         #expect(body.pinCode == "456789")
         #expect(body.feedback == [Components.Schemas.FeedbackInput(feedback)])
         #expect(shouldPresentRatingPrompt)
@@ -238,7 +238,7 @@ struct APIClientLiveTests {
     func `Create and update event calls refresh the cached manager event`() async throws {
         let createInput = LockIsolated<Operations.CreateEvent.Input?>(nil)
         let updateInput = LockIsolated<Operations.UpdateEvent.Input?>(nil)
-        let cache = APIClientCache(session: Self.managerSession(events: [Self.event(id: Self.existingEventId, title: "Original title")]))
+        let cache = APIClientCache(bootstrap: Self.managerSession(events: [Self.event(id: Self.existingEventId, title: "Original title")]))
         let client = Self.makeClient(
             api: MockAPI(
                 createEventHandler: { request in
@@ -264,7 +264,7 @@ struct APIClientLiveTests {
             Issue.record("Expected updateEvent JSON body")
             return
         }
-        let snapshot = await cache.getSession()
+        let snapshot = await cache.getBootstrap()
         #expect(createBody.title == "Created title")
         #expect(updateBody.title == "Updated title")
         #expect(created.title == "Created title")
@@ -278,7 +278,7 @@ struct APIClientLiveTests {
         let first = Self.event(id: Self.eventId, title: "First")
         let secondId = UUID(uuidString: "00000000-0000-0000-0000-000000000099")!
         let second = Self.event(id: secondId, title: "Second")
-        let cache = APIClientCache(session: Self.managerSession(events: [first, second]))
+        let cache = APIClientCache(bootstrap: Self.managerSession(events: [first, second]))
         let client = Self.makeClient(
             api: MockAPI(
                 deleteEventHandler: { _ in .ok }
@@ -288,7 +288,7 @@ struct APIClientLiveTests {
 
         var listener = await client.sessionChangedListener().makeAsyncIterator()
         try await client.deleteEvent(Self.eventId)
-        let snapshot = await cache.getSession()
+        let snapshot = await cache.getBootstrap()
         let updatedSession = await listener.next()
 
         #expect(snapshot?.managerData?.activities.count == 1)
@@ -301,7 +301,7 @@ struct APIClientLiveTests {
         let createInput = LockIsolated<Operations.CreateAccount.Input?>(nil)
         let bootstrapCalls = LockIsolated(0)
         let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
-        let cache = APIClientCache(session: nil)
+        let cache = APIClientCache(bootstrap: nil)
         let client = Self.makeClient(
             api: MockAPI(
                 createAccountHandler: { request in
@@ -323,7 +323,7 @@ struct APIClientLiveTests {
             Issue.record("Expected createAccount JSON body")
             return
         }
-        let snapshot = await cache.getSession()
+        let snapshot = await cache.getBootstrap()
         #expect(body.requestedRole == "Manager")
         #expect(body.fcmToken == "fcm-create")
         #expect(bootstrapCalls.value == 1)
@@ -334,7 +334,7 @@ struct APIClientLiveTests {
     @Test
     func `Join event appends the participant event to session`() async throws {
         let input = LockIsolated<Operations.JoinEvent.Input?>(nil)
-        let cache = APIClientCache(session: Self.participantSession())
+        let cache = APIClientCache(bootstrap: Self.participantSession())
         let client = Self.makeClient(
             api: MockAPI(
                 joinEventHandler: { request in
@@ -347,14 +347,14 @@ struct APIClientLiveTests {
 
         try await client.joinEvent(PinCode(value: "456789"))
 
-        let snapshot = await cache.getSession()
+        let snapshot = await cache.getBootstrap()
         #expect(input.value?.path.pinCode == "456789")
         #expect(snapshot?.participantEvents[id: Self.eventId] != nil)
     }
 
     @Test
     func `Manager event is marked as seen`() async throws {
-        let cache = APIClientCache(session: Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 1))
+        let cache = APIClientCache(bootstrap: Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 1))
         let client = Self.makeClient(
             api: MockAPI(
                 markEventAsSeenHandler: { _ in .ok }
@@ -364,7 +364,7 @@ struct APIClientLiveTests {
 
         try await client.markEventAsSeen(Self.eventId)
 
-        let updated = await cache.getSession()
+        let updated = await cache.getBootstrap()
         #expect(updated?.managerData?.activities[id: Self.eventId]?.overallFeedbackSummary?.unseenResponses == 0)
         #expect(updated?.managerData?.notificationHistory.unseenTotal == 0)
         #expect(updated?.managerData?.notificationHistory.items.allSatisfy { $0.seenByManager } == true)
@@ -372,7 +372,7 @@ struct APIClientLiveTests {
 
     @Test
     func `Updated session returns nil without a cached hash`() async throws {
-        let client = Self.makeClient(api: MockAPI(), cache: APIClientCache(session: Bootstrap.mockParticipant()))
+        let client = Self.makeClient(api: MockAPI(), cache: APIClientCache(bootstrap: Bootstrap.mockParticipant()))
 
         let result = try await client.getUpdatedSession()
 
@@ -383,7 +383,7 @@ struct APIClientLiveTests {
     func `Updated session fetches bootstrap update and refreshes the cache`() async throws {
         let input = LockIsolated<Operations.GetBoostrapUpdate.Input?>(nil)
         let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
-        let cache = APIClientCache(session: Self.managerSession())
+        let cache = APIClientCache(bootstrap: Self.managerSession())
         let client = Self.makeClient(
             api: MockAPI(
                 getBoostrapUpdateHandler: { request in
@@ -395,7 +395,7 @@ struct APIClientLiveTests {
         )
 
         let result = try await client.getUpdatedSession()
-        let snapshot = await cache.getSession()
+        let snapshot = await cache.getBootstrap()
 
         #expect(input.value?.path.hash == Self.sessionHash.uuidString)
         #expect(result == Bootstrap(bootstrap))
@@ -406,7 +406,7 @@ struct APIClientLiveTests {
     func `Updated session keeps cache unchanged when bootstrap hash is unchanged`() async throws {
         let input = LockIsolated<Operations.GetBoostrapUpdate.Input?>(nil)
         let existingSession = Self.managerSession()
-        let cache = APIClientCache(session: existingSession)
+        let cache = APIClientCache(bootstrap: existingSession)
         let client = Self.makeClient(
             api: MockAPI(
                 getBoostrapUpdateHandler: { request in
@@ -418,7 +418,7 @@ struct APIClientLiveTests {
         )
 
         let result = try await client.getUpdatedSession()
-        let snapshot = await cache.getSession()
+        let snapshot = await cache.getBootstrap()
 
         #expect(input.value?.path.hash == Self.sessionHash.uuidString)
         #expect(result == nil)
@@ -427,7 +427,7 @@ struct APIClientLiveTests {
 
     @Test
     func `Manager activity is marked as seen`() async throws {
-        let cache = APIClientCache(session: Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 2))
+        let cache = APIClientCache(bootstrap: Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 2))
         let client = Self.makeClient(
             api: MockAPI(
                 markActivityAsSeenHandler: { _ in .ok }
@@ -437,9 +437,87 @@ struct APIClientLiveTests {
 
         try await client.markActivityAsSeen()
 
-        let updated = await cache.getSession()
+        let updated = await cache.getBootstrap()
         #expect(updated?.managerData?.notificationHistory.unseenTotal == 0)
         #expect(updated?.managerData?.notificationHistory.items.allSatisfy { $0.seenByManager } == true)
+    }
+
+    @Test
+    func `Manager-only cache mutations throw when manager state is unavailable`() async throws {
+        let cache = APIClientCache(bootstrap: Self.participantSession())
+
+        do {
+            try await cache.markEventAsSeen(eventId: Self.eventId)
+            Issue.record("Expected managerDataUnavailable error")
+        } catch let error as APIClientCache.CacheMutationError {
+            #expect(error == .managerDataUnavailable)
+        }
+
+        do {
+            try await cache.markNotificationHistoryAsSeen()
+            Issue.record("Expected managerDataUnavailable error")
+        } catch let error as APIClientCache.CacheMutationError {
+            #expect(error == .managerDataUnavailable)
+        }
+    }
+
+    @Test
+    func `Cache mutation throws when entity does not exist`() async throws {
+        let cache = APIClientCache(bootstrap: Self.managerSession())
+        let unknownEventId = UUID(uuidString: "00000000-0000-0000-0000-000000000099")!
+        let unknownActivityId = UUID(uuidString: "00000000-0000-0000-0000-000000000098")!
+
+        do {
+            try await cache.markEventAsSeen(eventId: unknownEventId)
+            Issue.record("Expected eventNotFound error")
+        } catch let error as APIClientCache.CacheMutationError {
+            #expect(error == .eventNotFound(unknownEventId))
+        }
+
+        do {
+            try await cache.deleteActivity(unknownActivityId)
+            Issue.record("Expected activityNotFound error")
+        } catch let error as APIClientCache.CacheMutationError {
+            #expect(error == .activityNotFound(unknownActivityId))
+        }
+    }
+
+    @Test
+    func `Notification unseen counter decreases by the number of newly seen event items`() async throws {
+        let firstNotificationId = UUID(uuidString: "00000000-0000-0000-0000-000000000090")!
+        let secondNotificationId = UUID(uuidString: "00000000-0000-0000-0000-000000000091")!
+        let otherEventId = UUID(uuidString: "00000000-0000-0000-0000-000000000092")!
+
+        var session = Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 3)
+        session.managerData?.notificationHistory = .init(
+            items: [
+                .init(
+                    id: firstNotificationId,
+                    date: Self.referenceDate,
+                    eventTitle: "Weekly retro",
+                    eventId: Self.eventId,
+                    newFeedbackCount: 1,
+                    seenByManager: false
+                ),
+                .init(
+                    id: secondNotificationId,
+                    date: Self.referenceDate,
+                    eventTitle: "Weekly retro",
+                    eventId: otherEventId,
+                    newFeedbackCount: 1,
+                    seenByManager: false
+                )
+            ],
+            unseenTotal: 3
+        )
+        let cache = APIClientCache(bootstrap: session)
+
+        try await cache.markEventAsSeen(eventId: Self.eventId)
+
+        let updated = await cache.getBootstrap()
+        #expect(updated?.managerData?.notificationHistory.unseenTotal == 2)
+        #expect(updated?.managerData?.notificationHistory.items.first { $0.id == firstNotificationId }?.seenByManager == true)
+        #expect(updated?.managerData?.notificationHistory.items.first { $0.id == secondNotificationId }?.seenByManager == false)
     }
 }
 

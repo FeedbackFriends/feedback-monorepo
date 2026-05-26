@@ -3,133 +3,143 @@ import Domain
 import Logger
 
 public actor APIClientCache {
-    public enum CacheMutationError: Error, LocalizedError {
+    public enum CacheMutationError: Error, LocalizedError, Equatable {
+        case managerDataUnavailable
+        case activityNotFound(UUID)
         case eventNotFound(UUID)
 
         public var errorDescription: String? {
             switch self {
+            case .managerDataUnavailable:
+                return "Could not update cache. Manager data is missing."
+            case .activityNotFound(let id):
+                return "Could not update activity in cache. Activity with id \(id) was not found."
             case .eventNotFound(let id):
                 return "Could not update event in cache. Event with id \(id) was not found."
             }
         }
     }
 
-    private var session: Bootstrap? {
+    private var bootstrap: Bootstrap? {
         didSet {
-            if let session, session != oldValue {
-                sessionContinuation?.yield(session)
+            if let bootstrap, bootstrap != oldValue {
+                bootstrapContinuation?.yield(bootstrap)
             }
         }
     }
     
-    private var sessionContinuation: AsyncStream<Bootstrap>.Continuation?
+    private var bootstrapContinuation: AsyncStream<Bootstrap>.Continuation?
     
     public init(
-        session: Bootstrap? = nil,
-        sessionContinuation: AsyncStream<Bootstrap>.Continuation? = nil,
+        bootstrap: Bootstrap? = nil,
+        bootstrapContinuation: AsyncStream<Bootstrap>.Continuation? = nil,
     ) {
-        self.session = session
-        self.sessionContinuation = sessionContinuation
+        self.bootstrap = bootstrap
+        self.bootstrapContinuation = bootstrapContinuation
     }
     
-    public func getSession() -> Bootstrap? {
-        return session
+    public func getBootstrap() -> Bootstrap? {
+        return bootstrap
     }
     
-    public func updateSession(_ newSession: Bootstrap) {
-        if let cachedSession = session, cachedSession != newSession {
-            Logger.debug("Cached session overwritten with new session data")
+    public func updateBootstrap(_ newBootstrap: Bootstrap) {
+        if let cachedBootstrap = bootstrap, cachedBootstrap != newBootstrap {
+            Logger.debug("Cached bootstrap overwritten with new bootstrap data")
         }
-        session = newSession
+        bootstrap = newBootstrap
     }
     
-    public func deleteActivity(_ activityId: UUID) {
-        session?.deleteActivity(activityId)
+    public func deleteActivity(_ activityId: UUID) throws {
+        guard var bootstrap else {
+            throw CacheMutationError.managerDataUnavailable
+        }
+        try bootstrap.deleteActivity(activityId)
+        self.bootstrap = bootstrap
     }
     
-    public func updateOrAppendActivity(_ activity: Activity) {
-        session?.updateOrAppendActivity(activity)
+    public func updateOrAppendActivity(_ activity: Activity) throws {
+        guard var bootstrap else {
+            throw CacheMutationError.managerDataUnavailable
+        }
+        try bootstrap.updateOrAppendActivity(activity)
+        self.bootstrap = bootstrap
     }
     
     public func updateOrAppendEvent(_ event: Event) throws {
-        try session?.updateOrAppendEvent(event)
+        guard var bootstrap else {
+            throw CacheMutationError.managerDataUnavailable
+        }
+        try bootstrap.updateOrAppendEvent(event)
+        self.bootstrap = bootstrap
     }
 
     public func markEventAsSeen(eventId: UUID) throws {
-        guard var session else {
-            throw CacheMutationError.eventNotFound(eventId)
+        guard var bootstrap else {
+            throw CacheMutationError.managerDataUnavailable
         }
-        try session.markEventAsSeen(eventId: eventId)
-        self.session = session
+        try bootstrap.markEventAsSeen(eventId: eventId)
+        self.bootstrap = bootstrap
     }
     
-    public func sessionChangedListener() -> AsyncStream<Bootstrap> {
+    public func bootstrapChangedListener() -> AsyncStream<Bootstrap> {
         AsyncStream { continuation in
-            self.sessionContinuation = continuation
+            self.bootstrapContinuation = continuation
         }
     }
     
     public func updateOrAppendParticipantEvent(_ event: ParticipantEvent) {
-        session?.updateOrAppendParticipantEvent(event)
+        bootstrap?.updateOrAppendParticipantEvent(event)
     }
     
     public func updateAccount(name: String?, email: String?, phoneNumber: String?) {
-        session?.updateAccount(name: name, email: email, phoneNumber: phoneNumber)
+        bootstrap?.updateAccount(name: name, email: email, phoneNumber: phoneNumber)
     }
     
-    public func markActivityAsSeen(activityId: UUID) {
-        session?.markActivityAsSeen(activityId: activityId)
+    public func markActivityAsSeen(activityId: UUID) throws {
+        guard var bootstrap else {
+            throw CacheMutationError.managerDataUnavailable
+        }
+        try bootstrap.markActivityAsSeen(activityId: activityId)
+        self.bootstrap = bootstrap
     }
     
-    public func updateNotificationHistory(_ notificationHistory: NotificationHistory) {
-        session?.updateNotificationHistory(notificationHistory)
+    public func updateNotificationHistory(_ notificationHistory: NotificationHistory) throws {
+        guard var bootstrap else {
+            throw CacheMutationError.managerDataUnavailable
+        }
+        try bootstrap.updateNotificationHistory(notificationHistory)
+        self.bootstrap = bootstrap
     }
 
-    public func markNotificationHistoryAsSeen() {
-        session?.markNotificationHistoryAsSeen()
+    public func markNotificationHistoryAsSeen() throws {
+        guard var bootstrap else {
+            throw CacheMutationError.managerDataUnavailable
+        }
+        try bootstrap.markNotificationHistoryAsSeen()
+        self.bootstrap = bootstrap
     }
     
     public func reset() {
-        self.session = nil
+        self.bootstrap = nil
     }
     
     public var bootstrapHash: UUID? {
-        self.session?.managerData?.bootstrapHash
+        self.bootstrap?.managerData?.bootstrapHash
     }
 }
 
 public extension Bootstrap {
-    
-    mutating func updateOrAppendActivity(_ activity: Activity) {
-        self.managerData?.activities.updateOrAppend(activity)
+
+    mutating func updateOrAppendActivity(_ activity: Activity) throws {
+        var managerData = try requiredManagerData()
+        managerData.activities.updateOrAppend(activity)
+        self.managerData = managerData
     }
 
     mutating func updateOrAppendEvent(_ event: Event) throws {
-        guard var managerData else {
-            throw APIClientCache.CacheMutationError.eventNotFound(event.id)
-        }
-
-        for index in managerData.activities.indices {
-            if managerData.activities[index].id == event.id {
-                var activity = managerData.activities[index]
-                activity.date = event.date
-                activity.durationInMinutes = event.durationInMinutes
-                activity.location = event.location
-                activity.overallFeedbackSummary = event.overallFeedbackSummary
-                activity.questions = event.questionsSnapshot
-                managerData.activities[index] = activity
-                self.managerData = managerData
-                return
-            }
-
-            if let relatedIndex = managerData.activities[index].events.firstIndex(where: { $0.id == event.id }) {
-                managerData.activities[index].events[relatedIndex] = event
-                self.managerData = managerData
-                return
-            }
-        }
-
-        throw APIClientCache.CacheMutationError.eventNotFound(event.id)
+        var managerData = try requiredManagerData()
+        _ = try managerData.setEvent(event)
+        self.managerData = managerData
     }
     
     mutating func updateOrAppendParticipantEvent(_ event: ParticipantEvent) {
@@ -142,77 +152,28 @@ public extension Bootstrap {
         }
     }
     
-    mutating func deleteActivity(_ id: UUID) {
-        self.managerData?.activities.remove(id: id)
-    }
-    
-    func getActivityId(_ id: UUID) -> Activity {
-        return self.managerData!.activities[id: id]!
-    }
-    
-    mutating func markActivityAsSeen(activityId: UUID) {
-        guard var activity = self.managerData?.activities[id: activityId] else { return }
-        activity.overallFeedbackSummary?.unseenResponses = 0
-        activity.questions = activity.questions.map { question in
-            var updatedQuestion = question
-            updatedQuestion.feedback = updatedQuestion.feedback.map { feedback in
-                var updatedFeedback = feedback
-                updatedFeedback.seenByManager = true
-                return updatedFeedback
-            }
-            
-            return updatedQuestion
+    mutating func deleteActivity(_ id: UUID) throws {
+        var managerData = try requiredManagerData()
+        guard managerData.activities.remove(id: id) != nil else {
+            throw APIClientCache.CacheMutationError.activityNotFound(id)
         }
-        
-        self.managerData?.activities[id: activityId] = activity
-        guard let notificationHistory = self.managerData?.notificationHistory, notificationHistory.unseenTotal > 0 else { return }
-        Logger.debug("Unseen er over 0, så ør fjerne")
-        var mutableNotificationHistory = notificationHistory
-        mutableNotificationHistory.unseenTotal -= 1
-        for index in mutableNotificationHistory.items.indices {
-            mutableNotificationHistory.items[index].seenByManager = true
-        }
-        self.managerData!.notificationHistory = mutableNotificationHistory
+        self.managerData = managerData
+    }
+
+    mutating func markActivityAsSeen(activityId: UUID) throws {
+        var managerData = try requiredManagerData()
+        let updatedActivity = try managerData.activityMarkedAsSeen(id: activityId)
+        try managerData.setActivity(updatedActivity)
+        _ = managerData.markNotificationItemsSeen(eventId: nil)
+        self.managerData = managerData
     }
 
     mutating func markEventAsSeen(eventId: UUID) throws {
-        guard var managerData else {
-            throw APIClientCache.CacheMutationError.eventNotFound(eventId)
-        }
-
-        for activityIndex in managerData.activities.indices {
-            guard let eventIndex = managerData.activities[activityIndex].events.firstIndex(where: { $0.id == eventId }) else {
-                continue
-            }
-
-            var event = managerData.activities[activityIndex].events[eventIndex]
-            event.overallFeedbackSummary?.unseenResponses = 0
-            event.questions = event.questions.map { question in
-                var updatedQuestion = question
-                updatedQuestion.feedback = updatedQuestion.feedback.map { feedback in
-                    var updatedFeedback = feedback
-                    updatedFeedback.seenByManager = true
-                    return updatedFeedback
-                }
-                return updatedQuestion
-            }
-            managerData.activities[activityIndex].events[eventIndex] = event
-
-            var notificationHistory = managerData.notificationHistory
-            let newlySeenItems = notificationHistory.items.indices.reduce(0) { total, index in
-                guard notificationHistory.items[index].eventId == eventId, !notificationHistory.items[index].seenByManager else {
-                    return total
-                }
-                notificationHistory.items[index].seenByManager = true
-                return total + 1
-            }
-            notificationHistory.unseenTotal = max(0, notificationHistory.unseenTotal - newlySeenItems)
-            managerData.notificationHistory = notificationHistory
-            self.managerData = managerData
-            return
-        }
-
-        throw APIClientCache.CacheMutationError.eventNotFound(eventId)
+        var managerData = try requiredManagerData()
+        let updatedEvent = try managerData.eventMarkedAsSeen(id: eventId)
+        _ = try managerData.setEvent(updatedEvent)
+        _ = managerData.markNotificationItemsSeen(eventId: eventId)
+        self.managerData = managerData
     }
     
     mutating func updateAccount(name: String?, email: String?, phoneNumber: String?) {
@@ -224,18 +185,123 @@ public extension Bootstrap {
         self.accountInfo = updatedAccountInfo
     }
     
-    mutating func updateNotificationHistory(_ updatedNotificationHistory: NotificationHistory) {
-        self.managerData?.notificationHistory = updatedNotificationHistory
+    mutating func updateNotificationHistory(_ updatedNotificationHistory: NotificationHistory) throws {
+        var managerData = try requiredManagerData()
+        managerData.notificationHistory = updatedNotificationHistory
+        self.managerData = managerData
     }
 
-    mutating func markNotificationHistoryAsSeen() {
-        var mutableNotificationHistory = self.managerData!.notificationHistory
-        mutableNotificationHistory.unseenTotal = 0
-        for index in mutableNotificationHistory.items.indices {
-            mutableNotificationHistory.items[index].seenByManager = true
-        }
-        
-        self.managerData?.notificationHistory = mutableNotificationHistory
+    mutating func markNotificationHistoryAsSeen() throws {
+        var managerData = try requiredManagerData()
+        _ = managerData.markNotificationItemsSeen(eventId: nil)
+        self.managerData = managerData
     }
-    
+
+    mutating func updateActivity(id: UUID, _ updatedActivity: Activity) throws {
+        var managerData = try requiredManagerData()
+        guard updatedActivity.id == id else {
+            throw APIClientCache.CacheMutationError.activityNotFound(id)
+        }
+        try managerData.setActivity(updatedActivity)
+        self.managerData = managerData
+    }
+
+    mutating func updateEvent(id: UUID, _ updatedEvent: Event) throws {
+        var managerData = try requiredManagerData()
+        guard updatedEvent.id == id else {
+            throw APIClientCache.CacheMutationError.eventNotFound(id)
+        }
+        _ = try managerData.setEvent(updatedEvent)
+        self.managerData = managerData
+    }
+
+    private func requiredManagerData() throws -> ManagerData {
+        guard let managerData else {
+            throw APIClientCache.CacheMutationError.managerDataUnavailable
+        }
+        return managerData
+    }
+}
+
+private extension ManagerData {
+    func activityMarkedAsSeen(id: UUID) throws -> Activity {
+        guard var activity = activities[id: id] else {
+            throw APIClientCache.CacheMutationError.activityNotFound(id)
+        }
+        activity.overallFeedbackSummary?.unseenResponses = 0
+        activity.questions = activity.questions.map { question in
+            var updatedQuestion = question
+            updatedQuestion.feedback = updatedQuestion.feedback.map { feedback in
+                var updatedFeedback = feedback
+                updatedFeedback.seenByManager = true
+                return updatedFeedback
+            }
+            return updatedQuestion
+        }
+        return activity
+    }
+
+    func eventMarkedAsSeen(id: UUID) throws -> Event {
+        let event = try self.event(id: id)
+        var updatedEvent = event
+        updatedEvent.overallFeedbackSummary?.unseenResponses = 0
+        updatedEvent.questions = updatedEvent.questions.map { question in
+            var updatedQuestion = question
+            updatedQuestion.feedback = updatedQuestion.feedback.map { feedback in
+                var updatedFeedback = feedback
+                updatedFeedback.seenByManager = true
+                return updatedFeedback
+            }
+            return updatedQuestion
+        }
+        return updatedEvent
+    }
+
+    func event(id: UUID) throws -> Event {
+        for activityId in activities.ids {
+            guard let activity = activities[id: activityId] else {
+                continue
+            }
+            guard let event = activity.events.first(where: { $0.id == id }) else {
+                continue
+            }
+            return event
+        }
+        throw APIClientCache.CacheMutationError.eventNotFound(id)
+    }
+
+    mutating func setActivity(_ activity: Activity) throws {
+        guard activities[id: activity.id] != nil else {
+            throw APIClientCache.CacheMutationError.activityNotFound(activity.id)
+        }
+        activities[id: activity.id] = activity
+    }
+
+    mutating func setEvent(_ event: Event) throws -> UUID {
+        for activityId in activities.ids {
+            guard var activity = activities[id: activityId] else {
+                continue
+            }
+            guard let eventIndex = activity.events.firstIndex(where: { $0.id == event.id }) else {
+                continue
+            }
+            activity.events[eventIndex] = event
+            activities[id: activityId] = activity
+            return activityId
+        }
+        throw APIClientCache.CacheMutationError.eventNotFound(event.id)
+    }
+
+    mutating func markNotificationItemsSeen(eventId: UUID?) -> Int {
+        let newlySeenItems = notificationHistory.items.indices.reduce(0) { total, index in
+            let shouldMatchEvent = eventId == nil || notificationHistory.items[index].eventId == eventId
+            guard shouldMatchEvent, !notificationHistory.items[index].seenByManager else {
+                return total
+            }
+            notificationHistory.items[index].seenByManager = true
+            return total + 1
+        }
+        notificationHistory.unseenTotal = max(0, notificationHistory.unseenTotal - newlySeenItems)
+        return newlySeenItems
+    }
 }

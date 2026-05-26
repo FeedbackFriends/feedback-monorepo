@@ -74,7 +74,7 @@ extension APIClient {
                     )
                 ).ok.body.json
                 let session = Bootstrap(bootstrap)
-                await sessionCache.updateSession(session)
+                await sessionCache.updateBootstrap(session)
                 return session
             }
         }
