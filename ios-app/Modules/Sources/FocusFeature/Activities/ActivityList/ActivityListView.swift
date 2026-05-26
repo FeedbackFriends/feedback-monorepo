@@ -114,33 +114,9 @@ private struct ActivityCardView: View {
                 Spacer()
             }
 
-            HStack(spacing: 10) {
-                HStack(spacing: 4) {
-                    Image(systemName: "calendar")
-                    Text(activity.date, format: .dateTime.day().month(.abbreviated).year())
-                }
+            Text("\(activity.events.count) sessions")
                 .supportingTextStyle()
-
-                if let location = activity.location, !location.isEmpty {
-                    Text("•")
-                        .foregroundStyle(Color.themeTextSecondary)
-
-                    Label(location, systemImage: "mappin.and.ellipse")
-                        .supportingTextStyle()
-                        .lineLimit(1)
-                }
-            }
-            .foregroundStyle(Color.themeTextSecondary)
-
-            if let summary = activity.overallFeedbackSummary {
-                Text("\(summary.responses) responses")
-                    .rowTitleTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-            } else {
-                Text("No feedback yet")
-                    .supportingTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-            }
+                .foregroundStyle(Color.themeTextSecondary)
         }
         .padding()
         .background(

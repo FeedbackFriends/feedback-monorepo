@@ -30,7 +30,6 @@ public extension Activity {
             guard partialResult[key] == nil else { return }
             partialResult[key] = analytics
         }
-        let currentEvent = dto.latestEvent
         let events = dto.events
             .sorted(by: { $0.date > $1.date })
             .map { eventDto in
@@ -56,30 +55,24 @@ public extension Activity {
             id: UUID(uuidString: dto.id)!,
             title: dto.title,
             agenda: dto.agenda,
-            date: currentEvent?.date ?? .distantPast,
-            pinCode: currentEvent?.pinCode.map(PinCode.init(value:)),
-            durationInMinutes: Int(currentEvent?.durationInMinutes ?? 0),
-            location: currentEvent?.location,
+            date: .distantPast,
+            pinCode: nil,
+            durationInMinutes: 0,
+            location: nil,
             ownerInfo: .init(dto.owner),
             trend: .init(dto.trend),
-            overallFeedbackSummary: currentEvent?.overallFeedbackSummary.map(OverallFeedbackSummary.init),
+            overallFeedbackSummary: nil,
             questions: dto.currentQuestions.map { question in
                 let analytics = UUID(uuidString: question.id).flatMap { analyticsById[$0] }
                     ?? analyticsByNormalizedText[question.text.normalizedQuestionKey]
                 return .init(question, analytics: analytics)
             },
             events: events,
-            isDraft: currentEvent == nil,
+            isDraft: dto.events.isEmpty,
             invitedEmails: dto.invitedEmails,
             participants: [],
-            calendarProvider: currentEvent?.calendarProvider.map(CalendarProvider.init)
+            calendarProvider: nil
         )
-    }
-}
-
-private extension Components.Schemas.ActivityDto {
-    var latestEvent: Components.Schemas.EventDto? {
-        events.max(by: { $0.date < $1.date })
     }
 }
 

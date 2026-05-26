@@ -136,28 +136,9 @@ private struct ActivityDetailContentView: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        LegacyTrendBadge(direction: activity.trend.direction)
-                        Spacer()
-                        Text(activity.durationText)
-                            .supportingTextStyle()
-                            .foregroundStyle(Color.themeTextSecondary)
-                    }
-
-                    detailRow(title: "Date", value: activity.formattedDate)
-
-                    if let location = activity.location, !location.isEmpty {
-                        detailRow(title: "Location", value: location)
-                    }
-
-                    if let pinCode = activity.pinCode?.value {
-                        detailRow(title: "PIN", value: "#\(pinCode)")
-                    }
-
-                    if let summary = activity.overallFeedbackSummary {
-                        detailRow(title: "Responses", value: "\(summary.responses)")
-                        detailRow(title: "New responses", value: "\(summary.unseenResponses)")
-                    }
+                    LegacyTrendBadge(direction: activity.trend.direction)
+                    detailRow(title: "Sessions", value: "\(activity.events.count)")
+                    detailRow(title: "Invited participants", value: "\(activity.invitedEmails.count)")
 
                     if let agenda = activity.agenda, !agenda.isEmpty {
                         Text("Agenda")
@@ -171,11 +152,7 @@ private struct ActivityDetailContentView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(15)
 
-                if let feedback = activity.overallFeedbackSummary {
-                    FeedbackPercentageBarView(feedback: feedback.segmentationStats)
-                } else {
-                    EmptyFeedbackSegmentationStatsView()
-                }
+                EmptyFeedbackSegmentationStatsView()
             }
             .bodyTextStyle()
             .background(Color.themeSurface)

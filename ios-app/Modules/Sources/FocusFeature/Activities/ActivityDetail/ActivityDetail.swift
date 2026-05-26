@@ -33,7 +33,7 @@ public struct ActivityDetail: Sendable {
             activity?.title ?? "Unknown Activity"
         }
         var navigationSubTitle: String {
-            "\(activity?.overallFeedbackSummary?.responses ?? 0) responses"
+            "\(activity?.events.count ?? 0) sessions"
         }
 
         public init(
