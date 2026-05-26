@@ -14,7 +14,7 @@ struct NotificationPermissionView: View {
                     .frame(width: 300, height: 200)
                     Text("Please allow notifications so we can send you important messages.")
                         .padding(.top, 30)
-                        .font(.montserratRegular, 14)
+                        .bodyTextStyle()
                         .padding(.horizontal, 60)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.themeText)
@@ -55,7 +55,7 @@ private extension NotificationPermissionView {
                     .frame(width: 24, height: 24)
                     .foregroundStyle(Color.themeSuccess)
                 Text(buttonText)
-                    .font(.montserratBold, 14)
+                    .rowTitleTextStyle()
                     .foregroundColor(.themeText)
                 Spacer()
             }

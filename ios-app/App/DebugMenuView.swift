@@ -150,7 +150,7 @@ struct DebugMenuView: View {
                         }
                         if let alert {
                             Text(alert)
-                                .font(.caption2)
+                                .captionTextStyle()
                                 .multilineTextAlignment(.center)
                                 .frame(maxWidth: 220)
                         }
@@ -164,7 +164,7 @@ struct DebugMenuView: View {
                         Section("Server session") {
                             if let jsonString = prettyJSONString(session) {
                                 Text(jsonString)
-                                    .font(.system(.body, design: .monospaced))
+                                    .supportingTextStyle()
                             } else {
                                 Text("Failed to encode session")
                             }
@@ -172,7 +172,7 @@ struct DebugMenuView: View {
                         Section("Local session") {
                             if let localSession, let jsonString = prettyJSONString(localSession) {
                                 Text(jsonString)
-                                    .font(.system(.body, design: .monospaced))
+                                    .supportingTextStyle()
                             } else {
                                 Text("No local session")
                             }

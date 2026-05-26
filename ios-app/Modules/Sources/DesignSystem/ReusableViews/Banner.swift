@@ -34,7 +34,7 @@ public extension View {
     ) -> some View {
         VStack {
             Text(message)
-                .font(.montserratRegular, 14)
+                .bodyTextStyle()
                 .padding(.horizontal, 50)
                 .frame(minHeight: 54)
                 .foregroundColor(Color.themeText)

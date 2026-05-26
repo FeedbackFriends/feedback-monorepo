@@ -51,13 +51,13 @@ struct QuestionsListView: View {
                         } label: {
                             HStack(spacing: 12) {
                                 questionsInput.feedbackType.image
-                                    .font(.title)
+                                    .titleTextStyle()
                                     .foregroundStyle(Color.themeText)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(questionsInput.questionText)
                                         .foregroundColor(Color.themeText)
                                     Text(questionsInput.feedbackType.title)
-                                        .font(.montserratRegular, 10)
+                                        .captionTextStyle()
                                         .foregroundColor(Color.themeTextSecondary)
                                 }
                                 Spacer()
@@ -77,7 +77,7 @@ struct QuestionsListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .background(Color.themeBackground.ignoresSafeArea())
         .scrollContentBackground(.hidden)
-        .font(.montserratRegular, 13)
+        .supportingTextStyle()
         .foregroundColor(Color.themeTextSecondary)
         .sheet(
             item: $presentSelectQuestionSheet,
@@ -129,7 +129,7 @@ struct QuestionsListView: View {
                                     Text("Preview session")
                                 }
                                 Text("How participants will experience your session.")
-                                    .font(.montserratRegular, 8)
+                                    .captionTextStyle()
                             }
                         }
                         .buttonStyle(LargeBoxButtonStyle())

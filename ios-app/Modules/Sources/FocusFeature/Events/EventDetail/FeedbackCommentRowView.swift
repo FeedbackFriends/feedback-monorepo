@@ -33,7 +33,7 @@ struct FeedbackCommentRowView: View {
                     
                     VStack(alignment: .leading, spacing: 4) {
                         Text(comment)
-                            .font(.montserratMedium, 12)
+                            .captionTextStyle()
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -49,7 +49,7 @@ struct FeedbackCommentRowView: View {
         HStack(alignment: .center, spacing: 8) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(comment)
-                    .font(.montserratMedium, 12)
+                    .captionTextStyle()
                     .fixedSize(horizontal: false, vertical: true)
                 feedbackInfo(feedback: feedback)
             }
@@ -64,14 +64,14 @@ struct FeedbackCommentRowView: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .center, spacing: 8) {
                     Text("\(zeroToTen)")
-                        .font(.montserratSemiBold, 13)
+                        .rowTitleTextStyle()
                         .padding(2)
                         .padding(.horizontal, 4)
                         .foregroundStyle(Color.themeOnPrimaryAction)
                         .background(zeroToTen.ratingColor.gradient)
                         .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
                     Text(comment)
-                        .font(.montserratMedium, 12)
+                        .captionTextStyle()
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 feedbackInfo(feedback: feedback)
@@ -91,7 +91,7 @@ struct FeedbackCommentRowView: View {
                             .frame(width: 10, height: 10)
                             .foregroundStyle(opinion.color.gradient)
                         Text(opinion.localized)
-                            .font(.montserratMedium, 10)
+                            .captionTextStyle()
                             .foregroundStyle(Color.themeText)
                     }
                     .padding(6)
@@ -100,7 +100,7 @@ struct FeedbackCommentRowView: View {
                     .background(Color.themeBackground)
                     .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
                     Text(comment)
-                        .font(.montserratMedium, 12)
+                        .captionTextStyle()
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 VStack(alignment: .leading, spacing: 4) {
@@ -122,7 +122,7 @@ struct FeedbackCommentRowView: View {
                         .frame(width: 18, height: 18)
                         .padding(.top, 2)
                     Text(comment)
-                        .font(.montserratMedium, 12)
+                        .captionTextStyle()
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 feedbackInfo(feedback: feedback)
@@ -136,7 +136,7 @@ struct FeedbackCommentRowView: View {
         HStack {
             if !feedback.seenByManager {
                 Text("New")
-                    .font(.montserratBold, 8)
+                    .badgeTextStyle()
                     .padding(2)
                     .padding(.horizontal, 4)
                     .foregroundStyle(Color.themeOnPrimaryAction)
@@ -144,7 +144,7 @@ struct FeedbackCommentRowView: View {
                     .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
             }
             Text(feedback.createdAt.timeAgo())
-                .font(.montserratRegular, 10)
+                .captionTextStyle()
             Spacer()
             
         }

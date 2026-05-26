@@ -35,35 +35,35 @@ private extension DetailSectionView {
                 VStack(alignment: .leading, spacing: 10) {
                     if let agenda, !agenda.isEmpty {
                         Text("Agenda")
-                            .font(.montserratSemiBold, 13)
+                            .rowTitleTextStyle()
                         Text(agenda)
                             .multilineTextAlignment(.leading)
-                            .font(.montserratRegular, 13)
+                            .supportingTextStyle()
                     }
                     Text("Date")
-                        .font(.montserratSemiBold, 13)
+                        .rowTitleTextStyle()
                     Text(detail.formattedDate)
-                        .font(.montserratRegular, 13)
+                        .supportingTextStyle()
                     Text("Duration")
-                        .font(.montserratSemiBold, 13)
+                        .rowTitleTextStyle()
                     Text(detail.durationText)
-                        .font(.montserratRegular, 13)
+                        .supportingTextStyle()
                     if let location = detail.location, !location.isEmpty {
                         Text("Location")
-                            .font(.montserratSemiBold, 13)
+                            .rowTitleTextStyle()
                         Text(location)
-                            .font(.montserratRegular, 13)
+                            .supportingTextStyle()
                     }
                     if let calendarProviderName = detail.calendarProviderName {
                         Text("Calendar")
-                            .font(.montserratSemiBold, 13)
+                            .rowTitleTextStyle()
                         Text(calendarProviderName)
-                            .font(.montserratRegular, 13)
+                            .supportingTextStyle()
                     }
                     if let totalFeedback = detail.overallFeedbackSummary {
                         HStack {
                             Text("\(totalFeedback.responses) responses")
-                                .font(.montserratMedium, 12)
+                                .captionTextStyle()
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
@@ -79,7 +79,7 @@ private extension DetailSectionView {
                     EmptyFeedbackSegmentationStatsView()
                 }
             }
-            .font(.montserratRegular, 14)
+            .bodyTextStyle()
             .background(Color.themeSurface)
             .cornerRadius(14)
         }
@@ -93,7 +93,7 @@ private extension DetailSectionView {
                 if let pinCode = detail.pinCode?.value {
                     Text("\(pinCode)")
                         .frame(maxWidth: .infinity)
-                        .font(.montserratMedium, 30)
+                        .largeTitleTextStyle()
                         .kerning(10)
                         .padding(.vertical, 12)
                         .overlay(
@@ -101,8 +101,7 @@ private extension DetailSectionView {
                             content: {
                                 ShareLink(item: pinCode) {
                                     HStack {
-                                        Image.documentOnDocument
-                                            .font(.system(size: 16, weight: .regular))
+                                        Image.copyActionIcon
                                     }
                                     .padding(.trailing, 12)
                                 }
@@ -114,12 +113,12 @@ private extension DetailSectionView {
                         .cornerRadius(14)
                 } else {
                     HStack(spacing: 6) {
-                        Image.clockBadgeXmark
+                        Image.expiredStatusIcon
                             .foregroundColor(Color.themeVerySad)
-                            .font(.system(size: 14, weight: .semibold))
+                            .fontWeight(.semibold)
                         
                         Text("Expired")
-                            .font(.montserratRegular, 12)
+                            .supportingTextStyle()
                             .foregroundColor(Color.themeVerySad)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -131,7 +130,7 @@ private extension DetailSectionView {
                 }
             }
             .frame(maxWidth: .infinity)
-            .font(.montserratRegular, 14)
+            .bodyTextStyle()
         }
     }
     
@@ -159,11 +158,11 @@ struct QuestionView: View {
                 content: {
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Comments")
-                            .font(.montserratSemiBold, 13)
+                            .rowTitleTextStyle()
                             .frame(maxWidth: .infinity, alignment: .leading)
                         if question.feedbackSummary == nil {
                             Text("No comments yet")
-                                .font(.montserratRegular, 14)
+                                .bodyTextStyle()
                                 .padding(.vertical, 8)
                         } else {
                             ForEach(question.feedback.sorted(by: {
@@ -183,13 +182,13 @@ struct QuestionView: View {
                             VStack(alignment: .leading, spacing: 14) {
                                 HStack(spacing: 8) {
                                     Text("Question \(index + 1)")
-                                        .font(.montserratRegular, 13)
+                                        .supportingTextStyle()
                                     HStack {
                                         question.feedbackType.image
                                             .resizable()
                                             .frame(width: 10, height: 10)
                                         Text(question.feedbackType.title)
-                                            .font(.montserratMedium, 9)
+                                            .captionTextStyle()
                                             .foregroundStyle(Color.themeTextSecondary)
                                     }
                                     .padding(.horizontal, 10)
@@ -198,7 +197,7 @@ struct QuestionView: View {
                                     .clipShape(Capsule())
                                 }
                                 Text(question.questionText)
-                                    .font(.montserratMedium, 12)
+                                    .captionTextStyle()
                                     .multilineTextAlignment(.leading)
                                 if let emojiSummary = question.feedbackSummary?.emojiQuestionFeedbackSummary {
                                     QuestionEmojiSummaryView(emojiSummary: emojiSummary)

@@ -19,11 +19,11 @@ struct ZeroToTenFeedbackView: View {
         VStack(spacing: 8) {
             HStack {
                 Text("\(store.ratingAsInt)")
-                    .font(.montserratBold, 20)
+                    .titleTextStyle()
                     .monospacedDigit()
                     .foregroundStyle(store.ratingAsInt.ratingColor)
                 Text("af 10")
-                    .font(.montserratRegular, 14)
+                    .bodyTextStyle()
                     .foregroundStyle(Color.themeText)
             }
             Slider(
@@ -33,9 +33,9 @@ struct ZeroToTenFeedbackView: View {
             ) {
                 Text("Rating")
             } minimumValueLabel: {
-                Text("0").font(.montserratMedium, 15)
+                Text("0").rowTitleTextStyle()
             } maximumValueLabel: {
-                Text("10").font(.montserratMedium, 15)
+                Text("10").rowTitleTextStyle()
             } onEditingChanged: { editing in
                 store.send(.onEditingSliderChanged(editing))
             }

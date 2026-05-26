@@ -32,11 +32,11 @@ public struct EventListView: View {
                 VStack(alignment: .center, spacing: 14) {
                     VStack(spacing: 6) {
                         Text("No sessions yet")
-                            .font(.montserratSemiBold, 16)
+                            .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
 
                         Text("Create your first session to start collecting feedback.")
-                            .font(.montserratRegular, 12)
+                            .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                             .multilineTextAlignment(.center)
                     }
@@ -116,13 +116,13 @@ private struct EventListItemView: View {
     private var header: some View {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
             Text(eventTitle)
-                .font(.montserratSemiBold, 14)
+                .rowTitleTextStyle()
                 .lineLimit(2)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             if let overallFeedbackSummary = event.overallFeedbackSummary, overallFeedbackSummary.unseenResponses > 0 {
                 Text("\(overallFeedbackSummary.unseenResponses) new")
-                    .font(.montserratBold, 10)
+                    .badgeTextStyle()
                     .padding(.horizontal, 8)
                     .padding(.vertical, 5)
                     .foregroundStyle(Color.themeOnPrimaryAction)
@@ -171,7 +171,7 @@ private struct EventListItemView: View {
             Spacer(minLength: 8)
 
             Text(responseText)
-                .font(.montserratSemiBold, 11)
+                .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
         }
     }
@@ -208,7 +208,7 @@ private struct EventListItemView: View {
                 .foregroundStyle(Color.themeTextSecondary)
 
             Text(text)
-                .font(.montserratRegular, 11)
+                .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -216,12 +216,6 @@ private struct EventListItemView: View {
     }
 
     private func pill(text: String, foregroundColor: Color) -> some View {
-        Text(text)
-            .font(.montserratSemiBold, 10)
-            .foregroundStyle(foregroundColor)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 5)
-            .background(Color.themeBackground)
-            .clipShape(Capsule())
+        PillTagView(text, foregroundColor: foregroundColor)
     }
 }

@@ -14,7 +14,7 @@ struct StartFeedbackConfirmationView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Session joined! Would you like to start the feedback now? 🙏🏼")
                     }
-                    .font(.montserratRegular, 14)
+                    .bodyTextStyle()
                     VStack(alignment: .center, spacing: 12) {
                         
                         Button("Start feedback") {

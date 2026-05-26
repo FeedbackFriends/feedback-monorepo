@@ -15,7 +15,7 @@ struct ProfileSectionView: View {
             } label: {
                 VStack(alignment: .leading) {
                     Text(name ?? "Not found")
-                        .font(.montserratRegular, 16)
+                        .bodyTextStyle()
                     HStack {
                         Image.personCircleFill
                             .resizable()
@@ -28,7 +28,7 @@ struct ProfileSectionView: View {
                             Text(email ?? "Not found")
                             Text(phoneNumber ?? "Not found")
                         }
-                        .font(.montserratMedium, 10)
+                        .captionTextStyle()
                         Spacer()
                         Image.chevronRight
                             .resizable()
@@ -83,10 +83,10 @@ public struct ProfileSettingsView: View {
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Organizer mode")
-                            .font(.montserratSemiBold, 15)
+                            .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
                         Text("Create and manage your own feedback sessions.")
-                            .font(.montserratRegular, 12)
+                            .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
                 }
@@ -98,13 +98,13 @@ public struct ProfileSettingsView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: Color.themePrimaryAction))
                         Text("Updating preference...")
-                            .font(.montserratRegular, 12)
+                            .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
                 }
             } footer: {
                 Text("Turn this off if you only want to give feedback when invited. You can still join with a PIN.")
-                    .font(.montserratRegular, 12)
+                    .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
 
@@ -117,10 +117,10 @@ public struct ProfileSettingsView: View {
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("In-app notifications")
-                            .font(.montserratSemiBold, 15)
+                            .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
                         Text("Get timely reminders and updates about your events.")
-                            .font(.montserratRegular, 12)
+                            .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
                 }
@@ -135,10 +135,10 @@ public struct ProfileSettingsView: View {
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Email events")
-                            .font(.montserratSemiBold, 15)
+                            .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
                         Text("Receive event-related updates in your inbox.")
-                            .font(.montserratRegular, 12)
+                            .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
                 }

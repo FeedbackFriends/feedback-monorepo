@@ -150,13 +150,13 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
     var questionView: some View {
         VStack {
             Text("\(store.questionIndex + 1) of \(store.questions.count)")
-                .font(.montserratBold, 12)
+                .captionTextStyle()
                 .foregroundColor(Color.themeTextSecondary)
                 .padding(.top, 8)
                 .animation(.snappy, value: store.questionIndex)
             Text(store.questionText)
                 .padding(.horizontal, 24)
-                .font(.montserratRegular, 15)
+                .bodyTextStyle()
                 .foregroundColor(Color.themeText)
                 .multilineTextAlignment(.center)
                 .lineLimit(2, reservesSpace: true)

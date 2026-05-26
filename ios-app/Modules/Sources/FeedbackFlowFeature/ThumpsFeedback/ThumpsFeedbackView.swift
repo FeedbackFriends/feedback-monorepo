@@ -36,7 +36,7 @@ struct ThumpsFeedbackView: View {
             store.send(.thumpTap(thump), animation: .bouncy)
         } label: {
             thumpImage(thump)
-                .font(.system(size: 34, weight: .semibold))
+                .fontWeight(.semibold)
                 .symbolRenderingMode(.hierarchical)
                 .foregroundStyle(isSelected ? Color.themeOnPrimaryAction : Color.themeTextSecondary)
                 .frame(width: 40, height: 40)
@@ -54,8 +54,13 @@ struct ThumpsFeedbackView: View {
         }
     }
     
-    func thumpImage(_ thump: ThumbsUpThumpsDown) -> Image {
-        thump == .up ? Image.thumpsUp : Image.thumpsDown
+    @ViewBuilder
+    func thumpImage(_ thump: ThumbsUpThumpsDown) -> some View {
+        if thump == .up {
+            Image.thumpsUpFeedbackIcon
+        } else {
+            Image.thumpsDownFeedbackIcon
+        }
     }
     
     private func buttonBackgroundGradient(isSelected: Bool, thump: ThumbsUpThumpsDown) -> LinearGradient {

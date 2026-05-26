@@ -81,25 +81,29 @@ struct CustomSegmentedPicker: View {
 			.frame(width: 180, height: 35, alignment: .center)
 			
 			HStack(alignment: .center, spacing: 0) {
-				Button("Your own") {
+				Button {
 					self.selectedSegmentedControl = .yourEvents
+				} label: {
+					Text("Your own")
+						.sectionHeaderStyle()
+						.foregroundColor(yourOwnForeground)
 				}
 				.padding(10)
 				.frame(width: 90, alignment: .center)
-				.foregroundColor(yourOwnForeground)
 				.clipShape(Capsule(style: .continuous))
-				Button("Attending") {
+				Button {
 					self.selectedSegmentedControl = .participating
+				} label: {
+					Text("Attending")
+						.sectionHeaderStyle()
+						.foregroundColor(participatingForeground)
 				}
 				.transition(.slide)
 				.padding(10)
 				.frame(width: 90, alignment: .center)
-				.foregroundColor(participatingForeground)
 				.clipShape(Capsule(style: .continuous))
 			}
 			.frame(height: 35)
-			.foregroundStyle(Color.themeText)
-			.font(.montserratMedium, 13)
 			.background(Color.clear)
 		}
 		.offset(y: self.didAppear ? 0 : 200)

@@ -21,7 +21,7 @@ public struct DeleteConfirmationViewSheet<ActionButton: View>: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     Text(message)
-                        .font(.montserratRegular, 14)
+                        .bodyTextStyle()
                     actionButton
                     Button("Cancel") {
                         dismiss()

@@ -70,10 +70,10 @@ private extension SignUpView {
     var signUpView: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Sign up")
-                .font(.montserratBold, 28)
+                .largeTitleTextStyle()
                 .foregroundStyle(Color.themeText.gradient)
             Text("Signup to get started on your feedback jurney.")
-                .font(.montserratRegular, 14)
+                .bodyTextStyle()
                 .foregroundColor(.themeText)
             Button {
                 store.send(.signUpWithAppleButtonTap)
@@ -199,7 +199,7 @@ private struct E2EAuthenticationDebugView: View {
                 if let status = store.e2eAuthenticationStatus {
                     Section("Status") {
                         Text(status)
-                            .font(.caption)
+                            .captionTextStyle()
                     }
                 }
             }

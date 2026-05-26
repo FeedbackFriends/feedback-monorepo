@@ -42,7 +42,7 @@ struct QuestionEmojiSummaryView: View {
                 }
             }
         }
-        .font(.montserratSemiBold, 12)
+        .captionTextStyle()
     }
 }
 
@@ -117,7 +117,7 @@ struct QuestionZeroToTenSummaryView: View {
                 .padding(.vertical, 8)
             }
         }
-        .font(.montserratSemiBold, 12)
+        .captionTextStyle()
     }
 }
 
@@ -209,7 +209,7 @@ struct PercentageBar<TopView: View>: View {
         let width: CGFloat = 24
         VStack(spacing: 4) {
             topView
-                .font(.montserratSemiBold, 8)
+                .captionTextStyle()
             ZStack(alignment: .bottom) {
                 Capsule()
                     .fill(Color.themeChartBackground)
@@ -223,7 +223,7 @@ struct PercentageBar<TopView: View>: View {
                     }
             }
             Text("\(String(format: "%.0f", percentageValue))%")
-                .font(.montserratRegular, 8)
+                .captionTextStyle()
         }
     }
 }

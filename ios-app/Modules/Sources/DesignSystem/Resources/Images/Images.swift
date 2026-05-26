@@ -56,5 +56,45 @@ public extension Image {
     static let moreSectionTrash = Image(systemName: "trash")
     static let moreSectionPersonBadgeKey = Image(systemName: "person.badge.key")
     static let settings = Image(systemName: "gearshape.fill")
+
+    static var copyActionIcon: some View {
+        documentOnDocument.sizedSymbol(16)
+    }
+
+    static var shareActionIcon: some View {
+        squareAndArrowUp.sizedSymbol(14)
+    }
+
+    static var expiredStatusIcon: some View {
+        clockBadgeXmark.sizedSymbol(14)
+    }
+
+    static var clearSelectionIcon: some View {
+        xmark.sizedSymbol(12)
+    }
+
+    static var thumpsUpFeedbackIcon: some View {
+        thumpsUp.sizedSymbol(34)
+    }
+
+    static var thumpsDownFeedbackIcon: some View {
+        thumpsDown.sizedSymbol(34)
+    }
+
+    static func onboardingIcon(_ systemName: String) -> some View {
+        Image(systemName: systemName)
+            .sizedSymbol(64)
+    }
+
+    static var firstFocusOnboardingIcon: some View {
+        Image(systemName: "leaf.fill")
+            .sizedSymbol(50)
+    }
     
+}
+
+private extension Image {
+    func sizedSymbol(_ size: CGFloat) -> some View {
+        font(.system(size: size))
+    }
 }

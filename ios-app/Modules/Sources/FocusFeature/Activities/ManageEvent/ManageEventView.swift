@@ -31,7 +31,7 @@ public struct ManageEventView: View {
             toolbarItems
         }
         .foregroundStyle(Color.themeText)
-        .font(.montserratRegular, 14)
+        .bodyTextStyle()
         .onAppear {
             UIDatePicker.appearance().minuteInterval = 5
         }
@@ -57,7 +57,7 @@ public struct ManageEventView: View {
                 store: store,
                 principalToolbarItem: {
                     Text("Preview")
-                        .font(.montserratSemiBold, 12)
+                        .captionTextStyle()
                         .padding(.vertical, 8)
                         .padding(.horizontal, 12)
                         .background(Color.themeBlue.gradient)
@@ -150,7 +150,7 @@ private extension ManageEventView {
 
             Toggle(isOn: $store.allDay) {
                 Text("All day")
-                    .font(.montserratSemiBold, 13)
+                    .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
             }
             .tint(Color.themePrimaryAction)
@@ -167,7 +167,7 @@ private extension ManageEventView {
 
             Toggle(isOn: $store.startNowEnabled) {
                 Text("Start now")
-                    .font(.montserratSemiBold, 13)
+                    .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
             }
             .tint(Color.themePrimaryAction)
@@ -187,7 +187,7 @@ private extension ManageEventView {
 
             HStack {
                 Text("Duration")
-                    .font(.montserratSemiBold, 13)
+                    .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
 
                 Spacer()
@@ -215,7 +215,7 @@ private extension ManageEventView {
                     }
                 )
                 .pickerStyle(.menu)
-                .font(.montserratRegular, 13)
+                .supportingTextStyle()
             }
 
             if case .other = store.durationPicker {
@@ -223,7 +223,7 @@ private extension ManageEventView {
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Custom duration")
-                        .font(.montserratSemiBold, 13)
+                        .rowTitleTextStyle()
 
                     HStack {
                         Picker("", selection: $store.hourPicker) {
@@ -240,7 +240,7 @@ private extension ManageEventView {
                         }
                         .pickerStyle(WheelPickerStyle())
                     }
-                    .font(.montserratRegular, 12)
+                    .supportingTextStyle()
                     .frame(height: 140)
                 }
             }
@@ -285,7 +285,7 @@ private extension ManageEventView {
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.montserratSemiBold, 13)
+                .rowTitleTextStyle()
                 .foregroundStyle(Color.themeText)
 
             TextField(
@@ -296,7 +296,7 @@ private extension ManageEventView {
                 axis: axis
             )
             .accessibilityIdentifier(accessibilityIdentifier ?? "")
-            .font(.montserratRegular, 13)
+            .supportingTextStyle()
             .foregroundStyle(Color.themeTextSecondary)
             .lineLimit(lineLimit ?? 1...1)
         }
@@ -310,7 +310,7 @@ private extension ManageEventView {
     ) -> some View {
         HStack {
             Text(title)
-                .font(.montserratSemiBold, 13)
+                .rowTitleTextStyle()
                 .foregroundStyle(Color.themeText)
 
             Spacer()
@@ -322,7 +322,7 @@ private extension ManageEventView {
                 displayedComponents: displayedComponents
             )
             .labelsHidden()
-            .font(.montserratRegular, 13)
+            .supportingTextStyle()
         }
     }
 

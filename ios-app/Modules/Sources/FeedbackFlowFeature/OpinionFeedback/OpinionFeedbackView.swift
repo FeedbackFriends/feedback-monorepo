@@ -79,13 +79,13 @@ public struct OpinionFeedbackView: View {
                         .frame(width: 10, height: 10)
                         .foregroundStyle(opinion.color.gradient)
                     Text(opinion.localized)
-                        .font(.montserratMedium, 14)
+                        .bodyTextStyle()
                         .lineLimit(2)
                         .foregroundColor(.themeText)
                     Spacer(minLength: 0)
                     if isSelected {
                         Text("Change")
-                            .font(.montserratRegular, 10)
+                            .captionTextStyle()
                             .foregroundColor(.themeTextSecondary)
                     }
                 }

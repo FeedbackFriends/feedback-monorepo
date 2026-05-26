@@ -34,28 +34,28 @@ public struct EventInfoView: View {
                     if let eventAgenda {
                         Text("Agenda")
                             .padding(.top, 8)
-                            .font(.montserratBold, 15)
+                            .rowTitleTextStyle()
                         Text(eventAgenda)
-                            .font(.montserratRegular, 13)
+                            .supportingTextStyle()
                     }
                     Text("Date")
-                        .font(.montserratBold, 15)
+                        .rowTitleTextStyle()
                     Text(date.formatted(date: Date.FormatStyle.DateStyle.abbreviated, time: .omitted))
-                        .font(.montserratRegular, 13)
+                        .supportingTextStyle()
                     if ownerName != nil || ownerEmail != nil || ownerphoneNumber != nil {
                         Text("Organizer")
-                            .font(.montserratBold, 15)
+                            .rowTitleTextStyle()
                         if let ownerName {
                             Text(ownerName)
-                                .font(.montserratRegular, 13)
+                                .supportingTextStyle()
                         }
                         if let ownerEmail {
                             Text(ownerEmail)
-                                .font(.montserratRegular, 13)
+                                .supportingTextStyle()
                         }
                         if let ownerphoneNumber {
                             Text(ownerphoneNumber)
-                                .font(.montserratRegular, 13)
+                                .supportingTextStyle()
                         }
                     }
                 }

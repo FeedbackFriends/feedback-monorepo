@@ -73,7 +73,7 @@ struct QuestionPickerView: View {
                                             .frame(width: 18, height: 18)
                                             .foregroundStyle(Color.themeText)
                                         Text(question.title)
-                                            .font(.montserratSemiBold, 9)
+                                            .captionTextStyle()
                                             .foregroundStyle(Color.themeTextSecondary)
                                     }
                                     .padding(2)
@@ -108,7 +108,7 @@ struct QuestionPickerView: View {
                     Section {
                         TextField("Enter question.", text: $questionTextField, axis: .vertical)
                             .focused($isQuestionFocused)
-                            .font(.montserratMedium, 12)
+                            .captionTextStyle()
                             .foregroundColor(Color.themeText)
                             .textInputAutocapitalization(.sentences)
                             .submitLabel(.go)

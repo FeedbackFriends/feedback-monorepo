@@ -22,10 +22,10 @@ public struct UserTypePickerView: View {
                 VStack(alignment: .leading) {
                     
                     Text("Participant")
-                        .font(.montserratSemiBold, 16)
+                        .rowTitleTextStyle()
                     
                     Text("I only want to give feedback.")
-                        .font(.montserratRegular, 12)
+                        .supportingTextStyle()
                     
                 }
                 Spacer()
@@ -46,9 +46,9 @@ public struct UserTypePickerView: View {
                     .foregroundStyle(selectedUserType == .manager ? Color.themeSuccess : Color.themeTextSecondary)
                 VStack(alignment: .leading) {
                     Text("Organizer")
-                        .font(.montserratSemiBold, 16)
+                        .rowTitleTextStyle()
                     Text("I also want to receive feedback.")
-                        .font(.montserratRegular, 12)
+                        .supportingTextStyle()
                 }
                 Spacer()
             }

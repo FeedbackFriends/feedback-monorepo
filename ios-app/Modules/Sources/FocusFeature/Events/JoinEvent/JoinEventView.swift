@@ -16,14 +16,14 @@ public struct JoinEventView: View {
             VStack(alignment: .leading, spacing: 12) {
                 
                 Text("Join session")
-                    .font(.montserratBold, 28)
+                    .largeTitleTextStyle()
                     .padding(.top, 20)
                 Text("PIN Code")
                     .padding(.top, 20)
-                    .font(.montserratBold, 18)
+                    .titleTextStyle()
                     .foregroundStyle(Color.themeText)
                 TextField("", text: $store.pinCodeInput.value)
-                    .font(.montserratBold, 16)
+                    .rowTitleTextStyle()
                     .padding()
                     .foregroundColor(Color.themeText)
                     .background(Color.themeText.opacity(0.15).gradient)

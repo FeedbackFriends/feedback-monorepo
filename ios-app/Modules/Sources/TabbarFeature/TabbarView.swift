@@ -58,7 +58,7 @@ public struct TabbarView: View {
                     principalToolbarItem: {
                         store.withState { state in
                             Text(state.title)
-                                .font(.montserratSemiBold, 12)
+                                .captionTextStyle()
                                 .foregroundStyle(Color.themeText)
                         }
                     }

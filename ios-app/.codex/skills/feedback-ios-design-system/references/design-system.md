@@ -15,11 +15,34 @@ Source of truth: `Modules/Sources/DesignSystem/`
 Files:
 - `Modules/Sources/DesignSystem/Resources/Fonts/Font.swift`
 - `Modules/Sources/DesignSystem/Resources/Fonts/FontName.swift`
+- `Modules/Sources/DesignSystem/Styles/OtherStyles/TextStyles.swift`
+- `Modules/Sources/DesignSystem/Resources/Images/Images.swift`
 
 Rules:
 - Typography is Montserrat-only through `Font.FontName`.
-- Use the provided view helper: `.font(.montserratSemiBold, 16)`.
+- App UI should use public text-style modifiers instead of direct Montserrat font calls.
+- App UI outside `Modules/Sources/DesignSystem/` should not call `.font(...)` directly. SwiftLint warns on direct font modifiers outside DesignSystem; use text-style modifiers for text and sized image helpers for symbol sizing.
+- Direct `.font(.montserrat...)` calls are reserved for DesignSystem style files, `AppTheme`, and font infrastructure.
+- Use explicit foreground overrides after a text-style modifier when text needs stateful, sentiment, gradient, or otherwise semantic color:
+  ```swift
+  Text(opinion.localized)
+      .bodyTextStyle()
+      .foregroundStyle(opinion.color)
+  ```
 - UIKit surfaces use `UIFont.font(...)` and are registered from bundled `.otf` files.
+
+Public text styles:
+- `.largeTitleTextStyle()`: prominent screen/display titles, Montserrat Bold 28 with `themeText`
+- `.titleTextStyle()`: modal, card, overlay, and empty-state titles, Montserrat ExtraBold 18 with `themeText`
+- `.rowTitleTextStyle()`: list rows, settings rows, selectable options, and compact headings, Montserrat SemiBold 15 with `themeText`
+- `.bodyTextStyle()`: normal readable copy, Montserrat Regular 14 with `themeText`
+- `.supportingTextStyle()`: secondary/help/explanatory copy, Montserrat Regular 13 with `themeTextSecondary`
+- `.captionTextStyle()`: metadata, dates, small labels, and counters, Montserrat Medium 12 with `themeTextSecondary`
+- `.badgeTextStyle()`: badge/pill text, Montserrat Bold 10 with `themeOnPrimaryAction`
+- `.sectionHeaderStyle()`: section headers, Montserrat Medium 13 with `themeTextSecondary`
+
+Icon sizing:
+- Keep SF Symbol font sizing inside `Images.swift` helpers, such as `Image.copyActionIcon` or `Image.onboardingIcon(...)`. Put icon weight on the icon call site with `.fontWeight(...)` when needed.
 
 Available weights:
 - `montserratBlack`

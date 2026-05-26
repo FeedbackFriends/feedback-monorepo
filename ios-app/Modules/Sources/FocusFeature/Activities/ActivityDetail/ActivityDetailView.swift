@@ -140,7 +140,7 @@ private struct ActivityDetailContentView: View {
                         LegacyTrendBadge(direction: activity.trend.direction)
                         Spacer()
                         Text(activity.durationText)
-                            .font(.montserratRegular, 13)
+                            .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
 
@@ -161,10 +161,10 @@ private struct ActivityDetailContentView: View {
 
                     if let agenda = activity.agenda, !agenda.isEmpty {
                         Text("Agenda")
-                            .font(.montserratSemiBold, 13)
+                            .rowTitleTextStyle()
 
                         Text(agenda)
-                            .font(.montserratRegular, 13)
+                            .supportingTextStyle()
                             .multilineTextAlignment(.leading)
                     }
                 }
@@ -177,7 +177,7 @@ private struct ActivityDetailContentView: View {
                     EmptyFeedbackSegmentationStatsView()
                 }
             }
-            .font(.montserratRegular, 14)
+            .bodyTextStyle()
             .background(Color.themeSurface)
             .cornerRadius(14)
         }
@@ -199,10 +199,10 @@ private struct ActivityDetailContentView: View {
     private func detailRow(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
-                .font(.montserratSemiBold, 13)
+                .rowTitleTextStyle()
 
             Text(value)
-                .font(.montserratRegular, 13)
+                .supportingTextStyle()
         }
     }
 }
@@ -212,7 +212,7 @@ private struct LegacyTrendBadge: View {
 
     var body: some View {
         Label(title, systemImage: symbolName)
-            .font(.montserratMedium, 12)
+            .captionTextStyle()
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .foregroundStyle(color)

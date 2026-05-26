@@ -62,14 +62,14 @@ private extension RatingAlertView {
     private var content: some View {
         VStack(alignment: .center, spacing: 26) {
             Text(title)
-                .font(.montserratBold, 20)
+                .titleTextStyle()
                 .foregroundColor(Color.themeText)
                 .multilineTextAlignment(.center)
                 .accessibilityFocused($isFocused)
             LottieView(lottieFile: .fiveStars)
                 .frame(width: 300, height: 36)
             Text(message)
-                .font(.montserratRegular, 14)
+                .bodyTextStyle()
                 .foregroundColor(Color.themeText.opacity(0.7))
                 .multilineTextAlignment(.center)
                 .accessibilityFocused($isFocused)

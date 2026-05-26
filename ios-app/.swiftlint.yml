@@ -13,6 +13,14 @@ opt_in_rules:
 analyzer_rules:
     - unused_import
     - explicit_self
+custom_rules:
+  direct_font_modifier:
+    name: "Direct Font Modifier"
+    regex: '\.font\('
+    message: "Use a DesignSystem text or icon style modifier instead of calling .font directly outside DesignSystem."
+    severity: warning
+    excluded:
+      - "Modules/Sources/DesignSystem/.*"
 line_length:
     warning: 200
     error: 250

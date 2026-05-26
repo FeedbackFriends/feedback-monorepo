@@ -53,7 +53,7 @@ public struct ManageActivityView: View {
                     },
                     principalToolbarItem: {
                         Text("Preview")
-                            .font(.montserratSemiBold, 12)
+                            .captionTextStyle()
                             .padding(.vertical, 8)
                             .padding(.horizontal, 12)
                             .background(Color.themeBlue.gradient)
@@ -136,7 +136,7 @@ private extension ManageActivityView {
             } else {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Choose one feedback type")
-                        .font(.montserratRegular, 13)
+                        .supportingTextStyle()
                         .foregroundStyle(Color.themeTextSecondary)
 
                     ForEach(FeedbackTemplate.allCases) { template in
@@ -169,10 +169,10 @@ private extension ManageActivityView {
                     HStack(alignment: .center, spacing: 12) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(store.questionsSectionTitle)
-                                .font(.montserratSemiBold, 15)
+                                .rowTitleTextStyle()
                                 .foregroundStyle(Color.themeText)
                             Text(store.questionsSectionSubtitle)
-                                .font(.montserratRegular, 13)
+                                .supportingTextStyle()
                                 .foregroundStyle(Color.themeTextSecondary)
                         }
 
@@ -184,18 +184,18 @@ private extension ManageActivityView {
 
                     if store.questions.isEmpty {
                         Text("No questions yet. Tap to add your first question.")
-                            .font(.montserratRegular, 13)
+                            .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     } else {
                         VStack(alignment: .leading, spacing: 10) {
                             ForEach(Array(store.questions.prefix(3))) { question in
                                 HStack(alignment: .top, spacing: 10) {
                                     Image.checkmarkCircleFill
+                                        .captionTextStyle()
                                         .foregroundStyle(Color.themePrimaryAction)
-                                        .font(.caption)
 
                                     Text(question.questionText)
-                                        .font(.montserratRegular, 13)
+                                        .supportingTextStyle()
                                         .foregroundStyle(Color.themeTextSecondary)
                                         .multilineTextAlignment(.leading)
                                 }
@@ -203,7 +203,7 @@ private extension ManageActivityView {
 
                             if store.questions.count > 3 {
                                 Text("+\(store.questions.count - 3) more questions")
-                                    .font(.montserratRegular, 12)
+                                    .supportingTextStyle()
                                     .foregroundStyle(Color.themeTextSecondary)
                             }
                         }
@@ -217,11 +217,11 @@ private extension ManageActivityView {
 
             if store.selectedTemplate == nil {
                 Text("Select a template to start building questions.")
-                    .font(.montserratRegular, 13)
+                    .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             } else {
                 Text("You can review, edit, add, and reorder questions.")
-                    .font(.montserratRegular, 13)
+                    .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
         }
@@ -230,15 +230,15 @@ private extension ManageActivityView {
     var automaticSetup: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Create sessions automatically")
-                .font(.montserratSemiBold, 15)
+                .rowTitleTextStyle()
 
             Text("Invite this email to your calendar event")
-                .font(.montserratRegular, 13)
+                .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
 
             HStack(spacing: 12) {
                 Text(store.botEmail)
-                    .font(.montserratSemiBold, 12)
+                    .captionTextStyle()
                     .foregroundStyle(Color.themeText)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -260,7 +260,7 @@ private extension ManageActivityView {
 
             if store.didCopyEmail {
                 Text("Email copied. Paste it into your calendar event.")
-                    .font(.montserratRegular, 12)
+                    .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
 
@@ -290,7 +290,7 @@ private extension ManageActivityView {
 
             if let footer {
                 Text(footer)
-                    .font(.montserratRegular, 12)
+                    .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
                     .padding(.horizontal, 18)
                     .padding(.top, 8)
@@ -309,7 +309,7 @@ private extension ManageActivityView {
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.montserratSemiBold, 13)
+                .rowTitleTextStyle()
                 .foregroundStyle(Color.themeText)
 
             TextField(
@@ -320,7 +320,7 @@ private extension ManageActivityView {
                 axis: axis
             )
             .accessibilityIdentifier(accessibilityIdentifier ?? "")
-            .font(.montserratRegular, 13)
+            .supportingTextStyle()
             .foregroundStyle(Color.themeText)
             .lineLimit(lineLimit ?? 1...1)
         }
@@ -370,10 +370,10 @@ private struct SelectableRow: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
-                        .font(.montserratSemiBold, 15)
+                        .rowTitleTextStyle()
                         .foregroundStyle(Color.themeText)
                     Text(subtitle)
-                        .font(.montserratRegular, 13)
+                        .supportingTextStyle()
                         .foregroundStyle(Color.themeTextSecondary)
                 }
 
@@ -417,19 +417,19 @@ private struct SelectedFeedbackTemplateRow: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(template.title)
-                        .font(.montserratSemiBold, 15)
+                        .rowTitleTextStyle()
                         .foregroundStyle(Color.themeText)
 
                     Text(template.subtitle)
-                        .font(.montserratRegular, 13)
+                        .supportingTextStyle()
                         .foregroundStyle(Color.themeTextSecondary)
                 }
 
                 Spacer()
 
                 Button(action: onClear) {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 12, weight: .semibold))
+                    Image.clearSelectionIcon
+                        .fontWeight(.semibold)
                         .foregroundStyle(Color.themeTextSecondary)
                         .frame(width: 30, height: 30)
                         .background(Color.themeBackground.opacity(0.9), in: Circle())
@@ -467,7 +467,7 @@ struct AutomaticInfoSheet: View {
                 VStack(alignment: .leading, spacing: Theme.padding) {
                     VStack(alignment: .leading, spacing: 14) {
                         Text("Use automatic sessions when you already run meetings from a calendar invite.")
-                            .font(.montserratRegular, 14)
+                            .bodyTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
 
                         infoStep(
@@ -519,9 +519,9 @@ struct AutomaticInfoSheet: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.montserratSemiBold, 15)
+                    .rowTitleTextStyle()
                 Text(detail)
-                    .font(.montserratRegular, 13)
+                    .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
         }

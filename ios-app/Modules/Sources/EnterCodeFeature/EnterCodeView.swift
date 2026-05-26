@@ -26,24 +26,14 @@ private extension EnterCodeView {
             ScrollView {
                 VStack(alignment: .center) {
                     Spacer()
-                    VStack(spacing: 0) {
-                        Text("Lets Grow")
-                            .font(.montserratMedium, 30)
-                            .foregroundStyle(Color.themeTextSecondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Feedback")
-                            .font(.montserratExtraBold, 42)
-                            .foregroundStyle(Color.themeText.gradient)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                    }
-                    .frame(maxWidth: 250)
+                    LetsGrowFeedbackLogoView()
                     
                     Spacer()
                     Text("Enter PIN Code")
                         .foregroundStyle(Color.themeTextSecondary)
-                        .font(.montserratSemiBold, 20)
+                        .titleTextStyle()
                     TextField("", text: $store.pinCodeInput.value)
-                        .font(.montserratBold, 16)
+                        .rowTitleTextStyle()
                         .padding()
                         .background(Color.themeSurface)
                         .clipShape(Capsule(style: .continuous))

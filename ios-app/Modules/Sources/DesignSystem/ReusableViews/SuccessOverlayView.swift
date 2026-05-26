@@ -72,7 +72,7 @@ private extension SuccessOverlayView {
                 .frame(width: 40, height: 40)
                 .scaleEffect(alertDidAppear ? 1 : 0)
             Text(message)
-                .font(.montserratBold, 18)
+                .titleTextStyle()
                 .foregroundColor(Color.themeText)
                 .multilineTextAlignment(.center)
                 .accessibilityFocused($isFocused)

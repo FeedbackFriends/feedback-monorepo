@@ -18,9 +18,9 @@ public struct EmptyStateView: View {
                 .foregroundColor(.themeTextSecondary)
             VStack(spacing: 6) {
                 Text(title)
-                    .font(.montserratExtraBold, 18)
+                    .titleTextStyle()
                 Text(message)
-                    .font(.montserratRegular, 14)
+                    .bodyTextStyle()
                     .multilineTextAlignment(.center)
             }
         }

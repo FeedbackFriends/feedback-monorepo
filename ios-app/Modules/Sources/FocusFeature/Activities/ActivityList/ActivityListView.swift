@@ -70,14 +70,14 @@ public struct ActivityListView: View {
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "sparkles")
-                    .font(.title3)
+                    .titleTextStyle()
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Create a focus")
-                        .font(.headline)
+                        .rowTitleTextStyle()
 
                     Text("Choose what you want feedback on, then collect responses after each session.")
-                        .font(.subheadline)
+                        .supportingTextStyle()
                         .foregroundStyle(Color.themeTextSecondary)
                 }
 
@@ -110,7 +110,7 @@ private struct ActivityCardView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
                 Text(activity.title)
-                    .font(.headline)
+                    .rowTitleTextStyle()
                 Spacer()
             }
 
@@ -119,14 +119,14 @@ private struct ActivityCardView: View {
                     Image(systemName: "calendar")
                     Text(activity.date, format: .dateTime.day().month(.abbreviated).year())
                 }
-                .font(.subheadline)
+                .supportingTextStyle()
 
                 if let location = activity.location, !location.isEmpty {
                     Text("•")
                         .foregroundStyle(Color.themeTextSecondary)
 
                     Label(location, systemImage: "mappin.and.ellipse")
-                        .font(.subheadline)
+                        .supportingTextStyle()
                         .lineLimit(1)
                 }
             }
@@ -134,11 +134,11 @@ private struct ActivityCardView: View {
 
             if let summary = activity.overallFeedbackSummary {
                 Text("\(summary.responses) responses")
-                    .font(.subheadline.weight(.semibold))
+                    .rowTitleTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             } else {
                 Text("No feedback yet")
-                    .font(.subheadline)
+                    .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
         }

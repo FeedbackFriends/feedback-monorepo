@@ -32,7 +32,7 @@ public struct ModifyAccountView: View {
                     SectionHeaderView("Phone number", horizontalPadding: 0)
                 }
             }
-            .font(.montserratRegular, 12)
+            .supportingTextStyle()
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
             .scrollContentBackground(.hidden)
             .background(Color.themeBackground.ignoresSafeArea())

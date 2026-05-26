@@ -21,6 +21,6 @@ public func listElementView(
             .foregroundStyle(Color.themeText)
         Text(label)
     }
-    .font(.montserratRegular, 13)
+    .supportingTextStyle()
     .animation(.bouncy, value: isLoading)
 }

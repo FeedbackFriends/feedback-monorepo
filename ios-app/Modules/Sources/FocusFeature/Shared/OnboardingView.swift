@@ -58,7 +58,7 @@ struct OnboardingView: View {
                 Button("Skip") {
                     showCreateActivity = true
                 }
-                .font(.subheadline)
+                .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
             }
         }
@@ -73,16 +73,15 @@ struct OnboardingPage: View {
         VStack(spacing: 30) {
             Spacer()
 
-            Image(systemName: icon)
-                .font(.system(size: 64))
+            Image.onboardingIcon(icon)
                 .foregroundStyle(Color.themeSuccess)
 
             VStack(spacing: 12) {
                 Text(title)
-                    .font(.title.bold())
+                    .titleTextStyle()
 
                 Text(subtitle)
-                    .font(.body)
+                    .bodyTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
@@ -103,13 +102,12 @@ struct FirstFocusOnboardingView: View {
             VStack(spacing: 24) {
                 Spacer()
 
-                Image(systemName: "leaf.fill")
-                    .font(.system(size: 50))
+                Image.firstFocusOnboardingIcon
                     .foregroundStyle(Color.themeSuccess)
 
                 VStack(spacing: 8) {
                     Text("What do you want to grow?")
-                        .font(.title.bold())
+                        .titleTextStyle()
 
                     Text("Start by choosing something you'd like feedback on.")
                         .foregroundStyle(Color.themeTextSecondary)

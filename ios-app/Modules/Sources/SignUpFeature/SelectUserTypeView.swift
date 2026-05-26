@@ -15,7 +15,7 @@ public struct SelectUserTypeView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("What would you like to use the app for?")
                 .padding(.top, 30)
-                .font(.montserratBold, 14)
+                .rowTitleTextStyle()
                 .foregroundColor(.themeText)
             UserTypePickerView(selectedUserType: $store.selectedUserType)
             Button {

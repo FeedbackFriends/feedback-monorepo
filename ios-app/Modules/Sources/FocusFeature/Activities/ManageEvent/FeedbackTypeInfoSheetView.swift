@@ -9,13 +9,13 @@ struct FeedbackTypeInfoSheetView: View {
             List(FeedbackType.allCases, id: \.self) { type in
                 HStack(alignment: .top, spacing: 12) {
                     type.image
-                        .font(.title3)
+                        .titleTextStyle()
                         .frame(width: 28)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(type.title)
-                            .font(.montserratSemiBold, 15)
+                            .rowTitleTextStyle()
                         Text(type.helpDescription)
-                            .font(.montserratRegular, 13)
+                            .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
                 }

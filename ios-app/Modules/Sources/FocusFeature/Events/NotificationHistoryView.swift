@@ -37,14 +37,14 @@ public struct NotificationHistoryView: View {
                                 } label: {
                                     VStack(alignment: .leading) {
                                         Text("\(item.eventTitle)")
-                                            .font(.montserratSemiBold, 14)
+                                            .rowTitleTextStyle()
                                             .foregroundStyle(Color.themeText)
                                         Text("You have received \(item.newFeedbackCount) new feedback on ‘\(item.eventTitle)’.")
-                                            .font(.montserratRegular, 12)
+                                            .supportingTextStyle()
                                         HStack {
                                             if !item.seenByManager {
                                                 Text("New")
-                                                    .font(.montserratBold, 8)
+                                                    .badgeTextStyle()
                                                     .padding(2)
                                                     .padding(.horizontal, 4)
 													.foregroundStyle(Color.themeOnPrimaryAction)
@@ -52,7 +52,7 @@ public struct NotificationHistoryView: View {
                                                     .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
                                             }
                                             Text(item.date.timeAgo())
-                                                .font(.montserratRegular, 10)
+                                                .captionTextStyle()
                                             Spacer()
                                             
                                         }

@@ -9,11 +9,11 @@ struct FeedbackElaborationTextField: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Please elaborate why")
-                .font(.montserratMedium, 14)
+                .bodyTextStyle()
                 .foregroundColor(.themeText)
             TextEditor(text: $commentTextField)
                 .padding(.all, 12)
-                .font(.montserratRegular, 14)
+                .bodyTextStyle()
                 .foregroundColor(.themeText)
                 .scrollContentBackground(.hidden)
                 .glassEffect(in: .rect(cornerRadius: Theme.cornerRadius))

@@ -86,11 +86,11 @@ extension ParticipantEventsView {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         Text(event.title)
-                            .font(.montserratSemiBold, 14)
+                            .rowTitleTextStyle()
                         Spacer()
                         if event.recentlyJoined {
                             Text("New feedback")
-                                .font(.montserratBold, 10)
+                                .badgeTextStyle()
                                 .padding(4)
                                 .padding(.horizontal, 4)
                                 .foregroundStyle(Color.themeOnPrimaryAction)
@@ -100,20 +100,20 @@ extension ParticipantEventsView {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.montserratRegular, 12)
+                .supportingTextStyle()
                 .foregroundColor(Color.themeText)
                 Divider()
                 HStack(spacing: 12) {
                     HStack {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("\(event.date.formatted(date: .abbreviated, time: .omitted))")
-                                .font(.montserratRegular, 10)
+                                .captionTextStyle()
                             if let pinCode = event.pinCode {
                                 Text("#\(pinCode.value)")
-                                    .font(.montserratSemiBold, 10)
+                                    .badgeTextStyle()
                             } else {
                                 Text("Udløbet")
-                                    .font(.montserratSemiBold, 10)
+                                    .badgeTextStyle()
                             }
                         }
                         Spacer()
@@ -123,7 +123,7 @@ extension ParticipantEventsView {
                     Divider()
                     if event.feedbackSubmited {
                         Text("Sent")
-                            .font(.montserratSemiBold, 14)
+                            .rowTitleTextStyle()
                             .frame(maxWidth: .infinity, minHeight: 40)
                             .foregroundStyle(Color.themeText.gradient.opacity(0.5))
                     } else {
@@ -138,14 +138,14 @@ extension ParticipantEventsView {
                             .frame(maxWidth: .infinity, minHeight: 40)
                         } else {
                             Text("Udløbet")
-                                .font(.montserratSemiBold, 14)
+                                .rowTitleTextStyle()
                         }
                     }
                 }
                 
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .font(.montserratBold, 14)
+            .rowTitleTextStyle()
             .foregroundStyle(Color.themeText)
             .padding(.all, 10)
         }

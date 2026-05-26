@@ -38,7 +38,7 @@ struct InviteView: View {
     private var infoSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Share the link with people you would like feedback from 🤝")
-                .font(.montserratRegular, 14)
+                .bodyTextStyle()
         }
     }
     
@@ -50,7 +50,7 @@ struct InviteView: View {
                 .background(Color.themeSurface)
                 .foregroundStyle(Color.themeText)
                 .cornerRadius(14)
-                .font(.montserratMedium, 14)
+                .bodyTextStyle()
                 .overlay(copyButton, alignment: .trailing)
         }
     }
@@ -60,8 +60,7 @@ struct InviteView: View {
 			shareSheet = inviteLink
 		} label: {
 			HStack {
-                Image.documentOnDocument
-					.font(.system(size: 16, weight: .regular))
+                Image.copyActionIcon
 			}
 			.padding(.trailing, 12)
 		}
@@ -75,8 +74,8 @@ struct InviteView: View {
 			shareSheet = shareText
 		} label: {
 			HStack {
-                Image.squareAndArrowUp
-					.font(.system(size: 14, weight: .semibold))
+                Image.shareActionIcon
+					.fontWeight(.semibold)
 				Text("Invite")
 			}
 		}

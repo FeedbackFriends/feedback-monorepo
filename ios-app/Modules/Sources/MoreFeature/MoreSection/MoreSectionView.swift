@@ -51,7 +51,7 @@ public struct MoreSectionView: View {
                             .foregroundStyle(Color.themePrimaryAction.gradient)
                         Text("Support us")
                     }
-                    .font(.montserratRegular, 14)
+                    .bodyTextStyle()
                     .foregroundColor(.themeText)
                 }
                 
@@ -61,7 +61,7 @@ public struct MoreSectionView: View {
                 Text(appVersionFooterText)
                     .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
-                    .font(.montserratThin, 12)
+                    .captionTextStyle()
                     .padding(.vertical, 20)
             }
         }
@@ -91,9 +91,11 @@ public struct MoreSectionView: View {
             ShareLink(item: appStoreReviewUrl) {
                 VStack(spacing: 10) {
                     Text("Invite your colleagues")
-                        .font(.montserratExtraBold, 18)
+                        .titleTextStyle()
+                        .foregroundStyle(Color.themeOnPrimaryAction)
                     Text("Improve the feedback culture in the office 🤟🏽")
-                        .font(.montserratMedium, 14)
+                        .bodyTextStyle()
+                        .foregroundStyle(Color.themeOnPrimaryAction)
                 }
                 .padding(8)
                 .frame(maxWidth: .infinity)

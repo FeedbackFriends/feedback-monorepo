@@ -28,11 +28,11 @@ public struct ErrorView: View {
                 .foregroundColor(.themeVerySad)
             
             Text("\(error.title) 💩")
-                .font(.montserratBold, 16)
+                .rowTitleTextStyle()
                 .foregroundColor(.themeText)
             
             Text(error.message)
-                .font(.montserratRegular, 13)
+                .supportingTextStyle()
                 .foregroundColor(.themeText)
                 .multilineTextAlignment(.center)
             
