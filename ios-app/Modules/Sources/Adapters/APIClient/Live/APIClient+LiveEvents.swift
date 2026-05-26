@@ -104,8 +104,7 @@ extension APIClient {
         { sessionId in
             try await withAuthorization {
                 _ = try await api.markEventAsSeen(.init(path: .init(eventId: sessionId.uuidString))).ok
-                let bootstrap = try await api.getBootstrap().ok.body.json
-                await sessionCache.updateSession(Bootstrap(bootstrap))
+                try await sessionCache.markEventAsSeen(eventId: sessionId)
                 return ()
             }
         }

@@ -144,9 +144,7 @@ private extension TabbarView {
     }
 
     var managerUnseenResponses: Int {
-        store.bootstrap.managerData?.activities.reduce(0) { total, activity in
-            total + (activity.overallFeedbackSummary?.unseenResponses ?? 0)
-        } ?? 0
+        store.bootstrap.managerUnseenResponses
     }
 
     func resetSelectedTabIfNeeded() {

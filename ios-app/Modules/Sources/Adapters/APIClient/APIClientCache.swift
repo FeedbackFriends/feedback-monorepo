@@ -54,6 +54,14 @@ public actor APIClientCache {
     public func updateOrAppendEvent(_ event: Event) throws {
         try session?.updateOrAppendEvent(event)
     }
+
+    public func markEventAsSeen(eventId: UUID) throws {
+        guard var session else {
+            throw CacheMutationError.eventNotFound(eventId)
+        }
+        try session.markEventAsSeen(eventId: eventId)
+        self.session = session
+    }
     
     public func sessionChangedListener() -> AsyncStream<Bootstrap> {
         AsyncStream { continuation in
@@ -165,6 +173,46 @@ public extension Bootstrap {
             mutableNotificationHistory.items[index].seenByManager = true
         }
         self.managerData!.notificationHistory = mutableNotificationHistory
+    }
+
+    mutating func markEventAsSeen(eventId: UUID) throws {
+        guard var managerData else {
+            throw APIClientCache.CacheMutationError.eventNotFound(eventId)
+        }
+
+        for activityIndex in managerData.activities.indices {
+            guard let eventIndex = managerData.activities[activityIndex].events.firstIndex(where: { $0.id == eventId }) else {
+                continue
+            }
+
+            var event = managerData.activities[activityIndex].events[eventIndex]
+            event.overallFeedbackSummary?.unseenResponses = 0
+            event.questions = event.questions.map { question in
+                var updatedQuestion = question
+                updatedQuestion.feedback = updatedQuestion.feedback.map { feedback in
+                    var updatedFeedback = feedback
+                    updatedFeedback.seenByManager = true
+                    return updatedFeedback
+                }
+                return updatedQuestion
+            }
+            managerData.activities[activityIndex].events[eventIndex] = event
+
+            var notificationHistory = managerData.notificationHistory
+            let newlySeenItems = notificationHistory.items.indices.reduce(0) { total, index in
+                guard notificationHistory.items[index].eventId == eventId, !notificationHistory.items[index].seenByManager else {
+                    return total
+                }
+                notificationHistory.items[index].seenByManager = true
+                return total + 1
+            }
+            notificationHistory.unseenTotal = max(0, notificationHistory.unseenTotal - newlySeenItems)
+            managerData.notificationHistory = notificationHistory
+            self.managerData = managerData
+            return
+        }
+
+        throw APIClientCache.CacheMutationError.eventNotFound(eventId)
     }
     
     mutating func updateAccount(name: String?, email: String?, phoneNumber: String?) {

@@ -100,6 +100,15 @@ public struct Bootstrap: Equatable, Sendable {
         }
         return 0
     }
+
+    public var managerUnseenResponses: Int {
+        guard let managerData else { return 0 }
+        return managerData.activities.reduce(0) { total, activity in
+            total + activity.events.reduce(0) { eventTotal, event in
+                eventTotal + (event.overallFeedbackSummary?.unseenResponses ?? 0)
+            }
+        }
+    }
 }
 
 public enum UserType: Equatable, Sendable {
