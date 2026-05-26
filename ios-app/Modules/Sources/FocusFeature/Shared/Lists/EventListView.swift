@@ -8,28 +8,46 @@ public struct EventListView: View {
     let previousEvents: [Event]
     let eventTitle: String
     let onEventTap: ((Event) -> Void)?
+    let onCreateEventTap: (() -> Void)?
 
     public init(
         todayEvents: [Event],
         comingUpEvents: [Event],
         previousEvents: [Event],
         eventTitle: String,
-        onEventTap: ((Event) -> Void)? = nil
+        onEventTap: ((Event) -> Void)? = nil,
+        onCreateEventTap: (() -> Void)? = nil
     ) {
         self.todayEvents = todayEvents
         self.comingUpEvents = comingUpEvents
         self.previousEvents = previousEvents
         self.eventTitle = eventTitle
         self.onEventTap = onEventTap
+        self.onCreateEventTap = onCreateEventTap
     }
 
     public var body: some View {
-        LazyVStack(alignment: .leading, spacing: 18, pinnedViews: [.sectionHeaders]) {
+        LazyVStack(alignment: .leading, spacing: 18) {
             if todayEvents.isEmpty && comingUpEvents.isEmpty && previousEvents.isEmpty {
-                EmptyStateView(
-                    title: "No sessions yet.",
-                    message: "Add a session to collect feedback for this focus."
-                )
+                VStack(alignment: .center, spacing: 14) {
+                    VStack(spacing: 6) {
+                        Text("No sessions yet")
+                            .font(.montserratSemiBold, 16)
+                            .foregroundStyle(Color.themeText)
+
+                        Text("Create your first session to start collecting feedback.")
+                            .font(.montserratRegular, 12)
+                            .foregroundStyle(Color.themeTextSecondary)
+                            .multilineTextAlignment(.center)
+                    }
+
+                    Button("Create") {
+                        onCreateEventTap?()
+                    }
+                    .buttonStyle(LargeButtonStyle())
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 24)
             } else {
                 if !todayEvents.isEmpty {
                     CustomSection(title: "Today") {

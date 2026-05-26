@@ -15,7 +15,7 @@ public struct ParticipantEventsView: View {
             action: \.destination.startFeedbackConfirmation
         )
         ScrollView {
-            LazyVStack(spacing: 12, pinnedViews: [.sectionHeaders]) {
+            LazyVStack(spacing: 12) {
                 let participantEvents = store.bootstrap.participantEvents
                 if participantEvents.isEmpty {
                     EmptyStateView(

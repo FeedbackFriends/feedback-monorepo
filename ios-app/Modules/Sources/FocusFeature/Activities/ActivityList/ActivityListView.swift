@@ -31,6 +31,7 @@ public struct ActivityListView: View {
                 }
                 .padding()
             }
+            .background(Color.themeBackground.ignoresSafeArea())
             .navigationTitle("Focus")
             .navigationDestination(
                 item: $store.scope(

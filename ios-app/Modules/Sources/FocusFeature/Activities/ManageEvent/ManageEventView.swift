@@ -14,16 +14,24 @@ public struct ManageEventView: View {
     }
 
     public var body: some View {
-        Form {
-            content
+        ScrollView {
+            VStack(alignment: .leading, spacing: 8) {
+                content
+            }
+            .frame(maxWidth: Constants.maxWidthForLargeDevices)
+            .padding(.horizontal, Theme.padding)
+            .padding(.top, Theme.padding)
+            .padding(.bottom, Theme.padding)
+            .frame(maxWidth: .infinity)
         }
+        .scrollIndicators(.hidden)
         .synchronize($store.focus, $focus)
         .background(Color.themeBackground.ignoresSafeArea())
         .toolbar {
             toolbarItems
         }
-        .foregroundColor(.themeText)
-        .font(.montserratMedium, 14)
+        .foregroundStyle(Color.themeText)
+        .font(.montserratRegular, 14)
         .onAppear {
             UIDatePicker.appearance().minuteInterval = 5
         }
@@ -60,7 +68,6 @@ public struct ManageEventView: View {
         }
         .navigationBarTitle(store.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .scrollContentBackground(.hidden)
     }
 }
 
@@ -114,90 +121,216 @@ private extension ManageEventView {
     }
 
     var content: some View {
-        Section {
-            TextField("Title", text: $store.eventInput.title)
-                .accessibilityIdentifier("event_form_title_input")
-                .focused($focus, equals: .title)
-                .submitLabel(.next)
-                .onSubmit {
-                    store.send(.onSubmitTitleTextField)
-                }
-            TextField("Agenda (optional)", text: $store.eventInput.agenda.asNonOptional(), axis: .vertical)
-                .lineLimit(2, reservesSpace: true)
-                .submitLabel(.return)
-                .focused($focus, equals: .description)
+        section(title: "Details") {
+            inputField(
+                title: "Title",
+                prompt: "Session title",
+                text: $store.eventInput.title,
+                accessibilityIdentifier: "event_form_title_input"
+            )
+            .focused($focus, equals: .title)
+            .submitLabel(.next)
+            .onSubmit {
+                store.send(.onSubmitTitleTextField)
+            }
+
+            sectionDivider
+
+            inputField(
+                title: "Agenda",
+                prompt: "Agenda (optional)",
+                text: $store.eventInput.agenda.asNonOptional(),
+                axis: .vertical,
+                lineLimit: 2...2
+            )
+            .submitLabel(.return)
+            .focused($focus, equals: .description)
+
+            sectionDivider
+
             Toggle(isOn: $store.allDay) {
                 Text("All day")
+                    .font(.montserratSemiBold, 13)
+                    .foregroundStyle(Color.themeText)
             }
+            .tint(Color.themePrimaryAction)
+
             durationPickerView
-        } header: {
-            Text("Details")
-                .sectionHeaderStyle()
-                .padding(.leading, 12)
         }
         .animation(.default, value: store.startNowEnabled)
-        .scrollContentBackground(.hidden)
     }
 
     @ViewBuilder
     var durationPickerView: some View {
         if !store.allDay {
+            sectionDivider
+
             Toggle(isOn: $store.startNowEnabled) {
                 Text("Start now")
+                    .font(.montserratSemiBold, 13)
+                    .foregroundStyle(Color.themeText)
             }
+            .tint(Color.themePrimaryAction)
+
             if !store.startNowEnabled {
-                DatePicker(
+                sectionDivider
+
+                datePickerRow(
+                    title: "Time",
                     selection: $store.eventInput.date,
-                    in: store.date.roundedUpcoming5Min()...,
+                    range: store.date.roundedUpcoming5Min()...,
                     displayedComponents: [DatePickerComponents.date, DatePickerComponents.hourAndMinute]
-                ) {
-                    Text("Time")
-                }
+                )
             }
-            Picker(
-                selection: $store.durationPicker,
-                content: {
-                    Text(ManageEvent.State.DurationPicker.minutes15.localization).tag(ManageEvent.State.DurationPicker.minutes15)
-                    Text(ManageEvent.State.DurationPicker.minutes30.localization).tag(ManageEvent.State.DurationPicker.minutes30)
-                    Text(ManageEvent.State.DurationPicker.minutes45.localization).tag(ManageEvent.State.DurationPicker.minutes45)
-                    Text(ManageEvent.State.DurationPicker.minutes60.localization).tag(ManageEvent.State.DurationPicker.minutes60)
-                    Text(ManageEvent.State.DurationPicker.minutes90.localization).tag(ManageEvent.State.DurationPicker.minutes90)
-                    Text(ManageEvent.State.DurationPicker.minutes120.localization).tag(ManageEvent.State.DurationPicker.minutes120)
-                    Text(ManageEvent.State.DurationPicker.other.localization).tag(ManageEvent.State.DurationPicker.other)
-                },
-                label: {
-                    Text("Duration")
-                        .foregroundColor(.themeText)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            )
+
+            sectionDivider
+
+            HStack {
+                Text("Duration")
+                    .font(.montserratSemiBold, 13)
+                    .foregroundStyle(Color.themeText)
+
+                Spacer()
+
+                Picker(
+                    selection: $store.durationPicker,
+                    content: {
+                        Text(ManageEvent.State.DurationPicker.minutes15.localization)
+                            .tag(ManageEvent.State.DurationPicker.minutes15)
+                        Text(ManageEvent.State.DurationPicker.minutes30.localization)
+                            .tag(ManageEvent.State.DurationPicker.minutes30)
+                        Text(ManageEvent.State.DurationPicker.minutes45.localization)
+                            .tag(ManageEvent.State.DurationPicker.minutes45)
+                        Text(ManageEvent.State.DurationPicker.minutes60.localization)
+                            .tag(ManageEvent.State.DurationPicker.minutes60)
+                        Text(ManageEvent.State.DurationPicker.minutes90.localization)
+                            .tag(ManageEvent.State.DurationPicker.minutes90)
+                        Text(ManageEvent.State.DurationPicker.minutes120.localization)
+                            .tag(ManageEvent.State.DurationPicker.minutes120)
+                        Text(ManageEvent.State.DurationPicker.other.localization)
+                            .tag(ManageEvent.State.DurationPicker.other)
+                    },
+                    label: {
+                        Text("Duration")
+                    }
+                )
+                .pickerStyle(.menu)
+                .font(.montserratRegular, 13)
+            }
+
             if case .other = store.durationPicker {
-                HStack {
-                    Picker("", selection: $store.hourPicker) {
-                        ForEach(0..<24, id: \.self) { number in
-                            Text("\(number) hours").tag(number)
+                sectionDivider
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Custom duration")
+                        .font(.montserratSemiBold, 13)
+
+                    HStack {
+                        Picker("", selection: $store.hourPicker) {
+                            ForEach(0..<24, id: \.self) { number in
+                                Text("\(number) hours").tag(number)
+                            }
                         }
-                    }
-                    .pickerStyle(WheelPickerStyle())
-                    Picker("", selection: $store.minutePicker) {
-                        ForEach(0..<60, id: \.self) { number in
-                            Text("\(number) min").tag(number)
+                        .pickerStyle(WheelPickerStyle())
+
+                        Picker("", selection: $store.minutePicker) {
+                            ForEach(0..<60, id: \.self) { number in
+                                Text("\(number) min").tag(number)
+                            }
                         }
+                        .pickerStyle(WheelPickerStyle())
                     }
-                    .pickerStyle(WheelPickerStyle())
+                    .font(.montserratRegular, 12)
+                    .frame(height: 140)
                 }
-                .padding(.horizontal)
-                .font(.montserratRegular, 12)
-                .frame(height: 140)
             }
         } else {
-            DatePicker(
+            sectionDivider
+
+            datePickerRow(
+                title: "Time",
                 selection: $store.eventInput.date,
-                in: store.date...,
+                range: store.date...,
                 displayedComponents: [DatePickerComponents.date]
-            ) {
-                Text("Time")
-            }
+            )
         }
+    }
+
+    @ViewBuilder
+    func section<Content: View>(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading) {
+            Text(title.uppercased())
+                .sectionHeaderStyle()
+                .padding(.leading, 18)
+
+            VStack(alignment: .leading, spacing: 12) {
+                content()
+            }
+            .padding(15)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.themeSurface)
+            .cornerRadius(14)
+        }
+    }
+
+    @ViewBuilder
+    func inputField(
+        title: String,
+        prompt: String,
+        text: Binding<String>,
+        axis: Axis = .horizontal,
+        lineLimit: ClosedRange<Int>? = nil,
+        accessibilityIdentifier: String? = nil
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.montserratSemiBold, 13)
+                .foregroundStyle(Color.themeText)
+
+            TextField(
+                "",
+                text: text,
+                prompt: Text(prompt)
+                    .foregroundStyle(Color.themeTextSecondary),
+                axis: axis
+            )
+            .accessibilityIdentifier(accessibilityIdentifier ?? "")
+            .font(.montserratRegular, 13)
+            .foregroundStyle(Color.themeTextSecondary)
+            .lineLimit(lineLimit ?? 1...1)
+        }
+    }
+
+    func datePickerRow(
+        title: String,
+        selection: Binding<Date>,
+        range: PartialRangeFrom<Date>,
+        displayedComponents: DatePickerComponents
+    ) -> some View {
+        HStack {
+            Text(title)
+                .font(.montserratSemiBold, 13)
+                .foregroundStyle(Color.themeText)
+
+            Spacer()
+
+            DatePicker(
+                "",
+                selection: selection,
+                in: range,
+                displayedComponents: displayedComponents
+            )
+            .labelsHidden()
+            .font(.montserratRegular, 13)
+        }
+    }
+
+    var sectionDivider: some View {
+        Rectangle()
+            .fill(Color.themeBackground)
+            .frame(height: 1)
     }
 }

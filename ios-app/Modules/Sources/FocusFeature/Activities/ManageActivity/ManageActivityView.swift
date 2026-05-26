@@ -16,10 +16,12 @@ public struct ManageActivityView: View {
     public var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: Theme.padding) {
+                VStack(alignment: .leading, spacing: 8) {
                     detailsSection
                     feedbackSection
+                        .padding(.top, 4)
                     questionsSection
+                        .padding(.top, 4)
                 }
                 .frame(maxWidth: Constants.maxWidthForLargeDevices)
                 .padding(.horizontal, Theme.padding)
@@ -275,25 +277,25 @@ private extension ManageActivityView {
         footer: String? = nil,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
+        VStack(alignment: .leading) {
+            Text(title.uppercased())
                 .sectionHeaderStyle()
-                .padding(.leading, 4)
+                .padding(.leading, 18)
 
             VStack(alignment: .leading, spacing: 12) {
                 content()
             }
-            .padding(Theme.padding)
+            .padding(15)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color.themeSurface)
-            .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-            .lightShadow()
+            .cornerRadius(14)
 
             if let footer {
                 Text(footer)
                     .font(.montserratRegular, 12)
                     .foregroundStyle(Color.themeTextSecondary)
-                    .padding(.horizontal, 4)
+                    .padding(.horizontal, 18)
+                    .padding(.top, 8)
             }
         }
     }
@@ -309,8 +311,8 @@ private extension ManageActivityView {
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.montserratMedium, 13)
-                .foregroundStyle(Color.themeTextSecondary)
+                .font(.montserratSemiBold, 13)
+                .foregroundStyle(Color.themeText)
 
             TextField(
                 "",
@@ -320,7 +322,7 @@ private extension ManageActivityView {
                 axis: axis
             )
             .accessibilityIdentifier(accessibilityIdentifier ?? "")
-            .font(.montserratRegular, 15)
+            .font(.montserratRegular, 13)
             .foregroundStyle(Color.themeText)
             .lineLimit(lineLimit ?? 1...1)
         }
@@ -328,7 +330,7 @@ private extension ManageActivityView {
 
     var sectionDivider: some View {
         Rectangle()
-            .fill(Color.themeBackground.opacity(0.9))
+            .fill(Color.themeBackground)
             .frame(height: 1)
     }
 }
@@ -391,7 +393,7 @@ private struct SelectableRow: View {
             .padding(.horizontal, Theme.padding)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.themeBackground.opacity(isSelected ? 0.95 : 0.65))
+            .background(Color.themeBackground)
             .overlay {
                 Capsule(style: .continuous)
                     .stroke(isSelected ? Color.themePrimaryAction : Color.clear, lineWidth: 1.5)
@@ -444,7 +446,7 @@ private struct SelectedFeedbackTemplateRow: View {
         .padding(.horizontal, Theme.padding)
         .padding(.vertical, 14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeBackground.opacity(0.95))
+        .background(Color.themeBackground)
         .overlay {
             Capsule(style: .continuous)
                 .stroke(Color.themePrimaryAction, lineWidth: 1.5)

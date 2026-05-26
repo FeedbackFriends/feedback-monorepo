@@ -39,20 +39,6 @@ struct ActivityDetailView: View {
             ).presentationDetents([.height(340)])
         }
     }
-
-    private func detailRow(title: String, value: String) -> some View {
-        HStack(alignment: .top, spacing: 8) {
-            Text(title)
-                .font(.subheadline.weight(.semibold))
-                .frame(width: 110, alignment: .leading)
-
-            Text(value)
-                .font(.subheadline)
-                .foregroundStyle(Color.themeTextSecondary)
-
-            Spacer()
-        }
-    }
 }
 
 private struct ActivityDetailContentView: View {
@@ -68,59 +54,22 @@ private struct ActivityDetailContentView: View {
         )
 
         return ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                HStack {
-                    LegacyTrendBadge(direction: activity.trend.direction)
-                    Spacer()
-                    Text(activity.durationText)
-                        .font(.subheadline)
-                        .foregroundStyle(Color.themeTextSecondary)
-                }
+            VStack(alignment: .leading, spacing: 8) {
+                detailsSection(activity)
 
-                detailRow(title: "Date", value: activity.formattedDate)
-
-                if let location = activity.location, !location.isEmpty {
-                    detailRow(title: "Location", value: location)
-                }
-
-                if let pinCode = activity.pinCode?.value {
-                    let pinValue = "#\(pinCode)"
-                    detailRow(title: "PIN", value: pinValue)
-                }
-
-                if let summary = activity.overallFeedbackSummary {
-                    detailRow(title: "Responses", value: "\(summary.responses)")
-                    detailRow(title: "New responses", value: "\(summary.unseenResponses)")
-                }
-
-                if let agenda = activity.agenda, !agenda.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Agenda")
-                            .font(.headline)
-
-                        Text(agenda)
-                            .font(.body)
-                            .foregroundStyle(Color.themeTextSecondary)
-                    }
-                    .padding(.top, 8)
-                }
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Sessions")
-                        .font(.headline)
-
-                    EventListView(
-                        todayEvents: groupedSessions.today,
-                        comingUpEvents: groupedSessions.comingUp,
-                        previousEvents: groupedSessions.previous,
-                        eventTitle: activity.title,
-                        onEventTap: { store.send(.eventTapped($0)) }
-                    )
-                }
-                .padding(.top, 8)
+                sessionsSection(
+                    groupedSessions: groupedSessions,
+                    eventTitle: activity.title
+                )
+                .padding(.top, 4)
             }
             .padding()
+            .padding(.bottom, 80)
         }
+        .scrollIndicators(.hidden)
+        .background(Color.themeBackground)
+        .lineSpacing(5)
+        .foregroundStyle(Color.themeText)
         .navigationTitle(activity.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -131,6 +80,7 @@ private struct ActivityDetailContentView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
+                    .buttonStyle(PrimaryTextButtonStyle())
                     .accessibilityIdentifier("activity_detail_add_session_button")
 
                     Button {
@@ -138,6 +88,7 @@ private struct ActivityDetailContentView: View {
                     } label: {
                         Image(systemName: "pencil")
                     }
+                    .buttonStyle(PrimaryTextButtonStyle())
                     .accessibilityIdentifier("activity_detail_edit_button")
 
                     Button(role: .destructive) {
@@ -145,6 +96,8 @@ private struct ActivityDetailContentView: View {
                     } label: {
                         Image(systemName: "trash")
                     }
+                    .buttonStyle(PrimaryTextButtonStyle())
+                    .accessibilityLabel("Delete focus")
                 }
             }
         }
@@ -177,17 +130,81 @@ private struct ActivityDetailContentView: View {
         .alert($store.scope(state: \.alert, action: \.alert))
     }
 
+    private func detailsSection(_ activity: Activity) -> some View {
+        VStack(alignment: .leading) {
+            Text("DETAILS")
+                .sectionHeaderStyle()
+                .padding(.leading, 18)
+
+            VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        LegacyTrendBadge(direction: activity.trend.direction)
+                        Spacer()
+                        Text(activity.durationText)
+                            .font(.montserratRegular, 13)
+                            .foregroundStyle(Color.themeTextSecondary)
+                    }
+
+                    detailRow(title: "Date", value: activity.formattedDate)
+
+                    if let location = activity.location, !location.isEmpty {
+                        detailRow(title: "Location", value: location)
+                    }
+
+                    if let pinCode = activity.pinCode?.value {
+                        detailRow(title: "PIN", value: "#\(pinCode)")
+                    }
+
+                    if let summary = activity.overallFeedbackSummary {
+                        detailRow(title: "Responses", value: "\(summary.responses)")
+                        detailRow(title: "New responses", value: "\(summary.unseenResponses)")
+                    }
+
+                    if let agenda = activity.agenda, !agenda.isEmpty {
+                        Text("Agenda")
+                            .font(.montserratSemiBold, 13)
+
+                        Text(agenda)
+                            .font(.montserratRegular, 13)
+                            .multilineTextAlignment(.leading)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(15)
+
+                if let feedback = activity.overallFeedbackSummary {
+                    FeedbackPercentageBarView(feedback: feedback.segmentationStats)
+                } else {
+                    EmptyFeedbackSegmentationStatsView()
+                }
+            }
+            .font(.montserratRegular, 14)
+            .background(Color.themeSurface)
+            .cornerRadius(14)
+        }
+    }
+
+    private func sessionsSection(groupedSessions: GroupedSessions, eventTitle: String) -> some View {
+        EventListView(
+            todayEvents: groupedSessions.today,
+            comingUpEvents: groupedSessions.comingUp,
+            previousEvents: groupedSessions.previous,
+            eventTitle: eventTitle,
+            onEventTap: { store.send(.eventTapped($0)) },
+            onCreateEventTap: {
+                store.send(.createEventButtonTapped)
+            }
+        )
+    }
+
     private func detailRow(title: String, value: String) -> some View {
-        HStack(alignment: .top, spacing: 8) {
+        VStack(alignment: .leading, spacing: 2) {
             Text(title)
-                .font(.subheadline.weight(.semibold))
-                .frame(width: 110, alignment: .leading)
+                .font(.montserratSemiBold, 13)
 
             Text(value)
-                .font(.subheadline)
-                .foregroundStyle(Color.themeTextSecondary)
-
-            Spacer()
+                .font(.montserratRegular, 13)
         }
     }
 }
@@ -197,11 +214,11 @@ private struct LegacyTrendBadge: View {
 
     var body: some View {
         Label(title, systemImage: symbolName)
-            .font(.caption.weight(.semibold))
+            .font(.montserratMedium, 12)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .foregroundStyle(color)
-            .background(color.opacity(0.12), in: Capsule())
+            .background(Color.themeBackground, in: Capsule())
     }
 
     private var title: String {
