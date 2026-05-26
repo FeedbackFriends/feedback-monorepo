@@ -56,8 +56,7 @@ public struct MoreSectionView: View {
                 }
                 
             } header: {
-                Text("General")
-                    .sectionHeaderStyle()
+                SectionHeaderView("General", horizontalPadding: 0)
             } footer: {
                 Text(appVersionFooterText)
                     .frame(maxWidth: .infinity)
@@ -83,8 +82,7 @@ public struct MoreSectionView: View {
                 listElementView(image: .moreSectionExlamaionmarkSquare, label: "Report a bug")
             }
         } header: {
-            Text("Contact us")
-                .sectionHeaderStyle()
+            SectionHeaderView("Contact us", horizontalPadding: 0)
         }
     }
     

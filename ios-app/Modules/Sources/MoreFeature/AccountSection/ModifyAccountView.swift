@@ -17,22 +17,19 @@ public struct ModifyAccountView: View {
                 Section {
                     TextField("Name", text: $store.nameInput)
                 } header: {
-                    Text("Name")
-                        .sectionHeaderStyle()
+                    SectionHeaderView("Name", horizontalPadding: 0)
                 }
                 Section {
                     TextField("Email", text: $store.emailInput)
                 } header: {
-                    Text("Email")
-                        .sectionHeaderStyle()
+                    SectionHeaderView("Email", horizontalPadding: 0)
                 } footer: {
                     Text("Use the same email as your calendar account (Google, Outlook, etc.).")
                 }
                 Section {
                     TextField("Phone number", text: $store.phoneNumberInput)
                 } header: {
-                    Text("Phone number")
-                        .sectionHeaderStyle()
+                    SectionHeaderView("Phone number", horizontalPadding: 0)
                 }
             }
             .font(.montserratRegular, 12)

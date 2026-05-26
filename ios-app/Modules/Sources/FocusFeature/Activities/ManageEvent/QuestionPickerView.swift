@@ -91,8 +91,7 @@ struct QuestionPickerView: View {
                         .background(Color.themeBackground)
                     } header: {
                         HStack(spacing: 8) {
-                            Text("Choose feedback type")
-                                .sectionHeaderStyle()
+                            SectionHeaderView("Choose feedback type", horizontalPadding: 0)
                             Spacer()
                             Button {
                                 showFeedbackInfo = true
@@ -130,8 +129,7 @@ struct QuestionPickerView: View {
                             }
                             .padding(.trailing, 4)
                     } header: {
-                        Text("Question")
-                            .sectionHeaderStyle()
+                        SectionHeaderView("Question", horizontalPadding: 0)
                     }
                     
                     Button(text, action: commitQuestion)

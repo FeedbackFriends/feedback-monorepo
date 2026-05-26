@@ -278,9 +278,7 @@ private extension ManageActivityView {
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading) {
-            Text(title.uppercased())
-                .sectionHeaderStyle()
-                .padding(.leading, 18)
+            SectionHeaderView(title)
 
             VStack(alignment: .leading, spacing: 12) {
                 content()

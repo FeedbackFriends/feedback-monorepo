@@ -132,9 +132,7 @@ private struct ActivityDetailContentView: View {
 
     private func detailsSection(_ activity: Activity) -> some View {
         VStack(alignment: .leading) {
-            Text("DETAILS")
-                .sectionHeaderStyle()
-                .padding(.leading, 18)
+            SectionHeaderView("Details")
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {

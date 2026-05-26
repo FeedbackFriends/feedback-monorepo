@@ -30,9 +30,7 @@ private extension DetailSectionView {
     
     var detailSectionView: some View {
         VStack(alignment: .leading) {
-            Text("DETAILS")
-                .sectionHeaderStyle()
-                .padding(.leading, 18)
+            SectionHeaderView("Details")
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
                     if let agenda, !agenda.isEmpty {
@@ -90,9 +88,7 @@ private extension DetailSectionView {
     @ViewBuilder
     var eventPinSectionView: some View {
         VStack(alignment: .leading) {
-            Text("PIN CODE")
-                .sectionHeaderStyle()
-                .padding(.leading, 18)
+            SectionHeaderView("Pin code")
             VStack(alignment: .trailing, spacing: 12) {
                 if let pinCode = detail.pinCode?.value {
                     Text("\(pinCode)")
@@ -142,9 +138,7 @@ private extension DetailSectionView {
     @ViewBuilder
     var questionsSectionView: some View {
         VStack(alignment: .leading) {
-            Text("QUESTIONS")
-                .sectionHeaderStyle()
-                .padding(.leading, 18)
+            SectionHeaderView("Questions")
             ForEach(Array(zip(detail.questionsSnapshot.indices, detail.questionsSnapshot)), id: \.0) { index, question in
                 QuestionView(question: question, index: index)
                     .disabled(detail.overallFeedbackSummary == nil)

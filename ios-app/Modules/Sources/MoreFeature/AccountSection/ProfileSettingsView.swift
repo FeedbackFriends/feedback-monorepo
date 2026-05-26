@@ -145,8 +145,7 @@ public struct ProfileSettingsView: View {
                 .tint(Color.themePrimaryAction)
                 .disabled(store.isLoading)
             } header: {
-                Text("Communication preferences")
-                    .sectionHeaderStyle()
+                SectionHeaderView("Communication preferences", horizontalPadding: 0)
             }
 
             if let logoutButtonTap {
