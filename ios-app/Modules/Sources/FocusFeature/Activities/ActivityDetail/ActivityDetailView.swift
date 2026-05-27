@@ -54,52 +54,61 @@ private struct ActivityDetailContentView: View {
         )
 
         return ScrollView {
-            VStack(alignment: .leading, spacing: 8) {
-                detailsSection(activity)
+            VStack(alignment: .leading, spacing: 12) {
+                focusHeader(activity)
+
+                focusSetupSection(activity)
 
                 sessionsSection(
                     groupedSessions: groupedSessions,
                     eventTitle: activity.title
                 )
-                .padding(.top, 4)
             }
             .padding()
-            .padding(.bottom, 80)
+            .padding(.bottom, 24)
         }
         .scrollIndicators(.hidden)
         .background(Color.themeBackground)
         .lineSpacing(5)
         .foregroundStyle(Color.themeText)
-        .navigationTitle(activity.title)
+        .navigationTitle("Focus")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {
-                    Button {
-                        store.send(.createEventButtonTapped)
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .buttonStyle(PrimaryTextButtonStyle())
-                    .accessibilityIdentifier("activity_detail_add_session_button")
-
                     Button {
                         store.send(.editActivityButtonTapped)
                     } label: {
                         Image(systemName: "pencil")
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
+                    .accessibilityLabel("Edit focus")
                     .accessibilityIdentifier("activity_detail_edit_button")
 
-                    Button(role: .destructive) {
-                        store.send(.deleteActivityButtonTap)
+                    Menu {
+                        Button(role: .destructive) {
+                            store.send(.deleteActivityButtonTap)
+                        } label: {
+                            Label("Delete focus", systemImage: "trash")
+                        }
                     } label: {
-                        Image(systemName: "trash")
+                        Image(systemName: "ellipsis")
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
-                    .accessibilityLabel("Delete focus")
+                    .accessibilityLabel("More focus actions")
                 }
             }
+        }
+        .safeAreaInset(edge: .bottom) {
+            Button("Create session") {
+                store.send(.createEventButtonTapped)
+            }
+            .buttonStyle(LargeButtonStyle())
+            .accessibilityIdentifier("activity_detail_create_session_button")
+            .padding(.horizontal)
+            .padding(.top, 10)
+            .padding(.bottom, 16)
+            .background(Color.themeBackground)
         }
         .sheet(
             item: $store.scope(
@@ -130,34 +139,23 @@ private struct ActivityDetailContentView: View {
         .alert($store.scope(state: \.alert, action: \.alert))
     }
 
-    private func detailsSection(_ activity: Activity) -> some View {
-        VStack(alignment: .leading) {
-            SectionHeaderView("Details")
-
-            VStack(alignment: .leading, spacing: 0) {
-                VStack(alignment: .leading, spacing: 10) {
-                    LegacyTrendBadge(direction: activity.trend.direction)
-                    detailRow(title: "Sessions", value: "\(activity.events.count)")
-                    detailRow(title: "Invited participants", value: "\(activity.invitedEmails.count)")
-
-                    if let agenda = activity.agenda, !agenda.isEmpty {
-                        Text("Agenda")
-                            .rowTitleTextStyle()
-
-                        Text(agenda)
-                            .supportingTextStyle()
-                            .multilineTextAlignment(.leading)
-                    }
-                }
+    private func focusHeader(_ activity: Activity) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(activity.title)
+                .titleTextStyle()
+                .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(15)
 
-                EmptyFeedbackSegmentationStatsView()
+            HStack(spacing: 8) {
+                LegacyTrendBadge(direction: activity.trend.direction)
+                FocusMetricBadge(text: sessionCountText(for: activity.events.count))
             }
-            .bodyTextStyle()
-            .background(Color.themeSurface)
-            .cornerRadius(14)
         }
+        .padding(15)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.themeSurface)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .accessibilityIdentifier("activity_detail_focus_header")
     }
 
     private func sessionsSection(groupedSessions: GroupedSessions, eventTitle: String) -> some View {
@@ -166,21 +164,96 @@ private struct ActivityDetailContentView: View {
             comingUpEvents: groupedSessions.comingUp,
             previousEvents: groupedSessions.previous,
             eventTitle: eventTitle,
-            onEventTap: { store.send(.eventTapped($0)) },
-            onCreateEventTap: {
-                store.send(.createEventButtonTapped)
-            }
+            onEventTap: { store.send(.eventTapped($0)) }
         )
     }
 
-    private func detailRow(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(title)
-                .rowTitleTextStyle()
+    private func focusSetupSection(_ activity: Activity) -> some View {
+        VStack(alignment: .leading) {
+            SectionHeaderView("Focus setup")
 
-            Text(value)
-                .supportingTextStyle()
+            Button {
+                store.send(.editActivityButtonTapped)
+            } label: {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Text(questionCountText(for: activity.questions.count))
+                            .rowTitleTextStyle()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Label("Edit", systemImage: "pencil")
+                            .captionTextStyle()
+                            .foregroundStyle(Color.themePrimaryAction)
+                    }
+
+                    if let agenda = activity.agenda, !agenda.isEmpty {
+                        Text(agenda)
+                            .supportingTextStyle()
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(3)
+                    }
+
+                    questionTypeSummary(activity.questions)
+                }
+                .padding(15)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.themeSurface)
+                .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+            }
+            .buttonStyle(OpacityButtonStyle())
+            .accessibilityLabel("Edit focus setup")
+            .accessibilityIdentifier("activity_detail_focus_setup_section")
         }
+    }
+
+    private func questionTypeSummary(_ questions: [ManagerQuestion]) -> some View {
+        HStack(spacing: 8) {
+            ForEach(Array(questions.prefix(4).enumerated()), id: \.element.id) { _, question in
+                FocusQuestionTypeBadge(question: question)
+            }
+
+            if questions.count > 4 {
+                FocusMetricBadge(text: "+\(questions.count - 4)")
+            }
+        }
+    }
+
+    private func sessionCountText(for count: Int) -> String {
+        count == 1 ? "1 session" : "\(count) sessions"
+    }
+
+    private func questionCountText(for count: Int) -> String {
+        count == 1 ? "1 question" : "\(count) questions"
+    }
+}
+
+private struct FocusQuestionTypeBadge: View {
+    let question: ManagerQuestion
+
+    var body: some View {
+        Label {
+            Text(question.feedbackType.title)
+        } icon: {
+            question.feedbackType.image
+        }
+        .captionTextStyle()
+        .foregroundStyle(Color.themeTextSecondary)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.themeBackground, in: Capsule())
+    }
+}
+
+private struct FocusMetricBadge: View {
+    let text: String
+
+    var body: some View {
+        Text(text)
+            .captionTextStyle()
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .foregroundStyle(Color.themeTextSecondary)
+            .background(Color.themeBackground, in: Capsule())
     }
 }
 

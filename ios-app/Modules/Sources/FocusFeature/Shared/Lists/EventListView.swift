@@ -8,22 +8,19 @@ public struct EventListView: View {
     let previousEvents: [Event]
     let eventTitle: String
     let onEventTap: ((Event) -> Void)?
-    let onCreateEventTap: (() -> Void)?
 
     public init(
         todayEvents: [Event],
         comingUpEvents: [Event],
         previousEvents: [Event],
         eventTitle: String,
-        onEventTap: ((Event) -> Void)? = nil,
-        onCreateEventTap: (() -> Void)? = nil
+        onEventTap: ((Event) -> Void)? = nil
     ) {
         self.todayEvents = todayEvents
         self.comingUpEvents = comingUpEvents
         self.previousEvents = previousEvents
         self.eventTitle = eventTitle
         self.onEventTap = onEventTap
-        self.onCreateEventTap = onCreateEventTap
     }
 
     public var body: some View {
@@ -40,14 +37,11 @@ public struct EventListView: View {
                             .foregroundStyle(Color.themeTextSecondary)
                             .multilineTextAlignment(.center)
                     }
-
-                    Button("Create") {
-                        onCreateEventTap?()
-                    }
-                    .buttonStyle(LargeButtonStyle())
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 24)
+                .padding(.horizontal, 50)
+                .padding(.top, 50)
+
             } else {
                 if !todayEvents.isEmpty {
                     CustomSection(title: "Today") {
@@ -115,7 +109,7 @@ private struct EventListItemView: View {
 
     private var header: some View {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Text(eventTitle)
+            Text(sessionTitle)
                 .rowTitleTextStyle()
                 .lineLimit(2)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -142,11 +136,6 @@ private struct EventListItemView: View {
     private var metadata: some View {
         VStack(alignment: .leading, spacing: 8) {
             metadataRow(
-                image: Image.calendar,
-                text: event.date.formatted(date: .abbreviated, time: .shortened)
-            )
-
-            metadataRow(
                 image: Image(systemName: "clock"),
                 text: event.durationText
             )
@@ -158,6 +147,14 @@ private struct EventListItemView: View {
                 )
             }
         }
+    }
+
+    private var sessionTitle: String {
+        if event.date.isToday {
+            return "Today at \(event.date.formatted(date: .omitted, time: .shortened))"
+        }
+
+        return event.date.formatted(date: .abbreviated, time: .shortened)
     }
 
     private var feedbackSummary: some View {
