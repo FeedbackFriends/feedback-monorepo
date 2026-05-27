@@ -100,7 +100,7 @@ private extension ManageActivityView {
     var detailsSection: some View {
         section(title: "Details") {
             inputField(
-                title: "Activity title",
+                title: "Focus title",
                 prompt: "What do you want feedback on?",
                 text: $store.title,
                 accessibilityIdentifier: "create_activity_title_input"
