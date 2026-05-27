@@ -41,13 +41,9 @@ extension APIClient {
     static func makeCreateEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput) async throws -> Event {
         { sessionInput in
             try await withAuthorization {
-                let activity = try await api.createEvent(.init(body: .json(.init(sessionInput)))).ok.body.json
-                guard let latestEvent = activity.events.max(by: { $0.date < $1.date }) else {
-                    throw URLError(.cannotParseResponse)
-                }
-                let mappedActivity = Activity(activity)
-                let mappedEvent = Event(latestEvent)
-                try await sessionCache.updateOrAppendActivity(mappedActivity)
+                let event = try await api.createEvent(.init(body: .json(.init(sessionInput)))).ok.body.json
+                let mappedEvent = Event(event)
+                try await sessionCache.appendEvent(mappedEvent, toActivityId: sessionInput.activityId)
                 return mappedEvent
             }
         }
@@ -56,16 +52,12 @@ extension APIClient {
     static func makeUpdateEvent(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable (SessionInput, UUID) async throws -> Event {
         { sessionInput, sessionId in
             try await withAuthorization {
-                let activity = try await api.updateEvent(.init(
+                let event = try await api.updateEvent(.init(
                     path: .init(eventId: sessionId.uuidString),
                     body: .json(.init(sessionInput))
                 )).ok.body.json
-                guard let updatedEvent = activity.events.first(where: { $0.id == sessionId.uuidString }) else {
-                    throw URLError(.cannotParseResponse)
-                }
-                let mappedActivity = Activity(activity)
-                let mappedEvent = Event(updatedEvent)
-                try await sessionCache.updateOrAppendActivity(mappedActivity)
+                let mappedEvent = Event(event)
+                try await sessionCache.updateOrAppendEvent(mappedEvent)
                 return mappedEvent
             }
         }
@@ -92,6 +84,12 @@ extension APIClient {
                     let participantEvent = ParticipantEvent(try output.body.json)
                     await sessionCache.updateOrAppendParticipantEvent(participantEvent)
                     return participantEvent
+                case .forbidden(let forbidden):
+                    throw ApiError(try forbidden.body.json)
+                case .notFound(let notFound):
+                    throw ApiError(try notFound.body.json)
+                case .conflict(let conflict):
+                    throw ApiError(try conflict.body.json)
                 case .internalServerError(let internalError):
                     throw ApiError(try internalError.body.json)
                 case .undocumented:

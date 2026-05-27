@@ -3,7 +3,6 @@ package dk.example.feedback.service
 import dk.example.feedback.dto.ActivityDto
 import dk.example.feedback.dto.ActivityInput
 import dk.example.feedback.helpers.getAccountId
-import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.ActivityQuestionUpsert
 import dk.example.feedback.persistence.repo.EventRepo
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service
 class ActivityService(
     private val activityRepo: ActivityRepo,
     private val eventRepo: EventRepo,
+    private val authorizationService: AuthorizationService,
 ) {
 
     fun createActivity(input: ActivityInput, jwt: Jwt): ActivityDto {
@@ -37,8 +37,7 @@ class ActivityService(
     }
 
     fun updateActivity(activityId: UUID, input: ActivityInput, jwt: Jwt): ActivityDto {
-        val activity = activityRepo.getActivity(activityId)
-        jwt.verifyAccountHasId(activity.manager.id)
+        authorizationService.requireActivityManager(activityId = activityId, actorAccountId = jwt.getAccountId())
         activityRepo.updateActivity(
             activityId = activityId,
             title = input.title,
@@ -53,14 +52,14 @@ class ActivityService(
                 )
             },
             invitedEmails = input.invitedEmails,
+            managerId = jwt.getAccountId(),
         )
         return toActivityDto(activityId)
     }
 
     fun deleteActivity(activityId: UUID, jwt: Jwt) {
-        val activity = activityRepo.getActivity(activityId)
-        jwt.verifyAccountHasId(activity.manager.id)
-        activityRepo.deleteActivity(activityId)
+        authorizationService.requireActivityManager(activityId = activityId, actorAccountId = jwt.getAccountId())
+        activityRepo.deleteActivity(activityId = activityId, managerId = jwt.getAccountId())
     }
 
     fun getManagerActivities(managerId: String): List<ActivityDto> {

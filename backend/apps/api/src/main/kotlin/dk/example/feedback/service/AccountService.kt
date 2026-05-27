@@ -1,7 +1,6 @@
 package dk.example.feedback.service
 
 import dk.example.feedback.helpers.getAccountId
-import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.model.database.AccountEntity
 import dk.example.feedback.model.enumerations.Role
 import dk.example.feedback.model.helpers.normalizedEmail
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service
 class AccountService(
     val accountRepo: AccountRepo,
     private val eventRepo: EventRepo,
+    private val authorizationService: AuthorizationService,
 ) {
 
     private val logger = LoggerFactory.getLogger(AccountService::class.java)
@@ -70,7 +70,7 @@ class AccountService(
         jwt: Jwt,
     ) {
         val normalizedEmail = email.normalizedEmail()
-        jwt.verifyAccountHasId(accountId)
+        authorizationService.requireSelf(targetAccountId = accountId, actorAccountId = jwt.getAccountId())
         accountRepo.updateAccount(accountId = accountId, name = name, email = normalizedEmail, phoneNumber = phoneNumber)
         if (normalizedEmail != null) {
             eventRepo.joinInvitedEventsForEmail(accountId = accountId, email = normalizedEmail)
@@ -82,7 +82,7 @@ class AccountService(
     }
 
     fun unlinkFCMTokenFromAccount(fcmToken: String, jwt: Jwt) {
-        jwt.verifyAccountHasId(jwt.getAccountId())
+        authorizationService.requireSelf(targetAccountId = jwt.getAccountId(), actorAccountId = jwt.getAccountId())
         accountRepo.getAccount(accountId = jwt.getAccountId()).fcmTokens
             .find { it == fcmToken }
             ?: throw IllegalArgumentException("FCM token $fcmToken not found for account ${jwt.getAccountId()}")
@@ -90,7 +90,7 @@ class AccountService(
     }
 
     fun deleteAccount(accountId: String, jwt: Jwt) {
-        jwt.verifyAccountHasId(accountId)
+        authorizationService.requireSelf(targetAccountId = accountId, actorAccountId = jwt.getAccountId())
         accountRepo.deleteAccount(accountId)
     }
 }

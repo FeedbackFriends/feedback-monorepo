@@ -73,6 +73,14 @@ public actor APIClientCache {
         self.bootstrap = bootstrap
     }
 
+    public func appendEvent(_ event: Event, toActivityId activityId: UUID) throws {
+        guard var bootstrap else {
+            throw CacheMutationError.managerDataUnavailable
+        }
+        try bootstrap.appendEvent(event, toActivityId: activityId)
+        self.bootstrap = bootstrap
+    }
+
     public func markEventAsSeen(eventId: UUID) throws {
         guard var bootstrap else {
             throw CacheMutationError.managerDataUnavailable
@@ -139,6 +147,12 @@ public extension Bootstrap {
     mutating func updateOrAppendEvent(_ event: Event) throws {
         var managerData = try requiredManagerData()
         _ = try managerData.setEvent(event)
+        self.managerData = managerData
+    }
+
+    mutating func appendEvent(_ event: Event, toActivityId activityId: UUID) throws {
+        var managerData = try requiredManagerData()
+        try managerData.appendEvent(event, toActivityId: activityId)
         self.managerData = managerData
     }
     
@@ -290,6 +304,14 @@ private extension ManagerData {
             return activityId
         }
         throw APIClientCache.CacheMutationError.eventNotFound(event.id)
+    }
+
+    mutating func appendEvent(_ event: Event, toActivityId activityId: UUID) throws {
+        guard var activity = activities[id: activityId] else {
+            throw APIClientCache.CacheMutationError.activityNotFound(activityId)
+        }
+        activity.events.append(event)
+        activities[id: activityId] = activity
     }
 
     mutating func markNotificationItemsSeen(eventId: UUID?) -> Int {

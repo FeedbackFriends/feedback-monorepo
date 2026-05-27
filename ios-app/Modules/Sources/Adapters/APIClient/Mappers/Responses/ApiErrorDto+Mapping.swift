@@ -12,6 +12,8 @@ public extension DomainCode {
             self = .cannotJoinOwnEvent
         case .cannotGiveFeedbackToSelf:
             self = .cannotGiveFeedbackToSelf
+        case .forbiddenResourceAccess:
+            self = .forbiddenResourceAccess
         case .pincodeNotFound:
             self = .pincodeNotFound
         }

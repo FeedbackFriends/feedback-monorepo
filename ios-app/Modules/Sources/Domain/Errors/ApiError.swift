@@ -26,5 +26,6 @@ public enum DomainCode: Sendable {
     case eventAlreadyJoined
     case cannotJoinOwnEvent
     case cannotGiveFeedbackToSelf
+    case forbiddenResourceAccess
     case pincodeNotFound
 }

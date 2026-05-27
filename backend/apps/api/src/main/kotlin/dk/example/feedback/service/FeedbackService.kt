@@ -6,7 +6,6 @@ import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.SubmitFeedbackResponseDto
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.participantResponses
-import dk.example.feedback.model.database.EventEntity
 import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.payloads.FeedbackInput
@@ -24,6 +23,7 @@ class FeedbackService(
     val eventRepo: EventRepo,
     val accountRepo: AccountRepo,
     val newFeedbackNotificationRepo: NewFeedbackNotificationRepo,
+    val authorizationService: AuthorizationService,
 ) {
 
     fun startEvent(pinCode: String, jwt: Jwt): FeedbackEventDto {
@@ -32,7 +32,7 @@ class FeedbackService(
         val feedback = event.feedback
         val manager = event.manager
         throwIfAccountAlreadyGivenFeedback(feedback = feedback, accountId = accountId, eventId = event.id)
-        throwIfAccountIsManager(events = event, accountId = accountId)
+        authorizationService.requireNotEventManagerForFeedback(event = event, actorAccountId = accountId)
         return FeedbackEventDto(
             questions = event.questions.map {
                 ParticipantQuestionDto(
@@ -59,7 +59,7 @@ class FeedbackService(
         val event = eventRepo.getEventByPinCode(pinCode = pinCode)
         val managerId = event.manager.id
         throwIfAccountAlreadyGivenFeedback(feedback = event.feedback, accountId = accountId, eventId = event.id)
-        throwIfAccountIsManager(events = event, accountId = accountId)
+        authorizationService.requireNotEventManagerForFeedback(event = event, actorAccountId = accountId)
         val persistedFeedback = feedbackRepo.persistFeedback(
             feedbackList = feedbackInputList,
             participantId = accountId,
@@ -92,10 +92,4 @@ class FeedbackService(
         }
     }
 
-    private fun throwIfAccountIsManager(events: EventEntity, accountId: String) {
-        val isManager = events.manager.id == accountId
-        if (isManager) {
-            throw IllegalArgumentException("Owner of event cannot give feedback")
-        }
-    }
 }

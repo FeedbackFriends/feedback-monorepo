@@ -1,9 +1,8 @@
 package dk.example.feedback.service
 
-import dk.example.feedback.dto.ActivityDto
+import dk.example.feedback.dto.EventDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.helpers.getAccountId
-import dk.example.feedback.helpers.verifyAccountHasId
 import dk.example.feedback.model.exceptions.FeedbackAlreadySubmittedException
 import dk.example.feedback.model.exceptions.EventAlreadyJoinedException
 import dk.example.feedback.payloads.EventInput
@@ -17,15 +16,13 @@ import org.springframework.stereotype.Service
 @Service
 class EventService(
     private val eventRepo: EventRepo,
-    private val activityService: ActivityService,
     private val notificationHistoryRepo: NotificationHistoryRepo,
+    private val authorizationService: AuthorizationService,
 ) {
 
-    fun createEvent(eventInput: EventInput, jwt: Jwt): ActivityDto {
-        val activity = activityService.toActivityDto(eventInput.activityId)
-        jwt.verifyAccountHasId(activity.owner.id)
+    fun createEvent(eventInput: EventInput, jwt: Jwt): EventDto {
         val pinCode = PinCodeGenerator(eventRepo = eventRepo).generate()
-        eventRepo.persistEvent(
+        val event = eventRepo.persistEvent(
             activityId = eventInput.activityId,
             date = eventInput.date,
             location = eventInput.location,
@@ -33,36 +30,33 @@ class EventService(
             generatedPinCode = pinCode,
             managerId = jwt.getAccountId(),
         )
-        return activityService.toActivityDto(eventInput.activityId)
+        return event.toActivityEventDto(pinCode = pinCode)
     }
 
-    fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): ActivityDto {
-        val event = eventRepo.getEvent(eventId)
-        jwt.verifyAccountHasId(event.manager.id)
+    fun updateEvent(eventInput: EventInput, eventId: UUID, jwt: Jwt): EventDto {
+        val event = authorizationService.requireEventManager(eventId = eventId, actorAccountId = jwt.getAccountId())
         if (event.feedback.isNotEmpty()) {
             throw IllegalArgumentException("Cannot update event with feedback")
         }
-        eventRepo.updateEvent(
+        val updatedEvent = eventRepo.updateEvent(
             eventId = eventId,
             date = eventInput.date,
             location = eventInput.location,
             durationInMinutes = eventInput.durationInMinutes,
+            managerId = jwt.getAccountId(),
         )
-        return activityService.toActivityDto(event.activity.id)
+        return updatedEvent.toActivityEventDto(pinCode = eventRepo.getPinCodeForEvent(updatedEvent.id))
     }
 
     fun deleteEvent(eventId: UUID, jwt: Jwt) {
-        val event = eventRepo.getEvent(eventId)
-        jwt.verifyAccountHasId(event.manager.id)
-        eventRepo.deleteEvent(eventId)
+        authorizationService.requireEventManager(eventId = eventId, actorAccountId = jwt.getAccountId())
+        eventRepo.deleteEvent(eventId = eventId, managerId = jwt.getAccountId())
     }
 
     fun joinEvent(pinCode: String, jwt: Jwt): ParticipantEventDto {
         val accountId = jwt.getAccountId()
         val event = eventRepo.getEventByPinCode(pinCode)
-        if (event.manager.id == accountId) {
-            throw IllegalArgumentException("Owner of event cannot give feedback")
-        }
+        authorizationService.requireNotEventManagerForJoin(event = event, actorAccountId = accountId)
         if (eventRepo.isParticipant(event.id, accountId)) {
             throw EventAlreadyJoinedException(event.id, accountId)
         }
@@ -78,9 +72,8 @@ class EventService(
     }
 
     fun markEventAsSeen(eventId: UUID, jwt: Jwt) {
-        val event = eventRepo.getEvent(eventId)
-        jwt.verifyAccountHasId(event.manager.id)
-        eventRepo.markEventAsSeen(eventId)
+        authorizationService.requireEventManager(eventId = eventId, actorAccountId = jwt.getAccountId())
+        eventRepo.markEventAsSeen(eventId = eventId, managerId = jwt.getAccountId())
         notificationHistoryRepo.markNotificationHistoryAsSeen(
             accountId = jwt.getAccountId(),
             eventId = eventId,

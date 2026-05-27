@@ -23,6 +23,9 @@ public extension Error {
             case .cannotGiveFeedbackToSelf:
                 title = "Not allowed"
                 message = "You cannot give feedback to yourself."
+            case .forbiddenResourceAccess:
+                title = "Not allowed"
+                message = "You do not have access to this resource."
             }
         }
         if let urlError = self as? URLError {

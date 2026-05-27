@@ -62,8 +62,12 @@ class ActivityRepo {
         sendEmails: Boolean,
         questions: List<ActivityQuestionUpsert>,
         invitedEmails: List<String>,
+        managerId: String,
     ): ActivityEntity {
         val activity = ActivityDao.findById(activityId) ?: throw IllegalArgumentException("Could not find activity id: $activityId")
+        if (activity.manager.id.value != managerId) {
+            throw IllegalArgumentException("Activity $activityId does not belong to manager $managerId")
+        }
         activity.apply {
             this.title = title
             this.agenda = agenda
@@ -75,8 +79,11 @@ class ActivityRepo {
         return activity.toModel()
     }
 
-    fun deleteActivity(activityId: UUID) {
+    fun deleteActivity(activityId: UUID, managerId: String) {
         val activity = ActivityDao.findById(activityId) ?: throw IllegalArgumentException("Could not find activity id: $activityId")
+        if (activity.manager.id.value != managerId) {
+            throw IllegalArgumentException("Activity $activityId does not belong to manager $managerId")
+        }
         activity.delete()
     }
 

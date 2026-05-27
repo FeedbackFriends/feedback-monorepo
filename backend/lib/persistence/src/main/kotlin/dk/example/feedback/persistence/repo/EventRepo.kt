@@ -136,8 +136,11 @@ class EventRepo {
         return foundEvent.toModel()
     }
 
-    fun deleteEvent(eventId: UUID) {
+    fun deleteEvent(eventId: UUID, managerId: String) {
         val foundEvent = EventDao.findById(eventId) ?: throw IllegalArgumentException("Could not find event id: $eventId")
+        if (foundEvent.manager.id.value != managerId) {
+            throw IllegalArgumentException("Event $eventId does not belong to manager $managerId")
+        }
         foundEvent.delete()
     }
 
@@ -146,8 +149,12 @@ class EventRepo {
         date: OffsetDateTime,
         location: String?,
         durationInMinutes: Int,
+        managerId: String,
     ): EventEntity {
         val foundEvent = EventDao.findById(eventId) ?: throw IllegalArgumentException("Could not find event id: $eventId")
+        if (foundEvent.manager.id.value != managerId) {
+            throw IllegalArgumentException("Event $eventId does not belong to manager $managerId")
+        }
         foundEvent.apply {
             this.date = date
             this.location = location
@@ -281,8 +288,12 @@ class EventRepo {
         }
     }
 
-    fun markEventAsSeen(eventId: UUID) {
-        EventDao.findById(eventId)?.questions?.forEach { question ->
+    fun markEventAsSeen(eventId: UUID, managerId: String) {
+        val event = EventDao.findById(eventId) ?: throw IllegalArgumentException("Could not find event id: $eventId")
+        if (event.manager.id.value != managerId) {
+            throw IllegalArgumentException("Event $eventId does not belong to manager $managerId")
+        }
+        event.questions.forEach { question ->
             question.feedback.forEach { feedback ->
                 feedback.seenByManager = true
                 feedback.flush()

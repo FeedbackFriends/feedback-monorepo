@@ -10,6 +10,12 @@ extension APIClient {
                 switch response {
                 case .ok(let output):
                     return .init(try output.body.json, pinCode: pinCode)
+                case .forbidden(let forbidden):
+                    throw ApiError(try forbidden.body.json)
+                case .notFound(let notFound):
+                    throw ApiError(try notFound.body.json)
+                case .conflict(let conflict):
+                    throw ApiError(try conflict.body.json)
                 case .internalServerError(let internalError):
                     throw ApiError(try internalError.body.json)
                 case .undocumented:

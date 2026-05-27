@@ -396,57 +396,6 @@ export interface components {
             durationInMinutes: number;
             location?: string;
         };
-        /** @description Manager-facing activity with configuration, active questions, event history, and trend analytics. */
-        ActivityDto: {
-            /**
-             * Format: uuid
-             * @description Stable identifier for the activity.
-             */
-            id: string;
-            /** @description Display title shown to managers and participants. */
-            title: string;
-            agenda?: string;
-            owner: components["schemas"]["OwnerDto"];
-            /**
-             * @description Run mode that controls how events are joined and processed.
-             * @enum {string}
-             */
-            runMode: "MANUAL" | "AUTOMATIC";
-            sendEmails: boolean;
-            invitedEmails: string[];
-            events: components["schemas"]["EventDto"][];
-            currentQuestions: components["schemas"]["QuestionDto"][];
-            trend: components["schemas"]["ActivityTrendDto"];
-        };
-        /** @description Activity trend computed from comparable event ratings normalized to the 0-5 scale. */
-        ActivityTrendDto: {
-            /**
-             * @description Trend direction across comparable events.
-             * @enum {string}
-             */
-            direction: "improving" | "stable" | "declining" | "insufficient_data";
-            /**
-             * @description UI indicator derived from the trend direction.
-             * @enum {string}
-             */
-            indicator: "positive" | "neutral" | "negative";
-            /**
-             * @description Metric used to compute the trend.
-             * @enum {string}
-             */
-            metric: "average_rating";
-            /** Format: double */
-            latestValue?: number;
-            /** Format: double */
-            previousValue?: number;
-            /** Format: double */
-            delta?: number;
-            /**
-             * Format: int32
-             * @description Number of events used for trend comparison.
-             */
-            comparedEventCount: number;
-        };
         /** @description Manager-facing event summary with schedule, join details, and question snapshot. */
         EventDto: {
             /**
@@ -509,13 +458,6 @@ export interface components {
             /** Format: int32 */
             responses: number;
         };
-        /** @description Owner identity attached to activities and events. */
-        OwnerDto: {
-            /** @description Account identifier for the owner. */
-            id: string;
-            name?: string;
-            email?: string;
-        };
         /** @description Question reference used in activity and event snapshots. */
         QuestionDto: {
             /**
@@ -568,6 +510,64 @@ export interface components {
              * @enum {string}
              */
             feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
+        };
+        /** @description Manager-facing activity with configuration, active questions, event history, and trend analytics. */
+        ActivityDto: {
+            /**
+             * Format: uuid
+             * @description Stable identifier for the activity.
+             */
+            id: string;
+            /** @description Display title shown to managers and participants. */
+            title: string;
+            agenda?: string;
+            owner: components["schemas"]["OwnerDto"];
+            /**
+             * @description Run mode that controls how events are joined and processed.
+             * @enum {string}
+             */
+            runMode: "MANUAL" | "AUTOMATIC";
+            sendEmails: boolean;
+            invitedEmails: string[];
+            events: components["schemas"]["EventDto"][];
+            currentQuestions: components["schemas"]["QuestionDto"][];
+            trend: components["schemas"]["ActivityTrendDto"];
+        };
+        /** @description Activity trend computed from comparable event ratings normalized to the 0-5 scale. */
+        ActivityTrendDto: {
+            /**
+             * @description Trend direction across comparable events.
+             * @enum {string}
+             */
+            direction: "improving" | "stable" | "declining" | "insufficient_data";
+            /**
+             * @description UI indicator derived from the trend direction.
+             * @enum {string}
+             */
+            indicator: "positive" | "neutral" | "negative";
+            /**
+             * @description Metric used to compute the trend.
+             * @enum {string}
+             */
+            metric: "average_rating";
+            /** Format: double */
+            latestValue?: number;
+            /** Format: double */
+            previousValue?: number;
+            /** Format: double */
+            delta?: number;
+            /**
+             * Format: int32
+             * @description Number of events used for trend comparison.
+             */
+            comparedEventCount: number;
+        };
+        /** @description Owner identity attached to activities and events. */
+        OwnerDto: {
+            /** @description Account identifier for the owner. */
+            id: string;
+            name?: string;
+            email?: string;
         };
         /** @description Input payload for updating account profile information. */
         ModifyAccountInput: {
@@ -907,7 +907,7 @@ export interface components {
             timestamp?: string;
             message?: string;
             /** @enum {string} */
-            domainCode?: "FEEDBACK_ALREADY_SUBMITTED" | "EVENT_ALREADY_JOINED" | "CANNOT_JOIN_OWN_EVENT" | "CANNOT_GIVE_FEEDBACK_TO_SELF" | "PINCODE_NOT_FOUND";
+            domainCode?: "FEEDBACK_ALREADY_SUBMITTED" | "EVENT_ALREADY_JOINED" | "CANNOT_JOIN_OWN_EVENT" | "CANNOT_GIVE_FEEDBACK_TO_SELF" | "FORBIDDEN_RESOURCE_ACCESS" | "PINCODE_NOT_FOUND";
             exceptionType?: string;
             path?: string;
         };
@@ -941,7 +941,34 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ActivityDto"];
+                    "application/json": components["schemas"]["EventDto"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
                 };
             };
             /** @description Internal Server Error */
@@ -973,6 +1000,33 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1001,6 +1055,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {
@@ -1032,6 +1113,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {
@@ -1068,6 +1176,33 @@ export interface operations {
                     "application/json": components["schemas"]["ActivityDto"];
                 };
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1096,6 +1231,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {
@@ -1127,6 +1289,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {
@@ -1161,6 +1350,33 @@ export interface operations {
                     "application/json": components["schemas"]["BootstrapDto"];
                 };
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1187,6 +1403,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {
@@ -1219,6 +1462,33 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1249,6 +1519,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {
@@ -1281,6 +1578,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SubmitFeedbackResponseDto"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
                 };
             };
             /** @description Internal Server Error */
@@ -1316,6 +1640,33 @@ export interface operations {
                     "application/json": components["schemas"]["FeedbackEventDto"];
                 };
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1346,7 +1697,34 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ActivityDto"];
+                    "application/json": components["schemas"]["EventDto"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
                 };
             };
             /** @description Internal Server Error */
@@ -1380,6 +1758,33 @@ export interface operations {
                     "application/json": components["schemas"]["ParticipantEventDto"];
                 };
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1407,6 +1812,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MockTokenDto"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
                 };
             };
             /** @description Internal Server Error */
@@ -1438,6 +1870,33 @@ export interface operations {
                     "application/json": components["schemas"]["MockTokenDto"];
                 };
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1465,6 +1924,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MockTokenDto"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
                 };
             };
             /** @description Internal Server Error */
@@ -1496,6 +1982,33 @@ export interface operations {
                     "application/json": components["schemas"]["MockTokenDto"];
                 };
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1525,6 +2038,33 @@ export interface operations {
                     "application/json": components["schemas"]["MockTokenDto"];
                 };
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1551,6 +2091,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {
@@ -1583,6 +2150,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MockTokenDto"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
                 };
             };
             /** @description Internal Server Error */
@@ -1618,6 +2212,33 @@ export interface operations {
                     "application/json": components["schemas"]["ActivityDto"];
                 };
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1649,6 +2270,33 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
             /** @description Internal Server Error */
             500: {
                 headers: {
@@ -1675,6 +2323,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {
@@ -1703,6 +2378,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BootstrapDto"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
                 };
             };
             /** @description Internal Server Error */
@@ -1742,6 +2444,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
             };
             /** @description Internal Server Error */
             500: {

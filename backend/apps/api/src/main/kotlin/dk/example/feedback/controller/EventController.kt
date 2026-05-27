@@ -1,6 +1,6 @@
 package dk.example.feedback.controller
 
-import dk.example.feedback.dto.ActivityDto
+import dk.example.feedback.dto.EventDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.payloads.EventInput
@@ -27,7 +27,7 @@ class EventController(
 
     @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     @PostMapping
-    fun createEvent(@RequestBody eventInput: EventInput, @AuthenticationPrincipal principal: Jwt): ActivityDto {
+    fun createEvent(@RequestBody eventInput: EventInput, @AuthenticationPrincipal principal: Jwt): EventDto {
         return eventService.createEvent(eventInput = eventInput, jwt = principal)
     }
 
@@ -37,7 +37,7 @@ class EventController(
         @RequestBody eventInput: EventInput,
         @PathVariable eventId: UUID,
         @AuthenticationPrincipal principal: Jwt
-    ): ActivityDto {
+    ): EventDto {
         return eventService.updateEvent(eventInput = eventInput, eventId = eventId, jwt = principal)
     }
 

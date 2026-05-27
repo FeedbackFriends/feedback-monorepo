@@ -243,11 +243,11 @@ struct APIClientLiveTests {
             api: MockAPI(
                 createEventHandler: { request in
                     createInput.setValue(request)
-                    return .ok(.init(body: .json(Self.createdActivityDto(title: "Created title"))))
+                    return .ok(.init(body: .json(Self.createdEventDto())))
                 },
                 updateEventHandler: { request in
                     updateInput.setValue(request)
-                    return .ok(.init(body: .json(Self.feedbackFlowDto(title: "Updated title", id: request.path.eventId))))
+                    return .ok(.init(body: .json(Self.createdEventDto(id: request.path.eventId))))
                 }
             ),
             cache: cache
@@ -739,9 +739,9 @@ private extension APIClientLiveTests {
         )
     }
 
-    static func createdEventDto() -> Components.Schemas.EventDto {
+    static func createdEventDto(id: String = createdSessionId.uuidString) -> Components.Schemas.EventDto {
         .init(
-            id: createdSessionId.uuidString,
+            id: id,
             date: referenceDate,
             durationInMinutes: 45,
             location: "Room Blue",

@@ -37,6 +37,13 @@ struct PresentableErrorTests {
         #expect(presentableError.title == "Already joined")
         #expect(presentableError.message == "You already joined this event.")
     }
+
+    @Test func `Presentable error correctly maps API forbiddenResourceAccess error`() async throws {
+        let apiError = ApiError(domainCode: .forbiddenResourceAccess)
+        let presentableError = apiError.localized
+        #expect(presentableError.title == "Not allowed")
+        #expect(presentableError.message == "You do not have access to this resource.")
+    }
 }
 
 extension ApiError {

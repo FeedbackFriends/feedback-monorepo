@@ -68,12 +68,11 @@ class E2ETest(
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value(activityId))
-            .andExpect(jsonPath("$.events[0].location").value("Oslo"))
-            .andExpect(jsonPath("$.currentQuestions[0].text").value("How did the event go?"))
-            .andExpect(jsonPath("$.currentQuestions[0].feedbackType").value("Emoji"))
-            .andExpect(jsonPath("$.currentQuestions[1].text").value("What should we improve next time?"))
-            .andExpect(jsonPath("$.currentQuestions[1].feedbackType").value("Comment"))
+            .andExpect(jsonPath("$.location").value("Oslo"))
+            .andExpect(jsonPath("$.questionsSnapshot[0].text").value("How did the event go?"))
+            .andExpect(jsonPath("$.questionsSnapshot[0].feedbackType").value("Emoji"))
+            .andExpect(jsonPath("$.questionsSnapshot[1].text").value("What should we improve next time?"))
+            .andExpect(jsonPath("$.questionsSnapshot[1].feedbackType").value("Comment"))
     }
 
     @Test
@@ -106,8 +105,6 @@ class E2ETest(
             .andReturn()
 
         val eventId = objectMapper.readTree(response.response.contentAsString)
-            .get("events")
-            .get(0)
             .get("id")
             .asText()
 
@@ -473,8 +470,7 @@ class E2ETest(
 
         return objectMapper
             .readTree(response.response.contentAsString)
-            .get("events")
-            .first { it.get("location").asText() == location }
+            .also { require(it.get("location").asText() == location) }
     }
 
     private fun submitEmojiFeedback(participantId: String, pinCode: String, questionId: UUID) {

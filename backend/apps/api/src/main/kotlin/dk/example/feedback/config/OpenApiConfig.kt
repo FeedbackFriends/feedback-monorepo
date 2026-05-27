@@ -68,7 +68,12 @@ class OpenApiConfig {
                     val errorContent = Content().addMediaType(
                         "application/json", MediaType().schema(apiErrorSchema)
                     )
-                    operation.responses.addApiResponse("500", ApiResponse().description("Internal Server Error").content(errorContent))
+                    ErrorResponseConfig.globalDocumentedStatuses.forEach { status ->
+                        operation.responses.addApiResponse(
+                            status.value().toString(),
+                            ApiResponse().description(status.reasonPhrase).content(errorContent)
+                        )
+                    }
                 }
             }
         }

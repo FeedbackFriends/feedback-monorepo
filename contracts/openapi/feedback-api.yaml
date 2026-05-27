@@ -33,7 +33,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ActivityDto"
+                $ref: "#/components/schemas/EventDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -54,6 +72,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -75,6 +111,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -96,6 +150,24 @@ paths:
         "200":
           description: OK
           content: {}
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -127,6 +199,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActivityDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -147,6 +237,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -167,6 +275,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -190,6 +316,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BootstrapDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -203,6 +347,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -223,6 +385,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -243,6 +423,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -267,6 +465,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubmitFeedbackResponseDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -291,6 +507,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FeedbackEventDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -314,7 +548,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ActivityDto"
+                $ref: "#/components/schemas/EventDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -339,6 +591,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ParticipantEventDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -357,6 +627,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MockTokenDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -375,6 +663,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MockTokenDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -393,6 +699,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MockTokenDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -411,6 +735,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MockTokenDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -429,6 +771,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MockTokenDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -443,6 +803,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -467,6 +845,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MockTokenDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -491,6 +887,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActivityDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -511,6 +925,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -525,6 +957,24 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -543,6 +993,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BootstrapDto"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -573,6 +1041,24 @@ paths:
                 $ref: "#/components/schemas/BootstrapDto"
         "204":
           description: Bootstrap hash unchanged; no response body.
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
           content:
@@ -602,97 +1088,6 @@ components:
       - activityId
       - date
       - durationInMinutes
-    ActivityDto:
-      type: object
-      description: "Manager-facing activity with configuration, active questions,\
-        \ event history, and trend analytics."
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Stable identifier for the activity.
-        title:
-          type: string
-          description: Display title shown to managers and participants.
-        agenda:
-          type: string
-        owner:
-          $ref: "#/components/schemas/OwnerDto"
-        runMode:
-          type: string
-          description: Run mode that controls how events are joined and processed.
-          enum:
-          - MANUAL
-          - AUTOMATIC
-        sendEmails:
-          type: boolean
-        invitedEmails:
-          type: array
-          items:
-            type: string
-        events:
-          type: array
-          items:
-            $ref: "#/components/schemas/EventDto"
-        currentQuestions:
-          type: array
-          items:
-            $ref: "#/components/schemas/QuestionDto"
-        trend:
-          $ref: "#/components/schemas/ActivityTrendDto"
-      required:
-      - currentQuestions
-      - events
-      - id
-      - invitedEmails
-      - owner
-      - runMode
-      - sendEmails
-      - title
-      - trend
-    ActivityTrendDto:
-      type: object
-      description: Activity trend computed from comparable event ratings normalized
-        to the 0-5 scale.
-      properties:
-        direction:
-          type: string
-          description: Trend direction across comparable events.
-          enum:
-          - improving
-          - stable
-          - declining
-          - insufficient_data
-        indicator:
-          type: string
-          description: UI indicator derived from the trend direction.
-          enum:
-          - positive
-          - neutral
-          - negative
-        metric:
-          type: string
-          description: Metric used to compute the trend.
-          enum:
-          - average_rating
-        latestValue:
-          type: number
-          format: double
-        previousValue:
-          type: number
-          format: double
-        delta:
-          type: number
-          format: double
-        comparedEventCount:
-          type: integer
-          format: int32
-          description: Number of events used for trend comparison.
-      required:
-      - comparedEventCount
-      - direction
-      - indicator
-      - metric
     EventDto:
       type: object
       description: "Manager-facing event summary with schedule, join details, and\
@@ -806,19 +1201,6 @@ components:
       - responses
       - segmentationStats
       - unseenResponses
-    OwnerDto:
-      type: object
-      description: Owner identity attached to activities and events.
-      properties:
-        id:
-          type: string
-          description: Account identifier for the owner.
-        name:
-          type: string
-        email:
-          type: string
-      required:
-      - id
     QuestionDto:
       type: object
       description: Question reference used in activity and event snapshots.
@@ -916,6 +1298,110 @@ components:
       required:
       - feedbackType
       - questionText
+    ActivityDto:
+      type: object
+      description: "Manager-facing activity with configuration, active questions,\
+        \ event history, and trend analytics."
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Stable identifier for the activity.
+        title:
+          type: string
+          description: Display title shown to managers and participants.
+        agenda:
+          type: string
+        owner:
+          $ref: "#/components/schemas/OwnerDto"
+        runMode:
+          type: string
+          description: Run mode that controls how events are joined and processed.
+          enum:
+          - MANUAL
+          - AUTOMATIC
+        sendEmails:
+          type: boolean
+        invitedEmails:
+          type: array
+          items:
+            type: string
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventDto"
+        currentQuestions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionDto"
+        trend:
+          $ref: "#/components/schemas/ActivityTrendDto"
+      required:
+      - currentQuestions
+      - events
+      - id
+      - invitedEmails
+      - owner
+      - runMode
+      - sendEmails
+      - title
+      - trend
+    ActivityTrendDto:
+      type: object
+      description: Activity trend computed from comparable event ratings normalized
+        to the 0-5 scale.
+      properties:
+        direction:
+          type: string
+          description: Trend direction across comparable events.
+          enum:
+          - improving
+          - stable
+          - declining
+          - insufficient_data
+        indicator:
+          type: string
+          description: UI indicator derived from the trend direction.
+          enum:
+          - positive
+          - neutral
+          - negative
+        metric:
+          type: string
+          description: Metric used to compute the trend.
+          enum:
+          - average_rating
+        latestValue:
+          type: number
+          format: double
+        previousValue:
+          type: number
+          format: double
+        delta:
+          type: number
+          format: double
+        comparedEventCount:
+          type: integer
+          format: int32
+          description: Number of events used for trend comparison.
+      required:
+      - comparedEventCount
+      - direction
+      - indicator
+      - metric
+    OwnerDto:
+      type: object
+      description: Owner identity attached to activities and events.
+      properties:
+        id:
+          type: string
+          description: Account identifier for the owner.
+        name:
+          type: string
+        email:
+          type: string
+      required:
+      - id
     ModifyAccountInput:
       type: object
       description: Input payload for updating account profile information.
@@ -1541,6 +2027,7 @@ components:
           - EVENT_ALREADY_JOINED
           - CANNOT_JOIN_OWN_EVENT
           - CANNOT_GIVE_FEEDBACK_TO_SELF
+          - FORBIDDEN_RESOURCE_ACCESS
           - PINCODE_NOT_FOUND
         exceptionType:
           type: string
