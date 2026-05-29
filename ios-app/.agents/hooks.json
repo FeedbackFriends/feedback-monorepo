@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -lc 'cd \"$(git rev-parse --show-toplevel)\" && exec ios-app/.agents/scripts/allow_xcode_mcp.js'",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -lc 'cd \"$(git rev-parse --show-toplevel)\" && exec ios-app/.agents/hooks/swiftlint-fix-changed.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}

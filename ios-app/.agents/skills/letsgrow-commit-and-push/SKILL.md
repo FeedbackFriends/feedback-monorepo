@@ -1,9 +1,9 @@
 ---
-name: commit-and-push
-description: Commit intended local changes in small independent Git commits when possible, then push them. Use when the user asks Codex to commit, push, publish, save work to GitHub, or otherwise create Git commits and send them upstream. If the user does not name a branch, push to the current branch.
+name: letsgrow-commit-and-push
+description: Commit intended LetsGrow local changes in small independent Git commits when possible, then push them. Use when the user asks Codex to commit, push, publish, save work to GitHub, or otherwise create Git commits and send them upstream from this repo. If the user does not name a branch, push to the current branch.
 ---
 
-# Commit And Push
+# LetsGrow Commit And Push
 
 ## Workflow
 

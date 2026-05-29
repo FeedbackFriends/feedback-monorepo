@@ -1,4 +1,0 @@
-
-[mcp_servers.maestro]
-command = "maestro"
-args = ["mcp"]

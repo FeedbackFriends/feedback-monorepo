@@ -1,5 +1,5 @@
 ---
-name: openapi-domain-sync
+name: letsgrow-sync-openapi-ios
 description: >-
   Use when syncing the iOS app's handwritten API boundary from
   `Modules/Sources/OpenAPI/GeneratedSources/Client.swift` and `Types.swift`:
@@ -9,7 +9,7 @@ description: >-
   `Modules/Sources/Adapters/APIClient/Live` plus `AppMock/ApiClientMock.swift`.
 ---
 
-# OpenAPI Domain Sync
+# LetsGrow Sync OpenAPI iOS
 
 Use this skill when the user wants to:
 
@@ -54,7 +54,7 @@ Use this skill when the user wants to:
 Run the inventory script first:
 
 ```bash
-python3 .codex/skills/openapi-domain-sync/scripts/inventory_openapi_domain_sync.py
+python3 .agents/skills/letsgrow-sync-openapi-ios/scripts/inventory_openapi_domain_sync.py
 ```
 
 That script prints:

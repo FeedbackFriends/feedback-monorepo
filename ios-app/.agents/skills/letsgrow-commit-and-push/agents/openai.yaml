@@ -1,0 +1,7 @@
+interface:
+  display_name: "LetsGrow Commit and Push"
+  short_description: "Commit and push Git changes"
+  default_prompt: "Use $letsgrow-commit-and-push to commit the intended changes and push them; if no branch is named, push to the current branch."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,8 @@
+
+[mcp_servers.maestro]
+command = "maestro"
+args = ["mcp"]
+
+[mcp_servers.shadcn]
+command = "sh"
+args = ["-lc", "cd web && exec npx shadcn@latest mcp"]

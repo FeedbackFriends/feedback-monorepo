@@ -19,7 +19,23 @@ Editor config files:
 | Cursor | `.cursor/mcp.json` |
 | VS Code | `.vscode/mcp.json` |
 | OpenCode | `opencode.json` |
-| Codex | `~/.codex/config.toml` (manual) |
+| Codex | repo-local `.agents/config.toml` or `web/.agents/config.toml` |
+
+This repo keeps shadcn MCP config local:
+
+```toml
+[mcp_servers.shadcn]
+command = "sh"
+args = ["-lc", "cd web && exec npx shadcn@latest mcp"]
+```
+
+When working from `web/`, `web/.agents/config.toml` can use the shorter form:
+
+```toml
+[mcp_servers.shadcn]
+command = "npx"
+args = ["shadcn@latest", "mcp"]
+```
 
 ---
 
