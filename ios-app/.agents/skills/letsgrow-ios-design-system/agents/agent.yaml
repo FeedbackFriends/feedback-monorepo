@@ -1,0 +1,7 @@
+interface:
+  display_name: "LetsGrow iOS Design System"
+  short_description: "Expert on the app DesignSystem module"
+  default_prompt: "Use $letsgrow-ios-design-system to build or review UI using Modules/Sources/DesignSystem/."
+
+policy:
+  allow_implicit_invocation: true

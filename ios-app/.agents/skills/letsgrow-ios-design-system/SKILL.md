@@ -1,9 +1,9 @@
 ---
-name: feedback-ios-design-system
-description: Expert guidance for the Feedback iOS app design system in `Modules/Sources/DesignSystem/`, including reusable SwiftUI components, button styles, view modifiers, typography, colors, images, Lottie assets, and theme conventions. Use for any work on SwiftUI files, including building, reviewing, or refactoring UI in this app, and reuse or extend the existing DesignSystem instead of inventing new styling.
+name: letsgrow-ios-design-system
+description: Expert guidance for the LetsGrow iOS app design system in `Modules/Sources/DesignSystem/`, including reusable SwiftUI components, button styles, view modifiers, typography, colors, images, Lottie assets, and theme conventions. Use for any work on SwiftUI files, including building, reviewing, or refactoring UI in this app, and reuse or extend the existing DesignSystem instead of inventing new styling.
 ---
 
-# Feedback iOS Design System
+# LetsGrow iOS Design System
 
 Use `Modules/Sources/DesignSystem/` as the source of truth. Prefer reusing existing tokens, styles, and reusable views before introducing new UI primitives.
 

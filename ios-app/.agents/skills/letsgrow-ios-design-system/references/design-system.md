@@ -1,11 +1,11 @@
-# Feedback iOS Design System Reference
+# LetsGrow iOS Design System Reference
 
 Source of truth: `Modules/Sources/DesignSystem/`
 
 ## Core Direction
 
 - Build on shared SwiftUI primitives rather than styling feature views inline.
-- Invoke the `feedback-ios-design-system` skill before any work on a SwiftUI file in this app, including adding, editing, reviewing, or refactoring a view.
+- Invoke the `letsgrow-ios-design-system` skill before any work on a SwiftUI file in this app, including adding, editing, reviewing, or refactoring a view.
 - Reuse semantic tokens and component APIs instead of hardcoding colors, fonts, radii, or assets.
 - Keep new DesignSystem additions near similar code:
   `Resources/` for tokens and assets, `Styles/` for style wrappers, `ReusableViews/` for packaged UI, `ViewModifiers/` for cross-cutting behavior.
