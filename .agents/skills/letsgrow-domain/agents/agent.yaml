@@ -2,3 +2,6 @@ interface:
   display_name: "LetsGrow Domain"
   short_description: "LetsGrow product, marketing, and positioning guidance"
   default_prompt: "Use $letsgrow-domain to design a LetsGrow feature for the right target group."
+
+policy:
+  allow_implicit_invocation: true

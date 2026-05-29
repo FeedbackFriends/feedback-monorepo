@@ -1,0 +1,7 @@
+interface:
+  display_name: "UX Designer"
+  short_description: "UX research, flows, wireframes, and usability guidance"
+  default_prompt: "Use $ux-designer to review or design a user experience with clear flows, UX copy, and usability tradeoffs."
+
+policy:
+  allow_implicit_invocation: true
