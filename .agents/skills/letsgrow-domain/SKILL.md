@@ -1,6 +1,6 @@
 ---
 name: letsgrow-domain
-description: LetsGrow domain guidance for product, UX, marketing, positioning, pricing, onboarding, and project terminology. Use when Codex is designing, writing, reviewing, or prioritizing LetsGrow work that must fit the Danish recurring-meeting-improvement product and its Activity/Event domain language.
+description: LetsGrow domain guidance for product, UX, marketing, positioning, pricing, onboarding, and project terminology. Use when an agent is designing, writing, reviewing, or prioritizing LetsGrow work that must fit the Danish recurring-meeting-improvement product and its Activity/Event domain language.
 ---
 
 # LetsGrow Domain
