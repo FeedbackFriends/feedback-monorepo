@@ -72,7 +72,7 @@ private extension SignUpView {
             Text("Sign up")
                 .largeTitleTextStyle()
                 .foregroundStyle(Color.themeText.gradient)
-            Text("Signup to get started on your feedback jurney.")
+            Text("Sign up to improve recurring meetings with lightweight feedback.")
                 .bodyTextStyle()
                 .foregroundColor(.themeText)
             Button {

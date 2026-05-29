@@ -18,6 +18,8 @@ public struct ManageActivityView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
                     detailsSection
+                    calendarSetupSection
+                        .padding(.top, 4)
                     feedbackSection
                         .padding(.top, 4)
                     questionsSection
@@ -38,7 +40,14 @@ public struct ManageActivityView: View {
             }
             .alert($store.scope(state: \.alert, action: \.alert))
             .sheet(isPresented: $store.showInfoSheet) {
-                AutomaticInfoSheet(email: store.botEmail)
+                CalendarSetupView(
+                    email: store.botEmail,
+                    didCopyEmail: store.didCopyEmail,
+                    onCopyEmail: {
+                        UIPasteboard.general.string = store.botEmail
+                        store.send(.copyBotEmailTapped)
+                    }
+                )
             }
             .sheet(item: $store.previewSession) { previewSession in
                 FeedbackFlowCoordinatorView(
@@ -100,8 +109,8 @@ private extension ManageActivityView {
     var detailsSection: some View {
         section(title: "Details") {
             inputField(
-                title: "Focus title",
-                prompt: "What do you want feedback on?",
+                title: "Recurring meeting name",
+                prompt: "Which meeting should collect feedback?",
                 text: $store.title,
                 accessibilityIdentifier: "create_activity_title_input"
             )
@@ -110,7 +119,7 @@ private extension ManageActivityView {
 
             inputField(
                 title: "Context",
-                prompt: "Add context (optional)",
+                prompt: "Add context or agenda (optional)",
                 text: $store.description,
                 axis: .vertical,
                 lineLimit: 2...4
@@ -118,10 +127,16 @@ private extension ManageActivityView {
         }
     }
 
+    var calendarSetupSection: some View {
+        section(title: "Calendar setup") {
+            automaticSetup
+        }
+    }
+
     var feedbackSection: some View {
         section(
-            title: "How feedback works",
-            footer: "Templates give you a starting point. The question list stays editable."
+            title: "Meeting feedback",
+            footer: "Presets give you a starting point. The question list stays editable."
         ) {
             if let selectedTemplate = store.selectedTemplate {
                 SelectedFeedbackTemplateRow(
@@ -135,7 +150,7 @@ private extension ManageActivityView {
                 )
             } else {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Choose one feedback type")
+                    Text("Choose one meeting preset")
                         .supportingTextStyle()
                         .foregroundStyle(Color.themeTextSecondary)
 
@@ -158,8 +173,8 @@ private extension ManageActivityView {
     var questionsSection: some View {
         section(
             title: "Questions",
-            footer: store.selectedTemplate == .buildYourOwn && store.questions.isEmpty
-                ? "Add at least one question before creating the activity."
+            footer: store.selectedTemplate == .customQuestions && store.questions.isEmpty
+                ? "Add at least one question before creating the recurring meeting."
                 : nil
         ) {
             Button {
@@ -229,10 +244,10 @@ private extension ManageActivityView {
 
     var automaticSetup: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Create sessions automatically")
+            Text("Create feedback automatically")
                 .rowTitleTextStyle()
 
-            Text("Invite this email to your calendar event")
+            Text("Invite this email to your recurring calendar event.")
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
 
@@ -259,7 +274,7 @@ private extension ManageActivityView {
             }
 
             if store.didCopyEmail {
-                Text("Email copied. Paste it into your calendar event.")
+                Text("Email copied. Paste it into the recurring calendar invite.")
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
@@ -434,7 +449,7 @@ private struct SelectedFeedbackTemplateRow: View {
                         .frame(width: 30, height: 30)
                         .background(Color.themeBackground.opacity(0.9), in: Circle())
                 }
-                .accessibilityLabel("Clear selected feedback type")
+                .accessibilityLabel("Clear selected meeting preset")
                 .buttonStyle(.plain)
             }
 
@@ -450,81 +465,6 @@ private struct SelectedFeedbackTemplateRow: View {
                 .stroke(Color.themePrimaryAction, lineWidth: 1.5)
         }
         .clipShape(Capsule(style: .continuous))
-    }
-}
-
-//
-// MARK: - Info Sheet
-//
-
-struct AutomaticInfoSheet: View {
-    let email: String
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Theme.padding) {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("Use automatic sessions when you already run meetings from a calendar invite.")
-                            .bodyTextStyle()
-                            .foregroundStyle(Color.themeTextSecondary)
-
-                        infoStep(
-                            title: "1. Add the bot email",
-                            detail: "Invite \(email) to the calendar event you already use."
-                        )
-                        infoStep(
-                            title: "2. We create the session",
-                            detail: "A new feedback activity is prepared automatically from the calendar event."
-                        )
-                        infoStep(
-                            title: "3. Feedback is sent after",
-                            detail: "Participants receive feedback when the event is done."
-                        )
-                    }
-                    .padding(Theme.padding)
-                    .frame(maxWidth: Constants.maxWidthForLargeDevices, alignment: .leading)
-                    .background(Color.themeSurface)
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-                    .lightShadow()
-
-                    Button("Copy email") {
-                        UIPasteboard.general.string = email
-                    }
-                    .buttonStyle(LargeButtonStyle())
-                    .frame(maxWidth: Constants.maxWidthForLargeDevices)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, Theme.padding)
-                .padding(.top, Theme.padding)
-            }
-            .background(Color.themeBackground.ignoresSafeArea())
-            .foregroundStyle(Color.themeText)
-            .navigationTitle("Automatic sessions")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    CloseButtonView { dismiss() }
-                }
-            }
-        }
-    }
-
-    private func infoStep(title: String, detail: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            Image.checkmarkCircleFill
-                .foregroundStyle(Color.themePrimaryAction)
-                .padding(.top, 2)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .rowTitleTextStyle()
-                Text(detail)
-                    .supportingTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-            }
-        }
     }
 }
 

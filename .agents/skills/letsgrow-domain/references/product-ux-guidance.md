@@ -6,10 +6,10 @@ Use this for product shape, roles, onboarding, activation, and UX decisions.
 
 Make this loop obvious:
 
-1. The owner plans the meeting/activity as usual in Google, Outlook, Teams, Apple Calendar, or another calendar tool.
-2. The owner adds the generated LetsGrow email for that activity as one extra participant.
-3. LetsGrow maps the calendar invite to that activity and creates a session/event for it.
-4. Participants answer a few relevant questions directly from mobile after the meeting/activity.
+1. The owner plans the meeting, workshop, talk, training session, or similar format as usual in their calendar.
+2. The owner adds the generated LetsGrow email for that format as one extra participant.
+3. LetsGrow maps the calendar invite to that format and creates a session for it.
+4. Participants answer a few relevant questions directly from mobile after the session.
 5. The owner sees clear insights, patterns, and development over time.
 6. The owner adjusts and gets better at what actually works.
 
@@ -17,10 +17,10 @@ The most important product pattern is repeatability for the owner. The same part
 
 ## Primary User
 
-Design first for the meeting/activity owner:
+Design first for the format owner:
 
 - short on time
-- responsible for making repeatable meetings, workshops, talks, or activities useful
+- responsible for making repeatable meetings, workshops, talks, training, or similar formats useful
 - wants honest feedback without a heavy process
 - needs clear signals and next actions
 
@@ -29,30 +29,30 @@ Participants, HR admins, executives, and analysts matter later. They are not the
 ## Roles And Account Model
 
 - Workspace owner: owns workspace, later billing, main company contact, can invite more owners, and can view overall workspace usage.
-- Meeting/activity owner: runs one or more meetings, workshops, talks, or activities, configures feedback, views responses, and acts on insights.
+- Format owner: runs one or more meetings, workshops, talks, training sessions, or similar formats, configures feedback, views responses, and acts on insights.
 - Participant: receives feedback request and answers 2-3 short questions without password creation or a real LetsGrow account.
 
 Launch default:
 
 - one workspace per company or team
 - one workspace owner
-- one first meeting/activity owner, often the same person
+- one first format owner, often the same person
 - participants outside the account system
 
 Avoid advanced admin hierarchy until expansion is proven.
 
-Accounts should be linked inside the same workspace. The payer should not pay for separate disconnected individual accounts. Billing belongs to the workspace, users belong to the workspace, meeting/activity owners are added inside the workspace, and participants stay outside the account system.
+Accounts should be linked inside the same workspace. The payer should not pay for separate disconnected individual accounts. Billing belongs to the workspace, users belong to the workspace, format owners are added inside the workspace, and participants stay outside the account system.
 
 ## Onboarding
 
-Current launch flow:
+App-first onboarding flow:
 
 1. Danish website.
-2. `Hent på App Store` / `Hent appen`.
+2. App download or account start, depending on the current surface.
 3. User installs the app.
-4. User plans a meeting/activity as usual.
-5. User invites the generated LetsGrow email for that activity.
-6. Participants answer from mobile after the meeting/activity.
+4. User plans a meeting, workshop, talk, training session, or similar format as usual.
+5. User invites the generated LetsGrow email for that format.
+6. Participants answer from mobile after the session.
 7. User sees what actually worked and follows development over time.
 
 Later self-serve flow:
@@ -60,7 +60,7 @@ Later self-serve flow:
 1. Work email signup.
 2. Email verification.
 3. Confirm workspace.
-4. Add first meeting/activity.
+4. Add first format.
 5. Launch first feedback loop.
 6. See first results.
 7. Invite another owner if needed.
@@ -71,22 +71,22 @@ Do not optimize for account creation.
 
 Activation is:
 
-`one real meeting/activity has been configured and has received real participant feedback`.
+`one real format has been configured and has received real participant feedback`.
 
 Useful milestones:
 
 - landing page visit
-- app store click or app install
+- app download or install
 - workspace created
-- first meeting/activity configured
+- first format configured
 - first participant responses received
 - repeated feedback or pattern identified
 - paid conversion
 
 ## Prioritize
 
-- meeting/activity setup
-- calendar-invite based setup with a deterministic generated email per activity
+- format setup
+- calendar-invite based setup with a deterministic generated email per format
 - automatic post-meeting feedback
 - short mobile feedback
 - insights into what worked and what did not
@@ -107,7 +107,7 @@ Useful milestones:
 
 ## Expansion Rules
 
-Later, workspace owners should be able to add owners, remove owners, reassign meetings/activities to another owner, and see how many active owners are in the workspace. That is enough for the next stage; do not build enterprise account structures before expansion is proven.
+Later, workspace owners should be able to add owners, remove owners, reassign formats to another owner, and see how many active owners are in the workspace. That is enough for the next stage; do not build enterprise account structures before expansion is proven.
 
 ## UX Voice
 
@@ -119,16 +119,16 @@ Good directions:
 - `Se udvikling`
 - `Første feedback modtaget`
 - `Mødekvaliteten stiger`
-- `Invitér aktivitetens LetsGrow-mail`
+- `Invitér LetsGrow-mailen`
 
 ## Email-Based Setup
 
-Email-based session/event creation is strategically important for the MVP because it keeps the owner in their existing calendar workflow.
+Email-based session creation is strategically important because it keeps the owner in their existing calendar workflow.
 
-The backend should generate an email address for each activity. The owner adds that generated email as a calendar participant when planning a concrete meeting, workshop, talk, or session. Invites sent to that generated address create sessions/events for the specific activity.
+The backend generates an email address for each format. The owner adds that generated email as a calendar participant when planning a concrete meeting, workshop, talk, training session, or similar format. Invites sent to that generated address create sessions for the specific format.
 
 The generated address can be short and human-friendly, for example a four-digit or short-code local part at the LetsGrow domain such as `1234@letsgrow.dk`, as long as it is unique enough for deterministic routing.
 
-Do not use one shared generic address for all activities. The setup rule is deterministic: if the system cannot confidently map a calendar invite to one owner and one activity/session, it should throw an error or require explicit setup instead of guessing.
+The setup rule is deterministic: if the system cannot confidently map a calendar invite to one owner and one format/session, it should throw an error or require explicit setup instead of guessing.
 
 Avoid hype, long in-app education, surveillance language, and `AI-powered` as the core value.

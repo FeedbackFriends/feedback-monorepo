@@ -12,20 +12,20 @@ struct OnboardingView: View {
             TabView(selection: $page) {
                 OnboardingPage(
                     icon: "leaf.fill",
-                    title: "Grow with feedback",
-                    subtitle: "Turn everyday moments into opportunities to improve."
+                    title: "Improve recurring meetings",
+                    subtitle: "Collect lightweight feedback after the meetings your team already runs."
                 )
                 .tag(0)
                 OnboardingPage(
                     icon: "bubble.left.and.bubble.right.fill",
-                    title: "Get insights from others",
-                    subtitle: "Ask for feedback after meetings, workshops, or presentations."
+                    title: "Ask the right questions",
+                    subtitle: "Use short meeting feedback that is easy for participants to answer."
                 )
                 .tag(1)
                 OnboardingPage(
                     icon: "chart.line.uptrend.xyaxis",
-                    title: "Track your progress",
-                    subtitle: "See how you improve over time with clear trends."
+                    title: "Track meeting quality",
+                    subtitle: "See whether recurring meetings improve, stay flat, or need attention."
                 )
                 .tag(2)
             }
@@ -35,7 +35,7 @@ struct OnboardingView: View {
         }
         .padding()
         .sheet(isPresented: $showCreateActivity) {
-            FirstFocusOnboardingView {
+            FirstRecurringMeetingOnboardingView {
                 onFinish()
             }
         }
@@ -91,7 +91,7 @@ struct OnboardingPage: View {
         }
     }
 }
-struct FirstFocusOnboardingView: View {
+struct FirstRecurringMeetingOnboardingView: View {
     var onComplete: () -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -106,15 +106,15 @@ struct FirstFocusOnboardingView: View {
                     .foregroundStyle(Color.themeSuccess)
 
                 VStack(spacing: 8) {
-                    Text("What do you want to grow?")
+                    Text("Which meeting should collect feedback?")
                         .titleTextStyle()
 
-                    Text("Start by choosing something you'd like feedback on.")
+                    Text("Start with one recurring meeting. You can adjust questions later.")
                         .foregroundStyle(Color.themeTextSecondary)
                         .multilineTextAlignment(.center)
                 }
 
-                TextField("e.g. My leadership in meetings", text: $title)
+                TextField("e.g. Weekly team sync", text: $title)
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal)
 
@@ -123,7 +123,7 @@ struct FirstFocusOnboardingView: View {
                     dismiss()
                     onComplete()
                 } label: {
-                    Text("Create my first activity")
+                    Text("Create my first recurring meeting")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)

@@ -95,6 +95,12 @@ struct QuestionZeroToTenSummaryView: View {
                         Text("6")
                     }
                     PercentageBar(
+                        percentageValue: zeroToTenSummary.percentageValue7,
+                        countValue: zeroToTenSummary.countValue7
+                    ) {
+                        Text("7")
+                    }
+                    PercentageBar(
                         percentageValue: zeroToTenSummary.percentageValue8,
                         countValue: zeroToTenSummary.countValue8
                     ) {

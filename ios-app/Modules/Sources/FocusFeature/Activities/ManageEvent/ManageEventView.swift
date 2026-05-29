@@ -124,7 +124,7 @@ private extension ManageEventView {
         section(title: "Details") {
             inputField(
                 title: "Title",
-                prompt: "Session title",
+                prompt: "One-off session title",
                 text: $store.eventInput.title,
                 accessibilityIdentifier: "event_form_title_input"
             )

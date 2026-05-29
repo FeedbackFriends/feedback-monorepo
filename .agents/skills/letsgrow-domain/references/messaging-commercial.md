@@ -1,14 +1,10 @@
 # Messaging And Commercial Guidance
 
-Use this for website copy, CTAs, Danish messaging, pricing, and commercial model decisions.
+Use this for website copy, CTAs, Danish messaging, pricing principles, and commercial model decisions.
 
 ## Language And Tone
 
-Customer-facing launch website, marketing copy, and most UX copy should be Danish unless the user asks otherwise.
-
-Use the implemented landing page in `web/src/components/landing` as the source of truth for current public wording. The live page intentionally uses broader copy around meetings, workshops, talks, activities, and App Store download CTAs.
-
-Latest landing-page language audit: 2026-05-29.
+Customer-facing marketing copy and most UX copy should be Danish unless the user asks otherwise.
 
 Tone:
 
@@ -20,43 +16,34 @@ Tone:
 
 Avoid American SaaS cliches, broad culture claims, generic "unlock growth" language, HR-platform language, and `AI-powered` as the launch message.
 
-## Landing-Page Language Pattern
+## Language Pattern
 
-The current page is meeting-led, not meeting-only:
-
-- Hero broadens the promise: `møder, workshops, oplæg og andre aktiviteter`.
-- Problem section sharpens the recognizable moment: `Alle nikker. Ingen siger noget.`
-- Workflow copy uses `mødet` because the calendar behavior is easiest to understand through one concrete meeting.
-- Outcome copy stays practical: what worked, honest feedback, development over time, better meetings.
-- CTA copy is app-first: `Hent på App Store`, `Hent appen`, and `Prøv det helt gratis`.
-
-Use this pattern when writing new public copy:
+LetsGrow is meeting-led, not meeting-only:
 
 - lead with `møde` when the user needs a concrete mental model
-- broaden to `workshop`, `oplæg`, or `aktivitet` when describing product scope
-- keep `feedback` tied to a just-finished activity, not an abstract survey program
+- broaden to `workshop`, `oplæg`, `træning`, or a natural format-specific word when describing product scope
+- keep `feedback` tied to a just-finished session, not an abstract survey program
 - prefer `hvad der faktisk virker` over broad improvement or growth language
-- keep setup anchored in familiar calendar tools and the generated LetsGrow email for the activity
+- keep setup anchored in familiar calendar tools and the generated LetsGrow email for the format
 - make repeatability about the owner and the format, not necessarily the same participants
 
-Avoid forcing every sentence to mention every use case. The page works because it starts concrete and expands only where needed.
+Avoid forcing every sentence to mention every use case. Strong copy starts concrete and expands only where scope matters.
 
 ## Approved Copy Directions
 
 Use or adapt:
 
 - `Bliv klogere på hvad der virker`
-- `Få ærlig feedback efter møder, workshops, oplæg og andre aktiviteter`
+- `Få ærlig feedback efter møder, workshops og oplæg`
 - `Se mønstre, juster undervejs og bliv bedre til det, der gør en forskel`
 - `Alle nikker. Ingen siger noget.`
 - `Men hvad tænkte de egentlig?`
 - `De fleste møder føles som succes i øjeblikket`
 - `Uden ærlig feedback ved du ikke, hvad der faktisk virkede`
-- `Fra møde til indsigt - i 4 enkle trin`
 - `Planlæg mødet som du plejer`
 - `Tilføj én deltager`
-- `Invitér aktivitetens LetsGrow-mail, så ved systemet, at mødet skal have feedback bagefter`
-- `LetsGrow opretter en mail til aktiviteten, som du kan invitere fra din kalender`
+- `Invitér LetsGrow-mailen, så ved systemet, at mødet skal have feedback bagefter`
+- `LetsGrow opretter en mail til formatet, som du kan invitere fra din kalender`
 - `Deltagerne giver feedback`
 - `Efter mødet svarer deltagerne på få, relevante spørgsmål direkte fra mobilen`
 - `Se hvad der faktisk virker`
@@ -65,105 +52,79 @@ Use or adapt:
 - `Få ærlig feedback - ikke bare "det var godt"`
 - `Følg din udvikling over tid`
 - `Skab bedre møder, hver gang`
-- `Prøv det helt gratis`
 - `Giv dit næste møde feedback - uden ekstra arbejde`
 - `Feedbacken er anonym, så deltagerne kan svare ærligt`
 - `Se hvordan dit format udvikler sig fra gang til gang`
 
 Avoid or rewrite:
 
-- generic personal-growth copy disconnected from a specific meeting/activity
+- generic personal-growth copy disconnected from a specific meeting, workshop, talk, training session, or format
 - generic "team app for the office" copy without a concrete repeatable format
 - HR engagement or performance-review framing
 - long survey language
-- enterprise procurement or sales-heavy CTAs on the public landing page
+- enterprise procurement or sales-heavy CTAs unless the commercial motion changes
 
-## Homepage Narrative
+## Public Narrative
 
 Recommended structure:
 
-1. Hero: make "what works" the emotional hook and explain honest feedback after meetings, workshops, talks, and activities.
-2. Calendar trust: show familiar tools such as Teams, Outlook, Google Calendar, Apple Calendar, Zoho Calendar, and Proton Calendar.
+1. Lead: make "what works" the emotional hook and explain honest feedback after meetings, workshops, talks, training, and similar formats.
+2. Calendar trust: show that setup starts in familiar calendar tools.
 3. Problem: people nod, but the owner does not know what they actually thought.
-4. How it works: plan as usual, invite the generated LetsGrow email for the activity, participants answer from mobile, owner sees what works.
+4. How it works: plan as usual, invite the generated LetsGrow email for the format, participants answer from mobile, owner sees what works.
 5. Outcomes: what worked, honest feedback, development over time, better meetings each time.
-6. CTA: free App Store trial/download.
+6. CTA: match the current acquisition path.
 
-Hero must preserve the broad landing-page promise. Do not force it back to recurring meetings unless the user explicitly asks for a repositioning.
+Do not force positioning back to recurring meetings unless the user explicitly asks for a repositioning.
 
-The homepage succeeds when:
+Public copy succeeds when:
 
-- a reader understands that LetsGrow gets honest feedback after meetings and activities
+- a reader understands that LetsGrow gets honest feedback after meetings, workshops, talks, training, and similar formats
 - a reader understands that the value compounds when the owner repeats a format over time
 - participants understand whether their feedback is anonymous
-- the page feels concrete, Danish, and practical
+- the surface feels concrete, Danish, and practical
 - the workflow sounds effortless because it starts in the calendar
-- the app CTA is clear and immediate
 - a founder would not mistake LetsGrow for a broad HR or survey product
 
-Each section has a job:
+Each section or screen has a job:
 
-- Hero: state the "what works" promise and the feedback-after-activity scope.
+- Lead: state the "what works" promise and the feedback-after-session scope.
 - Problem: make the gap between polite nods and honest feedback recognizable.
 - How it works: show the calendar-based feedback workflow.
 - Outcomes: translate the product into practical insight and improvement over time.
-- CTA: turn interest into App Store download.
+- CTA: turn interest into the next step for the current surface.
 
 ## CTA
 
-Default primary CTA:
-
-- `Hent på App Store`
-- `Hent appen`
-
-Default destination:
-
-- Apple App Store URL from `web/src/components/landing/content.ts`
-
-Secondary CTA:
-
-- `Se hvordan det virker`
-
-Avoid `Book demo`, `Talk to sales`, early-access Typeform, or public checkout as the primary landing-page action unless the operating model changes.
+Choose CTAs based on the current acquisition path and surface. Avoid sales-heavy demo, procurement, or checkout language unless the operating model changes.
 
 ## Commercial Model
 
-Current landing page sells:
+Sell:
 
-- honest feedback after meetings and activities
+- honest feedback after meetings, workshops, talks, training, and similar formats
 - clarity about what actually worked
 - visible patterns and development over time
 - a lightweight calendar-based flow
-- free app download
 
 Do not sell "more survey responses."
 
 Do not sell a broad office team app unless the strategy is intentionally changed. The sharper wedge is for owners of repeatable formats who need feedback across sessions.
 
-Commercial direction should not override the current landing page. If pricing or paid pilots are discussed, keep them behind the scenes until the app-first public CTA changes.
-
 Expansion path:
 
-1. Land with one meeting/activity owner.
-2. Prove value on a small number of meetings or activities.
+1. Land with one format owner.
+2. Prove value on a small number of sessions.
 3. Add more owners inside the workspace.
 4. Later expand to departments or larger company usage.
 
 ## Pricing
 
-Launch with owner-based pricing inside one workspace subscription.
+Prefer owner-based pricing inside one workspace subscription.
 
 Avoid participant-based pricing because it makes cost unpredictable and discourages inviting the right people.
 
-Suggested validation phases:
-
-- Design partner: free for 6-8 weeks with active feedback calls.
-- Early access paid, if the app-first motion changes: 499 DKK/month per workspace, includes 1 owner, up to 3 active meetings/activities, and up to 25 participants total.
-- Extra owner: 299 DKK/month.
-- Annual early-access option: 4,990 DKK/year.
-- Later self-serve: Starter 499 DKK/month, Team 1,499 DKK/month, Business custom.
-
-Keep pricing semi-private until the offer is validated. Do not add a full public pricing table too early.
+Keep pricing private until the offer is validated. Do not add a full public pricing table too early.
 
 Pricing principles:
 
@@ -188,7 +149,6 @@ Early default:
 
 Later:
 
-- 14-day free trial
 - no credit card upfront
 - workspace owner starts subscription
 - extra owners adjust the workspace subscription

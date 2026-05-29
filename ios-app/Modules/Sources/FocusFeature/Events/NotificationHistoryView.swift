@@ -66,7 +66,7 @@ public struct NotificationHistoryView: View {
                 }
             }
             .foregroundStyle(Color.themeText)
-            .navigationTitle("Focus")
+            .navigationTitle("Recurring meetings")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

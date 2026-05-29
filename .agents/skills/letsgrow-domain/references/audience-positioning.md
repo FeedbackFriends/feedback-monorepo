@@ -4,20 +4,20 @@ Use this for ICP, market, JTBD, positioning, and prioritization decisions.
 
 ## Category
 
-Post-meeting and post-activity feedback app.
+Post-session feedback app for repeatable meetings, workshops, talks, training, and similar formats.
 
 LetsGrow is not a heavy survey builder, HR suite, employee engagement platform, or generic productivity dashboard.
 
 Short positioning statement:
 
-LetsGrow helps people who run meetings, workshops, talks, and similar activities get honest feedback, spot patterns, adjust along the way, and get better at what actually makes a difference.
+LetsGrow helps people who run meetings, workshops, talks, training, and similar formats get honest feedback, spot patterns, adjust along the way, and get better at what actually makes a difference.
 
-Landing-page emphasis:
+Positioning emphasis:
 
 - lead with meetings because they are the easiest and most frequent entry point
-- include workshops, talks, and similar activities to keep the scope broad enough for facilitators, presenters, and trainers
+- include workshops, talks, training, and similar formats to keep the scope broad enough for facilitators, presenters, and trainers
 - treat recurring meetings as one strong use case, not the whole category
-- focus on repeatable formats: the activity can be one-off for each participant group, but it should repeat for the owner
+- focus on repeatable formats: each session can be one-off for participants, but the format should repeat for the owner
 
 ## Launch Audience
 
@@ -27,7 +27,7 @@ Primary buyer:
 - manager
 - scrum master
 - department or project lead
-- facilitator, presenter, trainer, or anyone visibly responsible for making a meeting or activity work well
+- facilitator, presenter, trainer, or anyone visibly responsible for making a meeting, workshop, talk, or training session work well
 
 Recommended launch niche:
 
@@ -40,7 +40,7 @@ Avoid making the first niche a broad "team app for the office" unless the produc
 Best-fit organizations:
 
 - small to midsize knowledge-work companies
-- teams with meetings, workshops, presentations, or recurring activities already in place
+- teams with meetings, workshops, presentations, training, or repeatable formats already in place
 - short buying cycles and limited procurement friction
 - one motivated owner who can start small
 
@@ -85,33 +85,33 @@ The core belief behind the wedge:
 ## Jobs To Be Done
 
 - When people nod after a meeting, I want to know what they actually thought so I can improve the next one.
-- When I run a meeting, workshop, or talk, I want feedback to happen automatically after it so I do not have to chase people.
+- When I run a meeting, workshop, talk, or training session, I want feedback to happen automatically after it so I do not have to chase people.
 - When I adjust my format, I want to see whether feedback gets better over time.
 - When I invite participants, I want them to answer quickly without account creation or a long survey.
 
 ## Problem Pattern
 
-Most meetings and activities feel successful in the moment. People nod, smile, or say "det var godt", but the owner does not know what actually worked or what should change next time. Without honest feedback, it becomes hard to improve.
+Most meetings, workshops, talks, and training sessions feel successful in the moment. People nod, smile, or say "det var godt", but the owner does not know what actually worked or what should change next time. Without honest feedback, it becomes hard to improve.
 
-Traditional surveys are too slow, too heavy, and too disconnected from the moment. LetsGrow should create a small feedback habit immediately after meetings and activities.
+Traditional surveys are too slow, too heavy, and too disconnected from the moment. LetsGrow should create a small feedback habit immediately after the session.
 
 ## Positioning Pillars
 
 - Honest feedback: get beyond polite nods and "det var godt".
-- Zero extra workflow: stay in Google, Outlook, Teams, Apple Calendar, and similar calendar tools.
+- Zero extra workflow: stay in familiar calendar tools.
 - Visible patterns: see what actually works and what does not.
-- Practical improvement: adjust along the way and make the next meeting or activity better.
+- Practical improvement: adjust along the way and make the next session better.
 
 Proof mechanisms:
 
-- the owner creates the meeting/activity as usual in their calendar
-- the generated LetsGrow email for the activity is invited
+- the owner creates the meeting, workshop, talk, or training session as usual in their calendar
+- the generated LetsGrow email for the format is invited
 - participants answer 2-3 short questions after the meeting
 - responses become clear insights and visible patterns over time
 
 ## Decision Rule
 
-If a feature or message would also fit Typeform, Culture Amp, an HR engagement suite, or a generic productivity app, narrow it until it clearly serves lightweight feedback after a concrete meeting, workshop, talk, or activity.
+If a feature or message would also fit Typeform, Culture Amp, an HR engagement suite, or a generic productivity app, narrow it until it clearly serves lightweight feedback after a concrete meeting, workshop, talk, training session, or similar format.
 
 ## Launch Roadmap Framing
 
@@ -119,15 +119,15 @@ The roadmap can be ambitious, but launch positioning must stay narrow.
 
 Phase 1:
 
-- feedback after meetings, workshops, talks, and similar activities
-- calendar-invite setup through a backend-generated email address for each activity
+- feedback after meetings, workshops, talks, training, and similar formats
+- calendar-invite setup through a backend-generated email address for each format
 - short mobile participant feedback
 - clear insights into what worked and what did not
 - pattern tracking over time
 
 Phase 2:
 
-- recommendations for improving specific meeting and activity types
+- recommendations for improving specific meeting and format types
 - participation consistency tracking
 - team-level insight summaries
 
@@ -136,4 +136,4 @@ Phase 3:
 - broader team operating signals
 - cross-team benchmarking, only when enough data quality and trust exist
 
-Phase 3 must not shape the homepage or early sales story.
+Phase 3 must not shape early positioning or sales story.

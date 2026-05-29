@@ -36,7 +36,7 @@ struct ManagerEventsTests {
         }
 
         await store.send(.createActivityButtonTap) {
-            $0.destination = .manageActivity(.init())
+            $0.destination = .manageActivity(.create())
         }
 
         await store.send(.destination(.presented(.manageActivity(.delegate(.dismissAndNavigateToDetail(createdActivity)))))) {
@@ -47,7 +47,8 @@ struct ManagerEventsTests {
             $0.destination = .activityDetail(
                 ActivityDetail.State(
                     activityId: createdActivity.id,
-                    bootstrap: bootstrap
+                    bootstrap: bootstrap,
+                    showCalendarSetup: true
                 )
             )
         }

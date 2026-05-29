@@ -3,75 +3,63 @@ import Domain
 import FeedbackFlowFeature
 
 public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
-    case quickFeedback
-    case engagement
-    case learning
+    case standardMeeting
+    case teamMeeting
     case retrospective
-    case leadership
-    case buildYourOwn
+    case workshop
+    case customQuestions
 
     public var id: String { rawValue }
 
     var title: String {
         switch self {
-        case .quickFeedback: return "Quick feedback"
-        case .engagement: return "Engagement"
-        case .learning: return "Learning"
+        case .standardMeeting: return "Standard meeting feedback"
+        case .teamMeeting: return "Team meeting"
         case .retrospective: return "Retrospective"
-        case .leadership: return "Leadership"
-        case .buildYourOwn: return "Build your own"
+        case .workshop: return "Workshop"
+        case .customQuestions: return "Custom questions"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .quickFeedback:
-            return "Fast rating with optional comment"
-        case .engagement:
-            return "Energy and participation"
-        case .learning:
-            return "Clarity and usefulness"
+        case .standardMeeting:
+            return "Value, clarity, and one improvement"
+        case .teamMeeting:
+            return "Energy, participation, and follow-up"
         case .retrospective:
-            return "Reflect and improve as a team"
-        case .leadership:
-            return "Feedback on leadership and direction"
-        case .buildYourOwn:
-            return "Start empty and write every question yourself"
+            return "What worked, what should change, and overall rating"
+        case .workshop:
+            return "Usefulness, clarity, and open improvement"
+        case .customQuestions:
+            return "Start empty and write your own questions"
         }
     }
 
     var icon: String {
         switch self {
-        case .quickFeedback: return "bolt"
-        case .engagement: return "person.2"
-        case .learning: return "lightbulb"
+        case .standardMeeting: return "calendar.badge.checkmark"
+        case .teamMeeting: return "person.2"
         case .retrospective: return "arrow.clockwise"
-        case .leadership: return "person.crop.circle.badge.checkmark"
-        case .buildYourOwn: return "square.and.pencil"
+        case .workshop: return "lightbulb"
+        case .customQuestions: return "square.and.pencil"
         }
     }
 
     var defaultQuestions: [EventInput.QuestionInput] {
         switch self {
-        case .quickFeedback:
+        case .standardMeeting:
             return [
-                .init(questionText: "How was this session?", feedbackType: .emoji),
-                .init(questionText: "What went well?", feedbackType: .comment),
-                .init(questionText: "What could be improved?", feedbackType: .comment)
+                .init(questionText: "Was this meeting valuable?", feedbackType: .emoji),
+                .init(questionText: "Was the purpose clear?", feedbackType: .opinion),
+                .init(questionText: "What should we improve for the next meeting?", feedbackType: .comment)
             ]
 
-        case .engagement:
+        case .teamMeeting:
             return [
-                .init(questionText: "How was the energy?", feedbackType: .emoji),
+                .init(questionText: "How was the energy in this meeting?", feedbackType: .emoji),
                 .init(questionText: "Did you feel involved?", feedbackType: .opinion),
-                .init(questionText: "What affected engagement?", feedbackType: .comment)
-            ]
-
-        case .learning:
-            return [
-                .init(questionText: "How clear was it?", feedbackType: .zeroToTen),
-                .init(questionText: "How useful was it?", feedbackType: .zeroToTen),
-                .init(questionText: "What is still unclear?", feedbackType: .comment)
+                .init(questionText: "What should we follow up on?", feedbackType: .comment)
             ]
 
         case .retrospective:
@@ -81,21 +69,21 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
                 .init(questionText: "Overall rating", feedbackType: .zeroToTen)
             ]
 
-        case .leadership:
+        case .workshop:
             return [
-                .init(questionText: "Did you feel well guided?", feedbackType: .opinion),
-                .init(questionText: "Was communication clear?", feedbackType: .opinion),
-                .init(questionText: "What could be improved in leadership?", feedbackType: .comment)
+                .init(questionText: "How useful was the workshop?", feedbackType: .zeroToTen),
+                .init(questionText: "Was the next step clear?", feedbackType: .opinion),
+                .init(questionText: "What should we improve next time?", feedbackType: .comment)
             ]
 
-        case .buildYourOwn:
+        case .customQuestions:
             return []
         }
     }
 
     static func inferred(from questions: [EventInput.QuestionInput]) -> FeedbackTemplate {
         let signature = questions.map { Signature(text: $0.questionText, type: $0.feedbackType) }
-        for template in FeedbackTemplate.allCases where template != .buildYourOwn {
+        for template in FeedbackTemplate.allCases where template != .customQuestions {
             let templateSignature = template.defaultQuestions.map {
                 Signature(text: $0.questionText, type: $0.feedbackType)
             }
@@ -103,7 +91,7 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
                 return template
             }
         }
-        return .buildYourOwn
+        return .customQuestions
     }
 
     private struct Signature: Equatable {

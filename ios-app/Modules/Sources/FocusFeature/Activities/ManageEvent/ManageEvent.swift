@@ -37,19 +37,19 @@ public struct ManageEvent: Sendable {
             var localization: String {
                 switch self {
                 case .minutes15:
-                    "15 minutter"
+                    "15 min"
                 case .minutes30:
-                    "30 minutter"
+                    "30 min"
                 case .minutes45:
-                    "45 minutter"
+                    "45 min"
                 case .minutes60:
-                    "1 time"
+                    "1 hour"
                 case .minutes90:
-                    "1,5 timer"
+                    "1.5 hours"
                 case .minutes120:
-                    "2 timer"
+                    "2 hours"
                 case .other:
-                    "Andet"
+                    "Other"
                 }
             }
         }
@@ -140,9 +140,9 @@ public struct ManageEvent: Sendable {
         var navigationTitle: String {
             switch mode {
             case .create:
-                "New session"
+                "New one-off session"
             case .edit:
-                "Edit session"
+                "Edit one-off session"
             }
         }
 

@@ -35,15 +35,19 @@ public struct ActivityDetail: Sendable {
         var navigationSubTitle: String {
             "\(activity?.events.count ?? 0) sessions"
         }
+        var showCalendarSetup = false
+        var didCopyCalendarEmail = false
 
         public init(
             activityId: UUID,
             destination: Destination.State? = nil,
-            bootstrap: Shared<Bootstrap>
+            bootstrap: Shared<Bootstrap>,
+            showCalendarSetup: Bool = false
         ) {
             self.activityId = activityId
             self.destination = destination
             self._bootstrap = bootstrap
+            self.showCalendarSetup = showCalendarSetup
         }
     }
     

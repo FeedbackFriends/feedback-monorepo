@@ -32,7 +32,7 @@ public struct ActivityListView: View {
                 .padding()
             }
             .background(Color.themeBackground.ignoresSafeArea())
-            .navigationTitle("Focus")
+            .navigationTitle("Recurring meetings")
             .navigationDestination(
                 item: $store.scope(
                     state: \.destination?.activityDetail,
@@ -73,10 +73,10 @@ public struct ActivityListView: View {
                     .titleTextStyle()
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Create a focus")
+                    Text("Add recurring meeting")
                         .rowTitleTextStyle()
 
-                    Text("Choose what you want feedback on, then collect responses after each session.")
+                    Text("Invite feedback@letsgrow.dk to your calendar event and track meeting feedback over time.")
                         .supportingTextStyle()
                         .foregroundStyle(Color.themeTextSecondary)
                 }
@@ -94,9 +94,9 @@ public struct ActivityListView: View {
 
     private var emptyState: some View {
         ContentUnavailableView(
-            "No focus areas yet",
+            "No recurring meetings yet",
             systemImage: "calendar.badge.plus",
-            description: Text("Create a focus to start gathering feedback across sessions.")
+            description: Text("Add your first recurring meeting to start gathering feedback.")
         )
         .frame(maxWidth: .infinity)
         .padding(.vertical, 24)

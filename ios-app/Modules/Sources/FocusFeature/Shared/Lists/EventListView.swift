@@ -28,11 +28,11 @@ public struct EventListView: View {
             if todayEvents.isEmpty && comingUpEvents.isEmpty && previousEvents.isEmpty {
                 VStack(alignment: .center, spacing: 14) {
                     VStack(spacing: 6) {
-                        Text("No sessions yet")
+                        Text("No one-off sessions yet")
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
 
-                        Text("Create your first session to start collecting feedback.")
+                        Text("Use calendar setup for recurring feedback, or add a one-off session.")
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                             .multilineTextAlignment(.center)

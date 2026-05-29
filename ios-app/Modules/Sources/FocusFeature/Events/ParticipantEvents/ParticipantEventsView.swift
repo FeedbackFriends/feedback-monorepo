@@ -112,7 +112,7 @@ extension ParticipantEventsView {
                                 Text("#\(pinCode.value)")
                                     .badgeTextStyle()
                             } else {
-                                Text("Udløbet")
+                                Text("Expired")
                                     .badgeTextStyle()
                             }
                         }
@@ -137,7 +137,7 @@ extension ParticipantEventsView {
                             .isLoading(startFeedbackPincodeInFlight)
                             .frame(maxWidth: .infinity, minHeight: 40)
                         } else {
-                            Text("Udløbet")
+                            Text("Expired")
                                 .rowTitleTextStyle()
                         }
                     }

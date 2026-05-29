@@ -33,7 +33,9 @@ public struct ManageActivity: Sendable {
         var newEmail = ""
 
         public static func create() -> Self {
-            .init(mode: .create)
+            var state = Self(mode: .create)
+            state.selectTemplate(.standardMeeting)
+            return state
         }
 
         public static func edit(activity: Activity) -> Self {
@@ -57,8 +59,8 @@ public struct ManageActivity: Sendable {
 
         var navigationTitle: String {
             switch mode {
-            case .create: return "Create focus"
-            case .edit: return "Edit focus"
+            case .create: return "Add recurring meeting"
+            case .edit: return "Edit recurring meeting"
             }
         }
 
@@ -81,7 +83,7 @@ public struct ManageActivity: Sendable {
         }
 
         var questionsSectionSubtitle: String {
-            if selectedTemplate == .buildYourOwn && questions.isEmpty {
+            if selectedTemplate == .customQuestions && questions.isEmpty {
                 return "Start from scratch"
             }
             return "Open the list to customize the flow"
@@ -93,7 +95,7 @@ public struct ManageActivity: Sendable {
                 title: title,
                 agenda: description.nilIfBlank,
                 questions: questions,
-                runMode: .manual,
+                runMode: .automatic,
                 invitedEmails: sendEmails ? participants : [],
                 sendEmails: sendEmails,
                 existingQuestionIds: originalQuestionIds

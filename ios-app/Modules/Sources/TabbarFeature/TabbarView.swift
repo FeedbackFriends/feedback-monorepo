@@ -94,7 +94,7 @@ private extension TabbarView {
                     )
                 )
                     .tabItem {
-                        Label("Focus", systemImage: "scope")
+                        Label("Meetings", systemImage: "calendar")
                     }
                 .badge(managerUnseenResponses)
                 .tag(Tab.activities)

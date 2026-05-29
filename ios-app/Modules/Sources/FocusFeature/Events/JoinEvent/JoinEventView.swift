@@ -15,7 +15,7 @@ public struct JoinEventView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 12) {
                 
-                Text("Join session")
+                Text("Join feedback")
                     .largeTitleTextStyle()
                     .padding(.top, 20)
                 Text("PIN Code")

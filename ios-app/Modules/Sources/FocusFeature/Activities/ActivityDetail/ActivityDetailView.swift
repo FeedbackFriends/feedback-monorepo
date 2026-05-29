@@ -20,15 +20,15 @@ struct ActivityDetailView: View {
             } else {
                 EmptyView()
                     .successOverlay(
-                        message: "Focus deleted",
+                        message: "Recurring meeting deleted",
                         show: .constant(true),
                         enableAutomaticDismissal: true
                     )
             }
         }.sheet(isPresented: $store.showDeleteConfirmation) {
             DeleteConfirmationViewSheet(
-                title: "Delete focus",
-                message: "Delete this focus and its sessions?",
+                title: "Delete recurring meeting",
+                message: "Delete this recurring meeting and its feedback?",
                 actionButton: {
                     Button("Delete") {
                         store.send(.deleteActivityConfirmButtonTap)
@@ -71,36 +71,44 @@ private struct ActivityDetailContentView: View {
         .background(Color.themeBackground)
         .lineSpacing(5)
         .foregroundStyle(Color.themeText)
-        .navigationTitle("Focus")
+        .navigationTitle("Recurring meeting")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {
+                    Button {
+                        store.showCalendarSetup = true
+                    } label: {
+                        Image(systemName: "calendar.badge.plus")
+                    }
+                    .buttonStyle(PrimaryTextButtonStyle())
+                    .accessibilityLabel("Open calendar setup")
+
                     Button {
                         store.send(.editActivityButtonTapped)
                     } label: {
                         Image(systemName: "pencil")
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
-                    .accessibilityLabel("Edit focus")
+                    .accessibilityLabel("Edit recurring meeting")
                     .accessibilityIdentifier("activity_detail_edit_button")
 
                     Menu {
                         Button(role: .destructive) {
                             store.send(.deleteActivityButtonTap)
                         } label: {
-                            Label("Delete focus", systemImage: "trash")
+                            Label("Delete recurring meeting", systemImage: "trash")
                         }
                     } label: {
                         Image(systemName: "ellipsis")
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
-                    .accessibilityLabel("More focus actions")
+                    .accessibilityLabel("More recurring meeting actions")
                 }
             }
         }
         .safeAreaInset(edge: .bottom) {
-            Button("Create session") {
+            Button("Add one-off session") {
                 store.send(.createEventButtonTapped)
             }
             .buttonStyle(LargeButtonStyle())
@@ -127,6 +135,16 @@ private struct ActivityDetailContentView: View {
             NavigationStack {
                 ManageEventView(store: manageStore)
             }
+        }
+        .sheet(isPresented: $store.showCalendarSetup) {
+            CalendarSetupView(
+                email: "feedback@letsgrow.dk",
+                didCopyEmail: store.didCopyCalendarEmail,
+                onCopyEmail: {
+                    UIPasteboard.general.string = "feedback@letsgrow.dk"
+                    store.didCopyCalendarEmail = true
+                }
+            )
         }
         .navigationDestination(
             item: $store.scope(
@@ -170,7 +188,7 @@ private struct ActivityDetailContentView: View {
 
     private func focusSetupSection(_ activity: Activity) -> some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("Focus setup")
+            SectionHeaderView("Feedback setup")
 
             Button {
                 store.send(.editActivityButtonTapped)
@@ -201,7 +219,7 @@ private struct ActivityDetailContentView: View {
                 .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
             }
             .buttonStyle(OpacityButtonStyle())
-            .accessibilityLabel("Edit focus setup")
+            .accessibilityLabel("Edit recurring meeting feedback setup")
             .accessibilityIdentifier("activity_detail_focus_setup_section")
         }
     }
