@@ -1,0 +1,7 @@
+interface:
+  display_name: "LetsGrow Architecture"
+  short_description: "Map the LetsGrow monorepo architecture"
+  default_prompt: "Use $letsgrow-architecture to explain how this LetsGrow change flows across iOS, web, backend, OpenAPI, scripts, and infrastructure."
+
+policy:
+  allow_implicit_invocation: true
