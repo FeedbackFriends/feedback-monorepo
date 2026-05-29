@@ -1,58 +1,78 @@
 # Repository Guidelines
 
 ## Scope
-This is a monorepo. Root-level work should stay limited to shared tooling, Docker Compose, GitHub Actions, CI/CD, documentation, and deployment wiring.
+This is the LetsGrow monorepo. Root-level work is for shared orchestration and repository infrastructure only:
 
-Do not implement product features from the root when they belong inside an app:
-- `web/`: frontend app. Follow `web/AGENTS.md` for UI, Next.js, routes, components, and frontend build work.
-- `backend/`: API and scheduler. Follow `backend/AGENTS.md` for Kotlin, database, migrations, and service logic.
+- Docker Compose and runtime wiring
+- root scripts
+- GitHub Actions and release automation
+- generated API contracts under `contracts/openapi/`
+- repository documentation and deployment notes
 
-## Its better to throw an error instead of falling back
-Operations should be deterministic and single-path.
-Fallback logic and special-case recovery should not be implemented.
-Errors should propagate instead of triggering alternate behavior.
+Product features belong in the app that owns them:
+
+- `web/`: Next.js frontend. Follow `web/AGENTS.md` for routes, components, client auth, generated TypeScript API types, and frontend tests.
+- `backend/`: Kotlin API, scheduler, persistence, migrations, integrations, and canonical OpenAPI source. Follow `backend/AGENTS.md`.
+- `ios-app/`: SwiftUI/TCA iOS app, adapters, generated Swift OpenAPI sources, and Maestro flows. Follow `ios-app/AGENTS.md`.
+
+## Architecture Rules
+- The backend is the source of truth for API shape. Backend controllers, DTOs, and OpenAPI config generate `contracts/openapi/feedback-api.yaml`.
+- The committed OpenAPI contract feeds `web/src/lib/api/generated/openapi.ts` and `ios-app/Modules/Sources/OpenAPI/GeneratedSources/`.
+- Never hand-edit generated API artifacts. Regenerate them from the root with `./scripts/generate-api-artifacts.sh`.
+- Keep root changes focused on shared infrastructure. Do not implement app behavior from the root.
+- Prefer deterministic, single-path behavior. Throw clear errors instead of adding fallback logic or special-case recovery.
 
 ## Docker Compose
-Root Docker files orchestrate the full stack together:
-- `docker-compose.yml`: base stack. Uses the published `feedback-api:prod`, `feedback-scheduler:prod`, and `feedback-web:prod` images plus shared environment variables. This is the production-like Compose definition.
-- `docker-compose.override.yml`: local development override. Adds Postgres, publishes ports, points backend services at the local database, and consumes locally built `feedback-api:local`, `feedback-scheduler:local`, and `feedback-web` images.
+Root Docker files orchestrate the full stack:
+
+- `docker-compose.yml`: production-like base stack using published `feedback-api:prod`, `feedback-scheduler:prod`, and `feedback-web:prod` images plus the shared environment contract.
+- `docker-compose.override.yml`: local development override. It adds local development wiring, published ports, and local images.
 
 Default root commands:
-- `./scripts/run`: regenerate API artifacts, rebuild local backend images, and start the local stack.
-- `./scripts/run -d`: same as above, detached mode.
-- `docker compose down`: stop the stack.
-- `docker compose logs -f`: stream logs.
-- `docker compose ps`: inspect service state.
+
+```bash
+./scripts/run
+./scripts/run -d
+docker compose down
+docker compose logs -f
+docker compose ps
+```
 
 ## Environment
-Compose reads variables from a root `.env` file if present. Use it for local configuration such as database credentials, host ports, image platform, Firebase values, and other runtime settings.
+Compose reads variables from a root `.env` file when present.
 
 Rules:
-- keep secrets in `.env`, GitHub secrets, or Coolify-managed env vars
+
+- keep secrets in `.env`, GitHub secrets, or Coolify-managed environment variables
 - never commit real secret values
 - treat `NEXT_PUBLIC_*` values as client-exposed
-- `COOLIFY_TOKEN` in `.env` can be used for authenticated calls to the Coolify API from local scripts or automation; treat it as a secret and never expose it in logs or commits
+- treat `COOLIFY_TOKEN` as a secret and never expose it in logs, docs, or commits
+
+When adding or changing runtime configuration, call out new environment variables, ports, domains, image tags, or deployment assumptions.
 
 ## Deployment
-Production deployment uses Coolify, not local Compose. Keep root deployment changes aligned with the current Coolify setup and image tags. The release workflow publishes both dated release tags and mutable `prod` tags; production runtime should always pull `prod` rather than relying on an image-tag override env var.
+Production deployment uses Coolify, not local Compose. Keep deployment changes aligned with the current Coolify setup and image tags.
 
-When changing deployment-related files:
-- call out any new env vars, ports, domains, or image changes
-- treat cost or infrastructure changes as review-sensitive
-- keep local Compose behavior and Coolify runtime expectations consistent
+- production runtime should pull mutable `prod` image tags
+- infrastructure and cost changes are review-sensitive
+- local Compose behavior and Coolify runtime expectations should stay consistent
 
 ## GitHub Actions / CI/CD
 GitHub Actions live in `.github/workflows/` and are root-owned infrastructure.
-- `ci.yml`: runs backend build/tests and web install/lint/build for pull requests and pushes to `main`
-- `release.yml`: builds and publishes Docker images, generates OpenAPI output, creates a GitHub release, and triggers Coolify deployment
+
+- `ci.yml`: validates backend, web, and generated API artifacts
+- `release.yml`: runs release validation, builds and publishes Docker images, creates a GitHub release, and triggers Coolify deployment
 
 When editing workflows:
+
 - keep triggers, permissions, caches, and concurrency intentional
-- call out any new required secrets or external integrations
+- call out new required secrets or external integrations
 - keep changes small and easy to review
+- validate with `git diff -- .github/workflows` and any relevant local commands
 
 ## Working Rules
-- keep root changes focused on orchestration and shared infrastructure
-- use two-space indentation in YAML
-- prefer explicit config over clever indirection
-- validate root changes with `git diff -- .github/workflows` and relevant `docker compose` commands
+- Read the nearest `AGENTS.md` before editing a subtree.
+- Use two-space indentation in YAML.
+- Prefer explicit config over clever indirection.
+- Do not modify generated files unless the change is the result of the repo's generation scripts.
+- Do not commit or push unless the user explicitly asks.
