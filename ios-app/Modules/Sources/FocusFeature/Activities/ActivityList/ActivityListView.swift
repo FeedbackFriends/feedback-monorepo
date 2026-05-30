@@ -31,7 +31,7 @@ public struct ActivityListView: View {
                 .padding()
                 .padding(.bottom, 88)
             }
-            .background(Color.themeBackground.ignoresSafeArea())
+            .background(LetsGrowLandingGradient().ignoresSafeArea())
             .navigationTitle("✨ Aktiviteter")
             .toolbar {
                 if !store.activities.isEmpty {
@@ -56,6 +56,7 @@ public struct ActivityListView: View {
                         .foregroundStyle(Color.themeOnPrimaryAction)
                         .frame(width: 56, height: 56)
                         .background(Color.themePrimaryAction.gradient, in: Circle())
+                        .glassEffect(in: .circle)
                         .lightShadow()
                 }
                 .buttonStyle(ScalingButtonStyle())
@@ -130,7 +131,7 @@ private struct ActivityIntroContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("En aktivitet er et format, du gentager. Noget, du løbende ønsker at forbedre gennem feedback og erfaringer.\n\nDet kunne være:")
+            Text("En 'Aktivitet' er et format, du gentager. Noget, du løbende ønsker at forbedre gennem feedback og erfaringer.\n\nDet kunne være:")
                 .bodyTextStyle()
                 .foregroundStyle(Color.themeText)
 
@@ -150,7 +151,7 @@ private struct ActivityIntroContentView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .glassEffect(in: .rect(cornerRadius: Theme.cornerRadius))
     }
 }
 

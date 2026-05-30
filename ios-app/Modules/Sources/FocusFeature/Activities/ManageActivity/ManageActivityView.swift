@@ -98,7 +98,7 @@ private extension ManageActivityView {
         section(title: "Detaljer") {
             inputField(
                 title: "Navn på aktivitet",
-                prompt: "Hvilket møde skal indsamle feedback?",
+                prompt: "Fx månedligt teammøde, workshop eller træning",
                 text: $store.title,
                 accessibilityIdentifier: "create_activity_title_input"
             )
@@ -107,7 +107,7 @@ private extension ManageActivityView {
 
             inputField(
                 title: "Kontekst",
-                prompt: "Tilføj kontekst eller agenda (valgfrit)",
+                prompt: "Skriv kontekst, agenda eller formål (valgfrit)",
                 text: $store.description,
                 axis: .vertical,
                 lineLimit: 2...4
@@ -117,8 +117,8 @@ private extension ManageActivityView {
 
     var feedbackSection: some View {
         section(
-            title: "Mødefeedback",
-            footer: "Skabeloner giver dig en start. Spørgsmålene kan stadig redigeres."
+            title: "Feedback",
+            footer: "Vælg en enkel start. Du kan altid tilpasse spørgsmålene bagefter."
         ) {
             if let selectedTemplate = store.selectedTemplate {
                 SelectedFeedbackTemplateRow(
@@ -132,7 +132,7 @@ private extension ManageActivityView {
                 )
             } else {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Vælg en mødeskabelon")
+                    Text("Vælg en feedbackskabelon")
                         .supportingTextStyle()
                         .foregroundStyle(Color.themeTextSecondary)
 
@@ -156,7 +156,7 @@ private extension ManageActivityView {
         section(
             title: "Spørgsmål",
             footer: store.selectedTemplate == .customQuestions && store.questions.isEmpty
-                ? "Tilføj mindst ét spørgsmål, før du opretter det faste møde."
+                ? "Tilføj mindst ét spørgsmål, før du opretter aktiviteten."
                 : nil
         ) {
             Button {
@@ -213,7 +213,7 @@ private extension ManageActivityView {
             .opacity(store.selectedTemplate == nil ? 0.6 : 1.0)
 
             if store.selectedTemplate == nil {
-                Text("Vælg en skabelon for at komme i gang med spørgsmål.")
+                Text("Vælg en skabelon for at få et godt udgangspunkt.")
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             } else {

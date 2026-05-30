@@ -15,7 +15,7 @@ public struct EnterCodeView: View {
     public var body: some View {
         content
             .onTapGesture { store.send(.backgroundTap) }
-            .background(Color.themeBackground.ignoresSafeArea())
+            .background(LetsGrowLandingGradient().ignoresSafeArea())
             .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }

@@ -108,7 +108,7 @@ private extension TabbarView {
                         )
                 }
                 .scrollContentBackground(.hidden)
-                .background(Color.themeBackground)
+                .background(LetsGrowLandingGradient())
                 .tint(Color.themeText)
                 .accountSectionDestinations(
                     store: store.scope(state: \.accountSection, action: \.accountSection),
@@ -118,7 +118,6 @@ private extension TabbarView {
                 .toolbar {
                     profileSettingsToolbarItem
                 }
-                .background(Color.themeBackground)
             }
             .tabItem {
                 Image.personCropCircle
@@ -126,7 +125,7 @@ private extension TabbarView {
             }
             .tag(Tab.more)
         }
-        
+        .background(LetsGrowLandingGradient())
     }
     
     var profileSettingsToolbarItem: some ToolbarContent {

@@ -55,7 +55,7 @@ public struct ManageActivity: Sendable {
 
         var navigationTitle: String {
             switch mode {
-            case .create: return "Tilføj aktivitet"
+            case .create: return "Opret aktivitet"
             case .edit: return "Rediger aktivitet"
             }
         }
@@ -82,7 +82,7 @@ public struct ManageActivity: Sendable {
             if selectedTemplate == .customQuestions && questions.isEmpty {
                 return "Start fra bunden"
             }
-            return "Åbn listen for at tilpasse forløbet"
+            return "Åbn listen for at tilpasse spørgsmålene"
         }
 
         var activityInput: ActivityInput? {
