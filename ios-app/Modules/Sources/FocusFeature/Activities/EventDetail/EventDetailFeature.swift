@@ -46,11 +46,12 @@ public struct EventDetailFeature: Sendable {
         }
 
         var navigationTitle: String {
-            activity?.title ?? "Session"
+            activity?.title ?? "Mødegang"
         }
 
         var navigationSubTitle: String {
-            "\(event?.overallFeedbackSummary?.responses ?? 0) responses"
+            let responses = event?.overallFeedbackSummary?.responses ?? 0
+            return responses == 1 ? "1 svar" : "\(responses) svar"
         }
 
         var shareText: String? {
@@ -59,10 +60,10 @@ public struct EventDetailFeature: Sendable {
             }
 
             return """
-            You are invited to \(navigationTitle)!
-            Use pin code \(pinCode) to join.
+            Du er inviteret til at give feedback på \(navigationTitle).
+            Brug PIN-kode \(pinCode) for at svare.
 
-            Tap the link to join:
+            Åbn linket for at svare:
             \(inviteUrl)
             """
         }

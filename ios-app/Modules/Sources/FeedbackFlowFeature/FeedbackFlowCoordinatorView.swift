@@ -64,7 +64,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Quit") {
+                    Button("Afslut") {
                         self.store.send(.dismissButtonTap)
                     }
                     .buttonStyle(SecondaryTextButtonStyle())
@@ -125,7 +125,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
         .sensoryFeedback(.selection, trigger: store.questionIndex)
         .statusBar(hidden: true)
         .successOverlay(
-            message: "Thanks for the feedback",
+            message: "Tak for din feedback",
             show: $store.presentSuccessOverlay,
             enableAutomaticDismissal: false
         )
@@ -149,7 +149,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
     
     var questionView: some View {
         VStack {
-            Text("\(store.questionIndex + 1) of \(store.questions.count)")
+            Text("\(store.questionIndex + 1) af \(store.questions.count)")
                 .captionTextStyle()
                 .foregroundColor(Color.themeTextSecondary)
                 .padding(.top, 8)
@@ -181,7 +181,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
                 .buttonStyle(OpacityButtonStyle())
             }
             if showSubmitButton {
-                Button("Submit") {
+                Button("Send svar") {
                     store.send(.submitButtonTap)
                 }
                 .buttonStyle(LargeButtonStyle())
@@ -189,7 +189,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
                 .isLoading(store.submitFeedbackInFlight)
                 .transition(.blurReplace)
             } else {
-                Button("Next") {
+                Button("Næste") {
                     store.send(.nextQuestionButtonTap)
                 }
                 .buttonStyle(LargeButtonStyle())

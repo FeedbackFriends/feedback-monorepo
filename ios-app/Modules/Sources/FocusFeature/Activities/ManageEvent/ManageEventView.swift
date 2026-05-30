@@ -56,7 +56,7 @@ public struct ManageEventView: View {
             FeedbackFlowCoordinatorView(
                 store: store,
                 principalToolbarItem: {
-                    Text("Preview")
+                    Text("Forhåndsvis")
                         .captionTextStyle()
                         .padding(.vertical, 8)
                         .padding(.horizontal, 12)
@@ -110,7 +110,7 @@ private extension ManageEventView {
                     }
                     .alert($store.scope(state: \.alert, action: \.alert))
                 } label: {
-                    Text("Next")
+                    Text("Næste")
                 }
                 .accessibilityIdentifier("event_form_next")
                 .buttonStyle(PrimaryTextButtonStyle())
@@ -121,10 +121,10 @@ private extension ManageEventView {
     }
 
     var content: some View {
-        section(title: "Details") {
+        section(title: "Detaljer") {
             inputField(
-                title: "Title",
-                prompt: "One-off session title",
+                title: "Titel",
+                prompt: "Titel på enkelt mødegang",
                 text: $store.eventInput.title,
                 accessibilityIdentifier: "event_form_title_input"
             )
@@ -138,7 +138,7 @@ private extension ManageEventView {
 
             inputField(
                 title: "Agenda",
-                prompt: "Agenda (optional)",
+                prompt: "Agenda (valgfrit)",
                 text: $store.eventInput.agenda.asNonOptional(),
                 axis: .vertical,
                 lineLimit: 2...2
@@ -149,7 +149,7 @@ private extension ManageEventView {
             sectionDivider
 
             Toggle(isOn: $store.allDay) {
-                Text("All day")
+                Text("Hele dagen")
                     .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
             }
@@ -166,7 +166,7 @@ private extension ManageEventView {
             sectionDivider
 
             Toggle(isOn: $store.startNowEnabled) {
-                Text("Start now")
+                Text("Start nu")
                     .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
             }
@@ -176,7 +176,7 @@ private extension ManageEventView {
                 sectionDivider
 
                 datePickerRow(
-                    title: "Time",
+                    title: "Tidspunkt",
                     selection: $store.eventInput.date,
                     range: store.date.roundedUpcoming5Min()...,
                     displayedComponents: [DatePickerComponents.date, DatePickerComponents.hourAndMinute]
@@ -186,7 +186,7 @@ private extension ManageEventView {
             sectionDivider
 
             HStack {
-                Text("Duration")
+                Text("Varighed")
                     .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
 
@@ -211,7 +211,7 @@ private extension ManageEventView {
                             .tag(ManageEvent.State.DurationPicker.other)
                     },
                     label: {
-                        Text("Duration")
+                        Text("Varighed")
                     }
                 )
                 .pickerStyle(.menu)
@@ -222,13 +222,13 @@ private extension ManageEventView {
                 sectionDivider
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Custom duration")
+                    Text("Tilpasset varighed")
                         .rowTitleTextStyle()
 
                     HStack {
                         Picker("", selection: $store.hourPicker) {
                             ForEach(0..<24, id: \.self) { number in
-                                Text("\(number) hours").tag(number)
+                                Text(number == 1 ? "1 time" : "\(number) timer").tag(number)
                             }
                         }
                         .pickerStyle(WheelPickerStyle())

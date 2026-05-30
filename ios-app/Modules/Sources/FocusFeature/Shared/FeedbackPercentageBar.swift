@@ -29,7 +29,7 @@ struct EmptyFeedbackSegmentationStatsView: View {
         }
         .frame(minHeight: 24)
         .overlay(alignment: .center) {
-            Text("No feedback received")
+            Text("Ingen feedback endnu")
                 .captionTextStyle()
                 .foregroundColor(Color.themeTextSecondary)
         }

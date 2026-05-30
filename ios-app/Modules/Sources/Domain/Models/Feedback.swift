@@ -63,15 +63,15 @@ public extension Opinion {
     var localized: String {
         switch self {
         case .stronglyDisagree:
-            return "Strongly disagree"
+            return "Helt uenig"
         case .disagree:
-            return "Disagree"
+            return "Uenig"
         case .neutral:
             return "Neutral"
         case .agree:
-            return "Agree"
+            return "Enig"
         case .stronglyAgree:
-            return "Strongly agree"
+            return "Helt enig"
         }
     }
 }

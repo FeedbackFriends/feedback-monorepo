@@ -5,6 +5,7 @@ import SwiftUI
 
 public struct ActivityListView: View {
     
+    @State private var isActivityIntroPresented = false
     @Bindable var store: StoreOf<ActivityList>
 
     public init(
@@ -17,10 +18,8 @@ public struct ActivityListView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    createCTA
-                        .accessibilityIdentifier("my_activity_create_cta")
                     if store.activities.isEmpty {
-                        emptyState
+                        introCard
                     } else {
                         ForEach(store.activities) { activity in
                             ActivityRowButton(activity: activity) {
@@ -30,9 +29,41 @@ public struct ActivityListView: View {
                     }
                 }
                 .padding()
+                .padding(.bottom, 88)
             }
             .background(Color.themeBackground.ignoresSafeArea())
-            .navigationTitle("Recurring meetings")
+            .navigationTitle("✨ Aktiviteter")
+            .toolbar {
+                if !store.activities.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            isActivityIntroPresented = true
+                        } label: {
+                            Image.questionmarkCircle
+                        }
+                        .buttonStyle(ScalingButtonStyle())
+                        .accessibilityIdentifier("my_activity_info_button")
+                        .accessibilityLabel("Hvad er en aktivitet?")
+                    }
+                }
+            }
+            .overlay(alignment: .bottomTrailing) {
+                Button {
+                    self.store.send(.createActivityButtonTap)
+                } label: {
+                    Image(systemName: "plus")
+                        .titleTextStyle()
+                        .foregroundStyle(Color.themeOnPrimaryAction)
+                        .frame(width: 56, height: 56)
+                        .background(Color.themePrimaryAction.gradient, in: Circle())
+                        .lightShadow()
+                }
+                .buttonStyle(ScalingButtonStyle())
+                .accessibilityIdentifier("my_activity_add_button")
+                .accessibilityLabel("Tilføj aktivitet")
+                .padding(.trailing, Theme.padding)
+                .padding(.bottom, Theme.padding)
+            }
             .navigationDestination(
                 item: $store.scope(
                     state: \.destination?.activityDetail,
@@ -51,55 +82,75 @@ public struct ActivityListView: View {
                     ManageActivityView(store: store)
                 }
             }
+            .sheet(isPresented: $isActivityIntroPresented) {
+                ActivityIntroSheetView()
+                    .presentationDetents([.medium])
+            }
+        }
+    }
+
+    private var introCard: some View {
+        ActivityIntroContentView()
+            .accessibilityIdentifier("my_activity_intro_text")
+    }
+}
+
+private struct ActivityIntroSheetView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                introBody
+                .padding()
+            }
+            .background(Color.themeBackground.ignoresSafeArea())
+            .navigationTitle("Hvad er en aktivitet?")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        self.store.send(.createActivityButtonTap)
-                    } label: {
-                        Image(systemName: "plus")
+                ToolbarItem(placement: .cancellationAction) {
+                    CloseButtonView { dismiss() }
+                }
+            }
+        }
+    }
+
+    private var introBody: some View {
+        ActivityIntroContentView()
+            .accessibilityIdentifier("my_activity_intro_text")
+    }
+}
+
+private struct ActivityIntroContentView: View {
+    private let examples: [(emoji: String, text: String)] = [
+        ("🎤", "Et foredrag om ledelse"),
+        ("🤖", "En AI-workshop"),
+        ("🎾", "En padeltræning"),
+        ("📅", "Det månedlige teammøde")
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("En aktivitet er et format, du gentager. Noget, du løbende ønsker at forbedre gennem feedback og erfaringer.\n\nDet kunne være:")
+                .bodyTextStyle()
+                .foregroundStyle(Color.themeText)
+
+            VStack(alignment: .leading, spacing: 10) {
+                ForEach(examples, id: \.text) { example in
+                    HStack(alignment: .top, spacing: 10) {
+                        Text(example.emoji)
+                        Text(example.text)
+                            .bodyTextStyle()
+                            .foregroundStyle(Color.themeTextSecondary)
                     }
-                    .accessibilityIdentifier("my_activity_add_button")
                 }
             }
+            Text("\nTryk på plus-knappen for at oprette din første aktivitet.")
+                .bodyTextStyle()
+                .foregroundStyle(Color.themeText)
         }
-    }
-
-    private var createCTA: some View {
-        Button {
-            self.store.send(.createActivityButtonTap)
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "sparkles")
-                    .titleTextStyle()
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Add recurring meeting")
-                        .rowTitleTextStyle()
-
-                    Text("Invite feedback@letsgrow.dk to your calendar event and track meeting feedback over time.")
-                        .supportingTextStyle()
-                        .foregroundStyle(Color.themeTextSecondary)
-                }
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(Color.themeTextSecondary.opacity(0.7))
-            }
-            .padding()
-            .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: 20))
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var emptyState: some View {
-        ContentUnavailableView(
-            "No recurring meetings yet",
-            systemImage: "calendar.badge.plus",
-            description: Text("Add your first recurring meeting to start gathering feedback.")
-        )
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 24)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
     }
 }
 
@@ -114,7 +165,7 @@ private struct ActivityCardView: View {
                 Spacer()
             }
 
-            Text("\(activity.events.count) sessions")
+            Text(activity.events.count == 1 ? "1 mødegang" : "\(activity.events.count) mødegange")
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
         }
@@ -142,13 +193,13 @@ private extension ActivityTrend.Direction {
     var title: String {
         switch self {
         case .improving:
-            return "Improving"
+            return "Bliver bedre"
         case .stable:
-            return "Stable"
+            return "Stabilt"
         case .declining:
-            return "Declining"
+            return "Falder"
         case .insufficientData:
-            return "Insufficient data"
+            return "For lidt data"
         }
     }
 

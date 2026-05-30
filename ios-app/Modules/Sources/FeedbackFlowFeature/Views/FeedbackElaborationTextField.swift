@@ -8,7 +8,7 @@ struct FeedbackElaborationTextField: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Please elaborate why")
+            Text("Uddyb gerne hvorfor")
                 .bodyTextStyle()
                 .foregroundColor(.themeText)
             TextEditor(text: $commentTextField)

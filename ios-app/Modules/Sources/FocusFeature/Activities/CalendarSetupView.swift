@@ -5,15 +5,28 @@ struct CalendarSetupView: View {
     let email: String
     let didCopyEmail: Bool
     let onCopyEmail: () -> Void
+    let onCreateOneOffSession: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
+
+    init(
+        email: String,
+        didCopyEmail: Bool,
+        onCopyEmail: @escaping () -> Void,
+        onCreateOneOffSession: (() -> Void)? = nil
+    ) {
+        self.email = email
+        self.didCopyEmail = didCopyEmail
+        self.onCopyEmail = onCopyEmail
+        self.onCreateOneOffSession = onCreateOneOffSession
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Theme.padding) {
                     VStack(alignment: .leading, spacing: 14) {
-                        Text("Invite this email to your recurring calendar event.")
+                        Text("Inviter denne mail til din faste kalenderaftale.")
                             .bodyTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
 
@@ -26,7 +39,7 @@ struct CalendarSetupView: View {
 
                             Spacer(minLength: 0)
 
-                            Button("Copy") {
+                            Button("Kopiér") {
                                 onCopyEmail()
                             }
                             .buttonStyle(PrimaryTextButtonStyle())
@@ -35,23 +48,40 @@ struct CalendarSetupView: View {
                         .background(Color.themeBackground, in: Capsule(style: .continuous))
 
                         if didCopyEmail {
-                            Text("Email copied. Paste it into the recurring calendar invite.")
+                            Text("Mailen er kopieret. Sæt den ind i den faste kalenderaftale.")
                                 .supportingTextStyle()
                                 .foregroundStyle(Color.themeTextSecondary)
                         }
 
                         infoStep(
-                            title: "1. Add the email",
-                            detail: "Invite \(email) to the calendar event you already use."
+                            title: "1. Tilføj mailen",
+                            detail: "Inviter \(email) til den kalenderaftale, du allerede bruger."
                         )
                         infoStep(
-                            title: "2. Run the meeting as usual",
-                            detail: "LetsGrow creates feedback from the recurring calendar event."
+                            title: "2. Hold mødet som normalt",
+                            detail: "LetsGrow opretter feedback ud fra den faste kalenderaftale."
                         )
                         infoStep(
-                            title: "3. Review the trend",
-                            detail: "Participants receive feedback after the meeting, and you can track whether it improves."
+                            title: "3. Se udviklingen",
+                            detail: "Deltagerne får feedback efter mødet, og du kan følge om mødet bliver bedre."
                         )
+
+                        if let onCreateOneOffSession {
+                            Divider()
+
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Alternativ")
+                                    .sectionHeaderStyle()
+                                Text("Hvis du bare vil oprette en enkelt mødegang uden kalenderopsætning.")
+                                    .supportingTextStyle()
+                                    .foregroundStyle(Color.themeTextSecondary)
+                            }
+
+                            Button("Opret enkelt mødegang") {
+                                onCreateOneOffSession()
+                            }
+                            .buttonStyle(SecondaryTextButtonStyle())
+                        }
                     }
                     .padding(Theme.padding)
                     .frame(maxWidth: Constants.maxWidthForLargeDevices, alignment: .leading)
@@ -65,7 +95,7 @@ struct CalendarSetupView: View {
             }
             .background(Color.themeBackground.ignoresSafeArea())
             .foregroundStyle(Color.themeText)
-            .navigationTitle("Calendar setup")
+            .navigationTitle("Kalenderopsætning")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

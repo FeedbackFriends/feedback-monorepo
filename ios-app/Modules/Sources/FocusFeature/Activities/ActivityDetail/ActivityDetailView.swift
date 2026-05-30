@@ -20,17 +20,17 @@ struct ActivityDetailView: View {
             } else {
                 EmptyView()
                     .successOverlay(
-                        message: "Recurring meeting deleted",
+                        message: "Aktivitet slettet",
                         show: .constant(true),
                         enableAutomaticDismissal: true
                     )
             }
         }.sheet(isPresented: $store.showDeleteConfirmation) {
             DeleteConfirmationViewSheet(
-                title: "Delete recurring meeting",
-                message: "Delete this recurring meeting and its feedback?",
+                title: "Slet aktivitet",
+                message: "Slet dette faste møde og al feedback?",
                 actionButton: {
-                    Button("Delete") {
+                    Button("Slet") {
                         store.send(.deleteActivityConfirmButtonTap)
                     }
                     .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
@@ -53,71 +53,7 @@ private struct ActivityDetailContentView: View {
             previous: sessions.filter { $0.date.isBeforeToday }
         )
 
-        return ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                focusHeader(activity)
-
-                focusSetupSection(activity)
-
-                sessionsSection(
-                    groupedSessions: groupedSessions,
-                    eventTitle: activity.title
-                )
-            }
-            .padding()
-            .padding(.bottom, 24)
-        }
-        .scrollIndicators(.hidden)
-        .background(Color.themeBackground)
-        .lineSpacing(5)
-        .foregroundStyle(Color.themeText)
-        .navigationTitle("Recurring meeting")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                HStack {
-                    Button {
-                        store.showCalendarSetup = true
-                    } label: {
-                        Image(systemName: "calendar.badge.plus")
-                    }
-                    .buttonStyle(PrimaryTextButtonStyle())
-                    .accessibilityLabel("Open calendar setup")
-
-                    Button {
-                        store.send(.editActivityButtonTapped)
-                    } label: {
-                        Image(systemName: "pencil")
-                    }
-                    .buttonStyle(PrimaryTextButtonStyle())
-                    .accessibilityLabel("Edit recurring meeting")
-                    .accessibilityIdentifier("activity_detail_edit_button")
-
-                    Menu {
-                        Button(role: .destructive) {
-                            store.send(.deleteActivityButtonTap)
-                        } label: {
-                            Label("Delete recurring meeting", systemImage: "trash")
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis")
-                    }
-                    .buttonStyle(PrimaryTextButtonStyle())
-                    .accessibilityLabel("More recurring meeting actions")
-                }
-            }
-        }
-        .safeAreaInset(edge: .bottom) {
-            Button("Add one-off session") {
-                store.send(.createEventButtonTapped)
-            }
-            .buttonStyle(LargeButtonStyle())
-            .accessibilityIdentifier("activity_detail_create_session_button")
-            .padding(.horizontal)
-            .padding(.top, 10)
-            .padding(.bottom, 16)
-            .background(Color.themeBackground)
-        }
+        return screenBody(groupedSessions: groupedSessions)
         .sheet(
             item: $store.scope(
                 state: \.destination?.editActivity,
@@ -137,14 +73,8 @@ private struct ActivityDetailContentView: View {
             }
         }
         .sheet(isPresented: $store.showCalendarSetup) {
-            CalendarSetupView(
-                email: "feedback@letsgrow.dk",
-                didCopyEmail: store.didCopyCalendarEmail,
-                onCopyEmail: {
-                    UIPasteboard.general.string = "feedback@letsgrow.dk"
-                    store.didCopyCalendarEmail = true
-                }
-            )
+            calendarSetupSheet
+                .presentationDetents([.medium])
         }
         .navigationDestination(
             item: $store.scope(
@@ -155,6 +85,56 @@ private struct ActivityDetailContentView: View {
             EventDetailFeatureView(store: eventDetailStore)
         }
         .alert($store.scope(state: \.alert, action: \.alert))
+    }
+
+    private var calendarSetupSheet: some View {
+        CalendarSetupView(
+            email: "feedback@letsgrow.dk",
+            didCopyEmail: store.didCopyCalendarEmail,
+            onCopyEmail: {
+                UIPasteboard.general.string = "feedback@letsgrow.dk"
+                store.didCopyCalendarEmail = true
+            },
+            onCreateOneOffSession: {
+                Task { @MainActor in
+                    store.showCalendarSetup = false
+                    store.send(.createEventButtonTapped)
+                }
+            }
+        )
+    }
+
+    private func screenBody(groupedSessions: GroupedSessions) -> some View {
+        ScrollView {
+            contentStack(groupedSessions: groupedSessions)
+        }
+        .scrollIndicators(.hidden)
+        .background(Color.themeBackground)
+        .lineSpacing(5)
+        .foregroundStyle(Color.themeText)
+        .navigationTitle("Aktivitet")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            toolbarContent
+        }
+    }
+
+    @ViewBuilder
+    private func contentStack(groupedSessions: GroupedSessions) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            focusHeader(activity)
+
+            trendSection(activity)
+
+            focusSetupSection(activity)
+
+            sessionsSection(
+                groupedSessions: groupedSessions,
+                eventTitle: activity.title
+            )
+        }
+        .padding()
+        .padding(.bottom, 24)
     }
 
     private func focusHeader(_ activity: Activity) -> some View {
@@ -176,19 +156,106 @@ private struct ActivityDetailContentView: View {
         .accessibilityIdentifier("activity_detail_focus_header")
     }
 
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            HStack {
+                Button {
+                    store.showCalendarSetup = true
+                } label: {
+                    Image(systemName: "calendar.badge.plus")
+                }
+                .buttonStyle(PrimaryTextButtonStyle())
+                .accessibilityLabel("Åbn kalenderopsætning")
+
+                Button {
+                    store.send(.editActivityButtonTapped)
+                } label: {
+                    Image(systemName: "pencil")
+                }
+                .buttonStyle(PrimaryTextButtonStyle())
+                .accessibilityLabel("Rediger aktivitet")
+                .accessibilityIdentifier("activity_detail_edit_button")
+
+                Menu {
+                    Button(role: .destructive) {
+                        store.send(.deleteActivityButtonTap)
+                    } label: {
+                        Label("Slet aktivitet", systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                }
+                .buttonStyle(PrimaryTextButtonStyle())
+                .accessibilityLabel("Flere handlinger for aktivitet")
+            }
+        }
+    }
+
     private func sessionsSection(groupedSessions: GroupedSessions, eventTitle: String) -> some View {
-        EventListView(
-            todayEvents: groupedSessions.today,
-            comingUpEvents: groupedSessions.comingUp,
-            previousEvents: groupedSessions.previous,
-            eventTitle: eventTitle,
-            onEventTap: { store.send(.eventTapped($0)) }
-        )
+        VStack(alignment: .leading, spacing: 12) {
+            EventListView(
+                todayEvents: groupedSessions.today,
+                comingUpEvents: groupedSessions.comingUp,
+                previousEvents: groupedSessions.previous,
+                eventTitle: eventTitle,
+                onEventTap: { store.send(.eventTapped($0)) }
+            )
+
+            Button {
+                store.send(.createEventButtonTapped)
+            } label: {
+                Label("Tilføj enkelt mødegang", systemImage: "plus")
+            }
+            .buttonStyle(SecondaryTextButtonStyle())
+            .accessibilityIdentifier("activity_detail_create_session_button")
+        }
+    }
+
+    private func trendSection(_ activity: Activity) -> some View {
+        VStack(alignment: .leading) {
+            SectionHeaderView("Mødekvalitet")
+
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    Label(activity.trend.direction.title, systemImage: activity.trend.direction.symbolName)
+                        .rowTitleTextStyle()
+                        .foregroundStyle(activity.trend.direction.color)
+
+                    Spacer()
+
+                    if let deltaText = activity.trend.deltaText {
+                        Text(deltaText)
+                            .captionTextStyle()
+                            .foregroundStyle(activity.trend.direction.color)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(Color.themeBackground, in: Capsule())
+                    }
+                }
+
+                Text(activity.trend.summaryText)
+                    .supportingTextStyle()
+                    .foregroundStyle(Color.themeTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    store.showCalendarSetup = true
+                } label: {
+                    Label("Inviter feedback@letsgrow.dk", systemImage: "calendar.badge.plus")
+                }
+                .buttonStyle(SecondaryTextButtonStyle())
+            }
+            .padding(15)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.themeSurface)
+            .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        }
     }
 
     private func focusSetupSection(_ activity: Activity) -> some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("Feedback setup")
+            SectionHeaderView("Feedbackopsætning")
 
             Button {
                 store.send(.editActivityButtonTapped)
@@ -199,7 +266,7 @@ private struct ActivityDetailContentView: View {
                             .rowTitleTextStyle()
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        Label("Edit", systemImage: "pencil")
+                        Label("Rediger", systemImage: "pencil")
                             .captionTextStyle()
                             .foregroundStyle(Color.themePrimaryAction)
                     }
@@ -219,7 +286,7 @@ private struct ActivityDetailContentView: View {
                 .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
             }
             .buttonStyle(OpacityButtonStyle())
-            .accessibilityLabel("Edit recurring meeting feedback setup")
+            .accessibilityLabel("Rediger feedbackopsætning for aktivitet")
             .accessibilityIdentifier("activity_detail_focus_setup_section")
         }
     }
@@ -237,11 +304,11 @@ private struct ActivityDetailContentView: View {
     }
 
     private func sessionCountText(for count: Int) -> String {
-        count == 1 ? "1 session" : "\(count) sessions"
+        count == 1 ? "1 mødegang" : "\(count) mødegange"
     }
 
     private func questionCountText(for count: Int) -> String {
-        count == 1 ? "1 question" : "\(count) questions"
+        count == 1 ? "1 spørgsmål" : "\(count) spørgsmål"
     }
 }
 
@@ -279,29 +346,52 @@ private struct LegacyTrendBadge: View {
     let direction: ActivityTrend.Direction
 
     var body: some View {
-        Label(title, systemImage: symbolName)
+        Label(direction.title, systemImage: direction.symbolName)
             .captionTextStyle()
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .foregroundStyle(color)
+            .foregroundStyle(direction.color)
             .background(Color.themeBackground, in: Capsule())
     }
+}
 
-    private var title: String {
+private extension ActivityTrend {
+    var deltaText: String? {
+        guard let delta else { return nil }
+        let sign = delta > 0 ? "+" : ""
+        return "\(sign)\(String(format: "%.1f", delta))"
+    }
+
+    var summaryText: String {
         switch direction {
         case .improving:
-            return "Improving"
+            return "Mødekvaliteten stiger sammenlignet med tidligere mødegange."
         case .stable:
-            return "Stable"
+            return "Mødekvaliteten ligger stabilt. Hold øje med næste mødegang."
         case .declining:
-            return "Declining"
+            return "Mødekvaliteten falder. Brug feedbacken til at justere formatet."
         case .insufficientData:
-            return "Insufficient data"
+            return "Inviter feedback@letsgrow.dk og saml flere svar for at se udviklingen."
+        }
+    }
+}
+
+private extension ActivityTrend.Direction {
+    var title: String {
+        switch self {
+        case .improving:
+            return "Bliver bedre"
+        case .stable:
+            return "Stabilt"
+        case .declining:
+            return "Falder"
+        case .insufficientData:
+            return "For lidt data"
         }
     }
 
-    private var symbolName: String {
-        switch direction {
+    var symbolName: String {
+        switch self {
         case .improving:
             return "arrow.up.right"
         case .stable:
@@ -313,8 +403,8 @@ private struct LegacyTrendBadge: View {
         }
     }
 
-    private var color: Color {
-        switch direction {
+    var color: Color {
+        switch self {
         case .improving:
             return Color.themeSuccess
         case .stable:

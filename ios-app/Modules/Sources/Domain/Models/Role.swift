@@ -4,9 +4,9 @@ public enum Role: String, Equatable, Sendable {
     public var localized: String {
         switch self {
         case .participant:
-            "Participant"
+            "Deltager"
         case .manager:
-            "Manager"
+            "Mødeejer"
         }
     }
 }

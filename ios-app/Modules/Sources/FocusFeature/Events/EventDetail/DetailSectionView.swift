@@ -30,7 +30,7 @@ private extension DetailSectionView {
     
     var detailSectionView: some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("Details")
+            SectionHeaderView("Detaljer")
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
                     if let agenda, !agenda.isEmpty {
@@ -40,29 +40,29 @@ private extension DetailSectionView {
                             .multilineTextAlignment(.leading)
                             .supportingTextStyle()
                     }
-                    Text("Date")
+                        Text("Dato")
                         .rowTitleTextStyle()
                     Text(detail.formattedDate)
                         .supportingTextStyle()
-                    Text("Duration")
+                    Text("Varighed")
                         .rowTitleTextStyle()
                     Text(detail.durationText)
                         .supportingTextStyle()
                     if let location = detail.location, !location.isEmpty {
-                        Text("Location")
+                        Text("Lokation")
                             .rowTitleTextStyle()
                         Text(location)
                             .supportingTextStyle()
                     }
                     if let calendarProviderName = detail.calendarProviderName {
-                        Text("Calendar")
+                        Text("Kalender")
                             .rowTitleTextStyle()
                         Text(calendarProviderName)
                             .supportingTextStyle()
                     }
                     if let totalFeedback = detail.overallFeedbackSummary {
                         HStack {
-                            Text("\(totalFeedback.responses) responses")
+                            Text(totalFeedback.responses == 1 ? "1 svar" : "\(totalFeedback.responses) svar")
                                 .captionTextStyle()
                         }
                         .padding(.horizontal, 10)
@@ -88,7 +88,7 @@ private extension DetailSectionView {
     @ViewBuilder
     var eventPinSectionView: some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("Pin code")
+            SectionHeaderView("PIN-kode")
             VStack(alignment: .trailing, spacing: 12) {
                 if let pinCode = detail.pinCode?.value {
                     Text("\(pinCode)")
@@ -117,7 +117,7 @@ private extension DetailSectionView {
                             .foregroundColor(Color.themeVerySad)
                             .fontWeight(.semibold)
                         
-                        Text("Expired")
+                        Text("Udløbet")
                             .supportingTextStyle()
                             .foregroundColor(Color.themeVerySad)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -137,7 +137,7 @@ private extension DetailSectionView {
     @ViewBuilder
     var questionsSectionView: some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("Questions")
+            SectionHeaderView("Spørgsmål")
             ForEach(Array(zip(detail.questionsSnapshot.indices, detail.questionsSnapshot)), id: \.0) { index, question in
                 QuestionView(question: question, index: index)
                     .disabled(detail.overallFeedbackSummary == nil)
@@ -157,11 +157,11 @@ struct QuestionView: View {
                 isExpanded: $isExpanded,
                 content: {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("Comments")
+                        Text("Kommentarer")
                             .rowTitleTextStyle()
                             .frame(maxWidth: .infinity, alignment: .leading)
                         if question.feedbackSummary == nil {
-                            Text("No comments yet")
+                            Text("Ingen kommentarer endnu")
                                 .bodyTextStyle()
                                 .padding(.vertical, 8)
                         } else {
@@ -181,7 +181,7 @@ struct QuestionView: View {
                         HStack(alignment: .top) {
                             VStack(alignment: .leading, spacing: 14) {
                                 HStack(spacing: 8) {
-                                    Text("Question \(index + 1)")
+                                    Text("Spørgsmål \(index + 1)")
                                         .supportingTextStyle()
                                     HStack {
                                         question.feedbackType.image

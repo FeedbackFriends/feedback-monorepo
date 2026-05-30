@@ -31,7 +31,7 @@ struct ZeroToTenFeedbackView: View {
                 in: 0...10,
                 step: 1
             ) {
-                Text("Rating")
+                Text("Vurdering")
             } minimumValueLabel: {
                 Text("0").rowTitleTextStyle()
             } maximumValueLabel: {

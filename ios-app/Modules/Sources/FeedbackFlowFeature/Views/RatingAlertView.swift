@@ -12,8 +12,8 @@ public struct RatingAlertView: View {
     @Environment(\.requestReview) var requestReview
     
     public init(
-        title: String = "Happy with the app so far?",
-        message: String = "A rating on App Store can encourage others to give it a try. 👌🏽"
+        title: String = "Er LetsGrow nyttig indtil videre?",
+        message: String = "En vurdering i App Store kan hjælpe andre mødeejere med at finde LetsGrow."
     ) {
         self.title = title
         self.message = message
@@ -33,7 +33,7 @@ public struct RatingAlertView: View {
 						}
 					}
 					ToolbarItem(placement: .bottomBar) {
-						Button("Not now") {
+						Button("Ikke nu") {
 							self.dismiss()
 						}
 						.buttonStyle(SecondaryTextButtonStyle())
@@ -41,7 +41,7 @@ public struct RatingAlertView: View {
 					.sharedBackgroundVisibility(.hidden)
 					ToolbarSpacer(.flexible, placement: .bottomBar)
 					ToolbarItem(placement: .bottomBar) {
-						Button("Rate app") {
+						Button("Vurder appen") {
 							Task { @MainActor in
 								self.dismiss()
 								// Delay the task by 0.5 second

@@ -43,13 +43,13 @@ public struct ManageEvent: Sendable {
                 case .minutes45:
                     "45 min"
                 case .minutes60:
-                    "1 hour"
+                    "1 time"
                 case .minutes90:
-                    "1.5 hours"
+                    "1,5 time"
                 case .minutes120:
-                    "2 hours"
+                    "2 timer"
                 case .other:
-                    "Other"
+                    "Anden"
                 }
             }
         }
@@ -88,7 +88,7 @@ public struct ManageEvent: Sendable {
                 activityId: activity.id,
                 eventId: nil,
                 eventInput: eventInput,
-                successOverlayMessage: "Session created"
+                successOverlayMessage: "Mødegang oprettet"
             )
         }
 
@@ -106,7 +106,7 @@ public struct ManageEvent: Sendable {
                 activityId: activity.id,
                 eventId: event.id,
                 eventInput: eventInput,
-                successOverlayMessage: "Session saved"
+                successOverlayMessage: "Mødegang gemt"
             )
         }
 
@@ -140,14 +140,14 @@ public struct ManageEvent: Sendable {
         var navigationTitle: String {
             switch mode {
             case .create:
-                "New one-off session"
+                "Ny enkelt mødegang"
             case .edit:
-                "Edit one-off session"
+                "Rediger enkelt mødegang"
             }
         }
 
         var actionButtonTitle: String {
-            "Save"
+            "Gem"
         }
     }
 

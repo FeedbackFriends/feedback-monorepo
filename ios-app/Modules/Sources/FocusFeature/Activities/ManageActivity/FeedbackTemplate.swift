@@ -13,26 +13,26 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .standardMeeting: return "Standard meeting feedback"
-        case .teamMeeting: return "Team meeting"
-        case .retrospective: return "Retrospective"
+        case .standardMeeting: return "Standard mødefeedback"
+        case .teamMeeting: return "Teammøde"
+        case .retrospective: return "Retrospektiv"
         case .workshop: return "Workshop"
-        case .customQuestions: return "Custom questions"
+        case .customQuestions: return "Egne spørgsmål"
         }
     }
 
     var subtitle: String {
         switch self {
         case .standardMeeting:
-            return "Value, clarity, and one improvement"
+            return "Værdi, tydelighed og én forbedring"
         case .teamMeeting:
-            return "Energy, participation, and follow-up"
+            return "Energi, deltagelse og opfølgning"
         case .retrospective:
-            return "What worked, what should change, and overall rating"
+            return "Hvad virkede, hvad skal ændres og samlet vurdering"
         case .workshop:
-            return "Usefulness, clarity, and open improvement"
+            return "Nytte, tydelighed og åben forbedring"
         case .customQuestions:
-            return "Start empty and write your own questions"
+            return "Start tomt og skriv dine egne spørgsmål"
         }
     }
 
@@ -50,30 +50,30 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .standardMeeting:
             return [
-                .init(questionText: "Was this meeting valuable?", feedbackType: .emoji),
-                .init(questionText: "Was the purpose clear?", feedbackType: .opinion),
-                .init(questionText: "What should we improve for the next meeting?", feedbackType: .comment)
+                .init(questionText: "Var mødet værdifuldt?", feedbackType: .emoji),
+                .init(questionText: "Var formålet tydeligt?", feedbackType: .opinion),
+                .init(questionText: "Hvad skal vi forbedre til næste gang?", feedbackType: .comment)
             ]
 
         case .teamMeeting:
             return [
-                .init(questionText: "How was the energy in this meeting?", feedbackType: .emoji),
-                .init(questionText: "Did you feel involved?", feedbackType: .opinion),
-                .init(questionText: "What should we follow up on?", feedbackType: .comment)
+                .init(questionText: "Hvordan var energien i mødet?", feedbackType: .emoji),
+                .init(questionText: "Følte du dig involveret?", feedbackType: .opinion),
+                .init(questionText: "Hvad skal vi følge op på?", feedbackType: .comment)
             ]
 
         case .retrospective:
             return [
-                .init(questionText: "What worked well?", feedbackType: .comment),
-                .init(questionText: "What could be better?", feedbackType: .comment),
-                .init(questionText: "Overall rating", feedbackType: .zeroToTen)
+                .init(questionText: "Hvad fungerede godt?", feedbackType: .comment),
+                .init(questionText: "Hvad kan blive bedre?", feedbackType: .comment),
+                .init(questionText: "Samlet vurdering", feedbackType: .zeroToTen)
             ]
 
         case .workshop:
             return [
-                .init(questionText: "How useful was the workshop?", feedbackType: .zeroToTen),
-                .init(questionText: "Was the next step clear?", feedbackType: .opinion),
-                .init(questionText: "What should we improve next time?", feedbackType: .comment)
+                .init(questionText: "Hvor nyttig var workshoppen?", feedbackType: .zeroToTen),
+                .init(questionText: "Var næste skridt tydeligt?", feedbackType: .opinion),
+                .init(questionText: "Hvad skal vi forbedre næste gang?", feedbackType: .comment)
             ]
 
         case .customQuestions:

@@ -29,7 +29,7 @@ private extension EnterCodeView {
                     LetsGrowFeedbackLogoView()
                     
                     Spacer()
-                    Text("Enter PIN Code")
+                    Text("Indtast PIN-kode")
                         .foregroundStyle(Color.themeTextSecondary)
                         .titleTextStyle()
                     TextField("", text: $store.pinCodeInput.value)
@@ -46,7 +46,7 @@ private extension EnterCodeView {
                         }
                         .pinCodeInputValidation(pinCodeInput: $store.pinCodeInput)
                         .frame(maxWidth: Constants.maxWidthForLargeDevices)
-                    Button("Start feedback") {
+                    Button("Svar på feedback") {
                         store.send(.startFeedbackButtonTap)
                     }
                     .disabled(store.disableStartFeedbackButton)

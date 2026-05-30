@@ -15,10 +15,10 @@ public struct JoinEventView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 12) {
                 
-                Text("Join feedback")
+                Text("Svar på feedback")
                     .largeTitleTextStyle()
                     .padding(.top, 20)
-                Text("PIN Code")
+                Text("PIN-kode")
                     .padding(.top, 20)
                     .titleTextStyle()
                     .foregroundStyle(Color.themeText)
@@ -34,7 +34,7 @@ public struct JoinEventView: View {
                     .focused($pinCodeTextfieldFocused)
                     .padding(.top, 5)
                     .pinCodeInputValidation(pinCodeInput: $store.pinCodeInput)
-                Button("Join") {
+                Button("Fortsæt") {
                     store.send(.joinButtonTap)
                 }
                 .buttonStyle(LargeButtonStyle())
@@ -58,7 +58,7 @@ public struct JoinEventView: View {
             }
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
             .successOverlay(
-                message: "Session joined",
+                message: "Møde fundet",
                 show: $store.showSuccessOverlay
             )
             .toolbar {
@@ -85,7 +85,7 @@ public struct JoinEventView: View {
 
 #Preview {
     @Previewable @State var showDeleteConfirmation: Bool = false
-    Button("Join") {
+    Button("Fortsæt") {
         showDeleteConfirmation = true
     }
     .sheet(isPresented: $showDeleteConfirmation) {

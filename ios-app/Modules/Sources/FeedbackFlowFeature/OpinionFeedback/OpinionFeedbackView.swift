@@ -84,7 +84,7 @@ public struct OpinionFeedbackView: View {
                         .foregroundColor(.themeText)
                     Spacer(minLength: 0)
                     if isSelected {
-                        Text("Change")
+                        Text("Skift")
                             .captionTextStyle()
                             .foregroundColor(.themeTextSecondary)
                     }

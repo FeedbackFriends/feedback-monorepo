@@ -19,7 +19,7 @@ struct InviteView: View {
                     shareButton
                 }
                 .padding(.horizontal, 18)
-                .navigationTitle("Invite")
+                .navigationTitle("Inviter")
                 .navigationBarTitleDisplayMode(.large)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
@@ -37,7 +37,7 @@ struct InviteView: View {
     
     private var infoSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Share the link with people you would like feedback from 🤝")
+            Text("Del linket med de deltagere, du gerne vil have feedback fra.")
                 .bodyTextStyle()
         }
     }
@@ -76,7 +76,7 @@ struct InviteView: View {
 			HStack {
                 Image.shareActionIcon
 					.fontWeight(.semibold)
-				Text("Invite")
+				Text("Inviter")
 			}
 		}
         .buttonStyle(LargeButtonStyle())

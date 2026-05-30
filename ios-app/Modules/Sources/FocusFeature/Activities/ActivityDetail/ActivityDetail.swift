@@ -30,10 +30,11 @@ public struct ActivityDetail: Sendable {
         @Shared var bootstrap: Bootstrap
         
         var navigationTitle: String {
-            activity?.title ?? "Unknown Activity"
+            activity?.title ?? "Ukendt møde"
         }
         var navigationSubTitle: String {
-            "\(activity?.events.count ?? 0) sessions"
+            let count = activity?.events.count ?? 0
+            return count == 1 ? "1 mødegang" : "\(count) mødegange"
         }
         var showCalendarSetup = false
         var didCopyCalendarEmail = false

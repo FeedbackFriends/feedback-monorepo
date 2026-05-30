@@ -21,8 +21,8 @@ public struct NotificationHistoryView: View {
                 if notificationHistoryItems.isEmpty {
                     ScrollView {
                         EmptyStateView(
-                            title: "Nothing to show here yet.",
-                            message: "Once there’s an update, you’ll see it here."
+                            title: "Intet at vise endnu.",
+                            message: "Når der er nyt om møderne, ser du det her."
                         )
                     }
                     .scrollContentBackground(.hidden)
@@ -39,11 +39,11 @@ public struct NotificationHistoryView: View {
                                         Text("\(item.eventTitle)")
                                             .rowTitleTextStyle()
                                             .foregroundStyle(Color.themeText)
-                                        Text("You have received \(item.newFeedbackCount) new feedback on ‘\(item.eventTitle)’.")
+                                        Text("Du har modtaget \(item.newFeedbackCount) nye feedbacksvar på ‘\(item.eventTitle)’.")
                                             .supportingTextStyle()
                                         HStack {
                                             if !item.seenByManager {
-                                                Text("New")
+                                                Text("Ny")
                                                     .badgeTextStyle()
                                                     .padding(2)
                                                     .padding(.horizontal, 4)
@@ -66,7 +66,7 @@ public struct NotificationHistoryView: View {
                 }
             }
             .foregroundStyle(Color.themeText)
-            .navigationTitle("Recurring meetings")
+            .navigationTitle("Aktiviteter")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

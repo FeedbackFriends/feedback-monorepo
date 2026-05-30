@@ -82,10 +82,10 @@ public struct ProfileSettingsView: View {
                     )
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Organizer mode")
+                        Text("Mødeejer")
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
-                        Text("Create and manage your own feedback sessions.")
+                        Text("Opret aktiviteter og følg feedback over tid.")
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
@@ -97,13 +97,13 @@ public struct ProfileSettingsView: View {
                     HStack(spacing: 8) {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: Color.themePrimaryAction))
-                        Text("Updating preference...")
+                        Text("Opdaterer indstilling...")
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
                 }
             } footer: {
-                Text("Turn this off if you only want to give feedback when invited. You can still join with a PIN.")
+                Text("Slå fra, hvis du kun vil svare på feedback med en PIN-kode.")
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
@@ -116,10 +116,10 @@ public struct ProfileSettingsView: View {
                     )
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("In-app notifications")
+                        Text("Notifikationer i appen")
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
-                        Text("Get timely reminders and updates about your events.")
+                        Text("Få påmindelser og opdateringer om dine møder.")
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
@@ -134,10 +134,10 @@ public struct ProfileSettingsView: View {
                     )
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Email events")
+                        Text("Møder på mail")
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
-                        Text("Receive event-related updates in your inbox.")
+                        Text("Modtag mødeopdateringer i din indbakke.")
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
@@ -145,7 +145,7 @@ public struct ProfileSettingsView: View {
                 .tint(Color.themePrimaryAction)
                 .disabled(store.isLoading)
             } header: {
-                SectionHeaderView("Communication preferences", horizontalPadding: 0)
+                SectionHeaderView("Kommunikation", horizontalPadding: 0)
             }
 
             if let logoutButtonTap {
@@ -153,7 +153,7 @@ public struct ProfileSettingsView: View {
                     Button {
                         logoutButtonTap()
                     } label: {
-                        listElementView(image: .moreSectionPortraitAndArrowRight, label: "Logout")
+                        listElementView(image: .moreSectionPortraitAndArrowRight, label: "Log ud")
                     }
                 } 
             }
@@ -165,7 +165,7 @@ public struct ProfileSettingsView: View {
                     } label: {
                         listElementView(
                             image: .moreSectionTrash,
-                            label: "Delete account",
+                            label: "Slet konto",
                             isLoading: isDeleteAccountLoading
                         )
                     }
@@ -174,7 +174,7 @@ public struct ProfileSettingsView: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.themeBackground)
-        .navigationTitle("Settings")
+        .navigationTitle("Indstillinger")
         .navigationDestination(
             item: $store.scope(
                 state: \.destination?.modifyAccount,

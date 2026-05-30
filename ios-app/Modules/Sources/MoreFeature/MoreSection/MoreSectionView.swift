@@ -34,11 +34,11 @@ public struct MoreSectionView: View {
                 Button {
                     store.send(.onNotificationsButtonTap)
                 } label: {
-                    listElementView(image: .moreSectionBell, label: "Notifications")
+                    listElementView(image: .moreSectionBell, label: "Notifikationer")
                 }
                 if let privacyPolicyUrl = store.privacyPolicyUrl {
                     Link(destination: privacyPolicyUrl) {
-                        listElementView(image: .moreSectiondocPlaintext, label: "Privacy policy")
+                        listElementView(image: .moreSectiondocPlaintext, label: "Privatlivspolitik")
                     }
                     .onOpenURL(prefersInApp: true)
                 }
@@ -49,14 +49,14 @@ public struct MoreSectionView: View {
                         Image.heartFill
                             .frame(width: 24, height: 24)
                             .foregroundStyle(Color.themePrimaryAction.gradient)
-                        Text("Support us")
+                        Text("Støt os")
                     }
                     .bodyTextStyle()
                     .foregroundColor(.themeText)
                 }
                 
             } header: {
-                SectionHeaderView("General", horizontalPadding: 0)
+                SectionHeaderView("Generelt", horizontalPadding: 0)
             } footer: {
                 Text(appVersionFooterText)
                     .frame(maxWidth: .infinity)
@@ -74,15 +74,15 @@ public struct MoreSectionView: View {
             Button {
                 store.send(.onFeedbackButtonTap)
             } label: {
-                listElementView(image: .moreSectionElipsisBubble, label: "Send us feedback")
+                listElementView(image: .moreSectionElipsisBubble, label: "Send feedback til os")
             }
             Button {
                 store.send(.onReportBugButtonTap)
             } label: {
-                listElementView(image: .moreSectionExlamaionmarkSquare, label: "Report a bug")
+                listElementView(image: .moreSectionExlamaionmarkSquare, label: "Rapportér en fejl")
             }
         } header: {
-            SectionHeaderView("Contact us", horizontalPadding: 0)
+            SectionHeaderView("Kontakt os", horizontalPadding: 0)
         }
     }
     
@@ -90,10 +90,10 @@ public struct MoreSectionView: View {
         Section {
             ShareLink(item: appStoreReviewUrl) {
                 VStack(spacing: 10) {
-                    Text("Invite your colleagues")
+                    Text("Inviter flere mødeejere")
                         .titleTextStyle()
                         .foregroundStyle(Color.themeOnPrimaryAction)
-                    Text("Improve the feedback culture in the office 🤟🏽")
+                    Text("Gør aktiviteter lettere at forbedre")
                         .bodyTextStyle()
                         .foregroundStyle(Color.themeOnPrimaryAction)
                 }

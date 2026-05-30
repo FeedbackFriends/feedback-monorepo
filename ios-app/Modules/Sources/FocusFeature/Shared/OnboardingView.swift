@@ -12,20 +12,20 @@ struct OnboardingView: View {
             TabView(selection: $page) {
                 OnboardingPage(
                     icon: "leaf.fill",
-                    title: "Improve recurring meetings",
-                    subtitle: "Collect lightweight feedback after the meetings your team already runs."
+                    title: "Forbedr aktiviteter",
+                    subtitle: "Indsaml kort feedback efter de møder, dit team allerede holder."
                 )
                 .tag(0)
                 OnboardingPage(
                     icon: "bubble.left.and.bubble.right.fill",
-                    title: "Ask the right questions",
-                    subtitle: "Use short meeting feedback that is easy for participants to answer."
+                    title: "Stil få gode spørgsmål",
+                    subtitle: "Gør det nemt for deltagerne at svare, mens mødet stadig er friskt."
                 )
                 .tag(1)
                 OnboardingPage(
                     icon: "chart.line.uptrend.xyaxis",
-                    title: "Track meeting quality",
-                    subtitle: "See whether recurring meetings improve, stay flat, or need attention."
+                    title: "Følg mødekvaliteten",
+                    subtitle: "Se om det faste møde bliver bedre, står stille eller kræver handling."
                 )
                 .tag(2)
             }
@@ -49,13 +49,13 @@ struct OnboardingView: View {
                     showCreateActivity = true
                 }
             } label: {
-                Text(page == 2 ? "Get Started" : "Continue")
+                Text(page == 2 ? "Kom i gang" : "Fortsæt")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
 
             if page < 2 {
-                Button("Skip") {
+                Button("Spring over") {
                     showCreateActivity = true
                 }
                 .supportingTextStyle()
@@ -106,15 +106,15 @@ struct FirstRecurringMeetingOnboardingView: View {
                     .foregroundStyle(Color.themeSuccess)
 
                 VStack(spacing: 8) {
-                    Text("Which meeting should collect feedback?")
+                    Text("Hvilken aktivitet skal have feedback?")
                         .titleTextStyle()
 
-                    Text("Start with one recurring meeting. You can adjust questions later.")
+                    Text("Start med én aktivitet. Du kan justere spørgsmålene senere.")
                         .foregroundStyle(Color.themeTextSecondary)
                         .multilineTextAlignment(.center)
                 }
 
-                TextField("e.g. Weekly team sync", text: $title)
+                TextField("fx Ugentlig team sync", text: $title)
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal)
 
@@ -123,7 +123,7 @@ struct FirstRecurringMeetingOnboardingView: View {
                     dismiss()
                     onComplete()
                 } label: {
-                    Text("Create my first recurring meeting")
+                    Text("Opret mit første faste møde")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
@@ -132,7 +132,7 @@ struct FirstRecurringMeetingOnboardingView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Get Started")
+            .navigationTitle("Kom i gang")
             .navigationBarTitleDisplayMode(.inline)
         }
     }

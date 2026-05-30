@@ -24,10 +24,6 @@ public struct ManageActivity: Sendable {
         var createActivityRequestInFlight = false
         @Presents var alert: AlertState<Never>?
 
-        var showInfoSheet = false
-        var didCopyEmail = false
-        let botEmail = "feedback@letsgrow.dk"
-
         var sendEmails = false
         var participants: [String] = []
         var newEmail = ""
@@ -59,15 +55,15 @@ public struct ManageActivity: Sendable {
 
         var navigationTitle: String {
             switch mode {
-            case .create: return "Add recurring meeting"
-            case .edit: return "Edit recurring meeting"
+            case .create: return "Tilføj aktivitet"
+            case .edit: return "Rediger aktivitet"
             }
         }
 
         var actionButtonTitle: String {
             switch mode {
-            case .create: return "Create"
-            case .edit: return "Save"
+            case .create: return "Opret"
+            case .edit: return "Gem"
             }
         }
 
@@ -77,16 +73,16 @@ public struct ManageActivity: Sendable {
 
         var questionsSectionTitle: String {
             if questions.isEmpty {
-                return "Build your questions"
+                return "Byg dine spørgsmål"
             }
-            return "\(questions.count) question\(questions.count == 1 ? "" : "s") ready"
+            return questions.count == 1 ? "1 spørgsmål klar" : "\(questions.count) spørgsmål klar"
         }
 
         var questionsSectionSubtitle: String {
             if selectedTemplate == .customQuestions && questions.isEmpty {
-                return "Start from scratch"
+                return "Start fra bunden"
             }
-            return "Open the list to customize the flow"
+            return "Åbn listen for at tilpasse forløbet"
         }
 
         var activityInput: ActivityInput? {
@@ -119,7 +115,6 @@ public struct ManageActivity: Sendable {
         case presentError(Error)
         case templateSelected(FeedbackTemplate)
         case clearTemplateTapped
-        case copyBotEmailTapped
         case alert(PresentationAction<Never>)
         case delegate(Delegate)
 
@@ -147,10 +142,6 @@ public struct ManageActivity: Sendable {
             case .clearTemplateTapped:
                 state.selectedTemplate = nil
                 state.questions = []
-                return .none
-
-            case .copyBotEmailTapped:
-                state.didCopyEmail = true
                 return .none
 
             case .actionButtonTap:

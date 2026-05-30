@@ -19,8 +19,8 @@ public struct EventDetailFeatureView: View {
                 )
             } else {
                 EmptyStateView(
-                    title: "Session unavailable",
-                    message: "This session can no longer be opened."
+                    title: "Mødegangen er ikke tilgængelig",
+                    message: "Denne mødegang kan ikke længere åbnes."
                 )
                 .padding(.horizontal, Theme.padding)
             }
@@ -39,7 +39,7 @@ public struct EventDetailFeatureView: View {
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                     .disabled(store.event?.pinCode == nil)
-                    .accessibilityLabel("Invite")
+                    .accessibilityLabel("Inviter")
                     .accessibilityIdentifier("session_detail_invite_button")
 
                     Button {
@@ -49,7 +49,7 @@ public struct EventDetailFeatureView: View {
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                     .disabled(store.event == nil)
-                    .accessibilityLabel("Edit session")
+                    .accessibilityLabel("Rediger mødegang")
                     .accessibilityIdentifier("session_detail_edit_button")
 
                     Button(role: .destructive) {
@@ -59,17 +59,17 @@ public struct EventDetailFeatureView: View {
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                     .disabled(store.event == nil)
-                    .accessibilityLabel("Delete session")
+                    .accessibilityLabel("Slet mødegang")
                     .accessibilityIdentifier("session_detail_delete_button")
                 }
             }
         }
         .sheet(isPresented: $store.showDeleteConfirmation) {
             DeleteConfirmationViewSheet(
-                title: "Delete session",
-                message: "Delete this session and its feedback?",
+                title: "Slet mødegang",
+                message: "Slet denne mødegang og dens feedback?",
                 actionButton: {
-                    Button("Delete") {
+                    Button("Slet") {
                         store.send(.deleteEventConfirmButtonTapped)
                     }
                     .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
@@ -92,8 +92,8 @@ public struct EventDetailFeatureView: View {
                 .presentationDetents([.height(350)])
             } else {
                 EmptyStateView(
-                    title: "Invite unavailable",
-                    message: "Invites are not available for this session right now."
+                    title: "Invitation ikke tilgængelig",
+                    message: "Invitationer er ikke tilgængelige for denne mødegang lige nu."
                 )
                 .padding(.horizontal, Theme.padding)
                 .presentationDetents([.height(350)])

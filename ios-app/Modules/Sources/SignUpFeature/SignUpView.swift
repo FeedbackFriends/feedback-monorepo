@@ -38,16 +38,6 @@ public struct SignUpView: View {
             .navigationBarTitleDisplayMode(.large)
             .background(Color.themeBackground)
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
-            .sheet(
-                item: $store.scope(
-                    state: \.destination?.selectUserType,
-                    action: \.destination.selectUserType
-                )
-            ) { store in
-                SelectUserTypeView(store: store)
-                    .interactiveDismissDisabled()
-                    .presentationDetents([.height(240)])
-            }
             #if DEBUG
             .sheet(
                 isPresented: .init(
@@ -69,10 +59,10 @@ public struct SignUpView: View {
 private extension SignUpView {
     var signUpView: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Sign up")
+            Text("Forbedr aktiviteter")
                 .largeTitleTextStyle()
                 .foregroundStyle(Color.themeText.gradient)
-            Text("Sign up to improve recurring meetings with lightweight feedback.")
+            Text("Log ind som mødeejer, eller svar hurtigt med en PIN-kode uden at oprette en konto.")
                 .bodyTextStyle()
                 .foregroundColor(.themeText)
             Button {
@@ -90,7 +80,7 @@ private extension SignUpView {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 18, height: 18)
-                    Text("Continue with Apple")
+                    Text("Fortsæt med Apple")
                     Spacer()
                 }
                 .padding(.leading, 24)
@@ -112,7 +102,7 @@ private extension SignUpView {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 24, height: 24)
-                    Text("Continue with Google")
+                    Text("Fortsæt med Google")
                         .foregroundStyle(Color.themeText)
                     Spacer()
                 }
@@ -120,7 +110,7 @@ private extension SignUpView {
             }
             .buttonStyle(
                 LargeButtonStyle(
-					backgroundColor: Color.themeSurface
+                    backgroundColor: Color.themeSurface
                 )
             )
             .disabled(store.googleLoginInFlight || store.appleLoginInFlight || store.anonymousLoginInFlight)
@@ -132,7 +122,7 @@ private extension SignUpView {
                     if store.anonymousLoginInFlight {
                         ProgressView()
                     }
-                    Text("Skip for now")
+                    Text("Svar med PIN")
                 }
             }
             .buttonStyle(PrimaryTextButtonStyle())

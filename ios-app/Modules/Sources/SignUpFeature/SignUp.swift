@@ -11,7 +11,6 @@ public struct SignUp: Sendable {
     @Reducer
     public enum Destination {
         case alert(AlertState<Never>)
-        case selectUserType(SelectUserType)
     }
     
     @ObservableState

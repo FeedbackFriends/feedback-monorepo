@@ -28,11 +28,11 @@ public struct EventListView: View {
             if todayEvents.isEmpty && comingUpEvents.isEmpty && previousEvents.isEmpty {
                 VStack(alignment: .center, spacing: 14) {
                     VStack(spacing: 6) {
-                        Text("No one-off sessions yet")
+                        Text("Ingen mødegange endnu")
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
 
-                        Text("Use calendar setup for recurring feedback, or add a one-off session.")
+                        Text("Brug kalenderopsætning til fast feedback. Tilføj kun en enkelt mødegang ved behov.")
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                             .multilineTextAlignment(.center)
@@ -44,21 +44,21 @@ public struct EventListView: View {
 
             } else {
                 if !todayEvents.isEmpty {
-                    CustomSection(title: "Today") {
+                    CustomSection(title: "I dag") {
                         ForEach(todayEvents) { event in
                             eventListItem(event)
                         }
                     }
                 }
                 if !comingUpEvents.isEmpty {
-                    CustomSection(title: "Coming up") {
+                    CustomSection(title: "Kommende") {
                         ForEach(comingUpEvents) { event in
                             eventListItem(event)
                         }
                     }
                 }
                 if !previousEvents.isEmpty {
-                    CustomSection(title: "Previous") {
+                    CustomSection(title: "Tidligere") {
                         ForEach(previousEvents) { event in
                             eventListItem(event)
                         }
@@ -115,14 +115,14 @@ private struct EventListItemView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             if let overallFeedbackSummary = event.overallFeedbackSummary, overallFeedbackSummary.unseenResponses > 0 {
-                Text("\(overallFeedbackSummary.unseenResponses) new")
+                Text("\(overallFeedbackSummary.unseenResponses) nye")
                     .badgeTextStyle()
                     .padding(.horizontal, 8)
                     .padding(.vertical, 5)
                     .foregroundStyle(Color.themeOnPrimaryAction)
                     .background(Color.themeBlue)
                     .clipShape(Capsule())
-                    .accessibilityLabel("\(overallFeedbackSummary.unseenResponses) new responses")
+                    .accessibilityLabel("\(overallFeedbackSummary.unseenResponses) nye svar")
             }
 
             Image.chevronRight
@@ -151,7 +151,7 @@ private struct EventListItemView: View {
 
     private var sessionTitle: String {
         if event.date.isToday {
-            return "Today at \(event.date.formatted(date: .omitted, time: .shortened))"
+            return "I dag kl. \(event.date.formatted(date: .omitted, time: .shortened))"
         }
 
         return event.date.formatted(date: .abbreviated, time: .shortened)
@@ -162,7 +162,7 @@ private struct EventListItemView: View {
             if let pinCode = event.pinCode?.value {
                 pill(text: "#\(pinCode)", foregroundColor: Color.themeText)
             } else {
-                pill(text: "Expired", foregroundColor: Color.themeVerySad)
+                pill(text: "Udløbet", foregroundColor: Color.themeVerySad)
             }
 
             Spacer(minLength: 8)
@@ -186,10 +186,10 @@ private struct EventListItemView: View {
 
     private var responseText: String {
         guard let responses = event.overallFeedbackSummary?.responses else {
-            return "No responses yet"
+            return "Ingen svar endnu"
         }
 
-        return responses == 1 ? "1 response" : "\(responses) responses"
+        return responses == 1 ? "1 svar" : "\(responses) svar"
     }
 
     private var accessibilityLabel: String {

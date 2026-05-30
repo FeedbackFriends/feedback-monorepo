@@ -19,28 +19,28 @@ public struct ParticipantEventsView: View {
                 let participantEvents = store.bootstrap.participantEvents
                 if participantEvents.isEmpty {
                     EmptyStateView(
-                        message: "Sessions you are attending will be visible here."
+                        message: "Møder, du deltager i, vises her."
                     )
                 } else {
                     let todayMeetings = participantEvents.filter { $0.date.isToday }
                     let comingUpMeetings = participantEvents.filter { $0.date.isAfterToday }
                     let pastMeetings = participantEvents.filter { $0.date.isBeforeToday }
                     if !todayMeetings.isEmpty {
-                        CustomSection(title: "Today") {
+                        CustomSection(title: "I dag") {
                             ForEach(todayMeetings.sorted { $0.date > $1.date }) { event in
                                 listItem(event)
                             }
                         }
                     }
                     if !pastMeetings.isEmpty {
-                        CustomSection(title: "Past week") {
+                        CustomSection(title: "Seneste uge") {
                             ForEach(pastMeetings) { event in
                                 listItem(event)
                             }
                         }
                     }
                     if !comingUpMeetings.isEmpty {
-                        CustomSection(title: "Coming up") {
+                        CustomSection(title: "Kommende") {
                             ForEach(comingUpMeetings) { event in
                                 listItem(event)
                             }
@@ -89,7 +89,7 @@ extension ParticipantEventsView {
                             .rowTitleTextStyle()
                         Spacer()
                         if event.recentlyJoined {
-                            Text("New feedback")
+                            Text("Ny feedback")
                                 .badgeTextStyle()
                                 .padding(4)
                                 .padding(.horizontal, 4)
@@ -112,7 +112,7 @@ extension ParticipantEventsView {
                                 Text("#\(pinCode.value)")
                                     .badgeTextStyle()
                             } else {
-                                Text("Expired")
+                                Text("Udløbet")
                                     .badgeTextStyle()
                             }
                         }
@@ -122,14 +122,14 @@ extension ParticipantEventsView {
                     .frame(maxWidth: .infinity, minHeight: 40)
                     Divider()
                     if event.feedbackSubmited {
-                        Text("Sent")
+                        Text("Sendt")
                             .rowTitleTextStyle()
                             .frame(maxWidth: .infinity, minHeight: 40)
                             .foregroundStyle(Color.themeText.gradient.opacity(0.5))
                     } else {
                         if let pinCode = event.pinCode {
                             let startFeedbackPincodeInFlight = store.startFeedbackPincodeInFlight == event.pinCode
-                            Button("Give feedback") {
+                            Button("Svar") {
                                 store.send(.startFeedbackButtonTap(pinCode: pinCode))
                             }
                             .disabled(startFeedbackPincodeInFlight)
@@ -137,7 +137,7 @@ extension ParticipantEventsView {
                             .isLoading(startFeedbackPincodeInFlight)
                             .frame(maxWidth: .infinity, minHeight: 40)
                         } else {
-                            Text("Expired")
+                            Text("Udløbet")
                                 .rowTitleTextStyle()
                         }
                     }

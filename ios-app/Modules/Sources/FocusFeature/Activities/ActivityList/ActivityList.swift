@@ -63,6 +63,9 @@ public struct ActivityList: Sendable {
                 }
 
             case .navigateToCreatedActivity(let activity):
+                state.$bootstrap.withLock {
+                    $0.managerData!.activities.updateOrAppend(activity)
+                }
                 state.destination = .activityDetail(
                     ActivityDetail.State(
                         activityId: activity.id,

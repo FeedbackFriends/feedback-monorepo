@@ -89,18 +89,28 @@
 		281A89492E69B7AC0002D56C /* production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = production.xcconfig; sourceTree = "<group>"; };
 		282268002E6F68F400C03174 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = SOURCE_ROOT; };
 		284ACB252E92FF65008F01D0 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
-		2871CF5F2F7012820059E0D2 /* config.toml */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.toml; sourceTree = "<group>"; };
 		2871CF612F7012940059E0D2 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		2871CF622F7012A40059E0D2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		287B6F862E68ADC1003A419C /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
 		28A050122E786F9E00CC7316 /* Preview App Question Picker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Preview App Question Picker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		28A050142E786FCA00CC7316 /* QuestionPickerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionPickerApp.swift; sourceTree = "<group>"; };
 		28A0501E2E78910A00CC7316 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		28A8CA152F7D103E0028C59C /* openai.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openai.yaml; sourceTree = "<group>"; };
-		28A8CA172F7D103E0028C59C /* design-system.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "design-system.md"; sourceTree = "<group>"; };
-		28A8CA192F7D103E0028C59C /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
-		28A8CA1B2F7D103E0028C59C /* inventory_openapi_domain_sync.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = inventory_openapi_domain_sync.py; sourceTree = "<group>"; };
-		28A8CA1D2F7D103E0028C59C /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
+		28AC8EE52FCA1A500032438D /* swiftlint-fix-changed.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "swiftlint-fix-changed.sh"; sourceTree = "<group>"; };
+		28AC8EE72FCA1A500032438D /* allow_xcode_mcp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = allow_xcode_mcp.js; sourceTree = "<group>"; };
+		28AC8EE92FCA1A500032438D /* agent.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = agent.yaml; sourceTree = "<group>"; };
+		28AC8EEB2FCA1A500032438D /* design-system.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "design-system.md"; sourceTree = "<group>"; };
+		28AC8EED2FCA1A500032438D /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
+		28AC8EEF2FCA1A500032438D /* agent.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = agent.yaml; sourceTree = "<group>"; };
+		28AC8EF12FCA1A500032438D /* inventory_openapi_domain_sync.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = inventory_openapi_domain_sync.py; sourceTree = "<group>"; };
+		28AC8EF32FCA1A500032438D /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
+		28AC8EF52FCA1A500032438D /* agent.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = agent.yaml; sourceTree = "<group>"; };
+		28AC8EF72FCA1A500032438D /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
+		28AC8EF92FCA1A500032438D /* letsgrow-architecture */ = {isa = PBXFileReference; lastKnownFileType = text; path = "letsgrow-architecture"; sourceTree = "<group>"; };
+		28AC8EFA2FCA1A500032438D /* letsgrow-commit-and-push */ = {isa = PBXFileReference; lastKnownFileType = text; path = "letsgrow-commit-and-push"; sourceTree = "<group>"; };
+		28AC8EFB2FCA1A500032438D /* letsgrow-domain */ = {isa = PBXFileReference; lastKnownFileType = text; path = "letsgrow-domain"; sourceTree = "<group>"; };
+		28AC8EFC2FCA1A500032438D /* ux-designer */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ux-designer"; sourceTree = "<group>"; };
+		28AC8EFE2FCA1A500032438D /* config.toml */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.toml; sourceTree = "<group>"; };
+		28AC8EFF2FCA1A500032438D /* hooks.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = hooks.json; sourceTree = "<group>"; };
 		28BDE9D92E918A2C00BFD81D /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		28D8884C2E6788FF00F0B6BE /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28DB6A3A2E5E054700F90EA0 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
@@ -204,65 +214,115 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
-		2871CF602F7012820059E0D2 /* .codex */ = {
+		28AC8EE62FCA1A500032438D /* hooks */ = {
 			isa = PBXGroup;
 			children = (
-				28A8CA1F2F7D103E0028C59C /* skills */,
-				2871CF5F2F7012820059E0D2 /* config.toml */,
+				28AC8EE52FCA1A500032438D /* swiftlint-fix-changed.sh */,
 			);
-			path = .codex;
+			path = hooks;
 			sourceTree = "<group>";
 		};
-		28A8CA162F7D103E0028C59C /* agents */ = {
+		28AC8EE82FCA1A500032438D /* scripts */ = {
 			isa = PBXGroup;
 			children = (
-				28A8CA152F7D103E0028C59C /* openai.yaml */,
-			);
-			path = agents;
-			sourceTree = "<group>";
-		};
-		28A8CA182F7D103E0028C59C /* references */ = {
-			isa = PBXGroup;
-			children = (
-				28A8CA172F7D103E0028C59C /* design-system.md */,
-			);
-			path = references;
-			sourceTree = "<group>";
-		};
-		28A8CA1A2F7D103E0028C59C /* feedback-ios-design-system */ = {
-			isa = PBXGroup;
-			children = (
-				28A8CA162F7D103E0028C59C /* agents */,
-				28A8CA182F7D103E0028C59C /* references */,
-				28A8CA192F7D103E0028C59C /* SKILL.md */,
-			);
-			path = "feedback-ios-design-system";
-			sourceTree = "<group>";
-		};
-		28A8CA1C2F7D103E0028C59C /* scripts */ = {
-			isa = PBXGroup;
-			children = (
-				28A8CA1B2F7D103E0028C59C /* inventory_openapi_domain_sync.py */,
+				28AC8EE72FCA1A500032438D /* allow_xcode_mcp.js */,
 			);
 			path = scripts;
 			sourceTree = "<group>";
 		};
-		28A8CA1E2F7D103E0028C59C /* openapi-domain-sync */ = {
+		28AC8EEA2FCA1A500032438D /* agents */ = {
 			isa = PBXGroup;
 			children = (
-				28A8CA1C2F7D103E0028C59C /* scripts */,
-				28A8CA1D2F7D103E0028C59C /* SKILL.md */,
+				28AC8EE92FCA1A500032438D /* agent.yaml */,
 			);
-			path = "openapi-domain-sync";
+			path = agents;
 			sourceTree = "<group>";
 		};
-		28A8CA1F2F7D103E0028C59C /* skills */ = {
+		28AC8EEC2FCA1A500032438D /* references */ = {
 			isa = PBXGroup;
 			children = (
-				28A8CA1A2F7D103E0028C59C /* feedback-ios-design-system */,
-				28A8CA1E2F7D103E0028C59C /* openapi-domain-sync */,
+				28AC8EEB2FCA1A500032438D /* design-system.md */,
+			);
+			path = references;
+			sourceTree = "<group>";
+		};
+		28AC8EEE2FCA1A500032438D /* letsgrow-ios-design-system */ = {
+			isa = PBXGroup;
+			children = (
+				28AC8EEA2FCA1A500032438D /* agents */,
+				28AC8EEC2FCA1A500032438D /* references */,
+				28AC8EED2FCA1A500032438D /* SKILL.md */,
+			);
+			path = "letsgrow-ios-design-system";
+			sourceTree = "<group>";
+		};
+		28AC8EF02FCA1A500032438D /* agents */ = {
+			isa = PBXGroup;
+			children = (
+				28AC8EEF2FCA1A500032438D /* agent.yaml */,
+			);
+			path = agents;
+			sourceTree = "<group>";
+		};
+		28AC8EF22FCA1A500032438D /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				28AC8EF12FCA1A500032438D /* inventory_openapi_domain_sync.py */,
+			);
+			path = scripts;
+			sourceTree = "<group>";
+		};
+		28AC8EF42FCA1A500032438D /* letsgrow-ios-sync-openapi */ = {
+			isa = PBXGroup;
+			children = (
+				28AC8EF02FCA1A500032438D /* agents */,
+				28AC8EF22FCA1A500032438D /* scripts */,
+				28AC8EF32FCA1A500032438D /* SKILL.md */,
+			);
+			path = "letsgrow-ios-sync-openapi";
+			sourceTree = "<group>";
+		};
+		28AC8EF62FCA1A500032438D /* agents */ = {
+			isa = PBXGroup;
+			children = (
+				28AC8EF52FCA1A500032438D /* agent.yaml */,
+			);
+			path = agents;
+			sourceTree = "<group>";
+		};
+		28AC8EF82FCA1A500032438D /* maestro-mobile-testing */ = {
+			isa = PBXGroup;
+			children = (
+				28AC8EF62FCA1A500032438D /* agents */,
+				28AC8EF72FCA1A500032438D /* SKILL.md */,
+			);
+			path = "maestro-mobile-testing";
+			sourceTree = "<group>";
+		};
+		28AC8EFD2FCA1A500032438D /* skills */ = {
+			isa = PBXGroup;
+			children = (
+				28AC8EEE2FCA1A500032438D /* letsgrow-ios-design-system */,
+				28AC8EF42FCA1A500032438D /* letsgrow-ios-sync-openapi */,
+				28AC8EF82FCA1A500032438D /* maestro-mobile-testing */,
+				28AC8EF92FCA1A500032438D /* letsgrow-architecture */,
+				28AC8EFA2FCA1A500032438D /* letsgrow-commit-and-push */,
+				28AC8EFB2FCA1A500032438D /* letsgrow-domain */,
+				28AC8EFC2FCA1A500032438D /* ux-designer */,
 			);
 			path = skills;
+			sourceTree = "<group>";
+		};
+		28AC8F002FCA1A500032438D /* .agents */ = {
+			isa = PBXGroup;
+			children = (
+				28AC8EE62FCA1A500032438D /* hooks */,
+				28AC8EE82FCA1A500032438D /* scripts */,
+				28AC8EFD2FCA1A500032438D /* skills */,
+				28AC8EFE2FCA1A500032438D /* config.toml */,
+				28AC8EFF2FCA1A500032438D /* hooks.json */,
+			);
+			path = .agents;
 			sourceTree = "<group>";
 		};
 		28BDE9DB2E918A2C00BFD81D /* CI_scripts */ = {
@@ -306,9 +366,9 @@
 		B1057F2B2843FD8600B9EE2F = {
 			isa = PBXGroup;
 			children = (
+				28AC8F002FCA1A500032438D /* .agents */,
 				2871CF622F7012A40059E0D2 /* README.md */,
 				2871CF612F7012940059E0D2 /* AGENTS.md */,
-				2871CF602F7012820059E0D2 /* .codex */,
 				28A0501E2E78910A00CC7316 /* .swiftlint.yml */,
 				282268002E6F68F400C03174 /* README.md */,
 				287B6F862E68ADC1003A419C /* UnitTests.xctestplan */,

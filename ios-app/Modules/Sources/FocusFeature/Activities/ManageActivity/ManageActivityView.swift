@@ -18,8 +18,6 @@ public struct ManageActivityView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
                     detailsSection
-                    calendarSetupSection
-                        .padding(.top, 4)
                     feedbackSection
                         .padding(.top, 4)
                     questionsSection
@@ -39,16 +37,6 @@ public struct ManageActivityView: View {
                 toolbarContent
             }
             .alert($store.scope(state: \.alert, action: \.alert))
-            .sheet(isPresented: $store.showInfoSheet) {
-                CalendarSetupView(
-                    email: store.botEmail,
-                    didCopyEmail: store.didCopyEmail,
-                    onCopyEmail: {
-                        UIPasteboard.general.string = store.botEmail
-                        store.send(.copyBotEmailTapped)
-                    }
-                )
-            }
             .sheet(item: $store.previewSession) { previewSession in
                 FeedbackFlowCoordinatorView(
                     store: Store(
@@ -61,7 +49,7 @@ public struct ManageActivityView: View {
                             }
                     },
                     principalToolbarItem: {
-                        Text("Preview")
+                        Text("Forhåndsvis")
                             .captionTextStyle()
                             .padding(.vertical, 8)
                             .padding(.horizontal, 12)
@@ -107,10 +95,10 @@ private extension ManageActivityView {
     }
 
     var detailsSection: some View {
-        section(title: "Details") {
+        section(title: "Detaljer") {
             inputField(
-                title: "Recurring meeting name",
-                prompt: "Which meeting should collect feedback?",
+                title: "Navn på aktivitet",
+                prompt: "Hvilket møde skal indsamle feedback?",
                 text: $store.title,
                 accessibilityIdentifier: "create_activity_title_input"
             )
@@ -118,8 +106,8 @@ private extension ManageActivityView {
             sectionDivider
 
             inputField(
-                title: "Context",
-                prompt: "Add context or agenda (optional)",
+                title: "Kontekst",
+                prompt: "Tilføj kontekst eller agenda (valgfrit)",
                 text: $store.description,
                 axis: .vertical,
                 lineLimit: 2...4
@@ -127,16 +115,10 @@ private extension ManageActivityView {
         }
     }
 
-    var calendarSetupSection: some View {
-        section(title: "Calendar setup") {
-            automaticSetup
-        }
-    }
-
     var feedbackSection: some View {
         section(
-            title: "Meeting feedback",
-            footer: "Presets give you a starting point. The question list stays editable."
+            title: "Mødefeedback",
+            footer: "Skabeloner giver dig en start. Spørgsmålene kan stadig redigeres."
         ) {
             if let selectedTemplate = store.selectedTemplate {
                 SelectedFeedbackTemplateRow(
@@ -150,7 +132,7 @@ private extension ManageActivityView {
                 )
             } else {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Choose one meeting preset")
+                    Text("Vælg en mødeskabelon")
                         .supportingTextStyle()
                         .foregroundStyle(Color.themeTextSecondary)
 
@@ -172,9 +154,9 @@ private extension ManageActivityView {
 
     var questionsSection: some View {
         section(
-            title: "Questions",
+            title: "Spørgsmål",
             footer: store.selectedTemplate == .customQuestions && store.questions.isEmpty
-                ? "Add at least one question before creating the recurring meeting."
+                ? "Tilføj mindst ét spørgsmål, før du opretter det faste møde."
                 : nil
         ) {
             Button {
@@ -198,7 +180,7 @@ private extension ManageActivityView {
                     }
 
                     if store.questions.isEmpty {
-                        Text("No questions yet. Tap to add your first question.")
+                        Text("Ingen spørgsmål endnu. Tryk for at tilføje det første.")
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     } else {
@@ -217,7 +199,7 @@ private extension ManageActivityView {
                             }
 
                             if store.questions.count > 3 {
-                                Text("+\(store.questions.count - 3) more questions")
+                                Text("+\(store.questions.count - 3) flere spørgsmål")
                                     .supportingTextStyle()
                                     .foregroundStyle(Color.themeTextSecondary)
                             }
@@ -231,58 +213,14 @@ private extension ManageActivityView {
             .opacity(store.selectedTemplate == nil ? 0.6 : 1.0)
 
             if store.selectedTemplate == nil {
-                Text("Select a template to start building questions.")
+                Text("Vælg en skabelon for at komme i gang med spørgsmål.")
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             } else {
-                Text("You can review, edit, add, and reorder questions.")
+                Text("Du kan gennemse, redigere, tilføje og ændre rækkefølgen.")
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
-        }
-    }
-
-    var automaticSetup: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Create feedback automatically")
-                .rowTitleTextStyle()
-
-            Text("Invite this email to your recurring calendar event.")
-                .supportingTextStyle()
-                .foregroundStyle(Color.themeTextSecondary)
-
-            HStack(spacing: 12) {
-                Text(store.botEmail)
-                    .captionTextStyle()
-                    .foregroundStyle(Color.themeText)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(Color.themeBackground.opacity(0.9), in: Capsule())
-
-                Spacer(minLength: 0)
-
-                Button {
-                    UIPasteboard.general.string = store.botEmail
-                    store.send(.copyBotEmailTapped)
-                } label: {
-                    HStack(spacing: 6) {
-                        Image.documentOnDocument
-                        Text("Copy")
-                    }
-                }
-                .buttonStyle(PrimaryTextButtonStyle())
-            }
-
-            if store.didCopyEmail {
-                Text("Email copied. Paste it into the recurring calendar invite.")
-                    .supportingTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-            }
-
-            Button("How it works") {
-                store.showInfoSheet = true
-            }
-            .buttonStyle(SecondaryTextButtonStyle())
         }
     }
 
@@ -449,11 +387,11 @@ private struct SelectedFeedbackTemplateRow: View {
                         .frame(width: 30, height: 30)
                         .background(Color.themeBackground.opacity(0.9), in: Circle())
                 }
-                .accessibilityLabel("Clear selected meeting preset")
+                .accessibilityLabel("Ryd valgt mødeskabelon")
                 .buttonStyle(.plain)
             }
 
-            Button("Edit questions", action: onEditQuestions)
+            Button("Rediger spørgsmål", action: onEditQuestions)
                 .buttonStyle(SecondaryTextButtonStyle())
         }
         .padding(.horizontal, Theme.padding)

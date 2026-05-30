@@ -82,7 +82,7 @@ private extension TabbarView {
             }
             .tabItem {
                 Image.letsGrowIconTab
-                Text("Give Feedback")
+                Text("Svar")
             }
             .tag(Tab.feedback)
             
@@ -94,7 +94,7 @@ private extension TabbarView {
                     )
                 )
                     .tabItem {
-                        Label("Meetings", systemImage: "calendar")
+                        Label("Aktiviteter", systemImage: "calendar")
                     }
                 .badge(managerUnseenResponses)
                 .tag(Tab.activities)
@@ -114,7 +114,7 @@ private extension TabbarView {
                     store: store.scope(state: \.accountSection, action: \.accountSection),
                     isDeleteAccountLoading: store.deleteAccount.deleteAccountInFlight
                 )
-                .navigationTitle("Profile")
+                .navigationTitle("Profil")
                 .toolbar {
                     profileSettingsToolbarItem
                 }
@@ -122,7 +122,7 @@ private extension TabbarView {
             }
             .tabItem {
                 Image.personCropCircle
-                Text("Profile")
+                Text("Profil")
             }
             .tag(Tab.more)
         }

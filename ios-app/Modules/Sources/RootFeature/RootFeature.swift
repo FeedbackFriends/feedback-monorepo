@@ -64,7 +64,6 @@ public struct RootFeature: Sendable {
         case presentError(ErrorType)
         case tryAgainButtonTap(ErrorType)
         case createAccountResponse(Bootstrap, Role?)
-        case navigateToSelectUserType
         case logout(Logout.Action)
         case onNotificationTap(Deeplink)
         case onUrlOpen(Deeplink)
@@ -90,9 +89,6 @@ public struct RootFeature: Sendable {
         Reduce { state, action in
             switch action {
                 
-            case .destination(.signUp(.destination(.presented(.selectUserType(.delegate(.getSession(let bootstrap))))))):
-                return .send(.getSessionResponse(bootstrap: bootstrap, deeplink: nil))
-
             case .destination(.loggedIn(.delegate(.navigateToSignUp))):
                 return .send(.logout(.logoutButtonTap))
                 
@@ -165,16 +161,11 @@ public struct RootFeature: Sendable {
                 state.destination = .error(errorType)
                 return .none
                 
-            case .navigateToSelectUserType:
-                state.destination = .signUp(.init(destination: .selectUserType(.init())))
-                state.isLoading = false
-                return .none
-                
-            case .createAccountResponse(let bootstrap, _):
+            case .createAccountResponse(let bootstrap, let role):
                 state.destination = Destination.State.loggedIn(
                     Tabbar.State(
                         bootstrap: Shared(value: bootstrap),
-                        selectedTab: .feedback
+                        selectedTab: role == .manager ? .activities : .feedback
                     )
                 )
                 return .none
@@ -294,12 +285,9 @@ private extension RootFeature {
         return .run { send in
             do {
                 let existingRole = try await authClient.fetchCustomRole()
-                guard let existingRole else {
-                    await send(.navigateToSelectUserType)
-                    return
-                }
-                let bootstrap = try await apiClient.createAccount(existingRole)
-                await send(.createAccountResponse(bootstrap, existingRole))
+                let role = existingRole ?? .manager
+                let bootstrap = try await apiClient.createAccount(role)
+                await send(.createAccountResponse(bootstrap, role))
             } catch {
                 await send(.presentError(.handleAuthenticatedAccountError(error: error.localized)))
             }

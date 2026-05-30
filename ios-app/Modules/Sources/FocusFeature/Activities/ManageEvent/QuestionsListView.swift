@@ -39,8 +39,8 @@ struct QuestionsListView: View {
         Group {
             if questionsInputs.isEmpty {
                 EmptyStateView(
-                    title: "No questions",
-                    message: "Tap '+' to add a question"
+                    title: "Ingen spørgsmål",
+                    message: "Tryk '+' for at tilføje et spørgsmål"
                 ).frame(maxHeight: .infinity)
             } else {
                 Form {
@@ -73,7 +73,7 @@ struct QuestionsListView: View {
                 }
             }
         }
-        .navigationTitle("Questions")
+        .navigationTitle("Spørgsmål")
         .navigationBarTitleDisplayMode(.inline)
         .background(Color.themeBackground.ignoresSafeArea())
         .scrollContentBackground(.hidden)
@@ -126,9 +126,9 @@ struct QuestionsListView: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 HStack {
                                     Image.playButton
-                                    Text("Preview session")
+                                    Text("Forhåndsvis mødegang")
                                 }
-                                Text("How participants will experience your session.")
+                                Text("Sådan oplever deltagerne feedbacken.")
                                     .captionTextStyle()
                             }
                         }

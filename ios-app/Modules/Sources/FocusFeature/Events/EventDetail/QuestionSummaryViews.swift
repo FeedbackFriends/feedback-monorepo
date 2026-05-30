@@ -138,7 +138,7 @@ struct QuestionOpinionSummaryView: View {
                     percentageValue: opinionSummary.percentageStronglyAgree,
                     countValue: opinionSummary.countStronglyAgree
                 ) {
-                    Text("Strongly agree")
+                    Text("Helt enig")
                         .multilineTextAlignment(.center)
                         .frame(width: barWidth)
                         .frame(height: barHeight)
@@ -147,7 +147,7 @@ struct QuestionOpinionSummaryView: View {
                     percentageValue: opinionSummary.percentageAgree,
                     countValue: opinionSummary.countAgree
                 ) {
-                    Text("Agree")
+                    Text("Enig")
                         .multilineTextAlignment(.center)
                         .frame(width: barWidth)
                         .frame(height: barHeight)
@@ -156,7 +156,7 @@ struct QuestionOpinionSummaryView: View {
                     percentageValue: opinionSummary.percentageDisagree,
                     countValue: opinionSummary.countDisagree
                 ) {
-                    Text("Disagree")
+                    Text("Uenig")
                         .multilineTextAlignment(.center)
                         .frame(width: barWidth)
                         .frame(height: barHeight)
@@ -165,7 +165,7 @@ struct QuestionOpinionSummaryView: View {
                     percentageValue: opinionSummary.percentageStronglyDisagree,
                     countValue: opinionSummary.countStronglyDisagree
                 ) {
-                    Text("Strongly disagree")
+                    Text("Helt uenig")
                         .multilineTextAlignment(.center)
                         .frame(width: barWidth)
                         .frame(height: barHeight)

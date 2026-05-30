@@ -6,9 +6,9 @@ extension FeedbackType {
     var title: String {
         switch self {
         case .emoji: return "Emoji"
-        case .comment: return "Comment"
-        case .thumpsUpThumpsDown: return "Thumbs"
-        case .opinion: return "Opinion"
+        case .comment: return "Kommentar"
+        case .thumpsUpThumpsDown: return "Tommel"
+        case .opinion: return "Enighed"
         case .zeroToTen: return "0–10"
         }
     }
@@ -25,11 +25,11 @@ extension FeedbackType {
     
     var helpDescription: String {
         switch self {
-        case .emoji: return "Pick an emoji reaction. Great for quick vibes."
-        case .comment: return "Write freeform text. Best for detailed feedback."
-        case .thumpsUpThumpsDown: return "Simple thumbs up/down. Fast sentiment signal."
-        case .opinion: return "Express your level of agreement, from Strongly Disagree to Strongly Agree."
-        case .zeroToTen: return "Rate on a 0–10 scale for finer granularity."
+        case .emoji: return "Vælg en emoji-reaktion. God til hurtige signaler."
+        case .comment: return "Skriv fri tekst. Bedst til uddybende feedback."
+        case .thumpsUpThumpsDown: return "Enkel tommel op/ned. Hurtigt signal om stemning."
+        case .opinion: return "Angiv graden af enighed fra helt uenig til helt enig."
+        case .zeroToTen: return "Vurder på en skala fra 0-10 for mere nuance."
         }
     }
 }

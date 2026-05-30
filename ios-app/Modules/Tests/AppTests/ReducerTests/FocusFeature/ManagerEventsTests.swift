@@ -44,6 +44,9 @@ struct ManagerEventsTests {
         }
 
         await store.receive(\.navigateToCreatedActivity, createdActivity) {
+            $0.$bootstrap.withLock {
+                $0.managerData!.activities.updateOrAppend(createdActivity)
+            }
             $0.destination = .activityDetail(
                 ActivityDetail.State(
                     activityId: createdActivity.id,
