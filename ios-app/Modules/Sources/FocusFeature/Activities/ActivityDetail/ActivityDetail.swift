@@ -9,15 +9,19 @@ public struct ActivityDetail: Sendable {
     
     @Reducer
     public enum Destination {
+        case alert(AlertState<Never>)
         case manageEvent(ManageEvent)
         case editActivity(ManageActivity)
         case eventDetail(EventDetailFeature)
+        @ReducerCaseIgnored
+        case showHowItWorks
+        @ReducerCaseIgnored
+        case showDeleteConfirmation
     }
     
     @ObservableState
     public struct State: Equatable, Sendable {
         let activityId: UUID
-        @Presents var alert: AlertState<Never>?
         public var activity: Activity? {
             guard let activity = self.bootstrap.managerData?.activities.first(where: { $0.id == self.activityId }) else {
                 return nil
@@ -25,7 +29,6 @@ public struct ActivityDetail: Sendable {
             return activity
         }
         @Presents var destination: Destination.State?
-        var showDeleteConfirmation = false
         var deleteActivityInFlight = false
         @Shared var bootstrap: Bootstrap
         
@@ -36,36 +39,32 @@ public struct ActivityDetail: Sendable {
             let count = activity?.events.count ?? 0
             return count == 1 ? "1 mødegang" : "\(count) mødegange"
         }
-        var showCalendarSetup = false
-        var didCopyCalendarEmail = false
 
         public init(
             activityId: UUID,
             destination: Destination.State? = nil,
             bootstrap: Shared<Bootstrap>,
-            showCalendarSetup: Bool = false
+            showHowItWorks: Bool = false
         ) {
             self.activityId = activityId
-            self.destination = destination
+            self.destination = destination ?? (showHowItWorks ? .showHowItWorks : nil)
             self._bootstrap = bootstrap
-            self.showCalendarSetup = showCalendarSetup
         }
     }
     
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
-        case alert(PresentationAction<Never>)
         case createEventButtonTapped
         case eventTapped(Event)
         case editActivityButtonTapped
         case deleteActivityButtonTap
         case deleteActivityCancelButtonTap
         case deleteActivityConfirmButtonTap
-        case navigateToEvent(Event, presentInvite: Bool)
-        case refresh
         case deleteActivitySuccess
+        case navigateToEvent(Event, presentInvite: Bool)
         case presentError(Error)
+        case showHowItWorksButtonTap
     }
     
     public init() {}
@@ -80,6 +79,10 @@ public struct ActivityDetail: Sendable {
         BindingReducer()
         Reduce { state, action in
             switch action {
+                
+            case .showHowItWorksButtonTap:
+                state.destination = .showHowItWorks
+                return .none
                 
             case .destination(.presented(.manageEvent(.delegate(let delegate)))):
                 switch delegate {
@@ -104,20 +107,17 @@ public struct ActivityDetail: Sendable {
             case .destination:
                 return .none
 
-            case .alert:
-                return .none
-
             case .editActivityButtonTapped:
                 guard let activity = state.activity else { return .none }
                 state.destination = .editActivity(ManageActivity.State.edit(activity: activity))
                 return .none
 
             case .deleteActivityButtonTap:
-                state.showDeleteConfirmation = true
+                state.destination = .showDeleteConfirmation
                 return .none
 
             case .deleteActivityCancelButtonTap:
-                state.showDeleteConfirmation = false
+                state.destination = nil
                 return .none
 
             case .deleteActivityConfirmButtonTap:
@@ -167,13 +167,10 @@ public struct ActivityDetail: Sendable {
                     )
                 )
                 return .none
-            
-            case .refresh:
-                return .none
                 
             case .deleteActivitySuccess:
                 state.deleteActivityInFlight = false
-                state.showDeleteConfirmation = false
+                state.destination = nil
                 return .run { _ in
                     try await clock.sleep(for: Constants.successOverlayDuration)
                     await self.dismiss()
@@ -181,12 +178,11 @@ public struct ActivityDetail: Sendable {
 
             case .presentError(let error):
                 state.deleteActivityInFlight = false
-                state.alert = .init(error: error)
+                state.destination = .alert(.init(error: error))
                 return .none
             }
         }
         .ifLet(\.$destination, action: \.destination)
-        .ifLet(\.$alert, action: \.alert)
     }
 }
 

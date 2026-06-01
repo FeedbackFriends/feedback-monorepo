@@ -25,7 +25,13 @@ struct ActivityDetailView: View {
                         enableAutomaticDismissal: true
                     )
             }
-        }.sheet(isPresented: $store.showDeleteConfirmation) {
+        }
+        .sheet(
+            item: $store.scope(
+                state: \.destination?.showDeleteConfirmation,
+                action: \.destination.showDeleteConfirmation
+            )
+        ) { _ in
             DeleteConfirmationViewSheet(
                 title: "Slet aktivitet",
                 message: "Slet dette faste møde og al feedback?",
@@ -36,7 +42,19 @@ struct ActivityDetailView: View {
                     .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
                     .isLoading(store.deleteActivityInFlight)
                 }
-            ).presentationDetents([.height(340)])
+            )
+            .presentationDetents([.height(340)])
+        }
+        .sheet(
+            item: $store.scope(
+                state: \.destination?.showHowItWorks,
+                action: \.destination.showHowItWorks
+            )
+        ) { _ in
+            ActivityDetailHowItWorksSheetView {
+                UIPasteboard.general.string = "feedback@letsgrow.dk"
+            }
+            .presentationDetents([.medium, .large])
         }
     }
 }
@@ -72,10 +90,6 @@ private struct ActivityDetailContentView: View {
                 ManageEventView(store: manageStore)
             }
         }
-        .sheet(isPresented: $store.showCalendarSetup) {
-            calendarSetupSheet
-                .presentationDetents([.medium])
-        }
         .navigationDestination(
             item: $store.scope(
                 state: \.destination?.eventDetail,
@@ -84,24 +98,7 @@ private struct ActivityDetailContentView: View {
         ) { eventDetailStore in
             EventDetailFeatureView(store: eventDetailStore)
         }
-        .alert($store.scope(state: \.alert, action: \.alert))
-    }
-
-    private var calendarSetupSheet: some View {
-        CalendarSetupView(
-            email: "feedback@letsgrow.dk",
-            didCopyEmail: store.didCopyCalendarEmail,
-            onCopyEmail: {
-                UIPasteboard.general.string = "feedback@letsgrow.dk"
-                store.didCopyCalendarEmail = true
-            },
-            onCreateOneOffSession: {
-                Task { @MainActor in
-                    store.showCalendarSetup = false
-                    store.send(.createEventButtonTapped)
-                }
-            }
-        )
+        .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
     }
 
     private func screenBody(groupedSessions: GroupedSessions) -> some View {
@@ -109,10 +106,10 @@ private struct ActivityDetailContentView: View {
             contentStack(groupedSessions: groupedSessions)
         }
         .scrollIndicators(.hidden)
-        .background(Color.themeBackground)
+        .background(LetsGrowLandingGradient().ignoresSafeArea())
         .lineSpacing(5)
         .foregroundStyle(Color.themeText)
-        .navigationTitle("Aktivitet")
+        .navigationTitle(activity.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             toolbarContent
@@ -122,73 +119,80 @@ private struct ActivityDetailContentView: View {
     @ViewBuilder
     private func contentStack(groupedSessions: GroupedSessions) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            focusHeader(activity)
+            if activity.events.isEmpty {
+                ActivityDetailHowItWorksView {
+                    UIPasteboard.general.string = "feedback@letsgrow.dk"
+                }
+            }
 
-            trendSection(activity)
-
-            focusSetupSection(activity)
-
-            sessionsSection(
-                groupedSessions: groupedSessions,
-                eventTitle: activity.title
-            )
+            if !activity.events.isEmpty {
+                activityOverviewCard(activity)
+                trendSection(activity)
+                sessionsSection(
+                    groupedSessions: groupedSessions,
+                    eventTitle: activity.title
+                )
+            }
         }
         .padding()
         .padding(.bottom, 24)
     }
 
-    private func focusHeader(_ activity: Activity) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(activity.title)
-                .titleTextStyle()
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
+    private func activityOverviewCard(_ activity: Activity) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 10) {
+                SectionHeaderView("Mødedetaljer", horizontalPadding: 0)
 
-            HStack(spacing: 8) {
-                LegacyTrendBadge(direction: activity.trend.direction)
-                FocusMetricBadge(text: sessionCountText(for: activity.events.count))
+                HStack(spacing: 8) {
+                    LegacyTrendBadge(direction: activity.trend.direction)
+                    FocusMetricBadge(text: sessionCountText(for: activity.events.count))
+                }
             }
+
+            Divider()
+
+            focusSetupContent(activity)
         }
         .padding(15)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeSurface)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-        .accessibilityIdentifier("activity_detail_focus_header")
+        .glassCardBackground()
+        .accessibilityIdentifier("activity_detail_overview_card")
     }
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            HStack {
+            Menu {
                 Button {
-                    store.showCalendarSetup = true
+                    store.send(.showHowItWorksButtonTap)
                 } label: {
-                    Image(systemName: "calendar.badge.plus")
+                    Label("Sådan virker det", systemImage: "questionmark.circle")
                 }
-                .buttonStyle(PrimaryTextButtonStyle())
-                .accessibilityLabel("Åbn kalenderopsætning")
+
+                Button {
+                    store.send(.createEventButtonTapped)
+                } label: {
+                    Label("Opret mødegang", systemImage: "plus")
+                }
+                .accessibilityIdentifier("activity_detail_create_session_menu_button")
 
                 Button {
                     store.send(.editActivityButtonTapped)
                 } label: {
-                    Image(systemName: "pencil")
+                    Label("Rediger aktivitet", systemImage: "pencil")
                 }
-                .buttonStyle(PrimaryTextButtonStyle())
-                .accessibilityLabel("Rediger aktivitet")
                 .accessibilityIdentifier("activity_detail_edit_button")
 
-                Menu {
-                    Button(role: .destructive) {
-                        store.send(.deleteActivityButtonTap)
-                    } label: {
-                        Label("Slet aktivitet", systemImage: "trash")
-                    }
+                Button(role: .destructive) {
+                    store.send(.deleteActivityButtonTap)
                 } label: {
-                    Image(systemName: "ellipsis")
+                    Label("Slet aktivitet", systemImage: "trash")
                 }
-                .buttonStyle(PrimaryTextButtonStyle())
-                .accessibilityLabel("Flere handlinger for aktivitet")
+            } label: {
+                Image(systemName: "ellipsis")
             }
+            .buttonStyle(PrimaryTextButtonStyle())
+            .accessibilityLabel("Flere handlinger for aktivitet")
         }
     }
 
@@ -201,14 +205,6 @@ private struct ActivityDetailContentView: View {
                 eventTitle: eventTitle,
                 onEventTap: { store.send(.eventTapped($0)) }
             )
-
-            Button {
-                store.send(.createEventButtonTapped)
-            } label: {
-                Label("Tilføj enkelt mødegang", systemImage: "plus")
-            }
-            .buttonStyle(SecondaryTextButtonStyle())
-            .accessibilityIdentifier("activity_detail_create_session_button")
         }
     }
 
@@ -240,55 +236,50 @@ private struct ActivityDetailContentView: View {
                     .fixedSize(horizontal: false, vertical: true)
 
                 Button {
-                    store.showCalendarSetup = true
+                    store.send(.showHowItWorksButtonTap)
                 } label: {
-                    Label("Inviter feedback@letsgrow.dk", systemImage: "calendar.badge.plus")
+                    Label("Sådan virker det", systemImage: "questionmark.circle")
                 }
                 .buttonStyle(SecondaryTextButtonStyle())
             }
             .padding(15)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.themeSurface)
-            .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+            .glassCardBackground()
         }
     }
 
-    private func focusSetupSection(_ activity: Activity) -> some View {
-        VStack(alignment: .leading) {
-            SectionHeaderView("Feedbackopsætning")
-
-            Button {
-                store.send(.editActivityButtonTapped)
-            } label: {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+    private func focusSetupContent(_ activity: Activity) -> some View {
+        Button {
+            store.send(.editActivityButtonTapped)
+        } label: {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        SectionHeaderView("Feedbackopsætning", horizontalPadding: 0)
                         Text(questionCountText(for: activity.questions.count))
                             .rowTitleTextStyle()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                        Label("Rediger", systemImage: "pencil")
-                            .captionTextStyle()
-                            .foregroundStyle(Color.themePrimaryAction)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                    if let agenda = activity.agenda, !agenda.isEmpty {
-                        Text(agenda)
-                            .supportingTextStyle()
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(3)
-                    }
-
-                    questionTypeSummary(activity.questions)
+                    Label("Rediger", systemImage: "pencil")
+                        .captionTextStyle()
+                        .foregroundStyle(Color.themePrimaryAction)
                 }
-                .padding(15)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.themeSurface)
-                .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+
+                if let agenda = activity.agenda, !agenda.isEmpty {
+                    Text(agenda)
+                        .supportingTextStyle()
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(3)
+                }
+
+                questionTypeSummary(activity.questions)
             }
-            .buttonStyle(OpacityButtonStyle())
-            .accessibilityLabel("Rediger feedbackopsætning for aktivitet")
-            .accessibilityIdentifier("activity_detail_focus_setup_section")
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .buttonStyle(OpacityButtonStyle())
+        .accessibilityLabel("Rediger feedbackopsætning for aktivitet")
+        .accessibilityIdentifier("activity_detail_focus_setup_section")
     }
 
     private func questionTypeSummary(_ questions: [ManagerQuestion]) -> some View {
@@ -310,6 +301,119 @@ private struct ActivityDetailContentView: View {
     private func questionCountText(for count: Int) -> String {
         count == 1 ? "1 spørgsmål" : "\(count) spørgsmål"
     }
+}
+
+struct ActivityDetailHowItWorksView: View {
+    let onCopyEmail: () -> Void
+    @State private var showCopiedAlert = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Sådan virker det")
+                    .titleTextStyle()
+                    .foregroundStyle(Color.themeText)
+
+                Text(
+                    """
+                    Du behøver ikke ændre den måde, du planlægger møder på. Opret møder i det kalenderværktøj, du \
+                    allerede bruger, og inviter blot 'Lets Grow'-mailen. Så oprettes sessionen automatisk her i appen.
+                    """
+                )
+                    .bodyTextStyle()
+                    .foregroundStyle(Color.themeTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Tilføj mailen til dine eksisterende kalenderaftaler – uanset om du bruger Outlook, Google Calendar eller noget tredje.")
+                    .bodyTextStyle()
+                    .foregroundStyle(Color.themeTextSecondary)
+
+                CalendarIntegrationsView()
+
+                HStack(spacing: 12) {
+                    Text("feedback@letsgrow.dk")
+                        .foregroundStyle(Color.themeText)
+                        .rowTitleTextStyle()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+
+                    Spacer(minLength: 0)
+
+                    Button("Kopiér") {
+                        onCopyEmail()
+                        showCopiedAlert = true
+                    }
+                    .buttonStyle(PrimaryTextButtonStyle())
+                }
+                .padding(Theme.padding)
+                .background(Color.themeBackground, in: Capsule(style: .continuous))
+            }
+
+            Divider()
+
+            Text("Du kan også oprette en mødegang manuelt i Mere-menuen, hvis du foretrækker det.")
+                .supportingTextStyle()
+                .foregroundStyle(Color.themeTextSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(Theme.padding)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassCardBackground()
+        .alert("Mailen er kopieret", isPresented: $showCopiedAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Sæt den ind i den kalenderaftale, du allerede bruger.")
+        }
+    }
+}
+
+private struct CalendarIntegrationsView: View {
+    private let integrations: [CalendarIntegration] = [
+        CalendarIntegration(name: "Teams", image: .calendarTeamsLogo),
+        CalendarIntegration(name: "Outlook", image: .calendarMicrosoftOutlook),
+        CalendarIntegration(name: "Google", image: .calendarGoogle),
+        CalendarIntegration(name: "Apple", image: .calendarAppleLogo),
+        CalendarIntegration(name: "Zoho", image: .calendarZoho),
+        CalendarIntegration(name: "Proton", image: .calendarProton)
+    ]
+
+    private let columns = Array(
+        repeating: GridItem(.flexible(minimum: 44), spacing: 8),
+        count: 6
+    )
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 12) {
+            ForEach(integrations) { integration in
+                VStack(spacing: 8) {
+                    integration.image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+
+                    Text(integration.name)
+                        .captionTextStyle()
+                        .foregroundStyle(Color.themeTextSecondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .allowsTightening(true)
+                }
+                .frame(maxWidth: .infinity)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(integration.name)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+private struct CalendarIntegration: Identifiable {
+    let name: String
+    let image: Image
+
+    var id: String { name }
 }
 
 private struct FocusQuestionTypeBadge: View {

@@ -69,8 +69,7 @@ public struct ActivityList: Sendable {
                 state.destination = .activityDetail(
                     ActivityDetail.State(
                         activityId: activity.id,
-                        bootstrap: state.$bootstrap,
-                        showCalendarSetup: true
+                        bootstrap: state.$bootstrap
                     )
                 )
                 return .none

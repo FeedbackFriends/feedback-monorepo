@@ -32,7 +32,7 @@ struct ActivityDetailTests {
         }
 
         await store.send(.deleteActivityButtonTap) {
-            $0.showDeleteConfirmation = true
+            $0.destination = .showDeleteConfirmation
             $0.deleteActivityInFlight = false
         }
 
@@ -42,7 +42,7 @@ struct ActivityDetailTests {
 
         await store.receive(\.deleteActivitySuccess) {
             $0.deleteActivityInFlight = false
-            $0.showDeleteConfirmation = false
+            $0.destination = nil
         }
 
         #expect(deletedActivityId.value == activity.id)
@@ -71,7 +71,7 @@ struct ActivityDetailTests {
         }
 
         await store.send(.deleteActivityButtonTap) {
-            $0.showDeleteConfirmation = true
+            $0.destination = .showDeleteConfirmation
             $0.deleteActivityInFlight = false
         }
 
@@ -81,7 +81,7 @@ struct ActivityDetailTests {
 
         await store.receive(\.presentError) {
             $0.deleteActivityInFlight = false
-            $0.alert = .init(error: Failure())
+            $0.destination = .alert(.init(error: Failure()))
         }
     }
 
@@ -100,12 +100,12 @@ struct ActivityDetailTests {
         }
 
         await store.send(.deleteActivityButtonTap) {
-            $0.showDeleteConfirmation = true
+            $0.destination = .showDeleteConfirmation
             $0.deleteActivityInFlight = false
         }
 
         await store.send(.deleteActivityCancelButtonTap) {
-            $0.showDeleteConfirmation = false
+            $0.destination = nil
             $0.deleteActivityInFlight = false
         }
     }

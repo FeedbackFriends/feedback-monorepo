@@ -51,7 +51,7 @@ struct ManagerEventsTests {
                 ActivityDetail.State(
                     activityId: createdActivity.id,
                     bootstrap: bootstrap,
-                    showCalendarSetup: true
+                    showHowItWorks: true
                 )
             )
         }

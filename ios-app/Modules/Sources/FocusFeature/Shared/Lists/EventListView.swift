@@ -101,8 +101,9 @@ private struct EventListItemView: View {
 
             feedbackBar
         }
-        .background(Color.themeSurface)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassCardBackground()
+        .contentShape(RoundedRectangle(cornerRadius: Theme.cornerRadius))
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
     }

@@ -105,7 +105,6 @@ private struct ActivityIntroSheetView: View {
                 introBody
                 .padding()
             }
-            .background(Color.themeBackground.ignoresSafeArea())
             .navigationTitle("Hvad er en aktivitet?")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -151,7 +150,7 @@ private struct ActivityIntroContentView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .glassEffect(in: .rect(cornerRadius: Theme.cornerRadius))
+        .glassCardBackground()
     }
 }
 
@@ -170,11 +169,10 @@ private struct ActivityCardView: View {
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.themeSurface)
-        )
+        .glassCardBackground()
+        .contentShape(RoundedRectangle(cornerRadius: Theme.cornerRadius))
     }
 }
 
