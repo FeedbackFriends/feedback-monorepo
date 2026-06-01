@@ -36,6 +36,9 @@ Use XcodeBuildMCP for Xcode operations when available:
 
 Use the `Feedback Localhost` scheme for local development unless the user asks for another scheme.
 
+## Simulator Verification
+After implementing iOS app changes, run the app on the active simulator before finishing when feasible. Prefer the currently booted simulator and the `Feedback Localhost` scheme. If the app cannot be launched, report the reason in the final response.
+
 ## Architecture Rules
 - Features are TCA modules. Keep state, actions, reducers, and views inside the owning feature.
 - Domain services define app-facing boundaries. Features should depend on services through TCA dependencies, not SDKs or generated transport types.
