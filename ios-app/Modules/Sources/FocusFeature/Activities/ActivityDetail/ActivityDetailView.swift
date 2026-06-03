@@ -155,7 +155,7 @@ private struct ActivityDetailContentView: View {
         }
         .padding(15)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCardBackground()
+        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         .accessibilityIdentifier("activity_detail_overview_card")
     }
 
@@ -230,9 +230,10 @@ private struct ActivityDetailContentView: View {
                     }
                 }
 
-                Text(activity.trend.summaryText)
+                Text(verbatim: activity.trend.summaryText)
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
+                    .tint(Color.themeText)
                     .fixedSize(horizontal: false, vertical: true)
 
                 Button {
@@ -244,7 +245,7 @@ private struct ActivityDetailContentView: View {
             }
             .padding(15)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .glassCardBackground()
+            .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         }
     }
 
@@ -333,9 +334,10 @@ struct ActivityDetailHowItWorksView: View {
                 CalendarIntegrationsView()
 
                 HStack(spacing: 12) {
-                    Text("feedback@letsgrow.dk")
-                        .foregroundStyle(Color.themeText)
+                    Text(verbatim: "feedback@letsgrow.dk")
                         .rowTitleTextStyle()
+                        .foregroundStyle(Color.themeText)
+                        .tint(Color.themeText)
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)
 
@@ -360,7 +362,7 @@ struct ActivityDetailHowItWorksView: View {
         }
         .padding(Theme.padding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCardBackground()
+        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         .alert("Mailen er kopieret", isPresented: $showCopiedAlert) {
             Button("OK", role: .cancel) {}
         } message: {

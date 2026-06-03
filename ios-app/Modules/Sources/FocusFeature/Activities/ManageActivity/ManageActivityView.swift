@@ -29,6 +29,7 @@ public struct ManageActivityView: View {
                 .padding(.bottom, Theme.padding)
                 .frame(maxWidth: .infinity)
             }
+            .background(Color.themeBackground.ignoresSafeArea())
             .foregroundStyle(Color.themeText)
             .navigationTitle(store.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)

@@ -7,13 +7,16 @@ struct ActivityDetailHowItWorksSheetView: View {
     @State private var showCopiedAlert = false
 
     var body: some View {
-        ScrollView {
-            ActivityDetailHowItWorksView(onCopyEmail: copyEmail)
-        }
-        .alert("Mailen er kopieret", isPresented: $showCopiedAlert) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text("Sæt den ind i den kalenderaftale, du allerede bruger.")
+        NavigationStack {
+            ScrollView {
+                ActivityDetailHowItWorksView(onCopyEmail: copyEmail)
+                    .padding(Theme.padding)
+            }
+            .alert("Mailen er kopieret", isPresented: $showCopiedAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Sæt den ind i den kalenderaftale, du allerede bruger.")
+            }
         }
     }
 

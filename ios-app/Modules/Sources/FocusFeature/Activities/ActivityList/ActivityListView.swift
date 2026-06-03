@@ -150,7 +150,7 @@ private struct ActivityIntroContentView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .glassCardBackground()
+        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
     }
 }
 
@@ -166,12 +166,15 @@ private struct ActivityCardView: View {
             }
 
             Text(activity.events.count == 1 ? "1 mødegang" : "\(activity.events.count) mødegange")
-                .supportingTextStyle()
+                .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color.themeBackground, in: Capsule())
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .glassCardBackground()
+        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         .contentShape(RoundedRectangle(cornerRadius: Theme.cornerRadius))
     }
 }

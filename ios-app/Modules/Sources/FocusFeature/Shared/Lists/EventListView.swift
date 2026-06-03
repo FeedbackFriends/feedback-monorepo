@@ -102,7 +102,7 @@ private struct EventListItemView: View {
             feedbackBar
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCardBackground()
+        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         .contentShape(RoundedRectangle(cornerRadius: Theme.cornerRadius))
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
@@ -214,6 +214,11 @@ private struct EventListItemView: View {
     }
 
     private func pill(text: String, foregroundColor: Color) -> some View {
-        PillTagView(text, foregroundColor: foregroundColor)
+        Text(text)
+            .badgeTextStyle()
+            .foregroundStyle(foregroundColor)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .background(Color.themeBackground, in: Capsule())
     }
 }
