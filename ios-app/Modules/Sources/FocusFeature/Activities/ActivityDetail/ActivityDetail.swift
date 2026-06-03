@@ -96,10 +96,19 @@ public struct ActivityDetail: Sendable {
                 case .dismissAndUpdateEvent(let event):
                     state.destination = nil
                     return .send(.navigateToEvent(event, presentInvite: false))
+                case .editActivity:
+                    guard let activity = state.activity else { return .none }
+                    state.destination = .editActivity(ManageActivity.State.edit(activity: activity))
+                    return .none
                 case .dismiss:
                     state.destination = nil
                     return .none
                 }
+
+            case .destination(.presented(.eventDetail(.delegate(.editActivity)))):
+                guard let activity = state.activity else { return .none }
+                state.destination = .editActivity(ManageActivity.State.edit(activity: activity))
+                return .none
                 
             case .binding:
                 return .none

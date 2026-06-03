@@ -1,13 +1,11 @@
 import ComposableArchitecture
 import DesignSystem
 import Domain
-import FeedbackFlowFeature
 import Utility
 import SwiftUI
 
 public struct ManageEventView: View {
     @Bindable var store: StoreOf<ManageEvent>
-    @FocusState private var focus: ManageEvent.State.FocusedField?
 
     public init(store: StoreOf<ManageEvent>) {
         self.store = store
@@ -25,8 +23,12 @@ public struct ManageEventView: View {
             .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
-        .synchronize($store.focus, $focus)
         .background(Color.themeBackground.ignoresSafeArea())
+        .successOverlay(
+            message: store.successOverlayMessage,
+            show: $store.showSuccessOverlay,
+            enableAutomaticDismissal: false
+        )
         .toolbar {
             toolbarItems
         }
@@ -47,26 +49,8 @@ public struct ManageEventView: View {
         .onChange(of: store.durationPicker) { _, newValue in
             store.send(.durationPickerChanged(newValue))
         }
-        .sheet(
-            item: $store.scope(
-                state: \.feedbackFlowCoordinator,
-                action: \.feedbackFlowCoordinator
-            )
-        ) { store in
-            FeedbackFlowCoordinatorView(
-                store: store,
-                principalToolbarItem: {
-                    Text("Forhåndsvis")
-                        .captionTextStyle()
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 12)
-                        .background(Color.themeBlue.gradient)
-                        .foregroundStyle(Color.themeOnPrimaryAction)
-                        .clipShape(Capsule())
-                }
-            )
-        }
-        .navigationBarTitle(store.navigationTitle)
+        .alert($store.scope(state: \.alert, action: \.alert))
+        .navigationTitle(store.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -81,73 +65,40 @@ private extension ManageEventView {
                 .buttonStyle(SecondaryTextButtonStyle())
             }
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    QuestionsListView(
-                        questionsInputs: $store.eventInput.questions,
-                        previewConfiguration: .init(
-                            title: store.eventInput.title,
-                            agenda: store.eventInput.agenda,
-                            presentFeedbackFlowSession: { feedbackSessionState in
-                                store.send(.presentFeedbackFlowSession(feedbackSessionState))
-                            }
-                        )
-                    )
-                    .successOverlay(
-                        message: store.successOverlayMessage,
-                        show: $store.showSuccessOverlay,
-                        enableAutomaticDismissal: false
-                    )
-                    .toolbar {
-                        ToolbarItem(placement: .primaryAction) {
-                            Button(store.actionButtonTitle) {
-                                store.send(.actionButtonTap)
-                            }
-                            .buttonStyle(PrimaryTextButtonStyle())
-                            .isLoading(store.manageEventInFlight)
-                            .disabled(store.manageEventButtonDisabled)
-                        }
-                        .sharedBackgroundVisibility(.hidden)
-                    }
-                    .alert($store.scope(state: \.alert, action: \.alert))
-                } label: {
-                    Text("Næste")
+                Button(store.actionButtonTitle) {
+                    store.send(.actionButtonTap)
                 }
-                .accessibilityIdentifier("event_form_next")
                 .buttonStyle(PrimaryTextButtonStyle())
-                .disabled(store.eventInput.title.isEmpty)
+                .isLoading(store.manageEventInFlight)
+                .disabled(store.manageEventButtonDisabled)
+                .accessibilityIdentifier("event_form_save_button")
             }
             .sharedBackgroundVisibility(.hidden)
         }
     }
 
     var content: some View {
-        section(title: "Detaljer") {
-            inputField(
-                title: "Titel",
-                prompt: "Titel på enkelt mødegang",
-                text: $store.eventInput.title,
-                accessibilityIdentifier: "event_form_title_input"
-            )
-            .focused($focus, equals: .title)
-            .submitLabel(.next)
-            .onSubmit {
-                store.send(.onSubmitTitleTextField)
+        VStack(alignment: .leading, spacing: 12) {
+            section(title: "Tid og sted") {
+                inputField(
+                    title: "Lokation",
+                    prompt: "Lokation (valgfrit)",
+                    text: $store.eventInput.location.asNonOptional(),
+                    accessibilityIdentifier: "event_form_location_input"
+                )
+
+                sectionDivider
+
+                eventTimeFields
             }
 
-            sectionDivider
+            feedbackSetupSection
+        }
+    }
 
-            inputField(
-                title: "Agenda",
-                prompt: "Agenda (valgfrit)",
-                text: $store.eventInput.agenda.asNonOptional(),
-                axis: .vertical,
-                lineLimit: 2...2
-            )
-            .submitLabel(.return)
-            .focused($focus, equals: .description)
-
-            sectionDivider
-
+    @ViewBuilder
+    var eventTimeFields: some View {
+        VStack(alignment: .leading, spacing: 12) {
             Toggle(isOn: $store.allDay) {
                 Text("Hele dagen")
                     .rowTitleTextStyle()
@@ -158,6 +109,60 @@ private extension ManageEventView {
             durationPickerView
         }
         .animation(.default, value: store.startNowEnabled)
+    }
+
+    var feedbackSetupSection: some View {
+        section(title: "Feedbackopsætning") {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(store.eventInput.title)
+                    .rowTitleTextStyle()
+                    .foregroundStyle(Color.themeText)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Text("Denne mødegang bruger feedbackspørgsmålene fra formatet.")
+                    .supportingTextStyle()
+                    .foregroundStyle(Color.themeTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if let agenda = store.eventInput.agenda, !agenda.isEmpty {
+                    Text(agenda)
+                        .supportingTextStyle()
+                        .foregroundStyle(Color.themeTextSecondary)
+                        .lineLimit(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                HStack(spacing: 8) {
+                    Image(systemName: "questionmark.circle")
+                    Text(questionCountText)
+                }
+                .captionTextStyle()
+                .foregroundStyle(Color.themeTextSecondary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color.themeBackground, in: Capsule())
+
+                Text("Rediger formatet, hvis spørgsmålene skal ændres for kommende mødegange.")
+                    .supportingTextStyle()
+                    .foregroundStyle(Color.themeTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            sectionDivider
+
+            Button {
+                store.send(.editActivityButtonTap)
+            } label: {
+                Label("Rediger format", systemImage: "pencil")
+            }
+            .buttonStyle(SecondaryTextButtonStyle())
+            .accessibilityIdentifier("event_form_edit_activity_button")
+        }
+    }
+
+    var questionCountText: String {
+        let count = store.eventInput.questions.count
+        return count == 1 ? "1 spørgsmål" : "\(count) spørgsmål"
     }
 
     @ViewBuilder

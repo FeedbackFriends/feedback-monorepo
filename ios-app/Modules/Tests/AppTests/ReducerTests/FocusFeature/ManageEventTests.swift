@@ -106,4 +106,16 @@ struct ManageEventTests {
             $0.alert = .init(error: Failure())
         }
     }
+
+    @Test
+    func `Edit activity button delegates to parent`() async {
+        let store = TestStore(
+            initialState: ManageEvent.State.create(activity: Activity.mock())
+        ) {
+            ManageEvent()
+        }
+
+        await store.send(.editActivityButtonTap)
+        await store.receive(\.delegate, .editActivity)
+    }
 }

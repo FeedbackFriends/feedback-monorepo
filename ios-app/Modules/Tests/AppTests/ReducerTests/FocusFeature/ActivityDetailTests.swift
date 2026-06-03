@@ -193,4 +193,51 @@ struct ActivityDetailTests {
             )
         }
     }
+
+    @Test
+    func `Manage event edit activity delegate opens activity editor`() async {
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
+
+        let store = TestStore(
+            initialState: ActivityDetail.State(
+                activityId: activity.id,
+                destination: .manageEvent(.create(activity: activity)),
+                bootstrap: bootstrap
+            )
+        ) {
+            ActivityDetail()
+        }
+
+        await store.send(.destination(.presented(.manageEvent(.delegate(.editActivity))))) {
+            $0.destination = .editActivity(ManageActivity.State.edit(activity: activity))
+        }
+    }
+
+    @Test
+    func `Event detail edit activity delegate opens activity editor`() async {
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
+        let event = activity.events[0]
+
+        let store = TestStore(
+            initialState: ActivityDetail.State(
+                activityId: activity.id,
+                destination: .eventDetail(
+                    EventDetailFeature.State(
+                        activityId: activity.id,
+                        eventId: event.id,
+                        bootstrap: bootstrap
+                    )
+                ),
+                bootstrap: bootstrap
+            )
+        ) {
+            ActivityDetail()
+        }
+
+        await store.send(.destination(.presented(.eventDetail(.delegate(.editActivity))))) {
+            $0.destination = .editActivity(ManageActivity.State.edit(activity: activity))
+        }
+    }
 }

@@ -2,7 +2,7 @@
 # - Seed manager-empty via /admin/seed-manager-empty
 # - Login via E2E authentication debug sheet
 # - Create focus: "AIW1"
-# - Create session: "DINERO1"
+# - Create session from the existing focus setup
 # - Open invite sheet and copy invite link
 
 appId: dk.nicolaidam.letsgrow
@@ -62,16 +62,12 @@ appId: dk.nicolaidam.letsgrow
     id: "focus_detail_add_session_button"
 
 - extendedWaitUntil:
-    visible: "New session"
+    visible: "Ny enkelt mødegang"
     timeout: 10000
 
-# Create session titled "DINERO1".
+# Create session from the existing focus setup.
 - tapOn:
-    id: "event_form_title_input"
-- inputText: "DINERO1"
-- tapOn:
-    id: "event_form_next"
-- tapOn: "Finish"
+    id: "event_form_save_button"
 
 # Open session detail and copy invite link.
 - extendedWaitUntil:

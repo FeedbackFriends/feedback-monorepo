@@ -97,6 +97,11 @@ public struct EventDetailFeature: Sendable {
         case inviteButtonTapped
         case onTask
         case presentError(Error)
+        case delegate(Delegate)
+
+        public enum Delegate: Equatable, Sendable {
+            case editActivity
+        }
     }
 
     public init() {}
@@ -114,9 +119,13 @@ public struct EventDetailFeature: Sendable {
 
             case .destination(.presented(.manageEvent(.delegate(let delegate)))):
                 switch delegate {
-                case .dismissAndUpdateEvent(let event), .dismissAndNavigateToEvent(let event):
+                case .dismissAndUpdateEvent, .dismissAndNavigateToEvent:
                     state.destination = nil
                     return .none
+
+                case .editActivity:
+                    state.destination = nil
+                    return .send(.delegate(.editActivity))
 
                 case .dismiss:
                     state.destination = nil
@@ -189,6 +198,9 @@ public struct EventDetailFeature: Sendable {
             case .presentError(let error):
                 state.deleteEventInFlight = false
                 state.alert = .init(error: error)
+                return .none
+
+            case .delegate:
                 return .none
             }
         }

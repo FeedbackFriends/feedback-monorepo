@@ -3,7 +3,6 @@ import Domain
 import Foundation
 import Utility
 import DesignSystem
-import FeedbackFlowFeature
 
 @Reducer
 public struct ManageEvent: Sendable {
@@ -14,11 +13,6 @@ public struct ManageEvent: Sendable {
 
     @ObservableState
     public struct State: Equatable, Sendable {
-        enum FocusedField: Equatable, Sendable {
-            case title
-            case description
-        }
-
         public enum DurationPicker: Equatable, Hashable, Sendable {
             init(durationInMinutes: Int) {
                 switch durationInMinutes {
@@ -64,16 +58,12 @@ public struct ManageEvent: Sendable {
         var allDay: Bool
         var minutePicker: Int
         var hourPicker: Int
-        var focus: FocusedField?
         let successOverlayMessage: String
-        @Presents var feedbackFlowCoordinator: FeedbackFlowCoordinator.State?
         @Presents var alert: AlertState<Never>?
         var showSuccessOverlay = false
 
         var manageEventButtonDisabled: Bool {
-            eventInput.title.isEmpty
-                || eventInput.questions.isEmpty
-                || manageEventInFlight
+            manageEventInFlight
                 || showSuccessOverlay
         }
 
@@ -116,8 +106,7 @@ public struct ManageEvent: Sendable {
             eventId: UUID?,
             eventInput: EventInput,
             successOverlayMessage: String,
-            startNowEnabled: Bool = false,
-            focus: FocusedField? = nil
+            startNowEnabled: Bool = false
         ) {
             self.mode = mode
             self.activityId = activityId
@@ -128,7 +117,6 @@ public struct ManageEvent: Sendable {
             self.allDay = eventInput.durationInMinutes == .minutesOneDay
             self.minutePicker = eventInput.durationInMinutes % 60
             self.hourPicker = eventInput.durationInMinutes / 60
-            self.focus = focus
             self.successOverlayMessage = successOverlayMessage
         }
 
@@ -153,14 +141,12 @@ public struct ManageEvent: Sendable {
 
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
-        case onSubmitTitleTextField
         case minutePickerChanged
         case hourPickerChanged
         case allDayChanged
         case closeButtonTap
         case durationPickerChanged(State.DurationPicker)
-        case presentFeedbackFlowSession(FeedbackFlowCoordinator.State)
-        case feedbackFlowCoordinator(PresentationAction<FeedbackFlowCoordinator.Action>)
+        case editActivityButtonTap
         case actionButtonTap
         case manageEventResponse(Event)
         case presentError(Error)
@@ -170,6 +156,7 @@ public struct ManageEvent: Sendable {
         public enum Delegate: Equatable {
             case dismissAndNavigateToEvent(Event)
             case dismissAndUpdateEvent(Event)
+            case editActivity
             case dismiss
         }
     }
@@ -190,10 +177,6 @@ public struct ManageEvent: Sendable {
             switch action {
 
             case .binding:
-                return .none
-
-            case .onSubmitTitleTextField:
-                state.focus = .description
                 return .none
 
             case .minutePickerChanged:
@@ -234,12 +217,8 @@ public struct ManageEvent: Sendable {
                 }
                 return .none
 
-            case .presentFeedbackFlowSession(let feedbackFlowSession):
-                state.feedbackFlowCoordinator = feedbackFlowSession
-                return .none
-
-            case .feedbackFlowCoordinator:
-                return .none
+            case .editActivityButtonTap:
+                return .send(.delegate(.editActivity))
 
             case .actionButtonTap:
                 state.manageEventInFlight = true
@@ -300,13 +279,6 @@ public struct ManageEvent: Sendable {
             case .alert, .delegate:
                 return .none
             }
-        }
-        .ifLet(\.$feedbackFlowCoordinator, action: \.feedbackFlowCoordinator) {
-            FeedbackFlowCoordinator()
-                .transformDependency(\.apiClient) { apiClient in
-                    apiClient.submitFeedback = { _, _ in false }
-                    return ()
-                }
         }
         .ifLet(\.$alert, action: \.alert)
     }
