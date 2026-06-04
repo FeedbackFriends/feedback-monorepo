@@ -50,16 +50,16 @@ struct QuestionsListView: View {
                             self.presentSelectQuestionSheet = questionsInput
                         } label: {
                             HStack(spacing: 12) {
-                                questionsInput.feedbackType.image
-                                    .titleTextStyle()
-                                    .foregroundStyle(Color.themeText)
-                                VStack(alignment: .leading, spacing: 2) {
+                                VStack(alignment: .leading, spacing: 6) {
                                     Text(questionsInput.questionText)
                                         .foregroundColor(Color.themeText)
-                                    Text(questionsInput.feedbackType.title)
-                                        .captionTextStyle()
-                                        .foregroundColor(Color.themeTextSecondary)
+
+                                    FeedbackTypeTagView(
+                                        questionsInput.feedbackType,
+                                        orientation: .vertical
+                                    )
                                 }
+
                                 Spacer()
                             }
                         }

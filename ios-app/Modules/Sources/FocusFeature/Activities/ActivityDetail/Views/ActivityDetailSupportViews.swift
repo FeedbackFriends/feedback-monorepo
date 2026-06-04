@@ -2,23 +2,6 @@ import DesignSystem
 import Domain
 import SwiftUI
 
-struct FocusQuestionTypeBadge: View {
-    let question: ManagerQuestion
-
-    var body: some View {
-        Label {
-            Text(question.feedbackType.title)
-        } icon: {
-            question.feedbackType.image
-        }
-        .captionTextStyle()
-        .foregroundStyle(Color.themeTextSecondary)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(Color.themeBackground, in: Capsule())
-    }
-}
-
 struct FocusMetricBadge: View {
     let text: String
 

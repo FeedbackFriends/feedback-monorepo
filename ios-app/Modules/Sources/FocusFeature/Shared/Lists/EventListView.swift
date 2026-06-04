@@ -215,7 +215,7 @@ private struct EventListItemView: View {
 
     private func pill(text: String, foregroundColor: Color) -> some View {
         Text(text)
-            .badgeTextStyle()
+            .captionTextStyle()
             .foregroundStyle(foregroundColor)
             .padding(.horizontal, 8)
             .padding(.vertical, 5)

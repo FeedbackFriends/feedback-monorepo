@@ -331,12 +331,7 @@ private struct QuestionSummaryRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            Text(question.feedbackType.title)
-                .badgeTextStyle()
-                .foregroundStyle(Color.themeOnPrimaryAction)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 5)
-                .background(Color.themePrimaryAction, in: Capsule())
+            FeedbackTypeTagView(question.feedbackType)
 
             Text(question.questionText)
                 .supportingTextStyle()

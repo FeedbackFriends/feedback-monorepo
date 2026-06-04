@@ -256,15 +256,14 @@ struct ActivityDetailContentView: View {
     }
 
     private func questionTypeSummary(_ questions: [ManagerQuestion]) -> some View {
-        HStack(spacing: 8) {
-            ForEach(Array(questions.prefix(4).enumerated()), id: \.element.id) { _, question in
-                FocusQuestionTypeBadge(question: question)
-            }
-
-            if questions.count > 4 {
-                FocusMetricBadge(text: "+\(questions.count - 4)")
+        ScrollView(.horizontal) {
+            HStack(spacing: 8) {
+                ForEach(Array(questions.enumerated()), id: \.element.id) { _, question in
+                    FeedbackTypeTagView(question.feedbackType)
+                }
             }
         }
+        .scrollIndicators(.hidden)
     }
 
     private func sessionCountText(for count: Int) -> String {

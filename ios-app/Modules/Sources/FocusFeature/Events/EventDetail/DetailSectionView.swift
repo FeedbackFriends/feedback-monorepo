@@ -183,18 +183,7 @@ struct QuestionView: View {
                                 HStack(spacing: 8) {
                                     Text("Spørgsmål \(index + 1)")
                                         .supportingTextStyle()
-                                    HStack {
-                                        question.feedbackType.image
-                                            .resizable()
-                                            .frame(width: 10, height: 10)
-                                        Text(question.feedbackType.title)
-                                            .captionTextStyle()
-                                            .foregroundStyle(Color.themeTextSecondary)
-                                    }
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 6)
-                                    .background(Color.themeBackground)
-                                    .clipShape(Capsule())
+                                    FeedbackTypeTagView(question.feedbackType)
                                 }
                                 Text(question.questionText)
                                     .captionTextStyle()
