@@ -6,20 +6,33 @@ struct FeedbackTypeInfoSheetView: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
         NavigationStack {
-            List(FeedbackType.allCases, id: \.self) { type in
-                HStack(alignment: .top, spacing: 12) {
-                    type.image
-                        .titleTextStyle()
-                        .frame(width: 28)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(type.title)
-                            .rowTitleTextStyle()
-                        Text(type.helpDescription)
-                            .supportingTextStyle()
-                            .foregroundStyle(Color.themeTextSecondary)
+            List {
+                Section {
+                    ForEach(FeedbackType.allCases, id: \.self) { type in
+                        HStack(alignment: .top, spacing: 14) {
+                            type.image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(Color.themePrimaryAction)
+                                .padding(10)
+                                .background(Color.themePrimaryAction.opacity(0.12))
+                                .clipShape(Circle())
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(type.title)
+                                    .rowTitleTextStyle()
+                                Text(type.helpDescription)
+                                    .supportingTextStyle()
+                                    .foregroundStyle(Color.themeTextSecondary)
+                            }
+                        }
+                        .padding(.vertical, 6)
+                        .listRowBackground(Color.themeSurface)
                     }
+                } footer: {
+                    Text("Vælg den svartype, der passer bedst til det spørgsmål, deltagerne skal svare på.")
+                        .supportingTextStyle()
                 }
-                .padding(.vertical, 4)
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -28,7 +41,7 @@ struct FeedbackTypeInfoSheetView: View {
             }
             .background(Color.themeBackground)
             .scrollContentBackground(.hidden)
-            .navigationTitle("Feedback types")
+            .navigationTitle("Svartyper")
             .navigationBarTitleDisplayMode(.large)
             .foregroundStyle(Color.themeText)
         }

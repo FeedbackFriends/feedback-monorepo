@@ -7,9 +7,19 @@ extension FeedbackType {
         switch self {
         case .emoji: return "Emoji"
         case .comment: return "Kommentar"
-        case .thumpsUpThumpsDown: return "Tommel"
+        case .thumpsUpThumpsDown: return "Tommel op/ned"
         case .opinion: return "Enighed"
         case .zeroToTen: return "0–10"
+        }
+    }
+
+    var shortDescription: String {
+        switch self {
+        case .emoji: return "Hurtig stemning"
+        case .comment: return "Fri tekst"
+        case .thumpsUpThumpsDown: return "Ja eller nej"
+        case .opinion: return "Hvor enig?"
+        case .zeroToTen: return "Præcis vurdering"
         }
     }
     
@@ -25,11 +35,11 @@ extension FeedbackType {
     
     var helpDescription: String {
         switch self {
-        case .emoji: return "Vælg en emoji-reaktion. God til hurtige signaler."
-        case .comment: return "Skriv fri tekst. Bedst til uddybende feedback."
-        case .thumpsUpThumpsDown: return "Enkel tommel op/ned. Hurtigt signal om stemning."
-        case .opinion: return "Angiv graden af enighed fra helt uenig til helt enig."
-        case .zeroToTen: return "Vurder på en skala fra 0-10 for mere nuance."
+        case .emoji: return "Deltageren vælger en emoji. Brug den til hurtige temperaturmålinger efter et møde."
+        case .comment: return "Deltageren skriver et frit svar. Brug den, når du vil forstå årsagen bag feedbacken."
+        case .thumpsUpThumpsDown: return "Deltageren vælger tommel op eller ned. Brug den til klare ja/nej-spørgsmål."
+        case .opinion: return "Deltageren angiver graden af enighed. Brug den til udsagn som kan vurderes fra uenig til enig."
+        case .zeroToTen: return "Deltageren giver en score fra 0 til 10. Brug den, når du vil følge udviklingen over tid."
         }
     }
 }
