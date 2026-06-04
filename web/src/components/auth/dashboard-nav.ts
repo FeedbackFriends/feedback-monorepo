@@ -28,7 +28,7 @@ export const dashboardNavItems: DashboardNavItem[] = [
   },
   {
     href: "/dashboard/how-it-works",
-    title: "Sådan virker det",
+    title: "Fra møde til feedback",
     description: "Et hurtigt overblik over hvordan Lets Grow kobler sig på jeres møder og samler feedback.",
     icon: CircleHelp,
   },

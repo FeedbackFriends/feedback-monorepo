@@ -8,7 +8,7 @@ struct ActivityDetailHowItWorksView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Sådan virker det")
+                Text("Fra møde til feedback")
                     .titleTextStyle()
                     .foregroundStyle(Color.themeText)
 

@@ -23,7 +23,7 @@ type NavbarProps = {
 
 const navItems = [
   { href: "/#problem", label: "Problem" },
-  { href: "/#how-it-works", label: "Sådan virker det" },
+  { href: "/#how-it-works", label: "Fra møde til feedback" },
   { href: "/#app-store", label: "Hent appen" },
 ]
 

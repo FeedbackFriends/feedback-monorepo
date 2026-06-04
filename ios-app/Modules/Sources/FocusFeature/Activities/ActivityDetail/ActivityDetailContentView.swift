@@ -116,7 +116,7 @@ struct ActivityDetailContentView: View {
                 Button {
                     store.send(.showHowItWorksButtonTap)
                 } label: {
-                    Label("Sådan virker det", systemImage: "questionmark.circle")
+                    Label("Fra møde til feedback", systemImage: "questionmark.circle")
                 }
 
                 Button {
@@ -189,7 +189,7 @@ struct ActivityDetailContentView: View {
                 Button {
                     store.send(.showHowItWorksButtonTap)
                 } label: {
-                    Label("Sådan virker det", systemImage: "questionmark.circle")
+                    Label("Fra møde til feedback", systemImage: "questionmark.circle")
                 }
                 .buttonStyle(SecondaryTextButtonStyle())
             }
