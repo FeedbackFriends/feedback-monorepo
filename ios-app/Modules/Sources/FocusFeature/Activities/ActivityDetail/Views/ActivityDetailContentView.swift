@@ -70,14 +70,18 @@ struct ActivityDetailContentView: View {
     private func contentStack(groupedSessions: GroupedSessions) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             if activity.events.isEmpty {
+                emptyEventsNotice
+
                 ActivityDetailHowItWorksView {
                     UIPasteboard.general.string = "feedback@letsgrow.dk"
                 }
-            }
-
-            if !activity.events.isEmpty {
+            } else {
                 activityOverviewCard(activity)
-                trendSection(activity)
+
+                if activity.hasDisplayableTrend {
+                    trendSection(activity)
+                }
+
                 sessionsSection(
                     groupedSessions: groupedSessions,
                     eventTitle: activity.title
@@ -94,8 +98,11 @@ struct ActivityDetailContentView: View {
                 SectionHeaderView("Mødedetaljer", horizontalPadding: 0)
 
                 HStack(spacing: 8) {
-                    LegacyTrendBadge(direction: activity.trend.direction)
                     FocusMetricBadge(text: sessionCountText(for: activity.events.count))
+
+                    if activity.hasDisplayableTrend {
+                        LegacyTrendBadge(direction: activity.trend.direction)
+                    }
                 }
             }
 
@@ -107,6 +114,21 @@ struct ActivityDetailContentView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         .accessibilityIdentifier("activity_detail_overview_card")
+    }
+
+    private var emptyEventsNotice: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Ingen mødegange endnu")
+                .titleTextStyle()
+
+            Text("Når du inviterer LetsGrow til et kalendermøde, vises mødegangen her.")
+                .supportingTextStyle()
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(15)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .accessibilityIdentifier("activity_detail_empty_events_notice")
     }
 
     @ToolbarContentBuilder
@@ -251,5 +273,11 @@ struct ActivityDetailContentView: View {
 
     private func questionCountText(for count: Int) -> String {
         count == 1 ? "1 spørgsmål" : "\(count) spørgsmål"
+    }
+}
+
+private extension Activity {
+    var hasDisplayableTrend: Bool {
+        trend.direction != .insufficientData
     }
 }

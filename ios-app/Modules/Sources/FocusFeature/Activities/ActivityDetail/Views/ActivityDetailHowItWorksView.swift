@@ -14,7 +14,7 @@ struct ActivityDetailHowItWorksView: View {
 
                 Text(
                     """
-                    Du behøver ikke ændre den måde, du planlægger møder på. Opret møder i det kalenderværktøj, du \
+                    Opret møder i det kalenderværktøj, du \
                     allerede bruger, og inviter blot 'Lets Grow'-mailen. Så oprettes sessionen automatisk her i appen.
                     """
                 )
@@ -26,8 +26,8 @@ struct ActivityDetailHowItWorksView: View {
             VStack(alignment: .leading, spacing: 14) {
                 Text(
                     """
-                    Tilføj den generedede email-konto til kalenderaftalen. Invitationen skal sendes fra mailadressen på din \
-                    LetsGrow-konto, fx navn@firma.dk. Du kan ændre den under Indstillinger.
+                    Invitationen skal sendes fra mailadressen på din \
+                    LetsGrow-konto, navn@firma.dk. Du kan ændre den under Profil.
                     """
                 )
                     .bodyTextStyle()
