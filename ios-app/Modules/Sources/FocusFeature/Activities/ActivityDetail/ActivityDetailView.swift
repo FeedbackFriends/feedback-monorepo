@@ -327,7 +327,12 @@ struct ActivityDetailHowItWorksView: View {
             }
 
             VStack(alignment: .leading, spacing: 14) {
-                Text("Tilføj mailen til dine eksisterende kalenderaftaler – uanset om du bruger Outlook, Google Calendar eller noget tredje.")
+                Text(
+                    """
+                    Tilføj feedback@letsgrow.dk til kalenderaftalen. Invitationen skal sendes fra mailadressen på din \
+                    LetsGrow-konto, fx navn@firma.dk. Du kan ændre den under Indstillinger.
+                    """
+                )
                     .bodyTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
 
