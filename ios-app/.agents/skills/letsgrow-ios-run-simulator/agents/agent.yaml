@@ -1,0 +1,7 @@
+interface:
+  display_name: "LetsGrow iOS Simulator Run"
+  short_description: "Runs the app on iPhone 17 Pro, iOS 26.4 via Xcode CLI"
+  default_prompt: "Use $letsgrow-ios-run-simulator to run the iOS app on the iPhone 17 Pro, iOS 26.4 simulator using Xcode command-line tooling."
+
+policy:
+  allow_implicit_invocation: true
