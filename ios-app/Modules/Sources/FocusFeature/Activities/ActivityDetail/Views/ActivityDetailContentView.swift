@@ -78,9 +78,7 @@ struct ActivityDetailContentView: View {
             } else {
                 activityOverviewCard(activity)
 
-                if activity.hasDisplayableTrend {
-                    trendSection(activity)
-                }
+                meetingQualitySection(activity)
 
                 sessionsSection(
                     groupedSessions: groupedSessions,
@@ -180,44 +178,13 @@ struct ActivityDetailContentView: View {
         }
     }
 
-    private func trendSection(_ activity: Activity) -> some View {
+    private func meetingQualitySection(_ activity: Activity) -> some View {
         VStack(alignment: .leading) {
             SectionHeaderView("Mødekvalitet")
 
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    Label(activity.trend.direction.title, systemImage: activity.trend.direction.symbolName)
-                        .rowTitleTextStyle()
-                        .foregroundStyle(activity.trend.direction.color)
-
-                    Spacer()
-
-                    if let deltaText = activity.trend.deltaText {
-                        Text(deltaText)
-                            .captionTextStyle()
-                            .foregroundStyle(activity.trend.direction.color)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .background(Color.themeBackground, in: Capsule())
-                    }
-                }
-
-                Text(verbatim: activity.trend.summaryText)
-                    .supportingTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-                    .tint(Color.themeText)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Button {
-                    store.send(.showHowItWorksButtonTap)
-                } label: {
-                    Label("Fra møde til feedback", systemImage: "questionmark.circle")
-                }
-                .buttonStyle(SecondaryTextButtonStyle())
+            MeetingQualityCardView(activity: activity) {
+                store.send(.showHowItWorksButtonTap)
             }
-            .padding(15)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         }
     }
 
@@ -272,11 +239,5 @@ struct ActivityDetailContentView: View {
 
     private func questionCountText(for count: Int) -> String {
         count == 1 ? "1 spørgsmål" : "\(count) spørgsmål"
-    }
-}
-
-private extension Activity {
-    var hasDisplayableTrend: Bool {
-        trend.direction != .insufficientData
     }
 }
