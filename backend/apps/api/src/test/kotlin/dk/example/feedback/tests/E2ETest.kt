@@ -303,6 +303,7 @@ class E2ETest(
         assertEquals("neutral", afterFirstEvent.get("trend").get("indicator").asText())
         assertEquals("average_rating", afterFirstEvent.get("trend").get("metric").asText())
         assertEquals(3.0, afterFirstEvent.get("trend").get("latestValue").asDouble())
+        assertEquals(3.0, afterFirstEvent.get("events").get(0).get("averageRating").asDouble())
         assertEquals(1, afterFirstEvent.get("trend").get("comparedEventCount").asInt())
         assertEquals(true, afterFirstEvent.get("trend").get("previousValue").isNull)
         assertEquals(true, afterFirstEvent.get("trend").get("delta").isNull)
@@ -325,6 +326,7 @@ class E2ETest(
         assertEquals("positive", afterSecondEvent.get("trend").get("indicator").asText())
         assertEquals(4.0, afterSecondEvent.get("trend").get("latestValue").asDouble())
         assertEquals(3.0, afterSecondEvent.get("trend").get("previousValue").asDouble())
+        assertEquals(4.0, afterSecondEvent.get("events").get(0).get("averageRating").asDouble())
         assertEquals(1.0, afterSecondEvent.get("trend").get("delta").asDouble())
         assertEquals(2, afterSecondEvent.get("trend").get("comparedEventCount").asInt())
     }

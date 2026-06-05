@@ -67,7 +67,7 @@ fun EventEntity.toActivityEventDto(pinCode: String?): EventDto {
         createdFromMailListener = createdFromMailListener,
         calendarProvider = calendarProvider,
         calendarEventId = calendarEventId,
-        averageRating = averageZeroToTenRating(),
+        averageRating = averageRating(),
         overallFeedbackSummary = generateOverallFeedbackSummary(
             participantResponses = feedback.participantResponses(),
             feedback = feedback,
@@ -86,9 +86,13 @@ private fun EventEntity.averageZeroToTenRating(): Double? {
         .takeUnless { it.isNaN() }
 }
 
+private fun EventEntity.averageRating(): Double? {
+    return averageZeroToTenRating()?.div(2.0)
+}
+
 private fun List<EventEntity>.toActivityTrendDto(): ActivityTrendDto {
     val comparableScores = mapNotNull { event ->
-        event.averageZeroToTenRating()?.div(2.0)
+        event.averageRating()
     }
     val latestValue = comparableScores.getOrNull(0)
     val previousValue = comparableScores.getOrNull(1)
