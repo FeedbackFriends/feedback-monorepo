@@ -13,9 +13,16 @@ struct MeetingQualityPoint: Identifiable, Equatable {
     }
 }
 
+private enum MeetingQualityAnnotationEdge {
+    case leading
+    case center
+    case trailing
+}
+
 struct MeetingQualityCardView: View {
     let activity: Activity
     let showHowItWorks: () -> Void
+    let onEventTap: (Event) -> Void
 
     private var points: [MeetingQualityPoint] {
         activity.events
@@ -31,7 +38,13 @@ struct MeetingQualityCardView: View {
             if points.isEmpty {
                 emptyState
             } else {
-                MeetingQualityLineChartView(points: points)
+                MeetingQualityLineChartView(
+                    points: points,
+                    onPointTap: { point in
+                        guard let event = activity.events.first(where: { $0.id == point.eventId }) else { return }
+                        onEventTap(event)
+                    }
+                )
             }
         }
         .padding(15)
@@ -65,6 +78,7 @@ struct MeetingQualityCardView: View {
 
 struct MeetingQualityLineChartView: View {
     let points: [MeetingQualityPoint]
+    let onPointTap: (MeetingQualityPoint) -> Void
     @State private var selectedPointId: MeetingQualityPoint.ID?
 
     var body: some View {
@@ -108,8 +122,8 @@ struct MeetingQualityLineChartView: View {
                     x: .value("Session", xValue(for: point)),
                     y: .value("Feedbackscore", point.value)
                 )
-                .foregroundStyle(Color.themeChartHighlighted.gradient)
-                .symbolSize(point.id == latestPoint?.id ? 72 : 42)
+                    .foregroundStyle(Color.themeChartHighlighted.gradient)
+                    .symbolSize(point.id == latestPoint?.id ? 72 : 42)
             }
 
             if let selectedPoint {
@@ -123,9 +137,6 @@ struct MeetingQualityLineChartView: View {
                 )
                 .foregroundStyle(Color.themeChartHighlighted.gradient)
                 .symbolSize(150)
-                .annotation(position: .top, alignment: annotationAlignment(for: selectedPoint), spacing: 8) {
-                    selectedPointAnnotation(selectedPoint)
-                }
             }
         }
         .chartOverlay { proxy in
@@ -133,7 +144,6 @@ struct MeetingQualityLineChartView: View {
                 ZStack {
                     if let plotFrame = proxy.plotFrame,
                        let latestPoint,
-                       selectedPoint?.id != latestPoint.id,
                        let latestX = proxy.position(forX: xValue(for: latestPoint)),
                        let latestY = proxy.position(forY: latestPoint.value) {
                         let frame = geometry[plotFrame]
@@ -144,15 +154,42 @@ struct MeetingQualityLineChartView: View {
                             .position(x: frame.minX + latestX, y: frame.minY + latestY)
                     }
 
-                    Rectangle()
-                        .fill(Color.clear)
-                        .contentShape(Rectangle())
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { value in
-                                    selectNearestPoint(to: value.location, proxy: proxy, geometry: geometry)
+                    if let plotFrame = proxy.plotFrame {
+                        let frame = geometry[plotFrame]
+
+                        ForEach(points) { point in
+                            if let xPosition = proxy.position(forX: xValue(for: point)),
+                               let yPosition = proxy.position(forY: point.value) {
+                                Button {
+                                    selectedPointId = point.id
+                                } label: {
+                                    Circle()
+                                        .fill(Color.clear)
+                                        .frame(width: 44, height: 44)
+                                        .contentShape(Circle())
                                 }
-                        )
+                                .buttonStyle(.plain)
+                                .position(x: frame.minX + xPosition, y: frame.minY + yPosition)
+                                .accessibilityLabel(pointSelectionAccessibilityLabel(point))
+                            }
+                        }
+
+                        if let selectedPoint,
+                           let xPosition = proxy.position(forX: xValue(for: selectedPoint)),
+                           let yPosition = proxy.position(forY: selectedPoint.value) {
+                            selectedPointAnnotation(selectedPoint)
+                                .position(
+                                    annotationPosition(
+                                        for: selectedPoint,
+                                        pointPosition: CGPoint(
+                                            x: frame.minX + xPosition,
+                                            y: frame.minY + yPosition
+                                        ),
+                                        plotFrame: frame
+                                    )
+                                )
+                        }
+                    }
                 }
             }
         }
@@ -205,53 +242,29 @@ struct MeetingQualityLineChartView: View {
 
     @ViewBuilder
     private func selectedPointAnnotation(_ point: MeetingQualityPoint) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("\(String(format: "%.1f", point.value)) / 5")
-                .captionTextStyle()
-                .foregroundStyle(Color.themeText)
+        Button {
+            onPointTap(point)
+        } label: {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("\(String(format: "%.1f", point.value)) / 5")
+                    .captionTextStyle()
+                    .foregroundStyle(Color.themeText)
 
-            Text(point.date.formatted(.dateTime.day().month()))
-                .captionTextStyle()
-                .foregroundStyle(Color.themeTextSecondary)
+                Text(point.date.formatted(.dateTime.day().month()))
+                    .captionTextStyle()
+                    .foregroundStyle(Color.themeTextSecondary)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 7)
+            .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 7)
-        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-    }
-
-    private func selectNearestPoint(to location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) {
-        guard let plotFrame = proxy.plotFrame else { return }
-
-        let frame = geometry[plotFrame]
-        guard frame.insetBy(dx: -16, dy: -16).contains(location) else { return }
-
-        let plotX = min(max(location.x - frame.minX, 0), frame.width)
-        guard let selectedIndex = proxy.value(atX: plotX, as: Double.self),
-              let nearestPoint = points.min(by: { lhs, rhs in
-                  abs(xValue(for: lhs) - selectedIndex) < abs(xValue(for: rhs) - selectedIndex)
-              }) else { return }
-
-        selectedPointId = nearestPoint.id
+        .buttonStyle(OpacityButtonStyle())
+        .accessibilityLabel(pointNavigationAccessibilityLabel(point))
     }
 
     private func xValue(for point: MeetingQualityPoint) -> Double {
         guard let index = points.firstIndex(where: { $0.id == point.id }) else { return 0 }
         return Double(index)
-    }
-
-    private func annotationAlignment(for point: MeetingQualityPoint) -> Alignment {
-        guard points.count > 1,
-              let index = points.firstIndex(where: { $0.id == point.id }) else {
-            return .center
-        }
-
-        if index == points.startIndex {
-            return .leading
-        } else if index == points.index(before: points.endIndex) {
-            return .trailing
-        } else {
-            return .center
-        }
     }
 
     private var xDomain: ClosedRange<Double> {
@@ -276,13 +289,60 @@ struct MeetingQualityLineChartView: View {
         .map(Double.init)
     }
 
+    private var latestPoint: MeetingQualityPoint? {
+        points.last
+    }
+
     private var selectedPoint: MeetingQualityPoint? {
         guard let selectedPointId else { return nil }
         return points.first { $0.id == selectedPointId }
     }
 
-    private var latestPoint: MeetingQualityPoint? {
-        points.last
+    private func annotationEdge(for point: MeetingQualityPoint) -> MeetingQualityAnnotationEdge {
+        guard points.count > 1,
+              let index = points.firstIndex(where: { $0.id == point.id }) else {
+            return .center
+        }
+
+        if index == points.startIndex {
+            return .leading
+        } else if index == points.index(before: points.endIndex) {
+            return .trailing
+        } else {
+            return .center
+        }
+    }
+
+    private func annotationPosition(
+        for point: MeetingQualityPoint,
+        pointPosition: CGPoint,
+        plotFrame: CGRect
+    ) -> CGPoint {
+        var xPosition = pointPosition.x
+        let yPosition = max(plotFrame.minY + 22, pointPosition.y - 38)
+
+        switch annotationEdge(for: point) {
+        case .leading:
+            xPosition += 34
+        case .trailing:
+            xPosition -= 34
+        default:
+            break
+        }
+
+        return CGPoint(x: xPosition, y: yPosition)
+    }
+
+    private func pointSelectionAccessibilityLabel(_ point: MeetingQualityPoint) -> String {
+        let score = String(format: "%.1f", point.value)
+        let date = point.date.formatted(.dateTime.day().month())
+        return "Vis session fra \(date), score \(score) ud af 5"
+    }
+
+    private func pointNavigationAccessibilityLabel(_ point: MeetingQualityPoint) -> String {
+        let score = String(format: "%.1f", point.value)
+        let date = point.date.formatted(.dateTime.day().month())
+        return "Åbn session fra \(date), score \(score) ud af 5"
     }
 
     private var accessibilitySummary: String {

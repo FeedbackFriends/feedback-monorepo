@@ -13,6 +13,7 @@ public struct ActivityDetail: Sendable {
         case manageEvent(ManageEvent)
         case editActivity(ManageActivity)
         case eventDetail(EventDetailFeature)
+        case sessionList(ActivityDetailSessionList)
         @ReducerCaseIgnored
         case showHowItWorks
         @ReducerCaseIgnored
@@ -57,6 +58,7 @@ public struct ActivityDetail: Sendable {
         case destination(PresentationAction<Destination.Action>)
         case createEventButtonTapped
         case eventTapped(Event)
+        case showAllSessionsButtonTapped
         case editActivityButtonTapped
         case deleteActivityButtonTap
         case deleteActivityCancelButtonTap
@@ -109,6 +111,9 @@ public struct ActivityDetail: Sendable {
                 guard let activity = state.activity else { return .none }
                 state.destination = .editActivity(ManageActivity.State.edit(activity: activity))
                 return .none
+
+            case .destination(.presented(.sessionList(.delegate(.eventTapped(let event))))):
+                return .send(.eventTapped(event))
                 
             case .binding:
                 return .none
@@ -145,6 +150,19 @@ public struct ActivityDetail: Sendable {
                 guard let activity = state.activity else { return .none }
                 state.destination = .manageEvent(
                     ManageEvent.State.create(activity: activity)
+                )
+                return .none
+
+            case .showAllSessionsButtonTapped:
+                guard let activity = state.activity else { return .none }
+                let grouping = ActivityDetailSessionGrouping(events: activity.events)
+                guard !grouping.sections.isEmpty else { return .none }
+                state.destination = .sessionList(
+                    ActivityDetailSessionList.State(
+                        title: "Alle sessioner",
+                        eventTitle: activity.title,
+                        sections: grouping.sections
+                    )
                 )
                 return .none
 

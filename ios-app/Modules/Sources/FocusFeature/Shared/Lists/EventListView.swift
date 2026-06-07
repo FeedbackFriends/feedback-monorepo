@@ -2,30 +2,41 @@ import Domain
 import DesignSystem
 import SwiftUI
 
+public struct EventListSection: Identifiable, Equatable, Sendable {
+    public let title: String
+    public let events: [Event]
+
+    public var id: String {
+        title
+    }
+
+    public init(title: String, events: [Event]) {
+        self.title = title
+        self.events = events
+    }
+}
+
 public struct EventListView: View {
-    let todayEvents: [Event]
-    let comingUpEvents: [Event]
-    let previousEvents: [Event]
+    let sections: [EventListSection]
     let eventTitle: String
     let onEventTap: ((Event) -> Void)?
+    let sectionTrailingContent: ((EventListSection) -> AnyView?)?
 
     public init(
-        todayEvents: [Event],
-        comingUpEvents: [Event],
-        previousEvents: [Event],
+        sections: [EventListSection],
         eventTitle: String,
-        onEventTap: ((Event) -> Void)? = nil
+        onEventTap: ((Event) -> Void)? = nil,
+        sectionTrailingContent: ((EventListSection) -> AnyView?)? = nil
     ) {
-        self.todayEvents = todayEvents
-        self.comingUpEvents = comingUpEvents
-        self.previousEvents = previousEvents
+        self.sections = sections
         self.eventTitle = eventTitle
         self.onEventTap = onEventTap
+        self.sectionTrailingContent = sectionTrailingContent
     }
 
     public var body: some View {
         LazyVStack(alignment: .leading, spacing: 18) {
-            if todayEvents.isEmpty && comingUpEvents.isEmpty && previousEvents.isEmpty {
+            if sections.isEmpty {
                 VStack(alignment: .center, spacing: 14) {
                     VStack(spacing: 6) {
                         Text("Ingen sessioner endnu")
@@ -43,23 +54,12 @@ public struct EventListView: View {
                 .padding(.top, 50)
 
             } else {
-                if !todayEvents.isEmpty {
-                    CustomSection(title: "I dag") {
-                        ForEach(todayEvents) { event in
-                            eventListItem(event)
-                        }
-                    }
-                }
-                if !comingUpEvents.isEmpty {
-                    CustomSection(title: "Kommende") {
-                        ForEach(comingUpEvents) { event in
-                            eventListItem(event)
-                        }
-                    }
-                }
-                if !previousEvents.isEmpty {
-                    CustomSection(title: "Tidligere") {
-                        ForEach(previousEvents) { event in
+                ForEach(sections) { section in
+                    CustomSection(
+                        title: section.title,
+                        trailingContent: sectionTrailingContent?(section)
+                    ) {
+                        ForEach(section.events) { event in
                             eventListItem(event)
                         }
                     }
@@ -91,8 +91,10 @@ private struct EventListItemView: View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 12) {
                 header
-                Divider()
-                metadata
+                if hasLocation {
+                    Divider()
+                    metadata
+                }
                 feedbackSummary
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -136,11 +138,6 @@ private struct EventListItemView: View {
 
     private var metadata: some View {
         VStack(alignment: .leading, spacing: 8) {
-            metadataRow(
-                image: Image(systemName: "clock"),
-                text: event.durationText
-            )
-
             if let location = event.location, !location.isEmpty {
                 metadataRow(
                     image: Image(systemName: "mappin.and.ellipse"),
@@ -155,19 +152,19 @@ private struct EventListItemView: View {
             return "I dag kl. \(event.date.formatted(date: .omitted, time: .shortened))"
         }
 
+        if Calendar.current.isDateInYesterday(event.date) {
+            return "I går kl. \(event.date.formatted(date: .omitted, time: .shortened))"
+        }
+
+        if Calendar.current.isDateInTomorrow(event.date) {
+            return "I morgen kl. \(event.date.formatted(date: .omitted, time: .shortened))"
+        }
+
         return event.date.formatted(date: .abbreviated, time: .shortened)
     }
 
     private var feedbackSummary: some View {
         HStack(spacing: 8) {
-            if let pinCode = event.pinCode?.value {
-                pill(text: "#\(pinCode)", foregroundColor: Color.themeText)
-            } else {
-                pill(text: "Udløbet", foregroundColor: Color.themeVerySad)
-            }
-
-            Spacer(minLength: 8)
-
             Text(responseText)
                 .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
@@ -197,6 +194,11 @@ private struct EventListItemView: View {
         "\(eventTitle), \(event.formattedDate), \(responseText)"
     }
 
+    private var hasLocation: Bool {
+        guard let location = event.location else { return false }
+        return !location.isEmpty
+    }
+
     private func metadataRow(image: Image, text: String) -> some View {
         HStack(spacing: 8) {
             image
@@ -213,12 +215,4 @@ private struct EventListItemView: View {
         }
     }
 
-    private func pill(text: String, foregroundColor: Color) -> some View {
-        Text(text)
-            .captionTextStyle()
-            .foregroundStyle(foregroundColor)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 5)
-            .background(Color.themeBackground, in: Capsule())
-    }
 }

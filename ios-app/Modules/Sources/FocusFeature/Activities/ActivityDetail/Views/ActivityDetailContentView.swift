@@ -3,57 +3,22 @@ import DesignSystem
 import Domain
 import SwiftUI
 
-private struct GroupedSessions {
-    let today: [Event]
-    let comingUp: [Event]
-    let previous: [Event]
-}
-
 struct ActivityDetailContentView: View {
     @Bindable var store: StoreOf<ActivityDetail>
     let activity: Activity
 
     var body: some View {
-        let sessions = activity.events.sorted(by: { $0.date > $1.date })
-        let groupedSessions = GroupedSessions(
-            today: sessions.filter { $0.date.isToday },
-            comingUp: sessions.filter { $0.date.isAfterToday },
-            previous: sessions.filter { $0.date.isBeforeToday }
-        )
+        let sessionGrouping = ActivityDetailSessionGrouping(events: activity.events)
 
-        return screenBody(groupedSessions: groupedSessions)
-        .sheet(
-            item: $store.scope(
-                state: \.destination?.editActivity,
-                action: \.destination.editActivity
-            )
-        ) { editStore in
-            ManageActivityView(store: editStore)
-        }
-        .sheet(
-            item: $store.scope(
-                state: \.destination?.manageEvent,
-                action: \.destination.manageEvent
-            )
-        ) { manageStore in
-            NavigationStack {
-                ManageEventView(store: manageStore)
-            }
-        }
-        .navigationDestination(
-            item: $store.scope(
-                state: \.destination?.eventDetail,
-                action: \.destination.eventDetail
-            )
-        ) { eventDetailStore in
-            EventDetailFeatureView(store: eventDetailStore)
-        }
-        .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
+        return screenBody(sessionGrouping: sessionGrouping)
+            .modifier(ActivityDetailSheetsModifier(store: store))
+            .modifier(ActivityDetailNavigationModifier(store: store))
+            .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
     }
 
-    private func screenBody(groupedSessions: GroupedSessions) -> some View {
+    private func screenBody(sessionGrouping: ActivityDetailSessionGrouping) -> some View {
         ScrollView {
-            contentStack(groupedSessions: groupedSessions)
+            contentStack(sessionGrouping: sessionGrouping)
         }
         .scrollIndicators(.hidden)
         .background(Color.themeBackground.ignoresSafeArea())
@@ -67,62 +32,26 @@ struct ActivityDetailContentView: View {
     }
 
     @ViewBuilder
-    private func contentStack(groupedSessions: GroupedSessions) -> some View {
+    private func contentStack(sessionGrouping: ActivityDetailSessionGrouping) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             if activity.events.isEmpty {
-                emptyEventsNotice
-
                 ActivityDetailHowItWorksView {
                     UIPasteboard.general.string = "feedback@letsgrow.dk"
                 }
             } else {
-                activityOverviewCard(activity)
-
                 meetingQualitySection(activity)
 
-                sessionsSection(
-                    groupedSessions: groupedSessions,
-                    eventTitle: activity.title
-                )
+                if !sessionGrouping.activeSections.isEmpty {
+                    sessionsSection(
+                        sessionSections: sessionGrouping.activeSections,
+                        eventTitle: activity.title,
+                        showsAllSessionsButton: sessionGrouping.hasSessionsOutsideActive
+                    )
+                }
             }
         }
         .padding()
         .padding(.bottom, 24)
-    }
-
-    private func activityOverviewCard(_ activity: Activity) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 10) {
-                SectionHeaderView("Aktivitetsdetaljer", horizontalPadding: 0)
-
-                HStack(spacing: 8) {
-                    FocusMetricBadge(text: sessionCountText(for: activity.events.count))
-                }
-            }
-
-            Divider()
-
-            focusSetupContent(activity)
-        }
-        .padding(15)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-        .accessibilityIdentifier("activity_detail_overview_card")
-    }
-
-    private var emptyEventsNotice: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Ingen sessioner endnu")
-                .titleTextStyle()
-
-            Text("Når du inviterer LetsGrow i kalenderen, vises sessionen her.")
-                .supportingTextStyle()
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(15)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-        .accessibilityIdentifier("activity_detail_empty_events_notice")
     }
 
     @ToolbarContentBuilder
@@ -162,14 +91,23 @@ struct ActivityDetailContentView: View {
         }
     }
 
-    private func sessionsSection(groupedSessions: GroupedSessions, eventTitle: String) -> some View {
+    private func sessionsSection(
+        sessionSections: [EventListSection],
+        eventTitle: String,
+        showsAllSessionsButton: Bool
+    ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             EventListView(
-                todayEvents: groupedSessions.today,
-                comingUpEvents: groupedSessions.comingUp,
-                previousEvents: groupedSessions.previous,
+                sections: sessionSections,
                 eventTitle: eventTitle,
-                onEventTap: { store.send(.eventTapped($0)) }
+                onEventTap: { store.send(.eventTapped($0)) },
+                sectionTrailingContent: { section in
+                    guard showsAllSessionsButton, section.title == "Aktuelt" else {
+                        return nil
+                    }
+
+                    return AnyView(seeAllSessionsButton)
+                }
             )
         }
     }
@@ -178,62 +116,77 @@ struct ActivityDetailContentView: View {
         VStack(alignment: .leading) {
             SectionHeaderView("Feedback over tid")
 
-            MeetingQualityCardView(activity: activity) {
-                store.send(.showHowItWorksButtonTap)
-            }
+            MeetingQualityCardView(
+                activity: activity,
+                showHowItWorks: {
+                    store.send(.showHowItWorksButtonTap)
+                },
+                onEventTap: { event in
+                    store.send(.eventTapped(event))
+                }
+            )
         }
     }
 
-    private func focusSetupContent(_ activity: Activity) -> some View {
+    private var seeAllSessionsButton: some View {
         Button {
-            store.send(.editActivityButtonTapped)
+            store.send(.showAllSessionsButtonTapped)
         } label: {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        SectionHeaderView("Feedbackopsætning", horizontalPadding: 0)
-                        Text(questionCountText(for: activity.questions.count))
-                            .rowTitleTextStyle()
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    Label("Rediger", systemImage: "pencil")
-                        .captionTextStyle()
-                        .foregroundStyle(Color.themePrimaryAction)
-                }
-
-                if let agenda = activity.agenda, !agenda.isEmpty {
-                    Text(agenda)
-                        .supportingTextStyle()
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(3)
-                }
-
-                questionTypeSummary(activity.questions)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            Text("Se alle")
+                .captionTextStyle()
+                .foregroundStyle(Color.themePrimaryAction)
         }
         .buttonStyle(OpacityButtonStyle())
-        .accessibilityLabel("Rediger feedbackopsætning for aktivitet")
-        .accessibilityIdentifier("activity_detail_focus_setup_section")
+        .accessibilityIdentifier("activity_detail_see_all_sessions_button")
     }
+}
 
-    private func questionTypeSummary(_ questions: [ManagerQuestion]) -> some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: 8) {
-                ForEach(Array(questions.enumerated()), id: \.element.id) { _, question in
-                    FeedbackTypeTagView(question.feedbackType)
+private struct ActivityDetailSheetsModifier: ViewModifier {
+    @Bindable var store: StoreOf<ActivityDetail>
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(
+                item: $store.scope(
+                    state: \.destination?.editActivity,
+                    action: \.destination.editActivity
+                )
+            ) { editStore in
+                ManageActivityView(store: editStore)
+            }
+            .sheet(
+                item: $store.scope(
+                    state: \.destination?.manageEvent,
+                    action: \.destination.manageEvent
+                )
+            ) { manageStore in
+                NavigationStack {
+                    ManageEventView(store: manageStore)
                 }
             }
-        }
-        .scrollIndicators(.hidden)
     }
+}
 
-    private func sessionCountText(for count: Int) -> String {
-        count == 1 ? "1 session" : "\(count) sessioner"
-    }
+private struct ActivityDetailNavigationModifier: ViewModifier {
+    @Bindable var store: StoreOf<ActivityDetail>
 
-    private func questionCountText(for count: Int) -> String {
-        count == 1 ? "1 spørgsmål" : "\(count) spørgsmål"
+    func body(content: Content) -> some View {
+        content
+            .navigationDestination(
+                item: $store.scope(
+                    state: \.destination?.eventDetail,
+                    action: \.destination.eventDetail
+                )
+            ) { eventDetailStore in
+                EventDetailFeatureView(store: eventDetailStore)
+            }
+            .navigationDestination(
+                item: $store.scope(
+                    state: \.destination?.sessionList,
+                    action: \.destination.sessionList
+                )
+            ) { sessionListStore in
+                ActivityDetailSessionListView(store: sessionListStore)
+            }
     }
 }
