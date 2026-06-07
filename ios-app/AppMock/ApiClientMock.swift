@@ -79,16 +79,6 @@ extension APIClient {
                 try await Task.sleep(for: .seconds(delay))
                 return ()
             },
-            seedParticipantWithData: { .init(token: "mock-seed-participant-with-data") },
-            seedParticipantEmpty: { .init(token: "mock-seed-participant-empty") },
-            seedManagerWithData: { .init(token: "mock-seed-manager-with-data") },
-            seedManagerEmpty: { .init(token: "mock-seed-manager-empty") },
-            seedEmptyAccount: { .init(token: "mock-seed-empty-account") },
-            resetDatabase: {
-                try await Task.sleep(for: .seconds(delay))
-                return ()
-            },
-            login: { id in .init(token: "mock-login-\(id)") },
             getBootstrapUpdate: {
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()

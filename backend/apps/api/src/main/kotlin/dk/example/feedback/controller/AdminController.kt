@@ -3,6 +3,7 @@ package dk.example.feedback.controller
 import dk.example.feedback.firebase.FeedbackReceivedNotification
 import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.service.AdminService
+import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.tags.Tag
 import java.util.UUID
 import org.springframework.web.bind.annotation.PostMapping
@@ -34,36 +35,43 @@ class AdminController(
         val id: String,
     )
 
+    @Hidden
     @PostMapping("/login")
     fun login(@RequestBody input: AdminLoginRequestDto): MockTokenDto {
         return adminService.login(id = input.id)
     }
 
+    @Hidden
     @PostMapping("/seed-manager-empty")
     fun seedManagerEmpty(): MockTokenDto {
         return adminService.seedManagerEmpty()
     }
 
+    @Hidden
     @PostMapping("/seed-empty-account")
     fun seedEmptyAccount(): MockTokenDto {
         return adminService.seedEmptyAccount()
     }
 
+    @Hidden
     @PostMapping("/seed-manager-with-data")
     fun seedManagerWithData(): MockTokenDto {
         return adminService.seedManagerWithData()
     }
 
+    @Hidden
     @PostMapping("/seed-participant-empty")
     fun seedParticipantEmpty(): MockTokenDto {
         return adminService.seedParticipantEmpty()
     }
 
+    @Hidden
     @PostMapping("/seed-participant-with-data")
     fun seedParticipantWithData(): MockTokenDto {
         return adminService.seedParticipantWithData()
     }
 
+    @Hidden
     @PostMapping("/reset")
     fun resetDatabase() {
         adminService.resetDatabase()

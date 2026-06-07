@@ -40,9 +40,9 @@ private enum E2EAutoLoginConfig {
 
     static func tokenFromLaunchArguments() -> String? {
         let userDefaults = UserDefaults.standard
-        let enabled = (userDefaults.string(forKey: enabledKey) ?? ProcessInfo.processInfo.environment[enabledKey]) == "1"
+        let enabled = userDefaults.string(forKey: enabledKey) == "1"
         guard enabled else { return nil }
-        let token = userDefaults.string(forKey: tokenKey) ?? ProcessInfo.processInfo.environment[tokenKey]
+        let token = userDefaults.string(forKey: tokenKey)
         guard let token, !token.isEmpty else { return nil }
         return token
     }

@@ -89,39 +89,4 @@ extension APIClient {
         }
     }
 
-    static func makeSeedParticipantWithData(api: APIProtocol) -> @Sendable () async throws -> MockTokenDto {
-        {
-            MockTokenDto(try await api.seedParticipantWithData().ok.body.json)
-        }
-    }
-
-    static func makeSeedParticipantEmpty(api: APIProtocol) -> @Sendable () async throws -> MockTokenDto {
-        {
-            MockTokenDto(try await api.seedParticipantEmpty().ok.body.json)
-        }
-    }
-
-    static func makeSeedManagerWithData(api: APIProtocol) -> @Sendable () async throws -> MockTokenDto {
-        {
-            MockTokenDto(try await api.seedManagerWithData().ok.body.json)
-        }
-    }
-
-    static func makeSeedManagerEmpty(api: APIProtocol) -> @Sendable () async throws -> MockTokenDto {
-        {
-            MockTokenDto(try await api.seedManagerEmpty().ok.body.json)
-        }
-    }
-
-    static func makeSeedEmptyAccount(api: APIProtocol) -> @Sendable () async throws -> MockTokenDto {
-        {
-            MockTokenDto(try await api.seedEmptyAccount().ok.body.json)
-        }
-    }
-
-    static func makeLogin(api: APIProtocol) -> @Sendable (String) async throws -> MockTokenDto {
-        { id in
-            MockTokenDto(try await api.login(body: .json(.init(id: id))).ok.body.json)
-        }
-    }
 }

@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+API_BASE_URL="${API_BASE_URL:-http://localhost:8080}"
+E2E_ADMIN_RETRIES="${E2E_ADMIN_RETRIES:-5}"
+E2E_ADMIN_RETRY_DELAY_SECONDS="${E2E_ADMIN_RETRY_DELAY_SECONDS:-2}"
+COMMAND="${1:-}"
+
+usage() {
+  cat >&2 <<'EOF'
+Usage: scripts/e2e-admin <command>
+
+Commands:
+  reset
+  seed-manager-empty
+  seed-manager-with-data
+  seed-participant-empty
+  seed-participant-with-data
+  seed-empty-account
+
+Seed commands print only the custom token to stdout.
+EOF
+}
+
+require_cmd() {
+  local cmd="$1"
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Required command not found: $cmd" >&2
+    exit 1
+  fi
+}
+
+post_admin() {
+  local path="$1"
+  local attempt=1
+
+  while [ "$attempt" -le "$E2E_ADMIN_RETRIES" ]; do
+    if curl --fail --silent --show-error --request POST "$API_BASE_URL/admin/$path"; then
+      return 0
+    fi
+
+    if [ "$attempt" -eq "$E2E_ADMIN_RETRIES" ]; then
+      return 1
+    fi
+
+    echo "Admin request failed, retrying $path (${attempt}/${E2E_ADMIN_RETRIES})" >&2
+    sleep "$E2E_ADMIN_RETRY_DELAY_SECONDS"
+    attempt=$((attempt + 1))
+  done
+}
+
+print_token_from_json() {
+  ruby -rjson -e '
+    payload = JSON.parse(STDIN.read)
+    token = payload.fetch("token")
+    abort("Seed response did not include token") if token.empty?
+    puts token
+  '
+}
+
+require_cmd curl
+require_cmd ruby
+
+case "$COMMAND" in
+  reset)
+    post_admin "reset" >/dev/null
+    ;;
+  seed-manager-empty)
+    post_admin "seed-manager-empty" | print_token_from_json
+    ;;
+  seed-manager-with-data)
+    post_admin "seed-manager-with-data" | print_token_from_json
+    ;;
+  seed-participant-empty)
+    post_admin "seed-participant-empty" | print_token_from_json
+    ;;
+  seed-participant-with-data)
+    post_admin "seed-participant-with-data" | print_token_from_json
+    ;;
+  seed-empty-account)
+    post_admin "seed-empty-account" | print_token_from_json
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

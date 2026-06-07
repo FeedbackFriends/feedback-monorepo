@@ -88,6 +88,7 @@ struct ActivityDetailContentView: View {
             }
             .buttonStyle(PrimaryTextButtonStyle())
             .accessibilityLabel("Flere handlinger for aktivitet")
+            .accessibilityIdentifier("activity_detail_actions_menu_button")
         }
     }
 
@@ -115,7 +116,6 @@ struct ActivityDetailContentView: View {
     private func meetingQualitySection(_ activity: Activity) -> some View {
         VStack(alignment: .leading) {
             SectionHeaderView("Feedback over tid")
-
             MeetingQualityCardView(
                 activity: activity,
                 showHowItWorks: {

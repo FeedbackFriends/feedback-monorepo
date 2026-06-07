@@ -108,15 +108,4 @@ extension APIClient {
             }
         }
     }
-
-    static func makeResetDatabase(api: APIProtocol, sessionCache: APIClientCache) -> @Sendable () async throws -> Void {
-        {
-            try await withAuthorization {
-                _ = try await api.resetDatabase(.init()).ok
-                let bootstrap = try await api.getBootstrap().ok.body.json
-                await sessionCache.updateBootstrap(Bootstrap(bootstrap))
-                return ()
-            }
-        }
-    }
 }

@@ -5,6 +5,21 @@ import ComposableArchitecture
 import Domain
 import Logger
 
+private enum E2EAuthenticationConfig {
+    static let enabledKey = "E2E_ENABLE_TEST_LOGIN"
+    static let tokenKey = "E2E_CUSTOM_TOKEN"
+
+    static func tokenFromLaunchArguments() -> String? {
+        let userDefaults = UserDefaults.standard
+        let enabled = userDefaults.string(forKey: enabledKey) == "1"
+        guard enabled else { return nil }
+
+        let token = userDefaults.string(forKey: tokenKey)
+        guard let token, !token.isEmpty else { return nil }
+        return token
+    }
+}
+
 @Reducer
 public struct SignUp: Sendable {
     
@@ -50,13 +65,7 @@ public struct SignUp: Sendable {
         case iconTenTimesTap
         case e2eAuthenticationIconTap
         case e2eAuthenticationSheetDismissed
-        case e2eSeedParticipantWithDataTap
-        case e2eSeedParticipantEmptyTap
-        case e2eSeedManagerWithDataTap
-        case e2eSeedManagerEmptyTap
-        case e2eSeedEmptyAccountTap
-        case e2eLoginWithIdTap(String)
-        case e2eLoginWithPresetTap(String)
+        case e2eLoginWithInjectedTokenTap
         case e2eAuthenticationStatusResponse(String)
     }
     
@@ -64,7 +73,6 @@ public struct SignUp: Sendable {
     
     @Dependency(\.authClient) var authClient
     @Dependency(\.continuousClock) var clock
-    @Dependency(\.apiClient) var apiClient
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -83,90 +91,32 @@ public struct SignUp: Sendable {
                 state.e2eAuthenticationStatus = status
                 return .none
 
-            case .e2eSeedParticipantWithDataTap:
+            case .e2eLoginWithInjectedTokenTap:
                 return .run { send in
                     do {
-                        let token = try await apiClient.seedParticipantWithData()
-                        try await authClient.signInWithCustomToken(token.token)
-                        await send(.e2eAuthenticationStatusResponse("Seed participant with data succeeded"))
-                    } catch {
-                        await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
-                    }
-                }
+                        guard let token = E2EAuthenticationConfig.tokenFromLaunchArguments() else {
+                            await send(.e2eAuthenticationStatusResponse("No injected E2E token found"))
+                            return
+                        }
 
-            case .e2eSeedParticipantEmptyTap:
-                return .run { send in
-                    do {
-                        let token = try await apiClient.seedParticipantEmpty()
-                        try await authClient.signInWithCustomToken(token.token)
-                        await send(.e2eAuthenticationStatusResponse("Seed participant empty succeeded"))
-                    } catch {
-                        await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
-                    }
-                }
-
-            case .e2eSeedManagerWithDataTap:
-                return .run { send in
-                    do {
-                        let token = try await apiClient.seedManagerWithData()
-                        try await authClient.signInWithCustomToken(token.token)
-                        await send(.e2eAuthenticationStatusResponse("Seed manager with data succeeded"))
-                    } catch {
-                        await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
-                    }
-                }
-
-            case .e2eSeedManagerEmptyTap:
-                return .run { send in
-                    do {
-                        let token = try await apiClient.seedManagerEmpty()
-                        try await authClient.signInWithCustomToken(token.token)
-                        await send(.e2eAuthenticationStatusResponse("Seed manager empty succeeded"))
-                    } catch {
-                        await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
-                    }
-                }
-
-            case .e2eSeedEmptyAccountTap:
-                return .run { send in
-                    do {
-                        let token = try await apiClient.seedEmptyAccount()
-                        try await authClient.signInWithCustomToken(token.token)
-                        await send(.e2eAuthenticationStatusResponse("Seed empty account succeeded"))
-                    } catch {
-                        await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
-                    }
-                }
-
-            case .e2eLoginWithIdTap(let loginId):
-                return .run { send in
-                    do {
-                        let token = try await apiClient.login(loginId)
-                        try await authClient.signInWithCustomToken(token.token)
-                        await send(.e2eAuthenticationStatusResponse("E2E login endpoint with id \(loginId) succeeded"))
-                    } catch {
-                        await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
-                    }
-                }
-
-            case .e2eLoginWithPresetTap(let presetLoginId):
-                return .run { send in
-                    do {
-                        let token = try await apiClient.login(presetLoginId)
-                        try await authClient.signInWithCustomToken(token.token)
-                        await send(.e2eAuthenticationStatusResponse("E2E login endpoint with preset \(presetLoginId) succeeded"))
+                        try await authClient.signInWithCustomToken(token)
+                        await send(.e2eAuthenticationStatusResponse("E2E injected token login succeeded"))
                     } catch {
                         await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
                     }
                 }
                 
             case .iconTenTimesTap:
-                return .run { _ in
+                return .run { send in
+                    guard let token = E2EAuthenticationConfig.tokenFromLaunchArguments() else {
+                        Logger.debug("No injected E2E token found")
+                        return
+                    }
+
                     do {
-                        let token = try await apiClient.login("mock_id")
-                        try await authClient.signInWithCustomToken(token.token)
+                        try await authClient.signInWithCustomToken(token)
                     } catch {
-                        Logger.debug(error.localizedDescription)
+                        await send(.presentError(error))
                     }
                 }
                 

@@ -1,0 +1,27 @@
+# Debug auth smoke flow (localhost):
+# - Reset is handled by scripts/e2e
+# - Seed manager-empty through scripts/e2e-admin
+# - Login through the debug E2E authentication sheet with the injected token
+# - Verify the manager Activity tab becomes visible
+
+appId: dk.nicolaidam.letsgrow
+---
+- launchApp:
+    clearState: true
+    clearKeychain: true
+    arguments:
+      E2E_ENABLE_AUTO_LOGIN: "0"
+      E2E_ENABLE_TEST_LOGIN: "1"
+      E2E_CUSTOM_TOKEN: "${E2E_CUSTOM_TOKEN}"
+
+- tapOn:
+    id: "sign_up_logo"
+
+- tapOn:
+    id: "e2e_login_with_injected_token"
+
+- extendedWaitUntil:
+    visible: "Aktiviteter"
+    timeout: 30000
+
+- takeScreenshot: debug-auth-seed-manager

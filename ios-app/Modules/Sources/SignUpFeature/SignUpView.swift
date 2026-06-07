@@ -139,52 +139,15 @@ private extension SignUpView {
 #if DEBUG
 private struct E2EAuthenticationDebugView: View {
     let store: StoreOf<SignUp>
-    @State private var loginId: String = ""
-    @State private var selectedPresetLoginId: String = "mock-firebase-only-empty"
-
-    private let presetLoginIds: [String] = [
-        "mock-firebase-only-empty",
-        "mock-manager-empty",
-        "mock-manager-with-data",
-        "mock-participant-empty",
-        "mock-participant-with-data"
-    ]
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Seed users") {
-                    Button("Seed participant with data") {
-                        store.send(.e2eSeedParticipantWithDataTap)
-                    }
-                    Button("Seed participant empty") {
-                        store.send(.e2eSeedParticipantEmptyTap)
-                    }
-                    Button("Seed manager with data") {
-                        store.send(.e2eSeedManagerWithDataTap)
-                    }
-                    Button("Seed manager empty") {
-                        store.send(.e2eSeedManagerEmptyTap)
-                    }
-                    .accessibilityIdentifier("e2e_seed_manager_empty")
-                    Button("Seed empty account") {
-                        store.send(.e2eSeedEmptyAccountTap)
-                    }
-                }
                 Section("E2E login") {
-                    TextField("E2E login id", text: $loginId)
-                        .textFieldStyle(.roundedBorder)
-                    Button("E2E login endpoint (/admin/login) with id") {
-                        store.send(.e2eLoginWithIdTap(loginId))
+                    Button("Login with injected E2E token") {
+                        store.send(.e2eLoginWithInjectedTokenTap)
                     }
-                    Picker("Preset login id", selection: $selectedPresetLoginId) {
-                        ForEach(presetLoginIds, id: \.self) { presetId in
-                            Text(presetId).tag(presetId)
-                        }
-                    }
-                    Button("E2E login endpoint (/admin/login) with preset") {
-                        store.send(.e2eLoginWithPresetTap(selectedPresetLoginId))
-                    }
+                    .accessibilityIdentifier("e2e_login_with_injected_token")
                 }
                 if let status = store.e2eAuthenticationStatus {
                     Section("Status") {

@@ -27,13 +27,6 @@ public extension APIClient {
             markEventAsSeen: makeMarkEventAsSeen(api: api, sessionCache: sessionCache),
             sendNotification: makeSendNotification(api: api),
             updateRole: makeUpdateRole(api: api),
-            seedParticipantWithData: makeSeedParticipantWithData(api: api),
-            seedParticipantEmpty: makeSeedParticipantEmpty(api: api),
-            seedManagerWithData: makeSeedManagerWithData(api: api),
-            seedManagerEmpty: makeSeedManagerEmpty(api: api),
-            seedEmptyAccount: makeSeedEmptyAccount(api: api),
-            resetDatabase: makeResetDatabase(api: api, sessionCache: sessionCache),
-            login: makeLogin(api: api),
             getBootstrapUpdate: makeGetBootstrapUpdate(api: api, sessionCache: sessionCache),
             markNotificationHistoryAsSeen: makeMarkNotificationHistoryAsSeen(api: api, sessionCache: sessionCache)
         )

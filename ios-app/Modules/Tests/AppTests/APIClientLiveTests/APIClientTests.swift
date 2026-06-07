@@ -61,7 +61,6 @@ struct APIClientLiveTests {
     func `Account related generated inputs are forwarded correctly`() async throws {
         let fcmInput = LockIsolated<Operations.LinkFCMTokenToAccount.Input?>(nil)
         let roleInput = LockIsolated<Operations.UpdateRole.Input?>(nil)
-        let loginInput = LockIsolated<Operations.Login.Input?>(nil)
         let client = Self.makeClient(
             api: MockAPI(
                 linkFCMTokenToAccountHandler: { request in
@@ -71,26 +70,12 @@ struct APIClientLiveTests {
                 updateRoleHandler: { request in
                     roleInput.setValue(request)
                     return .ok
-                },
-                loginHandler: { request in
-                    loginInput.setValue(request)
-                    return .ok(
-                        .init(
-                            body: .json(
-                                .init(
-                                    firebaseResponse: .init(idToken: "id", refreshToken: "refresh", expiresIn: "3600"),
-                                    token: "mock-token"
-                                )
-                            )
-                        )
-                    )
                 }
             )
         )
 
         try await client.linkFCMTokenToAccount("fcm-123")
         try await client.updateAccountRole(.manager)
-        let token = try await client.login("mock_id")
 
         guard let capturedFCMInput = fcmInput.value, case .json(let fcmBody) = capturedFCMInput.body else {
             Issue.record("Expected linkFCMTokenToAccount JSON body")
@@ -100,15 +85,9 @@ struct APIClientLiveTests {
             Issue.record("Expected updateRole JSON body")
             return
         }
-        guard let capturedLoginInput = loginInput.value, case .json(let loginBody) = capturedLoginInput.body else {
-            Issue.record("Expected login JSON body")
-            return
-        }
 
         #expect(fcmBody.fcmToken == "fcm-123")
         #expect(roleBody.role == "Manager")
-        #expect(loginBody.id == "mock_id")
-        #expect(token.token == "mock-token")
     }
 
     @Test

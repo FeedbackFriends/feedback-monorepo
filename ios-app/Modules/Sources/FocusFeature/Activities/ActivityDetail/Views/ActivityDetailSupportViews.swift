@@ -35,44 +35,18 @@ struct MeetingQualityCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if points.isEmpty {
-                emptyState
-            } else {
-                MeetingQualityLineChartView(
-                    points: points,
-                    onPointTap: { point in
-                        guard let event = activity.events.first(where: { $0.id == point.eventId }) else { return }
-                        onEventTap(event)
-                    }
-                )
-            }
+            MeetingQualityLineChartView(
+                points: points,
+                onPointTap: { point in
+                    guard let event = activity.events.first(where: { $0.id == point.eventId }) else { return }
+                    onEventTap(event)
+                }
+            )
         }
         .padding(15)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         .accessibilityIdentifier("activity_detail_meeting_quality_card")
-    }
-
-    private var emptyState: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Ingen feedbackgraf endnu")
-                .rowTitleTextStyle()
-
-            Text("Når sessioner har rating-feedback, vises udviklingen her.")
-                .supportingTextStyle()
-                .foregroundStyle(Color.themeTextSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Button {
-                showHowItWorks()
-            } label: {
-                Label("Fra kalender til feedback", systemImage: "questionmark.circle")
-            }
-            .buttonStyle(SecondaryTextButtonStyle())
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeBackground, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
     }
 }
 

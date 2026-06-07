@@ -6,10 +6,15 @@ SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 16}"
 SCHEME="Feedback Localhost"
 DERIVED_DATA_PATH="$REPO_ROOT/ios-app/.build/maestro"
 APP_PATH="$DERIVED_DATA_PATH/Build/Products/DebugLocalhost-iphonesimulator/App.app"
-MANAGER_FLOW_PATH="$REPO_ROOT/ios-app/.maestro/manager-create-event-flow.yaml"
+MAESTRO_ROOT="$REPO_ROOT/ios-app/.maestro"
+DEFAULT_FLOW="manager-create-activity-event"
+FLOW_NAME="${1:-$DEFAULT_FLOW}"
 API_BASE_URL="http://localhost:8080"
 API_HEALTH_URL="http://localhost:8090/actuator/health"
 API_HEALTH_TIMEOUT_SECONDS="240"
+MAESTRO_DEBUG_OUTPUT="$DERIVED_DATA_PATH/debug"
+MAESTRO_TEST_OUTPUT="$DERIVED_DATA_PATH/output"
+SKIP_BACKEND_START="${E2E_SKIP_BACKEND_START:-0}"
 
 cleanup() {
   true
@@ -21,6 +26,64 @@ require_cmd() {
     echo "Required command not found: $cmd" >&2
     exit 1
   fi
+}
+
+resolve_flow_paths() {
+  local requested_flow="$1"
+  local candidate
+
+  if [ "$requested_flow" = "all" ]; then
+    for flow_dir in "$MAESTRO_ROOT/flows" "$MAESTRO_ROOT/scenarios"; do
+      if [ -d "$flow_dir" ]; then
+        find "$flow_dir" -maxdepth 1 -name "*.yaml" -type f
+      fi
+    done | sort
+    return 0
+  fi
+
+  if [ -f "$requested_flow" ]; then
+    cd "$(dirname "$requested_flow")"
+    pwd -P | awk -v file="$(basename "$requested_flow")" '{ print $0 "/" file }'
+    return 0
+  fi
+
+  for candidate in \
+    "$MAESTRO_ROOT/flows/$requested_flow" \
+    "$MAESTRO_ROOT/flows/$requested_flow.yaml" \
+    "$MAESTRO_ROOT/scenarios/$requested_flow" \
+    "$MAESTRO_ROOT/scenarios/$requested_flow.yaml" \
+    "$MAESTRO_ROOT/$requested_flow" \
+    "$MAESTRO_ROOT/$requested_flow.yaml"; do
+    if [ -f "$candidate" ]; then
+      echo "$candidate"
+      return 0
+    fi
+  done
+
+  echo "Maestro flow not found: $requested_flow" >&2
+  echo "Expected a file path, a flow name under ios-app/.maestro/flows, a scenario name under ios-app/.maestro/scenarios, or 'all'." >&2
+  return 1
+}
+
+seed_command_for_flow() {
+  local flow_path="$1"
+  local flow_name
+
+  flow_name="$(basename "$flow_path" .yaml)"
+
+  case "$flow_name" in
+    debug-auth-seed-manager)
+      echo "seed-manager-empty"
+      ;;
+    manager-create-activity-event)
+      echo "seed-manager-empty"
+      ;;
+    *)
+      echo "No seed command configured for Maestro flow: $flow_name" >&2
+      echo "Add the flow to seed_command_for_flow in scripts/e2e before running it." >&2
+      return 1
+      ;;
+  esac
 }
 
 wait_for_api_health() {
@@ -75,9 +138,22 @@ require_cmd xcodebuild
 require_cmd xcrun
 require_cmd curl
 require_cmd rg
+require_cmd ruby
+
+FLOW_PATHS=()
+while IFS= read -r flow_path; do
+  FLOW_PATHS+=("$flow_path")
+done < <(resolve_flow_paths "$FLOW_NAME")
+
+if [ "${#FLOW_PATHS[@]}" -eq 0 ]; then
+  echo "No Maestro flows resolved for: $FLOW_NAME" >&2
+  exit 1
+fi
 
 cd "$REPO_ROOT"
-./scripts/run -d
+if [ "$SKIP_BACKEND_START" != "1" ]; then
+  ./scripts/run -d
+fi
 wait_for_api_health "$API_HEALTH_TIMEOUT_SECONDS"
 SIMULATOR_UDID="$(ensure_booted_simulator "$SIMULATOR_NAME")"
 
@@ -97,4 +173,35 @@ if [ ! -d "$APP_PATH" ]; then
 fi
 
 xcrun simctl install "$SIMULATOR_UDID" "$APP_PATH"
-maestro test --device "$SIMULATOR_UDID" "$MANAGER_FLOW_PATH"
+mkdir -p "$MAESTRO_DEBUG_OUTPUT" "$MAESTRO_TEST_OUTPUT"
+
+for flow_path in "${FLOW_PATHS[@]}"; do
+  flow_name="$(basename "$flow_path" .yaml)"
+  seed_command="$(seed_command_for_flow "$flow_path")"
+
+  echo "Resetting E2E backend state for: $flow_name"
+  API_BASE_URL="$API_BASE_URL" "$REPO_ROOT/scripts/e2e-admin" reset
+
+  maestro_env=()
+  if [ -n "$seed_command" ]; then
+    echo "Seeding E2E backend state for: $flow_name ($seed_command)"
+    e2e_token="$(API_BASE_URL="$API_BASE_URL" "$REPO_ROOT/scripts/e2e-admin" "$seed_command")"
+    maestro_env=(-e "E2E_CUSTOM_TOKEN=$e2e_token")
+  fi
+
+  echo "Running Maestro flow: $flow_path"
+  if [ -n "$seed_command" ]; then
+    maestro test \
+      --device "$SIMULATOR_UDID" \
+      --debug-output "$MAESTRO_DEBUG_OUTPUT" \
+      --test-output-dir "$MAESTRO_TEST_OUTPUT" \
+      "${maestro_env[@]}" \
+      "$flow_path"
+  else
+    maestro test \
+      --device "$SIMULATOR_UDID" \
+      --debug-output "$MAESTRO_DEBUG_OUTPUT" \
+      --test-output-dir "$MAESTRO_TEST_OUTPUT" \
+      "$flow_path"
+  fi
+done

@@ -12,11 +12,3 @@ public struct SubmitFeedbackResponseDto: Equatable, Sendable {
         self.event = event
     }
 }
-
-public struct MockTokenDto: Equatable, Sendable {
-    public let token: String
-
-    public init(token: String) {
-        self.token = token
-    }
-}

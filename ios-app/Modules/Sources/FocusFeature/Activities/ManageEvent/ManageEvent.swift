@@ -128,9 +128,9 @@ public struct ManageEvent: Sendable {
         var navigationTitle: String {
             switch mode {
             case .create:
-                "Ny enkelt session"
+                "Ny session"
             case .edit:
-                "Rediger enkelt session"
+                "Rediger session"
             }
         }
 

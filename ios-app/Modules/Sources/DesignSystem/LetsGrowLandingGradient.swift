@@ -61,8 +61,8 @@ public struct LetsGrowLandingGradient: View {
             ]
         default:
             return [
-                Color(hex: 0xF0F3FE), // web: hsl(228 97% 97%)
-                Color(hex: 0xF9FAFC)  // web: hsl(210 38% 98.4%)
+                Color(hex: 0xE8ECFA), // web: hsl(228 97% 97%)
+                Color(hex: 0xF2F5F9)  // web: hsl(210 38% 98.4%)
             ]
         }
     }
@@ -82,7 +82,7 @@ public struct LetsGrowLandingGradient: View {
     private var lilacBlobColor: Color {
         colorScheme == .dark
             ? Color(hex: 0x1A1024).opacity(0.92)
-            : Color(hex: 0x9D60E6).opacity(0.12)
+            : Color(hex: 0x9D60E6).opacity(0.18)
     }
 
     private var goldBlobColor: Color {
@@ -94,7 +94,7 @@ public struct LetsGrowLandingGradient: View {
     private var greenBlobColor: Color {
         colorScheme == .dark
             ? Color(hex: 0x071815).opacity(0.92)
-            : Color(hex: 0x27AB85).opacity(0.13)
+            : Color(hex: 0x27AB85).opacity(0.14)
     }
 
     private var skyBlobColor: Color {

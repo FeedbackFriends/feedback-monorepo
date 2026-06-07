@@ -22,13 +22,6 @@ extension APIClient: TestDependencyKey {
         markEventAsSeen: { _ in },
         sendNotification: { _ in },
         updateRole: { _ in },
-        seedParticipantWithData: { .init(token: "test-seed-participant-with-data") },
-        seedParticipantEmpty: { .init(token: "test-seed-participant-empty") },
-        seedManagerWithData: { .init(token: "test-seed-manager-with-data") },
-        seedManagerEmpty: { .init(token: "test-seed-manager-empty") },
-        seedEmptyAccount: { .init(token: "test-seed-empty-account") },
-        resetDatabase: {},
-        login: { _ in .init(token: "test-login") },
         getBootstrapUpdate: { .mock() },
         markNotificationHistoryAsSeen: { }
     )

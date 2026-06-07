@@ -31,7 +31,7 @@ private extension EnterCodeView {
                     Spacer()
                     Text("Indtast PIN-kode")
                         .foregroundStyle(Color.themeTextSecondary)
-                        .titleTextStyle()
+                        .rowTitleTextStyle()
                     TextField("", text: $store.pinCodeInput.value)
                         .rowTitleTextStyle()
                         .padding()

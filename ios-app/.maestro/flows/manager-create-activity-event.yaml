@@ -1,0 +1,71 @@
+# Manager Activity/Event flow (localhost):
+# - Seed manager-empty via scripts/e2e-admin
+# - Login via E2E auto-login launch arguments
+# - Create Activity: "AIW1"
+# - Create one Event from the Activity setup
+# - Open invite sheet and copy invite link
+
+appId: dk.nicolaidam.letsgrow
+---
+- launchApp:
+    clearState: true
+    clearKeychain: true
+    arguments:
+      E2E_ENABLE_AUTO_LOGIN: "1"
+      E2E_CUSTOM_TOKEN: "${E2E_CUSTOM_TOKEN}"
+
+# Wait until logged-in manager UI is visible.
+- extendedWaitUntil:
+    visible: "Aktiviteter"
+    timeout: 30000
+
+# Ensure the Activity tab is active.
+- tapOn: "Aktiviteter"
+
+# Open Create Activity.
+- extendedWaitUntil:
+    visible:
+      id: "my_activity_add_button"
+    timeout: 10000
+- tapOn:
+    id: "my_activity_add_button"
+
+- extendedWaitUntil:
+    visible: "Opret aktivitet"
+    timeout: 10000
+
+# Create Activity named "AIW1". The form preselects the standard meeting template.
+- tapOn:
+    id: "create_activity_title_input"
+- inputText: "AIW1"
+- pressKey: Enter
+- tapOn:
+    id: "create_activity_submit"
+
+# Open the Activity and create a new Event.
+- extendedWaitUntil:
+    visible: "AIW1"
+    timeout: 20000
+- tapOn: "AIW1"
+- extendedWaitUntil:
+    visible: "AIW1"
+    timeout: 10000
+- tapOn:
+    id: "activity_detail_actions_menu_button"
+- tapOn: "Opret session"
+
+- extendedWaitUntil:
+    visible: "Ny enkelt session"
+    timeout: 10000
+
+# Create Event from the existing Activity setup.
+- tapOn:
+    id: "event_form_save_button"
+
+# The app presents the invite sheet automatically after creating an Event.
+- extendedWaitUntil:
+    visible: "Inviter"
+    timeout: 20000
+- tapOn:
+    id: "invite_copy_link"
+- takeScreenshot: manager-created-event-invite

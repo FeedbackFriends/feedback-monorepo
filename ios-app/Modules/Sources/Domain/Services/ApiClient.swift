@@ -40,13 +40,6 @@ public struct APIClient: Sendable {
     public var sendNotification: @Sendable (_ input: SendNotificationInput) async throws -> Void
     @DependencyEndpoint
     public var updateRole: @Sendable (_ role: Role) async throws -> Void
-    public var seedParticipantWithData: @Sendable () async throws -> MockTokenDto
-    public var seedParticipantEmpty: @Sendable () async throws -> MockTokenDto
-    public var seedManagerWithData: @Sendable () async throws -> MockTokenDto
-    public var seedManagerEmpty: @Sendable () async throws -> MockTokenDto
-    public var seedEmptyAccount: @Sendable () async throws -> MockTokenDto
-    public var resetDatabase: @Sendable () async throws -> Void
-    public var login: @Sendable (_ id: String) async throws -> MockTokenDto
     public var getBootstrapUpdate: @Sendable () async throws -> Bootstrap?
     public var markNotificationHistoryAsSeen: @Sendable () async throws -> Void
 }
