@@ -4,7 +4,7 @@ import Network
 import SignUpFeature
 import DesignSystem
 import Domain
-import FocusFeature
+import ActivityFeature
 import Logger
 import Foundation
 

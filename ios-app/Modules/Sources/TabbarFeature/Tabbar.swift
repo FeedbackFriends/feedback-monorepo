@@ -1,4 +1,4 @@
-import FocusFeature
+import ActivityFeature
 import EnterCodeFeature
 import SwiftUI
 import Foundation

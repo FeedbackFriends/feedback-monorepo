@@ -1,4 +1,4 @@
-import FocusFeature
+import ActivityFeature
 import MoreFeature
 import DesignSystem
 import SwiftUI

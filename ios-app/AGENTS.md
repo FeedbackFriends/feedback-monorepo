@@ -18,7 +18,7 @@ Keep work in this subtree focused on the iOS app. If the API contract changes, r
 - `App/`: app entry point, app delegate, configuration, and composition root.
 - `Modules/Sources/`: feature modules plus shared layers.
 - `Modules/Sources/RootFeature/`: root navigation and authenticated app composition.
-- `Modules/Sources/TabbarFeature/`, `FocusFeature/`, `FeedbackFlowFeature/`, `EnterCodeFeature/`, `MoreFeature/`, `SignUpFeature/`: user-facing feature modules.
+- `Modules/Sources/TabbarFeature/`, `ActivityFeature/`, `FeedbackFlowFeature/`, `EnterCodeFeature/`, `MoreFeature/`, `SignUpFeature/`: user-facing feature modules.
 - `Modules/Sources/Domain/`: domain models, service interfaces, errors, and dependency boundaries.
 - `Modules/Sources/Adapters/`: live implementations for API, auth, notification, logging, and system integrations.
 - `Modules/Sources/DesignSystem/`: theme, styles, reusable views, resources, and view modifiers.
