@@ -36,7 +36,7 @@ public struct SignUpView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.large)
-            .background(Color.themeBackground)
+            .background(LetsGrowLandingGradient())
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
             #if DEBUG
             .sheet(
@@ -86,7 +86,7 @@ private extension SignUpView {
                 .padding(.leading, 24)
             }
             .buttonStyle(LargeButtonStyle(backgroundColor: Color.themeText, foregroundColor: Color.themeBackground))
-            .disabled(store.googleLoginInFlight || store.appleLoginInFlight || store.anonymousLoginInFlight)
+            .disabled(store.googleLoginInFlight || store.appleLoginInFlight)
             Button {
                 store.send(.signUpWithGoogleButtonTap)
             } label: {
@@ -113,25 +113,12 @@ private extension SignUpView {
                     backgroundColor: Color.themeSurface
                 )
             )
-            .disabled(store.googleLoginInFlight || store.appleLoginInFlight || store.anonymousLoginInFlight)
+            .disabled(store.googleLoginInFlight || store.appleLoginInFlight)
             .lightShadow()
-            Button {
-                store.send(.skipButtonTap)
-            } label: {
-                HStack(spacing: 8) {
-                    if store.anonymousLoginInFlight {
-                        ProgressView()
-                    }
-                    Text("Svar med PIN")
-                }
-            }
-            .buttonStyle(PrimaryTextButtonStyle())
-            .disabled(store.googleLoginInFlight || store.appleLoginInFlight || store.anonymousLoginInFlight)
-            .padding(.bottom, 16)
         }
         .animation(.bouncy, value: store.googleLoginInFlight)
         .animation(.bouncy, value: store.appleLoginInFlight)
-        .animation(.bouncy, value: store.anonymousLoginInFlight)
+        
         .padding(.all, Theme.padding)
     }
 }

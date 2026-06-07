@@ -205,6 +205,7 @@ let package = Package(
                 "MoreFeature",
                 "Domain",
                 "Utility",
+                "SignUpFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
             ]
         ),

@@ -6,6 +6,7 @@ import ComposableArchitecture
 import FeedbackFlowFeature
 import Utility
 import EnterCodeFeature
+import SignUpFeature
 
 public struct TabbarView: View {
     
@@ -86,19 +87,29 @@ private extension TabbarView {
             }
             .tag(Tab.feedback)
             
-            if isManager {
-                ActivityListView(
-                    store: store.scope(
-                        state: \.managerEvents,
-                        action: \.managerEvents
+            Group {
+                if isManager {
+                    ActivityListView(
+                        store: store.scope(
+                            state: \.managerEvents,
+                            action: \.managerEvents
+                        )
                     )
-                )
-                    .tabItem {
-                        Label("Aktiviteter", systemImage: "calendar")
-                    }
-                .badge(managerUnseenResponses)
-                .tag(Tab.activities)
+                    
+                } else {
+                    SignUpView(
+                        store: store.scope(
+                            state: \.signUp,
+                            action: \.signUp
+                        )
+                    )
+                }
             }
+            .tabItem {
+                Label("Aktiviteter", systemImage: "calendar")
+            }
+            .badge(managerUnseenResponses)
+            .tag(Tab.activities)
             
             NavigationStack {
                 List {

@@ -7,6 +7,7 @@ import DesignSystem
 import Domain
 import ComposableArchitecture
 import Utility
+import SignUpFeature
 
 public enum Tab: Hashable, Sendable {
     case feedback, activities, more
@@ -23,7 +24,8 @@ public extension Tabbar.State {
         initialiseFeedback: InitialiseFeedback.State,
         managerEvents: ActivityList.State,
         deleteAccount: DeleteAccount.State,
-        destination: Tabbar.Destination.State? = nil
+        destination: Tabbar.Destination.State? = nil,
+        signUp: SignUp.State
     ) {
         self._bootstrap = bootstrap
         self.tabbarLifecyle = tabbarLifecyle
@@ -35,6 +37,7 @@ public extension Tabbar.State {
         self.managerEvents = managerEvents
         self.deleteAccount = deleteAccount
         self.destination = destination
+        self.signUp = signUp
     }
     
     init(
@@ -52,6 +55,7 @@ public extension Tabbar.State {
         self.managerEvents = .init(bootstrap: bootstrap)
         self.tabbarLifecyle = .init(bootstrap: bootstrap)
         self.destination = destination
+        self.signUp = .init()
     }
 }
 
@@ -72,6 +76,7 @@ public struct Tabbar: Sendable {
         
         @Shared public var bootstrap: Bootstrap
         var tabbarLifecyle: TabbarLifecycle.State
+        var signUp: SignUp.State
         var enterCode: EnterCode.State
         var moreSection: MoreSection.State
         var accountSection: AccountSection.State
@@ -94,6 +99,7 @@ public struct Tabbar: Sendable {
         case signUpButtonTap
         case tabbarLifecyle(TabbarLifecycle.Action)
         case deleteAccount(DeleteAccount.Action)
+        case signUp(SignUp.Action)
         case dismissFeedbackFlow
         public enum Toolbar: Equatable {
             case joinEventButtonTap
@@ -129,8 +135,13 @@ public struct Tabbar: Sendable {
         Scope(state: \.deleteAccount, action: \.deleteAccount) {
             DeleteAccount()
         }
+        Scope(state: \.signUp, action: \.signUp) {
+            SignUp()
+        }
         Reduce { state, action in
             switch action {
+            case .signUp:
+                return .none
             case .dismissFeedbackFlow:
                 state.initialiseFeedback.destination = nil
                 return .none

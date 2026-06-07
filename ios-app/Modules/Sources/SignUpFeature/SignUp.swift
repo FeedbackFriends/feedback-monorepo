@@ -33,21 +33,18 @@ public struct SignUp: Sendable {
         @Presents public var destination: Destination.State?
         var googleLoginInFlight: Bool
         var appleLoginInFlight: Bool
-        var anonymousLoginInFlight: Bool
         var e2eAuthenticationSheetPresented: Bool
         var e2eAuthenticationStatus: String?
         public init(
             destination: Destination.State? = nil,
             googleLoginInFlight: Bool = false,
             appleLoginInFlight: Bool = false,
-            anonymousLoginInFlight: Bool = false,
             e2eAuthenticationSheetPresented: Bool = false,
             e2eAuthenticationStatus: String? = nil
         ) {
             self.destination = destination
             self.googleLoginInFlight = googleLoginInFlight
             self.appleLoginInFlight = appleLoginInFlight
-            self.anonymousLoginInFlight = anonymousLoginInFlight
             self.e2eAuthenticationSheetPresented = e2eAuthenticationSheetPresented
             self.e2eAuthenticationStatus = e2eAuthenticationStatus
         }
@@ -56,7 +53,6 @@ public struct SignUp: Sendable {
     public enum Action: BindableAction {
         case signUpWithAppleButtonTap
         case signUpWithGoogleButtonTap
-        case skipButtonTap
         case destination(PresentationAction<Destination.Action>)
         case binding(BindingAction<State>)
         case presentError(Error)
@@ -123,7 +119,6 @@ public struct SignUp: Sendable {
             case .presentError(let error):
                 state.appleLoginInFlight = false
                 state.googleLoginInFlight = false
-                state.anonymousLoginInFlight = false
                 state.destination = .alert(.init(error: error))
                 return .none
                 
@@ -160,26 +155,14 @@ public struct SignUp: Sendable {
                         await send(.presentError(error))
                     }
                 }
-            case .skipButtonTap:
-                state.anonymousLoginInFlight = true
-                return .run { [authClient = self.authClient] send in
-                    do {
-                        try await authClient.signInAnonymously()
-                        await send(.signUpSuccess)
-                    } catch {
-                        await send(.presentError(error))
-                    }
-                }
             case .loginCancelled:
                 state.appleLoginInFlight = false
                 state.googleLoginInFlight = false
-                state.anonymousLoginInFlight = false
                 return .none
                 
             case .signUpSuccess:
                 state.appleLoginInFlight = false
                 state.googleLoginInFlight = false
-                state.anonymousLoginInFlight = false
                 return .none
             }
         }
