@@ -8,14 +8,14 @@ struct ActivityDetailHowItWorksView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Fra møde til feedback")
+                Text("Fra kalender til feedback")
                     .titleTextStyle()
                     .foregroundStyle(Color.themeText)
 
                 Text(
                     """
-                    Opret møder i det kalenderværktøj, du \
-                    allerede bruger, og inviter blot 'Lets Grow'-mailen. Så oprettes sessionen automatisk her i appen.
+                    Brug det kalenderværktøj, du allerede \
+                    planlægger i, og inviter blot 'Lets Grow'-mailen. Så oprettes sessionen automatisk her i appen.
                     """
                 )
                     .bodyTextStyle()
@@ -57,7 +57,7 @@ struct ActivityDetailHowItWorksView: View {
 
             Divider()
 
-            Text("Du kan også oprette en mødegang manuelt i Mere-menuen, hvis du foretrækker det.")
+            Text("Du kan også oprette en session manuelt i Mere-menuen, hvis du foretrækker det.")
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
                 .fixedSize(horizontal: false, vertical: true)

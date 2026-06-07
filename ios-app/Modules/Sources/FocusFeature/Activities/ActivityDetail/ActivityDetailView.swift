@@ -26,7 +26,7 @@ struct ActivityDetailView: View {
         ) { _ in
             DeleteConfirmationViewSheet(
                 title: "Slet aktivitet",
-                message: "Slet dette faste møde og al feedback?",
+                message: "Slet denne aktivitet og al feedback?",
                 actionButton: {
                     Button("Slet") {
                         store.send(.deleteActivityConfirmButtonTap)

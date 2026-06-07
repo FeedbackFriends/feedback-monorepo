@@ -12,7 +12,7 @@ struct StartFeedbackConfirmationView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Mødet er fundet. Vil du svare nu?")
+                        Text("Sessionen er fundet. Vil du svare nu?")
                     }
                     .bodyTextStyle()
                     VStack(alignment: .center, spacing: 12) {
@@ -30,7 +30,7 @@ struct StartFeedbackConfirmationView: View {
                     }
                 }
                 .padding(.horizontal, 18)
-                .navigationTitle("Møde fundet")
+                .navigationTitle("Session fundet")
                 .navigationBarTitleDisplayMode(.large)
                 .foregroundStyle(Color.themeText)
             }

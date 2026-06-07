@@ -79,10 +79,10 @@ struct MeetingQualityCardView: View {
 
     private var emptyState: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Ingen mødekvalitet endnu")
+            Text("Ingen feedback over tid endnu")
                 .rowTitleTextStyle()
 
-            Text("Når en mødegang har rating-feedback, vises gennemsnittet her.")
+            Text("Når en session har rating-feedback, vises gennemsnittet her.")
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -113,7 +113,7 @@ struct MeetingQualityCardView: View {
             Button {
                 showHowItWorks()
             } label: {
-                Label("Fra møde til feedback", systemImage: "questionmark.circle")
+                Label("Fra kalender til feedback", systemImage: "questionmark.circle")
             }
             .buttonStyle(SecondaryTextButtonStyle())
         }
@@ -124,9 +124,9 @@ struct MeetingQualityCardView: View {
         case 0:
             return "Afventer rating-feedback"
         case 1:
-            return "Seneste mødegang"
+            return "Seneste session"
         default:
-            return "\(points.count) mødegange med rating"
+            return "\(points.count) sessioner med rating"
         }
     }
 }
@@ -140,9 +140,9 @@ struct MeetingQualityLineChartView: View {
             ForEach(points) { point in
                 if points.count > 1 {
                     AreaMark(
-                        x: .value("Mødegang", xValue(for: point)),
+                        x: .value("Session", xValue(for: point)),
                         yStart: .value("Bund", 0),
-                        yEnd: .value("Mødekvalitet", point.value)
+                        yEnd: .value("Feedbackscore", point.value)
                     )
                     .interpolationMethod(.monotone)
                     .foregroundStyle(
@@ -157,8 +157,8 @@ struct MeetingQualityLineChartView: View {
                     )
 
                     LineMark(
-                        x: .value("Mødegang", xValue(for: point)),
-                        y: .value("Mødekvalitet", point.value)
+                        x: .value("Session", xValue(for: point)),
+                        y: .value("Feedbackscore", point.value)
                     )
                     .interpolationMethod(.monotone)
                     .foregroundStyle(Color.themeChartHighlighted.gradient)
@@ -166,28 +166,28 @@ struct MeetingQualityLineChartView: View {
                 }
 
                 PointMark(
-                    x: .value("Mødegang", xValue(for: point)),
-                    y: .value("Mødekvalitet", point.value)
+                    x: .value("Session", xValue(for: point)),
+                    y: .value("Feedbackscore", point.value)
                 )
                 .foregroundStyle(Color.themeSurface)
                 .symbolSize(point.id == latestPoint?.id ? 116 : 72)
 
                 PointMark(
-                    x: .value("Mødegang", xValue(for: point)),
-                    y: .value("Mødekvalitet", point.value)
+                    x: .value("Session", xValue(for: point)),
+                    y: .value("Feedbackscore", point.value)
                 )
                 .foregroundStyle(Color.themeChartHighlighted.gradient)
                 .symbolSize(point.id == latestPoint?.id ? 72 : 42)
             }
 
             if let selectedPoint {
-                RuleMark(x: .value("Valgt mødegang", xValue(for: selectedPoint)))
+                RuleMark(x: .value("Valgt session", xValue(for: selectedPoint)))
                     .foregroundStyle(Color.themeChartHighlighted.opacity(0.24))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [4, 5]))
 
                 PointMark(
-                    x: .value("Valgt mødegang", xValue(for: selectedPoint)),
-                    y: .value("Mødekvalitet", selectedPoint.value)
+                    x: .value("Valgt session", xValue(for: selectedPoint)),
+                    y: .value("Feedbackscore", selectedPoint.value)
                 )
                 .foregroundStyle(Color.themeChartHighlighted.gradient)
                 .symbolSize(150)
@@ -267,7 +267,7 @@ struct MeetingQualityLineChartView: View {
                 .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         }
         .frame(height: 190)
-        .accessibilityLabel("Mødekvalitet over tid")
+        .accessibilityLabel("Feedback over tid")
         .accessibilityValue(accessibilitySummary)
     }
 
@@ -355,7 +355,7 @@ struct MeetingQualityLineChartView: View {
 
     private var accessibilitySummary: String {
         guard let latestPoint = points.last else {
-            return "Ingen mødegange med rating"
+            return "Ingen sessioner med rating"
         }
 
         return "Seneste score \(String(format: "%.1f", latestPoint.value)) ud af 5"
@@ -398,11 +398,11 @@ extension ActivityTrend {
     var summaryText: String {
         switch direction {
         case .improving:
-            return "Mødekvaliteten stiger sammenlignet med tidligere mødegange."
+            return "Feedbacken stiger sammenlignet med tidligere sessioner."
         case .stable:
-            return "Mødekvaliteten ligger stabilt. Hold øje med næste mødegang."
+            return "Feedbacken ligger stabilt. Hold øje med næste session."
         case .declining:
-            return "Mødekvaliteten falder. Brug feedbacken til at justere formatet."
+            return "Feedbacken falder. Brug svarene til at justere aktiviteten."
         case .insufficientData:
             return "Inviter feedback@letsgrow.dk og saml flere svar for at se udviklingen."
         }

@@ -13,7 +13,7 @@ struct ActivityCardView: View {
                 Spacer()
             }
 
-            Text(activity.events.count == 1 ? "1 mødegang" : "\(activity.events.count) mødegange")
+            Text(activity.events.count == 1 ? "1 session" : "\(activity.events.count) sessioner")
                 .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
                 .padding(.horizontal, 10)

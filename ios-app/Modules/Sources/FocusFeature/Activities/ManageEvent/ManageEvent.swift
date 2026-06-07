@@ -78,7 +78,7 @@ public struct ManageEvent: Sendable {
                 activityId: activity.id,
                 eventId: nil,
                 eventInput: eventInput,
-                successOverlayMessage: "Mødegang oprettet"
+                successOverlayMessage: "Session oprettet"
             )
         }
 
@@ -96,7 +96,7 @@ public struct ManageEvent: Sendable {
                 activityId: activity.id,
                 eventId: event.id,
                 eventInput: eventInput,
-                successOverlayMessage: "Mødegang gemt"
+                successOverlayMessage: "Session gemt"
             )
         }
 
@@ -128,9 +128,9 @@ public struct ManageEvent: Sendable {
         var navigationTitle: String {
             switch mode {
             case .create:
-                "Ny enkelt mødegang"
+                "Ny enkelt session"
             case .edit:
-                "Rediger enkelt mødegang"
+                "Rediger enkelt session"
             }
         }
 

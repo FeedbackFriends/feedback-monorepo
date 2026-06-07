@@ -28,11 +28,11 @@ public struct EventListView: View {
             if todayEvents.isEmpty && comingUpEvents.isEmpty && previousEvents.isEmpty {
                 VStack(alignment: .center, spacing: 14) {
                     VStack(spacing: 6) {
-                        Text("Ingen mødegange endnu")
+                        Text("Ingen sessioner endnu")
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
 
-                        Text("Brug kalenderopsætning til fast feedback. Tilføj kun en enkelt mødegang ved behov.")
+                        Text("Brug kalenderopsætning til fast feedback. Tilføj kun en enkelt session ved behov.")
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                             .multilineTextAlignment(.center)

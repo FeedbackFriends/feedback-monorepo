@@ -119,7 +119,7 @@ private extension ManageEventView {
                     .foregroundStyle(Color.themeText)
                     .fixedSize(horizontal: false, vertical: true)
 
-                Text("Denne mødegang bruger feedbackspørgsmålene fra formatet.")
+                Text("Denne session bruger feedbackspørgsmålene fra aktiviteten.")
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -142,7 +142,7 @@ private extension ManageEventView {
                 .padding(.vertical, 6)
                 .background(Color.themeBackground, in: Capsule())
 
-                Text("Rediger formatet, hvis spørgsmålene skal ændres for kommende mødegange.")
+                Text("Rediger aktiviteten, hvis spørgsmålene skal ændres for kommende sessioner.")
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -153,7 +153,7 @@ private extension ManageEventView {
             Button {
                 store.send(.editActivityButtonTap)
             } label: {
-                Label("Rediger format", systemImage: "pencil")
+                Label("Rediger aktivitet", systemImage: "pencil")
             }
             .buttonStyle(SecondaryTextButtonStyle())
             .accessibilityIdentifier("event_form_edit_activity_button")

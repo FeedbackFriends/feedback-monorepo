@@ -37,7 +37,7 @@ struct ActivityIntroContentView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text(
                 """
-                En 'Aktivitet' er et format, du gentager. Noget, du løbende ønsker at forbedre gennem feedback og \
+                En aktivitet er noget, du gentager. Noget, du løbende ønsker at forbedre gennem feedback og \
                 erfaringer.
 
                 Det kunne være:

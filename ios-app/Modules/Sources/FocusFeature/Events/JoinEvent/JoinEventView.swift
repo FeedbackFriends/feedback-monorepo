@@ -58,7 +58,7 @@ public struct JoinEventView: View {
             }
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
             .successOverlay(
-                message: "Møde fundet",
+                message: "Session fundet",
                 show: $store.showSuccessOverlay
             )
             .toolbar {

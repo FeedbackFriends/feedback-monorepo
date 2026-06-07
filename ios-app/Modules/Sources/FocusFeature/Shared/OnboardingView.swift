@@ -13,19 +13,19 @@ struct OnboardingView: View {
                 OnboardingPage(
                     icon: "leaf.fill",
                     title: "Forbedr aktiviteter",
-                    subtitle: "Indsaml kort feedback efter de møder, dit team allerede holder."
+                    subtitle: "Indsaml kort feedback efter teamets møder, workshops og træning."
                 )
                 .tag(0)
                 OnboardingPage(
                     icon: "bubble.left.and.bubble.right.fill",
                     title: "Stil få gode spørgsmål",
-                    subtitle: "Gør det nemt for deltagerne at svare, mens mødet stadig er friskt."
+                    subtitle: "Gør det nemt for deltagerne at svare, mens oplevelsen stadig er frisk."
                 )
                 .tag(1)
                 OnboardingPage(
                     icon: "chart.line.uptrend.xyaxis",
-                    title: "Følg mødekvaliteten",
-                    subtitle: "Se om det faste møde bliver bedre, står stille eller kræver handling."
+                    title: "Følg feedback over tid",
+                    subtitle: "Se om aktiviteten bliver bedre, står stille eller kræver handling."
                 )
                 .tag(2)
             }
@@ -123,7 +123,7 @@ struct FirstRecurringMeetingOnboardingView: View {
                     dismiss()
                     onComplete()
                 } label: {
-                    Text("Opret mit første faste møde")
+                    Text("Opret min første aktivitet")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)

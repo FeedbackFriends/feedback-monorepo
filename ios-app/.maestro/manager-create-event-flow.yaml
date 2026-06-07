@@ -62,7 +62,7 @@ appId: dk.nicolaidam.letsgrow
     id: "focus_detail_add_session_button"
 
 - extendedWaitUntil:
-    visible: "Ny enkelt mødegang"
+    visible: "Ny enkelt session"
     timeout: 10000
 
 # Create session from the existing focus setup.

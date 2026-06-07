@@ -33,11 +33,11 @@ public struct ActivityDetail: Sendable {
         @Shared var bootstrap: Bootstrap
         
         var navigationTitle: String {
-            activity?.title ?? "Ukendt møde"
+            activity?.title ?? "Ukendt aktivitet"
         }
         var navigationSubTitle: String {
             let count = activity?.events.count ?? 0
-            return count == 1 ? "1 mødegang" : "\(count) mødegange"
+            return count == 1 ? "1 session" : "\(count) sessioner"
         }
 
         public init(

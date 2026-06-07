@@ -35,7 +35,7 @@ extension FeedbackType {
     
     var helpDescription: String {
         switch self {
-        case .emoji: return "Deltageren vælger en emoji. Brug den til hurtige temperaturmålinger efter et møde."
+        case .emoji: return "Deltageren vælger en emoji. Brug den til hurtige temperaturmålinger efter en session."
         case .comment: return "Deltageren skriver et frit svar. Brug den, når du vil forstå årsagen bag feedbacken."
         case .thumpsUpThumpsDown: return "Deltageren vælger tommel op eller ned. Brug den til klare ja/nej-spørgsmål."
         case .opinion: return "Deltageren angiver graden af enighed. Brug den til udsagn som kan vurderes fra uenig til enig."

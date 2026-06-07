@@ -19,7 +19,7 @@ public struct ParticipantEventsView: View {
                 let participantEvents = store.bootstrap.participantEvents
                 if participantEvents.isEmpty {
                     EmptyStateView(
-                        message: "Møder, du deltager i, vises her."
+                        message: "Sessioner, du deltager i, vises her."
                     )
                 } else {
                     let todayMeetings = participantEvents.filter { $0.date.isToday }

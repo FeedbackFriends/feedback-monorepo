@@ -131,7 +131,7 @@ struct QuestionPickerView: View {
                                         .padding(.top, 2)
                                     }
                                 }
-                            Text("Skriv kort og konkret. Gode spørgsmål er nemme at svare på lige efter mødet.")
+                            Text("Skriv kort og konkret. Gode spørgsmål er nemme at svare på lige efter sessionen.")
                                 .supportingTextStyle()
                                 .foregroundStyle(Color.themeTextSecondary)
                         }

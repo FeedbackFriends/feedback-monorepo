@@ -46,7 +46,7 @@ public struct EventDetailFeature: Sendable {
         }
 
         var navigationTitle: String {
-            activity?.title ?? "Mødegang"
+            activity?.title ?? "Session"
         }
 
         var navigationSubTitle: String {

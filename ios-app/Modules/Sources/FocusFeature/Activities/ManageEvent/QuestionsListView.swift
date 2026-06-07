@@ -125,7 +125,7 @@ struct QuestionsListView: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 HStack {
                                     Image.playButton
-                                    Text("Forhåndsvis mødegang")
+                                    Text("Forhåndsvis session")
                                 }
                                 Text("Sådan oplever deltagerne feedbacken.")
                                     .captionTextStyle()

@@ -19,8 +19,8 @@ public struct EventDetailFeatureView: View {
                 )
             } else {
                 EmptyStateView(
-                    title: "Mødegangen er ikke tilgængelig",
-                    message: "Denne mødegang kan ikke længere åbnes."
+                    title: "Sessionen er ikke tilgængelig",
+                    message: "Denne session kan ikke længere åbnes."
                 )
                 .padding(.horizontal, Theme.padding)
             }
@@ -49,7 +49,7 @@ public struct EventDetailFeatureView: View {
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                     .disabled(store.event == nil)
-                    .accessibilityLabel("Rediger mødegang")
+                    .accessibilityLabel("Rediger session")
                     .accessibilityIdentifier("session_detail_edit_button")
 
                     Button(role: .destructive) {
@@ -59,15 +59,15 @@ public struct EventDetailFeatureView: View {
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                     .disabled(store.event == nil)
-                    .accessibilityLabel("Slet mødegang")
+                    .accessibilityLabel("Slet session")
                     .accessibilityIdentifier("session_detail_delete_button")
                 }
             }
         }
         .sheet(isPresented: $store.showDeleteConfirmation) {
             DeleteConfirmationViewSheet(
-                title: "Slet mødegang",
-                message: "Slet denne mødegang og dens feedback?",
+                title: "Slet session",
+                message: "Slet denne session og dens feedback?",
                 actionButton: {
                     Button("Slet") {
                         store.send(.deleteEventConfirmButtonTapped)
@@ -93,7 +93,7 @@ public struct EventDetailFeatureView: View {
             } else {
                 EmptyStateView(
                     title: "Invitation ikke tilgængelig",
-                    message: "Invitationer er ikke tilgængelige for denne mødegang lige nu."
+                    message: "Invitationer er ikke tilgængelige for denne session lige nu."
                 )
                 .padding(.horizontal, Theme.padding)
                 .presentationDetents([.height(350)])

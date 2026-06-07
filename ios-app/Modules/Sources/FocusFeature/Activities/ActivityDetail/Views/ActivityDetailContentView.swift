@@ -93,7 +93,7 @@ struct ActivityDetailContentView: View {
     private func activityOverviewCard(_ activity: Activity) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 10) {
-                SectionHeaderView("Mødedetaljer", horizontalPadding: 0)
+                SectionHeaderView("Aktivitetsdetaljer", horizontalPadding: 0)
 
                 HStack(spacing: 8) {
                     FocusMetricBadge(text: sessionCountText(for: activity.events.count))
@@ -116,10 +116,10 @@ struct ActivityDetailContentView: View {
 
     private var emptyEventsNotice: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Ingen mødegange endnu")
+            Text("Ingen sessioner endnu")
                 .titleTextStyle()
 
-            Text("Når du inviterer LetsGrow til et kalendermøde, vises mødegangen her.")
+            Text("Når du inviterer LetsGrow i kalenderen, vises sessionen her.")
                 .supportingTextStyle()
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -136,13 +136,13 @@ struct ActivityDetailContentView: View {
                 Button {
                     store.send(.showHowItWorksButtonTap)
                 } label: {
-                    Label("Fra møde til feedback", systemImage: "questionmark.circle")
+                    Label("Fra kalender til feedback", systemImage: "questionmark.circle")
                 }
 
                 Button {
                     store.send(.createEventButtonTapped)
                 } label: {
-                    Label("Opret mødegang", systemImage: "plus")
+                    Label("Opret session", systemImage: "plus")
                 }
                 .accessibilityIdentifier("activity_detail_create_session_menu_button")
 
@@ -180,7 +180,7 @@ struct ActivityDetailContentView: View {
 
     private func meetingQualitySection(_ activity: Activity) -> some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("Mødekvalitet")
+            SectionHeaderView("Feedback over tid")
 
             MeetingQualityCardView(activity: activity) {
                 store.send(.showHowItWorksButtonTap)
@@ -234,7 +234,7 @@ struct ActivityDetailContentView: View {
     }
 
     private func sessionCountText(for count: Int) -> String {
-        count == 1 ? "1 mødegang" : "\(count) mødegange"
+        count == 1 ? "1 session" : "\(count) sessioner"
     }
 
     private func questionCountText(for count: Int) -> String {

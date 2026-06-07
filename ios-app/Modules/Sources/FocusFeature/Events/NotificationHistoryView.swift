@@ -22,7 +22,7 @@ public struct NotificationHistoryView: View {
                     ScrollView {
                         EmptyStateView(
                             title: "Intet at vise endnu.",
-                            message: "Når der er nyt om møderne, ser du det her."
+                            message: "Når der er nyt om sessionerne, ser du det her."
                         )
                     }
                     .scrollContentBackground(.hidden)
