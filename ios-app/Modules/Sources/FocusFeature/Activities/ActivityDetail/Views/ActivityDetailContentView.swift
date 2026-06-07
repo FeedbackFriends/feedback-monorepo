@@ -97,10 +97,6 @@ struct ActivityDetailContentView: View {
 
                 HStack(spacing: 8) {
                     FocusMetricBadge(text: sessionCountText(for: activity.events.count))
-
-                    if activity.hasDisplayableTrend {
-                        LegacyTrendBadge(direction: activity.trend.direction)
-                    }
                 }
             }
 

@@ -26,21 +26,13 @@ struct MeetingQualityCardView: View {
             .sorted { $0.date < $1.date }
     }
 
-    private var latestValueText: String? {
-        points.last.map { String(format: "%.1f", $0.value) }
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            header
-
             if points.isEmpty {
                 emptyState
             } else {
                 MeetingQualityLineChartView(points: points)
             }
-
-            footer
         }
         .padding(15)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -48,68 +40,16 @@ struct MeetingQualityCardView: View {
         .accessibilityIdentifier("activity_detail_meeting_quality_card")
     }
 
-    private var header: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 10) {
-            VStack(alignment: .leading, spacing: 4) {
-                if let latestValueText {
-                    Text("\(latestValueText) / 5")
-                        .titleTextStyle()
-                } else {
-                    Text("Ingen score endnu")
-                        .rowTitleTextStyle()
-                }
-
-                Text(latestValueDescription)
-                    .captionTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-            }
-
-            Spacer()
-
-            if activity.hasDisplayableTrend {
-                Label(activity.trend.direction.title, systemImage: activity.trend.direction.symbolName)
-                    .captionTextStyle()
-                    .foregroundStyle(activity.trend.direction.color)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Color.themeBackground, in: Capsule())
-            }
-        }
-    }
-
     private var emptyState: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Ingen feedback over tid endnu")
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Ingen feedbackgraf endnu")
                 .rowTitleTextStyle()
 
-            Text("Når en session har rating-feedback, vises gennemsnittet her.")
+            Text("Når sessioner har rating-feedback, vises udviklingen her.")
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
                 .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeBackground, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-    }
 
-    @ViewBuilder
-    private var footer: some View {
-        if activity.hasDisplayableTrend {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(verbatim: activity.trend.summaryText)
-                    .supportingTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Spacer(minLength: 8)
-
-                if let deltaText = activity.trend.deltaText {
-                    Text(deltaText)
-                        .captionTextStyle()
-                        .foregroundStyle(activity.trend.direction.color)
-                }
-            }
-        } else {
             Button {
                 showHowItWorks()
             } label: {
@@ -117,17 +57,9 @@ struct MeetingQualityCardView: View {
             }
             .buttonStyle(SecondaryTextButtonStyle())
         }
-    }
-
-    private var latestValueDescription: String {
-        switch points.count {
-        case 0:
-            return "Afventer rating-feedback"
-        case 1:
-            return "Seneste session"
-        default:
-            return "\(points.count) sessioner med rating"
-        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.themeBackground, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
     }
 }
 
@@ -372,86 +304,5 @@ struct FocusMetricBadge: View {
             .padding(.vertical, 6)
             .foregroundStyle(Color.themeTextSecondary)
             .background(Color.themeBackground, in: Capsule())
-    }
-}
-
-struct LegacyTrendBadge: View {
-    let direction: ActivityTrend.Direction
-
-    var body: some View {
-        Label(direction.title, systemImage: direction.symbolName)
-            .captionTextStyle()
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .foregroundStyle(direction.color)
-            .background(Color.themeBackground, in: Capsule())
-    }
-}
-
-extension ActivityTrend {
-    var deltaText: String? {
-        guard let delta else { return nil }
-        let sign = delta > 0 ? "+" : ""
-        return "\(sign)\(String(format: "%.1f", delta))"
-    }
-
-    var summaryText: String {
-        switch direction {
-        case .improving:
-            return "Feedbacken stiger sammenlignet med tidligere sessioner."
-        case .stable:
-            return "Feedbacken ligger stabilt. Hold øje med næste session."
-        case .declining:
-            return "Feedbacken falder. Brug svarene til at justere aktiviteten."
-        case .insufficientData:
-            return "Inviter feedback@letsgrow.dk og saml flere svar for at se udviklingen."
-        }
-    }
-}
-
-extension ActivityTrend.Direction {
-    var title: String {
-        switch self {
-        case .improving:
-            return "Bliver bedre"
-        case .stable:
-            return "Stabilt"
-        case .declining:
-            return "Falder"
-        case .insufficientData:
-            return "For lidt data"
-        }
-    }
-
-    var symbolName: String {
-        switch self {
-        case .improving:
-            return "arrow.up.right"
-        case .stable:
-            return "arrow.right"
-        case .declining:
-            return "arrow.down.right"
-        case .insufficientData:
-            return "questionmark"
-        }
-    }
-
-    var color: Color {
-        switch self {
-        case .improving:
-            return Color.themeSuccess
-        case .stable:
-            return Color.themeTextSecondary
-        case .declining:
-            return Color.themeSad
-        case .insufficientData:
-            return Color.themeTextSecondary
-        }
-    }
-}
-
-extension Activity {
-    var hasDisplayableTrend: Bool {
-        trend.direction != .insufficientData
     }
 }
