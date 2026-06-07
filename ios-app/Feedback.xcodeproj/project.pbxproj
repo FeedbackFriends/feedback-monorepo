@@ -87,7 +87,6 @@
 		281A89472E69B7AC0002D56C /* default.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = default.xcconfig; sourceTree = "<group>"; };
 		281A89482E69B7AC0002D56C /* localhost.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = localhost.xcconfig; sourceTree = "<group>"; };
 		281A89492E69B7AC0002D56C /* production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = production.xcconfig; sourceTree = "<group>"; };
-		282268002E6F68F400C03174 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = SOURCE_ROOT; };
 		284ACB252E92FF65008F01D0 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
 		2871CF612F7012940059E0D2 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		2871CF622F7012A40059E0D2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -370,7 +369,6 @@
 				2871CF622F7012A40059E0D2 /* README.md */,
 				2871CF612F7012940059E0D2 /* AGENTS.md */,
 				28A0501E2E78910A00CC7316 /* .swiftlint.yml */,
-				282268002E6F68F400C03174 /* README.md */,
 				287B6F862E68ADC1003A419C /* UnitTests.xctestplan */,
 				28BDE9DB2E918A2C00BFD81D /* CI_scripts */,
 				7A49F5202DD5EDDB00FF5B86 /* Resources */,
