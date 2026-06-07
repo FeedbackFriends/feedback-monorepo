@@ -56,7 +56,7 @@ struct ActivityDetailContentView: View {
             contentStack(groupedSessions: groupedSessions)
         }
         .scrollIndicators(.hidden)
-        .background(LetsGrowLandingGradient().ignoresSafeArea())
+        .background(Color.themeBackground.ignoresSafeArea())
         .lineSpacing(5)
         .foregroundStyle(Color.themeText)
         .navigationTitle(activity.title)
