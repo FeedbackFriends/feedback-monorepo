@@ -100,26 +100,6 @@ jobs:
             nicolaidam/feedback-web:${{ env.VERSION }}
             nicolaidam/feedback-web:prod
 
-      - name: Create and Push Git Tag
-        run: |
-          set -euo pipefail
-
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "${RELEASE_TAG}" -m "Release ${VERSION} (${SOURCE_SHA})"
-          git push origin "${RELEASE_TAG}"
-
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-
-          gh release create "${RELEASE_TAG}" \
-            contracts/openapi/feedback-api.yaml \
-            --generate-notes \
-            --title "Release ${VERSION}"
-
       - name: Trigger Coolify deployment
         env:
           BASE_URL: ${{ secrets.COOLIFY_BASE_URL }}
@@ -140,3 +120,22 @@ jobs:
             --get "$API_URL" \
             -H "Authorization: Bearer ${TOKEN}" \
             --data-urlencode "uuid=${RESOURCE_UUID}"
+      - name: Create and Push Git Tag
+        run: |
+          set -euo pipefail
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${RELEASE_TAG}" -m "Release ${VERSION} (${SOURCE_SHA})"
+          git push origin "${RELEASE_TAG}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          gh release create "${RELEASE_TAG}" \
+            contracts/openapi/feedback-api.yaml \
+            --generate-notes \
+            --title "Release ${VERSION}"
