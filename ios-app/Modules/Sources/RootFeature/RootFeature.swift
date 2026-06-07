@@ -47,7 +47,7 @@ public struct RootFeature: Sendable {
         var isLoading: Bool
         var logout: Logout.State
         public init(
-            destination: Destination.State = .signUp(.init()),
+            destination: Destination.State = .isLoading,
             isLoading: Bool = false,
             logout: Logout.State = .init(),
         ) {
