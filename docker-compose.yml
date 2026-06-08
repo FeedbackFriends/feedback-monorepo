@@ -3,6 +3,7 @@ name: feedback
 services:
   api:
     image: "nicolaidam/feedback-api:prod"
+    pull_policy: always
     platform: "${IMAGE_PLATFORM:?Set IMAGE_PLATFORM to linux/amd64 or linux/arm64}"
     restart: unless-stopped
     environment:
@@ -27,6 +28,7 @@ services:
 
   scheduler:
     image: "nicolaidam/feedback-scheduler:prod"
+    pull_policy: always
     platform: "${IMAGE_PLATFORM:?Set IMAGE_PLATFORM to linux/amd64 or linux/arm64}"
     restart: unless-stopped
     environment:
@@ -53,6 +55,7 @@ services:
 
   web:
     image: "nicolaidam/feedback-web:prod"
+    pull_policy: always
     platform: "${IMAGE_PLATFORM:?Set IMAGE_PLATFORM to linux/amd64 or linux/arm64}"
     restart: unless-stopped
     environment:
