@@ -119,7 +119,7 @@ jobs:
           curl --fail-with-body --silent --show-error \
             --request POST "$API_URL" \
             -H "Authorization: Bearer ${TOKEN}" \
-            --json "$(jq -n --arg uuid "$RESOURCE_UUID" '{uuid: $uuid}')"
+            --url-query "uuid=${RESOURCE_UUID}"
       - name: Create and Push Git Tag
         run: |
           set -euo pipefail
