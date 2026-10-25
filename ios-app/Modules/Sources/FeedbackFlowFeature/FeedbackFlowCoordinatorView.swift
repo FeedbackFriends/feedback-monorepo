@@ -28,11 +28,11 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             ProgressView()
-        } destination: { store in
+        } destination: { questionStore in
             VStack(spacing: 0) {
                 questionView
                     .padding(.top, 20)
-                switch store.case {
+                switch questionStore.case {
                 case let .emoji(store):
                     EmojiFeedbackView(
                         store: store,
@@ -64,11 +64,15 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Afslut") {
-                        self.store.send(.dismissButtonTap)
+                    if store.isPreview {
+                        CloseButtonView { self.store.send(.dismissButtonTap) }
+                    } else {
+                        Button("Afslut") {
+                            self.store.send(.dismissButtonTap)
+                        }
+                        .buttonStyle(SecondaryTextButtonStyle())
+                        .foregroundStyle(Color.themeText)
                     }
-                    .buttonStyle(SecondaryTextButtonStyle())
-                    .foregroundStyle(Color.themeText)
                 }
                 ToolbarItem(placement: .principal) {
                     principalToolbarItem()

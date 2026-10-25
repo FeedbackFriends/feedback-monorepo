@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import Domain
 import Foundation
+import FeedbackFlowFeature
 import Utility
 
 @Reducer
@@ -8,6 +9,11 @@ public struct ManageActivity: Sendable {
     public enum Mode: Equatable, Sendable {
         case create
         case edit
+    }
+
+    enum Step: Hashable {
+        case template
+        case questions
     }
 
     @ObservableState
@@ -19,19 +25,18 @@ public struct ManageActivity: Sendable {
         var description = ""
         var selectedTemplate: FeedbackTemplate?
         var questions: [EventInput.QuestionInput] = []
-        var showQuestionsList = false
-        var previewSession: FocusPreviewSession?
+        var path: [Step] = []
+        var isChoosingTemplate = true
+        var templateQuestions: [EventInput.QuestionInput] = []
+        @Presents var previewSession: FeedbackFlowCoordinator.State?
         var createActivityRequestInFlight = false
-        @Presents var alert: AlertState<Never>?
+        @Presents var alert: AlertState<Action.Alert>?
 
         var sendEmails = false
         var participants: [String] = []
-        var newEmail = ""
 
         public static func create() -> Self {
-            var state = Self(mode: .create)
-            state.selectTemplate(.standardMeeting)
-            return state
+            Self(mode: .create)
         }
 
         public static func edit(activity: Activity) -> Self {
@@ -48,6 +53,8 @@ public struct ManageActivity: Sendable {
                 )
             }
             state.selectedTemplate = FeedbackTemplate.inferred(from: state.questions)
+            state.templateQuestions = state.selectedTemplate?.defaultQuestions ?? []
+            state.isChoosingTemplate = false
             state.sendEmails = !activity.invitedEmails.isEmpty
             state.participants = activity.invitedEmails
             return state
@@ -67,8 +74,33 @@ public struct ManageActivity: Sendable {
             }
         }
 
-        var isCreateDisabled: Bool {
-            title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || selectedTemplate == nil || questions.isEmpty || createActivityRequestInFlight
+        var isTitleMissing: Bool {
+            title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+
+        var hasValidInput: Bool {
+            !isTitleMissing && selectedTemplate != nil && !questions.isEmpty
+                && questions.allSatisfy { !$0.questionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        }
+
+        var isNextDisabled: Bool {
+            guard !createActivityRequestInFlight else { return true }
+            switch path.last {
+            case nil: return isTitleMissing
+            case .template: return selectedTemplate == nil
+            case .questions: return true
+            }
+        }
+
+        var isSubmitDisabled: Bool {
+            !hasValidInput || createActivityRequestInFlight || (mode == .create && path.last != .questions)
+        }
+
+        var hasCustomizedQuestions: Bool {
+            guard questions.count == templateQuestions.count else { return true }
+            return zip(questions, templateQuestions).contains {
+                $0.questionText != $1.questionText || $0.feedbackType != $1.feedbackType
+            }
         }
 
         var questionsSectionTitle: String {
@@ -86,9 +118,9 @@ public struct ManageActivity: Sendable {
         }
 
         var activityInput: ActivityInput? {
-            guard selectedTemplate != nil else { return nil }
+            guard hasValidInput else { return nil }
             return ActivityInput(
-                title: title,
+                title: title.trimmingCharacters(in: .whitespacesAndNewlines),
                 agenda: description.nilIfBlank,
                 questions: questions,
                 runMode: .automatic,
@@ -101,8 +133,10 @@ public struct ManageActivity: Sendable {
         mutating func selectTemplate(_ template: FeedbackTemplate) {
             selectedTemplate = template
             questions = template.defaultQuestions
-            if questions.isEmpty {
-                showQuestionsList = true
+            templateQuestions = questions
+            isChoosingTemplate = false
+            if mode == .edit && questions.isEmpty {
+                path.append(.questions)
             }
         }
     }
@@ -110,12 +144,19 @@ public struct ManageActivity: Sendable {
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case actionButtonTap
+        case nextButtonTap
         case createResponse(Activity)
         case updateResponse(Activity)
         case presentError(Error)
         case templateSelected(FeedbackTemplate)
-        case clearTemplateTapped
-        case alert(PresentationAction<Never>)
+        case changeTemplateTapped
+        case previewRequested(FeedbackFlowCoordinator.State)
+        case previewSession(PresentationAction<FeedbackFlowCoordinator.Action>)
+        case alert(PresentationAction<Alert>)
+
+        public enum Alert: Equatable, Sendable {
+            case replaceTemplate(FeedbackTemplate)
+        }
         case delegate(Delegate)
 
         public enum Delegate: Equatable {
@@ -136,15 +177,58 @@ public struct ManageActivity: Sendable {
                 return .none
 
             case .templateSelected(let template):
+                guard template != state.selectedTemplate else {
+                    state.isChoosingTemplate = false
+                    return .none
+                }
+                if state.hasCustomizedQuestions {
+                    state.alert = AlertState {
+                        TextState("Erstat dine tilpassede spørgsmål?")
+                    } actions: {
+                        ButtonState(role: .destructive, action: .replaceTemplate(template)) {
+                            TextState("Erstat")
+                        }
+                        ButtonState(role: .cancel) { TextState("Annuller") }
+                    } message: {
+                        TextState("Spørgsmålene erstattes med spørgsmålene fra den nye skabelon.")
+                    }
+                } else {
+                    state.selectTemplate(template)
+                }
+                return .none
+
+            case .changeTemplateTapped:
+                state.isChoosingTemplate.toggle()
+                return .none
+
+            case .alert(.presented(.replaceTemplate(let template))):
                 state.selectTemplate(template)
                 return .none
 
-            case .clearTemplateTapped:
-                state.selectedTemplate = nil
-                state.questions = []
+            case .previewRequested(var preview):
+                preview.isPreview = true
+                state.previewSession = preview
+                return .none
+
+            case .previewSession:
+                return .none
+
+            case .nextButtonTap:
+                guard state.mode == .create, !state.isNextDisabled else { return .none }
+                switch state.path.last {
+                case nil:
+                    guard !state.isTitleMissing else { return .none }
+                    state.path.append(.template)
+                case .template:
+                    guard state.selectedTemplate != nil else { return .none }
+                    state.path.append(.questions)
+                case .questions:
+                    return .none
+                }
                 return .none
 
             case .actionButtonTap:
+                guard !state.isSubmitDisabled else { return .none }
                 guard let activityInput = state.activityInput else { return .none }
                 state.createActivityRequestInFlight = true
                 switch state.mode {
@@ -190,5 +274,6 @@ public struct ManageActivity: Sendable {
             }
         }
         .ifLet(\.$alert, action: \.alert)
+        .ifLet(\.$previewSession, action: \.previewSession) { FeedbackFlowCoordinator() }
     }
 }

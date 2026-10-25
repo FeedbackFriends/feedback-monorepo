@@ -19,5 +19,6 @@ struct ActivityDetailSessionListView: View {
         .background(Color.themeBackground.ignoresSafeArea())
         .navigationTitle(store.title)
         .navigationBarTitleDisplayMode(.inline)
+        .modifier(ActivitySheetCloseButtonModifier())
     }
 }

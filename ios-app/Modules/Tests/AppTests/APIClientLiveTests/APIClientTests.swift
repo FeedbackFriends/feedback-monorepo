@@ -703,6 +703,7 @@ private extension APIClientLiveTests {
         .init(
             id: createdActivityId.uuidString,
             title: title,
+            activityEmail: "1234@letsgrow.dk",
             owner: ownerDto(),
             runMode: .manual,
             sendEmails: false,

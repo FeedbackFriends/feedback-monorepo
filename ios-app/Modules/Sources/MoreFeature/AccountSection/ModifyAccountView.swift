@@ -44,6 +44,7 @@ public struct ModifyAccountView: View {
 					}
 					.buttonStyle(PrimaryTextButtonStyle())
 					.isLoading(store.isLoading)
+                    .disabled(store.isLoading)
 				}
 				.sharedBackgroundVisibility(.hidden)
             }

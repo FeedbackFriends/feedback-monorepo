@@ -274,6 +274,7 @@ private extension APIClientCacheMutationTests {
         .init(
             id: id,
             title: title,
+            activityEmail: "1234@letsgrow.dk",
             agenda: "Agenda",
             date: referenceDate,
             pinCode: .init(value: "123456"),

@@ -6,10 +6,12 @@ import Domain
 
 public struct SignUpView: View {
     
+    private let onProfileButtonTap: (() -> Void)?
     @Bindable var store: StoreOf<SignUp>
     
-    public init(store: StoreOf<SignUp>) {
+    public init(store: StoreOf<SignUp>, onProfileButtonTap: (() -> Void)? = nil) {
         self.store = store
+        self.onProfileButtonTap = onProfileButtonTap
     }
     
     public var body: some View {
@@ -35,6 +37,14 @@ public struct SignUpView: View {
                 signUpView
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .toolbar {
+                if let onProfileButtonTap {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Profil", systemImage: "person.crop.circle", action: onProfileButtonTap)
+                            .accessibilityIdentifier("profile_button")
+                    }
+                }
+            }
             .navigationBarTitleDisplayMode(.large)
             .background(LetsGrowLandingGradient())
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))

@@ -1,16 +1,12 @@
 import ActivityFeature
 import EnterCodeFeature
-import SwiftUI
-import Foundation
 import MoreFeature
-import DesignSystem
 import Domain
 import ComposableArchitecture
-import Utility
 import SignUpFeature
 
 public enum Tab: Hashable, Sendable {
-    case feedback, activities, more
+    case home, activities, feedback
 }
 
 public extension Tabbar.State {
@@ -34,7 +30,10 @@ public extension Tabbar.State {
         self.accountSection = accountSection
         self.selectedTab = selectedTab
         self.initialiseFeedback = initialiseFeedback
-        self.managerEvents = managerEvents
+        var overview = managerEvents
+        overview.presentation = .overview
+        self.managerEvents = overview
+        self.activities = .init(bootstrap: bootstrap)
         self.deleteAccount = deleteAccount
         self.destination = destination
         self.signUp = signUp
@@ -42,7 +41,7 @@ public extension Tabbar.State {
     
     init(
         bootstrap: Shared<Bootstrap>,
-        selectedTab: Tab = .activities,
+        selectedTab: Tab = .home,
         destination: Tabbar.Destination.State? = nil,
     ) {
         self._bootstrap = bootstrap
@@ -52,7 +51,8 @@ public extension Tabbar.State {
         self.accountSection = .init(bootstrap: bootstrap)
         self.initialiseFeedback = .init()
         self.deleteAccount = .init()
-        self.managerEvents = .init(bootstrap: bootstrap)
+        self.managerEvents = .init(bootstrap: bootstrap, presentation: .overview)
+        self.activities = .init(bootstrap: bootstrap)
         self.tabbarLifecyle = .init(bootstrap: bootstrap)
         self.destination = destination
         self.signUp = .init()
@@ -81,8 +81,10 @@ public struct Tabbar: Sendable {
         var moreSection: MoreSection.State
         var accountSection: AccountSection.State
         public var selectedTab: Tab
+        var isProfilePresented = false
         var initialiseFeedback: InitialiseFeedback.State
         public var managerEvents: ActivityList.State
+        public var activities: ActivityList.State
         var deleteAccount: DeleteAccount.State
         @Presents var destination: Destination.State?
     }
@@ -93,6 +95,8 @@ public struct Tabbar: Sendable {
         case accountSection(AccountSection.Action)
         case initialiseFeedback(InitialiseFeedback.Action)
         case managerEvents(ActivityList.Action)
+        case activities(ActivityList.Action)
+        case validateSelectedTab
         case destination(PresentationAction<Destination.Action>)
         case toolbar(Toolbar)
         case delegate(Delegate)
@@ -103,6 +107,7 @@ public struct Tabbar: Sendable {
         case dismissFeedbackFlow
         public enum Toolbar: Equatable {
             case joinEventButtonTap
+            case profileButtonTap
         }
         public enum Delegate: Equatable {
             case startFeedback(pinCode: PinCode)
@@ -121,6 +126,9 @@ public struct Tabbar: Sendable {
             EnterCode()
         }
         Scope(state: \.managerEvents, action: \.managerEvents) {
+            ActivityList()
+        }
+        Scope(state: \.activities, action: \.activities) {
             ActivityList()
         }
         Scope(state: \.accountSection, action: \.accountSection) {
@@ -166,9 +174,21 @@ public struct Tabbar: Sendable {
             case .destination:
                 return .none
                 
+            case .validateSelectedTab:
+                if state.bootstrap.role != .manager {
+                    state.managerEvents.path.removeAll()
+                    state.managerEvents.destination = nil
+                    state.activities.path.removeAll()
+                    state.activities.destination = nil
+                    if state.selectedTab == .home || state.selectedTab == .activities {
+                        state.selectedTab = .feedback
+                    }
+                }
+                return .none
+
             case .binding:
                 return .none
-                
+
             case .enterCode(.delegate(.startFeedback(let pinCode))):
                 return .send(.initialiseFeedback(.startFeedback(pinCode: pinCode)))
                 
@@ -185,6 +205,9 @@ public struct Tabbar: Sendable {
                 
             case .toolbar(let toolbarButtonAction):
                 switch toolbarButtonAction {
+                case .profileButtonTap:
+                    state.accountSection.destination = nil
+                    state.isProfilePresented = true
                 case .joinEventButtonTap:
                     state.destination = .joinEvent(.init())
                 }
@@ -202,7 +225,7 @@ public struct Tabbar: Sendable {
             case .delegate:
                 return .none
                 
-            case .managerEvents:
+            case .managerEvents, .activities:
                 return .none
                 
             case .deleteAccount:

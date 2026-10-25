@@ -35,11 +35,11 @@ struct ActivityDetailContentView: View {
     private func contentStack(sessionGrouping: ActivityDetailSessionGrouping) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             if activity.events.isEmpty {
-                ActivityDetailHowItWorksView {
-                    UIPasteboard.general.string = "feedback@letsgrow.dk"
+                ActivityDetailHowItWorksView(activityEmail: activity.activityEmail) {
+                    UIPasteboard.general.string = activity.activityEmail
                 }
             } else {
-                meetingQualitySection(activity)
+                ActivityTrendSectionView(activity: activity) { store.send(.eventTapped($0)) }
 
                 if !sessionGrouping.activeSections.isEmpty {
                     sessionsSection(
@@ -48,6 +48,8 @@ struct ActivityDetailContentView: View {
                         showsAllSessionsButton: sessionGrouping.hasSessionsOutsideActive
                     )
                 }
+
+                ActivityQuestionHistoriesView(activity: activity) { store.send(.eventTapped($0)) }
             }
         }
         .padding()
@@ -57,19 +59,20 @@ struct ActivityDetailContentView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
+            Button("Opret", systemImage: "plus") {
+                store.send(.createEventButtonTapped)
+            }
+            .labelStyle(.titleAndIcon)
+            .accessibilityLabel("Opret session")
+            .accessibilityIdentifier("activity_detail_create_session_button")
+        }
+        ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Button {
                     store.send(.showHowItWorksButtonTap)
                 } label: {
                     Label("Fra kalender til feedback", systemImage: "questionmark.circle")
                 }
-
-                Button {
-                    store.send(.createEventButtonTapped)
-                } label: {
-                    Label("Opret session", systemImage: "plus")
-                }
-                .accessibilityIdentifier("activity_detail_create_session_menu_button")
 
                 Button {
                     store.send(.editActivityButtonTapped)
@@ -108,21 +111,6 @@ struct ActivityDetailContentView: View {
                     }
 
                     return AnyView(seeAllSessionsButton)
-                }
-            )
-        }
-    }
-
-    private func meetingQualitySection(_ activity: Activity) -> some View {
-        VStack(alignment: .leading) {
-            SectionHeaderView("Feedback over tid")
-            MeetingQualityCardView(
-                activity: activity,
-                showHowItWorks: {
-                    store.send(.showHowItWorksButtonTap)
-                },
-                onEventTap: { event in
-                    store.send(.eventTapped(event))
                 }
             )
         }

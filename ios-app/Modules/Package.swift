@@ -65,6 +65,7 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", exact: "1.9.0"),
         .package(
             url: "git@github.com:pointfreeco/swift-snapshot-testing.git",
             exact: "1.18.9"
@@ -83,7 +84,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture.git",
-            exact: "1.23.2"
+            exact: "1.26.0"
         ),
         .package(
             url: "https://github.com/apple/swift-openapi-generator",
@@ -244,6 +245,13 @@ let package = Package(
                 "Domain",
                 "Utility",
                 "Logger"
+            ]
+        ),
+        .testTarget(
+            name: "InsightsTests",
+            dependencies: [
+                "ActivityFeature", "TabbarFeature", "RootFeature", "Adapters", "Domain", "OpenAPI",
+                .product(name: "IssueReportingTestSupport", package: "xctest-dynamic-overlay")
             ]
         ),
         .testTarget(

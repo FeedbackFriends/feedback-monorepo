@@ -21,8 +21,8 @@ public struct TabbarView: View {
         let joinEventStore = $store.scope(state: \.destination?.joinEvent, action: \.destination.joinEvent)
         tabView
             .task {
+                store.send(.validateSelectedTab)
                 await self.store.send(.tabbarLifecyle(.onTask)).finish()
-                resetSelectedTabIfNeeded()
             }
             .onChange(of: scenePhase) { _, newValue in
                 switch newValue {
@@ -37,17 +37,19 @@ public struct TabbarView: View {
                 }
             }
             .onChange(of: store.bootstrap.role) { _, _ in
-                resetSelectedTabIfNeeded()
+                store.send(.validateSelectedTab)
             }
             .sheet(item: joinEventStore) { store in
                 JoinEventView(store: store)
                     .presentationDetents([.height(300)])
             }
+            .sheet(isPresented: $store.isProfilePresented) {
+                profileSheet
+            }
             .animation(.bouncy, value: store.bootstrap)
             .banner(unwrapping: store.tabbarLifecyle.bannerState)
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
             .alert($store.scope(state: \.initialiseFeedback.destination?.alert, action: \.initialiseFeedback.destination.alert))
-            .alert($store.scope(state: \.deleteAccount.destination?.alert, action: \.deleteAccount.destination.alert))
             .fullScreenCover(
                 item: $store.scope(
                     state: \.initialiseFeedback.destination?.feedbackFlowCoordinator,
@@ -78,67 +80,81 @@ private extension TabbarView {
     
     var tabView: some View {
         TabView(selection: $store.selectedTab) {
-            NavigationStack {
-                EnterCodeView(store: store.scope(state: \.enterCode, action: \.enterCode))
-            }
-            .tabItem {
-                Image.letsGrowIconTab
-                Text("Svar")
-            }
-            .tag(Tab.feedback)
-            
-            Group {
+            SwiftUI.Tab("Overblik", systemImage: "house", value: Tab.home) {
                 if isManager {
                     ActivityListView(
-                        store: store.scope(
-                            state: \.managerEvents,
-                            action: \.managerEvents
-                        )
+                        store: store.scope(state: \.managerEvents, action: \.managerEvents),
+                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
                     )
-                    
                 } else {
                     SignUpView(
-                        store: store.scope(
-                            state: \.signUp,
-                            action: \.signUp
-                        )
+                        store: store.scope(state: \.signUp, action: \.signUp),
+                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
                     )
                 }
             }
-            .tabItem {
-                Label("Aktiviteter", systemImage: "calendar")
-            }
             .badge(managerUnseenResponses)
-            .tag(Tab.activities)
-            
-            NavigationStack {
-                List {
-                    MoreSectionView(store: store.scope(state: \.moreSection, action: \.moreSection))
-                        .listRowBackground(
-                            Color.themeSurface
-                        )
-                }
-                .scrollContentBackground(.hidden)
-                .background(LetsGrowLandingGradient())
-                .tint(Color.themeText)
-                .accountSectionDestinations(
-                    store: store.scope(state: \.accountSection, action: \.accountSection),
-                    isDeleteAccountLoading: store.deleteAccount.deleteAccountInFlight
-                )
-                .navigationTitle("Profil")
-                .toolbar {
-                    profileSettingsToolbarItem
+
+            if isManager {
+                SwiftUI.Tab("Aktiviteter", systemImage: "rectangle.stack", value: Tab.activities) {
+                    ActivityListView(
+                        store: store.scope(state: \.activities, action: \.activities),
+                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
+                    )
                 }
             }
-            .tabItem {
-                Image.personCropCircle
-                Text("Profil")
+
+            SwiftUI.Tab(value: Tab.feedback) {
+                NavigationStack {
+                    EnterCodeView(store: store.scope(state: \.enterCode, action: \.enterCode))
+                        .toolbar { profileToolbarItem }
+                }
+            } label: {
+                Image.letsGrowIconTab
+                Text("Giv feedback")
             }
-            .tag(Tab.more)
         }
         .background(LetsGrowLandingGradient())
     }
-    
+
+    var profileSheet: some View {
+        NavigationStack {
+            List {
+                MoreSectionView(store: store.scope(state: \.moreSection, action: \.moreSection))
+                    .listRowBackground(Color.themeSurface)
+            }
+            .scrollContentBackground(.hidden)
+            .background(LetsGrowLandingGradient())
+            .tint(Color.themeText)
+            .accountSectionDestinations(
+                store: store.scope(state: \.accountSection, action: \.accountSection),
+                isDeleteAccountLoading: store.deleteAccount.deleteAccountInFlight
+            )
+            .navigationTitle("Profil")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    CloseButtonView {
+                        store.isProfilePresented = false
+                    }
+                    .accessibilityIdentifier("profile_close_button")
+                }
+                profileSettingsToolbarItem
+            }
+            .alert($store.scope(state: \.deleteAccount.destination?.alert, action: \.deleteAccount.destination.alert))
+        }
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
+    }
+
+    var profileToolbarItem: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button("Profil", systemImage: "person.crop.circle") {
+                store.send(.toolbar(.profileButtonTap))
+            }
+            .accessibilityIdentifier("profile_button")
+        }
+    }
+
     var profileSettingsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
@@ -150,6 +166,8 @@ private extension TabbarView {
                     .frame(width: 16, height: 16)
             }
             .foregroundStyle(Color.themeText)
+            .accessibilityLabel("Indstillinger")
+            .accessibilityIdentifier("profile_settings_button")
         }
     }
 
@@ -157,9 +175,4 @@ private extension TabbarView {
         store.bootstrap.managerUnseenResponses
     }
 
-    func resetSelectedTabIfNeeded() {
-        guard !isManager else { return }
-        guard store.selectedTab == .activities else { return }
-        store.selectedTab = .feedback
-    }
 }

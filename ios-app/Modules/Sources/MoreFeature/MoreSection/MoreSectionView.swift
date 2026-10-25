@@ -91,11 +91,11 @@ public struct MoreSectionView: View {
             ShareLink(item: appStoreReviewUrl) {
                 VStack(spacing: 10) {
                     Text("Inviter flere mødeejere")
+                        .foregroundStyle(Color.themeOnPrimaryAction)
                         .titleTextStyle()
-                        .foregroundStyle(Color.themeOnPrimaryAction)
                     Text("Gør aktiviteter lettere at forbedre")
-                        .bodyTextStyle()
                         .foregroundStyle(Color.themeOnPrimaryAction)
+                        .bodyTextStyle()
                 }
                 .padding(8)
                 .frame(maxWidth: .infinity)

@@ -2,6 +2,7 @@ import DesignSystem
 import SwiftUI
 
 struct ActivityDetailHowItWorksView: View {
+    let activityEmail: String
     let onCopyEmail: () -> Void
     @State private var showCopiedAlert = false
 
@@ -36,7 +37,7 @@ struct ActivityDetailHowItWorksView: View {
                 CalendarIntegrationsView()
 
                 HStack(spacing: 12) {
-                    Text(verbatim: "feedback@letsgrow.dk")
+                    Text(verbatim: activityEmail)
                         .rowTitleTextStyle()
                         .foregroundStyle(Color.themeText)
                         .tint(Color.themeText)
@@ -57,7 +58,7 @@ struct ActivityDetailHowItWorksView: View {
 
             Divider()
 
-            Text("Du kan også oprette en session manuelt i Mere-menuen, hvis du foretrækker det.")
+            Text("Du kan også oprette en session manuelt med Opret øverst til højre.")
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
                 .fixedSize(horizontal: false, vertical: true)

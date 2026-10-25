@@ -18,7 +18,7 @@ public struct SelectUserType: Sendable {
         public init() {}
         var isLoading: Bool = false
         var disableUserTypeSelectionButton: Bool {
-            selectedUserType == nil
+            selectedUserType == nil || isLoading
         }
     }
     
@@ -57,6 +57,7 @@ public struct SelectUserType: Sendable {
                 return .none
                 
             case .createAccountButtonTap:
+                guard !state.disableUserTypeSelectionButton else { return .none }
                 state.isLoading = true
                 return .run { [role = state.selectedUserType, apiClient = self.apiClient] send in
                     do {

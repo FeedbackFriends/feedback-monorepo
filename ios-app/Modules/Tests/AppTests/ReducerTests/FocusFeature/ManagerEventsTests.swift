@@ -16,12 +16,12 @@ struct ManagerEventsTests {
         }
 
         await store.send(.activityTap(activity)) {
-            $0.destination = .activityDetail(
+            $0.path.append(.activityDetail(
                 ActivityDetail.State(
                     activityId: activity.id,
                     bootstrap: bootstrap
                 )
-            )
+            ))
         }
     }
 
@@ -47,13 +47,12 @@ struct ManagerEventsTests {
             $0.$bootstrap.withLock {
                 $0.managerData!.activities.updateOrAppend(createdActivity)
             }
-            $0.destination = .activityDetail(
+            $0.path.append(.activityDetail(
                 ActivityDetail.State(
                     activityId: createdActivity.id,
-                    bootstrap: bootstrap,
-                    showHowItWorks: true
+                    bootstrap: bootstrap
                 )
-            )
+            ))
         }
     }
 }

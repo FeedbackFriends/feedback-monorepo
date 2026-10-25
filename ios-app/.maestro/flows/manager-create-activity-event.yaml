@@ -16,29 +16,38 @@ appId: dk.nicolaidam.letsgrow
 
 # Wait until logged-in manager UI is visible.
 - extendedWaitUntil:
-    visible: "Aktiviteter"
+    visible: "Overblik"
     timeout: 30000
 
-# Ensure the Activity tab is active.
-- tapOn: "Aktiviteter"
+# Open the primary first-activity action on Overblik.
 
 # Open Create Activity.
 - extendedWaitUntil:
     visible:
-      id: "my_activity_add_button"
+      id: "home_create_first_activity"
     timeout: 10000
 - tapOn:
-    id: "my_activity_add_button"
+    id: "home_create_first_activity"
 
 - extendedWaitUntil:
     visible: "Opret aktivitet"
     timeout: 10000
 
-# Create Activity named "AIW1". The form preselects the standard meeting template.
+# Create Activity named "AIW1" and explicitly select a feedback template.
 - tapOn:
     id: "create_activity_title_input"
 - inputText: "AIW1"
 - pressKey: Enter
+- tapOn:
+    id: "create_activity_next"
+- scrollUntilVisible:
+    element:
+      id: "create_activity_template_standardMeeting"
+    direction: DOWN
+- tapOn:
+    id: "create_activity_template_standardMeeting"
+- tapOn:
+    id: "create_activity_next"
 - tapOn:
     id: "create_activity_submit"
 
@@ -51,8 +60,7 @@ appId: dk.nicolaidam.letsgrow
     visible: "AIW1"
     timeout: 10000
 - tapOn:
-    id: "activity_detail_actions_menu_button"
-- tapOn: "Opret session"
+    id: "activity_detail_create_session_button"
 
 - extendedWaitUntil:
     visible: "Ny enkelt session"

@@ -17,6 +17,10 @@ public struct AccountSection: Sendable {
         var accountInfo: AccountInfo {
             bootstrap.accountInfo
         }
+        var canSignOut: Bool {
+            bootstrap.role != nil
+        }
+
         public init(bootstrap: Shared<Bootstrap>) {
             self._bootstrap = bootstrap
         }
@@ -51,6 +55,7 @@ public struct AccountSection: Sendable {
                 return .none
                 
             case .signOutButtonTapped:
+                guard state.canSignOut else { return .none }
                 return .send(.delegate(.navigateToSignUp))
                 
             case .deleteAccountButtonTapped:
@@ -86,9 +91,9 @@ private struct AccountSectionDestinationsModifier: ViewModifier {
             ) { profileSettingsStore in
                 ProfileSettingsView(
                     store: profileSettingsStore,
-                    logoutButtonTap: {
+                    logoutButtonTap: store.canSignOut ? {
                         store.send(.signOutButtonTapped)
-                    },
+                    } : nil,
                     deleteAccountButtonTap: {
                         store.send(.deleteAccountButtonTapped)
                     },

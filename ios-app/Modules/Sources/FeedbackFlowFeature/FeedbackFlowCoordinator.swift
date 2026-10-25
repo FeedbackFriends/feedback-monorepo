@@ -32,6 +32,7 @@ public struct FeedbackFlowCoordinator: Sendable {
         
         @Presents var destination: Destination.State?
         var path: StackState<Path.State>
+        public var isPreview = false
         var submitFeedbackInFlight: Bool
         var presentSuccessOverlay: Bool
         var feedbackItemCompleted: Bool {
@@ -174,6 +175,9 @@ public struct FeedbackFlowCoordinator: Sendable {
                 return .send(.navigateToNextQuestion)
                 
             case .submitButtonTap:
+                if state.isPreview {
+                    return .run { _ in await dismiss() }
+                }
                 state.commentTextfieldFocused = false
                 state.submitFeedbackInFlight = true
                 return .run { [state = state] send in

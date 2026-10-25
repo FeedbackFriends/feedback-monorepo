@@ -259,6 +259,7 @@ public extension Activity {
         return Self.init(
             id: nextDeterministicUUID(),
             title: generateFeedbackEventTitle(),
+            activityEmail: "1234@letsgrow.dk",
             agenda: generateAgenda(),
             date: generateRandomDate(),
             pinCode: generateRandomPin(),
@@ -397,6 +398,7 @@ public extension Activity {
     static let mockEmpty = Self.init(
         id: nextDeterministicUUID(),
         title: "Standup Meeting",
+        activityEmail: "1234@letsgrow.dk",
         agenda: mockAgenda,
         date: .init(timeIntervalSince1970: 0),
         pinCode: PinCode(value: "1234"),

@@ -49,6 +49,7 @@ public struct ModifyAccount: Sendable {
                 return .none
                 
             case .saveButtonTap:
+                guard !state.isLoading else { return .none }
                 state.isLoading = true
                 return .run { [state = state] send in
                     do {

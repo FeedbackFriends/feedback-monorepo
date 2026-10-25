@@ -160,7 +160,7 @@ struct QuestionView: View {
                         Text("Kommentarer")
                             .rowTitleTextStyle()
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        if question.feedbackSummary == nil {
+                        if question.feedback.isEmpty {
                             Text("Ingen kommentarer endnu")
                                 .bodyTextStyle()
                                 .padding(.vertical, 8)

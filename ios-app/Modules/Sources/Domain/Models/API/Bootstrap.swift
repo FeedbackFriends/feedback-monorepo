@@ -310,6 +310,7 @@ public struct ManagerQuestion: Equatable, Hashable, Sendable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+    public let activityQuestionId: UUID?
     public let id: UUID
     public let questionText: String
     public let feedbackType: FeedbackType
@@ -321,8 +322,10 @@ public struct ManagerQuestion: Equatable, Hashable, Sendable {
         questionText: String,
         feedbackType: FeedbackType,
         feedback: [Feedback],
-        feedbackSummary: QuestionFeedbackSummary?
+        feedbackSummary: QuestionFeedbackSummary?,
+        activityQuestionId: UUID? = nil
     ) {
+        self.activityQuestionId = activityQuestionId
         self.id = id
         self.questionText = questionText
         self.feedbackType = feedbackType
@@ -426,6 +429,7 @@ public struct Event: Equatable, Identifiable, Sendable {
 
 public struct Activity: Equatable, Identifiable, Sendable {
     public let id: UUID
+    public let activityEmail: String
     public var title: String
     public var agenda: String?
     public var date: Date
@@ -489,6 +493,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
     public init(
         id: UUID,
         title: String,
+        activityEmail: String,
         agenda: String? = nil,
         date: Date,
         pinCode: PinCode?,
@@ -506,6 +511,7 @@ public struct Activity: Equatable, Identifiable, Sendable {
     ) {
         self.id = id
         self.title = title
+        self.activityEmail = activityEmail
         self.agenda = agenda
         self.date = date
         self.pinCode = pinCode

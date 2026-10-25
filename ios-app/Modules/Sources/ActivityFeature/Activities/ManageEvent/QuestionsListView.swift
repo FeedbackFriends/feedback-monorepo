@@ -6,33 +6,17 @@ import ComposableArchitecture
 
 struct QuestionsListView: View {
     
-    struct PreviewConfiguration {
-        let title: String
-        let agenda: String?
-        let presentFeedbackFlowSession: (FeedbackFlowCoordinator.State) -> Void
-        
-        init(
-            title: String,
-            agenda: String? = nil,
-            presentFeedbackFlowSession: @escaping (FeedbackFlowCoordinator.State) -> Void
-        ) {
-            self.title = title
-            self.agenda = agenda
-            self.presentFeedbackFlowSession = presentFeedbackFlowSession
-        }
-    }
-    
     @Binding var questionsInputs: [EventInput.QuestionInput]
     @State private var presentSelectQuestionSheet: EventInput.QuestionInput?
     @State private var existingQuestionID: EventInput.QuestionInput.ID?
-    let previewConfiguration: PreviewConfiguration?
+    let onPreview: ((FeedbackFlowCoordinator.State) -> Void)?
     
     init(
         questionsInputs: Binding<[EventInput.QuestionInput]>,
-        previewConfiguration: PreviewConfiguration? = nil
+        onPreview: ((FeedbackFlowCoordinator.State) -> Void)? = nil
     ) {
         self._questionsInputs = questionsInputs
-        self.previewConfiguration = previewConfiguration
+        self.onPreview = onPreview
     }
     
     var body: some View {
@@ -95,13 +79,13 @@ struct QuestionsListView: View {
                 }
             }
         )
-        .overlay(
-            alignment: .bottomTrailing,
+        .safeAreaInset(
+            edge: .bottom,
             content: {
                 HStack(spacing: 6) {
-                    if let previewConfiguration {
+                    if let onPreview {
                         Button {
-                            previewConfiguration.presentFeedbackFlowSession(
+                            onPreview(
                                 .initialState(
                                     feedbackSession: .init(
                                         questions: self.questionsInputs.map {
@@ -153,7 +137,8 @@ struct QuestionsListView: View {
                     }
                 }
                 .padding(.horizontal, 24)
-                .padding(.bottom, 24)
+                .padding(.vertical, 12)
+                .background(Color.themeBackground)
             }
         )
     }
@@ -170,10 +155,7 @@ struct QuestionsListView: View {
                     )
                 ]
             ),
-            previewConfiguration: .init(
-                title: "Preview",
-                presentFeedbackFlowSession: { _ in }
-            )
+            onPreview: { _ in }
         )
     }
 }
@@ -182,10 +164,7 @@ struct QuestionsListView: View {
     NavigationStack {
         QuestionsListView(
             questionsInputs: .constant([]),
-            previewConfiguration: .init(
-                title: "Preview",
-                presentFeedbackFlowSession: { _ in }
-            )
+            onPreview: { _ in }
         )
     }
 }

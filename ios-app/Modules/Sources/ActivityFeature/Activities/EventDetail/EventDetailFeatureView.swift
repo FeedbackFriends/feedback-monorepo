@@ -29,6 +29,7 @@ public struct EventDetailFeatureView: View {
         .foregroundStyle(Color.themeText)
         .background(Color.themeBackground)
         .task { await store.send(.onTask).finish() }
+        .modifier(ActivitySheetCloseButtonModifier())
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack {

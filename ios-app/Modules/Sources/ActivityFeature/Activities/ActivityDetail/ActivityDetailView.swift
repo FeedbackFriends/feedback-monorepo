@@ -18,6 +18,7 @@ struct ActivityDetailView: View {
                     )
             }
         }
+        .modifier(ActivitySheetCloseButtonModifier())
         .sheet(
             item: $store.scope(
                 state: \.destination?.showDeleteConfirmation,
@@ -43,10 +44,12 @@ struct ActivityDetailView: View {
                 action: \.destination.showHowItWorks
             )
         ) { _ in
-            ActivityDetailHowItWorksSheetView {
-                UIPasteboard.general.string = "feedback@letsgrow.dk"
+            if let activity = store.activity {
+                ActivityDetailHowItWorksSheetView(activityEmail: activity.activityEmail) {
+                    UIPasteboard.general.string = activity.activityEmail
+                }
+                .presentationDetents([.medium, .large])
             }
-            .presentationDetents([.medium, .large])
         }
     }
 }

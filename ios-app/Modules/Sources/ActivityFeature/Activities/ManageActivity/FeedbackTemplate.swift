@@ -1,6 +1,5 @@
 import Foundation
 import Domain
-import FeedbackFlowFeature
 
 public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
     case standardMeeting
@@ -98,9 +97,4 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
         let text: String
         let type: FeedbackType
     }
-}
-
-struct FocusPreviewSession: Equatable, Sendable, Identifiable {
-    let id = UUID()
-    let state: FeedbackFlowCoordinator.State
 }

@@ -21,7 +21,6 @@ private enum MeetingQualityAnnotationEdge {
 
 struct MeetingQualityCardView: View {
     let activity: Activity
-    let showHowItWorks: () -> Void
     let onEventTap: (Event) -> Void
 
     private var points: [MeetingQualityPoint] {

@@ -4,112 +4,114 @@ import DesignSystem
 import SwiftUI
 
 public struct ActivityListView: View {
-
-    @State private var isActivityIntroPresented = false
+    private let onProfileButtonTap: (() -> Void)?
     @Bindable var store: StoreOf<ActivityList>
 
     public init(
-        store: StoreOf<ActivityList>
+        store: StoreOf<ActivityList>,
+        onProfileButtonTap: (() -> Void)? = nil
     ) {
         self.store = store
+        self.onProfileButtonTap = onProfileButtonTap
     }
 
     public var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    if store.activities.isEmpty {
-                        introCard
-                    } else {
-                        ForEach(store.activities) { activity in
-                            ActivityRowButton(activity: activity) {
-                                store.send(.activityTap(activity))
-                            }
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            Group {
+                switch store.presentation {
+                case .overview:
+                    TimelineView(.periodic(from: .now, by: 60)) { context in
+                        ScrollView {
+                            HomeOverviewView(store: store, now: context.date)
+                                .padding()
                         }
                     }
+                case .activities:
+                    HomeActivitiesView(store: store)
                 }
-                .padding()
-                .padding(.bottom, 88)
             }
             .background(LetsGrowLandingGradient().ignoresSafeArea())
-            .navigationTitle("✨ Aktiviteter")
+            .navigationTitle(store.presentation == .overview ? "Overblik" : "Aktiviteter")
+            .refreshable { await store.send(.refresh).finish() }
             .toolbar {
-                if !store.activities.isEmpty {
+                if let onProfileButtonTap {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Profil", systemImage: "person.crop.circle", action: onProfileButtonTap)
+                            .accessibilityIdentifier("profile_button")
+                    }
+                }
+                if store.presentation == .activities {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            isActivityIntroPresented = true
-                        } label: {
-                            Image.questionmarkCircle
-                        }
-                        .buttonStyle(ScalingButtonStyle())
-                        .accessibilityIdentifier("my_activity_info_button")
-                        .accessibilityLabel("Hvad er en aktivitet?")
+                        Button("Opret aktivitet", systemImage: "plus") { store.send(.createActivityButtonTap) }
+                            .accessibilityIdentifier("my_activity_add_button")
                     }
                 }
             }
-            .overlay(alignment: .bottomTrailing) {
-                Button {
-                    self.store.send(.createActivityButtonTap)
-                } label: {
-                    Image(systemName: "plus")
-                        .titleTextStyle()
-                        .foregroundStyle(Color.themeOnPrimaryAction)
-                        .frame(width: 56, height: 56)
-                        .background(Color.themePrimaryAction.gradient, in: Circle())
-                        .glassEffect(in: .circle)
-                        .lightShadow()
-                }
-                .buttonStyle(ScalingButtonStyle())
-                .accessibilityIdentifier("my_activity_add_button")
-                .accessibilityLabel("Tilføj aktivitet")
-                .padding(.trailing, Theme.padding)
-                .padding(.bottom, Theme.padding)
+            .sheet(item: $store.scope(state: \.destination?.manageActivity, action: \.destination.manageActivity)) { activityStore in
+                ManageActivityView(store: activityStore)
             }
-            .navigationDestination(
-                item: $store.scope(
-                    state: \.destination?.activityDetail,
-                    action: \.destination.activityDetail
-                )
-            ) { store in
-                ActivityDetailView(store: store)
-            }
-            .sheet(
-                item: $store.scope(
-                    state: \.destination?.manageActivity,
-                    action: \.destination.manageActivity
-                )
-            ) { store in
+            .sheet(item: $store.scope(state: \.destination?.quickLook, action: \.destination.quickLook)) { detailStore in
                 NavigationStack {
-                    ManageActivityView(store: store)
+                    ActivityDetailView(store: detailStore)
                 }
+                .environment(\.dismissActivitySheet, { store.send(.destination(.dismiss)) })
+                .presentationDetents([.large])
             }
-            .sheet(isPresented: $isActivityIntroPresented) {
-                ActivityIntroSheetView()
-                    .presentationDetents([.medium])
+        } destination: { pathStore in
+            switch pathStore.case {
+            case .unreadFeedback:
+                HomeUnreadFeedbackView(store: store)
+            case .activityDetail(let detailStore):
+                ActivityDetailView(store: detailStore)
+            case .eventDetail(let detailStore):
+                EventDetailFeatureView(store: detailStore)
             }
         }
     }
+}
 
-    private var introCard: some View {
-        ActivityIntroContentView()
-            .accessibilityIdentifier("my_activity_intro_text")
+private struct HomeActivitiesView: View {
+    let store: StoreOf<ActivityList>
+
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 16) {
+                if store.activities.isEmpty {
+                    Text("Du har ingen aktiviteter endnu.").supportingTextStyle()
+                }
+                ForEach(store.activities) { activity in
+                    ActivityRowButton(activity: activity) { store.send(.activityTap(activity)) }
+                }
+            }
+            .padding()
+        }
+        .background(LetsGrowLandingGradient().ignoresSafeArea())
     }
 }
 
-#Preview("With activities") {
-    ActivityListView(
-        store: .init(
-            initialState: .init(bootstrap: .init(value: .mock())),
-            reducer: { ActivityList() }
-        )
-    )
+private struct HomeUnreadFeedbackView: View {
+    let store: StoreOf<ActivityList>
+
+    var body: some View {
+        let overview = HomeOverview(activities: store.activities, now: .now)
+        ScrollView {
+            LazyVStack(spacing: 12) {
+                if overview.unreadSessions.isEmpty {
+                    ContentUnavailableView("Du har læst al feedback", systemImage: "checkmark.circle")
+                }
+                ForEach(overview.unreadSessions) { session in
+                    HomeSessionCardView(session: session, isUpcoming: false) {
+                        store.send(.eventTap(activityId: session.activity.id, eventId: session.event.id))
+                    }
+                }
+            }
+            .padding()
+        }
+        .background(LetsGrowLandingGradient().ignoresSafeArea())
+        .navigationTitle("Ny feedback")
+    }
 }
 
-#Preview("Empty") {
-    ActivityListView(
-        store: .init(
-            initialState: .init(bootstrap: .init(value: .empty())),
-            reducer: { ActivityList() }
-        )
-    )
+#Preview("Overblik") {
+    ActivityListView(store: .init(initialState: .init(bootstrap: .init(value: .mock()), presentation: .overview), reducer: { ActivityList() }))
 }

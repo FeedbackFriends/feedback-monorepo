@@ -11,8 +11,9 @@ public extension ManagerQuestion {
             id: UUID(uuidString: dto.id)!,
             questionText: dto.text,
             feedbackType: FeedbackType(dto.feedbackType.rawValue),
-            feedback: [],
-            feedbackSummary: analytics?.overallSummary
+            feedback: dto.feedback.map(Feedback.init),
+            feedbackSummary: dto.summary.map(QuestionFeedbackSummary.init) ?? analytics?.overallSummary,
+            activityQuestionId: dto.activityQuestionId.flatMap(UUID.init(uuidString:))
         )
     }
 }
@@ -44,9 +45,7 @@ public extension Activity {
                     averageRating: eventDto.averageRating,
                     overallFeedbackSummary: eventDto.overallFeedbackSummary.map(OverallFeedbackSummary.init),
                     questionsSnapshot: eventDto.questionsSnapshot.map { question in
-                        let analytics = UUID(uuidString: question.id).flatMap { analyticsById[$0] }
-                            ?? analyticsByNormalizedText[question.text.normalizedQuestionKey]
-                        return .init(question, analytics: analytics)
+                        .init(question)
                     },
                     calendarProvider: eventDto.calendarProvider.map(CalendarProvider.init)
                 )
@@ -54,6 +53,7 @@ public extension Activity {
         self.init(
             id: UUID(uuidString: dto.id)!,
             title: dto.title,
+            activityEmail: dto.activityEmail,
             agenda: dto.agenda,
             date: .distantPast,
             pinCode: nil,

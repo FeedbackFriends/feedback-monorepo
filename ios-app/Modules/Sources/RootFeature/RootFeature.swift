@@ -43,6 +43,10 @@ public struct RootFeature: Sendable {
     @ObservableState
     public struct State {
         var notificationDeeplinkInFlight = false
+        /// Set when the user explicitly asks to sign up / sign out, so that the
+        /// resulting `.loggedOut` state shows the SignUp screen instead of
+        /// silently signing back in anonymously.
+        var userRequestedSignUp = false
         var destination: Destination.State
         var isLoading: Bool
         var logout: Logout.State
@@ -90,6 +94,7 @@ public struct RootFeature: Sendable {
             switch action {
                 
             case .destination(.loggedIn(.delegate(.navigateToSignUp))):
+                state.userRequestedSignUp = true
                 return .send(.logout(.logoutButtonTap))
                 
             case .tryAgainButtonTap(let errorType):
@@ -97,9 +102,7 @@ public struct RootFeature: Sendable {
                 switch errorType {
                     
                 case .anonymousSignUpError:
-                    state.destination = .signUp(.init())
-                    state.isLoading = false
-                    return .none
+                    return signInAnonymously(state: &state)
                     
                 case .createAccountError(_, let role):
                     return createAccount(withRole: role, state: &state)
@@ -125,9 +128,16 @@ public struct RootFeature: Sendable {
                     return createAccount(withRole: nil, state: &state)
                     
                 case .loggedOut:
-                    state.destination = .signUp(.init())
-                    state.isLoading = false
-                    return .none
+                    // When the user explicitly asked to sign up / sign out, take
+                    // them to the SignUp screen. Otherwise (e.g. a fresh launch)
+                    // sign them in anonymously so they land straight in the app.
+                    if state.userRequestedSignUp {
+                        state.userRequestedSignUp = false
+                        state.destination = .signUp(.init())
+                        state.isLoading = false
+                        return .none
+                    }
+                    return signInAnonymously(state: &state)
                 }
                 
             case .destination:
@@ -144,7 +154,7 @@ public struct RootFeature: Sendable {
                     state.destination = Destination.State.loggedIn(
                         Tabbar.State(
                             bootstrap: sharedBootstrap,
-                            selectedTab: .feedback,
+                            selectedTab: bootstrap.role == .manager ? .home : .feedback,
                         )
                     )
                     return .none
@@ -162,10 +172,11 @@ public struct RootFeature: Sendable {
                 return .none
                 
             case .createAccountResponse(let bootstrap, let role):
+                state.isLoading = false
                 state.destination = Destination.State.loggedIn(
                     Tabbar.State(
                         bootstrap: Shared(value: bootstrap),
-                        selectedTab: role == .manager ? .activities : .feedback
+                        selectedTab: role == .manager ? .home : .feedback
                     )
                 )
                 return .none
@@ -185,7 +196,7 @@ public struct RootFeature: Sendable {
                 }
                 state = .fromDeeplink(
                     deeplink: deeplink,
-                    sharedBootstrap: Shared(value: existingState.bootstrap)
+                    sharedBootstrap: existingState.$bootstrap
                 )
                 return .none
                 
@@ -230,13 +241,14 @@ extension RootFeature.State {
             var newTabbarState = Tabbar.State(
                 bootstrap: sharedBootstrap
             )
-            if let managerEvent = sharedBootstrap.wrappedValue.managerData?.activities[id: eventId] {
-                newTabbarState.managerEvents.destination = .activityDetail(
-                    ActivityDetail.State(
-                        activityId: managerEvent.id,
-                        bootstrap: sharedBootstrap
-                    )
-                )
+            if let activity = sharedBootstrap.wrappedValue.managerData?.activities.first(where: {
+                $0.events.contains { $0.id == eventId }
+            }) {
+                newTabbarState.managerEvents.destination = .quickLook(.init(
+                    activityId: activity.id,
+                    destination: .eventDetail(.init(activityId: activity.id, eventId: eventId, bootstrap: sharedBootstrap)),
+                    bootstrap: sharedBootstrap
+                ))
             }
             return RootFeature.State(
                 destination: RootFeature.Destination.State.loggedIn(
@@ -251,6 +263,21 @@ extension RootFeature.Destination.State: Equatable {}
 
 /// Helpers
 private extension RootFeature {
+    func signInAnonymously(state: inout State) -> EffectOf<Self> {
+        state.isLoading = true
+        state.destination = .isLoading
+        return .run { send in
+            do {
+                // The Firebase auth state listener started in `.onAppOpen` will
+                // pick up the new anonymous user and drive the rest of the flow
+                // via `.authenticationStateChanged(.anonymous)`.
+                try await authClient.signInAnonymously()
+            } catch {
+                await send(.presentError(.anonymousSignUpError(error: error.localized)))
+            }
+        }
+    }
+
     func createAccount(
         withRole role: Role?,
         state: inout State

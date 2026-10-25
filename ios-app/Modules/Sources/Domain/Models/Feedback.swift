@@ -2,7 +2,7 @@ import Foundation
 
 public struct Feedback: Equatable, Identifiable, Sendable {
     
-    public var id: UUID { UUID() }
+    public let id: UUID
     public let type: FeedbackTypeWithData
     public let questionId: UUID
     public var seenByManager: Bool
@@ -23,7 +23,8 @@ public struct Feedback: Equatable, Identifiable, Sendable {
         return false
     }
     
-    public init(type: FeedbackTypeWithData, questionId: UUID, seenByManager: Bool, createdAt: Date) {
+    public init(id: UUID = UUID(), type: FeedbackTypeWithData, questionId: UUID, seenByManager: Bool, createdAt: Date) {
+        self.id = id
         self.type = type
         self.questionId = questionId
         self.seenByManager = seenByManager

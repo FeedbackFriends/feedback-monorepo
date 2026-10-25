@@ -114,6 +114,7 @@ private extension UnseenResponseBadgeTests {
         .init(
             id: activityId,
             title: "Weekly retro",
+            activityEmail: "1234@letsgrow.dk",
             date: referenceDate,
             pinCode: nil,
             durationInMinutes: 45,
