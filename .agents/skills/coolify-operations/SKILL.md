@@ -11,7 +11,7 @@ Use this skill for LetsGrow deployment and production-runtime work.
 
 - Production runs the root `docker-compose.yml` through Coolify.
 - The Compose services are `api`, `scheduler`, and `web`; production uses the mutable `prod` images and `pull_policy: always`.
-- GitHub Actions publishes images and triggers the Coolify deployment. The deployment webhook must include `force=true` so mutable tags are pulled again.
+- GitHub Actions publishes images and triggers the Coolify deployment with `force=true` so mutable tags are pulled again.
 - The API health endpoint is `https://api.letsgrow.dk/actuator/health`.
 - Do not read, print, or commit secrets from `.env`, GitHub Actions, or Coolify.
 

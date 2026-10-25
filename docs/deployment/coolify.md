@@ -9,16 +9,17 @@ production resource.
 The GitHub Actions release workflow builds and publishes
 `nicolaidam/feedback-api:prod`, `nicolaidam/feedback-scheduler:prod`, and
 `nicolaidam/feedback-web:prod`, then sends a forced deployment request to the
-Coolify webhook. The webhook URL must include `force=true`; otherwise Coolify
-may keep running containers based on an earlier version of a mutable `prod`
-image tag.
+Coolify webhook with `force=true`; otherwise Coolify may keep running
+containers based on an earlier version of a mutable `prod` image tag. The
+workflow adds `force=true` when the configured webhook URL does not include it
+and rejects a URL configured with `force=false`.
 
 Required GitHub Actions secrets:
 
 - `DOCKER_USERNAME`
 - `DOCKER_PASSWORD`
 - `COOLIFY_DEPLOY_WEBHOOK_URL` - deploy webhook URL for the LetsGrow Compose
-  resource, configured with `force=true`.
+  resource. The workflow adds the required `force=true` query parameter.
 - `COOLIFY_TOKEN` - bearer token accepted by the webhook.
 
 Keep secret values in GitHub Actions or Coolify. Do not copy them into this

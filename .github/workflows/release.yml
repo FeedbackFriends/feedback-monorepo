@@ -109,10 +109,15 @@ jobs:
 
           [[ -n "${DEPLOY_WEBHOOK_URL:-}" ]] || { echo "COOLIFY_DEPLOY_WEBHOOK_URL is empty."; exit 1; }
           [[ -n "${TOKEN:-}" ]] || { echo "COOLIFY_TOKEN is empty."; exit 1; }
-          [[ "$DEPLOY_WEBHOOK_URL" == *"force=true"* ]] || {
-            echo "COOLIFY_DEPLOY_WEBHOOK_URL must include force=true so Coolify pulls the mutable prod image tags."
+          [[ "$DEPLOY_WEBHOOK_URL" != *"force=false"* ]] || {
+            echo "COOLIFY_DEPLOY_WEBHOOK_URL must not disable forced image pulls."
             exit 1
           }
+          if [[ "$DEPLOY_WEBHOOK_URL" != *"force=true"* ]]; then
+            SEPARATOR="?"
+            [[ "$DEPLOY_WEBHOOK_URL" != *"?"* ]] || SEPARATOR="&"
+            DEPLOY_WEBHOOK_URL="${DEPLOY_WEBHOOK_URL}${SEPARATOR}force=true"
+          fi
 
           echo "::add-mask::$TOKEN"
           echo "Triggering forced Coolify deployment."
