@@ -1,0 +1,23 @@
+.agents/skills/coolify-operations/SKILL.md
+  s_fc3b5b588c68e8::t_2439d59370850e 1-35
+.github/workflows/release.yml
+  s_fc3b5b588c68e8::t_92c0eb9889e8cf 105,110,112-115,118-122
+docs/deployment/coolify.md
+  s_fc3b5b588c68e8::t_fa342afce0abb0 1-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dfd9b6143acd6d0dc6ff2c10fc7a2715d7ea2bd7",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
