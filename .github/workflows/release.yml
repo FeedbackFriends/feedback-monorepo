@@ -102,26 +102,24 @@ jobs:
 
       - name: Trigger Coolify deployment
         env:
-          BASE_URL: ${{ secrets.COOLIFY_BASE_URL }}
-          RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
+          DEPLOY_WEBHOOK_URL: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
           TOKEN: ${{ secrets.COOLIFY_TOKEN }}
         run: |
           set -euo pipefail
 
-          [[ -n "${BASE_URL:-}" ]] || { echo "COOLIFY_BASE_URL is empty."; exit 1; }
-          [[ -n "${RESOURCE_UUID:-}" ]] || { echo "COOLIFY_RESOURCE_UUID is empty."; exit 1; }
+          [[ -n "${DEPLOY_WEBHOOK_URL:-}" ]] || { echo "COOLIFY_DEPLOY_WEBHOOK_URL is empty."; exit 1; }
           [[ -n "${TOKEN:-}" ]] || { echo "COOLIFY_TOKEN is empty."; exit 1; }
+          [[ "$DEPLOY_WEBHOOK_URL" == *"force=true"* ]] || {
+            echo "COOLIFY_DEPLOY_WEBHOOK_URL must include force=true so Coolify pulls the mutable prod image tags."
+            exit 1
+          }
 
           echo "::add-mask::$TOKEN"
-          API_URL="${BASE_URL%/}/api/v1/deploy"
-          echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID}"
-
-          DEPLOYMENT_RESPONSE="$(curl --fail-with-body --silent --show-error \
-            --request POST "$API_URL" \
-            -H "Authorization: Bearer ${TOKEN}" \
-            --url-query "uuid=${RESOURCE_UUID}")"
-          DEPLOYMENT_UUID="$(jq -er '.deployments[0].deployment_uuid' <<< "$DEPLOYMENT_RESPONSE")"
-          echo "Coolify deployment queued id=${DEPLOYMENT_UUID}"
+          echo "Triggering forced Coolify deployment."
+          curl --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer ${TOKEN}" \
+            "$DEPLOY_WEBHOOK_URL"
 
           HEALTH_STATUS=""
           for attempt in {1..90}; do
