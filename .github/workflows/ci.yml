@@ -51,11 +51,6 @@ jobs:
       - name: Install web dependencies
         run: npm ci
         working-directory: web
-        
-      - name: Set up Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
 
       - name: Generate frontend API types
         run: npm run generate:api-types
@@ -76,6 +71,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
       - name: Set up JDK environment
         uses: actions/setup-java@v4
