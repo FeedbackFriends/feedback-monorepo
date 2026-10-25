@@ -12,7 +12,7 @@ The GitHub Actions release workflow builds and publishes
 Coolify webhook with `force=true`; otherwise Coolify may keep running
 containers based on an earlier version of a mutable `prod` image tag. The
 workflow adds `force=true` when the configured webhook URL does not include it
-and rejects a URL configured with `force=false`.
+and replaces a configured `force=false` value with `force=true`.
 
 Required GitHub Actions secrets:
 

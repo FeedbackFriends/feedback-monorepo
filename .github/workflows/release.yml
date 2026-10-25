@@ -109,11 +109,9 @@ jobs:
 
           [[ -n "${DEPLOY_WEBHOOK_URL:-}" ]] || { echo "COOLIFY_DEPLOY_WEBHOOK_URL is empty."; exit 1; }
           [[ -n "${TOKEN:-}" ]] || { echo "COOLIFY_TOKEN is empty."; exit 1; }
-          [[ "$DEPLOY_WEBHOOK_URL" != *"force=false"* ]] || {
-            echo "COOLIFY_DEPLOY_WEBHOOK_URL must not disable forced image pulls."
-            exit 1
-          }
-          if [[ "$DEPLOY_WEBHOOK_URL" != *"force=true"* ]]; then
+          if [[ "$DEPLOY_WEBHOOK_URL" == *"force=false"* ]]; then
+            DEPLOY_WEBHOOK_URL="${DEPLOY_WEBHOOK_URL/force=false/force=true}"
+          elif [[ "$DEPLOY_WEBHOOK_URL" != *"force=true"* ]]; then
             SEPARATOR="?"
             [[ "$DEPLOY_WEBHOOK_URL" != *"?"* ]] || SEPARATOR="&"
             DEPLOY_WEBHOOK_URL="${DEPLOY_WEBHOOK_URL}${SEPARATOR}force=true"
