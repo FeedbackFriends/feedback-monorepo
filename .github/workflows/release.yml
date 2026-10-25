@@ -117,9 +117,9 @@ jobs:
           echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID}"
 
           curl --fail --silent --show-error \
-            --get "$API_URL" \
+            --request POST "$API_URL" \
             -H "Authorization: Bearer ${TOKEN}" \
-            --data-urlencode "uuid=${RESOURCE_UUID}"
+            --json "$(jq -n --arg uuid "$RESOURCE_UUID" '{uuid: $uuid}')"
       - name: Create and Push Git Tag
         run: |
           set -euo pipefail
