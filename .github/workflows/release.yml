@@ -116,7 +116,7 @@ jobs:
           API_URL="${BASE_URL%/}/api/v1/deploy"
           echo "Triggering Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID}"
 
-          curl --fail --silent --show-error \
+          curl --fail-with-body --silent --show-error \
             --request POST "$API_URL" \
             -H "Authorization: Bearer ${TOKEN}" \
             --json "$(jq -n --arg uuid "$RESOURCE_UUID" '{uuid: $uuid}')"
