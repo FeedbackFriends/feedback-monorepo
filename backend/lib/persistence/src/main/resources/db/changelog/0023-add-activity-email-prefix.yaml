@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0023-add-activity-email-prefix
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT CASE WHEN COUNT(*) <= 9000 THEN 0 ELSE 1 END FROM activity
+      changes:
+        - addColumn:
+            tableName: activity
+            columns:
+              - column:
+                  name: email_prefix
+                  type: varchar(4)
+        - sql:
+            sql: >-
+              UPDATE activity SET email_prefix = CAST(1000 +
+              (SELECT COUNT(*) FROM activity previous WHERE previous.id < activity.id) AS VARCHAR(4))
+        - addNotNullConstraint:
+            tableName: activity
+            columnName: email_prefix
+            columnDataType: varchar(4)
+        - addUniqueConstraint:
+            tableName: activity
+            columnNames: email_prefix
+            constraintName: uk_activity_email_prefix

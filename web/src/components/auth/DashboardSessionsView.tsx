@@ -8,7 +8,7 @@ const steps = [
     title: "1. Opret eventet",
   },
   {
-    description: "Tilføj feedback@letsgrow.dk som deltager i invitationen, når du sender mødet ud.",
+    description: "Tilføj aktivitetens mailadresse fra Lets Grow som deltager i invitationen, når du sender mødet ud.",
     icon: Mail,
     title: "2. Inviter Lets Grow",
   },
@@ -20,7 +20,7 @@ const steps = [
 ] as const
 
 const listensFor = [
-  "Nye mødeinvitationer sendt til feedback@letsgrow.dk",
+  "Nye mødeinvitationer sendt til aktivitetens mailadresse",
   "Opdateringer til eksisterende events",
   "Tilbagevendende møder, der skal følges over tid",
 ] as const
@@ -40,7 +40,7 @@ export default function DashboardSessionsView() {
             <p className="max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
               Denne side bliver fyldt, når Lets Grow modtager en kalenderinvitation.
               Hvis du vil have et møde til at dukke op her, skal du bare invitere{" "}
-              <span className="font-semibold text-primary">feedback@letsgrow.dk</span>{" "}
+              <span className="font-semibold text-primary">aktivitetens mailadresse</span>{" "}
               med i eventet.
             </p>
           </div>
@@ -106,9 +106,9 @@ export default function DashboardSessionsView() {
             </div>
 
             <div className="rounded-[1.3rem] border border-slate-200 bg-slate-50/80 p-4">
-              <p className="text-sm text-slate-500">Inbox</p>
+              <p className="text-sm text-slate-500">Kalenderadresse</p>
               <p className="mt-2 break-all text-base font-semibold text-slate-950">
-                feedback@letsgrow.dk
+                Find adressen under aktiviteten i appen
               </p>
             </div>
 

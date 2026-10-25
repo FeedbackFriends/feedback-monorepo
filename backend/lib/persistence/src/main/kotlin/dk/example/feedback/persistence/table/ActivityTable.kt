@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
 object ActivityTable : CommonColumnsTbl("activity") {
     val title = text("title")
     val agenda = text("agenda").nullable()
+    val emailPrefix = varchar("email_prefix", 4).uniqueIndex()
     val runMode = enumerationByName("run_mode", 255, ActivityRunMode::class)
     val sendEmails = bool("send_emails").default(false)
     val manager = reference("manager_id", AccountTable, onDelete = ReferenceOption.CASCADE)

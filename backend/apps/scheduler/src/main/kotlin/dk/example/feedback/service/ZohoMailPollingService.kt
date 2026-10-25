@@ -9,6 +9,7 @@ import dk.example.feedback.mail.ZohoMessageSummary
 import dk.example.feedback.persistence.pincodegenerator.PinCodeGenerator
 import dk.example.feedback.persistence.repo.AccountRepo
 import dk.example.feedback.persistence.repo.ArchiveStatus
+import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.persistence.repo.MailListenerState
 import dk.example.feedback.persistence.repo.MailListenerStateRepo
@@ -24,6 +25,7 @@ class ZohoMailPollingService(
     private val feedbackConfig: FeedbackConfig,
     private val zohoMailClient: ZohoMailClient,
     private val eventRepo: EventRepo,
+    private val activityRepo: ActivityRepo,
     private val accountRepo: AccountRepo,
     private val mailListenerStateRepo: MailListenerStateRepo,
     private val processedMessageRepo: ZohoProcessedMessageRepo,
@@ -175,7 +177,8 @@ class ZohoMailPollingService(
                     message.subject,
                 )
             }
-            if (maxReceivedTime == null || message.receivedTime > maxReceivedTime!!) {
+            val previousReceivedTime = maxReceivedTime
+            if (previousReceivedTime == null || message.receivedTime > previousReceivedTime) {
                 maxReceivedTime = message.receivedTime
             }
         }
@@ -392,6 +395,15 @@ class ZohoMailPollingService(
     }
 
     private fun persistEvent(calendarInvite: CalendarInvite, metadata: MessageMetadata): MessageProcessingOutcome {
+        val activityRecipientEmail = when (calendarInvite.activityRecipientEmails.size) {
+            0 -> return MessageProcessingOutcome.skipped("no_activity_email_recipient")
+            1 -> calendarInvite.activityRecipientEmails.single()
+            else -> return MessageProcessingOutcome.skipped("multiple_activity_email_recipients")
+        }
+        val activityEmailPrefix = activityRecipientEmail.substringBefore("@")
+        val activity = activityRepo.getActivityByEmailPrefix(activityEmailPrefix)
+            ?: return MessageProcessingOutcome.skipped("activity_email_not_found")
+
         val account = accountRepo.getAccountFromEmail(emailInput = calendarInvite.managerEmail)
         if (account == null) {
             logger.warn(
@@ -401,6 +413,16 @@ class ZohoMailPollingService(
                 metadata.messageId,
             )
             return MessageProcessingOutcome.skipped("no_account_for_manager_email")
+        }
+        if (activity.manager.id != account.id) {
+            logger.warn(
+                "Calendar invite organizer does not own activity activityId={} managerEmail={} subject={} messageId={}",
+                activity.id,
+                calendarInvite.managerEmail,
+                metadata.subject,
+                metadata.messageId,
+            )
+            return MessageProcessingOutcome.skipped("activity_manager_mismatch")
         }
 
         val calendarEventId = calendarInvite.calendarEventId
@@ -414,6 +436,17 @@ class ZohoMailPollingService(
 
         val existingEvent = calendarEventId?.let { eventRepo.getEventByCalendarEventId(account.id, it) }
         if (existingEvent != null) {
+            if (existingEvent.activity.id != activity.id) {
+                logger.warn(
+                    "Calendar invite UID belongs to another activity existingEventId={} existingActivityId={} routedActivityId={} subject={} messageId={}",
+                    existingEvent.id,
+                    existingEvent.activity.id,
+                    activity.id,
+                    metadata.subject,
+                    metadata.messageId,
+                )
+                return MessageProcessingOutcome.skipped("calendar_event_activity_mismatch")
+            }
             logger.info(
                 "Updating event from calendar invite id={} title={} date={} managerEmail={} calendarEventId={} subject={} messageId={}",
                 existingEvent.id,
@@ -425,10 +458,8 @@ class ZohoMailPollingService(
                 metadata.messageId,
             )
             runCatching {
-                eventRepo.updateEventFromMailListener(
+                eventRepo.updateActivityEventFromMailListener(
                     eventId = existingEvent.id,
-                    title = calendarInvite.title,
-                    agenda = calendarInvite.agenda,
                     date = calendarInvite.date,
                     location = calendarInvite.location,
                     durationInMinutes = calendarInvite.durationInMinutes,
@@ -477,16 +508,14 @@ class ZohoMailPollingService(
 
         runCatching {
             eventRepo.persistEvent(
-                title = calendarInvite.title,
-                agenda = calendarInvite.agenda,
+                activityId = activity.id,
                 date = calendarInvite.date,
                 location = calendarInvite.location,
                 durationInMinutes = calendarInvite.durationInMinutes,
                 generatedPinCode = generatedPincode,
-                questions = emptyList(),
                 managerId = account.id,
-                createdFromMailListener = true,
                 invitedEmails = calendarInvite.attendingEmails,
+                createdFromMailListener = true,
                 calendarProvider = calendarInvite.calendarProvider,
                 calendarEventId = calendarEventId,
             )

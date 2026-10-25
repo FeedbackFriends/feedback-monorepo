@@ -834,6 +834,43 @@ components:
       - activityId
       - date
       - durationInMinutes
+    EmojiQuestionFeedbackSummary:
+      type: object
+      description: Distribution summary for emoji feedback.
+      properties:
+        countVerySad:
+          type: integer
+          format: int32
+        countSad:
+          type: integer
+          format: int32
+        countHappy:
+          type: integer
+          format: int32
+        countVeryHappy:
+          type: integer
+          format: int32
+        percentageVerySad:
+          type: number
+          format: double
+        percentageSad:
+          type: number
+          format: double
+        percentageHappy:
+          type: number
+          format: double
+        percentageVeryHappy:
+          type: number
+          format: double
+      required:
+      - countHappy
+      - countSad
+      - countVeryHappy
+      - countVerySad
+      - percentageHappy
+      - percentageSad
+      - percentageVeryHappy
+      - percentageVerySad
     EventDto:
       type: object
       description: "Manager-facing event summary with schedule, join details, and\
@@ -882,6 +919,43 @@ components:
       - durationInMinutes
       - id
       - questionsSnapshot
+    OpinionQuestionFeedbackSummary:
+      type: object
+      description: Distribution summary for agree/disagree opinion feedback.
+      properties:
+        countStronglyAgree:
+          type: integer
+          format: int32
+        countAgree:
+          type: integer
+          format: int32
+        countStronglyDisagree:
+          type: integer
+          format: int32
+        countDisagree:
+          type: integer
+          format: int32
+        percentageStronglyAgree:
+          type: number
+          format: double
+        percentageAgree:
+          type: number
+          format: double
+        percentageStronglyDisagree:
+          type: number
+          format: double
+        percentageDisagree:
+          type: number
+          format: double
+      required:
+      - countAgree
+      - countDisagree
+      - countStronglyAgree
+      - countStronglyDisagree
+      - percentageAgree
+      - percentageDisagree
+      - percentageStronglyAgree
+      - percentageStronglyDisagree
     OverallFeedbackCountStatsDto:
       type: object
       description: Absolute counts of feedback outcomes in a event summary.
@@ -967,10 +1041,203 @@ components:
           - ThumpsUpThumpsDown
           - Opinion
           - ZeroToTen
+        activityQuestionId:
+          type: string
+          format: uuid
+          description: Canonical activity question identifier for grouping session
+            snapshots.
+        feedback:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionResponseDto"
+        summary:
+          $ref: "#/components/schemas/QuestionFeedbackSummaryDto"
       required:
+      - feedback
       - feedbackType
       - id
       - text
+    QuestionFeedbackSummaryDto:
+      type: object
+      description: Question feedback summary where only one subtype is populated per
+        feedback type.
+      properties:
+        emojiQuestionFeedbackSummary:
+          $ref: "#/components/schemas/EmojiQuestionFeedbackSummary"
+        thumpsQuestionFeedbackSummary:
+          $ref: "#/components/schemas/ThumpsQuestionFeedbackSummary"
+        opinionQuestionFeedbackSummary:
+          $ref: "#/components/schemas/OpinionQuestionFeedbackSummary"
+        zeroToTenQuestionFeedbackSummary:
+          $ref: "#/components/schemas/ZeroToTenQuestionFeedbackSummary"
+    QuestionResponseDto:
+      type: object
+      description: An anonymous question response visible to the activity owner.
+      properties:
+        id:
+          type: string
+          format: uuid
+        feedbackType:
+          type: string
+          enum:
+          - Emoji
+          - Comment
+          - ThumpsUpThumpsDown
+          - Opinion
+          - ZeroToTen
+        questionId:
+          type: string
+          format: uuid
+        comment:
+          type: string
+        emoji:
+          type: string
+          enum:
+          - VerySad
+          - Sad
+          - Happy
+          - VeryHappy
+        thumbsUpThumpsDown:
+          type: string
+          enum:
+          - Up
+          - Down
+        opinion:
+          type: string
+          enum:
+          - StronglyDisagree
+          - Disagree
+          - Neutral
+          - Agree
+          - StronglyAgree
+        zeroToTen:
+          type: integer
+          format: int32
+        seenByManager:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+      required:
+      - createdAt
+      - feedbackType
+      - id
+      - questionId
+      - seenByManager
+    ThumpsQuestionFeedbackSummary:
+      type: object
+      description: Distribution summary for thumbs up/down feedback.
+      properties:
+        countUp:
+          type: integer
+          format: int32
+        countDown:
+          type: integer
+          format: int32
+        percentageUp:
+          type: number
+          format: double
+        percentageDown:
+          type: number
+          format: double
+      required:
+      - countDown
+      - countUp
+      - percentageDown
+      - percentageUp
+    ZeroToTenQuestionFeedbackSummary:
+      type: object
+      description: Distribution summary for zero-to-ten rating feedback.
+      properties:
+        countValue0:
+          type: integer
+          format: int32
+        countValue1:
+          type: integer
+          format: int32
+        countValue2:
+          type: integer
+          format: int32
+        countValue3:
+          type: integer
+          format: int32
+        countValue4:
+          type: integer
+          format: int32
+        countValue5:
+          type: integer
+          format: int32
+        countValue6:
+          type: integer
+          format: int32
+        countValue7:
+          type: integer
+          format: int32
+        countValue8:
+          type: integer
+          format: int32
+        countValue9:
+          type: integer
+          format: int32
+        countValue10:
+          type: integer
+          format: int32
+        percentageValue0:
+          type: number
+          format: double
+        percentageValue1:
+          type: number
+          format: double
+        percentageValue2:
+          type: number
+          format: double
+        percentageValue3:
+          type: number
+          format: double
+        percentageValue4:
+          type: number
+          format: double
+        percentageValue5:
+          type: number
+          format: double
+        percentageValue6:
+          type: number
+          format: double
+        percentageValue7:
+          type: number
+          format: double
+        percentageValue8:
+          type: number
+          format: double
+        percentageValue9:
+          type: number
+          format: double
+        percentageValue10:
+          type: number
+          format: double
+      required:
+      - countValue0
+      - countValue1
+      - countValue10
+      - countValue2
+      - countValue3
+      - countValue4
+      - countValue5
+      - countValue6
+      - countValue7
+      - countValue8
+      - countValue9
+      - percentageValue0
+      - percentageValue1
+      - percentageValue10
+      - percentageValue2
+      - percentageValue3
+      - percentageValue4
+      - percentageValue5
+      - percentageValue6
+      - percentageValue7
+      - percentageValue8
+      - percentageValue9
     SendNotificationInput:
       type: object
       properties:
@@ -1058,6 +1325,10 @@ components:
           description: Display title shown to managers and participants.
         agenda:
           type: string
+        activityEmail:
+          type: string
+          description: Calendar invite email address for creating events under this
+            activity.
         owner:
           $ref: "#/components/schemas/OwnerDto"
         runMode:
@@ -1083,6 +1354,7 @@ components:
         trend:
           $ref: "#/components/schemas/ActivityTrendDto"
       required:
+      - activityEmail
       - currentQuestions
       - events
       - id
@@ -1388,43 +1660,6 @@ components:
       required:
       - accountInfo
       - participantEvents
-    EmojiQuestionFeedbackSummary:
-      type: object
-      description: Distribution summary for emoji feedback.
-      properties:
-        countVerySad:
-          type: integer
-          format: int32
-        countSad:
-          type: integer
-          format: int32
-        countHappy:
-          type: integer
-          format: int32
-        countVeryHappy:
-          type: integer
-          format: int32
-        percentageVerySad:
-          type: number
-          format: double
-        percentageSad:
-          type: number
-          format: double
-        percentageHappy:
-          type: number
-          format: double
-        percentageVeryHappy:
-          type: number
-          format: double
-      required:
-      - countHappy
-      - countSad
-      - countVeryHappy
-      - countVerySad
-      - percentageHappy
-      - percentageSad
-      - percentageVeryHappy
-      - percentageVerySad
     ManagerDataDto:
       type: object
       description: Manager-only bootstrap section with activities and analytics.
@@ -1536,56 +1771,6 @@ components:
       - id
       - newFeedbackCount
       - seenByManager
-    OpinionQuestionFeedbackSummary:
-      type: object
-      description: Distribution summary for agree/disagree opinion feedback.
-      properties:
-        countStronglyAgree:
-          type: integer
-          format: int32
-        countAgree:
-          type: integer
-          format: int32
-        countStronglyDisagree:
-          type: integer
-          format: int32
-        countDisagree:
-          type: integer
-          format: int32
-        percentageStronglyAgree:
-          type: number
-          format: double
-        percentageAgree:
-          type: number
-          format: double
-        percentageStronglyDisagree:
-          type: number
-          format: double
-        percentageDisagree:
-          type: number
-          format: double
-      required:
-      - countAgree
-      - countDisagree
-      - countStronglyAgree
-      - countStronglyDisagree
-      - percentageAgree
-      - percentageDisagree
-      - percentageStronglyAgree
-      - percentageStronglyDisagree
-    QuestionFeedbackSummaryDto:
-      type: object
-      description: Question feedback summary where only one subtype is populated per
-        feedback type.
-      properties:
-        emojiQuestionFeedbackSummary:
-          $ref: "#/components/schemas/EmojiQuestionFeedbackSummary"
-        thumpsQuestionFeedbackSummary:
-          $ref: "#/components/schemas/ThumpsQuestionFeedbackSummary"
-        opinionQuestionFeedbackSummary:
-          $ref: "#/components/schemas/OpinionQuestionFeedbackSummary"
-        zeroToTenQuestionFeedbackSummary:
-          $ref: "#/components/schemas/ZeroToTenQuestionFeedbackSummary"
     QuestionTrendPointDto:
       type: object
       description: Single event trend point for question analytics.
@@ -1607,120 +1792,6 @@ components:
       - eventDate
       - eventId
       - responseCount
-    ThumpsQuestionFeedbackSummary:
-      type: object
-      description: Distribution summary for thumbs up/down feedback.
-      properties:
-        countUp:
-          type: integer
-          format: int32
-        countDown:
-          type: integer
-          format: int32
-        percentageUp:
-          type: number
-          format: double
-        percentageDown:
-          type: number
-          format: double
-      required:
-      - countDown
-      - countUp
-      - percentageDown
-      - percentageUp
-    ZeroToTenQuestionFeedbackSummary:
-      type: object
-      description: Distribution summary for zero-to-ten rating feedback.
-      properties:
-        countValue0:
-          type: integer
-          format: int32
-        countValue1:
-          type: integer
-          format: int32
-        countValue2:
-          type: integer
-          format: int32
-        countValue3:
-          type: integer
-          format: int32
-        countValue4:
-          type: integer
-          format: int32
-        countValue5:
-          type: integer
-          format: int32
-        countValue6:
-          type: integer
-          format: int32
-        countValue7:
-          type: integer
-          format: int32
-        countValue8:
-          type: integer
-          format: int32
-        countValue9:
-          type: integer
-          format: int32
-        countValue10:
-          type: integer
-          format: int32
-        percentageValue0:
-          type: number
-          format: double
-        percentageValue1:
-          type: number
-          format: double
-        percentageValue2:
-          type: number
-          format: double
-        percentageValue3:
-          type: number
-          format: double
-        percentageValue4:
-          type: number
-          format: double
-        percentageValue5:
-          type: number
-          format: double
-        percentageValue6:
-          type: number
-          format: double
-        percentageValue7:
-          type: number
-          format: double
-        percentageValue8:
-          type: number
-          format: double
-        percentageValue9:
-          type: number
-          format: double
-        percentageValue10:
-          type: number
-          format: double
-      required:
-      - countValue0
-      - countValue1
-      - countValue10
-      - countValue2
-      - countValue3
-      - countValue4
-      - countValue5
-      - countValue6
-      - countValue7
-      - countValue8
-      - countValue9
-      - percentageValue0
-      - percentageValue1
-      - percentageValue10
-      - percentageValue2
-      - percentageValue3
-      - percentageValue4
-      - percentageValue5
-      - percentageValue6
-      - percentageValue7
-      - percentageValue8
-      - percentageValue9
     LogoutInput:
       type: object
       description: Input payload for account logout and device token unlink.

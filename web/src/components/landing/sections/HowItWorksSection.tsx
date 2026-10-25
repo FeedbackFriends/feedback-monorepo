@@ -13,7 +13,7 @@ const steps = [
   {
     title: "Tilføj én deltager",
     description:
-      "Invitér feedback@letsgrow.dk, så ved systemet, at mødet skal have feedback bagefter.",
+      "Opret en aktivitet i Lets Grow, og invitér dens mailadresse til mødet. Så oprettes sessionen automatisk.",
     highlight: true,
   },
   {

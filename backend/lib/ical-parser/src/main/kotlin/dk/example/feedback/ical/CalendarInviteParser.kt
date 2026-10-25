@@ -27,6 +27,7 @@ object CalendarInviteParser {
     private val builder = CalendarBuilder()
     private val timeZoneRegistry = TimeZoneRegistryFactory.getInstance().createRegistry()
     private val ignoredAttendeeEmails = setOf("feedback@letsgrow.dk")
+    private val activityEmailRegex = Regex("^[0-9]{4}@letsgrow\\.dk$", RegexOption.IGNORE_CASE)
 
     fun parse(inputStream: InputStream): CalendarInvite {
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true)
@@ -62,6 +63,7 @@ object CalendarInviteParser {
             location = event.getLocation()?.value,
             managerEmail = organizerEmail,
             attendingEmails = event.attendeeEmails(excludeEmail = organizerEmail),
+            activityRecipientEmails = event.activityRecipientEmails(),
             calendarProvider = calendarProvider,
             calendarEventId = event.uid?.toString(),
         )
@@ -80,16 +82,27 @@ object CalendarInviteParser {
 
     private fun VEvent.attendeeEmails(excludeEmail: String?): List<String> =
         getAttendees()
-            .mapNotNull { attendee ->
-                attendee.calAddress?.schemeSpecificPart
-                    ?.removePrefix("mailto:")
-                    ?.removePrefix("MAILTO:")
-                    ?.trim()
-                    ?.takeIf { it.isNotEmpty() }
-            }.filterNot { email -> shouldIgnoreAttendee(email, excludeEmail) }
+            .mapNotNull { attendee -> attendee.emailAddress() }
+            .filterNot { email -> shouldIgnoreAttendee(email, excludeEmail) }
+
+    private fun VEvent.activityRecipientEmails(): List<String> =
+        getAttendees()
+            .mapNotNull { attendee -> attendee.emailAddress()?.lowercase() }
+            .filter { email -> activityEmailRegex.matches(email) }
+            .distinct()
+
+    private fun net.fortuna.ical4j.model.property.Attendee.emailAddress(): String? =
+        calAddress?.schemeSpecificPart
+            ?.removePrefix("mailto:")
+            ?.removePrefix("MAILTO:")
+            ?.trim()
+            ?.takeIf { it.isNotEmpty() }
 
     private fun shouldIgnoreAttendee(email: String, organizerEmail: String?): Boolean {
         if (organizerEmail != null && email.equals(organizerEmail, ignoreCase = true)) {
+            return true
+        }
+        if (activityEmailRegex.matches(email)) {
             return true
         }
         return ignoredAttendeeEmails.any { email.equals(it, ignoreCase = true) }
@@ -124,6 +137,7 @@ data class CalendarInvite(
     val location: String?,
     val managerEmail: String,
     val attendingEmails: List<String>,
+    val activityRecipientEmails: List<String>,
     val calendarProvider: CalendarProvider?,
     val calendarEventId: String?,
 )

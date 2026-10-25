@@ -9,6 +9,7 @@ import dk.example.feedback.dto.OwnerDto
 import dk.example.feedback.dto.ParticipantQuestionDto
 import dk.example.feedback.dto.ParticipantEventDto
 import dk.example.feedback.dto.ParticipantSummaryDto
+import dk.example.feedback.dto.QuestionResponseDto
 import dk.example.feedback.dto.QuestionDto
 import dk.example.feedback.dto.QuestionFeedbackSummaryDto
 import dk.example.feedback.dto.EventDetailDto
@@ -40,6 +41,7 @@ fun ActivityEntity.toActivityDto(
         id = id,
         title = title,
         agenda = agenda,
+        activityEmail = "$emailPrefix@letsgrow.dk",
         owner = OwnerDto(
             id = manager.id,
             name = manager.name,
@@ -74,7 +76,29 @@ fun EventEntity.toActivityEventDto(pinCode: String?): EventDto {
         ),
         questionsSnapshot = questions
             .sortedBy { it.index }
-            .map { QuestionDto(id = it.id, text = it.questionText, feedbackType = it.feedbackType) },
+            .map { question ->
+                QuestionDto(
+                    id = question.id,
+                    text = question.questionText,
+                    feedbackType = question.feedbackType,
+                    activityQuestionId = question.activityQuestionId,
+                    feedback = question.feedback.map { response ->
+                        QuestionResponseDto(
+                            id = response.id,
+                            feedbackType = response.feedbackType,
+                            questionId = response.questionId,
+                            comment = response.comment,
+                            emoji = response.emoji,
+                            thumbsUpThumpsDown = response.thumbsUpThumpsDown,
+                            opinion = response.opinion,
+                            zeroToTen = response.zeroToTen,
+                            seenByManager = response.seenByManager,
+                            createdAt = response.createdAt,
+                        )
+                    },
+                    summary = generateQuestionFeedbackSummary(question.feedback, question.feedbackType),
+                )
+            },
     )
 }
 

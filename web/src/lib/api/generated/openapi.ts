@@ -284,6 +284,25 @@ export interface components {
             durationInMinutes: number;
             location?: string;
         };
+        /** @description Distribution summary for emoji feedback. */
+        EmojiQuestionFeedbackSummary: {
+            /** Format: int32 */
+            countVerySad: number;
+            /** Format: int32 */
+            countSad: number;
+            /** Format: int32 */
+            countHappy: number;
+            /** Format: int32 */
+            countVeryHappy: number;
+            /** Format: double */
+            percentageVerySad: number;
+            /** Format: double */
+            percentageSad: number;
+            /** Format: double */
+            percentageHappy: number;
+            /** Format: double */
+            percentageVeryHappy: number;
+        };
         /** @description Manager-facing event summary with schedule, join details, and question snapshot. */
         EventDto: {
             /**
@@ -312,6 +331,25 @@ export interface components {
             averageRating?: number;
             overallFeedbackSummary?: components["schemas"]["OverallFeedbackSummaryDto"];
             questionsSnapshot: components["schemas"]["QuestionDto"][];
+        };
+        /** @description Distribution summary for agree/disagree opinion feedback. */
+        OpinionQuestionFeedbackSummary: {
+            /** Format: int32 */
+            countStronglyAgree: number;
+            /** Format: int32 */
+            countAgree: number;
+            /** Format: int32 */
+            countStronglyDisagree: number;
+            /** Format: int32 */
+            countDisagree: number;
+            /** Format: double */
+            percentageStronglyAgree: number;
+            /** Format: double */
+            percentageAgree: number;
+            /** Format: double */
+            percentageStronglyDisagree: number;
+            /** Format: double */
+            percentageDisagree: number;
         };
         /** @description Absolute counts of feedback outcomes in a event summary. */
         OverallFeedbackCountStatsDto: {
@@ -360,6 +398,99 @@ export interface components {
              * @enum {string}
              */
             feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
+            /**
+             * Format: uuid
+             * @description Canonical activity question identifier for grouping session snapshots.
+             */
+            activityQuestionId?: string;
+            feedback: components["schemas"]["QuestionResponseDto"][];
+            summary?: components["schemas"]["QuestionFeedbackSummaryDto"];
+        };
+        /** @description Question feedback summary where only one subtype is populated per feedback type. */
+        QuestionFeedbackSummaryDto: {
+            emojiQuestionFeedbackSummary?: components["schemas"]["EmojiQuestionFeedbackSummary"];
+            thumpsQuestionFeedbackSummary?: components["schemas"]["ThumpsQuestionFeedbackSummary"];
+            opinionQuestionFeedbackSummary?: components["schemas"]["OpinionQuestionFeedbackSummary"];
+            zeroToTenQuestionFeedbackSummary?: components["schemas"]["ZeroToTenQuestionFeedbackSummary"];
+        };
+        /** @description An anonymous question response visible to the activity owner. */
+        QuestionResponseDto: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            feedbackType: "Emoji" | "Comment" | "ThumpsUpThumpsDown" | "Opinion" | "ZeroToTen";
+            /** Format: uuid */
+            questionId: string;
+            comment?: string;
+            /** @enum {string} */
+            emoji?: "VerySad" | "Sad" | "Happy" | "VeryHappy";
+            /** @enum {string} */
+            thumbsUpThumpsDown?: "Up" | "Down";
+            /** @enum {string} */
+            opinion?: "StronglyDisagree" | "Disagree" | "Neutral" | "Agree" | "StronglyAgree";
+            /** Format: int32 */
+            zeroToTen?: number;
+            seenByManager: boolean;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @description Distribution summary for thumbs up/down feedback. */
+        ThumpsQuestionFeedbackSummary: {
+            /** Format: int32 */
+            countUp: number;
+            /** Format: int32 */
+            countDown: number;
+            /** Format: double */
+            percentageUp: number;
+            /** Format: double */
+            percentageDown: number;
+        };
+        /** @description Distribution summary for zero-to-ten rating feedback. */
+        ZeroToTenQuestionFeedbackSummary: {
+            /** Format: int32 */
+            countValue0: number;
+            /** Format: int32 */
+            countValue1: number;
+            /** Format: int32 */
+            countValue2: number;
+            /** Format: int32 */
+            countValue3: number;
+            /** Format: int32 */
+            countValue4: number;
+            /** Format: int32 */
+            countValue5: number;
+            /** Format: int32 */
+            countValue6: number;
+            /** Format: int32 */
+            countValue7: number;
+            /** Format: int32 */
+            countValue8: number;
+            /** Format: int32 */
+            countValue9: number;
+            /** Format: int32 */
+            countValue10: number;
+            /** Format: double */
+            percentageValue0: number;
+            /** Format: double */
+            percentageValue1: number;
+            /** Format: double */
+            percentageValue2: number;
+            /** Format: double */
+            percentageValue3: number;
+            /** Format: double */
+            percentageValue4: number;
+            /** Format: double */
+            percentageValue5: number;
+            /** Format: double */
+            percentageValue6: number;
+            /** Format: double */
+            percentageValue7: number;
+            /** Format: double */
+            percentageValue8: number;
+            /** Format: double */
+            percentageValue9: number;
+            /** Format: double */
+            percentageValue10: number;
         };
         SendNotificationInput: {
             fcmToken: string;
@@ -409,6 +540,8 @@ export interface components {
             /** @description Display title shown to managers and participants. */
             title: string;
             agenda?: string;
+            /** @description Calendar invite email address for creating events under this activity. */
+            activityEmail: string;
             owner: components["schemas"]["OwnerDto"];
             /**
              * @description Run mode that controls how events are joined and processed.
@@ -587,25 +720,6 @@ export interface components {
             participantEvents: components["schemas"]["ParticipantEventDto"][];
             managerData?: components["schemas"]["ManagerDataDto"];
         };
-        /** @description Distribution summary for emoji feedback. */
-        EmojiQuestionFeedbackSummary: {
-            /** Format: int32 */
-            countVerySad: number;
-            /** Format: int32 */
-            countSad: number;
-            /** Format: int32 */
-            countHappy: number;
-            /** Format: int32 */
-            countVeryHappy: number;
-            /** Format: double */
-            percentageVerySad: number;
-            /** Format: double */
-            percentageSad: number;
-            /** Format: double */
-            percentageHappy: number;
-            /** Format: double */
-            percentageVeryHappy: number;
-        };
         /** @description Manager-only bootstrap section with activities and analytics. */
         ManagerDataDto: {
             activities: components["schemas"]["ActivityDto"][];
@@ -674,32 +788,6 @@ export interface components {
             newFeedbackCount: number;
             seenByManager: boolean;
         };
-        /** @description Distribution summary for agree/disagree opinion feedback. */
-        OpinionQuestionFeedbackSummary: {
-            /** Format: int32 */
-            countStronglyAgree: number;
-            /** Format: int32 */
-            countAgree: number;
-            /** Format: int32 */
-            countStronglyDisagree: number;
-            /** Format: int32 */
-            countDisagree: number;
-            /** Format: double */
-            percentageStronglyAgree: number;
-            /** Format: double */
-            percentageAgree: number;
-            /** Format: double */
-            percentageStronglyDisagree: number;
-            /** Format: double */
-            percentageDisagree: number;
-        };
-        /** @description Question feedback summary where only one subtype is populated per feedback type. */
-        QuestionFeedbackSummaryDto: {
-            emojiQuestionFeedbackSummary?: components["schemas"]["EmojiQuestionFeedbackSummary"];
-            thumpsQuestionFeedbackSummary?: components["schemas"]["ThumpsQuestionFeedbackSummary"];
-            opinionQuestionFeedbackSummary?: components["schemas"]["OpinionQuestionFeedbackSummary"];
-            zeroToTenQuestionFeedbackSummary?: components["schemas"]["ZeroToTenQuestionFeedbackSummary"];
-        };
         /** @description Single event trend point for question analytics. */
         QuestionTrendPointDto: {
             /**
@@ -715,64 +803,6 @@ export interface components {
             /** Format: int32 */
             responseCount: number;
             summary?: components["schemas"]["QuestionFeedbackSummaryDto"];
-        };
-        /** @description Distribution summary for thumbs up/down feedback. */
-        ThumpsQuestionFeedbackSummary: {
-            /** Format: int32 */
-            countUp: number;
-            /** Format: int32 */
-            countDown: number;
-            /** Format: double */
-            percentageUp: number;
-            /** Format: double */
-            percentageDown: number;
-        };
-        /** @description Distribution summary for zero-to-ten rating feedback. */
-        ZeroToTenQuestionFeedbackSummary: {
-            /** Format: int32 */
-            countValue0: number;
-            /** Format: int32 */
-            countValue1: number;
-            /** Format: int32 */
-            countValue2: number;
-            /** Format: int32 */
-            countValue3: number;
-            /** Format: int32 */
-            countValue4: number;
-            /** Format: int32 */
-            countValue5: number;
-            /** Format: int32 */
-            countValue6: number;
-            /** Format: int32 */
-            countValue7: number;
-            /** Format: int32 */
-            countValue8: number;
-            /** Format: int32 */
-            countValue9: number;
-            /** Format: int32 */
-            countValue10: number;
-            /** Format: double */
-            percentageValue0: number;
-            /** Format: double */
-            percentageValue1: number;
-            /** Format: double */
-            percentageValue2: number;
-            /** Format: double */
-            percentageValue3: number;
-            /** Format: double */
-            percentageValue4: number;
-            /** Format: double */
-            percentageValue5: number;
-            /** Format: double */
-            percentageValue6: number;
-            /** Format: double */
-            percentageValue7: number;
-            /** Format: double */
-            percentageValue8: number;
-            /** Format: double */
-            percentageValue9: number;
-            /** Format: double */
-            percentageValue10: number;
         };
         /** @description Input payload for account logout and device token unlink. */
         LogoutInput: {

@@ -59,11 +59,25 @@ class MailServiceTest {
         assertThat(invite.title).isEqualTo("Cool møde")
         assertThat(invite.managerEmail).isEqualTo("nicolaidam96@gmail.com")
         assertThat(invite.attendingEmails).containsExactly("contact@damofficial.com")
+        assertThat(invite.activityRecipientEmails).isEmpty()
         assertThat(invite.date).isEqualTo(expectedStart)
         assertThat(invite.durationInMinutes).isEqualTo(60)
         assertThat(invite.agenda).contains("Google Meet")
         assertThat(invite.location).contains("meet.google.com")
         assertThat(invite.calendarProvider).isEqualTo(CalendarProvider.GOOGLE)
+    }
+
+    @Test
+    fun `parses generated activity email separately from attendees`() {
+        val inviteText = resource("invite_google.ics")
+            .readBytes()
+            .decodeToString()
+            .replace("feedback@letsgrow.dk", "1234@letsgrow.dk")
+
+        val invite = CalendarInviteParser.parse(inviteText.byteInputStream())
+
+        assertThat(invite.attendingEmails).containsExactly("contact@damofficial.com")
+        assertThat(invite.activityRecipientEmails).containsExactly("1234@letsgrow.dk")
     }
 
     @Test

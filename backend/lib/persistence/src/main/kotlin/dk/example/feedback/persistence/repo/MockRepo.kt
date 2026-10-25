@@ -274,6 +274,7 @@ class MockRepo {
             it[id] = EntityID(activityId, ActivityTable)
             it[ActivityTable.title] = title
             it[ActivityTable.agenda] = agenda
+            it[emailPrefix] = deterministicEmailPrefix(activityId.toString())
             it[runMode] = ActivityRunMode.MANUAL
             it[sendEmails] = false
             it[ActivityTable.manager] = manager
@@ -425,6 +426,10 @@ class MockRepo {
 
     private fun deterministicUuid(seed: String): UUID {
         return UUID.nameUUIDFromBytes(seed.toByteArray(StandardCharsets.UTF_8))
+    }
+
+    private fun deterministicEmailPrefix(seed: String): String {
+        return (Math.floorMod(seed.hashCode(), 9000) + 1000).toString()
     }
 
     private fun resetSeedGraph(accountIds: Set<String>, eventId: UUID, activityId: UUID) {

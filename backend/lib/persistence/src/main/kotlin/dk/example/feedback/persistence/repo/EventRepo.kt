@@ -68,10 +68,14 @@ class EventRepo {
         createdFromMailListener: Boolean = false,
         calendarProvider: CalendarProvider? = null,
         calendarEventId: String? = null,
+        invitedEmails: List<String>? = null,
     ): EventEntity {
         val activity = ActivityDao.findById(activityId) ?: throw IllegalArgumentException("Could not find activity id: $activityId")
         if (activity.manager.id.value != managerId) {
             throw IllegalArgumentException("Activity $activityId does not belong to manager $managerId")
+        }
+        if (invitedEmails != null) {
+            replaceActivityInvites(activityId, managerId, invitedEmails)
         }
         val manager = AccountDao.findById(managerId) ?: throw IllegalArgumentException("Could not find manager id: $managerId")
         val createdEvent = EventDao.new {
@@ -107,10 +111,8 @@ class EventRepo {
             ?.toModel()
     }
 
-    fun updateEventFromMailListener(
+    fun updateActivityEventFromMailListener(
         eventId: UUID,
-        title: String,
-        agenda: String?,
         date: OffsetDateTime,
         location: String?,
         durationInMinutes: Int,
@@ -128,10 +130,7 @@ class EventRepo {
             this.createdFromMailListener = true
         }
 
-        val activity = foundEvent.activity
-        activity.title = title
-        activity.agenda = agenda
-        replaceActivityInvites(activity.id.value, activity.manager.id.value, invitedEmails)
+        replaceActivityInvites(foundEvent.activity.id.value, foundEvent.activity.manager.id.value, invitedEmails)
 
         return foundEvent.toModel()
     }
@@ -279,7 +278,7 @@ class EventRepo {
                 it[EventParticipantTable.participant] = accountId
                 it[EventParticipantTable.feedbackSubmitted] = feedbackSubmitted
             }
-        } else {
+        } else if (feedbackSubmitted) {
             EventParticipantTable.update(
                 { (EventParticipantTable.event eq eventId) and (EventParticipantTable.participant eq accountId) }
             ) {

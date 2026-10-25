@@ -8,6 +8,7 @@ data class ActivityEntity(
     val id: UUID,
     val title: String,
     val agenda: String?,
+    val emailPrefix: String,
     val runMode: ActivityRunMode,
     val sendEmails: Boolean,
     val createdAt: OffsetDateTime,

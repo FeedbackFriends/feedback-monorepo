@@ -4,6 +4,9 @@ import dk.example.feedback.model.database.FeedbackEntity
 import dk.example.feedback.model.enumerations.ActivityRunMode
 import dk.example.feedback.model.enumerations.CalendarProvider
 import dk.example.feedback.model.enumerations.FeedbackType
+import dk.example.feedback.model.enumerations.Emoji
+import dk.example.feedback.model.enumerations.Opinion
+import dk.example.feedback.model.enumerations.ThumbsUpThumpsDown
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.OffsetDateTime
 import java.util.UUID
@@ -17,6 +20,8 @@ data class ActivityDto(
     @field:Schema(description = "Display title shown to managers and participants.")
     val title: String,
     val agenda: String?,
+    @field:Schema(description = "Calendar invite email address for creating events under this activity.")
+    val activityEmail: String,
     val owner: OwnerDto,
     @field:Schema(description = "Run mode that controls how events are joined and processed.")
     val runMode: ActivityRunMode,
@@ -98,6 +103,24 @@ data class QuestionDto(
     val text: String,
     @field:Schema(description = "Feedback format expected for this question.")
     val feedbackType: FeedbackType,
+    @field:Schema(description = "Canonical activity question identifier for grouping session snapshots.")
+    val activityQuestionId: UUID? = null,
+    val feedback: List<QuestionResponseDto> = emptyList(),
+    val summary: QuestionFeedbackSummaryDto? = null,
+)
+
+@Schema(description = "An anonymous question response visible to the activity owner.")
+data class QuestionResponseDto(
+    val id: UUID,
+    val feedbackType: FeedbackType,
+    val questionId: UUID,
+    val comment: String?,
+    val emoji: Emoji?,
+    val thumbsUpThumpsDown: ThumbsUpThumpsDown?,
+    val opinion: Opinion?,
+    val zeroToTen: Int?,
+    val seenByManager: Boolean,
+    val createdAt: OffsetDateTime,
 )
 
 @Schema(

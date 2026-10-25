@@ -82,3 +82,6 @@ databaseChangeLog:
   - include:
       file: 0022-add-manager-account-cascades.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0023-add-activity-email-prefix.yaml
+      relativeToChangelogFile: true

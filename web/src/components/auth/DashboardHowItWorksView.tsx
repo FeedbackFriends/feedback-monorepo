@@ -20,7 +20,7 @@ const howItWorksSteps = [
   },
   {
     description:
-      "Tilføj feedback@letsgrow.dk til kalenderinvitationen. Det er den eneste ekstra handling i jeres eksisterende flow.",
+      "Tilføj aktivitetens mailadresse fra Lets Grow til kalenderinvitationen. Det er den eneste ekstra handling i jeres eksisterende flow.",
     icon: MailPlus,
     title: "Tilføj Lets Grow til invitationen",
   },

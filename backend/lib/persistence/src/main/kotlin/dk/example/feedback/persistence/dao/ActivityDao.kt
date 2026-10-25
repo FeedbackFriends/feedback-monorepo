@@ -15,6 +15,7 @@ class ActivityDao(id: EntityID<UUID>) : CommonColumns<ActivityEntity>(id, Activi
 
     var title by ActivityTable.title
     var agenda by ActivityTable.agenda
+    var emailPrefix by ActivityTable.emailPrefix
     var runMode by ActivityTable.runMode
     var sendEmails by ActivityTable.sendEmails
     var manager by AccountDao referencedOn ActivityTable.manager
@@ -26,6 +27,7 @@ class ActivityDao(id: EntityID<UUID>) : CommonColumns<ActivityEntity>(id, Activi
             id = id.value,
             title = title,
             agenda = agenda,
+            emailPrefix = emailPrefix,
             runMode = runMode,
             sendEmails = sendEmails,
             createdAt = dateCreated,

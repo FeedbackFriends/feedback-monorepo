@@ -42,9 +42,13 @@ class ActivityRepo {
         managerId: String,
     ): ActivityEntity {
         val manager = AccountDao.findById(managerId) ?: throw IllegalArgumentException("Could not find manager id: $managerId")
+        val usedPrefixes = ActivityTable.selectAll().map { it[ActivityTable.emailPrefix] }.toSet()
+        val emailPrefix = (1000..9999).filterNot { it.toString() in usedPrefixes }.randomOrNull()?.toString()
+            ?: throw IllegalStateException("No activity email addresses available")
         val activity = ActivityDao.new {
             this.title = title
             this.agenda = agenda
+            this.emailPrefix = emailPrefix
             this.runMode = runMode
             this.sendEmails = sendEmails
             this.manager = manager
@@ -89,6 +93,10 @@ class ActivityRepo {
 
     fun getActivity(activityId: UUID): ActivityEntity {
         return ActivityDao.findById(activityId)?.toModel() ?: throw IllegalArgumentException("Could not find activity id: $activityId")
+    }
+
+    fun getActivityByEmailPrefix(emailPrefix: String): ActivityEntity? {
+        return ActivityDao.find { ActivityTable.emailPrefix eq emailPrefix }.firstOrNull()?.toModel()
     }
 
     fun getManagerActivities(managerId: String): List<ActivityEntity> {

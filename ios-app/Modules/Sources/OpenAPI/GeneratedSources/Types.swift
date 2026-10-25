@@ -358,6 +358,67 @@ public enum Components {
                 case location
             }
         }
+        /// Distribution summary for emoji feedback.
+        ///
+        /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary`.
+        public struct EmojiQuestionFeedbackSummary: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countVerySad`.
+            public var countVerySad: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countSad`.
+            public var countSad: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countHappy`.
+            public var countHappy: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countVeryHappy`.
+            public var countVeryHappy: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageVerySad`.
+            public var percentageVerySad: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageSad`.
+            public var percentageSad: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageHappy`.
+            public var percentageHappy: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageVeryHappy`.
+            public var percentageVeryHappy: Swift.Double
+            /// Creates a new `EmojiQuestionFeedbackSummary`.
+            ///
+            /// - Parameters:
+            ///   - countVerySad:
+            ///   - countSad:
+            ///   - countHappy:
+            ///   - countVeryHappy:
+            ///   - percentageVerySad:
+            ///   - percentageSad:
+            ///   - percentageHappy:
+            ///   - percentageVeryHappy:
+            public init(
+                countVerySad: Swift.Int32,
+                countSad: Swift.Int32,
+                countHappy: Swift.Int32,
+                countVeryHappy: Swift.Int32,
+                percentageVerySad: Swift.Double,
+                percentageSad: Swift.Double,
+                percentageHappy: Swift.Double,
+                percentageVeryHappy: Swift.Double
+            ) {
+                self.countVerySad = countVerySad
+                self.countSad = countSad
+                self.countHappy = countHappy
+                self.countVeryHappy = countVeryHappy
+                self.percentageVerySad = percentageVerySad
+                self.percentageSad = percentageSad
+                self.percentageHappy = percentageHappy
+                self.percentageVeryHappy = percentageVeryHappy
+            }
+            public enum CodingKeys: String, CodingKey {
+                case countVerySad
+                case countSad
+                case countHappy
+                case countVeryHappy
+                case percentageVerySad
+                case percentageSad
+                case percentageHappy
+                case percentageVeryHappy
+            }
+        }
         /// Manager-facing event summary with schedule, join details, and question snapshot.
         ///
         /// - Remark: Generated from `#/components/schemas/EventDto`.
@@ -450,6 +511,67 @@ public enum Components {
                 case averageRating
                 case overallFeedbackSummary
                 case questionsSnapshot
+            }
+        }
+        /// Distribution summary for agree/disagree opinion feedback.
+        ///
+        /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary`.
+        public struct OpinionQuestionFeedbackSummary: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countStronglyAgree`.
+            public var countStronglyAgree: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countAgree`.
+            public var countAgree: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countStronglyDisagree`.
+            public var countStronglyDisagree: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countDisagree`.
+            public var countDisagree: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageStronglyAgree`.
+            public var percentageStronglyAgree: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageAgree`.
+            public var percentageAgree: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageStronglyDisagree`.
+            public var percentageStronglyDisagree: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageDisagree`.
+            public var percentageDisagree: Swift.Double
+            /// Creates a new `OpinionQuestionFeedbackSummary`.
+            ///
+            /// - Parameters:
+            ///   - countStronglyAgree:
+            ///   - countAgree:
+            ///   - countStronglyDisagree:
+            ///   - countDisagree:
+            ///   - percentageStronglyAgree:
+            ///   - percentageAgree:
+            ///   - percentageStronglyDisagree:
+            ///   - percentageDisagree:
+            public init(
+                countStronglyAgree: Swift.Int32,
+                countAgree: Swift.Int32,
+                countStronglyDisagree: Swift.Int32,
+                countDisagree: Swift.Int32,
+                percentageStronglyAgree: Swift.Double,
+                percentageAgree: Swift.Double,
+                percentageStronglyDisagree: Swift.Double,
+                percentageDisagree: Swift.Double
+            ) {
+                self.countStronglyAgree = countStronglyAgree
+                self.countAgree = countAgree
+                self.countStronglyDisagree = countStronglyDisagree
+                self.countDisagree = countDisagree
+                self.percentageStronglyAgree = percentageStronglyAgree
+                self.percentageAgree = percentageAgree
+                self.percentageStronglyDisagree = percentageStronglyDisagree
+                self.percentageDisagree = percentageDisagree
+            }
+            public enum CodingKeys: String, CodingKey {
+                case countStronglyAgree
+                case countAgree
+                case countStronglyDisagree
+                case countDisagree
+                case percentageStronglyAgree
+                case percentageAgree
+                case percentageStronglyDisagree
+                case percentageDisagree
             }
         }
         /// Absolute counts of feedback outcomes in a event summary.
@@ -595,25 +717,365 @@ public enum Components {
             ///
             /// - Remark: Generated from `#/components/schemas/QuestionDto/feedbackType`.
             public var feedbackType: Components.Schemas.QuestionDto.FeedbackTypePayload
+            /// Canonical activity question identifier for grouping session snapshots.
+            ///
+            /// - Remark: Generated from `#/components/schemas/QuestionDto/activityQuestionId`.
+            public var activityQuestionId: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/QuestionDto/feedback`.
+            public var feedback: [Components.Schemas.QuestionResponseDto]
+            /// - Remark: Generated from `#/components/schemas/QuestionDto/summary`.
+            public var summary: Components.Schemas.QuestionFeedbackSummaryDto?
             /// Creates a new `QuestionDto`.
             ///
             /// - Parameters:
             ///   - id: Stable identifier for the question.
             ///   - text: Question text shown to participants.
             ///   - feedbackType: Feedback format expected for this question.
+            ///   - activityQuestionId: Canonical activity question identifier for grouping session snapshots.
+            ///   - feedback:
+            ///   - summary:
             public init(
                 id: Swift.String,
                 text: Swift.String,
-                feedbackType: Components.Schemas.QuestionDto.FeedbackTypePayload
+                feedbackType: Components.Schemas.QuestionDto.FeedbackTypePayload,
+                activityQuestionId: Swift.String? = nil,
+                feedback: [Components.Schemas.QuestionResponseDto],
+                summary: Components.Schemas.QuestionFeedbackSummaryDto? = nil
             ) {
                 self.id = id
                 self.text = text
                 self.feedbackType = feedbackType
+                self.activityQuestionId = activityQuestionId
+                self.feedback = feedback
+                self.summary = summary
             }
             public enum CodingKeys: String, CodingKey {
                 case id
                 case text
                 case feedbackType
+                case activityQuestionId
+                case feedback
+                case summary
+            }
+        }
+        /// Question feedback summary where only one subtype is populated per feedback type.
+        ///
+        /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto`.
+        public struct QuestionFeedbackSummaryDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/emojiQuestionFeedbackSummary`.
+            public var emojiQuestionFeedbackSummary: Components.Schemas.EmojiQuestionFeedbackSummary?
+            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/thumpsQuestionFeedbackSummary`.
+            public var thumpsQuestionFeedbackSummary: Components.Schemas.ThumpsQuestionFeedbackSummary?
+            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/opinionQuestionFeedbackSummary`.
+            public var opinionQuestionFeedbackSummary: Components.Schemas.OpinionQuestionFeedbackSummary?
+            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/zeroToTenQuestionFeedbackSummary`.
+            public var zeroToTenQuestionFeedbackSummary: Components.Schemas.ZeroToTenQuestionFeedbackSummary?
+            /// Creates a new `QuestionFeedbackSummaryDto`.
+            ///
+            /// - Parameters:
+            ///   - emojiQuestionFeedbackSummary:
+            ///   - thumpsQuestionFeedbackSummary:
+            ///   - opinionQuestionFeedbackSummary:
+            ///   - zeroToTenQuestionFeedbackSummary:
+            public init(
+                emojiQuestionFeedbackSummary: Components.Schemas.EmojiQuestionFeedbackSummary? = nil,
+                thumpsQuestionFeedbackSummary: Components.Schemas.ThumpsQuestionFeedbackSummary? = nil,
+                opinionQuestionFeedbackSummary: Components.Schemas.OpinionQuestionFeedbackSummary? = nil,
+                zeroToTenQuestionFeedbackSummary: Components.Schemas.ZeroToTenQuestionFeedbackSummary? = nil
+            ) {
+                self.emojiQuestionFeedbackSummary = emojiQuestionFeedbackSummary
+                self.thumpsQuestionFeedbackSummary = thumpsQuestionFeedbackSummary
+                self.opinionQuestionFeedbackSummary = opinionQuestionFeedbackSummary
+                self.zeroToTenQuestionFeedbackSummary = zeroToTenQuestionFeedbackSummary
+            }
+            public enum CodingKeys: String, CodingKey {
+                case emojiQuestionFeedbackSummary
+                case thumpsQuestionFeedbackSummary
+                case opinionQuestionFeedbackSummary
+                case zeroToTenQuestionFeedbackSummary
+            }
+        }
+        /// An anonymous question response visible to the activity owner.
+        ///
+        /// - Remark: Generated from `#/components/schemas/QuestionResponseDto`.
+        public struct QuestionResponseDto: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/feedbackType`.
+            @frozen public enum FeedbackTypePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case emoji = "Emoji"
+                case comment = "Comment"
+                case thumpsUpThumpsDown = "ThumpsUpThumpsDown"
+                case opinion = "Opinion"
+                case zeroToTen = "ZeroToTen"
+            }
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/feedbackType`.
+            public var feedbackType: Components.Schemas.QuestionResponseDto.FeedbackTypePayload
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/questionId`.
+            public var questionId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/comment`.
+            public var comment: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/emoji`.
+            @frozen public enum EmojiPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case verySad = "VerySad"
+                case sad = "Sad"
+                case happy = "Happy"
+                case veryHappy = "VeryHappy"
+            }
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/emoji`.
+            public var emoji: Components.Schemas.QuestionResponseDto.EmojiPayload?
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/thumbsUpThumpsDown`.
+            @frozen public enum ThumbsUpThumpsDownPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case up = "Up"
+                case down = "Down"
+            }
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/thumbsUpThumpsDown`.
+            public var thumbsUpThumpsDown: Components.Schemas.QuestionResponseDto.ThumbsUpThumpsDownPayload?
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/opinion`.
+            @frozen public enum OpinionPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case stronglyDisagree = "StronglyDisagree"
+                case disagree = "Disagree"
+                case neutral = "Neutral"
+                case agree = "Agree"
+                case stronglyAgree = "StronglyAgree"
+            }
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/opinion`.
+            public var opinion: Components.Schemas.QuestionResponseDto.OpinionPayload?
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/zeroToTen`.
+            public var zeroToTen: Swift.Int32?
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/seenByManager`.
+            public var seenByManager: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/QuestionResponseDto/createdAt`.
+            public var createdAt: Foundation.Date
+            /// Creates a new `QuestionResponseDto`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - feedbackType:
+            ///   - questionId:
+            ///   - comment:
+            ///   - emoji:
+            ///   - thumbsUpThumpsDown:
+            ///   - opinion:
+            ///   - zeroToTen:
+            ///   - seenByManager:
+            ///   - createdAt:
+            public init(
+                id: Swift.String,
+                feedbackType: Components.Schemas.QuestionResponseDto.FeedbackTypePayload,
+                questionId: Swift.String,
+                comment: Swift.String? = nil,
+                emoji: Components.Schemas.QuestionResponseDto.EmojiPayload? = nil,
+                thumbsUpThumpsDown: Components.Schemas.QuestionResponseDto.ThumbsUpThumpsDownPayload? = nil,
+                opinion: Components.Schemas.QuestionResponseDto.OpinionPayload? = nil,
+                zeroToTen: Swift.Int32? = nil,
+                seenByManager: Swift.Bool,
+                createdAt: Foundation.Date
+            ) {
+                self.id = id
+                self.feedbackType = feedbackType
+                self.questionId = questionId
+                self.comment = comment
+                self.emoji = emoji
+                self.thumbsUpThumpsDown = thumbsUpThumpsDown
+                self.opinion = opinion
+                self.zeroToTen = zeroToTen
+                self.seenByManager = seenByManager
+                self.createdAt = createdAt
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case feedbackType
+                case questionId
+                case comment
+                case emoji
+                case thumbsUpThumpsDown
+                case opinion
+                case zeroToTen
+                case seenByManager
+                case createdAt
+            }
+        }
+        /// Distribution summary for thumbs up/down feedback.
+        ///
+        /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary`.
+        public struct ThumpsQuestionFeedbackSummary: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/countUp`.
+            public var countUp: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/countDown`.
+            public var countDown: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/percentageUp`.
+            public var percentageUp: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/percentageDown`.
+            public var percentageDown: Swift.Double
+            /// Creates a new `ThumpsQuestionFeedbackSummary`.
+            ///
+            /// - Parameters:
+            ///   - countUp:
+            ///   - countDown:
+            ///   - percentageUp:
+            ///   - percentageDown:
+            public init(
+                countUp: Swift.Int32,
+                countDown: Swift.Int32,
+                percentageUp: Swift.Double,
+                percentageDown: Swift.Double
+            ) {
+                self.countUp = countUp
+                self.countDown = countDown
+                self.percentageUp = percentageUp
+                self.percentageDown = percentageDown
+            }
+            public enum CodingKeys: String, CodingKey {
+                case countUp
+                case countDown
+                case percentageUp
+                case percentageDown
+            }
+        }
+        /// Distribution summary for zero-to-ten rating feedback.
+        ///
+        /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary`.
+        public struct ZeroToTenQuestionFeedbackSummary: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue0`.
+            public var countValue0: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue1`.
+            public var countValue1: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue2`.
+            public var countValue2: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue3`.
+            public var countValue3: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue4`.
+            public var countValue4: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue5`.
+            public var countValue5: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue6`.
+            public var countValue6: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue7`.
+            public var countValue7: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue8`.
+            public var countValue8: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue9`.
+            public var countValue9: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue10`.
+            public var countValue10: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue0`.
+            public var percentageValue0: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue1`.
+            public var percentageValue1: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue2`.
+            public var percentageValue2: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue3`.
+            public var percentageValue3: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue4`.
+            public var percentageValue4: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue5`.
+            public var percentageValue5: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue6`.
+            public var percentageValue6: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue7`.
+            public var percentageValue7: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue8`.
+            public var percentageValue8: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue9`.
+            public var percentageValue9: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue10`.
+            public var percentageValue10: Swift.Double
+            /// Creates a new `ZeroToTenQuestionFeedbackSummary`.
+            ///
+            /// - Parameters:
+            ///   - countValue0:
+            ///   - countValue1:
+            ///   - countValue2:
+            ///   - countValue3:
+            ///   - countValue4:
+            ///   - countValue5:
+            ///   - countValue6:
+            ///   - countValue7:
+            ///   - countValue8:
+            ///   - countValue9:
+            ///   - countValue10:
+            ///   - percentageValue0:
+            ///   - percentageValue1:
+            ///   - percentageValue2:
+            ///   - percentageValue3:
+            ///   - percentageValue4:
+            ///   - percentageValue5:
+            ///   - percentageValue6:
+            ///   - percentageValue7:
+            ///   - percentageValue8:
+            ///   - percentageValue9:
+            ///   - percentageValue10:
+            public init(
+                countValue0: Swift.Int32,
+                countValue1: Swift.Int32,
+                countValue2: Swift.Int32,
+                countValue3: Swift.Int32,
+                countValue4: Swift.Int32,
+                countValue5: Swift.Int32,
+                countValue6: Swift.Int32,
+                countValue7: Swift.Int32,
+                countValue8: Swift.Int32,
+                countValue9: Swift.Int32,
+                countValue10: Swift.Int32,
+                percentageValue0: Swift.Double,
+                percentageValue1: Swift.Double,
+                percentageValue2: Swift.Double,
+                percentageValue3: Swift.Double,
+                percentageValue4: Swift.Double,
+                percentageValue5: Swift.Double,
+                percentageValue6: Swift.Double,
+                percentageValue7: Swift.Double,
+                percentageValue8: Swift.Double,
+                percentageValue9: Swift.Double,
+                percentageValue10: Swift.Double
+            ) {
+                self.countValue0 = countValue0
+                self.countValue1 = countValue1
+                self.countValue2 = countValue2
+                self.countValue3 = countValue3
+                self.countValue4 = countValue4
+                self.countValue5 = countValue5
+                self.countValue6 = countValue6
+                self.countValue7 = countValue7
+                self.countValue8 = countValue8
+                self.countValue9 = countValue9
+                self.countValue10 = countValue10
+                self.percentageValue0 = percentageValue0
+                self.percentageValue1 = percentageValue1
+                self.percentageValue2 = percentageValue2
+                self.percentageValue3 = percentageValue3
+                self.percentageValue4 = percentageValue4
+                self.percentageValue5 = percentageValue5
+                self.percentageValue6 = percentageValue6
+                self.percentageValue7 = percentageValue7
+                self.percentageValue8 = percentageValue8
+                self.percentageValue9 = percentageValue9
+                self.percentageValue10 = percentageValue10
+            }
+            public enum CodingKeys: String, CodingKey {
+                case countValue0
+                case countValue1
+                case countValue2
+                case countValue3
+                case countValue4
+                case countValue5
+                case countValue6
+                case countValue7
+                case countValue8
+                case countValue9
+                case countValue10
+                case percentageValue0
+                case percentageValue1
+                case percentageValue2
+                case percentageValue3
+                case percentageValue4
+                case percentageValue5
+                case percentageValue6
+                case percentageValue7
+                case percentageValue8
+                case percentageValue9
+                case percentageValue10
             }
         }
         /// - Remark: Generated from `#/components/schemas/SendNotificationInput`.
@@ -774,6 +1236,10 @@ public enum Components {
             public var title: Swift.String
             /// - Remark: Generated from `#/components/schemas/ActivityDto/agenda`.
             public var agenda: Swift.String?
+            /// Calendar invite email address for creating events under this activity.
+            ///
+            /// - Remark: Generated from `#/components/schemas/ActivityDto/activityEmail`.
+            public var activityEmail: Swift.String
             /// - Remark: Generated from `#/components/schemas/ActivityDto/owner`.
             public var owner: Components.Schemas.OwnerDto
             /// Run mode that controls how events are joined and processed.
@@ -803,6 +1269,7 @@ public enum Components {
             ///   - id: Stable identifier for the activity.
             ///   - title: Display title shown to managers and participants.
             ///   - agenda:
+            ///   - activityEmail: Calendar invite email address for creating events under this activity.
             ///   - owner:
             ///   - runMode: Run mode that controls how events are joined and processed.
             ///   - sendEmails:
@@ -814,6 +1281,7 @@ public enum Components {
                 id: Swift.String,
                 title: Swift.String,
                 agenda: Swift.String? = nil,
+                activityEmail: Swift.String,
                 owner: Components.Schemas.OwnerDto,
                 runMode: Components.Schemas.ActivityDto.RunModePayload,
                 sendEmails: Swift.Bool,
@@ -825,6 +1293,7 @@ public enum Components {
                 self.id = id
                 self.title = title
                 self.agenda = agenda
+                self.activityEmail = activityEmail
                 self.owner = owner
                 self.runMode = runMode
                 self.sendEmails = sendEmails
@@ -837,6 +1306,7 @@ public enum Components {
                 case id
                 case title
                 case agenda
+                case activityEmail
                 case owner
                 case runMode
                 case sendEmails
@@ -1485,67 +1955,6 @@ public enum Components {
                 case managerData
             }
         }
-        /// Distribution summary for emoji feedback.
-        ///
-        /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary`.
-        public struct EmojiQuestionFeedbackSummary: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countVerySad`.
-            public var countVerySad: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countSad`.
-            public var countSad: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countHappy`.
-            public var countHappy: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/countVeryHappy`.
-            public var countVeryHappy: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageVerySad`.
-            public var percentageVerySad: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageSad`.
-            public var percentageSad: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageHappy`.
-            public var percentageHappy: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/EmojiQuestionFeedbackSummary/percentageVeryHappy`.
-            public var percentageVeryHappy: Swift.Double
-            /// Creates a new `EmojiQuestionFeedbackSummary`.
-            ///
-            /// - Parameters:
-            ///   - countVerySad:
-            ///   - countSad:
-            ///   - countHappy:
-            ///   - countVeryHappy:
-            ///   - percentageVerySad:
-            ///   - percentageSad:
-            ///   - percentageHappy:
-            ///   - percentageVeryHappy:
-            public init(
-                countVerySad: Swift.Int32,
-                countSad: Swift.Int32,
-                countHappy: Swift.Int32,
-                countVeryHappy: Swift.Int32,
-                percentageVerySad: Swift.Double,
-                percentageSad: Swift.Double,
-                percentageHappy: Swift.Double,
-                percentageVeryHappy: Swift.Double
-            ) {
-                self.countVerySad = countVerySad
-                self.countSad = countSad
-                self.countHappy = countHappy
-                self.countVeryHappy = countVeryHappy
-                self.percentageVerySad = percentageVerySad
-                self.percentageSad = percentageSad
-                self.percentageHappy = percentageHappy
-                self.percentageVeryHappy = percentageVeryHappy
-            }
-            public enum CodingKeys: String, CodingKey {
-                case countVerySad
-                case countSad
-                case countHappy
-                case countVeryHappy
-                case percentageVerySad
-                case percentageSad
-                case percentageHappy
-                case percentageVeryHappy
-            }
-        }
         /// Manager-only bootstrap section with activities and analytics.
         ///
         /// - Remark: Generated from `#/components/schemas/ManagerDataDto`.
@@ -1746,104 +2155,6 @@ public enum Components {
                 case seenByManager
             }
         }
-        /// Distribution summary for agree/disagree opinion feedback.
-        ///
-        /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary`.
-        public struct OpinionQuestionFeedbackSummary: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countStronglyAgree`.
-            public var countStronglyAgree: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countAgree`.
-            public var countAgree: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countStronglyDisagree`.
-            public var countStronglyDisagree: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/countDisagree`.
-            public var countDisagree: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageStronglyAgree`.
-            public var percentageStronglyAgree: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageAgree`.
-            public var percentageAgree: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageStronglyDisagree`.
-            public var percentageStronglyDisagree: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/OpinionQuestionFeedbackSummary/percentageDisagree`.
-            public var percentageDisagree: Swift.Double
-            /// Creates a new `OpinionQuestionFeedbackSummary`.
-            ///
-            /// - Parameters:
-            ///   - countStronglyAgree:
-            ///   - countAgree:
-            ///   - countStronglyDisagree:
-            ///   - countDisagree:
-            ///   - percentageStronglyAgree:
-            ///   - percentageAgree:
-            ///   - percentageStronglyDisagree:
-            ///   - percentageDisagree:
-            public init(
-                countStronglyAgree: Swift.Int32,
-                countAgree: Swift.Int32,
-                countStronglyDisagree: Swift.Int32,
-                countDisagree: Swift.Int32,
-                percentageStronglyAgree: Swift.Double,
-                percentageAgree: Swift.Double,
-                percentageStronglyDisagree: Swift.Double,
-                percentageDisagree: Swift.Double
-            ) {
-                self.countStronglyAgree = countStronglyAgree
-                self.countAgree = countAgree
-                self.countStronglyDisagree = countStronglyDisagree
-                self.countDisagree = countDisagree
-                self.percentageStronglyAgree = percentageStronglyAgree
-                self.percentageAgree = percentageAgree
-                self.percentageStronglyDisagree = percentageStronglyDisagree
-                self.percentageDisagree = percentageDisagree
-            }
-            public enum CodingKeys: String, CodingKey {
-                case countStronglyAgree
-                case countAgree
-                case countStronglyDisagree
-                case countDisagree
-                case percentageStronglyAgree
-                case percentageAgree
-                case percentageStronglyDisagree
-                case percentageDisagree
-            }
-        }
-        /// Question feedback summary where only one subtype is populated per feedback type.
-        ///
-        /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto`.
-        public struct QuestionFeedbackSummaryDto: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/emojiQuestionFeedbackSummary`.
-            public var emojiQuestionFeedbackSummary: Components.Schemas.EmojiQuestionFeedbackSummary?
-            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/thumpsQuestionFeedbackSummary`.
-            public var thumpsQuestionFeedbackSummary: Components.Schemas.ThumpsQuestionFeedbackSummary?
-            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/opinionQuestionFeedbackSummary`.
-            public var opinionQuestionFeedbackSummary: Components.Schemas.OpinionQuestionFeedbackSummary?
-            /// - Remark: Generated from `#/components/schemas/QuestionFeedbackSummaryDto/zeroToTenQuestionFeedbackSummary`.
-            public var zeroToTenQuestionFeedbackSummary: Components.Schemas.ZeroToTenQuestionFeedbackSummary?
-            /// Creates a new `QuestionFeedbackSummaryDto`.
-            ///
-            /// - Parameters:
-            ///   - emojiQuestionFeedbackSummary:
-            ///   - thumpsQuestionFeedbackSummary:
-            ///   - opinionQuestionFeedbackSummary:
-            ///   - zeroToTenQuestionFeedbackSummary:
-            public init(
-                emojiQuestionFeedbackSummary: Components.Schemas.EmojiQuestionFeedbackSummary? = nil,
-                thumpsQuestionFeedbackSummary: Components.Schemas.ThumpsQuestionFeedbackSummary? = nil,
-                opinionQuestionFeedbackSummary: Components.Schemas.OpinionQuestionFeedbackSummary? = nil,
-                zeroToTenQuestionFeedbackSummary: Components.Schemas.ZeroToTenQuestionFeedbackSummary? = nil
-            ) {
-                self.emojiQuestionFeedbackSummary = emojiQuestionFeedbackSummary
-                self.thumpsQuestionFeedbackSummary = thumpsQuestionFeedbackSummary
-                self.opinionQuestionFeedbackSummary = opinionQuestionFeedbackSummary
-                self.zeroToTenQuestionFeedbackSummary = zeroToTenQuestionFeedbackSummary
-            }
-            public enum CodingKeys: String, CodingKey {
-                case emojiQuestionFeedbackSummary
-                case thumpsQuestionFeedbackSummary
-                case opinionQuestionFeedbackSummary
-                case zeroToTenQuestionFeedbackSummary
-            }
-        }
         /// Single event trend point for question analytics.
         ///
         /// - Remark: Generated from `#/components/schemas/QuestionTrendPointDto`.
@@ -1883,188 +2194,6 @@ public enum Components {
                 case eventDate
                 case responseCount
                 case summary
-            }
-        }
-        /// Distribution summary for thumbs up/down feedback.
-        ///
-        /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary`.
-        public struct ThumpsQuestionFeedbackSummary: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/countUp`.
-            public var countUp: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/countDown`.
-            public var countDown: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/percentageUp`.
-            public var percentageUp: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ThumpsQuestionFeedbackSummary/percentageDown`.
-            public var percentageDown: Swift.Double
-            /// Creates a new `ThumpsQuestionFeedbackSummary`.
-            ///
-            /// - Parameters:
-            ///   - countUp:
-            ///   - countDown:
-            ///   - percentageUp:
-            ///   - percentageDown:
-            public init(
-                countUp: Swift.Int32,
-                countDown: Swift.Int32,
-                percentageUp: Swift.Double,
-                percentageDown: Swift.Double
-            ) {
-                self.countUp = countUp
-                self.countDown = countDown
-                self.percentageUp = percentageUp
-                self.percentageDown = percentageDown
-            }
-            public enum CodingKeys: String, CodingKey {
-                case countUp
-                case countDown
-                case percentageUp
-                case percentageDown
-            }
-        }
-        /// Distribution summary for zero-to-ten rating feedback.
-        ///
-        /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary`.
-        public struct ZeroToTenQuestionFeedbackSummary: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue0`.
-            public var countValue0: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue1`.
-            public var countValue1: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue2`.
-            public var countValue2: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue3`.
-            public var countValue3: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue4`.
-            public var countValue4: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue5`.
-            public var countValue5: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue6`.
-            public var countValue6: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue7`.
-            public var countValue7: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue8`.
-            public var countValue8: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue9`.
-            public var countValue9: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/countValue10`.
-            public var countValue10: Swift.Int32
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue0`.
-            public var percentageValue0: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue1`.
-            public var percentageValue1: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue2`.
-            public var percentageValue2: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue3`.
-            public var percentageValue3: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue4`.
-            public var percentageValue4: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue5`.
-            public var percentageValue5: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue6`.
-            public var percentageValue6: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue7`.
-            public var percentageValue7: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue8`.
-            public var percentageValue8: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue9`.
-            public var percentageValue9: Swift.Double
-            /// - Remark: Generated from `#/components/schemas/ZeroToTenQuestionFeedbackSummary/percentageValue10`.
-            public var percentageValue10: Swift.Double
-            /// Creates a new `ZeroToTenQuestionFeedbackSummary`.
-            ///
-            /// - Parameters:
-            ///   - countValue0:
-            ///   - countValue1:
-            ///   - countValue2:
-            ///   - countValue3:
-            ///   - countValue4:
-            ///   - countValue5:
-            ///   - countValue6:
-            ///   - countValue7:
-            ///   - countValue8:
-            ///   - countValue9:
-            ///   - countValue10:
-            ///   - percentageValue0:
-            ///   - percentageValue1:
-            ///   - percentageValue2:
-            ///   - percentageValue3:
-            ///   - percentageValue4:
-            ///   - percentageValue5:
-            ///   - percentageValue6:
-            ///   - percentageValue7:
-            ///   - percentageValue8:
-            ///   - percentageValue9:
-            ///   - percentageValue10:
-            public init(
-                countValue0: Swift.Int32,
-                countValue1: Swift.Int32,
-                countValue2: Swift.Int32,
-                countValue3: Swift.Int32,
-                countValue4: Swift.Int32,
-                countValue5: Swift.Int32,
-                countValue6: Swift.Int32,
-                countValue7: Swift.Int32,
-                countValue8: Swift.Int32,
-                countValue9: Swift.Int32,
-                countValue10: Swift.Int32,
-                percentageValue0: Swift.Double,
-                percentageValue1: Swift.Double,
-                percentageValue2: Swift.Double,
-                percentageValue3: Swift.Double,
-                percentageValue4: Swift.Double,
-                percentageValue5: Swift.Double,
-                percentageValue6: Swift.Double,
-                percentageValue7: Swift.Double,
-                percentageValue8: Swift.Double,
-                percentageValue9: Swift.Double,
-                percentageValue10: Swift.Double
-            ) {
-                self.countValue0 = countValue0
-                self.countValue1 = countValue1
-                self.countValue2 = countValue2
-                self.countValue3 = countValue3
-                self.countValue4 = countValue4
-                self.countValue5 = countValue5
-                self.countValue6 = countValue6
-                self.countValue7 = countValue7
-                self.countValue8 = countValue8
-                self.countValue9 = countValue9
-                self.countValue10 = countValue10
-                self.percentageValue0 = percentageValue0
-                self.percentageValue1 = percentageValue1
-                self.percentageValue2 = percentageValue2
-                self.percentageValue3 = percentageValue3
-                self.percentageValue4 = percentageValue4
-                self.percentageValue5 = percentageValue5
-                self.percentageValue6 = percentageValue6
-                self.percentageValue7 = percentageValue7
-                self.percentageValue8 = percentageValue8
-                self.percentageValue9 = percentageValue9
-                self.percentageValue10 = percentageValue10
-            }
-            public enum CodingKeys: String, CodingKey {
-                case countValue0
-                case countValue1
-                case countValue2
-                case countValue3
-                case countValue4
-                case countValue5
-                case countValue6
-                case countValue7
-                case countValue8
-                case countValue9
-                case countValue10
-                case percentageValue0
-                case percentageValue1
-                case percentageValue2
-                case percentageValue3
-                case percentageValue4
-                case percentageValue5
-                case percentageValue6
-                case percentageValue7
-                case percentageValue8
-                case percentageValue9
-                case percentageValue10
             }
         }
         /// Input payload for account logout and device token unlink.

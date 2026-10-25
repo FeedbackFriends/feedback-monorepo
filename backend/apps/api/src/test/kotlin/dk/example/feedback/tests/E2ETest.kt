@@ -10,6 +10,7 @@ import dk.example.feedback.model.enumerations.Emoji
 import dk.example.feedback.model.enumerations.FeedbackType
 import dk.example.feedback.model.enumerations.ActivityRunMode
 import dk.example.feedback.model.enumerations.Role
+import dk.example.feedback.persistence.repo.EventRepo
 import dk.example.feedback.payloads.FeedbackInput
 import dk.example.feedback.payloads.CreateAccountInput
 import dk.example.feedback.payloads.ModifyAccountInput
@@ -23,6 +24,7 @@ import java.util.UUID
 import org.hamcrest.Matchers.hasItem
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -39,11 +41,73 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc
 @Import(TestConfig::class, SecurityConfig::class)
 class E2ETest(
-    @Autowired val mockMvc: MockMvc,
+    @param:Autowired val mockMvc: MockMvc,
+    @param:Autowired val eventRepo: EventRepo,
 ) {
     private val objectMapper = jacksonObjectMapper()
         .registerModule(JavaTimeModule())
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+
+    @Test
+    fun `manager activity responses include stable generated activity email`() {
+        val managerId = "manager-activity-email"
+        createAccount(managerId = managerId)
+
+        val createdActivity = createActivityResponse(managerId = managerId)
+        val activityId = createdActivity.get("id").asText()
+        val activityEmail = createdActivity.get("activityEmail").asText()
+
+        assertTrue(Regex("^[0-9]{4}@letsgrow\\.dk$").matches(activityEmail))
+
+        val updatedActivity = updateActivity(
+            managerId = managerId,
+            activityId = activityId,
+            questions = listOf(
+                QuestionInput(
+                    id = UUID.fromString(createdActivity.get("currentQuestions").get(0).get("id").asText()),
+                    questionText = "How did it go after update?",
+                    feedbackType = FeedbackType.Emoji,
+                )
+            ),
+        )
+        assertEquals(activityEmail, updatedActivity.get("activityEmail").asText())
+
+        val bootstrapActivity = fetchActivityFromBootstrap(managerId = managerId, activityId = activityId)
+        assertEquals(activityEmail, bootstrapActivity.get("activityEmail").asText())
+    }
+
+    @Test
+    fun `calendar invite updates preserve submitted feedback status`() {
+        val managerId = "manager-calendar-feedback-status"
+        val participantId = "participant-calendar-feedback-status"
+        val participantEmail = "calendar.feedback@example.com"
+        createAccount(managerId = managerId)
+        createParticipantAccount(accountId = participantId, email = participantEmail)
+        val activity = createActivityResponse(managerId = managerId)
+        val event = createEvent(
+            managerId = managerId,
+            activityId = activity.get("id").asText(),
+            date = OffsetDateTime.parse("2026-04-03T09:00:00+00:00"),
+            location = "Oslo",
+        )
+        val eventId = UUID.fromString(event.get("id").asText())
+        submitEmojiFeedback(
+            participantId = participantId,
+            pinCode = event.get("pinCode").asText(),
+            questionId = UUID.fromString(event.get("questionsSnapshot").get(0).get("id").asText()),
+        )
+        assertTrue(eventRepo.accountDidSubmitFeedbackForEvent(eventId, participantId))
+        eventRepo.updateActivityEventFromMailListener(
+            eventId = eventId,
+            date = OffsetDateTime.parse("2026-04-03T10:00:00+00:00"),
+            location = "Bergen",
+            durationInMinutes = 60,
+            invitedEmails = listOf(participantEmail),
+            calendarProvider = null,
+            calendarEventId = "calendar-feedback-status",
+        )
+        assertTrue(eventRepo.accountDidSubmitFeedbackForEvent(eventId, participantId))
+    }
 
     @Test
     fun `manager creates activity then event from that activity`() {
@@ -274,6 +338,19 @@ class E2ETest(
         assertEquals("How did the event go?", analyticsEntry.get("questionText").asText())
         assertEquals(2, analyticsEntry.get("timeline").size())
         assertEquals(2, analyticsEntry.get("overallSummary").get("emojiQuestionFeedbackSummary").get("countHappy").asInt())
+
+        val activity = bootstrapJson.get("managerData").get("activities")
+            .first { it.get("id").asText() == activityId }
+        activity.get("events").forEach { event ->
+            val snapshot = event.get("questionsSnapshot").get(0)
+            assertEquals(canonicalQuestionId.toString(), snapshot.get("activityQuestionId").asText())
+            assertEquals(1, snapshot.get("feedback").size())
+            assertEquals(1, snapshot.get("summary").get("emojiQuestionFeedbackSummary").get("countHappy").asInt())
+            val response = snapshot.get("feedback").get(0)
+            assertEquals(snapshot.get("id").asText(), response.get("questionId").asText())
+            assertTrue(response.hasNonNull("createdAt"))
+            assertTrue(!response.has("participantId"))
+        }
     }
 
     @Test
