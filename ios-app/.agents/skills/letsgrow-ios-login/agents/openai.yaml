@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow iOS Login"
+  short_description: "Log ind i Localhost-appen gennem Xcode MCP"
+  default_prompt: "Brug $letsgrow-ios-login til at starte Feedback Localhost på simulatoren med en indlogget testbruger."

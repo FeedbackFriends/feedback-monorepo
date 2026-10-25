@@ -27,17 +27,21 @@ Keep work in this subtree focused on the iOS app. If the API contract changes, r
 - `.maestro/`: mobile UI flows.
 - `Docs/`: architecture, setup, configuration, notification docs, and screenshots.
 
-## Xcode And Build Tools
-Use XcodeBuildMCP for Xcode operations when available:
-
-- build: `mcp__xcodebuildmcp__build_sim_name_proj`
-- test: `mcp__xcodebuildmcp__test_sim_name_proj`
-- clean: `mcp__xcodebuildmcp__clean`
-
-Use the `Feedback Localhost` scheme for local development unless the user asks for another scheme.
+## Xcode And Simulator Harness
+- Use the native Xcode MCP server (`mcp__xcode`) for all interaction with Xcode and simulators: workspace discovery, scheme/destination selection, builds, tests, launch arguments, install/run, UI interaction, screenshots, logs, and debugging.
+- Use the `Feedback Localhost` scheme for local development and testing unless the user explicitly asks for another scheme. Select it with `XcodeSwitchScheme` before building, running, or testing.
+- Discover workspace identifiers with `XcodeListWorkspaces`; do not hardcode identifiers from previous sessions. Open `Feedback.xcodeproj` with `XcodeOpenWorkspace` when it is not listed.
+- Use the active simulator by default. Use `XcodeListRunDestinations` and `XcodeSwitchRunDestination` when a different target is requested.
+- Use `BuildProject`, `RunProject`, `RunSomeTests`/`RunAllTests`, `GetBuildLog`, and `GetConsoleOutput` for the corresponding operations.
+- For interactive checks, use `DeviceInteractionStartWorkspaceSession`, `DeviceInteractionInstallAndRun`, and `DeviceInteractionSynthesize`. Close the interaction session with `DeviceInteractionEndSession` when finished.
+- Do not substitute XcodeBuildMCP, `xcodebuild`, `xcrun simctl`, AppleScript, computer-use automation, or Maestro for these Xcode/simulator operations. If native Xcode MCP is unavailable or fails, report the exact blocker instead of silently switching tools. Existing explicitly requested Maestro test flows remain separate from this harness.
+- File edits, SwiftLint, API generation scripts, and local backend HTTP requests may use normal filesystem/shell tools; they are not Xcode interaction.
 
 ## Simulator Verification
-After implementing iOS app changes, run the app on the active simulator before finishing when feasible. Prefer the currently booted simulator and the `Feedback Localhost` scheme. If the app cannot be launched, report the reason in the final response.
+After implementing iOS app changes, run the app on the active simulator through Xcode MCP before finishing when feasible. Prefer the `Feedback Localhost` scheme. If the app cannot be launched, report the reason in the final response.
+
+## Simulator Login
+Use the repository skill `.agents/skills/letsgrow-ios-login/SKILL.md` (relative to `ios-app/`) to start the Localhost app with an authenticated test account. Obtain a fresh custom token and pass it only as per-launch arguments through Xcode MCP. Never commit tokens to a shared scheme or log them. Login alone must not reset or reseed test data.
 
 ## Architecture Rules
 - Features are TCA modules. Keep state, actions, reducers, and views inside the owning feature.
@@ -74,6 +78,11 @@ Examples:
 | `FocusListView` | `FocusList` |
 | `SettingsView` | `Settings` |
 | `ProfileView` | `Profile` |
+
+## Form Validation
+- Disable Continue/Next/Create/Save actions until all required inputs are valid, and while submission is in flight.
+- Do not enable invalid form actions just to show missing-field errors after tapping. Mark required fields clearly and preserve optional fields as optional.
+- Apply the same validation guard in reducers or submission handlers so keyboard/programmatic actions cannot bypass it. Keep API and network error reporting.
 
 ## Testing And Linting
 - Use Swift Testing, TCA `TestStore`, and snapshot tests for module behavior.
