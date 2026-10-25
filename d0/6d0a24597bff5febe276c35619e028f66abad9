@@ -1,0 +1,21 @@
+.github/workflows/release.yml
+  s_fc3b5b588c68e8::t_acc525243d48a8 112-114
+docs/deployment/coolify.md
+  s_fc3b5b588c68e8::t_7f745f8caf07f4 15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d06d0a24597bff5febe276c35619e028f66abad9",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
