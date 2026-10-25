@@ -1,0 +1,14 @@
+backend/gradle/libs.versions.toml
+  h_4568b5f7ec4588 8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "377af76a8810f38b28b248fa0cfd1ea5d6eacfe5",
+  "prompts": {},
+  "humans": {
+    "h_4568b5f7ec4588": {
+      "author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
