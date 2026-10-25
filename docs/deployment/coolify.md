@@ -9,18 +9,16 @@ production resource.
 The GitHub Actions release workflow builds and publishes
 `nicolaidam/feedback-api:prod`, `nicolaidam/feedback-scheduler:prod`, and
 `nicolaidam/feedback-web:prod`, then sends a forced deployment request to the
-Coolify webhook with `force=true`; otherwise Coolify may keep running
-containers based on an earlier version of a mutable `prod` image tag. The
-workflow adds `force=true` when the configured webhook URL does not include it
-and replaces a configured `force=false` value with `force=true`.
+Coolify API with `force=true`. This ensures Coolify pulls the newly published
+mutable `prod` image tags.
 
 Required GitHub Actions secrets:
 
 - `DOCKER_USERNAME`
 - `DOCKER_PASSWORD`
-- `COOLIFY_DEPLOY_WEBHOOK_URL` - deploy webhook URL for the LetsGrow Compose
-  resource. The workflow adds the required `force=true` query parameter.
-- `COOLIFY_TOKEN` - bearer token accepted by the webhook.
+- `COOLIFY_BASE_URL` - base URL of the Coolify instance.
+- `COOLIFY_RESOURCE_UUID` - UUID of the LetsGrow Compose resource.
+- `COOLIFY_TOKEN` - bearer token with deploy permission for the resource.
 
 Keep secret values in GitHub Actions or Coolify. Do not copy them into this
 repository or print them in logs.
@@ -80,3 +78,4 @@ Official setup and security references:
 - [Coolify MCP setup](https://coolify.io/docs/mcp/setup)
 - [How Coolify MCP works](https://coolify.io/docs/mcp/how-mcp-works)
 - [Coolify MCP security](https://coolify.io/docs/mcp/security)
+- [Coolify deploy API](https://coolify.io/docs/api/endpoints/deployments/deploy-by-tag-or-uuid)

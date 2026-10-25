@@ -102,27 +102,25 @@ jobs:
 
       - name: Trigger Coolify deployment
         env:
-          DEPLOY_WEBHOOK_URL: ${{ secrets.COOLIFY_DEPLOY_WEBHOOK_URL }}
+          BASE_URL: ${{ secrets.COOLIFY_BASE_URL }}
+          RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
           TOKEN: ${{ secrets.COOLIFY_TOKEN }}
         run: |
           set -euo pipefail
 
-          [[ -n "${DEPLOY_WEBHOOK_URL:-}" ]] || { echo "COOLIFY_DEPLOY_WEBHOOK_URL is empty."; exit 1; }
+          [[ -n "${BASE_URL:-}" ]] || { echo "COOLIFY_BASE_URL is empty."; exit 1; }
+          [[ -n "${RESOURCE_UUID:-}" ]] || { echo "COOLIFY_RESOURCE_UUID is empty."; exit 1; }
           [[ -n "${TOKEN:-}" ]] || { echo "COOLIFY_TOKEN is empty."; exit 1; }
-          if [[ "$DEPLOY_WEBHOOK_URL" == *"force=false"* ]]; then
-            DEPLOY_WEBHOOK_URL="${DEPLOY_WEBHOOK_URL/force=false/force=true}"
-          elif [[ "$DEPLOY_WEBHOOK_URL" != *"force=true"* ]]; then
-            SEPARATOR="?"
-            [[ "$DEPLOY_WEBHOOK_URL" != *"?"* ]] || SEPARATOR="&"
-            DEPLOY_WEBHOOK_URL="${DEPLOY_WEBHOOK_URL}${SEPARATOR}force=true"
-          fi
 
           echo "::add-mask::$TOKEN"
-          echo "Triggering forced Coolify deployment."
-          curl --fail --silent --show-error \
+          API_URL="${BASE_URL%/}/api/v1/deploy"
+          echo "Triggering forced Coolify deployment for RESOURCE_UUID=${RESOURCE_UUID}"
+          curl --fail-with-body --silent --show-error \
             --request POST \
             --header "Authorization: Bearer ${TOKEN}" \
-            "$DEPLOY_WEBHOOK_URL"
+            --url-query "uuid=${RESOURCE_UUID}" \
+            --url-query "force=true" \
+            "$API_URL"
 
           HEALTH_STATUS=""
           for attempt in {1..90}; do
