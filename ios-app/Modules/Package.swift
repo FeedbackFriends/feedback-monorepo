@@ -67,7 +67,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", exact: "1.9.0"),
         .package(
-            url: "git@github.com:pointfreeco/swift-snapshot-testing.git",
+            url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
             exact: "1.18.9"
         ),
         .package(
