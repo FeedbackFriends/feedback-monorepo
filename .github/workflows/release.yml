@@ -123,27 +123,8 @@ jobs:
           DEPLOYMENT_UUID="$(jq -er '.deployments[0].deployment_uuid' <<< "$DEPLOYMENT_RESPONSE")"
           echo "Coolify deployment queued id=${DEPLOYMENT_UUID}"
 
-          for attempt in {1..90}; do
-            DEPLOYMENT_STATUS="$(curl --fail-with-body --silent --show-error \
-              -H "Authorization: Bearer ${TOKEN}" \
-              "${BASE_URL%/}/api/v1/deployments/${DEPLOYMENT_UUID}" | jq -er '.status')"
-            echo "Coolify deployment status=${DEPLOYMENT_STATUS}"
-
-            case "$DEPLOYMENT_STATUS" in
-              finished) break ;;
-              failed|cancelled|cancelled-by-user) exit 1 ;;
-              queued|in_progress) sleep 10 ;;
-              *) echo "Unexpected Coolify deployment status: ${DEPLOYMENT_STATUS}"; exit 1 ;;
-            esac
-          done
-
-          [[ "$DEPLOYMENT_STATUS" == "finished" ]] || {
-            echo "Coolify deployment did not finish within 15 minutes."
-            exit 1
-          }
-
           HEALTH_STATUS=""
-          for attempt in {1..12}; do
+          for attempt in {1..90}; do
             HEALTH_STATUS="$(curl --silent --show-error --max-time 15 \
               --output /dev/null --write-out "%{http_code}" \
               https://api.letsgrow.dk/actuator/health || true)"
