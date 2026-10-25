@@ -1,0 +1,23 @@
+ios-app/Feedback.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+  s_fc3b5b588c68e8::t_7eb411879cb1da 349
+ios-app/Modules/Package.resolved
+  s_fc3b5b588c68e8::t_b1f02ea437588a 349
+ios-app/Modules/Package.swift
+  s_fc3b5b588c68e8::t_d97c6bf84a77e5 70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "94992824cf40caf98e5d7ea355251de07e368be1",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
