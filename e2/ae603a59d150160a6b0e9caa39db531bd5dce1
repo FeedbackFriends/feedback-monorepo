@@ -1,0 +1,21 @@
+backend/lib/persistence/src/main/resources/db/changelog/0001b-rename-notification-history-primary-key.yaml
+  s_fc3b5b588c68e8::t_a568b928333ab3 1-8
+backend/lib/persistence/src/main/resources/db/changelog/db.changelog-master.yaml
+  s_fc3b5b588c68e8::t_05234b57050bf8 25-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e2ae603a59d150160a6b0e9caa39db531bd5dce1",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
