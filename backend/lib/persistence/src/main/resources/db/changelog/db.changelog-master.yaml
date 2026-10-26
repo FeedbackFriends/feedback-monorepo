@@ -77,7 +77,7 @@ databaseChangeLog:
       file: 0018-add-activity-and-rename-event-to-session.yaml
       relativeToChangelogFile: true
   - include:
-      file: 0019-add-activity-question-id.yaml
+      file: 0019b-backfill-activity-question-id.yaml
       relativeToChangelogFile: true
   - include:
       file: 0020-drop-session-title-and-agenda.yaml

@@ -1,0 +1,107 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0019b-backfill-activity-question-id
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: question
+                columnName: activity_question_id
+      changes:
+        - addColumn:
+            tableName: question
+            columns:
+              - column:
+                  name: activity_question_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+        - sql:
+            sql: |
+              update question
+              set activity_question_id = id
+              where activity_id is not null;
+        - sql:
+            dbms: postgresql
+            sql: |
+              with session_questions as (
+                select
+                  question.id,
+                  session.activity_id,
+                  question.index,
+                  question.question_text,
+                  question.feedback_type,
+                  question.manager_id,
+                  question.created_at,
+                  question.updated_at,
+                  row_number() over (
+                    partition by
+                      session.activity_id,
+                      question.index,
+                      question.question_text,
+                      question.feedback_type,
+                      question.manager_id,
+                      question.created_at,
+                      question.updated_at
+                    order by question.id
+                  ) as duplicate_number
+                from question
+                join session on session.id = question.session_id
+              ), activity_questions as (
+                select
+                  question.id,
+                  question.activity_id,
+                  question.index,
+                  question.question_text,
+                  question.feedback_type,
+                  question.manager_id,
+                  question.created_at,
+                  question.updated_at,
+                  row_number() over (
+                    partition by
+                      question.activity_id,
+                      question.index,
+                      question.question_text,
+                      question.feedback_type,
+                      question.manager_id,
+                      question.created_at,
+                      question.updated_at
+                    order by question.id
+                  ) as duplicate_number
+                from question
+                where question.activity_id is not null
+                  and question.session_id is null
+              )
+              update question session_question
+              set activity_question_id = activity_question.id
+              from session_questions
+              join activity_questions
+                on activity_questions.activity_id = session_questions.activity_id
+               and activity_questions.index = session_questions.index
+               and activity_questions.question_text = session_questions.question_text
+               and activity_questions.feedback_type = session_questions.feedback_type
+               and activity_questions.manager_id = session_questions.manager_id
+               and activity_questions.created_at = session_questions.created_at
+               and activity_questions.updated_at = session_questions.updated_at
+               and activity_questions.duplicate_number = session_questions.duplicate_number
+              where session_question.id = session_questions.id;
+        - sql:
+            dbms: h2
+            sql: |
+              update question
+              set activity_question_id = (
+                select activity_question.id
+                from session
+                join question activity_question
+                  on activity_question.activity_id = session.activity_id
+                 and activity_question.index = question.index
+                where session.id = question.session_id
+              )
+              where session_id is not null;
+        - createIndex:
+            tableName: question
+            indexName: idx_question_activity_question_id
+            columns:
+              - column:
+                  name: activity_question_id
