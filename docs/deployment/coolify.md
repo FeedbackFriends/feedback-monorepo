@@ -57,8 +57,9 @@ For HTTP 502 from the API domain:
 3. Confirm the API image was pulled and is running the expected architecture.
 4. Check required environment-variable presence and database connectivity
    without exposing their values.
-5. Check whether the API process is listening on port `8080` and whether the
-   management endpoint responds on `8090` inside the Coolify network.
+5. Check whether the API process is listening on port `8080` and whether
+   `/actuator/health` responds through the same port in production. Local
+   Compose uses port `8090` for the separate management endpoint.
 6. Verify the public health endpoint returns HTTP 200 after remediation.
 
 ## Coolify MCP
