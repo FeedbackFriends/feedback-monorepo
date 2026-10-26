@@ -1,0 +1,19 @@
+backend/lib/persistence/src/main/resources/db/changelog/0019b-backfill-activity-question-id.yaml
+  s_fc3b5b588c68e8::t_99af1db481eba5 77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "191ba345f76829227b2f0777b3b5f6f3bbc2ba66",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
