@@ -74,7 +74,7 @@ databaseChangeLog:
                   and question.session_id is null
               )
               update question session_question
-              set activity_question_id = activity_question.id
+              set activity_question_id = activity_questions.id
               from session_questions
               join activity_questions
                 on activity_questions.activity_id = session_questions.activity_id
