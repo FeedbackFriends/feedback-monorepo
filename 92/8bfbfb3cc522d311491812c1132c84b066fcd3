@@ -1,0 +1,23 @@
+docker-compose.override.yml
+  s_fc3b5b588c68e8::t_e03f73ace15326 31
+docker-compose.yml
+  s_fc3b5b588c68e8::t_488e7868edbb3f 11
+docs/deployment/coolify.md
+  s_fc3b5b588c68e8::t_7e5151bcc73af8 34-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "928bfbfb3cc522d311491812c1132c84b066fcd3",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
