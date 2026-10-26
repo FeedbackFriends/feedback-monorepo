@@ -1,0 +1,3 @@
+[mcp_servers.coolify]
+url = "https://coolify.letsgrow.dk/mcp"
+http_headers_helper = "./scripts/coolify-mcp-auth-headers"

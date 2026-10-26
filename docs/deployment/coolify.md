@@ -70,11 +70,14 @@ and create a team-scoped API token. Use `read` for inspection; add
 only if the client needs to start or restart resources. Do not use a root token
 for routine operations.
 
-Configure the AI client for Streamable HTTP at the Coolify instance's `/mcp`
-endpoint with the token supplied through secret storage. Keep the MCP endpoint
-on a dedicated infrastructure hostname or the Coolify host; do not attach it to
-`letsgrow.dk`. MCP respects token permissions and team scope, and may return
-redacted log summaries rather than full container logs.
+This repository's Codex configuration connects to the Coolify MCP endpoint at
+`https://coolify.letsgrow.dk/mcp`. The header helper reads `COOLIFY_MCP_TOKEN`
+from the ignored root `.env`; keep that file local and restrict it to the
+current user (`chmod 600 .env`). The committed `.env.example` contains only an
+empty placeholder. Keep the MCP endpoint on a dedicated infrastructure
+hostname or the Coolify host; do not attach it to `letsgrow.dk`. MCP respects
+token permissions and team scope, and may return redacted log summaries rather
+than full container logs.
 
 Official setup and security references:
 

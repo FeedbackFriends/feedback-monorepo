@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+"""Print the Coolify MCP Authorization header from the ignored project .env."""
+
+import json
+from pathlib import Path
+import sys
+
+
+env_file = Path(__file__).resolve().parent.parent / ".env"
+token = None
+
+try:
+    for line in env_file.read_text(encoding="utf-8").splitlines():
+        key, separator, value = line.partition("=")
+        if separator and key.strip() == "COOLIFY_MCP_TOKEN":
+            token = value.strip().strip("\"'")
+            break
+except OSError:
+    pass
+
+if not token:
+    print("COOLIFY_MCP_TOKEN is missing from the project .env", file=sys.stderr)
+    sys.exit(1)
+
+print(json.dumps({"Authorization": f"Bearer {token}"}))
