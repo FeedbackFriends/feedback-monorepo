@@ -1,0 +1,27 @@
+backend/lib/persistence/src/main/resources/db/changelog/0001-initial-schema.yaml
+  s_fc3b5b588c68e8::t_d678a38675e7a7 17,337,377,381,384,388
+.agents/skills/coolify-operations/SKILL.md
+  s_fc3b5b588c68e8::t_61d27ce5e784ce 27-31
+.env.example
+  s_fc3b5b588c68e8::t_d960d4c8c24cbe 30-31
+docker-compose.yml
+  s_fc3b5b588c68e8::t_0e3c0197b2b08e 23
+docs/deployment/coolify.md
+  s_fc3b5b588c68e8::t_9a7701a57c6bbc 31-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d02433c0cbc9c31ca6a865cf6b7da56650f70f19",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
