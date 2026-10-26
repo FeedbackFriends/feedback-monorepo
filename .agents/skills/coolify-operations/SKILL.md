@@ -24,6 +24,11 @@ Use this skill for LetsGrow deployment and production-runtime work.
 5. Verify `https://api.letsgrow.dk/actuator/health` returns HTTP 200 and `https://letsgrow.dk` returns a successful response.
 6. Report what was verified and any remaining unhealthy service. A queued deployment is not evidence that the application is healthy.
 
+The production API requires `FEEDBACK_ADMIN_EMAILS` to contain at least one
+comma-separated email address while test-admin endpoints are disabled. Treat
+this as an access-control allowlist; do not infer or add addresses without the
+owner's instruction.
+
 ## Coolify MCP
 
 If a Coolify MCP connection is available, start with the infrastructure overview and search for the LetsGrow Compose resource. Inspect deployment history, resource/service health, and supported log summaries. Use a team-scoped token with read access for inspection; add deploy permission only when the task requires lifecycle operations. Keep the token in the MCP client's secret storage.

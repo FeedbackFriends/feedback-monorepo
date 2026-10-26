@@ -14,7 +14,7 @@ databaseChangeLog:
                     unique: true
                     nullable: false
               - column:
-                  name: bootstrap_version
+                  name: feedback_session_hash
                   type: uuid
                   constraints:
                     nullable: false
@@ -334,7 +334,7 @@ databaseChangeLog:
             constraintName: fcm_token_account_id
             onDelete: CASCADE
         - createTable:
-            tableName: notification_history
+            tableName: activity
             columns:
               - column:
                   name: id
@@ -374,18 +374,18 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:
-            baseTableName: notification_history
+            baseTableName: activity
             baseColumnNames: event_id
             referencedTableName: event
             referencedColumnNames: id
-            constraintName: notification_history_event_id
+            constraintName: activity_event_id
             onDelete: CASCADE
         - addForeignKeyConstraint:
-            baseTableName: notification_history
+            baseTableName: activity
             baseColumnNames: account_id
             referencedTableName: account
             referencedColumnNames: id
-            constraintName: notification_history_account_id
+            constraintName: activity_account_id
             onDelete: CASCADE
         #feedback foreign keys
         - addForeignKeyConstraint:

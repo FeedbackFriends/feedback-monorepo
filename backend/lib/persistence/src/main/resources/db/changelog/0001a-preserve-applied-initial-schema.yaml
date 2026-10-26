@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001a-preserve-applied-initial-schema
+      author: codex
+      changes:
+        - renameColumn:
+            tableName: account
+            oldColumnName: feedback_session_hash
+            newColumnName: bootstrap_version
+            columnDataType: uuid
+        - renameTable:
+            oldTableName: activity
+            newTableName: notification_history
+        - dropForeignKeyConstraint:
+            baseTableName: notification_history
+            constraintName: activity_event_id
+        - addForeignKeyConstraint:
+            baseTableName: notification_history
+            baseColumnNames: event_id
+            referencedTableName: event
+            referencedColumnNames: id
+            constraintName: notification_history_event_id
+            onDelete: CASCADE
+        - dropForeignKeyConstraint:
+            baseTableName: notification_history
+            constraintName: activity_account_id
+        - addForeignKeyConstraint:
+            baseTableName: notification_history
+            baseColumnNames: account_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: notification_history_account_id
+            onDelete: CASCADE

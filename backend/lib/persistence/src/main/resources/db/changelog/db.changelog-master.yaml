@@ -20,6 +20,9 @@ databaseChangeLog:
       file: 0001-initial-schema.yaml
       relativeToChangelogFile: true
   - include:
+      file: 0001a-preserve-applied-initial-schema.yaml
+      relativeToChangelogFile: true
+  - include:
       file: 0002-rename-one_to_ten-to-zero_to_ten.yaml
       relativeToChangelogFile: true
   - include:

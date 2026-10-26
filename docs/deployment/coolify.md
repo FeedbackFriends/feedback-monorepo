@@ -28,8 +28,10 @@ repository or print them in logs.
 Create a Docker Compose resource from the repository root and use
 `docker-compose.yml`. Configure the production environment variables required
 by that Compose file, including database credentials, Firebase configuration,
-JWT settings, Zoho credentials, `IMAGE_PLATFORM`, and the public web
-configuration. Set the LetsGrow public domain on the `web` service at port
+JWT settings, Zoho credentials, `IMAGE_PLATFORM`, the public web configuration,
+and `FEEDBACK_ADMIN_EMAILS` as a comma-separated allowlist of administrator
+email addresses. Production has test-admin endpoints disabled, so this list
+must be non-empty for the API to start. Set the LetsGrow public domain on the `web` service at port
 `3000`; the API service listens on `8080` and exposes its management endpoint
 on `8090` internally.
 
