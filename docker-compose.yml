@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     environment:
       PORT: "8080"
-      MANAGEMENT_SERVER_PORT: "8090"
+      MANAGEMENT_SERVER_PORT: "8080"
       SPRING_DOC_API_DOCS_ENABLED: "true"
       SPRING_DOC_SWAGGER_UI_ENABLED: "true"
       POSTGRES_HOST: "${POSTGRES_HOST:?Set POSTGRES_HOST}"
