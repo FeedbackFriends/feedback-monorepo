@@ -1,0 +1,21 @@
+scripts/coolify-mcp-auth-headers
+  s_fc3b5b588c68e8::t_5c1742f2d5ddc2 1-25
+.codex/config.toml
+  s_fc3b5b588c68e8::t_b11dc2fd312503 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f887c7bb37321ef2b11ce87768e0688d8df319a1",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
