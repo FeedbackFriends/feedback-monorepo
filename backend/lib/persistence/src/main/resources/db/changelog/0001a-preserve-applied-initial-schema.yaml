@@ -11,6 +11,9 @@ databaseChangeLog:
         - renameTable:
             oldTableName: activity
             newTableName: notification_history
+        - sql:
+            dbms: h2
+            sql: ALTER TABLE notification_history RENAME CONSTRAINT PK_ACTIVITY TO PK_NOTIFICATION_HISTORY
         - dropForeignKeyConstraint:
             baseTableName: notification_history
             constraintName: activity_event_id
