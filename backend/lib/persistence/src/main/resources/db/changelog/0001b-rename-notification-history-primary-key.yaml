@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001b-rename-notification-history-primary-key
+      author: codex
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: ALTER TABLE notification_history RENAME CONSTRAINT activity_pkey TO notification_history_pkey
