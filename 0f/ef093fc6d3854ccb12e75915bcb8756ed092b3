@@ -1,0 +1,53 @@
+ios-app/Modules/Package.swift
+  s_af767e0f469315::t_01529e0966e003 260
+ios-app/Modules/Tests/AppTests/APIClientLiveTests/APIClientCacheMutationTests.swift
+  s_eb4f825bc489a6::t_8d6f317e5fbc31 107,109,143-144,166,186
+ios-app/Modules/Tests/AppTests/APIClientLiveTests/APIClientTests.swift
+  s_eb4f825bc489a6::t_8524e4b65642f1 13,30-31,41,64,69-72,78,96,114,135,137,157,161,173,179,182,184,193,213,217,220-221,225-229,231,234-238,242-250,254,256-260,262-264,267,269-271,275,278,280,284,304,312-313,317,327,332-333,340,343,350,352,360-362,372,375,383,385,395,398,404-406,408,413,422,425,441,466,471,473,479,490,499,526,556,574-579,581,585-587,590,592,646,651,685-686,692-696,701-708,710,715-724,736-737,740-741,744-745,748-749,752-753,764-766,771-772,777-779,781,783-785,789-794,798-807,813-819,869-880
+ios-app/Modules/Tests/AppTests/APIClientLiveTests/MockAPI.swift
+  s_eb4f825bc489a6::t_dcdb6fa8aa583d 52-77,144-145
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ActivityDetailTests.swift
+  s_eb4f825bc489a6::t_c889878ffd6b60 3,180,214-217
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ManagerEventsTests.swift
+  s_eb4f825bc489a6::t_bab6d8ec190466 46-47,49-51
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/UnseenResponseBadgeTests.swift
+  s_eb4f825bc489a6::t_4d5a104a77a27a 28,48-49,71,76
+ios-app/Modules/Tests/AppTests/ReducerTests/More/AccountSectionTests.swift
+  s_eb4f825bc489a6::t_4ceb3642af6184 9,14-32
+ios-app/Modules/Tests/AppTests/ReducerTests/More/ModifyAccountTests.swift
+  s_eb4f825bc489a6::t_37436236a2c8e0 19,44
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/EventDetailFeatureTests.swift
+  s_eb4f825bc489a6::t_c69314a18f39d3 18,47,67,79,97,118,147-186,202
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/JoinEventTests.swift
+  s_eb4f825bc489a6::t_2689b85c841a8e 12
+ios-app/Modules/Tests/AppTests/ReducerTests/More/ChangeUserTypeTests.swift
+  s_eb4f825bc489a6::t_ae999431a5e335 16,21,24,34
+ios-app/Modules/Tests/AppTests/ReducerTests/SignUp/SelectUserTypeTests.swift
+  s_eb4f825bc489a6::t_7b6e10e4f7ce77 11,16,28-31
+ios-app/Modules/Tests/AppTests/ReducerTests/Tabbar/TabbarTests.swift
+  s_eb4f825bc489a6::t_128428cbdef4e1 3-4,6,12-13,16-18,21,23-24,27-29,32,34-35,38-40,43,45-48,51-53,56,58-59,62-63,65,67-68,71-73,75,77-79,82,85-88,90-96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0fef093fc6d3854ccb12e75915bcb8756ed092b3",
+  "prompts": {},
+  "sessions": {
+    "s_af767e0f469315": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17d66-b845-79a2-916c-17546d20a23b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_eb4f825bc489a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17c43-b203-7d30-80eb-8a805f4aef4e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
