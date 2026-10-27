@@ -1,0 +1,25 @@
+.agents/config.toml
+  s_fc3b5b588c68e8::t_9e090b53e3d986 9-12
+.codex/config.toml
+  s_fc3b5b588c68e8::t_242b2264b4c4ed 4-14
+README.md
+  s_fc3b5b588c68e8::t_6b80ab7b502366 65-67
+docs/agent-tooling.md
+  s_fc3b5b588c68e8::t_fc05a36a0e816a 1-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "34f95ac4241d27331bde173b445804281bb78a2f",
+  "prompts": {},
+  "sessions": {
+    "s_fc3b5b588c68e8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17253-5c78-7a80-816f-e8dec15a5e51",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
