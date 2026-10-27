@@ -15,7 +15,7 @@ struct EventDetailFeatureTests {
             initialState: EventDetailFeature.State(
                 activityId: activity.id,
                 eventId: event.id,
-                session: session
+                bootstrap: session
             )
         ) {
             EventDetailFeature()
@@ -44,7 +44,7 @@ struct EventDetailFeatureTests {
             initialState: EventDetailFeature.State(
                 activityId: activity.id,
                 eventId: event.id,
-                session: session,
+                bootstrap: session,
                 webBaseUrl: URL(string: "https://example.com")
             )
         ) {
@@ -64,7 +64,7 @@ struct EventDetailFeatureTests {
             initialState: EventDetailFeature.State(
                 activityId: activity.id,
                 eventId: event.id,
-                session: session
+                bootstrap: session
             )
         ) {
             EventDetailFeature()
@@ -76,7 +76,7 @@ struct EventDetailFeatureTests {
     }
 
     @Test
-    func `Edit delegate updates event and closes manage event`() async {
+    func `Edit delegate closes manage event`() async {
         let (session, activity, event) = makeSession()
         let updatedEvent = Event(
             id: event.id,
@@ -94,18 +94,13 @@ struct EventDetailFeatureTests {
                 activityId: activity.id,
                 eventId: event.id,
                 destination: .manageEvent(.edit(activity: activity, event: event)),
-                session: session
+                bootstrap: session
             )
         ) {
             EventDetailFeature()
         }
 
         await store.send(.destination(.presented(.manageEvent(.delegate(.dismissAndUpdateEvent(updatedEvent)))))) {
-            var updatedActivity = activity
-            updatedActivity.events = [updatedEvent]
-            $0.$session.withLock {
-                $0.managerData!.activities[id: activity.id] = updatedActivity
-            }
             $0.destination = nil
         }
     }
@@ -120,7 +115,7 @@ struct EventDetailFeatureTests {
             initialState: EventDetailFeature.State(
                 activityId: activity.id,
                 eventId: event.id,
-                session: session
+                bootstrap: session
             )
         ) {
             EventDetailFeature()
@@ -142,17 +137,52 @@ struct EventDetailFeatureTests {
         }
 
         await store.receive(\.deleteEventSuccess) {
-            var updatedActivity = activity
-            updatedActivity.events = []
-            $0.$session.withLock {
-                $0.managerData!.activities[id: activity.id] = updatedActivity
-            }
             $0.deleteEventInFlight = false
             $0.showDeleteConfirmation = false
         }
 
         #expect(deletedEventId.value == event.id)
         #expect(didDismiss.value)
+    }
+
+    @Test
+    func `Delete failure keeps the session open and presents an error`() async {
+        let (bootstrap, activity, event) = makeSession()
+        let error = URLError(.cannotConnectToHost)
+        let store = TestStore(initialState: EventDetailFeature.State(
+            activityId: activity.id, eventId: event.id, bootstrap: bootstrap
+        )) {
+            EventDetailFeature()
+        } withDependencies: {
+            $0.apiClient.deleteEvent = { _ in throw error }
+        }
+
+        await store.send(.deleteEventConfirmButtonTapped) {
+            $0.deleteEventInFlight = true
+        }
+        await store.receive(\.presentError) {
+            $0.deleteEventInFlight = false
+            $0.alert = .init(error: error)
+        }
+        #expect(bootstrap.wrappedValue.managerData?.activities[id: activity.id]?.events == [event])
+    }
+
+    @Test
+    func `Cancel closes the delete confirmation without deleting the session`() async {
+        let (bootstrap, activity, event) = makeSession()
+        let store = TestStore(initialState: EventDetailFeature.State(
+            activityId: activity.id, eventId: event.id, bootstrap: bootstrap
+        )) {
+            EventDetailFeature()
+        }
+
+        await store.send(.deleteEventButtonTapped) {
+            $0.showDeleteConfirmation = true
+        }
+        await store.send(.deleteEventCancelButtonTapped) {
+            $0.showDeleteConfirmation = false
+        }
+        #expect(bootstrap.wrappedValue.managerData?.activities[id: activity.id]?.events == [event])
     }
 }
 
@@ -169,6 +199,7 @@ private func makeSession() -> (Shared<Bootstrap>, Activity, Event) {
     var bootstrap = Bootstrap.mock(numberOfManagerEvents: 1)
     var activity = bootstrap.managerData!.activities[0]
     activity.events = [event]
+    activity.questions = []
     bootstrap.managerData!.activities[id: activity.id] = activity
 
     return (.init(value: bootstrap), activity, event)

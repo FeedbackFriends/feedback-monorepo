@@ -9,7 +9,7 @@ struct JoinEventTests {
         let store = await TestStore(initialState: JoinEvent.State(pinCodeInput: .init(value: "1234"))) {
             JoinEvent()
         } withDependencies: {
-            $0.apiClient.joinEvent = { _ in () }
+            $0.apiClient.joinEvent = { _ in .mock() }
         }
         await store.send(.binding(.set(\.pinCodeTextfieldFocused, true))) {
             $0.pinCodeTextfieldFocused = true

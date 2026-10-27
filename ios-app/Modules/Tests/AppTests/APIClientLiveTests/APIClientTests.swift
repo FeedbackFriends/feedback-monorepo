@@ -10,7 +10,7 @@ struct APIClientLiveTests {
     @Test
     func `Delete account delegates to generated client`() async throws {
         let deleteCalled = LockIsolated(false)
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 deleteAccountHandler: { _ in
                     deleteCalled.setValue(true)
@@ -27,8 +27,8 @@ struct APIClientLiveTests {
     @Test
     func `Update account normalizes empty fields and updates cache`() async throws {
         let input = LockIsolated<Operations.ModifyAccount.Input?>(nil)
-        let cache = APIClientCache(bootstrap: Self.managerSession())
-        let client = Self.makeClient(
+        let cache = APIClientCache(bootstrap: APIFixture.managerSession())
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 modifyAccountHandler: { request in
                     input.setValue(request)
@@ -38,7 +38,7 @@ struct APIClientLiveTests {
             cache: cache
         )
 
-        try await client.updateAccount("", "updated@example.com", "")
+        try await client.modifyAccount("", "updated@example.com", "")
 
         guard let captured = input.value else {
             Issue.record("Expected modifyAccount request")
@@ -61,21 +61,21 @@ struct APIClientLiveTests {
     func `Account related generated inputs are forwarded correctly`() async throws {
         let fcmInput = LockIsolated<Operations.LinkFCMTokenToAccount.Input?>(nil)
         let roleInput = LockIsolated<Operations.UpdateRole.Input?>(nil)
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
-                linkFCMTokenToAccountHandler: { request in
-                    fcmInput.setValue(request)
-                    return .ok
-                },
                 updateRoleHandler: { request in
                     roleInput.setValue(request)
+                    return .ok
+                },
+                linkFCMTokenToAccountHandler: { request in
+                    fcmInput.setValue(request)
                     return .ok
                 }
             )
         )
 
         try await client.linkFCMTokenToAccount("fcm-123")
-        try await client.updateAccountRole(.manager)
+        try await client.updateRole(.manager)
 
         guard let capturedFCMInput = fcmInput.value, case .json(let fcmBody) = capturedFCMInput.body else {
             Issue.record("Expected linkFCMTokenToAccount JSON body")
@@ -93,7 +93,7 @@ struct APIClientLiveTests {
     @Test
     func `Logout does not call API when FCM token is unavailable`() async throws {
         let logoutCalled = LockIsolated(false)
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 logoutHandler: { _ in
                     logoutCalled.setValue(true)
@@ -111,7 +111,7 @@ struct APIClientLiveTests {
     @Test
     func `Logout forwards the current FCM token`() async throws {
         let input = LockIsolated<Operations.Logout.Input?>(nil)
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 logoutHandler: { request in
                     input.setValue(request)
@@ -132,9 +132,9 @@ struct APIClientLiveTests {
 
     @Test
     func `Session is returned and saved in cache after being fetched`() async throws {
-        let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
+        let bootstrap = APIFixture.bootstrapDto(role: "Manager", managerData: APIFixture.managerDataDto())
         let cache = APIClientCache(bootstrap: nil)
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 getBootstrapHandler: { _ in
                     .ok(.init(body: .json(bootstrap)))
@@ -154,11 +154,11 @@ struct APIClientLiveTests {
     func `Start feedback event maps the generated DTO`() async throws {
         let input = LockIsolated<Operations.StartFeedbackEvent.Input?>(nil)
         let pinCode = PinCode(value: "456789")
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 startFeedbackEventHandler: { request in
                     input.setValue(request)
-                    return .ok(.init(body: .json(Self.feedbackEventDto())))
+                    return .ok(.init(body: .json(APIFixture.feedbackEventDto())))
                 }
             )
         )
@@ -170,18 +170,18 @@ struct APIClientLiveTests {
             return
         }
         #expect(body.pinCode == "456789")
-        #expect(session == FeedbackEventDto(Self.feedbackEventDto(), pinCode: pinCode))
+        #expect(session == FeedbackEventDto(APIFixture.feedbackEventDto(), pinCode: pinCode))
     }
 
     @Test
     func `Submit feedback forwards mapped payload and updates participant cache`() async throws {
         let input = LockIsolated<Operations.SubmitFeedback.Input?>(nil)
-        let cache = APIClientCache(bootstrap: Self.participantSession())
+        let cache = APIClientCache(bootstrap: APIFixture.participantSession())
         let feedback = FeedbackInput(
             type: .emoji(emoji: .veryHappy, comment: "Great"),
-            questionId: Self.questionId
+            questionId: APIFixture.questionId
         )
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 submitFeedbackHandler: { request in
                     input.setValue(request)
@@ -190,7 +190,7 @@ struct APIClientLiveTests {
                             body: .json(
                                 .init(
                                     shouldPresentRatingPrompt: true,
-                                    event: Self.participantEventDto(feedbackSubmited: true)
+                                    event: APIFixture.participantEventDto(feedbackSubmited: true)
                                 )
                             )
                         )
@@ -210,82 +210,78 @@ struct APIClientLiveTests {
         #expect(body.pinCode == "456789")
         #expect(body.feedback == [Components.Schemas.FeedbackInput(feedback)])
         #expect(shouldPresentRatingPrompt)
-        #expect(snapshot?.participantEvents[id: Self.eventId]?.feedbackSubmited == true)
+        #expect(snapshot?.participantEvents[id: APIFixture.eventId]?.feedbackSubmited == true)
     }
 
     @Test
-    func `Create and update event calls refresh the cached manager event`() async throws {
+    func `Create and update event calls refresh the cached session in its activity`() async throws {
         let createInput = LockIsolated<Operations.CreateEvent.Input?>(nil)
         let updateInput = LockIsolated<Operations.UpdateEvent.Input?>(nil)
-        let cache = APIClientCache(bootstrap: Self.managerSession(events: [Self.event(id: Self.existingEventId, title: "Original title")]))
-        let client = Self.makeClient(
+        let cache = APIClientCache(bootstrap: APIFixture.managerSession(events: [APIFixture.event(id: APIFixture.existingEventId)]))
+        let client = APIFixture.makeClient(
             api: MockAPI(
-                createEventHandler: { request in
-                    createInput.setValue(request)
-                    return .ok(.init(body: .json(Self.createdEventDto())))
-                },
                 updateEventHandler: { request in
                     updateInput.setValue(request)
-                    return .ok(.init(body: .json(Self.createdEventDto(id: request.path.eventId))))
+                    return .ok(.init(body: .json(APIFixture.createdEventDto(id: request.path.eventId))))
+                },
+                createEventHandler: { request in
+                    createInput.setValue(request)
+                    return .ok(.init(body: .json(APIFixture.createdEventDto())))
                 }
-            ),
-            cache: cache
+            ), cache: cache
         )
 
-        let created = try await client.createEvent(Self.eventInput(title: "Created title"))
-        let updated = try await client.updateEvent(Self.eventInput(title: "Updated title"), Self.eventId)
-
-        guard let capturedCreateInput = createInput.value, case .json(let createBody) = capturedCreateInput.body else {
-            Issue.record("Expected createEvent JSON body")
-            return
-        }
-        guard let capturedUpdateInput = updateInput.value, case .json(let updateBody) = capturedUpdateInput.body else {
-            Issue.record("Expected updateEvent JSON body")
+        let created = try await client.createEvent(APIFixture.sessionInput(location: "Created room"))
+        let updated = try await client.updateEvent(APIFixture.sessionInput(location: "Updated room"), APIFixture.createdSessionId)
+        guard let capturedCreate = createInput.value, case .json(let createBody) = capturedCreate.body,
+              let capturedUpdate = updateInput.value, case .json(let updateBody) = capturedUpdate.body else {
+            Issue.record("Expected create and update JSON bodies")
             return
         }
         let snapshot = await cache.getBootstrap()
-        #expect(createBody.title == "Created title")
-        #expect(updateBody.title == "Updated title")
-        #expect(created.title == "Created title")
-        #expect(updated.title == "Updated title")
-        #expect(snapshot?.managerData?.activities[id: Self.eventId]?.title == "Updated title")
-        #expect(snapshot?.managerData?.activities[id: Self.createdActivityId]?.title == "Created title")
+        let events = snapshot?.managerData?.activities[id: APIFixture.createdActivityId]?.events
+        #expect(createBody.activityId == APIFixture.createdActivityId.uuidString)
+        #expect(createBody.location == "Created room")
+        #expect(updateBody.location == "Updated room")
+        #expect(created == Event(APIFixture.createdEventDto()))
+        #expect(updated == created)
+        #expect(events?.count == 2)
+        #expect(events?.first { $0.id == APIFixture.createdSessionId } == updated)
+        #expect(events?.contains { $0.id == APIFixture.existingEventId } == true)
     }
 
     @Test
-    func `Event is removed from cache after deletion and stream is triggered with updated session`() async throws {
-        let first = Self.event(id: Self.eventId, title: "First")
+    func `Event deletion refreshes bootstrap and emits the updated cache`() async throws {
         let secondId = UUID(uuidString: "00000000-0000-0000-0000-000000000099")!
-        let second = Self.event(id: secondId, title: "Second")
-        let cache = APIClientCache(bootstrap: Self.managerSession(events: [first, second]))
-        let client = Self.makeClient(
+        var refreshedData = APIFixture.managerDataDto()
+        refreshedData.activities[0].events = [APIFixture.createdEventDto(id: secondId.uuidString)]
+        let response = APIFixture.bootstrapDto(role: "Manager", managerData: refreshedData)
+        let cache = APIClientCache(bootstrap: APIFixture.managerSession(events: [APIFixture.event(), APIFixture.event(id: secondId)]))
+        let client = APIFixture.makeClient(
             api: MockAPI(
-                deleteEventHandler: { _ in .ok }
-            ),
-            cache: cache
+                deleteEventHandler: { _ in .ok },
+                getBootstrapHandler: { _ in .ok(.init(body: .json(response))) }
+            ), cache: cache
         )
-
         var listener = await client.sessionChangedListener().makeAsyncIterator()
-        try await client.deleteEvent(Self.eventId)
+        try await client.deleteEvent(APIFixture.eventId)
         let snapshot = await cache.getBootstrap()
-        let updatedSession = await listener.next()
-
-        #expect(snapshot?.managerData?.activities.count == 1)
-        #expect(snapshot?.managerData?.activities.first?.id == secondId)
-        #expect(updatedSession == snapshot)
+        let emitted = await listener.next()
+        #expect(snapshot?.managerData?.activities.first?.events.map(\.id) == [secondId])
+        #expect(emitted == snapshot)
     }
 
     @Test
-    func `Create account forwards role and FCM token then refreshes bootstrap`() async throws {
+    func `Create account forwards role and FCM token and caches the returned bootstrap`() async throws {
         let createInput = LockIsolated<Operations.CreateAccount.Input?>(nil)
         let bootstrapCalls = LockIsolated(0)
-        let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
+        let bootstrap = APIFixture.bootstrapDto(role: "Manager", managerData: APIFixture.managerDataDto())
         let cache = APIClientCache(bootstrap: nil)
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 createAccountHandler: { request in
                     createInput.setValue(request)
-                    return .ok(.init(body: .json(Self.sessionDto())))
+                    return .ok(.init(body: .json(bootstrap)))
                 },
                 getBootstrapHandler: { _ in
                     bootstrapCalls.setValue(bootstrapCalls.value + 1)
@@ -305,7 +301,7 @@ struct APIClientLiveTests {
         let snapshot = await cache.getBootstrap()
         #expect(body.requestedRole == "Manager")
         #expect(body.fcmToken == "fcm-create")
-        #expect(bootstrapCalls.value == 1)
+        #expect(bootstrapCalls.value == 0)
         #expect(session == Bootstrap(bootstrap))
         #expect(snapshot == Bootstrap(bootstrap))
     }
@@ -313,12 +309,12 @@ struct APIClientLiveTests {
     @Test
     func `Join event appends the participant event to session`() async throws {
         let input = LockIsolated<Operations.JoinEvent.Input?>(nil)
-        let cache = APIClientCache(bootstrap: Self.participantSession())
-        let client = Self.makeClient(
+        let cache = APIClientCache(bootstrap: APIFixture.participantSession())
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 joinEventHandler: { request in
                     input.setValue(request)
-                    return .ok(.init(body: .json(Self.participantEventDto())))
+                    return .ok(.init(body: .json(APIFixture.participantEventDto())))
                 }
             ),
             cache: cache
@@ -328,32 +324,32 @@ struct APIClientLiveTests {
 
         let snapshot = await cache.getBootstrap()
         #expect(input.value?.path.pinCode == "456789")
-        #expect(snapshot?.participantEvents[id: Self.eventId] != nil)
+        #expect(snapshot?.participantEvents[id: APIFixture.eventId] != nil)
     }
 
     @Test
     func `Manager event is marked as seen`() async throws {
-        let cache = APIClientCache(bootstrap: Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 1))
-        let client = Self.makeClient(
+        let cache = APIClientCache(bootstrap: APIFixture.managerSession(events: [APIFixture.event(unseenResponses: 1)], unseenTotal: 1))
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 markEventAsSeenHandler: { _ in .ok }
             ),
             cache: cache
         )
 
-        try await client.markEventAsSeen(Self.eventId)
+        try await client.markEventAsSeen(APIFixture.eventId)
 
         let updated = await cache.getBootstrap()
-        #expect(updated?.managerData?.activities[id: Self.eventId]?.overallFeedbackSummary?.unseenResponses == 0)
+        #expect(updated?.managerData?.activities[id: APIFixture.createdActivityId]?.events.first?.overallFeedbackSummary?.unseenResponses == 0)
         #expect(updated?.managerData?.notificationHistory.unseenTotal == 0)
         #expect(updated?.managerData?.notificationHistory.items.allSatisfy { $0.seenByManager } == true)
     }
 
     @Test
     func `Updated session returns nil without a cached hash`() async throws {
-        let client = Self.makeClient(api: MockAPI(), cache: APIClientCache(bootstrap: Bootstrap.mockParticipant()))
+        let client = APIFixture.makeClient(api: MockAPI(), cache: APIClientCache(bootstrap: Bootstrap.mockParticipant()))
 
-        let result = try await client.getUpdatedSession()
+        let result = try await client.getBootstrapUpdate()
 
         #expect(result == nil)
     }
@@ -361,9 +357,9 @@ struct APIClientLiveTests {
     @Test
     func `Updated session fetches bootstrap update and refreshes the cache`() async throws {
         let input = LockIsolated<Operations.GetBoostrapUpdate.Input?>(nil)
-        let bootstrap = Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto())
-        let cache = APIClientCache(bootstrap: Self.managerSession())
-        let client = Self.makeClient(
+        let bootstrap = APIFixture.bootstrapDto(role: "Manager", managerData: APIFixture.managerDataDto())
+        let cache = APIClientCache(bootstrap: APIFixture.managerSession())
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 getBoostrapUpdateHandler: { request in
                     input.setValue(request)
@@ -373,10 +369,10 @@ struct APIClientLiveTests {
             cache: cache
         )
 
-        let result = try await client.getUpdatedSession()
+        let result = try await client.getBootstrapUpdate()
         let snapshot = await cache.getBootstrap()
 
-        #expect(input.value?.path.hash == Self.sessionHash.uuidString)
+        #expect(input.value?.path.hash == APIFixture.sessionHash.uuidString)
         #expect(result == Bootstrap(bootstrap))
         #expect(snapshot == Bootstrap(bootstrap))
     }
@@ -384,9 +380,9 @@ struct APIClientLiveTests {
     @Test
     func `Updated session keeps cache unchanged when bootstrap hash is unchanged`() async throws {
         let input = LockIsolated<Operations.GetBoostrapUpdate.Input?>(nil)
-        let existingSession = Self.managerSession()
+        let existingSession = APIFixture.managerSession()
         let cache = APIClientCache(bootstrap: existingSession)
-        let client = Self.makeClient(
+        let client = APIFixture.makeClient(
             api: MockAPI(
                 getBoostrapUpdateHandler: { request in
                     input.setValue(request)
@@ -396,25 +392,25 @@ struct APIClientLiveTests {
             cache: cache
         )
 
-        let result = try await client.getUpdatedSession()
+        let result = try await client.getBootstrapUpdate()
         let snapshot = await cache.getBootstrap()
 
-        #expect(input.value?.path.hash == Self.sessionHash.uuidString)
+        #expect(input.value?.path.hash == APIFixture.sessionHash.uuidString)
         #expect(result == nil)
         #expect(snapshot == existingSession)
     }
 
     @Test
-    func `Manager activity is marked as seen`() async throws {
-        let cache = APIClientCache(bootstrap: Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 2))
-        let client = Self.makeClient(
+    func `Manager notification history is marked as seen`() async throws {
+        let cache = APIClientCache(bootstrap: APIFixture.managerSession(events: [APIFixture.event(unseenResponses: 1)], unseenTotal: 1))
+        let client = APIFixture.makeClient(
             api: MockAPI(
-                markActivityAsSeenHandler: { _ in .ok }
+                markNotificationHistoryAsSeenHandler: { _ in .ok }
             ),
             cache: cache
         )
 
-        try await client.markActivityAsSeen()
+        try await client.markNotificationHistoryAsSeen()
 
         let updated = await cache.getBootstrap()
         #expect(updated?.managerData?.notificationHistory.unseenTotal == 0)
@@ -423,10 +419,10 @@ struct APIClientLiveTests {
 
     @Test
     func `Manager-only cache mutations throw when manager state is unavailable`() async throws {
-        let cache = APIClientCache(bootstrap: Self.participantSession())
+        let cache = APIClientCache(bootstrap: APIFixture.participantSession())
 
         do {
-            try await cache.markEventAsSeen(eventId: Self.eventId)
+            try await cache.markEventAsSeen(eventId: APIFixture.eventId)
             Issue.record("Expected managerDataUnavailable error")
         } catch let error as APIClientCache.CacheMutationError {
             #expect(error == .managerDataUnavailable)
@@ -442,7 +438,7 @@ struct APIClientLiveTests {
 
     @Test
     func `Cache mutation throws when entity does not exist`() async throws {
-        let cache = APIClientCache(bootstrap: Self.managerSession())
+        let cache = APIClientCache(bootstrap: APIFixture.managerSession())
         let unknownEventId = UUID(uuidString: "00000000-0000-0000-0000-000000000099")!
         let unknownActivityId = UUID(uuidString: "00000000-0000-0000-0000-000000000098")!
 
@@ -467,20 +463,20 @@ struct APIClientLiveTests {
         let secondNotificationId = UUID(uuidString: "00000000-0000-0000-0000-000000000091")!
         let otherEventId = UUID(uuidString: "00000000-0000-0000-0000-000000000092")!
 
-        var session = Self.managerSession(events: [Self.event(unseenResponses: 1)], unseenTotal: 3)
+        var session = APIFixture.managerSession(events: [APIFixture.event(unseenResponses: 1)], unseenTotal: 3)
         session.managerData?.notificationHistory = .init(
             items: [
                 .init(
                     id: firstNotificationId,
-                    date: Self.referenceDate,
+                    date: APIFixture.referenceDate,
                     eventTitle: "Weekly retro",
-                    eventId: Self.eventId,
+                    eventId: APIFixture.eventId,
                     newFeedbackCount: 1,
                     seenByManager: false
                 ),
                 .init(
                     id: secondNotificationId,
-                    date: Self.referenceDate,
+                    date: APIFixture.referenceDate,
                     eventTitle: "Weekly retro",
                     eventId: otherEventId,
                     newFeedbackCount: 1,
@@ -491,7 +487,7 @@ struct APIClientLiveTests {
         )
         let cache = APIClientCache(bootstrap: session)
 
-        try await cache.markEventAsSeen(eventId: Self.eventId)
+        try await cache.markEventAsSeen(eventId: APIFixture.eventId)
 
         let updated = await cache.getBootstrap()
         #expect(updated?.managerData?.notificationHistory.unseenTotal == 2)
@@ -500,7 +496,7 @@ struct APIClientLiveTests {
     }
 }
 
-private extension APIClientLiveTests {
+private enum APIFixture {
     static let referenceDate = Date(timeIntervalSince1970: 1_710_000_000)
     static let eventId = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
     static let questionId = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
@@ -527,7 +523,7 @@ private extension APIClientLiveTests {
     }
 
     static func questionDto() -> Components.Schemas.QuestionDto {
-        .init(id: questionId.uuidString, text: "How did it go?")
+        .init(id: questionId.uuidString, text: "How did it go?", feedbackType: .emoji, feedback: [])
     }
 
     static func participantQuestionDto() -> Components.Schemas.ParticipantQuestionDto {
@@ -557,19 +553,7 @@ private extension APIClientLiveTests {
         )
     }
 
-    static func feedbackFlowDto(title: String, id: String = eventId.uuidString) -> Components.Schemas.FeedbackFlowDto {
-        .init(
-            id: id,
-            title: title,
-            owner: ownerDto(),
-            newFeedback: true,
-            analytics: .init(averageRating: 4.2, trendStatus: .stable, lastSessionAt: referenceDate, ratingTrend: []),
-            insights: .init(summary: "Talk through wins and blockers"),
-            sessions: [],
-            sessionSettings: .init(source: .manual),
-            currentQuestions: [questionDto()]
-        )
-    }
+
 
     static func notificationHistory(unseenTotal: Int) -> NotificationHistory {
         .init(
@@ -587,50 +571,25 @@ private extension APIClientLiveTests {
         )
     }
 
-    static func event(
-        id: UUID = eventId,
-        title: String = "Weekly retro",
-        unseenResponses: Int = 0
-    ) -> Event {
-        .init(
-            id: id,
-            title: title,
-            agenda: "Talk through wins and blockers",
-            date: referenceDate,
-            pinCode: .init(value: "456789"),
-            durationInMinutes: 45,
-            location: "Room Blue",
-            ownerInfo: .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678"),
-            overallFeedbackSummary: .init(
-                segmentationStats: .init(verySadPercentage: 0, sadPercentage: 0, happyPercentage: 100, veryHappyPercentage: 0),
-                countStats: .init(verySadCount: 0, sadCount: 0, happyCount: 1, veryHappyCount: 0, commentsCount: 0),
-                unseenResponses: unseenResponses,
-                responses: 1
-            ),
-            questions: [
-                .init(
-                    id: questionId,
-                    questionText: "How did it go?",
-                    feedbackType: .emoji,
-                    feedback: [],
-                    feedbackSummary: nil
-                )
-            ],
-            isDraft: false,
-            invitedEmails: [],
-            participants: [],
-            calendarProvider: nil
+    static func event(id: UUID = eventId, unseenResponses: Int = 0) -> Event {
+        var event = Event(createdEventDto(id: id.uuidString))
+        event.overallFeedbackSummary = .init(
+            segmentationStats: .init(verySadPercentage: 0, sadPercentage: 0, happyPercentage: 100, veryHappyPercentage: 0),
+            countStats: .init(verySadCount: 0, sadCount: 0, happyCount: 1, veryHappyCount: 0, commentsCount: 0),
+            unseenResponses: unseenResponses, responses: 1
         )
+        return event
     }
 
     static func managerSession(events: [Event] = [event()], unseenTotal: Int = 0) -> Bootstrap {
-        .init(
+        var activity = Activity(createdActivityDto(title: "Weekly retro"))
+        activity.events = events
+        return .init(
             participantEvents: [],
             managerData: .init(
-                activities: .init(uniqueElements: events),
+                activities: .init(uniqueElements: [activity]),
                 notificationHistory: notificationHistory(unseenTotal: unseenTotal),
-                questionAnalytics: [.mock()],
-                bootstrapHash: sessionHash
+                questionAnalytics: [.mock()], bootstrapHash: sessionHash
             ),
             accountInfo: .init(name: "Account", email: "account@example.com", phoneNumber: "12345678"),
             role: .manager
@@ -684,20 +643,12 @@ private extension APIClientLiveTests {
         .init(
             role: role,
             accountInfo: .init(name: "Account", email: "account@example.com", phoneNumber: "12345678"),
+            participantEvents: [],
             managerData: managerData
         )
     }
 
-    static func sessionDto() -> Components.Schemas.SessionDto {
-        .init(
-            id: UUID().uuidString,
-            averageRating: 3.5,
-            ratingDelta: 0.4,
-            summary: "Summary",
-            questionSummary: .init(positives: ["Good"], improvements: ["Faster"]),
-            questionsSnapshot: [questionDto()]
-        )
-    }
+
 
     static func createdActivityDto(title: String) -> Components.Schemas.ActivityDto {
         .init(
@@ -731,62 +682,44 @@ private extension APIClientLiveTests {
         )
     }
 
-    static func eventInput(title: String) -> EventInput {
-        .init(
-            title: title,
-            agenda: "Talk through wins and blockers",
-            date: referenceDate,
-            durationInMinutes: 45,
-            location: "Room Blue",
-            questions: [
-                .init(id: questionId, questionText: "How did it go?", feedbackType: .emoji)
-            ]
-        )
+    static func sessionInput(location: String) -> SessionInput {
+        .init(activityId: createdActivityId, date: referenceDate, durationInMinutes: 45, location: location)
     }
 }
 
 struct APIClientMappingTests {
     @Test
-    func `Event input question maps to generated question input`() {
-        let question = EventInput.QuestionInput(
-            id: Self.questionId,
-            questionText: "How did it go?",
-            feedbackType: .emoji
-        )
-
-        let feedbackTypePayload = Components.Schemas.QuestionInput.FeedbackTypePayload(.emoji)
-        let dto = Components.Schemas.QuestionInput(question)
-
-        #expect(feedbackTypePayload == .emoji)
-        #expect(dto.questionText == question.questionText)
+    func `Question input maps its identity text and format`() {
+        let input = EventInput.QuestionInput(id: APIFixture.questionId, questionText: "How did it go?", feedbackType: .emoji)
+        let dto = Components.Schemas.QuestionInput(input)
+        #expect(dto.id == input.id.uuidString)
+        #expect(dto.questionText == input.questionText)
         #expect(dto.feedbackType == .emoji)
     }
 
     @Test
-    func `Event input maps to generated DTO`() {
-        let event = EventInput(
-            title: "Weekly retro",
-            agenda: "Talk through wins and blockers",
-            date: Self.referenceDate,
-            durationInMinutes: 45,
-            location: "Room Blue",
-            questions: [
-                .init(id: Self.questionId, questionText: "How did it go?", feedbackType: .emoji),
-                .init(id: Self.secondQuestionId, questionText: "What should improve?", feedbackType: .comment)
-            ]
-        )
-
-        let dto = Components.Schemas.EventInput(event)
-
-        #expect(dto.title == event.title)
-        #expect(dto.agenda == event.agenda)
-        #expect(dto.date == event.date)
-        #expect(dto.durationInMinutes == 45)
-        #expect(dto.location == event.location)
+    func `Legacy event input maps to activity configuration`() {
+        let input = EventInput(title: "Weekly retro", agenda: "Agenda", questions: [
+            .init(questionText: "How did it go?", feedbackType: .emoji),
+            .init(questionText: "What should improve?", feedbackType: .comment)
+        ])
+        let dto = Components.Schemas.ActivityInput(legacyEvent: input)
+        #expect(dto.title == input.title)
+        #expect(dto.agenda == input.agenda)
         #expect(dto.invitedEmails.isEmpty)
-        #expect(dto.questions.count == 2)
+        #expect(dto.questions.map(\.questionText) == input.questions.map(\.questionText))
         #expect(dto.questions[0].feedbackType == .emoji)
         #expect(dto.questions[1].feedbackType == .comment)
+    }
+
+    @Test
+    func `Session input maps scheduling fields and owning activity`() {
+        let input = APIFixture.sessionInput(location: "Room Blue")
+        let dto = Components.Schemas.EventInput(input)
+        #expect(dto.activityId == input.activityId.uuidString)
+        #expect(dto.date == input.date)
+        #expect(dto.durationInMinutes == 45)
+        #expect(dto.location == input.location)
     }
 
     @Test
@@ -800,24 +733,24 @@ struct APIClientMappingTests {
     func `Feedback inputs map to generated DTOs for every type`() {
         let cases: [(FeedbackInput, Components.Schemas.FeedbackInput)] = [
             (
-                .init(type: .emoji(emoji: .happy, comment: "Nice"), questionId: Self.questionId),
-                .init(comment: "Nice", emoji: .happy, questionId: Self.questionId.uuidString, feedbackType: .emoji)
+                .init(type: .emoji(emoji: .happy, comment: "Nice"), questionId: APIFixture.questionId),
+                .init(comment: "Nice", emoji: .happy, questionId: APIFixture.questionId.uuidString, feedbackType: .emoji)
             ),
             (
-                .init(type: .comment(comment: "Hello"), questionId: Self.questionId),
-                .init(comment: "Hello", questionId: Self.questionId.uuidString, feedbackType: .comment)
+                .init(type: .comment(comment: "Hello"), questionId: APIFixture.questionId),
+                .init(comment: "Hello", questionId: APIFixture.questionId.uuidString, feedbackType: .comment)
             ),
             (
-                .init(type: .thumpsUpThumpsDown(thumbsUpThumpsDown: .up, comment: "Works"), questionId: Self.questionId),
-                .init(comment: "Works", thumbsUpThumpsDown: .up, questionId: Self.questionId.uuidString, feedbackType: .thumpsUpThumpsDown)
+                .init(type: .thumpsUpThumpsDown(thumbsUpThumpsDown: .up, comment: "Works"), questionId: APIFixture.questionId),
+                .init(comment: "Works", thumbsUpThumpsDown: .up, questionId: APIFixture.questionId.uuidString, feedbackType: .thumpsUpThumpsDown)
             ),
             (
-                .init(type: .opinion(opinion: .neutral, comment: "Mixed"), questionId: Self.questionId),
-                .init(comment: "Mixed", opinion: .neutral, questionId: Self.questionId.uuidString, feedbackType: .opinion)
+                .init(type: .opinion(opinion: .neutral, comment: "Mixed"), questionId: APIFixture.questionId),
+                .init(comment: "Mixed", opinion: .neutral, questionId: APIFixture.questionId.uuidString, feedbackType: .opinion)
             ),
             (
-                .init(type: .zeroToTen(zeroToTen: 8, comment: "Solid"), questionId: Self.questionId),
-                .init(comment: "Solid", zeroToTen: 8, questionId: Self.questionId.uuidString, feedbackType: .zeroToTen)
+                .init(type: .zeroToTen(zeroToTen: 8, comment: "Solid"), questionId: APIFixture.questionId),
+                .init(comment: "Solid", zeroToTen: 8, questionId: APIFixture.questionId.uuidString, feedbackType: .zeroToTen)
             )
         ]
 
@@ -828,82 +761,62 @@ struct APIClientMappingTests {
 
     @Test
     func `Owner and account DTOs map to domain models`() {
-        let owner = OwnerInfo(Self.ownerDto())
-        let ownerInfo = OwnerInfo(Self.ownerInfoDto())
-        let accountInfo = AccountInfo(Self.accountInfoDto())
-
+        let owner = OwnerInfo(APIFixture.ownerDto())
+        let ownerInfo = OwnerInfo(APIFixture.ownerInfoDto())
+        let account = AccountInfo(APIFixture.bootstrapDto(role: nil).accountInfo)
         #expect(owner.name == "Owner")
         #expect(owner.email == "owner@example.com")
         #expect(owner.phoneNumber == nil)
         #expect(ownerInfo.phoneNumber == "12345678")
-        #expect(accountInfo.name == "Account")
-        #expect(accountInfo.email == "account@example.com")
-        #expect(accountInfo.phoneNumber == "87654321")
+        #expect(account.name == "Account")
+        #expect(account.email == "account@example.com")
     }
 
     @Test
     func `Participant DTOs map to domain models`() {
-        let question = ParticipantQuestion(Self.participantQuestionDto())
-        let event = ParticipantEvent(Self.participantEventDto())
-
-        #expect(question.id == Self.questionId)
-        #expect(question.questionText == "How did it go?")
+        let question = ParticipantQuestion(APIFixture.participantQuestionDto())
+        let event = ParticipantEvent(APIFixture.participantEventDto())
+        #expect(question.id == APIFixture.questionId)
         #expect(question.feedbackType == .emoji)
-        #expect(event.id == Self.eventId)
-        #expect(event.pinCode == .init(value: "456789"))
+        #expect(event.id == APIFixture.eventId)
         #expect(event.questions == [question])
-        #expect(event.ownerInfo == .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678"))
-        #expect(event.feedbackSubmited == false)
-        #expect(event.recentlyJoined == true)
+        #expect(event.pinCode == .init(value: "456789"))
+        #expect(!event.feedbackSubmited)
+        #expect(event.recentlyJoined)
     }
 
     @Test
-    func `Activity DTOs map to domain models`() {
-        let item = ActivityItems(Self.activityItemDto())
-        let activity = Activity(Self.activityDto())
-
-        #expect(item.id == Self.activityItemId)
-        #expect(item.eventId == Self.eventId)
-        #expect(item.newFeedbackCount == 3)
-        #expect(activity.items == [item])
-        #expect(activity.unseenTotal == 4)
+    func `Notification history maps independently from activities`() {
+        let history = NotificationHistory(APIFixture.managerDataDto().notificationHistory)
+        #expect(history.items.count == 1)
+        #expect(history.items.first?.id == APIFixture.activityItemId)
+        #expect(history.items.first?.eventId == APIFixture.eventId)
+        #expect(history.unseenTotal == 2)
     }
 
     @Test
-    func `Feedback flow DTOs map to manager models`() {
-        let question = ManagerQuestion(Self.questionDto())
-        let analytics = ManagerQuestionAnalytics(Self.questionAnalyticsDto())
-        let activity = Activity(Self.createdActivityDto(title: "Weekly retro"), questionAnalytics: [analytics])
-
-        #expect(question.id == Self.questionId)
-        #expect(question.questionText == "How did it go?")
-        #expect(question.feedbackType == .comment)
-        #expect(question.feedback.isEmpty)
-        #expect(question.feedbackSummary == nil)
-        #expect(analytics.questionId == Self.questionId)
-        #expect(analytics.questionText == "How did it go?")
-        #expect(analytics.feedbackType == .emoji)
+    func `Activity and event DTOs preserve the owning activity boundary`() {
+        let analytics = ManagerQuestionAnalytics(APIFixture.questionAnalyticsDto())
+        let dto = APIFixture.createdActivityDto(title: "Weekly retro")
+        let activity = Activity(dto, questionAnalytics: [analytics])
+        #expect(activity.id == APIFixture.createdActivityId)
+        #expect(activity.title == dto.title)
+        #expect(activity.events == [Event(APIFixture.createdEventDto())])
+        #expect(activity.questions.count == 1)
+        #expect(activity.questions.first?.id == analytics.questionId)
+        #expect(activity.questions.first?.feedbackType == .emoji)
         #expect(analytics.eventCount == 1)
         #expect(analytics.responseCount == 1)
-        #expect(activity.id == Self.createdActivityId)
-        #expect(activity.title == "Weekly retro")
-        #expect(activity.agenda == "Talk through wins and blockers")
-        #expect(activity.events.count == 1)
-        #expect(activity.questions.count == 1)
-        #expect(activity.questions[0].feedbackSummary == nil)
     }
 
     @Test
-    func `Feedback event DTO maps to feedback event`() {
-        let pinCode = PinCode(value: "456789")
-        let session = FeedbackEventDto(Self.feedbackEventDto(), pinCode: pinCode)
-
-        #expect(session.title == "Event")
-        #expect(session.agenda == nil)
-        #expect(session.questions.count == 1)
-        #expect(session.ownerInfo == .init(name: "Owner", email: "owner@example.com", phoneNumber: "12345678"))
-        #expect(session.pinCode == pinCode)
-        #expect(session.date == Self.referenceDate)
+    func `Feedback event DTO maps questions owner and pin code`() {
+        let pin = PinCode(value: "456789")
+        let feedback = FeedbackEventDto(APIFixture.feedbackEventDto(), pinCode: pin)
+        #expect(feedback.questions.count == 1)
+        #expect(feedback.ownerInfo == OwnerInfo(APIFixture.ownerInfoDto()))
+        #expect(feedback.pinCode == pin)
+        #expect(feedback.date == APIFixture.referenceDate)
     }
 
     @Test
@@ -953,161 +866,17 @@ struct APIClientMappingTests {
     }
 
     @Test
-    func `Bootstrap, manager data and session DTOs map to sessions`() {
-        let managerData = ManagerData(Self.managerDataDto())
-        let managerBootstrap = Bootstrap(Self.bootstrapDto(role: "Manager", managerData: Self.managerDataDto()))
-        let participantBootstrap = Bootstrap(Self.bootstrapDto(role: "Participant"))
-        let anonymousBootstrap = Bootstrap(Self.bootstrapDto(role: nil))
-        let sessionDto = Bootstrap(Self.sessionDto())
-
-        #expect(managerData.activities.count == 1)
-        #expect(managerData.notificationHistory == Self.notificationHistory(unseenTotal: 4))
-        #expect(managerData.bootstrapHash == Self.sessionHash)
-        #expect(managerData.questionAnalytics.count == 1)
-        #expect(managerBootstrap.role == .manager)
-        #expect(managerBootstrap.managerData == managerData)
-        #expect(managerBootstrap.accountInfo == AccountInfo(Self.accountInfoDto()))
-        #expect(participantBootstrap.role == .participant)
-        #expect(participantBootstrap.managerData == nil)
-        #expect(anonymousBootstrap.role == nil)
-        #expect(sessionDto.participantEvents.isEmpty)
-        #expect(sessionDto.managerData == nil)
-        #expect(sessionDto.accountInfo == .init(name: nil, email: nil, phoneNumber: nil))
-        #expect(sessionDto.role == nil)
-    }
-}
-
-private extension APIClientMappingTests {
-    static let referenceDate = Date(timeIntervalSince1970: 1_710_000_000)
-    static let eventId = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
-    static let questionId = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
-    static let secondQuestionId = UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
-    static let activityItemId = UUID(uuidString: "00000000-0000-0000-0000-000000000004")!
-    static let sessionHash = UUID(uuidString: "00000000-0000-0000-0000-000000000005")!
-
-    static func ownerDto() -> Components.Schemas.OwnerDto {
-        .init(
-            id: UUID().uuidString,
-            name: "Owner",
-            email: "owner@example.com"
-        )
-    }
-
-    static func ownerInfoDto() -> Components.Schemas.OwnerInfoDto {
-        .init(
-            name: "Owner",
-            email: "owner@example.com",
-            phoneNumber: "12345678"
-        )
-    }
-
-    static func accountInfoDto() -> Components.Schemas.AccountInfoDto {
-        .init(
-            name: "Account",
-            email: "account@example.com",
-            phoneNumber: "87654321"
-        )
-    }
-
-    static func questionDto() -> Components.Schemas.QuestionDto {
-        .init(
-            id: questionId.uuidString,
-            text: "How did it go?"
-        )
-    }
-
-    static func participantQuestionDto() -> Components.Schemas.ParticipantQuestionDto {
-        .init(
-            id: questionId.uuidString,
-            questionText: "How did it go?",
-            feedbackType: .emoji
-        )
-    }
-
-    static func participantEventDto() -> Components.Schemas.ParticipantEventDto {
-        .init(
-            id: eventId.uuidString,
-            date: referenceDate,
-            pinCode: "456789",
-            durationInMinutes: 45,
-            location: "Room Blue",
-            createdFromMailListener: false,
-            ownerInfo: ownerInfoDto(),
-            questions: [participantQuestionDto()],
-            feedbackSubmited: false,
-            recentlyJoined: true
-        )
-    }
-
-    static func activityItemDto() -> Components.Schemas.ActivityItem {
-        .init(
-            id: activityItemId.uuidString,
-            date: referenceDate,
-            eventTitle: "Weekly retro",
-            eventId: eventId.uuidString,
-            newFeedbackCount: 3,
-            seenByManager: false
-        )
-    }
-
-    static func activityDto() -> Components.Schemas.ActivityDto {
-        .init(
-            items: [activityItemDto()],
-            unseenTotal: 4
-        )
-    }
-
-    static func feedbackFlowDto() -> Components.Schemas.FeedbackFlowDto {
-        .init(
-            id: eventId.uuidString,
-            title: "Weekly retro",
-            owner: ownerDto(),
-            newFeedback: true,
-            analytics: .init(
-                averageRating: 4.2,
-                trendStatus: .stable,
-                lastSessionAt: referenceDate,
-                ratingTrend: []
-            ),
-            insights: .init(summary: "Talk through wins and blockers"),
-            sessions: [],
-            sessionSettings: .init(source: .manual),
-            currentQuestions: [questionDto()]
-        )
-    }
-
-    static func feedbackEventDto() -> Components.Schemas.FeedbackEventDto {
-        .init(
-            questions: [participantQuestionDto()],
-            ownerInfo: ownerInfoDto(),
-            date: referenceDate
-        )
-    }
-
-    static func managerDataDto() -> Components.Schemas.ManagerDataDto {
-        .init(
-            feedbackFlows: [feedbackFlowDto()],
-            activity: activityDto(),
-            sessionHash: sessionHash.uuidString
-        )
-    }
-
-    static func bootstrapDto(role: String?, managerData: Components.Schemas.ManagerDataDto? = nil) -> Components.Schemas.BootstrapDto {
-        .init(
-            role: role,
-            accountInfo: accountInfoDto(),
-            managerData: managerData
-        )
-    }
-
-    static func sessionDto() -> Components.Schemas.SessionDto {
-        .init(
-            id: UUID().uuidString,
-            averageRating: 3.5,
-            ratingDelta: 0.5,
-            summary: "Summary",
-            questionSummary: .init(positives: ["Good"], improvements: ["Faster"]),
-            questionsSnapshot: [questionDto()]
-        )
+    func `Bootstrap maps manager participant and anonymous roles`() {
+        let dto = APIFixture.managerDataDto()
+        let manager = Bootstrap(APIFixture.bootstrapDto(role: "Manager", managerData: dto))
+        let participant = Bootstrap(APIFixture.bootstrapDto(role: "Participant"))
+        let anonymous = Bootstrap(APIFixture.bootstrapDto(role: nil))
+        #expect(manager.role == .manager)
+        #expect(manager.managerData == ManagerData(dto))
+        #expect(manager.managerData?.bootstrapHash == APIFixture.sessionHash)
+        #expect(participant.role == .participant)
+        #expect(participant.managerData == nil)
+        #expect(anonymous.role == nil)
+        #expect(anonymous.participantEvents.isEmpty)
     }
 }

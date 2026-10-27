@@ -104,9 +104,9 @@ struct APIClientCacheMutationTests {
 
         let updated = try #require(await cache.getBootstrap())
         let activities = try #require(updated.managerData?.activities)
-        #expect(activities[id: Self.activityId]?.events.first?.title == "Target new")
+        #expect(activities[id: Self.activityId]?.events.first?.id == Self.eventId)
         #expect(activities[id: Self.activityId]?.events.first?.overallFeedbackSummary?.unseenResponses == 9)
-        #expect(activities[id: Self.secondActivityId]?.events.first?.title == "Other old")
+        #expect(activities[id: Self.secondActivityId]?.events.first == untouchedEvent)
     }
 
     @Test
@@ -140,8 +140,8 @@ struct APIClientCacheMutationTests {
         let updatedActivity = try #require(managerData.activities[id: Self.activityId])
 
         #expect(updatedActivity.overallFeedbackSummary?.unseenResponses == 0)
-        #expect(updatedActivity.questions.flatMap(\.feedback).allSatisfy(\.seenByManager))
-        #expect(managerData.notificationHistory.items.allSatisfy(\.seenByManager))
+        #expect(updatedActivity.questions.flatMap(\.feedback).allSatisfy { $0.seenByManager })
+        #expect(managerData.notificationHistory.items.allSatisfy { $0.seenByManager })
         #expect(managerData.notificationHistory.unseenTotal == 1)
     }
 
@@ -163,7 +163,7 @@ struct APIClientCacheMutationTests {
         let items = managerData.notificationHistory.items
 
         #expect(updatedEvent.overallFeedbackSummary?.unseenResponses == 0)
-        #expect(updatedEvent.questions.flatMap(\.feedback).allSatisfy(\.seenByManager))
+        #expect(updatedEvent.questions.flatMap(\.feedback).allSatisfy { $0.seenByManager })
         #expect(items.first { $0.id == Self.notificationId }?.seenByManager == true)
         #expect(items.first { $0.id == Self.secondNotificationId }?.seenByManager == true)
         #expect(items.first { $0.id == Self.thirdNotificationId }?.seenByManager == false)
@@ -183,7 +183,7 @@ struct APIClientCacheMutationTests {
         let updated = try #require(await cache.getBootstrap())
         let notificationHistory = try #require(updated.managerData?.notificationHistory)
 
-        #expect(notificationHistory.items.allSatisfy(\.seenByManager))
+        #expect(notificationHistory.items.allSatisfy { $0.seenByManager })
         #expect(notificationHistory.unseenTotal == 0)
     }
 

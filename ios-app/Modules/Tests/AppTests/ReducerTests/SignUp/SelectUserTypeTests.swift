@@ -8,11 +8,12 @@ struct SelectUserTypeTests {
 
     @Test
     func `Create account succeeds and navigates to session fetch`() async {
+        let bootstrap: Bootstrap = .mock()
         let store = await TestStore(initialState: SelectUserType.State()) {
             SelectUserType()
         } withDependencies: {
             $0.apiClient.createAccount = { _ in
-                    .mock()
+                bootstrap
             }
         }
 
@@ -24,7 +25,10 @@ struct SelectUserTypeTests {
             $0.isLoading = true
         }
 
-        await store.receive(\.delegate, .getSession)
+        await store.receive { action in
+            guard case .delegate(.getSession(let received)) = action else { return false }
+            return received == bootstrap
+        }
     }
 
     @Test

@@ -49,8 +49,32 @@ struct MockAPI: APIProtocol {
     var getBoostrapUpdateHandler: @Sendable (Operations.GetBoostrapUpdate.Input) async throws -> Operations.GetBoostrapUpdate.Output = { _ in
         fatalError("MockAPI: getBoostrapUpdate unimplemented")
     }
-    var markActivityAsSeenHandler: @Sendable (Operations.MarkActivityAsSeen.Input) async throws -> Operations.MarkActivityAsSeen.Output = { _ in
-        fatalError("MockAPI: markActivityAsSeen unimplemented")
+    var markNotificationHistoryAsSeenHandler: @Sendable (Operations.MarkNotificationHistoryAsSeen.Input) async throws -> Operations.MarkNotificationHistoryAsSeen.Output = { _ in
+        fatalError("MockAPI: markNotificationHistoryAsSeen unimplemented")
+    }
+
+    var updateActivityHandler: @Sendable (Operations.UpdateActivity.Input) async throws -> Operations.UpdateActivity.Output = { _ in
+        fatalError("MockAPI: updateActivity unimplemented")
+    }
+
+    func updateActivity(_ input: Operations.UpdateActivity.Input) async throws -> Operations.UpdateActivity.Output {
+        try await updateActivityHandler(input)
+    }
+
+    var deleteActivityHandler: @Sendable (Operations.DeleteActivity.Input) async throws -> Operations.DeleteActivity.Output = { _ in
+        fatalError("MockAPI: deleteActivity unimplemented")
+    }
+
+    func deleteActivity(_ input: Operations.DeleteActivity.Input) async throws -> Operations.DeleteActivity.Output {
+        try await deleteActivityHandler(input)
+    }
+
+    var createActivityHandler: @Sendable (Operations.CreateActivity.Input) async throws -> Operations.CreateActivity.Output = { _ in
+        fatalError("MockAPI: createActivity unimplemented")
+    }
+
+    func createActivity(_ input: Operations.CreateActivity.Input) async throws -> Operations.CreateActivity.Output {
+        try await createActivityHandler(input)
     }
 
     func updateEvent(_ input: Operations.UpdateEvent.Input) async throws -> Operations.UpdateEvent.Output {
@@ -117,7 +141,7 @@ struct MockAPI: APIProtocol {
         try await getBoostrapUpdateHandler(input)
     }
 
-    func markActivityAsSeen(_ input: Operations.MarkActivityAsSeen.Input) async throws -> Operations.MarkActivityAsSeen.Output {
-        try await markActivityAsSeenHandler(input)
+    func markNotificationHistoryAsSeen(_ input: Operations.MarkNotificationHistoryAsSeen.Input) async throws -> Operations.MarkNotificationHistoryAsSeen.Output {
+        try await markNotificationHistoryAsSeenHandler(input)
     }
 }

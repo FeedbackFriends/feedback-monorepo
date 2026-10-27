@@ -1,6 +1,6 @@
 @testable import ActivityFeature
 import ComposableArchitecture
-import Domain
+@testable import Domain
 import Foundation
 import Testing
 
@@ -177,12 +177,7 @@ struct ActivityDetailTests {
             $0.destination = nil
         }
 
-        await store.receive(.navigateToEvent(event, presentInvite: true)) {
-            var updatedActivity = activity
-            updatedActivity.events = [event]
-            $0.$bootstrap.withLock {
-                $0.managerData!.activities[id: activity.id] = updatedActivity
-            }
+        await store.receive(\.navigateToEvent) {
             $0.destination = .eventDetail(
                 EventDetailFeature.State(
                     activityId: activity.id,
@@ -216,9 +211,11 @@ struct ActivityDetailTests {
 
     @Test
     func `Event detail edit activity delegate opens activity editor`() async {
-        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        var initial = Bootstrap.mock(numberOfManagerEvents: 1)
+        let event = Event.mock()
+        initial.managerData!.activities[0].events = [event]
+        let bootstrap: Shared<Bootstrap> = .init(value: initial)
         let activity = bootstrap.wrappedValue.managerData!.activities[0]
-        let event = activity.events[0]
 
         let store = TestStore(
             initialState: ActivityDetail.State(

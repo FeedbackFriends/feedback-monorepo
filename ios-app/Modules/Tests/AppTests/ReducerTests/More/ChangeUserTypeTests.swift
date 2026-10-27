@@ -13,15 +13,15 @@ struct ChangeUserTypeTests {
         let store = TestStore(initialState: ChangeUserType.State(selectedUserType: mockRole)) {
             ChangeUserType()
         } withDependencies: {
-            $0.apiClient.updateAccountRole = { _ in }
+            $0.apiClient.updateRole = { _ in }
         }
         await store.send(.saveButtonTap) {
             $0.isLoading = true
         }
-        await store.receive(\.updateAccountRoleResponse) {
+        await store.receive(\.updateRoleResponse) {
             $0.isLoading = false
         }
-        await store.receive(\.delegate, .refreshSession)
+        await store.receive(\.delegate)
     }
     
     @Test
@@ -31,7 +31,7 @@ struct ChangeUserTypeTests {
         let store = TestStore(initialState: ChangeUserType.State(selectedUserType: Role.manager)) {
             ChangeUserType()
         } withDependencies: {
-            $0.apiClient.updateAccountRole = { _ in throw Failure() }
+            $0.apiClient.updateRole = { _ in throw Failure() }
         }
         
         await store.send(.saveButtonTap) {

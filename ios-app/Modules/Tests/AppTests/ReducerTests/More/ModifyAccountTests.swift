@@ -16,7 +16,7 @@ struct ModifyAccountTests {
         )) {
             ModifyAccount()
         } withDependencies: {
-            $0.apiClient.updateAccount = { _, _, _ in }
+            $0.apiClient.modifyAccount = { _, _, _ in }
             $0.dismiss = .init({
                 dismissed.setValue(true)
             })
@@ -41,7 +41,7 @@ struct ModifyAccountTests {
         )) {
             ModifyAccount()
         } withDependencies: {
-            $0.apiClient.updateAccount = { _, _, _ in throw Failure() }
+            $0.apiClient.modifyAccount = { _, _, _ in throw Failure() }
         }
         await store.send(.saveButtonTap) {
             $0.isLoading = true

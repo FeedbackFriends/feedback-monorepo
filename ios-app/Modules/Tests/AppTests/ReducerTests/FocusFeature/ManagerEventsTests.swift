@@ -43,16 +43,11 @@ struct ManagerEventsTests {
             $0.destination = nil
         }
 
-        await store.receive(\.navigateToCreatedActivity, createdActivity) {
-            $0.$bootstrap.withLock {
-                $0.managerData!.activities.updateOrAppend(createdActivity)
-            }
-            $0.path.append(.activityDetail(
-                ActivityDetail.State(
-                    activityId: createdActivity.id,
-                    bootstrap: bootstrap
-                )
-            ))
+        await store.withExhaustivity(.off) {
+            await store.receive(\.navigateToCreatedActivity, createdActivity)
         }
+        #expect(store.state.path.count == 1)
+        #expect(store.state.path.last?.activityDetail?.activityId == createdActivity.id)
+        #expect(bootstrap.wrappedValue.managerData?.activities[id: createdActivity.id] == createdActivity)
     }
 }

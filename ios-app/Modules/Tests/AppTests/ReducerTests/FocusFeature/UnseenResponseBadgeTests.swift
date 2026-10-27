@@ -25,7 +25,7 @@ struct UnseenResponseBadgeTests {
         let firstEvent = Self.event(id: Self.firstEventId, unseenResponses: 2)
         let secondEvent = Self.event(id: Self.secondEventId, unseenResponses: 3)
         let cache = APIClientCache(
-            session: Self.bootstrap(
+            bootstrap: Self.bootstrap(
                 activity: Self.activity(events: [firstEvent, secondEvent]),
                 notificationHistory: .init(
                     items: [
@@ -45,8 +45,8 @@ struct UnseenResponseBadgeTests {
         let updatedSecondEvent = updatedActivity.events.first { $0.id == Self.secondEventId }
         #expect(updatedFirstEvent?.overallFeedbackSummary?.unseenResponses == 0)
         #expect(updatedSecondEvent?.overallFeedbackSummary?.unseenResponses == 3)
-        #expect(updatedFirstEvent?.questions.first?.feedback.allSatisfy(\.seenByManager) == true)
-        #expect(updatedSecondEvent?.questions.first?.feedback.allSatisfy(\.seenByManager) == false)
+        #expect(updatedFirstEvent?.questions.first?.feedback.allSatisfy { $0.seenByManager } == true)
+        #expect(updatedSecondEvent?.questions.first?.feedback.allSatisfy { $0.seenByManager } == false)
         #expect(updated?.managerData?.notificationHistory.unseenTotal == 1)
         #expect(
             updated?.managerData?.notificationHistory.items.first { $0.id == Self.firstNotificationId }?.seenByManager == true
@@ -68,12 +68,12 @@ struct UnseenResponseBadgeTests {
         }
 
         await store.send(.activityTap(activity)) {
-            $0.destination = .activityDetail(
+            $0.path.append(.activityDetail(
                 ActivityDetail.State(
                     activityId: activity.id,
                     bootstrap: sharedBootstrap
                 )
-            )
+            ))
         }
 
         let updatedEvent = sharedBootstrap.wrappedValue.managerData?.activities[id: activity.id]?.events.first { $0.id == event.id }
