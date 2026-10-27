@@ -176,3 +176,10 @@ private extension TabbarView {
     }
 
 }
+
+#if DEBUG
+extension TabbarView {
+    /// Render the real profile sheet without native presentation lifecycle leaking between previews.
+    var screenCatalogProfileSheet: some View { profileSheet }
+}
+#endif

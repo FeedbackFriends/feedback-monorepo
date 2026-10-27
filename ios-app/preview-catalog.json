@@ -1,0 +1,15 @@
+{
+  "formatVersion": 1,
+  "renderer": "Xcode RenderPreview",
+  "scheme": "Feedback Localhost",
+  "fixture": {
+    "locale": "da_DK",
+    "appearance": "light",
+    "dynamicType": "large",
+    "referenceDate": "2026-10-27T09:00:00Z",
+    "timeZone": "Europe/Copenhagen",
+    "data": "Domain/PreviewCatalogFixtures.swift — fixed account, IDs, sessions and feedback",
+    "effects": "Explicit reference date in reducer state; EmptyReducer; no backend, login, or feature network requests",
+    "foundationFormatting": "Date.formatted uses the preview host locale and time zone; the current host produces English dates. Keep the host environment fixed."
+  }
+}
