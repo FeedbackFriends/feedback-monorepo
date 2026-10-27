@@ -1,0 +1,49 @@
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_007963660d4850::t_a00a5826e53e21 1-1088
+ios-app/Modules/Sources/DesignSystem/ScreenCatalogContainerView.swift
+  s_007963660d4850::t_4db33030c2e54e 1-25
+ios-app/Modules/Sources/Domain/PreviewCatalogFixtures.swift
+  s_007963660d4850::t_42b2f5aaf481d7 1-153
+ios-app/Modules/Sources/EnterCodeFeature/ScreenCatalogPreviewView.swift
+  s_007963660d4850::t_785bb16446699e 1-52
+ios-app/Modules/Sources/FeedbackFlowFeature/ScreenCatalogPreviewView.swift
+  s_007963660d4850::t_c31a39c987e231 1-429
+ios-app/Modules/Sources/MoreFeature/ScreenCatalogPreviewView.swift
+  s_007963660d4850::t_b51437a0fd00a4 1-212
+ios-app/Modules/Sources/RootFeature/ScreenCatalogPreviewView.swift
+  s_007963660d4850::t_d9c9038c7322a1 1-43
+ios-app/Modules/Sources/SignUpFeature/ScreenCatalogPreviewView.swift
+  s_007963660d4850::t_0b288b5ccfba2b 1-139
+ios-app/Modules/Sources/TabbarFeature/ScreenCatalogPreviewView.swift
+  s_007963660d4850::t_02ee1cdaefdec4 1-126
+ios-app/Modules/Sources/TabbarFeature/TabbarView.swift
+  s_007963660d4850::t_9df6f82c5a1f0e 179-185
+ios-app/preview-catalog.json
+  s_007963660d4850::t_d2ef7a7a3b2871 1-15
+ios-app/scripts/publish-preview-catalog.py
+  s_007963660d4850::t_e29781a15c788f 1-132
+ios-app/.agents/skills/letsgrow-ios-screenshots/SKILL.md
+  s_007963660d4850::t_691a982896cbe2 1-16
+ios-app/Docs/plans/2026-10-27-ios-screen-catalog.md
+  s_007963660d4850::t_494faf0df06b4b 1-12
+ios-app/Docs/screenshots/README.md
+  s_007963660d4850::t_d881dfeea5086f 1-23
+ios-app/scripts/tests/test_publish_preview_catalog.py
+  s_007963660d4850::t_61f02ace7bb147 1-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "21f56158eb0d016f8f66714e324a8afc4847a289",
+  "prompts": {},
+  "sessions": {
+    "s_007963660d4850": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17dbf-9201-7a43-8eeb-7c32267f803d",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
