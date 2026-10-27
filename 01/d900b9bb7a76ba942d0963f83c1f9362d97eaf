@@ -1,0 +1,19 @@
+ios-app/AGENTS.md
+  s_007963660d4850::t_a6e45dbf6f3910 34-35,48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "01d900b9bb7a76ba942d0963f83c1f9362d97eaf",
+  "prompts": {},
+  "sessions": {
+    "s_007963660d4850": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17dbf-9201-7a43-8eeb-7c32267f803d",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
