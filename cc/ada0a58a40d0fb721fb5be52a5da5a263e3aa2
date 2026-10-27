@@ -1,0 +1,97 @@
+.github/workflows/ios.yml
+  s_eb4f825bc489a6::t_335809396b323f 1-104
+.gitignore
+  s_eb4f825bc489a6::t_a9e45f0eb98d9d 51-52
+ios-app/.gitignore
+  s_eb4f825bc489a6::t_77e716c3945f2e 19-21
+ios-app/AGENTS.md
+  s_af767e0f469315::t_d0ae5e98e2d386 9,32-33,35,90-91,94-95
+ios-app/App/Config/localhost.xcconfig
+  s_eb4f825bc489a6::t_11bdec0f3de39a 3
+ios-app/Docs/ARCHITECTURE.md
+  s_eb4f825bc489a6::t_ed98ccb690f134 14-15,18,31,39,42,60,79,97,102-104
+ios-app/Docs/CONFIGURATION.md
+  s_eb4f825bc489a6::t_c39bac598dc14e 16,20,26
+ios-app/Docs/SETUP.md
+  s_af767e0f469315::t_062adeea3eb4f5 1,3,5,7,9,11,13
+ios-app/Docs/agent-harness.md
+  s_af767e0f469315::t_1a71d7120f3aec 1-89
+ios-app/Docs/push_notifications/README.md
+  s_eb4f825bc489a6::t_5a64c09623e0ad 3,8
+ios-app/Feedback.xcodeproj/project.pbxproj
+  s_af767e0f469315::t_3ca3a76a6db4b5 735
+"ios-app/Feedback.xcodeproj/xcshareddata/xcschemes/Feedback Localhost.xcscheme"
+  s_af767e0f469315::t_8672423260c951 27,30-36
+"ios-app/Feedback.xcodeproj/xcshareddata/xcschemes/Feedback Production.xcscheme"
+  s_af767e0f469315::t_d8ca17c8e5f479 8-23,34-35
+ios-app/README.md
+  s_af767e0f469315::t_24cc072a406383 22,30,37,43,51,58,61-62,70-72,74-75,95,102,109-111,118-120,161
+.agents/config.toml
+  s_eb4f825bc489a6::t_33ad9f5e49e193 2-5
+.agents/skills/letsgrow-ios-localhost/SKILL.md
+  s_eb4f825bc489a6::t_cd5cbbed7c465d 1-16
+.agents/skills/letsgrow-ios-localhost/agents/openai.yaml
+  s_eb4f825bc489a6::t_1c5c1e9c357dcb 2-4
+.agents/skills/letsgrow-ios-production/SKILL.md
+  s_eb4f825bc489a6::t_c122f0b0a2a768 1-16
+.agents/skills/letsgrow-ios-production/agents/openai.yaml
+  s_eb4f825bc489a6::t_e44902c0f882aa 1-7
+.codex/config.toml
+  s_eb4f825bc489a6::t_321741d5b09ef1 1-4
+AGENTS.md
+  s_eb4f825bc489a6::t_d5036aac0cd9ed 64,76-77
+docs/agent-tooling.md
+  s_eb4f825bc489a6::t_a160267c1ff876 13,17,33,39
+ios-app/.agents/config.toml
+  s_eb4f825bc489a6::t_4906c054f1c387 2
+ios-app/.agents/hooks.json
+  s_eb4f825bc489a6::t_0ff6b4fb140da9 2
+ios-app/.agents/hooks/swiftlint-fix-changed.sh
+  s_eb4f825bc489a6::t_335df7ec638dab 4-5
+ios-app/.agents/skills/letsgrow-ios-run-simulator/SKILL.md
+  s_eb4f825bc489a6::t_a20e19c487b3fe 3,8,10-17,21-31
+ios-app/.agents/skills/letsgrow-ios-run-simulator/agents/openai.yaml
+  s_eb4f825bc489a6::t_3b9d359f8c315b 1-7
+ios-app/UnitTests.xctestplan
+  s_82bcd698a57f12::t_1d70108935fc4a 15-21
+ios-app/scripts/lint-swift-changes.py
+  s_eb4f825bc489a6::t_33cae6e156665b 1-80
+ios-app/scripts/tests/test_lint_swift_changes.py
+  s_eb4f825bc489a6::t_6fd39662c2b3a7 1-127
+scripts/ios-backend
+  s_eb4f825bc489a6::t_ab2fc88197f688 1-108
+scripts/tests/test_ios_backend.py
+  s_eb4f825bc489a6::t_f5692f3381b16c 1-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ccada0a58a40d0fb721fb5be52a5da5a263e3aa2",
+  "prompts": {},
+  "sessions": {
+    "s_82bcd698a57f12": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ca1-94fc-7710-b7ce-7441f5c8a4c6",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_af767e0f469315": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17d66-b845-79a2-916c-17546d20a23b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_eb4f825bc489a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17c43-b203-7d30-80eb-8a805f4aef4e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
