@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -129,6 +129,9 @@
 		C30B1C4C2EB611E6000E4AAA /* AppMockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMockApp.swift; sourceTree = "<group>"; };
 		C3E527AA2EA8AC6C005FECFC /* AppMock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppMock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		2892AA322C0F89C600F12E83 /* Frameworks */ = {
@@ -572,7 +575,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
+				LastSwiftUpdateCheck = 2710;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					2892AA342C0F89C600F12E83 = {
