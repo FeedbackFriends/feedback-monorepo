@@ -67,10 +67,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", exact: "1.9.0"),
         .package(
-            url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
-            exact: "1.18.9"
-        ),
-        .package(
             url: "https://github.com/firebase/firebase-ios-sdk.git",
             exact: "12.9.0"
         ),
@@ -259,7 +255,6 @@ let package = Package(
             dependencies: [
                 .product(name: "IssueReportingTestSupport", package: "xctest-dynamic-overlay"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
                 "RootFeature",
                 "Adapters",
                 "Domain",
