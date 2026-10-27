@@ -76,3 +76,8 @@ When editing workflows:
 - Prefer explicit config over clever indirection.
 - Do not modify generated files unless the change is the result of the repo's generation scripts.
 - Do not commit or push unless the user explicitly asks.
+
+## Browser Access
+- Use an isolated in-app browser for browser tasks by default.
+- Do not connect to the user's personal Chrome or other browser profile unless the user explicitly requests it for that task.
+- If a site requires authentication, have the user sign in to the isolated browser; do not transfer credentials or cookies from a personal browser.

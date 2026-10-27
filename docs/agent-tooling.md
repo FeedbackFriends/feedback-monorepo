@@ -16,6 +16,10 @@ version control. Credentials and user-level MCP connections stay outside Git.
 - The `skills-lock.json` files are local installer state and are ignored by
   Git. The skill instructions themselves are committed in the repository.
 
+For browser work, follow the root `AGENTS.md`: use the isolated in-app browser
+by default, and use a personal browser profile only when the user explicitly
+requests it for that task. The isolated browser has its own login session.
+
 ## MCP servers
 
 Codex reads this repository's MCP definitions from
