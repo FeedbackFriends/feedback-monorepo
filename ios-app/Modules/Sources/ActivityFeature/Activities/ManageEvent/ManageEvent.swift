@@ -112,6 +112,7 @@ public struct ManageEvent: Sendable {
             self.activityId = activityId
             self.eventId = eventId
             self.eventInput = eventInput
+            self.date = eventInput.date
             self.startNowEnabled = startNowEnabled
             self.durationPicker = DurationPicker(durationInMinutes: eventInput.durationInMinutes)
             self.allDay = eventInput.durationInMinutes == .minutesOneDay
@@ -120,10 +121,7 @@ public struct ManageEvent: Sendable {
             self.successOverlayMessage = successOverlayMessage
         }
 
-        var date: Date {
-            @Dependency(\.date) var date
-            return date.now
-        }
+        var date: Date
 
         var navigationTitle: String {
             switch mode {
@@ -141,6 +139,7 @@ public struct ManageEvent: Sendable {
 
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
+        case task
         case minutePickerChanged
         case hourPickerChanged
         case allDayChanged
@@ -163,6 +162,7 @@ public struct ManageEvent: Sendable {
 
     public init() {}
 
+    @Dependency(\.date.now) var now
     @Dependency(\.apiClient) var apiClient
     @Dependency(\.dismiss) var dismiss
     @Dependency(\.continuousClock) var clock
@@ -175,6 +175,10 @@ public struct ManageEvent: Sendable {
         BindingReducer()
         Reduce { state, action in
             switch action {
+            case .task:
+                state.date = now
+                return .none
+
 
             case .binding:
                 return .none

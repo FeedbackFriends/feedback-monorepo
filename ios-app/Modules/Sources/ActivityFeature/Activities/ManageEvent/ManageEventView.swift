@@ -37,6 +37,7 @@ public struct ManageEventView: View {
         .onAppear {
             UIDatePicker.appearance().minuteInterval = 5
         }
+        .task { store.send(.task) }
         .onChange(of: store.minutePicker) { _, _ in
             store.send(.minutePickerChanged)
         }
