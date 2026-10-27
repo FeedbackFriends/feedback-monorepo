@@ -6,3 +6,7 @@ args = ["mcp"]
 [mcp_servers.shadcn]
 command = "sh"
 args = ["-lc", "cd web && exec npx shadcn@latest mcp"]
+
+[mcp_servers.godaddy]
+url = "https://api.godaddy.com/v1/domains/mcp"
+transport = "streamable-http"

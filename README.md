@@ -62,6 +62,9 @@ App-specific instructions live in:
 - `web/AGENTS.md`
 - `backend/AGENTS.md`
 
+Project MCP definitions, harness guidance, and skills are documented in
+[`docs/agent-tooling.md`](./docs/agent-tooling.md).
+
 For frontend work, use Node `20.19.0` in `web/` so local installs match
 GitHub Actions (`web/.nvmrc`) and the pinned web Docker image.
 

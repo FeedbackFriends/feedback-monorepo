@@ -1,3 +1,14 @@
 [mcp_servers.coolify]
 url = "https://coolify.letsgrow.dk/mcp"
 http_headers_helper = "./scripts/coolify-mcp-auth-headers"
+
+[mcp_servers.maestro]
+command = "maestro"
+args = ["mcp"]
+
+[mcp_servers.shadcn]
+command = "sh"
+args = ["-lc", "cd web && exec npx shadcn@latest mcp"]
+
+[mcp_servers.godaddy]
+url = "https://api.godaddy.com/v1/domains/mcp"
