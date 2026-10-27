@@ -1,0 +1,19 @@
+ios-app/Feedback.xcodeproj/project.pbxproj
+  s_af767e0f469315::t_caefb12fd1da56 6,133-135,578
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0f8f09f0dd76b723ff319b145e8b86c8c1280357",
+  "prompts": {},
+  "sessions": {
+    "s_af767e0f469315": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17d66-b845-79a2-916c-17546d20a23b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
