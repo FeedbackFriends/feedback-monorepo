@@ -1,0 +1,104 @@
+name: iOS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ios-app/**"
+      - "scripts/ios-backend"
+      - "scripts/tests/**"
+      - ".github/workflows/ios.yml"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "ios-app/**"
+      - "scripts/ios-backend"
+      - "scripts/tests/**"
+      - ".github/workflows/ios.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: macos-26
+    timeout-minutes: 45
+    env:
+      LINT_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Check lint script behavior
+        run: python3 -m unittest discover -s ios-app/scripts/tests -v
+
+      - name: Check iOS backend workflow behavior
+        run: python3 -m unittest discover -s scripts/tests -v
+
+      - name: Lint changed Swift lines
+        shell: bash
+        run: |
+          set -euo pipefail
+          base=$(git merge-base "$LINT_BASE" HEAD)
+          python3 ios-app/scripts/lint-swift-changes.py --base "$base"
+
+      - name: Select an available iPhone simulator
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import subprocess
+
+          def simctl(*args):
+              return json.loads(subprocess.check_output(["xcrun", "simctl", *args, "--json"]))
+
+          runtimes = [r for r in simctl("list", "runtimes")["runtimes"]
+                      if r["isAvailable"] and r["identifier"].startswith("com.apple.CoreSimulator.SimRuntime.iOS-")
+                      and int(r["version"].split(".")[0]) >= 26]
+          devices = simctl("list", "devices", "available")["devices"]
+          candidates = [(tuple(map(int, r["version"].split("."))), d["name"], d["udid"])
+                        for r in runtimes for d in devices.get(r["identifier"], [])
+                        if d["isAvailable"] and d["name"].startswith("iPhone")]
+          if not candidates:
+              raise SystemExit("No available iPhone simulator with iOS 26 or newer")
+          version, name, udid = sorted(candidates)[-1]
+          print(f"Testing on {name}, iOS {'.'.join(map(str, version))}")
+          with open(os.environ["GITHUB_ENV"], "a") as output:
+              output.write(f"IOS_SIMULATOR_UDID={udid}\n")
+          PY
+
+      - name: Build app and run both unit test targets
+        run: |
+          mkdir -p ios-app/.build/ci
+          xcodebuild test \
+            -project ios-app/Feedback.xcodeproj \
+            -scheme "Feedback Localhost" \
+            -configuration DebugLocalhost \
+            -testPlan UnitTests \
+            -destination "platform=iOS Simulator,id=$IOS_SIMULATOR_UDID" \
+            -resultBundlePath ios-app/.build/ci/UnitTests.xcresult \
+            -skipMacroValidation \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-unit-test-results
+          path: ios-app/.build/ci/UnitTests.xcresult
+          if-no-files-found: ignore
+          retention-days: 7

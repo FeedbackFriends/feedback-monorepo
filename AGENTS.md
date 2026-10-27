@@ -61,6 +61,7 @@ Production deployment uses Coolify, not local Compose. Keep deployment changes a
 GitHub Actions live in `.github/workflows/` and are root-owned infrastructure.
 
 - `ci.yml`: validates backend, web, and generated API artifacts
+- `ios.yml`: path-filtered macOS job that builds iOS, runs both unit-test targets, and checks changed-line SwiftLint violations
 - `release.yml`: runs release validation, builds and publishes Docker images, creates a GitHub release, and triggers Coolify deployment
 
 When editing workflows:
@@ -72,6 +73,8 @@ When editing workflows:
 
 ## Working Rules
 - Read the nearest `AGENTS.md` before editing a subtree.
+- For building the local backend and launching iOS together, use `.agents/skills/letsgrow-ios-localhost/SKILL.md`. For an iOS simulator build against deployed production, use `.agents/skills/letsgrow-ios-production/SKILL.md`.
+- For iOS build, test, launch, or verification work, read `ios-app/.agents/skills/letsgrow-ios-run-simulator/SKILL.md`, including when starting from the monorepo root. Setup is documented in `ios-app/Docs/agent-harness.md`.
 - Use two-space indentation in YAML.
 - Prefer explicit config over clever indirection.
 - Do not modify generated files unless the change is the result of the repo's generation scripts.

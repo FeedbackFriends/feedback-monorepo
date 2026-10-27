@@ -15,6 +15,13 @@
     {
       "target" : {
         "containerPath" : "container:Modules",
+        "identifier" : "InsightsTests",
+        "name" : "InsightsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Modules",
         "identifier" : "AppTests",
         "name" : "AppTests"
       }

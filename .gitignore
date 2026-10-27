@@ -49,3 +49,4 @@ skills-lock.json
 
 .env
 firebase-debug.log
+scripts/tests/__pycache__/

@@ -1,7 +1,0 @@
-interface:
-  display_name: "LetsGrow iOS Simulator Run"
-  short_description: "Run Feedback Localhost through native Xcode MCP"
-  default_prompt: "Use $letsgrow-ios-run-simulator to build and run Feedback Localhost on the active simulator through Xcode MCP."
-
-policy:
-  allow_implicit_invocation: true

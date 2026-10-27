@@ -19,7 +19,7 @@ The app is 100% SwiftUI, [The Composable Architecture (TCA)](https://github.com/
 
 ## 🔧 Requirements
 - Swift 6.2  
-- Xcode 26  
+- Xcode 27
 - iOS 26  
 - SwiftLint (`brew install swiftlint`)
 
@@ -27,20 +27,20 @@ The app is 100% SwiftUI, [The Composable Architecture (TCA)](https://github.com/
 ## 🗂 Project structure
 
 ```
-Xcode_project/
+ios-app/
   App/                         # App entry, AppDelegate, Composition Root
   Modules/
     Sources/
       RootFeature/             # App root reducer & navigation
       EnterCodeFeature/        # Join flow
       FeedbackFlowFeature/     # Feedback screens and flow
-      EventsFeature/           # Event list/detail/create
+      ActivityFeature/           # Event list/detail/create
       MoreFeature/             # Settings/account
       SignUpFeature/           # Sign up
       TabbarFeature/           # Tab coordination
       Domain/                  # Models, errors, service interfaces 
       Adapters/                # Live implementations (API, Firebase, etc.)
-      OpenAPI/                 # Spec + committed generated client
+      OpenAPI/                 # Generator config + generated client
       DesignSystem/            # Theme, styles, reusable views
       Logger/, Utility/, InfoPlist/  # Cross‑cutting utilities
     Tests/                     # Reducer & snapshot tests
@@ -48,18 +48,18 @@ Xcode_project/
   Docs/                        # Documentation, screenshots, push samples
 ```
 
-See also: `Xcode_project/Modules/Package.swift` for module targets and dependencies.
+See also: `ios-app/Modules/Package.swift` for module targets and dependencies.
 
 
 ---
 
 ## 🔌 API Layer
 
-The API layer is fully generated from our [OpenAPI specification](https://github.com/FeedbackFriends/feedback-openapi).  
+The backend generates the canonical API contract at `contracts/openapi/feedback-api.yaml`; the iOS transport client is generated from that contract.
 This ensures the client stays in sync with the backend contract.
 
-- Spec and generated client live under `Xcode_project/Modules/Sources/OpenAPI/`.
-- Committed generated Swift sources live under `Xcode_project/Modules/Sources/OpenAPI/GeneratedSources/`.
+- The generated client and generator configuration live under `ios-app/Modules/Sources/OpenAPI/`.
+- Committed generated Swift sources live under `ios-app/Modules/Sources/OpenAPI/GeneratedSources/`.
 - Regenerate the backend contract, TypeScript client, and Swift client from the monorepo root with `./scripts/generate-api-artifacts.sh`.
 - The live `APIClient` is injected via TCA dependencies.
 
@@ -67,9 +67,12 @@ This ensures the client stays in sync with the backend contract.
 
 ## 🧪 Testing
 
-- Unit and reducer tests: `Xcode_project/Modules/Tests/`
+For a complete backend and simulator run, use `$letsgrow-ios-localhost`. To build a Release simulator app against the existing Coolify deployment, use `$letsgrow-ios-production`. See [build/run workflows](Docs/agent-harness.md#build-and-run-workflows).
+
+- Unit and reducer tests: `ios-app/Modules/Tests/`
 - Snapshot tests via `swift-snapshot-testing`
-- Run from Xcode or use the `xcodebuild test` command above.
+- The `Feedback Localhost` scheme uses the shared `UnitTests` plan with `AppTests` and `InsightsTests`.
+- Agent build, test, launch, and UI verification use the [simulator workflow](.agents/skills/letsgrow-ios-run-simulator/SKILL.md). See the [harness overview](Docs/agent-harness.md) for Xcode MCP setup and lint commands.
 
 
 ---
@@ -89,37 +92,32 @@ Required keys:
 | `SUPPORT_EMAIL` | `support@myhost.com` | Support link |
 | `APPSTORE_ID` | `1234567890` | App Store links |
 
-Schemes select different environments (Prod/Debug/Localhost/Mock) using `.xcconfig` under `Xcode_project/App/Config/`.
+Schemes select different environments (Prod/Debug/Localhost/Mock) using `.xcconfig` under `ios-app/App/Config/`.
 
 ---
 
 ## 🐞 Debugging & Preview
 
 - In `DEBUG` builds a debug overlay (`DebugMenuView`) is available.
-- Dedicated preview apps exist under `Xcode_project/PreviewApps/` for focused UI flows.
+- Dedicated preview apps exist under `ios-app/PreviewApps/` for focused UI flows.
 
 
 ---
 
 ## 🔔 Notifications
 
-- Push is enabled via `Xcode_project/App/Entitlements.entitlements`.
-- Sample payloads are in `Docs/push_notifications/`.
-- Local testing on a booted simulator or device:
-
-```bash
-xcrun simctl push booted <your.bundle.id> Docs/push_notifications/new_feedback_received.apns
-```
-
-Details: [Docs/NOTIFICATIONS.md](Docs/NOTIFICATIONS.md)
+- Push is enabled via `ios-app/App/Entitlements.entitlements`.
+- Sample payloads and manual notification-testing instructions are in [Docs/push_notifications/](Docs/push_notifications/README.md).
+- Local agent simulator operations follow [the iOS harness policy](AGENTS.md).
 
 
 ---
 
 ## 🧰 CI
 
-- `Xcode_project/CI_scripts/ci_post_clone.sh` relaxes SwiftPM plugin fingerprint checks (needed for the OpenAPI generator) in CI environments.
-- GitHub Actions verifies the committed Swift OpenAPI sources stay in sync with `contracts/openapi/feedback-api.yaml`.
+- GitHub Actions builds the iOS app, runs both unit-test targets, and gates changed-line lint in the path-filtered `iOS` workflow. See [CI setup and cost assumptions](Docs/agent-harness.md#ci).
+- The existing `CI` workflow separately verifies generated Swift OpenAPI sources against the canonical contract.
+- `ios-app/CI_scripts/` contains separate Xcode Cloud hooks; GitHub Actions does not invoke them.
 
 
 ## 🏗️ Architecture
@@ -160,7 +158,7 @@ flowchart TD
     subgraph Features[TCA Features]
         RootFeature
         TabbarFeature
-        EventsFeature
+        ActivityFeature
         FeedbackFlowFeature
         EnterCodeFeature
         MoreFeature

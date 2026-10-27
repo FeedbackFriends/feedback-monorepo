@@ -1,0 +1,7 @@
+interface:
+  display_name: "LetsGrow iOS Production"
+  short_description: "Run a Release simulator build against production"
+  default_prompt: "Use $letsgrow-ios-production to build and launch Feedback Production on the active simulator against the API deployed on Coolify."
+
+policy:
+  allow_implicit_invocation: true

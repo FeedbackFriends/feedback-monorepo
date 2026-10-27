@@ -1,0 +1,7 @@
+interface:
+  display_name: "LetsGrow iOS Verification"
+  short_description: "Build, test, and verify iOS through Xcode MCP"
+  default_prompt: "Use $letsgrow-ios-run-simulator to verify my iOS changes with Feedback Localhost, relevant tests, lint, and a simulator check."
+
+policy:
+  allow_implicit_invocation: true

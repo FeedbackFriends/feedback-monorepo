@@ -1,3 +1,7 @@
+[mcp_servers.xcode]
+command = "xcrun"
+args = ["mcpbridge"]
+
 [mcp_servers.coolify]
 url = "https://coolify.letsgrow.dk/mcp"
 http_headers_helper = "./scripts/coolify-mcp-auth-headers"

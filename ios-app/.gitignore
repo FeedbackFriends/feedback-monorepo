@@ -17,3 +17,5 @@ xcuserdata/
 !*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+# Python tooling cache
+__pycache__/

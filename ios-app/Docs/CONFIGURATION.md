@@ -13,20 +13,17 @@ The app reads runtime configuration from `Info.plist` using the `InfoPlist` help
 | `SUPPORT_EMAIL` | `support@myhost.com` | Support link |
 | `APPSTORE_ID` | `1234567890` | App Store links |
 
-See `Xcode_project/App/InfoPlist/Info.plist` and scheme‑specific `.xcconfig` files under `Xcode_project/App/Config/`.
+See `ios-app/App/InfoPlist/Info.plist` and scheme‑specific `.xcconfig` files under `ios-app/App/Config/`.
 
 ## Schemes
 
-- Feedback Debug — development defaults
-- Feedback Localhost — local API
-- Feedback Mock — mocks adapters; minimal external setup
-- Feedback Prod — production configuration
+The default local scheme is `Feedback Localhost`; `Feedback Production` targets production. See [setup](SETUP.md) and [the harness overview](agent-harness.md) for running and testing.
 
 ## Accessing values
 
 Example wrapper:
 
-```19:33:Xcode_project/App/AppDelegate.swift
+```19:33:ios-app/App/AppDelegate.swift
 public enum InfoPlistConfig {
     public static var apiBaseUrl: URL {
         InfoPlist().url(for: "API_BASE_URL", scheme: "API_SCHEME")!

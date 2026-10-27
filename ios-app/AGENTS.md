@@ -6,6 +6,7 @@ Work in `ios-app/` for the native LetsGrow iOS app: SwiftUI screens, TCA reducer
 Keep work in this subtree focused on the iOS app. If the API contract changes, regenerate API artifacts from the monorepo root.
 
 ## Quick Reference
+- IDE: Xcode 27
 - Platform: iOS 26+
 - Language: Swift 6.2
 - UI: SwiftUI
@@ -28,12 +29,10 @@ Keep work in this subtree focused on the iOS app. If the API contract changes, r
 - `Docs/`: architecture, setup, configuration, notification docs, and screenshots.
 
 ## Xcode And Simulator Harness
+Setup and configuration ownership are documented in `Docs/agent-harness.md`. The build, test, launch, and verification procedure lives in `.agents/skills/letsgrow-ios-run-simulator/SKILL.md`; read it for those tasks.
+
 - Use the native Xcode MCP server (`mcp__xcode`) for all interaction with Xcode and simulators: workspace discovery, scheme/destination selection, builds, tests, launch arguments, install/run, UI interaction, screenshots, logs, and debugging.
-- Use the `Feedback Localhost` scheme for local development and testing unless the user explicitly asks for another scheme. Select it with `XcodeSwitchScheme` before building, running, or testing.
-- Discover workspace identifiers with `XcodeListWorkspaces`; do not hardcode identifiers from previous sessions. Open `Feedback.xcodeproj` with `XcodeOpenWorkspace` when it is not listed.
-- Use the active simulator by default. Use `XcodeListRunDestinations` and `XcodeSwitchRunDestination` when a different target is requested.
-- Use `BuildProject`, `RunProject`, `RunSomeTests`/`RunAllTests`, `GetBuildLog`, and `GetConsoleOutput` for the corresponding operations.
-- For interactive checks, use `DeviceInteractionStartWorkspaceSession`, `DeviceInteractionInstallAndRun`, and `DeviceInteractionSynthesize`. Close the interaction session with `DeviceInteractionEndSession` when finished.
+- Use `Feedback Localhost` for local development and testing unless the user explicitly asks for another scheme. Resolve the current checkout's workspace and keep the active eligible simulator by default; never implicitly select a physical device.
 - Do not substitute XcodeBuildMCP, `xcodebuild`, `xcrun simctl`, AppleScript, computer-use automation, or Maestro for these Xcode/simulator operations. If native Xcode MCP is unavailable or fails, report the exact blocker instead of silently switching tools. Existing explicitly requested Maestro test flows remain separate from this harness.
 - File edits, SwiftLint, API generation scripts, and local backend HTTP requests may use normal filesystem/shell tools; they are not Xcode interaction.
 
@@ -88,9 +87,11 @@ Examples:
 - Use Swift Testing, TCA `TestStore`, and snapshot tests for module behavior.
 - Put tests under `Modules/Tests/`, mirroring source module names.
 - Use Maestro for user-facing mobile journeys when appropriate.
-- When changing Swift code, run `swiftlint lint --reporter xcode` before finishing.
-- Fix SwiftLint warnings before the final response. Do not run auto-fix commands unless the user explicitly asks.
+- When changing Swift code, run `python3 ios-app/scripts/lint-swift-changes.py --base <merge-base>` from the monorepo root before finishing. Use the merge base with the task's target branch (normally `origin/main`); use `HEAD` for a check of uncommitted changes only.
+- Fix lint violations on added or modified lines. Existing violations on untouched lines are not a gate; do not expand the task to clean them up. The script honors `.swiftlint.yml` exclusions and never modifies files. Do not run auto-fix commands unless the user explicitly asks.
 - Final responses for Swift code changes should include the lint command result.
+
+GitHub Actions uses command-line Xcode tools on its isolated macOS runner for the `iOS` workflow. This CI exception does not change the native Xcode MCP requirement for local agent work. Explicitly requested Maestro flows remain governed by `.maestro/README.md` and may reset local fixture data.
 
 ## Domain And Product Language
 - LetsGrow is Danish-first and focused on honest feedback after meetings, workshops, talks, training, and similar repeatable formats.

@@ -1,19 +1,31 @@
 ---
 name: letsgrow-ios-run-simulator
-description: Build, run, and verify the LetsGrow iOS app on a simulator through native Xcode MCP using the Feedback Localhost scheme. Use when asked to launch or test the iOS app locally.
+description: Build, test, launch, and verify LetsGrow iOS changes through native Xcode MCP. Defaults to Feedback Localhost; supports an explicitly requested Feedback Production launch. Use for simulator requests and verification after implementing iOS changes; honor build-only or launch-only requests.
 ---
 
 # Run LetsGrow on a Simulator
 
-Use native `mcp__xcode` tools for every Xcode and simulator operation. Follow `ios-app/AGENTS.md`. Use `Feedback Localhost` for builds, runs, and tests. Prefer the current simulator unless the user specifies another; do not pin an old simulator model or OS version.
+Follow [the iOS policy](../../../AGENTS.md). Setup and configuration ownership are in [the harness overview](../../../Docs/agent-harness.md). Use native `mcp__xcode` tools. Default to `Feedback Localhost`; an explicitly requested production run uses `Feedback Production` (Release). A request only to launch or build does not require the full verification sequence below. For backend preparation, use the root `letsgrow-ios-localhost` or `letsgrow-ios-production` skill as appropriate.
 
-1. Discover the project's workspace identifier with `XcodeListWorkspaces`. Open `ios-app/Feedback.xcodeproj` with `XcodeOpenWorkspace` only when absent, then list workspaces again if opening times out. Use the returned identifier in subsequent calls.
-2. Select `Feedback Localhost` with `XcodeSwitchScheme`. Confirm the active destination with `XcodeListRunDestinations`; use `XcodeSwitchRunDestination` for a user-requested simulator.
-3. For build-only work, use `BuildProject`. For a normal launch, use `RunProject`.
-4. For interactive verification, start `DeviceInteractionStartWorkspaceSession`, build/install/launch with `DeviceInteractionInstallAndRun`, then inspect or interact with `DeviceInteractionSynthesize`. Base taps on the latest hierarchy, and close the interaction session with `DeviceInteractionEndSession` when done.
-5. Use `GetBuildLog` and `GetConsoleOutput` for failures. Use `RunSomeTests` or `RunAllTests` for requested tests under the Localhost scheme; report missing test configuration rather than switching schemes silently.
-6. When an authenticated app is required, use the sibling `letsgrow-ios-login/SKILL.md` workflow to provide per-launch login arguments.
+1. Discover the workspace with `XcodeListWorkspaces`, matching the absolute `ios-app/Feedback.xcodeproj` path in the current checkout. Other LetsGrow or Dinero windows may be open. Open the project with `XcodeOpenWorkspace` only when absent; list again if opening times out. Pass the discovered identifier to later workspace tools.
+2. Select the chosen scheme using `XcodeSwitchScheme` (`Feedback Localhost` by default, `Feedback Production` for an explicit production run). Confirm the destination with `XcodeListRunDestinations`. Keep the active eligible simulator unless the user chooses another; if none is active, select an eligible simulator explicitly and report it. Never run on a physical device implicitly.
+3. For tests, use `Feedback Localhost`, inspect `XcodeListTestPlans`, and select `UnitTests` with `XcodeSwitchTestPlan` if needed. `GetTestList` must discover enabled tests from both `AppTests` and `InsightsTests`; inspect its full list file when inline results are truncated. Missing plans, targets, or zero discovered tests are blockers, not a passing test run. Do not switch schemes to hide configuration failures. A production launch does not run tests; if tests were also requested, run them on Localhost and explicitly reselect Production before the production build/run.
+4. After implementation, build with `BuildProject` and run tests relevant to the changed behavior with `RunSomeTests`, using identifiers from `GetTestList`. Suite names (the prefix before `/` in a discovered identifier) can select an entire suite, including when MCP rejects an individual Swift test name containing backticks/spaces. Use `RunAllTests` for shared behavior or test-harness changes. A requested build-only operation needs only `BuildProject`.
+5. Run the changed-line lint check defined in `AGENTS.md` when Swift files changed. It covers staged, unstaged, and untracked files relative to the supplied base. A lint-script or lint-configuration change also needs a check of the script's behavior. Never autofix as part of verification.
+6. Choose one launch route per build: `RunProject` for an ordinary run, or the interactive install/run in step 7. Do not call `RunProject` immediately before `DeviceInteractionInstallAndRun`; repeated launches can create extra Device Hub windows. For authenticated **localhost** checks, launch directly through [the login skill](../letsgrow-ios-login/SKILL.md), which supplies fresh per-launch arguments without resetting fixtures. Do not duplicate that credential procedure here or use it against production. Production login uses the normal app UI.
+7. For changed user-facing behavior, start `DeviceInteractionStartWorkspaceSession`, install/launch using `DeviceInteractionInstallAndRun` (or the login skill), and inspect/interact using `DeviceInteractionSynthesize`. Check the affected path against the task's expected behavior. Base taps on the latest hierarchy; use screenshots when layout needs inspection. Close the session with `DeviceInteractionEndSession`, including on failure. An error alert makes the check failed or inconclusive; launch success alone is not UI verification.
+8. On build failure, retrieve error entries with `GetBuildLog`; use narrowly filtered `GetConsoleOutput` for runtime failures. Return concise errors and artifact paths instead of entire logs. Report a blocked operation and continue independent checks where possible.
 
 Do not fall back to XcodeBuildMCP, Xcode CLI, simulator CLI, AppleScript, or another UI automation tool. Do not automate Xcode permission dialogs. If native Xcode MCP is blocked, report the blocking operation.
 
-Report the scheme, simulator, build/launch result, and what was verified. Distinguish launch success from successful login or UI verification.
+Report only observed results, marking omitted checks `not run` with a reason:
+
+```text
+Scheme / simulator: <selected scheme> / <destination>
+Build: passed | failed | blocked
+Tests: <passed/failed/skipped counts and targets, or reason not run>
+Lint: <command and result, or reason not run>
+Launch / login: <separate observed outcomes>
+UI: passed | failed | inconclusive | not run — <steps and expected behavior>
+Blockers / artifacts: <only when relevant>
+```

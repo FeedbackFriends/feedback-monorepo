@@ -11,11 +11,11 @@ The app uses a **TCA-based modular architecture** where features are self-contai
 - Actions that represent user interactions and system events
 
 **Features compose in two ways**:
-1. **Parent-Child**: Features embed child features (e.g., `TabbarFeature` contains `EventsFeature`)
-2. **Shared State**: Features share data via TCA's `@Shared` mechanism (e.g., `Session` is shared across many features)
+1. **Parent-Child**: Features embed child features (e.g., `TabbarFeature` contains `ActivityFeature`)
+2. **Shared State**: Features share data via TCA's `@Shared` mechanism (e.g., `Bootstrap` is shared across many features)
 
 **Domain Services** provide interfaces that features use to interact with external systems:
-- Defined as protocols in the `Domain` module
+- Defined as app-facing dependencies in the `Domain` module
 - Injected via TCA's `@Dependency` system
 - Implemented by `Adapters` module using real APIs/SDKs
 
@@ -28,7 +28,7 @@ The app uses a **TCA-based modular architecture** where features are self-contai
 // TabbarFeature contains multiple child features
 TabbarFeature.State(
     enterCode: EnterCode.State(),
-    managerEvents: ManagerEvents.State(),
+    managerEvents: ActivityList.State(bootstrap: bootstrap),
     moreSection: MoreSection.State(),
     // ...
 )
@@ -36,10 +36,10 @@ TabbarFeature.State(
 
 **Shared State**: Features share data using `@Shared`:
 ```swift
-// Session is shared across many features
+// Bootstrap is shared across many features
 @ObservableState
 public struct State {
-    @Shared public var session: Session
+    @Shared public var bootstrap: Bootstrap
 }
 ```
 
@@ -57,7 +57,7 @@ public struct State {
 
 Example dependency injection (from the app composition root):
 
-```54:67:Xcode_project/App/AppDelegate.swift
+```54:67:ios-app/App/AppDelegate.swift
 lazy var intialStore = Store(
     initialState: RootFeature.State()
 ) {
@@ -76,7 +76,7 @@ lazy var intialStore = Store(
 
 Example reducer with dependency usage:
 
-```78:86:Xcode_project/Modules/Sources/RootFeature/RootFeature.swift
+```78:86:ios-app/Modules/Sources/RootFeature/RootFeature.swift
 @Dependency(\.apiClient) var apiClient
 @Dependency(\.authClient) var authClient
 @Dependency(\.mainQueue) var mainQueue
@@ -94,12 +94,13 @@ public var body: some ReducerOf<Self> {
 
 ## Testing
 
-- Reducer tests live in `Xcode_project/Modules/Tests/`.
+- Reducer tests live in `ios-app/Modules/Tests/`.
 - Prefer testing reducer logic with injected test dependencies.
 
 ## OpenAPI Client
 
-- Spec and generated client live under `Modules/Sources/OpenAPI/`.
-- Swift OpenAPI Generator plugin runs on build to produce client code.
+- The backend generates the canonical contract at `contracts/openapi/feedback-api.yaml`.
+- Committed Swift sources live under `ios-app/Modules/Sources/OpenAPI/GeneratedSources/`. Regenerate from the monorepo root with `./scripts/generate-api-artifacts.sh`.
+- See [the harness overview](agent-harness.md) for build and test verification.
 
 

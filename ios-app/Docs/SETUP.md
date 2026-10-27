@@ -1,51 +1,13 @@
-# Setup & Running
+# Setup and running
 
-This guide walks you through installing dependencies, selecting schemes, and running/testing the app.
+Open `ios-app/Feedback.xcodeproj` from the LetsGrow monorepo. The Swift package in `ios-app/Modules/Package.swift` owns module dependencies.
 
-## Requirements
+Use Xcode 27 with Swift 6.2 or newer and the installed iOS 27 simulator runtime. SwiftLint is required for verification (`brew install swiftlint`); the lint helper also requires Python 3.
 
-- Swift 6.2
-- Xcode 26
-- iOS 26
-- Optional: SwiftLint (`brew install swiftlint`)
+For agent setup, Xcode MCP connection checks, test configuration, local authentication, and CI, follow the [iOS harness overview](agent-harness.md). The [simulator skill](../.agents/skills/letsgrow-ios-run-simulator/SKILL.md) owns the execution procedure.
 
-## Clone and open
+For manual development, select the `Feedback Localhost` scheme and an iOS simulator in Xcode, then Build & Run. Run the shared `UnitTests` plan from the same scheme. Other schemes target different configurations; `Feedback Production` is the production scheme.
 
-```bash
-git clone https://github.com/FeedbackFriends/feedback-ios.git
-open Xcode_project/Feedback.xcodeproj
-```
+Live authentication requires the Firebase configuration read from the app's Info.plist, populated through `App/Config/secrets.xcconfig`. Keep that file local and ignored by Git. See [configuration](CONFIGURATION.md) and the harness overview for local backend addressing and test-account login.
 
-## Schemes
-
-- Feedback Debug — default dev environment
-- Feedback Localhost — targets a locally running backend
-- Feedback Mock — uses mock adapters instead of live services
-- Feedback Prod — production configuration
-
-Switch schemes in the Xcode toolbar.
-
-## Running
-
-1. Select a simulator or a connected device.
-2. Choose the scheme.
-3. Build & Run.
-
-## Testing
-
-Run tests from Xcode or via command line:
-
-```bash
-xcodebuild \
-  -project Xcode_project/Feedback.xcodeproj \
-  -scheme "Feedback Debug" \
-  -destination 'platform=iOS Simulator,name=iPhone 16' \
-  test
-```
-
-## Notes
-
-- OpenAPI client code is committed under `Modules/Sources/OpenAPI/GeneratedSources/`.
-- Regenerate the committed backend contract and both generated clients from the monorepo root with `./scripts/generate-api-artifacts.sh`.
-- Some features depend on Firebase (Auth, Messaging); ensure you have a valid `GoogleService-Info.plist` for non‑mock schemes.
-
+The backend owns the API contract. Regenerate the committed contract and both clients from the monorepo root using `./scripts/generate-api-artifacts.sh`; do not hand-edit generated Swift sources.

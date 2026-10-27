@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# Prepare the backend for an iOS simulator build; Xcode operations belong to the skills.
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+usage() {
+  echo "Usage: ./scripts/ios-backend localhost|production"
+  echo "  localhost   Build the local API image, start API/Postgres, and wait for health."
+  echo "  production  Check the existing production API without building or deploying it."
+}
+
+if [ "$#" -ne 1 ]; then
+  usage >&2
+  exit 2
+fi
+case "$1" in
+  localhost|production) MODE="$1" ;;
+  -h|--help) usage; exit 0 ;;
+  *) usage >&2; exit 2 ;;
+esac
+
+for executable in python3 curl; do
+  command -v "$executable" >/dev/null || { echo "Required command missing: $executable" >&2; exit 1; }
+done
+cd "$REPO_ROOT"
+
+API_URL=$(python3 - "$MODE" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+config = Path("ios-app/App/Config") / f"{sys.argv[1]}.xcconfig"
+settings = {}
+for key in ("API_SCHEME", "API_BASE_URL"):
+    values = re.findall(rf"^{key}\s*=\s*(\S+)\s*$", config.read_text(), re.M)
+    if len(values) != 1:
+        raise SystemExit(f"Expected one explicit {key} in {config}")
+    settings[key] = values[0]
+url = f"{settings['API_SCHEME']}://{settings['API_BASE_URL']}"
+expected = {"localhost": "http://localhost:8080", "production": "https://api.letsgrow.dk"}
+if url != expected[sys.argv[1]]:
+    raise SystemExit(f"Unexpected API address in {config}; update the workflow explicitly")
+print(url)
+PY
+)
+
+if [ "$MODE" = localhost ]; then
+  command -v docker >/dev/null || { echo "Docker is required for localhost." >&2; exit 1; }
+  docker info >/dev/null 2>&1 || { echo "Start the local Docker daemon and retry." >&2; exit 1; }
+  DOCKER_ENDPOINT="${DOCKER_HOST:-$(docker context inspect --format '{{.Endpoints.docker.Host}}')}"
+  case "$DOCKER_ENDPOINT" in
+    unix://*) ;;
+    *) echo "Localhost builds require a local Docker Unix socket; remote Docker endpoints are not supported." >&2; exit 1 ;;
+  esac
+  COMPOSE=(docker compose -f "$REPO_ROOT/docker-compose.yml" -f "$REPO_ROOT/docker-compose.override.yml")
+  # Resolve Compose in memory. Never print its environment/secret values.
+  IMAGE_PLATFORM=$("${COMPOSE[@]}" config --format json | python3 -c '
+import json, sys
+api = json.load(sys.stdin)["services"]["api"]
+platform = api["platform"]
+if platform not in ("linux/amd64", "linux/arm64") or api["image"] != "nicolaidam/feedback-api:local":
+    raise SystemExit("Expected the local API image and an explicit amd64/arm64 platform")
+print(platform)
+')
+  echo "Building local API image ($IMAGE_PLATFORM)."
+  (
+    cd backend
+    ./gradlew --console=plain --no-daemon --no-configuration-cache :api:jibDockerBuild \
+      -Djib.console=plain \
+      -Djib.to.image=nicolaidam/feedback-api:local \
+      "-Djib.from.platforms=$IMAGE_PLATFORM"
+  )
+  "${COMPOSE[@]}" up -d --no-build --pull never db api
+  HEALTH_URL="http://127.0.0.1:8090/actuator/health"
+  ATTEMPTS=60
+else
+  HEALTH_URL="$API_URL/actuator/health"
+  ATTEMPTS=1
+fi
+
+for ((attempt = 1; attempt <= ATTEMPTS; attempt++)); do
+  if curl --fail --silent --connect-timeout 2 --max-time 5 "$HEALTH_URL" |
+    python3 -c 'import json, sys; sys.exit(0 if json.load(sys.stdin).get("status") == "UP" else 1)' 2>/dev/null; then
+    printf 'BACKEND=%s\nAPI_URL=%s\nHEALTH=UP\n' "$MODE" "$API_URL"
+    exit 0
+  fi
+  if [ "$MODE" = localhost ]; then
+    API_CONTAINER=$("${COMPOSE[@]}" ps --all --quiet api)
+    if [ -z "$API_CONTAINER" ]; then
+      echo "Local API container is missing after startup." >&2
+      exit 1
+    fi
+    API_STATE=$(docker inspect --format '{{.State.Status}}' "$API_CONTAINER")
+    case "$API_STATE" in
+      restarting|exited|dead)
+        echo "Local API container is $API_STATE; inspect docker compose logs --tail 100 api. Database contents were preserved." >&2
+        exit 1
+        ;;
+    esac
+  fi
+  if [ "$attempt" -lt "$ATTEMPTS" ]; then sleep 2; fi
+done
+echo "Backend health check failed: $HEALTH_URL (expected HTTP 200 and status UP)." >&2
+if [ "$MODE" = localhost ]; then
+  echo "Inspect locally with: docker compose logs --tail 100 api" >&2
+fi
+exit 1
