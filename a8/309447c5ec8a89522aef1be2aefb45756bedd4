@@ -1,0 +1,21 @@
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/ManageEvent.swift
+  s_af767e0f469315::t_65bf3839fc4d9a 115,124,142,165,178-181
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/ManageEventView.swift
+  s_af767e0f469315::t_90dfde4db4d76a 40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a8309447c5ec8a89522aef1be2aefb45756bedd4",
+  "prompts": {},
+  "sessions": {
+    "s_af767e0f469315": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17d66-b845-79a2-916c-17546d20a23b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
