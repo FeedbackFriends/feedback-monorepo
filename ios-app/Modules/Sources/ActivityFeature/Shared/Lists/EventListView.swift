@@ -55,7 +55,7 @@ public struct EventListView: View {
 
             } else {
                 ForEach(sections) { section in
-                    CustomSection(
+                    ContentSectionView(
                         title: section.title,
                         trailingContent: sectionTrailingContent?(section)
                     ) {
@@ -103,9 +103,7 @@ private struct EventListItemView: View {
 
             feedbackBar
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-        .contentShape(RoundedRectangle(cornerRadius: Theme.cornerRadius))
+        .surfaceCard(padding: 0)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
     }
@@ -118,13 +116,12 @@ private struct EventListItemView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             if let overallFeedbackSummary = event.overallFeedbackSummary, overallFeedbackSummary.unseenResponses > 0 {
-                Text("\(overallFeedbackSummary.unseenResponses) nye")
-                    .badgeTextStyle()
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 5)
-                    .foregroundStyle(Color.themeOnPrimaryAction)
-                    .background(Color.themeBlue)
-                    .clipShape(Capsule())
+                PillTagView(
+                    "\(overallFeedbackSummary.unseenResponses) nye",
+                    style: .badge,
+                    foregroundColor: .themeOnPrimaryAction,
+                    backgroundColor: .themeBlue
+                )
                     .accessibilityLabel("\(overallFeedbackSummary.unseenResponses) nye svar")
             }
 

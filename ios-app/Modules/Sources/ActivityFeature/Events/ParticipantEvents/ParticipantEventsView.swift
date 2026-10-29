@@ -26,21 +26,21 @@ public struct ParticipantEventsView: View {
                     let comingUpMeetings = participantEvents.filter { $0.date.isAfterToday }
                     let pastMeetings = participantEvents.filter { $0.date.isBeforeToday }
                     if !todayMeetings.isEmpty {
-                        CustomSection(title: "I dag") {
+                        ContentSectionView(title: "I dag") {
                             ForEach(todayMeetings.sorted { $0.date > $1.date }) { event in
                                 listItem(event)
                             }
                         }
                     }
                     if !pastMeetings.isEmpty {
-                        CustomSection(title: "Seneste uge") {
+                        ContentSectionView(title: "Seneste uge") {
                             ForEach(pastMeetings) { event in
                                 listItem(event)
                             }
                         }
                     }
                     if !comingUpMeetings.isEmpty {
-                        CustomSection(title: "Kommende") {
+                        ContentSectionView(title: "Kommende") {
                             ForEach(comingUpMeetings) { event in
                                 listItem(event)
                             }

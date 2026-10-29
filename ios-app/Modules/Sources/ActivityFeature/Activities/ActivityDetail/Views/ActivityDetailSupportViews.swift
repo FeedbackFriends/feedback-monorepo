@@ -42,9 +42,7 @@ struct MeetingQualityCardView: View {
                 }
             )
         }
-        .padding(15)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .surfaceCard(padding: 15)
         .accessibilityIdentifier("activity_detail_meeting_quality_card")
     }
 }
@@ -324,18 +322,5 @@ struct MeetingQualityLineChartView: View {
         }
 
         return "Seneste score \(String(format: "%.1f", latestPoint.value)) ud af 5"
-    }
-}
-
-struct FocusMetricBadge: View {
-    let text: String
-
-    var body: some View {
-        Text(text)
-            .captionTextStyle()
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .foregroundStyle(Color.themeTextSecondary)
-            .background(Color.themeBackground, in: Capsule())
     }
 }

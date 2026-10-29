@@ -63,9 +63,7 @@ struct ActivityDetailHowItWorksView: View {
                 .foregroundStyle(Color.themeTextSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(Theme.padding)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .surfaceCard(padding: Theme.padding)
         .alert("Mailen er kopieret", isPresented: $showCopiedAlert) {
             Button("OK", role: .cancel) {}
         } message: {

@@ -32,19 +32,13 @@ private extension EnterCodeView {
                     Text("Indtast PIN-kode")
                         .foregroundStyle(Color.themeTextSecondary)
                         .rowTitleTextStyle()
-                    TextField("", text: $store.pinCodeInput.value)
-                        .rowTitleTextStyle()
-                        .padding()
-                        .background(Color.themeSurface)
-                        .clipShape(Capsule(style: .continuous))
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.center)
-                        .submitLabel(.go)
-                        .focused($enterCodeTextfieldFocused)
+                    PinCodeTextFieldView(
+                        input: $store.pinCodeInput,
+                        isFocused: $enterCodeTextfieldFocused
+                    )
                         .sensoryFeedback(.selection, trigger: enterCodeTextfieldFocused) { _, new in
                             new == true
                         }
-                        .pinCodeInputValidation(pinCodeInput: $store.pinCodeInput)
                         .frame(maxWidth: Constants.maxWidthForLargeDevices)
                     Button("Svar på feedback") {
                         store.send(.startFeedbackButtonTap)

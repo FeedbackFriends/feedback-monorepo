@@ -29,6 +29,7 @@ public struct SelectUserTypeView: View {
             .padding(.bottom, 16)
         }
         .padding(.all, Theme.padding)
-        .background(Color.themeBackground)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.themeBackground.ignoresSafeArea())
     }
 }

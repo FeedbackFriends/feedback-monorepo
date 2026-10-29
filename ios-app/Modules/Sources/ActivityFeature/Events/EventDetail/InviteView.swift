@@ -20,7 +20,7 @@ struct InviteView: View {
                 }
                 .padding(.horizontal, 18)
                 .navigationTitle("Inviter")
-                .navigationBarTitleDisplayMode(.large)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         CloseButtonView { dismiss() }
@@ -33,6 +33,7 @@ struct InviteView: View {
                     .presentationDetents([.medium, .large])
             }
         }
+        .presentationBackground(Color.themeBackground)
     }
     
     private var infoSection: some View {

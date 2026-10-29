@@ -43,13 +43,12 @@ public struct NotificationHistoryView: View {
                                             .supportingTextStyle()
                                         HStack {
                                             if !item.seenByManager {
-                                                Text("Ny")
-                                                    .badgeTextStyle()
-                                                    .padding(2)
-                                                    .padding(.horizontal, 4)
-													.foregroundStyle(Color.themeOnPrimaryAction)
-                                                    .background(Color.themeBlue)
-                                                    .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+                                                PillTagView(
+                                                    "Ny",
+                                                    style: .compactBadge,
+                                                    foregroundColor: .themeOnPrimaryAction,
+                                                    backgroundColor: .themeBlue
+                                                )
                                             }
                                             Text(item.date.timeAgo())
                                                 .captionTextStyle()

@@ -187,14 +187,11 @@ private struct FeedbackTypeOptionView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            type.image
-                .resizable()
-                .scaledToFit()
-                .frame(width: 20, height: 20)
-                .foregroundStyle(isSelected ? Color.themeOnPrimaryAction : Color.themePrimaryAction)
-                .padding(9)
-                .background(isSelected ? Color.themePrimaryAction : Color.themePrimaryAction.opacity(0.12))
-                .clipShape(Circle())
+            CircleIconView(
+                type.image,
+                foregroundColor: isSelected ? .themeOnPrimaryAction : .themePrimaryAction,
+                backgroundColor: isSelected ? .themePrimaryAction : .themePrimaryAction.opacity(0.12)
+            )
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(type.title)
@@ -230,14 +227,7 @@ private struct SelectedFeedbackTypeView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            type.image
-                .resizable()
-                .scaledToFit()
-                .frame(width: 18, height: 18)
-                .foregroundStyle(Color.themePrimaryAction)
-                .padding(8)
-                .background(Color.themePrimaryAction.opacity(0.12))
-                .clipShape(Circle())
+            CircleIconView(type.image, size: 18, padding: 8)
 
             VStack(alignment: .leading, spacing: 5) {
                 Text("Valgt: \(type.title)")
@@ -249,10 +239,7 @@ private struct SelectedFeedbackTypeView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .padding(Theme.padding)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.themeSurface)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .surfaceCard()
         .animation(.default, value: type)
     }
 }

@@ -1,12 +1,11 @@
 import SwiftUI
-import DesignSystem
 
-struct CustomSection<Content: View>: View {
+public struct ContentSectionView<Content: View>: View {
     let title: String
     let trailingContent: AnyView?
     let content: () -> Content
 
-    init(
+    public init(
         title: String,
         trailingContent: AnyView? = nil,
         @ViewBuilder content: @escaping () -> Content
@@ -16,7 +15,7 @@ struct CustomSection<Content: View>: View {
         self.content = content
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center, spacing: 8) {
                 SectionHeaderView(title)

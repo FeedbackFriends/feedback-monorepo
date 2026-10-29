@@ -8,40 +8,27 @@ struct StartFeedbackConfirmationView: View {
     let startFeedback: () -> Void
    
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Sessionen er fundet. Vil du svare nu?")
-                    }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Session fundet")
+                    .titleTextStyle()
+                    .accessibilityAddTraits(.isHeader)
+                Text("Sessionen er fundet. Vil du svare nu?")
                     .bodyTextStyle()
-                    VStack(alignment: .center, spacing: 12) {
-                        
-                        Button("Svar på feedback") {
-                            startFeedback()
-                            dismiss()
-                        }
-                        .buttonStyle(LargeBoxButtonStyle(color: Color.themePrimaryAction))
-                        
-                        Button("Ikke nu") {
-                            dismiss()
-                        }
-                        .buttonStyle(LargeBoxButtonStyle(style: .secondary))
-                    }
+                Button("Svar på feedback") {
+                    startFeedback()
+                    dismiss()
                 }
-                .padding(.horizontal, 18)
-                .navigationTitle("Session fundet")
-                .navigationBarTitleDisplayMode(.large)
-                .foregroundStyle(Color.themeText)
-            }
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    CloseButtonView {
-                        dismiss()
-                    }
+                .buttonStyle(LargeBoxButtonStyle(color: Color.themePrimaryAction))
+                Button("Ikke nu") {
+                    dismiss()
                 }
+                .buttonStyle(LargeBoxButtonStyle(style: .secondary))
             }
+            .foregroundStyle(Color.themeText)
+            .padding(24)
         }
+        .presentationBackground(Color.themeBackground)
     }
 }
 

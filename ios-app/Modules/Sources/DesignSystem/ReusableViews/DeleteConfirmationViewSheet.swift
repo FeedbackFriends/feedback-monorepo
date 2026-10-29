@@ -17,28 +17,22 @@ public struct DeleteConfirmationViewSheet<ActionButton: View>: View {
     }
 
     public var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    Text(message)
-                        .bodyTextStyle()
-                    actionButton
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                    .buttonStyle(LargeBoxButtonStyle(style: .secondary))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text(title)
+                    .font(.title2.bold())
+                    .accessibilityAddTraits(.isHeader)
+                Text(message)
+                    .bodyTextStyle()
+                actionButton
+                Button("Annuller") {
+                    dismiss()
                 }
-                .padding(.horizontal, 18)
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.large)
+                .buttonStyle(LargeBoxButtonStyle(style: .secondary))
             }
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    CloseButtonView {
-                        dismiss()
-                    }
-                }
-            }
+            .foregroundStyle(Color.themeText)
+            .padding(24)
         }
+        .presentationBackground(Color.themeBackground)
     }
 }

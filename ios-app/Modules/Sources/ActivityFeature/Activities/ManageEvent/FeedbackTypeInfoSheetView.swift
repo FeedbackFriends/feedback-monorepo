@@ -10,14 +10,7 @@ struct FeedbackTypeInfoSheetView: View {
                 Section {
                     ForEach(FeedbackType.allCases, id: \.self) { type in
                         HStack(alignment: .top, spacing: 14) {
-                            type.image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundStyle(Color.themePrimaryAction)
-                                .padding(10)
-                                .background(Color.themePrimaryAction.opacity(0.12))
-                                .clipShape(Circle())
+                            CircleIconView(type.image, size: 24, padding: 10)
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(type.title)
                                     .rowTitleTextStyle()
@@ -45,6 +38,7 @@ struct FeedbackTypeInfoSheetView: View {
             .navigationBarTitleDisplayMode(.large)
             .foregroundStyle(Color.themeText)
         }
+        .presentationBackground(Color.themeBackground)
     }
 }
 

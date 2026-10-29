@@ -19,13 +19,22 @@ struct HomeOverviewView: View {
             }
             if store.activities.isEmpty {
                 ContentUnavailableView {
-                    Label("Din første aktivitet", systemImage: "calendar.badge.plus")
+                    Label {
+                        Text("Din første aktivitet").titleTextStyle()
+                    } icon: {
+                        Image(systemName: "calendar.badge.plus")
+                            .foregroundStyle(Color.themeTextSecondary)
+                    }
                 } description: {
                     Text("Saml ærlig feedback efter dine møder, og se hvad der virker over tid.")
+                        .bodyTextStyle()
                 } actions: {
-                    Button("Opret din første aktivitet") { store.send(.createActivityButtonTap) }
-                        .buttonStyle(.borderedProminent)
-                        .accessibilityIdentifier("home_create_first_activity")
+                    Button { store.send(.createActivityButtonTap) } label: {
+                        Text("Opret din første aktivitet")
+                            .padding(.horizontal, 24)
+                    }
+                    .buttonStyle(LargeButtonStyle())
+                    .accessibilityIdentifier("home_create_first_activity")
                 }
             } else {
                 if !overview.unreadSessions.isEmpty {
@@ -77,7 +86,7 @@ struct HomeOverviewView: View {
                                     Label("Se udvikling", systemImage: "arrow.right").captionTextStyle()
                                         .foregroundStyle(Color.themePrimaryAction)
                                 }
-                                .homeCard()
+                                .surfaceCard(padding: 16)
                             }
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("home_development_\(activity.id)")
@@ -142,19 +151,10 @@ struct HomeSessionCardView: View {
                 Label(isUpcoming ? "Se session" : "Læs feedback", systemImage: "arrow.right")
                     .captionTextStyle().foregroundStyle(Color.themePrimaryAction)
             }
-            .homeCard()
+            .surfaceCard(padding: 16)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("home_\(isUpcoming ? "upcoming" : session.unseenResponses > 0 ? "unread" : "latest")_\(session.id)")
-    }
-}
-
-private extension View {
-    func homeCard() -> some View {
-        self
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(16)
-            .background(Color.themeSurface, in: .rect(cornerRadius: Theme.cornerRadius))
     }
 }

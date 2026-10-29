@@ -21,7 +21,10 @@ public struct RatingAlertView: View {
     
     public var body: some View {
         NavigationStack {
-            content
+            ScrollView {
+                content
+            }
+            .scrollBounceBehavior(.basedOnSize)
                 .presentationDetents([.height(300)])
 				.frame(maxWidth: .infinity)
 				.background(Color.themeSurface.ignoresSafeArea())
@@ -60,11 +63,12 @@ public struct RatingAlertView: View {
 private extension RatingAlertView {
     
     private var content: some View {
-        VStack(alignment: .center, spacing: 26) {
+        VStack(alignment: .center, spacing: 16) {
             Text(title)
                 .titleTextStyle()
                 .foregroundColor(Color.themeText)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .accessibilityFocused($isFocused)
             LottieView(lottieFile: .fiveStars)
                 .frame(width: 300, height: 36)
@@ -72,11 +76,12 @@ private extension RatingAlertView {
                 .bodyTextStyle()
                 .foregroundColor(Color.themeText.opacity(0.7))
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .accessibilityFocused($isFocused)
                 .lineSpacing(5)
-            Spacer()
         }
-        .padding(.horizontal, 40)
+        .padding(.horizontal, 24)
+        .padding(.vertical, 12)
     }
 }
 

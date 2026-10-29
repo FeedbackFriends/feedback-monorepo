@@ -17,6 +17,7 @@ struct ActivityDetailHowItWorksSheetView: View {
                 }
             }
         }
+        .presentationBackground(Color.themeBackground)
     }
 
     @Environment(\.dismiss) private var dismiss

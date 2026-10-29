@@ -38,12 +38,12 @@ public struct EventInfoView: View {
                         Text(eventAgenda)
                             .supportingTextStyle()
                     }
-                    Text("Date")
+                    Text("Dato")
                         .rowTitleTextStyle()
                     Text(date.formatted(date: Date.FormatStyle.DateStyle.abbreviated, time: .omitted))
                         .supportingTextStyle()
                     if ownerName != nil || ownerEmail != nil || ownerphoneNumber != nil {
-                        Text("Organizer")
+                        Text("Arrangør")
                             .rowTitleTextStyle()
                         if let ownerName {
                             Text(ownerName)
@@ -78,6 +78,7 @@ public struct EventInfoView: View {
                 }
             }
         }
+        .presentationBackground(Color.themeBackground)
     }
 }
 

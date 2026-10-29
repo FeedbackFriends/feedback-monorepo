@@ -135,13 +135,12 @@ struct FeedbackCommentRowView: View {
     func feedbackInfo(feedback: Feedback) -> some View {
         HStack {
             if !feedback.seenByManager {
-                Text("New")
-                    .badgeTextStyle()
-                    .padding(2)
-                    .padding(.horizontal, 4)
-                    .foregroundStyle(Color.themeOnPrimaryAction)
-                    .background(Color.themeBlue)
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+                PillTagView(
+                    "New",
+                    style: .compactBadge,
+                    foregroundColor: .themeOnPrimaryAction,
+                    backgroundColor: .themeBlue
+                )
             }
             Text(feedback.createdAt.timeAgo())
                 .captionTextStyle()

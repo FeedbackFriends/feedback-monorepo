@@ -133,15 +133,12 @@ private extension ManageEventView {
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                HStack(spacing: 8) {
-                    Image(systemName: "questionmark.circle")
-                    Text(questionCountText)
+                PillTagView {
+                    HStack(spacing: 8) {
+                        Image(systemName: "questionmark.circle")
+                        Text(questionCountText)
+                    }
                 }
-                .captionTextStyle()
-                .foregroundStyle(Color.themeTextSecondary)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(Color.themeBackground, in: Capsule())
 
                 Text("Rediger aktiviteten, hvis spørgsmålene skal ændres for kommende sessioner.")
                     .supportingTextStyle()

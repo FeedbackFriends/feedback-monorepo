@@ -85,8 +85,7 @@ private struct InsightQuestionHistoryView: View {
             }
         }
         .tint(Color.themePrimaryAction)
-        .padding(16)
-        .background(Color.themeSurface, in: .rect(cornerRadius: Theme.cornerRadius))
+        .surfaceCard(padding: 16)
     }
 }
 

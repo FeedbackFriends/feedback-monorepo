@@ -13,12 +13,7 @@ struct ActivityCardView: View {
                 Spacer()
             }
 
-            Text(activity.events.count == 1 ? "1 session" : "\(activity.events.count) sessioner")
-                .captionTextStyle()
-                .foregroundStyle(Color.themeTextSecondary)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(Color.themeBackground, in: Capsule())
+            PillTagView(activity.events.count == 1 ? "1 session" : "\(activity.events.count) sessioner")
 
             if let nextEvent = activity.events.filter({ $0.date > Date() }).min(by: { $0.date < $1.date }) {
                 Label {
@@ -41,10 +36,7 @@ struct ActivityCardView: View {
                 Text("\(data.responseCount) svar i alt").captionTextStyle().foregroundStyle(Color.themeTextSecondary)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.themeSurface, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-        .contentShape(RoundedRectangle(cornerRadius: Theme.cornerRadius))
+        .surfaceCard(padding: 16)
     }
 }
 

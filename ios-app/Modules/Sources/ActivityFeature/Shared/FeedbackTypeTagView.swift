@@ -30,24 +30,20 @@ struct FeedbackTypeTagView: View {
     var body: some View {
         switch style {
         case .iconOnly:
-            feedbackType.image
-                .resizable()
-                .scaledToFit()
-                .frame(width: 16, height: 16)
-                .padding(8)
+            CircleIconView(
+                feedbackType.image,
+                size: 16,
+                padding: 8,
+                foregroundColor: .themeTextSecondary,
+                backgroundColor: .themeBackground
+            )
                 .frame(width: 34, height: 34)
-                .foregroundStyle(Color.themeTextSecondary)
-                .background(Color.themeBackground, in: Circle())
                 .accessibilityLabel(feedbackType.title)
 
         case .label:
-            labelContent
-                .captionTextStyle()
-                .foregroundStyle(Color.themeTextSecondary)
-                .lineLimit(1)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(Color.themeBackground, in: Capsule())
+            PillTagView {
+                labelContent.lineLimit(1)
+            }
                 .accessibilityLabel(feedbackType.title)
         }
     }

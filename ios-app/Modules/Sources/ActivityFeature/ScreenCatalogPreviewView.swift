@@ -1044,23 +1044,6 @@ private func catalogExtraHomeNextSessionReady() -> some View {
 
 #Preview("home.next-session-ready") { catalogExtraHomeNextSessionReady() }
 
-@MainActor
-private func catalogExtraLegacyOnboardingIntro() -> some View {
-    ScreenCatalogContainerView {
-        OnboardingView(onFinish: {})
-    }
-}
-
-#Preview("legacy.onboarding.intro") { catalogExtraLegacyOnboardingIntro() }
-
-@MainActor
-private func catalogExtraLegacyOnboardingFirstActivity() -> some View {
-    ScreenCatalogContainerView {
-        FirstRecurringMeetingOnboardingView(onComplete: {})
-    }
-}
-
-#Preview("legacy.onboarding.first-activity") { catalogExtraLegacyOnboardingFirstActivity() }
 
     catalogActivityDetailPopulated()
 }

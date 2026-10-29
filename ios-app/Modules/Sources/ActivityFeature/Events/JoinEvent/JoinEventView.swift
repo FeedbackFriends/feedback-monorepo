@@ -16,30 +16,23 @@ public struct JoinEventView: View {
             VStack(alignment: .leading, spacing: 12) {
                 
                 Text("Svar på feedback")
-                    .largeTitleTextStyle()
-                    .padding(.top, 20)
+                    .titleTextStyle()
                 Text("PIN-kode")
-                    .padding(.top, 20)
+                    .padding(.top, 4)
                     .titleTextStyle()
                     .foregroundStyle(Color.themeText)
-                TextField("", text: $store.pinCodeInput.value)
-                    .rowTitleTextStyle()
-                    .padding()
-                    .foregroundColor(Color.themeText)
-                    .background(Color.themeText.opacity(0.15).gradient)
-                    .clipShape(Capsule())
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.center)
-                    .submitLabel(.next)
-                    .focused($pinCodeTextfieldFocused)
-                    .padding(.top, 5)
-                    .pinCodeInputValidation(pinCodeInput: $store.pinCodeInput)
+                PinCodeTextFieldView(
+                    input: $store.pinCodeInput,
+                    isFocused: $pinCodeTextfieldFocused,
+                    submitLabel: .next,
+                    background: Color.themeText.opacity(0.15).gradient
+                )
+                .padding(.top, 5)
                 Button("Fortsæt") {
                     store.send(.joinButtonTap)
                 }
                 .buttonStyle(LargeButtonStyle())
                 .isLoading(store.joinRequestInFlight)
-                .padding(.bottom, 50)
                 .disabled(store.disableJoinButton)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
@@ -54,8 +47,8 @@ public struct JoinEventView: View {
                 FirstResponderFieldView()
                     .frame(width: 0, height: 0)
                     .opacity(0)
-                    .background(Color.themeSurface.ignoresSafeArea())
             }
+            .background(Color.themeSurface.ignoresSafeArea())
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
             .successOverlay(
                 message: "Session fundet",
@@ -69,6 +62,7 @@ public struct JoinEventView: View {
                 }
             }
         }
+        .presentationBackground(Color.themeSurface)
     }
 }
 
