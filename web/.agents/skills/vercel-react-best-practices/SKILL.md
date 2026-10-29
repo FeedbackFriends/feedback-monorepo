@@ -131,6 +131,6 @@ Each rule file contains:
 - Correct code example with explanation
 - Additional context and references
 
-## Full Compiled Document
+## Additional guidance
 
-For the complete guide with all rules expanded: `AGENTS.md`
+Use [AGENTS.md](AGENTS.md) as a category index. Read only the relevant rule files. The [complete compiled reference](references/complete-guide.md) is available for a full review.
