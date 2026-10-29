@@ -1,0 +1,81 @@
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailHowItWorksSheetView.swift
+  s_3a5e360a442b86::t_c0549d0c2bc154 20
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailHowItWorksView.swift
+  s_52b9b44e3f9d61::t_3bb38621bcc386 66
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailSupportViews.swift
+  s_52b9b44e3f9d61::t_206865cfb10ee2 45
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/HomeOverviewView.swift
+  s_52b9b44e3f9d61::t_49c46970ed01b3 22-27,30,32-37,89,154
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/Views/ActivityRowView.swift
+  s_52b9b44e3f9d61::t_354be6ccc73218 16,39
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/FeedbackTypeInfoSheetView.swift
+  s_3a5e360a442b86::t_b02bcd4cbac222 13,41
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/ManageEventView.swift
+  s_52b9b44e3f9d61::t_65164ddf413eb4 136-140
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionPickerView.swift
+  s_52b9b44e3f9d61::t_5185b620136429 190-194,230,242
+ios-app/Modules/Sources/ActivityFeature/Events/EventDetail/FeedbackCommentRowView.swift
+  s_52b9b44e3f9d61::t_c9908f9594e7e2 138-143
+ios-app/Modules/Sources/ActivityFeature/Events/EventDetail/InviteView.swift
+  s_3a5e360a442b86::t_78ff6da7904887 23,36
+ios-app/Modules/Sources/ActivityFeature/Events/JoinEvent/JoinEventView.swift
+  s_3a5e360a442b86::t_089157a6b4467e 19,21,24-30,51,65
+ios-app/Modules/Sources/ActivityFeature/Events/NotificationHistoryView.swift
+  s_52b9b44e3f9d61::t_ec29c04f0c712b 46-51
+ios-app/Modules/Sources/ActivityFeature/Events/ParticipantEvents/ParticipantEventsView.swift
+  s_52b9b44e3f9d61::t_fc5bde6a103bcc 29,36,43
+ios-app/Modules/Sources/ActivityFeature/Events/StartFeedbackConfirmationView.swift
+  s_3a5e360a442b86::t_4ef6446f74efe1 11-16,18-20,22-24,26,28-29,31
+ios-app/Modules/Sources/ActivityFeature/Insights/ActivityInsightSectionsView.swift
+  s_52b9b44e3f9d61::t_72630897c7d525 88
+ios-app/Modules/Sources/ActivityFeature/Shared/FeedbackTypeTagView.swift
+  s_52b9b44e3f9d61::t_b9154d8f9718e2 33-39,44-46
+ios-app/Modules/Sources/ActivityFeature/Shared/Lists/EventListView.swift
+  s_52b9b44e3f9d61::t_b16be04705f319 58,106,119-124
+ios-app/Modules/Sources/DesignSystem/ReusableViews/CircleIconView.swift
+  s_52b9b44e3f9d61::t_48e8b376939414 3-21,24-31
+ios-app/Modules/Sources/DesignSystem/ReusableViews/ContentSectionView.swift
+  s_52b9b44e3f9d61::t_0037d5468f4349 3,8,18
+ios-app/Modules/Sources/DesignSystem/ReusableViews/DeleteConfirmationViewSheet.swift
+  s_3a5e360a442b86::t_d579009f719b04 20-29,31,33-34,36
+ios-app/Modules/Sources/DesignSystem/ReusableViews/EventInfoView.swift
+  s_3a5e360a442b86::t_508e58d7fe675d 41,46,81
+ios-app/Modules/Sources/DesignSystem/ReusableViews/PillTagView.swift
+  s_52b9b44e3f9d61::t_b98e56c7783c70 3-13,15-21,23-24,28,30-65
+ios-app/Modules/Sources/DesignSystem/ReusableViews/PinCodeTextFieldView.swift
+  s_52b9b44e3f9d61::t_128d7fee4b2f3e 1,4-19,22-25,27-33,36-43
+ios-app/Modules/Sources/DesignSystem/ViewModifiers/SurfaceCard.swift
+  s_52b9b44e3f9d61::t_2713d9d59a68fb 4-11
+ios-app/Modules/Sources/EnterCodeFeature/EnterCodeView.swift
+  s_52b9b44e3f9d61::t_8b0695af7f9e80 35-38
+ios-app/Modules/Sources/FeedbackFlowFeature/Views/RatingAlertView.swift
+  s_3a5e360a442b86::t_d76414cbcea136 24-27,66,71,79,83-84
+ios-app/Modules/Sources/SignUpFeature/SelectUserTypeView.swift
+  s_3a5e360a442b86::t_c96cdb79165765 32-33
+ios-app/Modules/Sources/TabbarFeature/NotificationPermissionView.swift
+  s_3a5e360a442b86::t_d96c9c6176d17e 31,33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5d2297aa987a2a691a287a3c9ef8d3419d8ec30d",
+  "prompts": {},
+  "sessions": {
+    "s_3a5e360a442b86": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1871a-e59d-71c2-a3d7-2f989d427b5d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_52b9b44e3f9d61": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18701-a63a-74d1-b1d1-e57fe188dae5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
