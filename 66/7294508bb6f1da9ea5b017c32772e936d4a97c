@@ -1,0 +1,139 @@
+.agents/skills/ux-designer/AGENTS.md
+  s_6ba0319cc28509::t_f24c37e249cb2a 1,3,5-11,13
+.agents/skills/ux-designer/SKILL.md
+  s_6ba0319cc28509::t_95f82b76cb0ebc 37
+.agents/skills/ux-designer/references/complete-guide.md
+  s_6ba0319cc28509::t_5bd1c912f2774d 1-125
+AGENTS.md
+  s_6ba0319cc28509::t_f54e2adc64ace7 1,3,5-6,8,10,12-13,15,17-27
+backend/AGENTS.md
+  s_6ba0319cc28509::t_ce15bc979242fb 1,3,5,7,9-12,14,16-22,24
+backend/docs/agents/api-contract.md
+  s_6ba0319cc28509::t_7d82bbefac01ad 1-10
+backend/docs/agents/architecture.md
+  s_6ba0319cc28509::t_94c13d19731932 1-25
+backend/docs/agents/persistence.md
+  s_6ba0319cc28509::t_283c25d0369e98 1-10
+backend/docs/agents/runtime.md
+  s_6ba0319cc28509::t_d3bd2ab850f652 1-9
+backend/docs/agents/validation.md
+  s_6ba0319cc28509::t_2015767c55c642 1-37
+docs/agent-tooling.md
+  s_6ba0319cc28509::t_8b204bd60fb1e0 21
+docs/agents/api-contract.md
+  s_6ba0319cc28509::t_d0a518c7e83342 1-14
+docs/agents/browser-access.md
+  s_6ba0319cc28509::t_6ccbd6b9be630e 1-5
+docs/agents/ci-cd.md
+  s_6ba0319cc28509::t_f473a623ab6f58 1-15
+docs/agents/ios-workflows.md
+  s_6ba0319cc28509::t_0d7092233b51b6 1-9
+docs/agents/refactor-review.md
+  s_6ba0319cc28509::t_aae9a9a8ca93eb 1-54
+docs/agents/runtime-and-deployment.md
+  s_6ba0319cc28509::t_cf9631938c3e51 1-33
+ios-app/AGENTS.md
+  s_6ba0319cc28509::t_a0a40c9c8c913d 1,3,5,7-9,11,13,15,17,19-27
+ios-app/Docs/agents/api-contract.md
+  s_6ba0319cc28509::t_854501ca56819f 1-13
+ios-app/Docs/agents/architecture.md
+  s_6ba0319cc28509::t_edfe4a77235231 1-35
+ios-app/Docs/agents/product-language.md
+  s_6ba0319cc28509::t_f6db2a8dd87bf8 1-10
+ios-app/Docs/agents/simulator.md
+  s_fa63d76890d6f8::t_dfe67cc58162c5 1-22
+ios-app/Docs/agents/testing.md
+  s_6ba0319cc28509::t_cd7fc94531767c 1-12
+ios-app/Docs/agents/ui.md
+  s_52b9b44e3f9d61::t_42379ea553e01d 1-34
+ios-app/Docs/agents/visual-review.md
+  s_3a5e360a442b86::t_2d0fd94124bdca 1-3
+web/.agents/skills/vercel-composition-patterns/AGENTS.md
+  s_6ba0319cc28509::t_6c55fcb776bc22 3,5-10,12
+web/.agents/skills/vercel-composition-patterns/SKILL.md
+  s_6ba0319cc28509::t_acda06dad4eae6 87,89
+web/.agents/skills/vercel-composition-patterns/references/architecture.md
+  s_6ba0319cc28509::t_734413908552d1 1-6
+web/.agents/skills/vercel-composition-patterns/references/complete-guide.md
+  s_6ba0319cc28509::t_c7d64c08e6b1fd 1-946
+web/.agents/skills/vercel-composition-patterns/references/patterns.md
+  s_6ba0319cc28509::t_a3143d7eda6939 1-6
+web/.agents/skills/vercel-composition-patterns/references/react19.md
+  s_6ba0319cc28509::t_7c2a0fb8ec1401 1-5
+web/.agents/skills/vercel-composition-patterns/references/state.md
+  s_6ba0319cc28509::t_289a7638b1440a 1-7
+web/.agents/skills/vercel-react-best-practices/AGENTS.md
+  s_6ba0319cc28509::t_d5474e5dec85dd 3-16
+web/.agents/skills/vercel-react-best-practices/SKILL.md
+  s_6ba0319cc28509::t_efdb43885848a0 134,136
+web/.agents/skills/vercel-react-best-practices/references/advanced.md
+  s_6ba0319cc28509::t_d66bf750bf9333 1-7
+web/.agents/skills/vercel-react-best-practices/references/async.md
+  s_6ba0319cc28509::t_4e0f705e2332fb 1-9
+web/.agents/skills/vercel-react-best-practices/references/bundle.md
+  s_6ba0319cc28509::t_c89ce5cfb18617 1-9
+web/.agents/skills/vercel-react-best-practices/references/client.md
+  s_6ba0319cc28509::t_f5588975edf976 1-8
+web/.agents/skills/vercel-react-best-practices/references/complete-guide.md
+  s_6ba0319cc28509::t_f5e9d5b12447af 1-2934
+web/.agents/skills/vercel-react-best-practices/references/js.md
+  s_6ba0319cc28509::t_3d79dff4ad46e6 1-16
+web/.agents/skills/vercel-react-best-practices/references/rendering.md
+  s_6ba0319cc28509::t_140a4434795ca3 1-13
+web/.agents/skills/vercel-react-best-practices/references/rerender.md
+  s_6ba0319cc28509::t_545c380794e858 1-16
+web/.agents/skills/vercel-react-best-practices/references/server.md
+  s_6ba0319cc28509::t_eac4de2bf9d600 1-11
+web/AGENTS.md
+  s_6ba0319cc28509::t_043b79be20ed06 1,3,5,7,9-14,16
+web/docs/agents/api-and-auth.md
+  s_6ba0319cc28509::t_c7d1584e892350 1-16
+web/docs/agents/architecture.md
+  s_6ba0319cc28509::t_95fd047d02645e 1-37
+web/docs/agents/ui.md
+  s_6ba0319cc28509::t_4212d8767a3b47 1-10
+web/docs/agents/validation.md
+  s_6ba0319cc28509::t_753aadf6cca79d 1-31
+docs/agents/repository-scope.md
+  s_6ba0319cc28509::t_0429e70cc22c6e 1-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "667294508bb6f1da9ea5b017c32772e936d4a97c",
+  "prompts": {},
+  "sessions": {
+    "s_3a5e360a442b86": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1871a-e59d-71c2-a3d7-2f989d427b5d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_52b9b44e3f9d61": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18701-a63a-74d1-b1d1-e57fe188dae5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_6ba0319cc28509": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17f3c-bc9a-7420-9818-6fbf43a3cf96",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_fa63d76890d6f8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ef5-26b4-7363-ba13-f213b039821c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
