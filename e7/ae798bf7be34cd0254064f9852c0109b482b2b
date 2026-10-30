@@ -1,0 +1,23 @@
+backend/apps/api/src/test/kotlin/dk/example/feedback/tests/PrelaunchResetMigrationTest.kt
+  s_62bff887fa7a81::t_32f20c39d75d74 1-57
+backend/lib/persistence/src/main/resources/db/changelog/0025-reset-prelaunch-data.yaml
+  s_62bff887fa7a81::t_e80bc1ece2080d 1-32
+backend/lib/persistence/src/main/resources/db/changelog/db.changelog-master.yaml
+  s_62bff887fa7a81::t_7ced342f659507 97-99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e7ae798bf7be34cd0254064f9852c0109b482b2b",
+  "prompts": {},
+  "sessions": {
+    "s_62bff887fa7a81": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18e28-ff43-7a70-8a7a-1ca3532acd3b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
