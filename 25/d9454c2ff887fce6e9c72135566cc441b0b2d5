@@ -1,0 +1,83 @@
+.agents/skills/letsgrow-ios-localhost/SKILL.md
+  s_81627833479e98::t_70f72a8c0461b9 3,8,10,12,14-57
+.agents/skills/letsgrow-screenshots
+  s_8740616c1e4718::t_f9b0ce04c127fe 1
+backend/docs/agents/architecture.md
+  s_156388c05ba638::t_cf5ec3c074fa15 26-31
+docs/agents/refactor-review.md
+  s_6ba0319cc28509::t_ca9bfe2abeceab 7
+ios-app/.agents/skills/letsgrow-screenshots/SKILL.md
+  s_8740616c1e4718::t_20c7b4e9660648 1-23
+ios-app/Docs/agents/architecture.md
+  s_81fa46f2240807::t_94494545d730b0 31-33
+ios-app/Docs/agents/simulator.md
+  s_8740616c1e4718::t_6bd7d97b6ced5e 9-10
+ios-app/Docs/agents/visual-review.md
+  s_8740616c1e4718::t_7fe6ccda45a32a 3-11
+ios-app/Docs/screenshots/README.md
+  s_96dff01b498a6e::t_ae64794d5bed9a 1,3,5,7-13,16-18,21-54,57-59,62,64,66-95
+.agents/skills/letsgrow-ios-localhost/agents/openai.yaml
+  s_81627833479e98::t_cedde679c5f8e7 3-4
+docs/agents/ios-workflows.md
+  s_81627833479e98::t_639f361b57ae42 6
+ios-app/Docs/agent-harness.md
+  s_81627833479e98::t_d72f49659d7fe2 39-44,57
+ios-app/Docs/local-testing.md
+  s_81627833479e98::t_7a84b3ad73667b 1-79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "25d9454c2ff887fce6e9c72135566cc441b0b2d5",
+  "prompts": {},
+  "sessions": {
+    "s_156388c05ba638": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18806-3cb0-74b1-a545-a7806084c062",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_6ba0319cc28509": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17f3c-bc9a-7420-9818-6fbf43a3cf96",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_81627833479e98": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18906-6af4-7081-bdaf-6cb59b403ed8",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_81fa46f2240807": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18e0e-1f23-7230-b92b-5d90d462c3a4",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_8740616c1e4718": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18d3c-c615-7070-a3ca-aa10c27b7624",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_96dff01b498a6e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18de5-2cc2-7331-8392-77bcca51692f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
