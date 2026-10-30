@@ -1,0 +1,45 @@
+backend/apps/api/src/test/kotlin/dk/example/feedback/tests/ActivityAgendaMigrationTest.kt
+  s_62bff887fa7a81::t_67ab52f60ccd9d 1-38
+backend/lib/persistence/src/main/resources/db/changelog/0024-drop-activity-agenda.yaml
+  s_62bff887fa7a81::t_0f3e4587bfb92a 1-8
+backend/lib/persistence/src/main/resources/db/changelog/db.changelog-master.yaml
+  s_62bff887fa7a81::t_c71d083ffb484f 94-96
+ios-app/Docs/features/create-activity.md
+  s_62bff887fa7a81::t_cf922e5222b761 7,11
+ios-app/Modules/Sources/ActivityFeature/Activities/EventDetail/EventDetailFeatureView.swift
+  s_62bff887fa7a81::t_fa9ead63167c39 17
+ios-app/Modules/Sources/ActivityFeature/Events/EventDetail/DetailSectionView.swift
+  s_62bff887fa7a81::t_8e00c5c6cb7127 210,219
+ios-app/Modules/Sources/Domain/PreviewCatalogFixtures.swift
+  s_62bff887fa7a81::t_019d89b0a0d030 49
+ios-app/Modules/Sources/FeedbackFlowFeature/ScreenCatalogPreviewView.swift
+  s_3a5e360a442b86::t_fd717f34ec7d29 392
+ios-app/Modules/Tests/AppTests/APIClientLiveTests/APIClientTests.swift
+  s_62bff887fa7a81::t_a55a6cea31be24 702
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivityView.swift
+  s_62bff887fa7a81::t_6c0328c565f20a 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "464e14f9b97614dff096a71fdab6c2bdfe45d201",
+  "prompts": {},
+  "sessions": {
+    "s_3a5e360a442b86": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1871a-e59d-71c2-a3d7-2f989d427b5d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_62bff887fa7a81": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18e28-ff43-7a70-8a7a-1ca3532acd3b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
