@@ -1,0 +1,31 @@
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/ActivityDetailSessionGrouping.swift
+  s_8740616c1e4718::t_e860a0420fab95 28
+ios-app/Modules/Sources/Utility/Extensions/Date+Extension.swift
+  s_8740616c1e4718::t_60ef05f8b7bd98 30,41,45
+ios-app/Modules/Tests/AppTests/UnitTests/DateTests.swift
+  s_fa63d76890d6f8::t_f2612d6a5d5c21 43-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8091e4007813d3d4c1f789b2d5c082cf421005bd",
+  "prompts": {},
+  "sessions": {
+    "s_8740616c1e4718": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18d3c-c615-7070-a3ca-aa10c27b7624",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_fa63d76890d6f8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17ef5-26b4-7363-ba13-f213b039821c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
