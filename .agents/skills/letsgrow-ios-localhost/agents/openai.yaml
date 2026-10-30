@@ -1,7 +1,7 @@
 interface:
   display_name: "LetsGrow iOS Localhost"
-  short_description: "Build local backend and run iOS on localhost"
-  default_prompt: "Use $letsgrow-ios-localhost to build the local backend and build and launch Feedback Localhost on the active simulator."
+  short_description: "Start backend and manager/anonymous iOS simulators"
+  default_prompt: "Use $letsgrow-ios-localhost both to start the local backend and launch manager and anonymous apps on two simulators, preserving existing data."
 
 policy:
   allow_implicit_invocation: true

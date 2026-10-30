@@ -28,6 +28,9 @@ Paths are relative to `ios-app/` unless stated otherwise.
 ## App State
 
 - Authenticated app state is held as a shared `Bootstrap` value.
+- Account access has two states: signed-in owners (`Role.manager`) and anonymous feedback users (`role == nil`). There is no participant account role or owner-mode toggle. Session participation (`ParticipantEvent`) is independent of account access.
+- Apple/Google login always creates or restores owner access. Anonymous users can continue giving feedback with a PIN without signing up.
+- The tab bar contains `Giv feedback` and `Aktiviteter`. Owner feedback notifications open the session in the activity navigation stack; anonymous users see sign-in on `Aktiviteter`.
 - Feature state should name this shared value `@Shared var bootstrap: Bootstrap`.
 - `RootFeature` creates and passes the same `Shared<Bootstrap>` through the logged-in feature tree.
 - UI and reducers should derive account, role, activity, event, participant-event, and notification data directly from `bootstrap`.

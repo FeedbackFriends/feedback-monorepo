@@ -23,3 +23,9 @@ Tests live next to their modules under `src/test/kotlin`. API and persistence te
 - Use constructor injection with `val` dependencies.
 - Prefer straight-line flows, guard clauses, and explicit exceptions over fallback behavior.
 - Do not log secrets, tokens, Firebase service account values, or Zoho credentials.
+
+## Account access
+
+- `Role.Manager` is the only named account role; anonymous feedback users have no role.
+- Session participation and feedback records are independent of account roles.
+- Role switching (`PUT /account/role`) has been removed.

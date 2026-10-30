@@ -6,7 +6,8 @@ Paths are relative to `ios-app/` unless stated otherwise.
 
 Setup and configuration ownership are documented in [the harness overview](../agent-harness.md). The build, test, launch, and verification procedure lives in [the simulator workflow skill](../../.agents/skills/letsgrow-ios-run-simulator/SKILL.md); read it for those tasks.
 
-- For screen and state screenshots, follow [the screenshot skill](../../.agents/skills/letsgrow-ios-screenshots/SKILL.md). Captures use native Xcode MCP and publish original-size PNG files under `Docs/screenshots/catalog/`.
+- Screenshot capture uses the app-hosted Point-Free SnapshotTesting target and the separate `ScreenSnapshots` plan. Its full-catalog scope, alert readiness checks and visual review workflow are documented in [the screenshots documentation](../screenshots/README.md). Use native Xcode MCP to build and run it.
+- For screen and state screenshots, follow [the screenshot skill](../../.agents/skills/letsgrow-screenshots/SKILL.md). Captures use native Xcode MCP and publish original-size PNG files under `screenshots/current/`. Approved baselines live under `Docs/screenshots/catalog/`.
 
 - Use the native Xcode MCP server (`mcp__xcode`) for all interaction with Xcode and simulators: workspace discovery, scheme/destination selection, builds, tests, launch arguments, install/run, UI interaction, screenshots, logs, and debugging.
 - Use `Feedback Localhost` for local development and testing unless the user explicitly asks for another scheme. Resolve the current checkout's workspace and keep the active eligible simulator by default; never implicitly select a physical device.

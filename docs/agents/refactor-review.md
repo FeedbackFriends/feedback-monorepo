@@ -4,7 +4,7 @@
 
 - [Web](../../web/AGENTS.md): 83 → 16 lines; details in `web/docs/agents/`.
 - [Backend](../../backend/AGENTS.md): 75 → 24 lines; details in `backend/docs/agents/`.
-- [iOS](../../ios-app/AGENTS.md): existing working-tree guidance preserved in `ios-app/Docs/agents/`.
+- [iOS](../../ios-app/AGENTS.md): existing working-tree guidance preserved in `ios-app/Docs/agents/`, including the screenshot experiment and baseline approval policy.
 
 The app guides inherit repository-wide Git, generated-artifact, and browser rules from the root. App-specific commands and restrictions remain discoverable in their indexes.
 

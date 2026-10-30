@@ -36,6 +36,12 @@ Do not quit Device Hub or close unrelated windows to hide duplicates. Report dup
 
 ### Test environment
 
+For self-service manual testing, use the [two-simulator guide](local-testing.md).
+The shared `Feedback Localhost Manager` and `Feedback Localhost Anonymous`
+schemes select their account before the app starts observing authentication.
+The manager scheme fetches a fresh local token; normal launches never seed or
+reset fixtures. These schemes do not require agent tooling or manual signup.
+
 The shared `Feedback Localhost` scheme uses `DebugLocalhost` for launch and tests. Its default `UnitTests` plan includes `AppTests` and `InsightsTests`. Tests do not inherit app launch arguments, including temporary auto-login credentials. The simulator workflow verifies discovery before running tests.
 
 Unit/reducer tests use injected dependencies and do not require resetting or seeding the backend. Authenticated live UI checks need the local backend and working local Firebase configuration; follow the login skill. The Localhost app addresses `http://localhost:8080` directly from the simulator, while the login helper calls `http://localhost:8080`. No proxy is required. No new developer-managed runtime environment variables or services are introduced by this harness.
@@ -48,7 +54,7 @@ Invoke either root skill from an agent session started at the monorepo root:
 
 | Skill | Backend preparation | Simulator scheme |
 | --- | --- | --- |
-| `$letsgrow-ios-localhost` | Build local API image, start API/Postgres, wait for health | `Feedback Localhost` / `DebugLocalhost` |
+| `$letsgrow-ios-localhost` | Build local API image, start API/Postgres, wait for health; optional explicit fixture preparation/reset | `Feedback Localhost`, or Manager/Anonymous schemes with `manager`, `anonymous`, or `both` |
 | `$letsgrow-ios-production` | Check the existing Coolify API's health | `Feedback Production` / `Release` |
 
 The skills own the complete backend-to-simulator sequence. Both use native Xcode MCP for app build/install/launch and keep the current eligible simulator. They leave the app running for manual testing. Production mode targets the already deployed backend; it does not deploy services or publish an iOS build.
