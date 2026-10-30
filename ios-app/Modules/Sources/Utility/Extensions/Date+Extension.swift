@@ -27,7 +27,7 @@ public extension Date {
         let todayEnd = calendar.date(byAdding: .day, value: 1, to: todayStart)!
         
         // Include only events happening strictly after today
-        return self >= todayEnd
+        return self.compare(todayEnd) != .orderedAscending
     }
     
     var isBeforeToday: Bool {
@@ -38,10 +38,10 @@ public extension Date {
 }
 
 public extension Date {
-    func timeAgo(_ locale: Locale = .autoupdatingCurrent) -> String {
+    func timeAgo(_ locale: Locale = .autoupdatingCurrent, relativeTo referenceDate: Date = .now) -> String {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .spellOut
         formatter.locale = locale
-        return formatter.localizedString(for: self, relativeTo: Date())
+        return formatter.localizedString(for: self, relativeTo: referenceDate)
     }
 }

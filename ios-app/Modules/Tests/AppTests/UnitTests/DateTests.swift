@@ -40,4 +40,13 @@ class DateTests {
         let date = Date(timeIntervalSinceNow: -3600) // 1 hour ago
         #expect(date.timeAgo(Locale(identifier: "en_US")) == "one hour ago")
     }
+
+    @Test
+    func `Relative dates use an explicit reference instead of the live clock`() {
+        let reference = Date(timeIntervalSince1970: 946_684_800)
+        let locale = Locale(identifier: "en_US")
+        #expect(reference.addingTimeInterval(-3600).timeAgo(locale, relativeTo: reference) == "one hour ago")
+        #expect(reference.addingTimeInterval(3600).timeAgo(locale, relativeTo: reference) == "in one hour")
+    }
+
 }

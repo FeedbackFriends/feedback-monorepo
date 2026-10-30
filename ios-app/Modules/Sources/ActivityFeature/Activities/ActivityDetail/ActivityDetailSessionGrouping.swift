@@ -25,7 +25,7 @@ struct ActivityDetailSessionGrouping: Equatable {
             .filter { !activeIds.contains($0.id) && $0.date > now }
             .sorted { $0.date < $1.date }
         let previous = events
-            .filter { !activeIds.contains($0.id) && $0.date <= now }
+            .filter { !activeIds.contains($0.id) && $0.date.compare(now) != .orderedDescending }
             .sorted { $0.date > $1.date }
 
         self.sections = [
