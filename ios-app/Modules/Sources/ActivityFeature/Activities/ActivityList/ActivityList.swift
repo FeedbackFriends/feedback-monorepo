@@ -4,20 +4,18 @@ import Domain
 
 @Reducer
 public struct ActivityList: Sendable {
-    public enum Presentation: Equatable, Sendable {
-        case overview, activities
-    }
-    
     @Reducer
     public enum Destination {
+        case alert(AlertState<AlertAction>)
         case manageActivity(ManageActivity)
-        case quickLook(ActivityDetail)
+
+        public enum AlertAction: Equatable, Sendable {
+            case retryRefresh
+        }
     }
 
     @Reducer
     public enum Path {
-        @ReducerCaseIgnored
-        case unreadFeedback
         case activityDetail(ActivityDetail)
         case eventDetail(EventDetailFeature)
     }
@@ -28,9 +26,9 @@ public struct ActivityList: Sendable {
         @Presents public var destination: Destination.State?
         public var path = StackState<Path.State>()
         @Shared var bootstrap: Bootstrap
-        public var presentation: Presentation
+        /// Fixed time for deterministic previews; live screens follow the current time.
+        public var referenceDate: Date?
         var isRefreshing = false
-        var refreshError: String?
         var activities: [Activity] {
             guard bootstrap.role == .manager else { return [] }
             return ActivityInsightData.sorted(bootstrap.unwrappedManagerSession.managerData.activities.elements)
@@ -38,24 +36,18 @@ public struct ActivityList: Sendable {
         public init(
             destination: Destination.State? = nil,
             bootstrap: Shared<Bootstrap>,
-            presentation: Presentation = .activities
+            referenceDate: Date? = nil
         ) {
             self.destination = destination
             self._bootstrap = bootstrap
-            self.presentation = presentation
+            self.referenceDate = referenceDate
         }
 
         mutating func openActivity(_ activity: Activity, eventId: UUID? = nil) {
             let eventDetail = eventId.map {
                 EventDetailFeature.State(activityId: activity.id, eventId: $0, bootstrap: $bootstrap)
             }
-            if presentation == .overview {
-                destination = .quickLook(.init(
-                    activityId: activity.id,
-                    destination: eventDetail.map(ActivityDetail.Destination.State.eventDetail),
-                    bootstrap: $bootstrap
-                ))
-            } else if let eventDetail {
+            if let eventDetail {
                 path.append(.eventDetail(eventDetail))
             } else {
                 path.append(.activityDetail(.init(activityId: activity.id, bootstrap: $bootstrap)))
@@ -69,7 +61,6 @@ public struct ActivityList: Sendable {
         case destination(PresentationAction<Destination.Action>)
         case activityTap(Activity)
         case eventTap(activityId: UUID, eventId: UUID)
-        case unreadFeedbackButtonTap
         case path(StackActionOf<Path>)
         case createActivityButtonTap
         case navigateToCreatedActivity(Activity)
@@ -111,16 +102,14 @@ public struct ActivityList: Sendable {
             case .binding:
                 return .none
 
+            case .destination(.presented(.alert(.retryRefresh))):
+                return .send(.refresh)
+
             case .eventTap(let activityId, let eventId):
                 guard state.bootstrap.role == .manager,
                       let activity = state.bootstrap.managerData?.activities[id: activityId],
                       activity.events.contains(where: { $0.id == eventId }) else { return .none }
                 state.openActivity(activity, eventId: eventId)
-                return .none
-
-            case .unreadFeedbackButtonTap:
-                guard state.bootstrap.role == .manager else { return .none }
-                state.path.append(.unreadFeedback)
                 return .none
 
             case .path(.element(let id, action: .eventDetail(.delegate(.editActivity)))):
@@ -138,7 +127,6 @@ public struct ActivityList: Sendable {
             case .refresh:
                 guard state.bootstrap.role == .manager, !state.isRefreshing else { return .none }
                 state.isRefreshing = true
-                state.refreshError = nil
                 return .run { send in
                     do {
                         await send(.refreshed(try await apiClient.getBootstrap()))
@@ -155,7 +143,8 @@ public struct ActivityList: Sendable {
 
             case .refreshFailed:
                 state.isRefreshing = false
-                state.refreshError = "Kunne ikke opdatere dit overblik. Prøv igen."
+                guard state.bootstrap.role == .manager else { return .none }
+                state.destination = .alert(.refreshFailure)
                 return .none
 
             case .destination, .path:
@@ -170,3 +159,16 @@ public struct ActivityList: Sendable {
 extension ActivityList.Destination.State: Equatable, Sendable {}
 
 extension ActivityList.Path.State: Equatable, Sendable {}
+
+extension AlertState where Action == ActivityList.Destination.AlertAction {
+    static var refreshFailure: Self {
+        Self {
+            TextState("Kunne ikke opdatere")
+        } actions: {
+            ButtonState(role: .cancel) { TextState("Annuller") }
+            ButtonState(action: .retryRefresh) { TextState("Prøv igen") }
+        } message: {
+            TextState("Dine aktiviteter kunne ikke opdateres. Prøv igen.")
+        }
+    }
+}

@@ -2,7 +2,7 @@
 # - Reset is handled by scripts/e2e
 # - Seed manager-empty through scripts/e2e-admin
 # - Login through the debug E2E authentication sheet with the injected token
-# - Verify the manager Home tab becomes visible
+# - Verify the manager Activities tab becomes visible
 
 appId: dk.nicolaidam.letsgrow
 ---
@@ -21,7 +21,7 @@ appId: dk.nicolaidam.letsgrow
     id: "e2e_login_with_injected_token"
 
 - extendedWaitUntil:
-    visible: "Overblik"
+    visible: "Aktiviteter"
     timeout: 30000
 
 - takeScreenshot: debug-auth-seed-manager

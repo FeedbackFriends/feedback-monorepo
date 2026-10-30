@@ -96,7 +96,7 @@ class AdminService(
     fun seedParticipantEmpty(): MockTokenDto {
         ensureTestAdminEndpointsEnabled()
         resetSeedState(seedId = participantEmptyId)
-        prepareMockIdentity(uid = participantEmptyId, role = Role.Participant)
+        prepareMockIdentity(uid = participantEmptyId, role = null)
         return signInFor(uid = participantEmptyId)
     }
 
@@ -110,7 +110,7 @@ class AdminService(
                 "$participantWithDataId-manager",
             ),
         )
-        prepareMockIdentity(uid = participantWithDataId, role = Role.Participant)
+        prepareMockIdentity(uid = participantWithDataId, role = null)
         mockRepo.insertParticipantWithData(participantId = participantWithDataId)
         return signInFor(uid = participantWithDataId)
     }
@@ -142,7 +142,7 @@ class AdminService(
         }
     }
 
-    private fun prepareMockIdentity(uid: String, role: Role) {
+    private fun prepareMockIdentity(uid: String, role: Role?) {
         accountRepo.createOrGetAccount(
             name = "Mock",
             email = "$uid@email.dk",

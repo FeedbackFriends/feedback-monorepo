@@ -34,17 +34,14 @@ struct QuestionsListView: View {
                             self.presentSelectQuestionSheet = questionsInput
                         } label: {
                             HStack(spacing: 12) {
-                                VStack(alignment: .leading, spacing: 6) {
-                                    Text(questionsInput.questionText)
-                                        .foregroundColor(Color.themeText)
+                                FeedbackTypeTagView(questionsInput.feedbackType, style: .iconOnly)
 
-                                    FeedbackTypeTagView(
-                                        questionsInput.feedbackType,
-                                        orientation: .vertical
-                                    )
-                                }
+                                Text(questionsInput.questionText)
+                                    .foregroundStyle(Color.themeText)
+                                    .multilineTextAlignment(.leading)
+                                    .fixedSize(horizontal: false, vertical: true)
 
-                                Spacer()
+                                Spacer(minLength: 0)
                             }
                         }
                     }

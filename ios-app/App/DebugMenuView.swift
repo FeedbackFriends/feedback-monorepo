@@ -8,6 +8,78 @@ import TabbarFeature
 import DesignSystem
 import Logger
 
+/// Resolves a non-secret scheme selection before RootFeature observes Firebase auth.
+@MainActor
+enum LocalTestAccountLaunch {
+    static let environmentKey = "LETSGROW_LOCAL_TEST_ACCOUNT"
+
+    static var isRequested: Bool {
+        ProcessInfo.processInfo.environment[environmentKey] != nil
+    }
+
+    private struct LoginResponse: Decodable {
+        let token: String
+    }
+
+    private enum LaunchError: LocalizedError {
+        case nonLocalBackend
+        case unknownAccount
+        case loginFailed
+        case managerNotPrepared
+
+        var errorDescription: String? {
+            switch self {
+            case .nonLocalBackend:
+                "Testkonti kræver Feedback Localhost og http://localhost:8080."
+            case .unknownAccount:
+                "Ukendt testkonto. Vælg Feedback Localhost Manager eller Feedback Localhost Anonymous."
+            case .loginFailed:
+                "Kunne ikke hente testlogin. Start den lokale backend, og aktivér test-admin-endpoints."
+            case .managerNotPrepared:
+                "Testkontoen mangler mødeejeradgang. Kør ./scripts/e2e-admin seed-manager-with-data > /dev/null fra projektets rod, og start appen igen."
+            }
+        }
+    }
+
+    static func prepare(apiBaseURL: URL) async throws {
+        guard apiBaseURL.scheme == "http",
+              apiBaseURL.host() == "localhost",
+              apiBaseURL.port == 8080 else {
+            throw LaunchError.nonLocalBackend
+        }
+
+        switch ProcessInfo.processInfo.environment[environmentKey] {
+        case "anonymous":
+            // Preserve an existing anonymous identity and its submitted feedback.
+            if Auth.auth().currentUser?.isAnonymous != true {
+                try Auth.auth().signOut()
+                _ = try await Auth.auth().signInAnonymously()
+            }
+
+        case "manager":
+            var request = URLRequest(url: apiBaseURL.appending(path: "admin/login"))
+            request.httpMethod = "POST"
+            request.timeoutInterval = 15
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try JSONEncoder().encode(["id": "mock-manager-with-data"])
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                throw LaunchError.loginFailed
+            }
+            let login = try JSONDecoder().decode(LoginResponse.self, from: data)
+            let result = try await Auth.auth().signIn(withCustomToken: login.token)
+            let idToken = try await result.user.getIDTokenResult(forcingRefresh: true)
+            guard idToken.claims["role"] as? String == "Manager" else {
+                try Auth.auth().signOut()
+                throw LaunchError.managerNotPrepared
+            }
+
+        default:
+            throw LaunchError.unknownAccount
+        }
+    }
+}
+
 extension Bootstrap: @retroactive Identifiable {
     public var id: UUID {
         UUID()

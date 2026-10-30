@@ -8,23 +8,15 @@ struct FeedbackTypeTagView: View {
         case label
     }
 
-    enum Orientation {
-        case horizontal
-        case vertical
-    }
-
     let feedbackType: FeedbackType
     let style: Style
-    let orientation: Orientation
 
     init(
         _ feedbackType: FeedbackType,
-        style: Style = .label,
-        orientation: Orientation = .horizontal
+        style: Style = .label
     ) {
         self.feedbackType = feedbackType
         self.style = style
-        self.orientation = orientation
     }
 
     var body: some View {
@@ -42,34 +34,19 @@ struct FeedbackTypeTagView: View {
 
         case .label:
             PillTagView {
-                labelContent.lineLimit(1)
+                HStack(spacing: 6) {
+                    feedbackType.image
+                        .captionTextStyle()
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.themeText)
+                        .frame(minWidth: 16)
+                        .accessibilityHidden(true)
+                    Text(feedbackType.title)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
+                .accessibilityElement(children: .ignore)
                 .accessibilityLabel(feedbackType.title)
         }
-    }
-
-    @ViewBuilder
-    private var labelContent: some View {
-        switch orientation {
-        case .horizontal:
-            Label {
-                Text(feedbackType.title)
-            } icon: {
-                icon
-            }
-
-        case .vertical:
-            VStack(spacing: 4) {
-                icon
-                Text(feedbackType.title)
-            }
-        }
-    }
-
-    private var icon: some View {
-        feedbackType.image
-            .resizable()
-            .scaledToFit()
-            .frame(width: 12, height: 12)
     }
 }

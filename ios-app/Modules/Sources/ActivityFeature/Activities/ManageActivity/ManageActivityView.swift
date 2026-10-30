@@ -167,7 +167,7 @@ private extension ManageActivityView {
     var detailsSection: some View {
         section(title: "Aktivitet") {
             inputField(
-                title: "Aktivitetens navn (påkrævet)",
+                title: "Aktivitetens navn",
                 prompt: "Fx månedligt teammøde, workshop eller træning",
                 text: $store.title,
                 field: .title,

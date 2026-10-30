@@ -14,7 +14,6 @@ struct AccountSectionTests {
 
         await store.send(.settingsButtonTap) {
             $0.destination = .profileSettings(ProfileSettings.State(
-                role: bootstrap.role,
                 accountInfo: bootstrap.accountInfo
             ))
         }
@@ -24,7 +23,6 @@ struct AccountSectionTests {
     func `Profile settings opens the account editor`() async {
         let bootstrap: Bootstrap = .mock()
         let store = TestStore(initialState: ProfileSettings.State(
-            role: bootstrap.role,
             accountInfo: bootstrap.accountInfo
         )) {
             ProfileSettings()
@@ -38,4 +36,16 @@ struct AccountSectionTests {
             ))
         }
     }
+
+    @Test
+    func anonymousUsersCannotOpenAccountSettingsOrDeleteAnAccount() async {
+        let store = TestStore(initialState: AccountSection.State(bootstrap: .init(value: .mockAnonymous()))) {
+            AccountSection()
+        }
+
+        await store.send(.settingsButtonTap)
+        await store.send(.deleteAccountButtonTapped)
+        await store.send(.signOutButtonTapped)
+    }
+
 }

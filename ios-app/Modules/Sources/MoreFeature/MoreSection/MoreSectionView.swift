@@ -90,10 +90,10 @@ public struct MoreSectionView: View {
         Section {
             ShareLink(item: appStoreReviewUrl) {
                 VStack(spacing: 10) {
-                    Text("Inviter flere mødeejere")
+                    Text("Del LetsGrow med andre")
                         .foregroundStyle(Color.themeOnPrimaryAction)
                         .titleTextStyle()
-                    Text("Gør aktiviteter lettere at forbedre")
+                    Text("Hjælp andre med at få ærlig feedback og forbedre deres aktiviteter.")
                         .foregroundStyle(Color.themeOnPrimaryAction)
                         .bodyTextStyle()
                 }

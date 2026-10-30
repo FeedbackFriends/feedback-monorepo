@@ -80,30 +80,6 @@ private extension TabbarView {
     
     var tabView: some View {
         TabView(selection: $store.selectedTab) {
-            SwiftUI.Tab("Overblik", systemImage: "house", value: Tab.home) {
-                if isManager {
-                    ActivityListView(
-                        store: store.scope(state: \.managerEvents, action: \.managerEvents),
-                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
-                    )
-                } else {
-                    SignUpView(
-                        store: store.scope(state: \.signUp, action: \.signUp),
-                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
-                    )
-                }
-            }
-            .badge(managerUnseenResponses)
-
-            if isManager {
-                SwiftUI.Tab("Aktiviteter", systemImage: "rectangle.stack", value: Tab.activities) {
-                    ActivityListView(
-                        store: store.scope(state: \.activities, action: \.activities),
-                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
-                    )
-                }
-            }
-
             SwiftUI.Tab(value: Tab.feedback) {
                 NavigationStack {
                     EnterCodeView(store: store.scope(state: \.enterCode, action: \.enterCode))
@@ -113,6 +89,21 @@ private extension TabbarView {
                 Image.letsGrowIconTab
                 Text("Giv feedback")
             }
+
+            SwiftUI.Tab("Aktiviteter", systemImage: "rectangle.stack", value: Tab.activities) {
+                if isManager {
+                    ActivityListView(
+                        store: store.scope(state: \.activities, action: \.activities),
+                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
+                    )
+                } else {
+                    SignUpView(
+                        store: store.scope(state: \.signUp, action: \.signUp),
+                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
+                    )
+                }
+            }
+            .badge(isManager ? store.bootstrap.managerUnseenResponses : 0)
         }
         .background(LetsGrowLandingGradient())
     }
@@ -120,7 +111,9 @@ private extension TabbarView {
     var profileSheet: some View {
         NavigationStack {
             List {
-                MoreSectionView(store: store.scope(state: \.moreSection, action: \.moreSection))
+                MoreSectionView(
+                    store: store.scope(state: \.moreSection, action: \.moreSection)
+                )
                     .listRowBackground(Color.themeSurface)
             }
             .scrollContentBackground(.hidden)
@@ -169,10 +162,6 @@ private extension TabbarView {
             .accessibilityLabel("Indstillinger")
             .accessibilityIdentifier("profile_settings_button")
         }
-    }
-
-    var managerUnseenResponses: Int {
-        store.bootstrap.managerUnseenResponses
     }
 
 }

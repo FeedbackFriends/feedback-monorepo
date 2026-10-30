@@ -90,17 +90,6 @@ public enum PreviewCatalogFixtures {
         return value
     }
 
-    public static func participantEvent(
-        index: Int, submitted: Bool = false, expired: Bool = false, recentlyJoined: Bool = false
-    ) -> ParticipantEvent {
-        ParticipantEvent(
-            id: id(100 + index), date: now.addingTimeInterval(Double(index) * 86_400),
-            pinCode: expired ? nil : .init(value: "1234"), location: "Mødelokale 2", durationInMinutes: 30,
-            questions: [.init(id: id(10), questionText: questionText, feedbackType: .zeroToTen)],
-            feedbackSubmited: submitted, ownerInfo: owner, recentlyJoined: recentlyJoined
-        )
-    }
-
     public static func feedbackSession(type: FeedbackType) -> FeedbackEventDto {
         FeedbackEventDto(
             questions: [.init(id: id(10), questionText: questionText, feedbackType: type)],

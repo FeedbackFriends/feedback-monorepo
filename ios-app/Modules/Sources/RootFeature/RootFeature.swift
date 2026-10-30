@@ -154,7 +154,7 @@ public struct RootFeature: Sendable {
                     state.destination = Destination.State.loggedIn(
                         Tabbar.State(
                             bootstrap: sharedBootstrap,
-                            selectedTab: bootstrap.role == .manager ? .home : .feedback,
+                            selectedTab: .feedback,
                         )
                     )
                     return .none
@@ -176,7 +176,7 @@ public struct RootFeature: Sendable {
                 state.destination = Destination.State.loggedIn(
                     Tabbar.State(
                         bootstrap: Shared(value: bootstrap),
-                        selectedTab: role == .manager ? .home : .feedback
+                        selectedTab: .feedback
                     )
                 )
                 return .none
@@ -239,16 +239,16 @@ extension RootFeature.State {
             )
         case .managerEvent(let eventId):
             var newTabbarState = Tabbar.State(
-                bootstrap: sharedBootstrap
+                bootstrap: sharedBootstrap,
+                selectedTab: .activities
             )
             if let activity = sharedBootstrap.wrappedValue.managerData?.activities.first(where: {
                 $0.events.contains { $0.id == eventId }
             }) {
-                newTabbarState.managerEvents.destination = .quickLook(.init(
-                    activityId: activity.id,
-                    destination: .eventDetail(.init(activityId: activity.id, eventId: eventId, bootstrap: sharedBootstrap)),
-                    bootstrap: sharedBootstrap
-                ))
+                newTabbarState.activities.path.append(.activityDetail(.init(activityId: activity.id, bootstrap: sharedBootstrap)))
+                newTabbarState.activities.path.append(.eventDetail(.init(
+                    activityId: activity.id, eventId: eventId, bootstrap: sharedBootstrap
+                )))
             }
             return RootFeature.State(
                 destination: RootFeature.Destination.State.loggedIn(
@@ -311,8 +311,7 @@ private extension RootFeature {
         state.destination = .isLoading
         return .run { send in
             do {
-                let existingRole = try await authClient.fetchCustomRole()
-                let role = existingRole ?? .manager
+                let role = Role.manager
                 let bootstrap = try await apiClient.createAccount(role)
                 await send(.createAccountResponse(bootstrap, role))
             } catch {

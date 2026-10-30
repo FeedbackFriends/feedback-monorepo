@@ -3,6 +3,8 @@ import SwiftUI
 import DesignSystem
 
 struct FeedbackCommentRowView: View {
+    @Environment(\.locale) private var locale
+    @Environment(\.referenceDate) private var referenceDate
     
     let feedback: Feedback
     
@@ -142,7 +144,7 @@ struct FeedbackCommentRowView: View {
                     backgroundColor: .themeBlue
                 )
             }
-            Text(feedback.createdAt.timeAgo())
+            Text(feedback.createdAt.timeAgo(locale, relativeTo: referenceDate ?? .now))
                 .captionTextStyle()
             Spacer()
             

@@ -39,7 +39,7 @@ class AccountService(
                 )
             }
 
-            Role.Manager, Role.Participant -> {
+            Role.Manager -> {
                 val accountId = jwt.getAccountId()
                 val normalizedEmail = email.normalizedEmail()
                 accountRepo.createOrGetAccount(

@@ -87,7 +87,22 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         Messaging.messaging().delegate = self
         UIApplication.shared.registerForRemoteNotifications()
         
+        #if DEBUG
+        if LocalTestAccountLaunch.isRequested {
+            Task {
+                do {
+                    try await LocalTestAccountLaunch.prepare(apiBaseURL: InfoPlistConfig().apiBaseUrl)
+                    intialStore.send(.onAppOpen)
+                } catch {
+                    intialStore.send(.presentError(.getSessionError(error: error.localized)))
+                }
+            }
+        } else {
+            intialStore.send(.onAppOpen)
+        }
+        #else
         intialStore.send(.onAppOpen)
+        #endif
         return true
     }
     

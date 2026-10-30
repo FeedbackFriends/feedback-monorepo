@@ -26,7 +26,6 @@ public extension APIClient {
             joinEvent: makeJoinEvent(api: api, sessionCache: sessionCache),
             markEventAsSeen: makeMarkEventAsSeen(api: api, sessionCache: sessionCache),
             sendNotification: makeSendNotification(api: api),
-            updateRole: makeUpdateRole(api: api),
             getBootstrapUpdate: makeGetBootstrapUpdate(api: api, sessionCache: sessionCache),
             markNotificationHistoryAsSeen: makeMarkNotificationHistoryAsSeen(api: api, sessionCache: sessionCache)
         )

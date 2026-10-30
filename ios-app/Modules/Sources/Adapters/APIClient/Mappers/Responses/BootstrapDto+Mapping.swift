@@ -4,8 +4,6 @@ import OpenAPI
 public extension Bootstrap {
     init(_ bootstrap: Components.Schemas.BootstrapDto) {
         let role: Role? = switch bootstrap.role {
-        case .some("Participant"):
-            .participant
         case .some("Manager"):
             .manager
         default:

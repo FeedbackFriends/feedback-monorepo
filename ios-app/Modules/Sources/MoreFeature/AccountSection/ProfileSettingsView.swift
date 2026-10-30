@@ -77,40 +77,6 @@ public struct ProfileSettingsView: View {
             Section {
                 Toggle(
                     isOn: Binding(
-                        get: { store.isOrganizerModeEnabled },
-                        set: { store.send(.organizerModeToggleChanged($0)) }
-                    )
-                ) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Mødeejer")
-                            .rowTitleTextStyle()
-                            .foregroundStyle(Color.themeText)
-                        Text("Opret aktiviteter og følg feedback over tid.")
-                            .supportingTextStyle()
-                            .foregroundStyle(Color.themeTextSecondary)
-                    }
-                }
-                .tint(Color.themePrimaryAction)
-                .disabled(store.isLoading)
-
-                if store.isLoading {
-                    HStack(spacing: 8) {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: Color.themePrimaryAction))
-                        Text("Opdaterer indstilling...")
-                            .supportingTextStyle()
-                            .foregroundStyle(Color.themeTextSecondary)
-                    }
-                }
-            } footer: {
-                Text("Slå fra, hvis du kun vil svare på feedback med en PIN-kode.")
-                    .supportingTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-            }
-
-            Section {
-                Toggle(
-                    isOn: Binding(
                         get: { store.isInAppNotificationsEnabled },
                         set: { store.send(.inAppNotificationsToggleChanged($0)) }
                     )
@@ -192,7 +158,6 @@ public struct ProfileSettingsView: View {
         ProfileSettingsView(
             store: .init(
                 initialState: .init(
-                    role: .manager,
                     accountInfo: .init(name: "Jane Doe", email: "jane@doe.com", phoneNumber: "+45 12 34 56 78")
                 ),
                 reducer: {

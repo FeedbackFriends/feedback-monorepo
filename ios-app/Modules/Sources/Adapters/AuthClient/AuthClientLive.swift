@@ -33,27 +33,6 @@ public extension AuthClient {
                 }
                 Logger.log(.error, "🔥 Firebase signInAnonymously: Sign in anonymously called but user was already logged in.")
             },
-            fetchCustomRole: {
-                guard let currentUser = Auth.auth().currentUser else {
-                    throw AuthenticationError.notSignedIn
-                }
-                guard let role = try await currentUser.getIDTokenResult().claims["role"] as? String else {
-                    Logger.debug("🔥 Firebase user loggedin: Logged in user, but no custom roles found")
-                    return nil
-                }
-                
-                if role == "Manager" {
-                    Logger.debug("🔥 Firebase user loggedin: Manager role found")
-                    return Role.manager
-                } else if role == "Participant" {
-                    Logger.debug("🔥 Firebase user loggedin: Participant role found")
-                    return Role.participant
-                }
-                Logger.log(.error, "Role is unknown: \(role)")
-                struct UnkownRoleError: Error {}
-                throw UnkownRoleError()
-                
-            },
             googleLogin: {
                 let credential = try await FirebaseService().startGoogleSignInFlow()
                 try await credential.linkOrSignInWithCredential()

@@ -4,11 +4,12 @@ import Domain
 import SwiftUI
 
 struct ActivityDetailContentView: View {
+    @Environment(\.referenceDate) private var referenceDate
     @Bindable var store: StoreOf<ActivityDetail>
     let activity: Activity
 
     var body: some View {
-        let sessionGrouping = ActivityDetailSessionGrouping(events: activity.events)
+        let sessionGrouping = ActivityDetailSessionGrouping(events: activity.events, now: referenceDate ?? .now)
 
         return screenBody(sessionGrouping: sessionGrouping)
             .modifier(ActivityDetailSheetsModifier(store: store))

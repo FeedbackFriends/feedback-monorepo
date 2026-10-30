@@ -48,7 +48,7 @@ private func catalogFeedbackEmojiUnanswered() -> some View {
 }
 
 @MainActor
-private func catalogFeedbackEmojiVerySad() -> some View {
+func catalogFeedbackEmojiVerySad() -> some View {
     ScreenCatalogContainerView {
         CatalogFeedback.view(CatalogFeedback.state(.emoji(.init(
             questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText, selectedEmoji: .verySad
@@ -82,12 +82,13 @@ private func catalogFeedbackEmojiHappy() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("feedback.emoji.happy") {
     catalogFeedbackEmojiHappy()
 }
 
 @MainActor
-private func catalogFeedbackEmojiVeryHappy() -> some View {
+func catalogFeedbackEmojiVeryHappy() -> some View {
     ScreenCatalogContainerView {
         CatalogFeedback.view(CatalogFeedback.state(.emoji(.init(
             questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText, selectedEmoji: .veryHappy
@@ -108,6 +109,7 @@ private func catalogFeedbackEmojiComment() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("feedback.emoji.comment") {
     catalogFeedbackEmojiComment()
 }
@@ -147,12 +149,13 @@ private func catalogFeedbackRatingHigh() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("feedback.rating.high") {
     catalogFeedbackRatingHigh()
 }
 
 @MainActor
-private func catalogFeedbackRatingComment() -> some View {
+func catalogFeedbackRatingComment() -> some View {
     ScreenCatalogContainerView {
         CatalogFeedback.view(CatalogFeedback.state(.zeroToTen(.init(
             questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText, commentTextField: "God dialog og tydelige næste skridt.", rating: 8
@@ -186,6 +189,7 @@ private func catalogFeedbackThumbsUp() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("feedback.thumbs.up") {
     catalogFeedbackThumbsUp()
 }
@@ -256,7 +260,7 @@ private func catalogFeedbackOpinionDisagree() -> some View {
 }
 
 @MainActor
-private func catalogFeedbackOpinionNeutral() -> some View {
+func catalogFeedbackOpinionNeutral() -> some View {
     ScreenCatalogContainerView {
         CatalogFeedback.view(CatalogFeedback.state(.opinion(.init(
             questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText, selectedOpinion: .neutral
@@ -277,6 +281,7 @@ private func catalogFeedbackOpinionAgree() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("feedback.opinion.agree") {
     catalogFeedbackOpinionAgree()
 }
@@ -295,7 +300,7 @@ private func catalogFeedbackOpinionStronglyAgree() -> some View {
 }
 
 @MainActor
-private func catalogFeedbackCommentEmpty() -> some View {
+func catalogFeedbackCommentEmpty() -> some View {
     ScreenCatalogContainerView {
         CatalogFeedback.view(CatalogFeedback.state(.comment(.init(
             questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText
@@ -308,7 +313,7 @@ private func catalogFeedbackCommentEmpty() -> some View {
 }
 
 @MainActor
-private func catalogFeedbackCommentPopulated() -> some View {
+func catalogFeedbackCommentPopulated() -> some View {
     ScreenCatalogContainerView {
         CatalogFeedback.view(CatalogFeedback.state(.comment(.init(
             questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText, commentTextField: "Behold den åbne dialog. Afsæt mere tid til spørgsmål og afslut med tydelige aftaler."
@@ -316,6 +321,7 @@ private func catalogFeedbackCommentPopulated() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("feedback.comment.populated") {
     catalogFeedbackCommentPopulated()
 }
@@ -352,12 +358,13 @@ private func catalogFeedbackSuccess() -> some View {
     }
 }
 
+// Screenshot: Distinct screen or presentation.
 #Preview("feedback.success") {
     catalogFeedbackSuccess()
 }
 
 @MainActor
-private func catalogFeedbackPreviewMode() -> some View {
+func catalogFeedbackPreviewMode() -> some View {
     ScreenCatalogContainerView {
         let state = {
             var state = CatalogFeedback.state(.zeroToTen(.init(
@@ -375,12 +382,26 @@ private func catalogFeedbackPreviewMode() -> some View {
 }
 
 @MainActor
-private func catalogFeedbackRatingPrompt() -> some View {
+func catalogFeedbackRatingPrompt() -> some View {
     ScreenCatalogContainerView {
-        RatingAlertView()
+        var state = CatalogFeedback.state(.zeroToTen(.init(
+            questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText, rating: 8
+        )))
+        state.destination = .ratingPrompt
+        return FeedbackFlowCoordinatorView(store: Store(initialState: state) {
+            Reduce<FeedbackFlowCoordinator.State, FeedbackFlowCoordinator.Action> { state, action in
+                if case .destination(.dismiss) = action {
+                    state.destination = nil
+                }
+                return .none
+            }
+        }) {
+            Text("Ugentligt teammøde")
+        }
     }
 }
 
+// Screenshot: Distinct screen or presentation.
 #Preview("feedback.rating-prompt") {
     catalogFeedbackRatingPrompt()
 }
@@ -388,14 +409,24 @@ private func catalogFeedbackRatingPrompt() -> some View {
 @MainActor
 private func catalogFeedbackEventInfo() -> some View {
     ScreenCatalogContainerView {
-        EventInfoView(
-            eventTitle: "Ugentligt teammøde",
-            ownerName: "Anna Jensen", ownerEmail: "anna@example.com",
-            ownerphoneNumber: "+45 12 34 56 78", date: PreviewCatalogFixtures.now
-        )
+        var state = CatalogFeedback.state(.zeroToTen(.init(
+            questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText, rating: 8
+        )))
+        state.destination = .showEventInfo
+        return FeedbackFlowCoordinatorView(store: Store(initialState: state) {
+            Reduce<FeedbackFlowCoordinator.State, FeedbackFlowCoordinator.Action> { state, action in
+                if case .destination(.dismiss) = action {
+                    state.destination = nil
+                }
+                return .none
+            }
+        }) {
+            Text("Ugentligt teammøde")
+        }
     }
 }
 
+// Screenshot: Distinct screen or presentation.
 #Preview("feedback.event-info") {
     catalogFeedbackEventInfo()
 }
@@ -426,4 +457,41 @@ private func catalogExtraFeedbackMiddleQuestion() -> some View {
     catalogExtraFeedbackMiddleQuestion()
 }
 
+// BEGIN GENERATED SNAPSHOT CATALOG
+// Generated by scripts/screen-catalog.py --generate. Do not edit this section.
+@MainActor
+enum FeedbackFlowFeatureScreenSnapshotCatalog {
+    static var samples: [ScreenSnapshotSample] {
+        [
+            .init(id: "feedback.emoji.happy", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackEmojiHappy()
+            },
+            .init(id: "feedback.emoji.comment", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackEmojiComment()
+            },
+            .init(id: "feedback.rating.high", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackRatingHigh()
+            },
+            .init(id: "feedback.thumbs.up", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackThumbsUp()
+            },
+            .init(id: "feedback.opinion.agree", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackOpinionAgree()
+            },
+            .init(id: "feedback.comment.populated", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackCommentPopulated()
+            },
+            .init(id: "feedback.success", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackSuccess()
+            },
+            .init(id: "feedback.rating-prompt", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackRatingPrompt()
+            },
+            .init(id: "feedback.event-info", size: CGSize(width: 402, height: 874)) {
+                catalogFeedbackEventInfo()
+            }
+        ]
+    }
+}
+// END GENERATED SNAPSHOT CATALOG
 #endif

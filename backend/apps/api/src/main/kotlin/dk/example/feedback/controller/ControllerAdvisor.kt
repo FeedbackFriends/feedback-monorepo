@@ -6,6 +6,8 @@ import dk.example.feedback.model.error.ApiError
 import dk.example.feedback.model.exceptions.DomainException
 import jakarta.servlet.http.HttpServletRequest
 import java.time.OffsetDateTime
+import org.springframework.http.HttpStatus
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -18,7 +20,7 @@ class ControllerAdvisor() {
         request.setAttribute(LoggingInterceptor.HANDLED_EXCEPTION_ATTRIBUTE, exception)
 
         val domainCode = if (exception is DomainException) exception.domainCode else null
-        val status = ErrorResponseConfig.resolve(domainCode)
+        val status = if (exception is AccessDeniedException) HttpStatus.FORBIDDEN else ErrorResponseConfig.resolve(domainCode)
 
         val error = ApiError(
             timestamp = OffsetDateTime.now(),

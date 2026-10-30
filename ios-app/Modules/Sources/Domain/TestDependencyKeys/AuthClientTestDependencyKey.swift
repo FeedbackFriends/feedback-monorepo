@@ -20,7 +20,6 @@ extension AuthClient: TestDependencyKey {
             signInAnonymously: {
                 await mockAuthEngine.yield(.anonymous)
             },
-            fetchCustomRole: { nil },
             googleLogin: {
                 await mockAuthEngine.yield(.authenticated)
             },

@@ -4,6 +4,25 @@ import DesignSystem
 import Domain
 import SwiftUI
 
+extension JoinEvent.State {
+    public static var screenCatalogSuccess: Self {
+        var state = Self(pinCodeInput: .init(value: "1234"))
+        state.showSuccessOverlay = true
+        return state
+    }
+}
+
+extension ActivityList.State {
+    public static var screenCatalogRefreshError: Self {
+        var state = Self(
+            bootstrap: PreviewCatalogFixtures.bootstrap(),
+            referenceDate: PreviewCatalogFixtures.now
+        )
+        state.destination = .alert(.refreshFailure)
+        return state
+    }
+}
+
 @MainActor
 private enum CatalogActivity {
     static func detail(_ activity: Activity) -> some View {
@@ -74,7 +93,7 @@ private func catalogActivityDetailPopulated() -> some View {
     }
 }
 
-#Preview("activity-detail.populated") { catalogActivityDetailPopulated() }
+#Preview("activity-detail.populated.content-only") { catalogActivityDetailPopulated() }
 
 @MainActor
 private func catalogActivityDetailNoSessions() -> some View {
@@ -83,7 +102,7 @@ private func catalogActivityDetailNoSessions() -> some View {
     }
 }
 
-#Preview("activity-detail.no-sessions") { catalogActivityDetailNoSessions() }
+#Preview("activity-detail.no-sessions.content-only") { catalogActivityDetailNoSessions() }
 
 @MainActor
 private func catalogActivityDetailNoFeedback() -> some View {
@@ -116,7 +135,7 @@ private func catalogSessionDetailNoFeedback() -> some View {
     }
 }
 
-#Preview("session-detail.no-feedback") { catalogSessionDetailNoFeedback() }
+#Preview("session-detail.no-feedback.content-only") { catalogSessionDetailNoFeedback() }
 
 @MainActor
 private func catalogSessionDetailExpired() -> some View {
@@ -152,6 +171,7 @@ private func catalogCreateActivityDetails() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("create-activity.details") { catalogCreateActivityDetails() }
 
 @MainActor
@@ -170,6 +190,7 @@ private func catalogCreateActivityQuestions() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("create-activity.questions") { catalogCreateActivityQuestions() }
 
 @MainActor
@@ -265,6 +286,7 @@ private func catalogCreateSessionScheduled() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("create-session.scheduled") { catalogCreateSessionScheduled() }
 
 @MainActor
@@ -281,6 +303,7 @@ private func catalogCreateSessionStartNow() -> some View {
     }
 }
 
+// Screenshot: Distinct role or content layout.
 #Preview("create-session.start-now") { catalogCreateSessionStartNow() }
 
 @MainActor
@@ -297,6 +320,7 @@ private func catalogCreateSessionAllDay() -> some View {
     }
 }
 
+// Screenshot: Distinct role or content layout.
 #Preview("create-session.all-day") { catalogCreateSessionAllDay() }
 
 @MainActor
@@ -347,6 +371,7 @@ private func catalogCreateSessionSuccess() -> some View {
     }
 }
 
+// Screenshot: Distinct screen or presentation.
 #Preview("create-session.success") { catalogCreateSessionSuccess() }
 
 @MainActor
@@ -360,6 +385,7 @@ private func catalogEditSessionPopulated() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("edit-session.populated") { catalogEditSessionPopulated() }
 
 @MainActor
@@ -371,6 +397,7 @@ private func catalogQuestionsPopulated() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("questions.populated") { catalogQuestionsPopulated() }
 
 @MainActor
@@ -382,6 +409,7 @@ private func catalogQuestionsEmpty() -> some View {
     }
 }
 
+// Screenshot: Distinct empty layout.
 #Preview("questions.empty") { catalogQuestionsEmpty() }
 
 @MainActor
@@ -406,6 +434,7 @@ private func catalogQuestionEditorEdit() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("question-editor.edit") { catalogQuestionEditorEdit() }
 
 @MainActor
@@ -418,10 +447,11 @@ private func catalogQuestionEditorLongText() -> some View {
     }
 }
 
+// Screenshot: Distinct role or content layout.
 #Preview("question-editor.long-text") { catalogQuestionEditorLongText() }
 
 @MainActor
-private func catalogQuestionEditorThumbs() -> some View {
+func catalogQuestionEditorThumbs() -> some View {
     ScreenCatalogContainerView {
         QuestionPickerView(
             existingQuestionID: nil, feedbackTypeSelected: .thumpsUpThumpsDown,
@@ -447,50 +477,94 @@ private func catalogQuestionEditorComment() -> some View {
 @MainActor
 private func catalogQuestionsAnswerTypeHelp() -> some View {
     ScreenCatalogContainerView {
-        FeedbackTypeInfoSheetView()
+        catalogQuestionEditorEdit()
+            .sheet(isPresented: .constant(true)) {
+                FeedbackTypeInfoSheetView()
+            }
     }
 }
 
+// Screenshot: Sheet presentation over the question editor.
 #Preview("questions.answer-type-help") { catalogQuestionsAnswerTypeHelp() }
 
 @MainActor
 private func catalogActivityHowItWorks() -> some View {
     ScreenCatalogContainerView {
-        ActivityDetailHowItWorksSheetView(activityEmail: PreviewCatalogFixtures.activity.activityEmail) {}
+        var state = ActivityDetail.State(
+            activityId: PreviewCatalogFixtures.activity.id,
+            bootstrap: PreviewCatalogFixtures.bootstrap(activity: PreviewCatalogFixtures.activity)
+        )
+        state.destination = .showHowItWorks
+        return NavigationStack {
+            ActivityDetailView(store: Store(initialState: state) {
+                Reduce<ActivityDetail.State, ActivityDetail.Action> { state, action in
+                    if case .destination(.dismiss) = action {
+                        state.destination = nil
+                    }
+                    return .none
+                }
+            })
+        }
     }
 }
 
+// Screenshot: Distinct screen or presentation.
 #Preview("activity.how-it-works") { catalogActivityHowItWorks() }
 
 @MainActor
 private func catalogSessionInvite() -> some View {
     ScreenCatalogContainerView {
-        InviteView(inviteLink: "https://letsgrow.dk/invite/1234", shareText: "Svar på feedback med PIN-kode 1234")
+        let event = PreviewCatalogFixtures.upcomingEvent
+        var activity = PreviewCatalogFixtures.activity
+        activity.events = [event]
+        var state = EventDetailFeature.State(
+            activityId: activity.id, eventId: event.id,
+            bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity),
+            webBaseUrl: URL(string: "https://letsgrow.dk")
+        )
+        state.destination = .invite(event)
+        return NavigationStack {
+            EventDetailFeatureView(store: Store(initialState: state) {
+                Reduce<EventDetailFeature.State, EventDetailFeature.Action> { state, action in
+                    if case .destination(.dismiss) = action {
+                        state.destination = nil
+                    }
+                    return .none
+                }
+            })
+        }
     }
 }
 
+// Screenshot: Distinct screen or presentation.
 #Preview("session.invite") { catalogSessionInvite() }
 
 @MainActor
 private func catalogSessionInviteUnavailable() -> some View {
     ScreenCatalogContainerView {
-        EmptyStateView(
-            title: "Invitation ikke tilgængelig",
-            message: "Invitationer er ikke tilgængelige for denne session lige nu."
-        ).padding(Theme.padding)
+        let event = PreviewCatalogFixtures.upcomingEvent
+        var activity = PreviewCatalogFixtures.activity
+        activity.events = [event]
+        var state = EventDetailFeature.State(
+            activityId: activity.id, eventId: event.id,
+            bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity),
+            webBaseUrl: nil
+        )
+        state.destination = .invite(event)
+        return NavigationStack {
+            EventDetailFeatureView(store: Store(initialState: state) {
+                Reduce<EventDetailFeature.State, EventDetailFeature.Action> { state, action in
+                    if case .destination(.dismiss) = action {
+                        state.destination = nil
+                    }
+                    return .none
+                }
+            })
+        }
     }
 }
 
 #Preview("session.invite-unavailable") { catalogSessionInviteUnavailable() }
-
-@MainActor
-private func catalogParticipantStartFeedbackConfirmation() -> some View {
-    ScreenCatalogContainerView {
-        StartFeedbackConfirmationView(startFeedback: {})
-    }
-}
-
-#Preview("participant.start-feedback-confirmation") { catalogParticipantStartFeedbackConfirmation() }
 
 @MainActor
 private func catalogNotificationsEmpty() -> some View {
@@ -499,6 +573,7 @@ private func catalogNotificationsEmpty() -> some View {
     }
 }
 
+// Screenshot: Distinct empty layout.
 #Preview("notifications.empty") { catalogNotificationsEmpty() }
 
 @MainActor
@@ -508,6 +583,7 @@ private func catalogNotificationsUnread() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("notifications.unread") { catalogNotificationsUnread() }
 
 @MainActor
@@ -524,7 +600,7 @@ private func catalogNotificationsRead() -> some View {
 #Preview("notifications.read") { catalogNotificationsRead() }
 
 @MainActor
-private func catalogJoinSessionEmpty() -> some View {
+func catalogJoinSessionEmpty() -> some View {
     ScreenCatalogContainerView {
         let state = {
             var state = JoinEvent.State(pinCodeInput: .init(value: ""))
@@ -538,7 +614,7 @@ private func catalogJoinSessionEmpty() -> some View {
 #Preview("join-session.empty") { catalogJoinSessionEmpty() }
 
 @MainActor
-private func catalogJoinSessionPartial() -> some View {
+func catalogJoinSessionPartial() -> some View {
     ScreenCatalogContainerView {
         let state = {
             var state = JoinEvent.State(pinCodeInput: .init(value: "12"))
@@ -552,7 +628,7 @@ private func catalogJoinSessionPartial() -> some View {
 #Preview("join-session.partial") { catalogJoinSessionPartial() }
 
 @MainActor
-private func catalogJoinSessionReady() -> some View {
+func catalogJoinSessionReady() -> some View {
     ScreenCatalogContainerView {
         let state = {
             var state = JoinEvent.State(pinCodeInput: .init(value: "1234"))
@@ -563,10 +639,10 @@ private func catalogJoinSessionReady() -> some View {
     }
 }
 
-#Preview("join-session.ready") { catalogJoinSessionReady() }
+#Preview("join-session.content-ready") { catalogJoinSessionReady() }
 
 @MainActor
-private func catalogJoinSessionLoading() -> some View {
+func catalogJoinSessionLoading() -> some View {
     ScreenCatalogContainerView {
         let state = {
             var state = JoinEvent.State(pinCodeInput: .init(value: "1234"))
@@ -580,7 +656,7 @@ private func catalogJoinSessionLoading() -> some View {
 #Preview("join-session.loading") { catalogJoinSessionLoading() }
 
 @MainActor
-private func catalogJoinSessionSuccess() -> some View {
+func catalogJoinSessionSuccess() -> some View {
     ScreenCatalogContainerView {
         let state = {
             var state = JoinEvent.State(pinCodeInput: .init(value: "1234"))
@@ -591,137 +667,51 @@ private func catalogJoinSessionSuccess() -> some View {
     }
 }
 
-#Preview("join-session.success") { catalogJoinSessionSuccess() }
-
-@MainActor
-private func catalogParticipantSessionsEmpty() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var state = ParticipantEvents.State(bootstrap: {
-                let value = PreviewCatalogFixtures.bootstrap(role: .participant)
-                value.withLock { $0.participantEvents = [] }
-                return value
-            }())
-            state.startFeedbackPincodeInFlight = nil
-            return state
-        }()
-        NavigationStack {
-            ParticipantEventsView(store: Store(initialState: state) { EmptyReducer() })
-                .navigationTitle("Dine sessioner")
-        }
-    }
-}
-
-#Preview("participant-sessions.empty") { catalogParticipantSessionsEmpty() }
-
-@MainActor
-private func catalogParticipantSessionsAvailable() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var state = ParticipantEvents.State(bootstrap: {
-                let value = PreviewCatalogFixtures.bootstrap(role: .participant)
-                value.withLock { $0.participantEvents = [PreviewCatalogFixtures.participantEvent(index: 0, recentlyJoined: true)] }
-                return value
-            }())
-            state.startFeedbackPincodeInFlight = nil
-            return state
-        }()
-        NavigationStack {
-            ParticipantEventsView(store: Store(initialState: state) { EmptyReducer() })
-                .navigationTitle("Dine sessioner")
-        }
-    }
-}
-
-#Preview("participant-sessions.available") { catalogParticipantSessionsAvailable() }
-
-@MainActor
-private func catalogParticipantSessionsSubmitted() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var state = ParticipantEvents.State(bootstrap: {
-                let value = PreviewCatalogFixtures.bootstrap(role: .participant)
-                value.withLock { $0.participantEvents = [PreviewCatalogFixtures.participantEvent(index: -1, submitted: true)] }
-                return value
-            }())
-            state.startFeedbackPincodeInFlight = nil
-            return state
-        }()
-        NavigationStack {
-            ParticipantEventsView(store: Store(initialState: state) { EmptyReducer() })
-                .navigationTitle("Dine sessioner")
-        }
-    }
-}
-
-#Preview("participant-sessions.submitted") { catalogParticipantSessionsSubmitted() }
-
-@MainActor
-private func catalogParticipantSessionsExpired() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var state = ParticipantEvents.State(bootstrap: {
-                let value = PreviewCatalogFixtures.bootstrap(role: .participant)
-                value.withLock { $0.participantEvents = [PreviewCatalogFixtures.participantEvent(index: -2, expired: true)] }
-                return value
-            }())
-            state.startFeedbackPincodeInFlight = nil
-            return state
-        }()
-        NavigationStack {
-            ParticipantEventsView(store: Store(initialState: state) { EmptyReducer() })
-                .navigationTitle("Dine sessioner")
-        }
-    }
-}
-
-#Preview("participant-sessions.expired") { catalogParticipantSessionsExpired() }
-
-@MainActor
-private func catalogParticipantSessionsLoading() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var state = ParticipantEvents.State(bootstrap: {
-                let value = PreviewCatalogFixtures.bootstrap(role: .participant)
-                value.withLock { $0.participantEvents = [PreviewCatalogFixtures.participantEvent(index: 0)] }
-                return value
-            }())
-            state.startFeedbackPincodeInFlight = .init(value: "1234")
-            return state
-        }()
-        NavigationStack {
-            ParticipantEventsView(store: Store(initialState: state) { EmptyReducer() })
-                .navigationTitle("Dine sessioner")
-        }
-    }
-}
-
-#Preview("participant-sessions.loading") { catalogParticipantSessionsLoading() }
+#Preview("join-session.content-success") { catalogJoinSessionSuccess() }
 
 @MainActor
 private func catalogActivityDeleteConfirmation() -> some View {
     ScreenCatalogContainerView {
-        DeleteConfirmationViewSheet(
-            title: "Slet aktivitet", message: "Slet denne aktivitet og al feedback?"
-        ) {
-            Button("Slet") {}
-                .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
-                .isLoading(false)
+        var state = ActivityDetail.State(
+            activityId: PreviewCatalogFixtures.activity.id,
+            bootstrap: PreviewCatalogFixtures.bootstrap(activity: PreviewCatalogFixtures.activity)
+        )
+        state.destination = .showDeleteConfirmation
+        state.deleteActivityInFlight = false
+        return NavigationStack {
+            ActivityDetailView(store: Store(initialState: state) {
+                Reduce<ActivityDetail.State, ActivityDetail.Action> { state, action in
+                    if case .destination(.dismiss) = action {
+                        state.destination = nil
+                    }
+                    return .none
+                }
+            })
         }
     }
 }
 
+// Screenshot: Distinct screen or presentation.
 #Preview("activity.delete-confirmation") { catalogActivityDeleteConfirmation() }
 
 @MainActor
 private func catalogActivityDeleteConfirmationLoading() -> some View {
     ScreenCatalogContainerView {
-        DeleteConfirmationViewSheet(
-            title: "Slet aktivitet", message: "Slet denne aktivitet og al feedback?"
-        ) {
-            Button("Slet") {}
-                .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
-                .isLoading(true)
+        var state = ActivityDetail.State(
+            activityId: PreviewCatalogFixtures.activity.id,
+            bootstrap: PreviewCatalogFixtures.bootstrap(activity: PreviewCatalogFixtures.activity)
+        )
+        state.destination = .showDeleteConfirmation
+        state.deleteActivityInFlight = true
+        return NavigationStack {
+            ActivityDetailView(store: Store(initialState: state) {
+                Reduce<ActivityDetail.State, ActivityDetail.Action> { state, action in
+                    if case .destination(.dismiss) = action {
+                        state.destination = nil
+                    }
+                    return .none
+                }
+            })
         }
     }
 }
@@ -731,70 +721,45 @@ private func catalogActivityDeleteConfirmationLoading() -> some View {
 @MainActor
 private func catalogSessionDeleteConfirmation() -> some View {
     ScreenCatalogContainerView {
-        DeleteConfirmationViewSheet(
-            title: "Slet session", message: "Slet denne session og al feedback?"
-        ) {
-            Button("Slet") {}
-                .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
-                .isLoading(false)
+        var state = EventDetailFeature.State(
+            activityId: PreviewCatalogFixtures.activity.id,
+            eventId: PreviewCatalogFixtures.previousEvent.id,
+            bootstrap: PreviewCatalogFixtures.bootstrap(activity: PreviewCatalogFixtures.activity),
+            webBaseUrl: URL(string: "https://letsgrow.dk")
+        )
+        state.showDeleteConfirmation = true
+        state.deleteEventInFlight = false
+        return NavigationStack {
+            EventDetailFeatureView(store: Store(initialState: state) {
+                BindingReducer()
+            })
         }
     }
 }
 
+// Screenshot: Distinct screen or presentation.
 #Preview("session.delete-confirmation") { catalogSessionDeleteConfirmation() }
 
 @MainActor
 private func catalogSessionDeleteConfirmationLoading() -> some View {
     ScreenCatalogContainerView {
-        DeleteConfirmationViewSheet(
-            title: "Slet session", message: "Slet denne session og al feedback?"
-        ) {
-            Button("Slet") {}
-                .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
-                .isLoading(true)
+        var state = EventDetailFeature.State(
+            activityId: PreviewCatalogFixtures.activity.id,
+            eventId: PreviewCatalogFixtures.previousEvent.id,
+            bootstrap: PreviewCatalogFixtures.bootstrap(activity: PreviewCatalogFixtures.activity),
+            webBaseUrl: URL(string: "https://letsgrow.dk")
+        )
+        state.showDeleteConfirmation = true
+        state.deleteEventInFlight = true
+        return NavigationStack {
+            EventDetailFeatureView(store: Store(initialState: state) {
+                BindingReducer()
+            })
         }
     }
 }
 
 #Preview("session.delete-confirmation-loading") { catalogSessionDeleteConfirmationLoading() }
-
-@MainActor
-private func catalogUnreadFeedbackPopulated() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var state = ActivityList.State(
-                bootstrap: PreviewCatalogFixtures.bootstrap(empty: false),
-                presentation: .overview, referenceDate: PreviewCatalogFixtures.now
-            )
-            state.path.append(.unreadFeedback)
-            return state
-        }()
-        NavigationStack {
-            ActivityListView(store: Store(initialState: state) { EmptyReducer() })
-        }
-    }
-}
-
-#Preview("unread-feedback.populated") { catalogUnreadFeedbackPopulated() }
-
-@MainActor
-private func catalogUnreadFeedbackEmpty() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var state = ActivityList.State(
-                bootstrap: PreviewCatalogFixtures.bootstrap(empty: true),
-                presentation: .overview, referenceDate: PreviewCatalogFixtures.now
-            )
-            state.path.append(.unreadFeedback)
-            return state
-        }()
-        NavigationStack {
-            ActivityListView(store: Store(initialState: state) { EmptyReducer() })
-        }
-    }
-}
-
-#Preview("unread-feedback.empty") { catalogUnreadFeedbackEmpty() }
 
 @MainActor
 private func catalogActivityAllSessions() -> some View {
@@ -811,6 +776,7 @@ private func catalogActivityAllSessions() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("activity.all-sessions") { catalogActivityAllSessions() }
 
 @MainActor
@@ -822,6 +788,7 @@ private func catalogSessionFeedbackComments() -> some View {
     }
 }
 
+// Screenshot: Main screen.
 #Preview("session.feedback-comments") { catalogSessionFeedbackComments() }
 
 @MainActor
@@ -838,6 +805,7 @@ private func catalogExtraSessionResultsEmojiAnswered() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("session-results.emoji.answered") { catalogExtraSessionResultsEmojiAnswered() }
 
 @MainActor
@@ -854,6 +822,7 @@ private func catalogExtraSessionResultsEmojiEmpty() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("session-results.emoji.empty") { catalogExtraSessionResultsEmojiEmpty() }
 
 @MainActor
@@ -870,6 +839,7 @@ private func catalogExtraSessionResultsRatingAnswered() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("session-results.rating.answered") { catalogExtraSessionResultsRatingAnswered() }
 
 @MainActor
@@ -902,6 +872,7 @@ private func catalogExtraSessionResultsThumbsAnswered() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("session-results.thumbs.answered") { catalogExtraSessionResultsThumbsAnswered() }
 
 @MainActor
@@ -934,6 +905,7 @@ private func catalogExtraSessionResultsOpinionAnswered() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("session-results.opinion.answered") { catalogExtraSessionResultsOpinionAnswered() }
 
 @MainActor
@@ -966,6 +938,7 @@ private func catalogExtraSessionResultsCommentAnswered() -> some View {
     }
 }
 
+// Screenshot: Distinct answer control.
 #Preview("session-results.comment.answered") { catalogExtraSessionResultsCommentAnswered() }
 
 @MainActor
@@ -984,87 +957,92 @@ private func catalogExtraSessionResultsCommentEmpty() -> some View {
 
 #Preview("session-results.comment.empty") { catalogExtraSessionResultsCommentEmpty() }
 
+// BEGIN GENERATED SNAPSHOT CATALOG
+// Generated by scripts/screen-catalog.py --generate. Do not edit this section.
 @MainActor
-private func catalogExtraHomeRefreshError() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var activity = PreviewCatalogFixtures.activity
-            var state = ActivityList.State(
-                bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity),
-                presentation: .overview, referenceDate: PreviewCatalogFixtures.now
-            )
-            state.refreshError = "Kunne ikke opdatere. Prøv igen."
-            return state
-        }()
-        ActivityListView(store: Store(initialState: state) { EmptyReducer() })
+enum ActivityFeatureScreenSnapshotCatalog {
+    static var samples: [ScreenSnapshotSample] {
+        [
+            .init(id: "create-activity.details", size: CGSize(width: 402, height: 874)) {
+                catalogCreateActivityDetails()
+            },
+            .init(id: "create-activity.questions", size: CGSize(width: 402, height: 874)) {
+                catalogCreateActivityQuestions()
+            },
+            .init(id: "create-session.scheduled", size: CGSize(width: 402, height: 874)) {
+                catalogCreateSessionScheduled()
+            },
+            .init(id: "create-session.start-now", size: CGSize(width: 402, height: 874)) {
+                catalogCreateSessionStartNow()
+            },
+            .init(id: "create-session.all-day", size: CGSize(width: 402, height: 874)) {
+                catalogCreateSessionAllDay()
+            },
+            .init(id: "create-session.success", size: CGSize(width: 402, height: 874)) {
+                catalogCreateSessionSuccess()
+            },
+            .init(id: "edit-session.populated", size: CGSize(width: 402, height: 874)) {
+                catalogEditSessionPopulated()
+            },
+            .init(id: "questions.populated", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionsPopulated()
+            },
+            .init(id: "questions.empty", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionsEmpty()
+            },
+            .init(id: "question-editor.edit", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionEditorEdit()
+            },
+            .init(id: "question-editor.long-text", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionEditorLongText()
+            },
+            .init(id: "questions.answer-type-help", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionsAnswerTypeHelp()
+            },
+            .init(id: "activity.how-it-works", size: CGSize(width: 402, height: 874)) {
+                catalogActivityHowItWorks()
+            },
+            .init(id: "session.invite", size: CGSize(width: 402, height: 874)) {
+                catalogSessionInvite()
+            },
+            .init(id: "notifications.empty", size: CGSize(width: 402, height: 874)) {
+                catalogNotificationsEmpty()
+            },
+            .init(id: "notifications.unread", size: CGSize(width: 402, height: 874)) {
+                catalogNotificationsUnread()
+            },
+            .init(id: "activity.delete-confirmation", size: CGSize(width: 402, height: 874)) {
+                catalogActivityDeleteConfirmation()
+            },
+            .init(id: "session.delete-confirmation", size: CGSize(width: 402, height: 874)) {
+                catalogSessionDeleteConfirmation()
+            },
+            .init(id: "activity.all-sessions", size: CGSize(width: 402, height: 874)) {
+                catalogActivityAllSessions()
+            },
+            .init(id: "session.feedback-comments", size: CGSize(width: 402, height: 874)) {
+                catalogSessionFeedbackComments()
+            },
+            .init(id: "session-results.emoji.answered", size: CGSize(width: 402, height: 874)) {
+                catalogExtraSessionResultsEmojiAnswered()
+            },
+            .init(id: "session-results.emoji.empty", size: CGSize(width: 402, height: 874)) {
+                catalogExtraSessionResultsEmojiEmpty()
+            },
+            .init(id: "session-results.rating.answered", size: CGSize(width: 402, height: 874)) {
+                catalogExtraSessionResultsRatingAnswered()
+            },
+            .init(id: "session-results.thumbs.answered", size: CGSize(width: 402, height: 874)) {
+                catalogExtraSessionResultsThumbsAnswered()
+            },
+            .init(id: "session-results.opinion.answered", size: CGSize(width: 402, height: 874)) {
+                catalogExtraSessionResultsOpinionAnswered()
+            },
+            .init(id: "session-results.comment.answered", size: CGSize(width: 402, height: 874)) {
+                catalogExtraSessionResultsCommentAnswered()
+            }
+        ]
     }
 }
-
-#Preview("home.refresh-error") { catalogExtraHomeRefreshError() }
-
-@MainActor
-private func catalogExtraHomeUpToDate() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var activity = PreviewCatalogFixtures.activity
-            activity.events = []
-            activity.overallFeedbackSummary = nil
-            var state = ActivityList.State(
-                bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity),
-                presentation: .overview, referenceDate: PreviewCatalogFixtures.now
-            )
-
-            return state
-        }()
-        ActivityListView(store: Store(initialState: state) { EmptyReducer() })
-    }
-}
-
-#Preview("home.up-to-date") { catalogExtraHomeUpToDate() }
-
-@MainActor
-private func catalogExtraHomeNextSessionReady() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var activity = PreviewCatalogFixtures.activity
-            var event = PreviewCatalogFixtures.upcomingEvent
-            event.questionsSnapshot = [PreviewCatalogFixtures.question]
-            activity.events = [event]
-            var state = ActivityList.State(
-                bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity),
-                presentation: .overview, referenceDate: PreviewCatalogFixtures.now
-            )
-
-            return state
-        }()
-        ActivityListView(store: Store(initialState: state) { EmptyReducer() })
-    }
-}
-
-#Preview("home.next-session-ready") { catalogExtraHomeNextSessionReady() }
-
-
-    catalogActivityDetailPopulated()
-}
-
-#Preview("session-detail.full-content", traits: .fixedLayout(width: 402, height: 1600)) {
-    catalogSessionDetailFeedback()
-}
-
-#Preview("create-activity.templates.full-content", traits: .fixedLayout(width: 402, height: 1100)) {
-    catalogCreateActivityTemplates()
-}
-
-#Preview("edit-activity.full-content", traits: .fixedLayout(width: 402, height: 1400)) {
-    catalogEditActivityPopulated()
-}
-
-#Preview("create-session.custom-duration.full-content", traits: .fixedLayout(width: 402, height: 1400)) {
-    catalogCreateSessionCustomDuration()
-}
-
-#Preview("questions.answer-type-help.full-content", traits: .fixedLayout(width: 402, height: 1400)) {
-    catalogQuestionsAnswerTypeHelp()
-}
-
+// END GENERATED SNAPSHOT CATALOG
 #endif

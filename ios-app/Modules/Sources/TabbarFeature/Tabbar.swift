@@ -6,7 +6,7 @@ import ComposableArchitecture
 import SignUpFeature
 
 public enum Tab: Hashable, Sendable {
-    case home, activities, feedback
+    case feedback, activities
 }
 
 public extension Tabbar.State {
@@ -18,7 +18,6 @@ public extension Tabbar.State {
         accountSection: AccountSection.State,
         selectedTab: Tab,
         initialiseFeedback: InitialiseFeedback.State,
-        managerEvents: ActivityList.State,
         deleteAccount: DeleteAccount.State,
         destination: Tabbar.Destination.State? = nil,
         signUp: SignUp.State
@@ -30,9 +29,6 @@ public extension Tabbar.State {
         self.accountSection = accountSection
         self.selectedTab = selectedTab
         self.initialiseFeedback = initialiseFeedback
-        var overview = managerEvents
-        overview.presentation = .overview
-        self.managerEvents = overview
         self.activities = .init(bootstrap: bootstrap)
         self.deleteAccount = deleteAccount
         self.destination = destination
@@ -41,7 +37,7 @@ public extension Tabbar.State {
     
     init(
         bootstrap: Shared<Bootstrap>,
-        selectedTab: Tab = .home,
+        selectedTab: Tab = .feedback,
         destination: Tabbar.Destination.State? = nil,
     ) {
         self._bootstrap = bootstrap
@@ -51,7 +47,6 @@ public extension Tabbar.State {
         self.accountSection = .init(bootstrap: bootstrap)
         self.initialiseFeedback = .init()
         self.deleteAccount = .init()
-        self.managerEvents = .init(bootstrap: bootstrap, presentation: .overview)
         self.activities = .init(bootstrap: bootstrap)
         self.tabbarLifecyle = .init(bootstrap: bootstrap)
         self.destination = destination
@@ -83,7 +78,6 @@ public struct Tabbar: Sendable {
         public var selectedTab: Tab
         var isProfilePresented = false
         var initialiseFeedback: InitialiseFeedback.State
-        public var managerEvents: ActivityList.State
         public var activities: ActivityList.State
         var deleteAccount: DeleteAccount.State
         @Presents var destination: Destination.State?
@@ -94,13 +88,11 @@ public struct Tabbar: Sendable {
         case moreSection(MoreSection.Action)
         case accountSection(AccountSection.Action)
         case initialiseFeedback(InitialiseFeedback.Action)
-        case managerEvents(ActivityList.Action)
         case activities(ActivityList.Action)
         case validateSelectedTab
         case destination(PresentationAction<Destination.Action>)
         case toolbar(Toolbar)
         case delegate(Delegate)
-        case signUpButtonTap
         case tabbarLifecyle(TabbarLifecycle.Action)
         case deleteAccount(DeleteAccount.Action)
         case signUp(SignUp.Action)
@@ -124,9 +116,6 @@ public struct Tabbar: Sendable {
         }
         Scope(state: \.enterCode, action: \.enterCode) {
             EnterCode()
-        }
-        Scope(state: \.managerEvents, action: \.managerEvents) {
-            ActivityList()
         }
         Scope(state: \.activities, action: \.activities) {
             ActivityList()
@@ -176,13 +165,8 @@ public struct Tabbar: Sendable {
                 
             case .validateSelectedTab:
                 if state.bootstrap.role != .manager {
-                    state.managerEvents.path.removeAll()
-                    state.managerEvents.destination = nil
                     state.activities.path.removeAll()
                     state.activities.destination = nil
-                    if state.selectedTab == .home || state.selectedTab == .activities {
-                        state.selectedTab = .feedback
-                    }
                 }
                 return .none
 
@@ -219,13 +203,10 @@ public struct Tabbar: Sendable {
             case .initialiseFeedback:
                 return .none
                 
-            case .signUpButtonTap:
-                return .send(.delegate(.navigateToSignUp))
-  
             case .delegate:
                 return .none
                 
-            case .managerEvents, .activities:
+            case .activities:
                 return .none
                 
             case .deleteAccount:

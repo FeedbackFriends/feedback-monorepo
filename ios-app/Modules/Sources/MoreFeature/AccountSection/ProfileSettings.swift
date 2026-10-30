@@ -14,16 +14,12 @@ public struct ProfileSettings: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         @Presents var destination: Destination.State?
-        var isOrganizerModeEnabled: Bool
-        var persistedRole: Role?
         var accountInfo: AccountInfo
         var isLoading = false
         var isInAppNotificationsEnabled = false
         var isEmailEventsEnabled = false
 
-        public init(role: Role?, accountInfo: AccountInfo) {
-            self.persistedRole = role
-            self.isOrganizerModeEnabled = role == .manager
+        public init(accountInfo: AccountInfo) {
             self.accountInfo = accountInfo
         }
     }
@@ -31,25 +27,12 @@ public struct ProfileSettings: Sendable {
     public enum Action {
         case destination(PresentationAction<Destination.Action>)
         case updateProfileButtonTap
-        case organizerModeToggleChanged(Bool)
-        case updateRoleResponse(Role)
         case inAppNotificationsToggleChanged(Bool)
         case emailEventsToggleChanged(Bool)
         case presentError(Error)
-        case delegate(Delegate)
-
-        public enum Delegate {
-            case refreshSession
-        }
-    }
-
-    private enum CancelID {
-        case updateRole
     }
 
     public init() {}
-
-    @Dependency(\.apiClient) var apiClient
 
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -67,25 +50,6 @@ public struct ProfileSettings: Sendable {
                 )
                 return .none
 
-            case .organizerModeToggleChanged(let isEnabled):
-                let newRole: Role = isEnabled ? .manager : .participant
-                state.isOrganizerModeEnabled = isEnabled
-                state.isLoading = true
-                return .run { send in
-                    do {
-                        try await apiClient.updateRole(newRole)
-                        await send(.updateRoleResponse(newRole))
-                    } catch {
-                        await send(.presentError(error))
-                    }
-                }
-                .cancellable(id: CancelID.updateRole, cancelInFlight: true)
-
-            case .updateRoleResponse(let role):
-                state.isLoading = false
-                state.persistedRole = role
-                return .send(.delegate(.refreshSession))
-
             case .emailEventsToggleChanged(let isEnabled):
                 state.isEmailEventsEnabled = isEnabled
                 return .none
@@ -96,11 +60,7 @@ public struct ProfileSettings: Sendable {
 
             case .presentError(let error):
                 state.isLoading = false
-                state.isOrganizerModeEnabled = state.persistedRole == .manager
                 state.destination = .alert(.init(error: error))
-                return .none
-
-            case .delegate:
                 return .none
             }
         }

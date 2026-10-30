@@ -2,6 +2,9 @@ import SwiftUI
 
 struct SuccessOverlayView: View {
     
+    #if DEBUG
+    @Environment(\.isScreenSnapshot) private var isScreenSnapshot
+    #endif
     let message: String
     @State private var showAlert = false
     @State private var alertDidAppear = false
@@ -15,6 +18,9 @@ struct SuccessOverlayView: View {
                 self.isModal = false
             })
             .onChange(of: showAlert, { _, _ in
+                #if DEBUG
+                if isScreenSnapshot { return }
+                #endif
                 if showAlert {
                     // A delay is needed here to get the accessibility focus working
                     Task { @MainActor in
@@ -32,6 +38,13 @@ private extension SuccessOverlayView {
         ZStack {
             backgroundView
                 .onAppear {
+                    #if DEBUG
+                    if isScreenSnapshot {
+                        showAlert = true
+                        alertDidAppear = true
+                        return
+                    }
+                    #endif
                     Task { @MainActor in
                         try await Task.sleep(for: .seconds(0.5))
                         withAnimation {
@@ -42,6 +55,9 @@ private extension SuccessOverlayView {
             if showAlert {
                 alertView
                     .onAppear {
+                        #if DEBUG
+                        if isScreenSnapshot { return }
+                        #endif
                         Task { @MainActor in
                             try await Task.sleep(for: .seconds(0.2))
                                 withAnimation(.spring(response: 0.7, dampingFraction: 0.925, blendDuration: 10)) {

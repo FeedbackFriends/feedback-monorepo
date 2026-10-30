@@ -24,6 +24,9 @@ struct QuestionPickerView: View {
     @State var questionTextField: String
     @State private var showFeedbackInfo = false
     @Environment(\.dismiss) private var dismiss
+    #if DEBUG
+    @Environment(\.isScreenSnapshot) private var isScreenSnapshot
+    #endif
     @FocusState private var isQuestionFocused: Bool
 
     init(
@@ -168,7 +171,11 @@ struct QuestionPickerView: View {
                 }
             }
             .onAppear {
+                #if DEBUG
+                isQuestionFocused = !isScreenSnapshot
+                #else
                 isQuestionFocused = true
+                #endif
             }
             .background {
                 /// this makes the keyboard to appear with a single animation

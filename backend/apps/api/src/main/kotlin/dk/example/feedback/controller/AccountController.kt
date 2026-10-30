@@ -8,7 +8,6 @@ import dk.example.feedback.payloads.CreateAccountInput
 import dk.example.feedback.payloads.LinkFCMTokenToAccountInput
 import dk.example.feedback.payloads.LogoutInput
 import dk.example.feedback.payloads.ModifyAccountInput
-import dk.example.feedback.payloads.UpdateRoleInput
 import dk.example.feedback.service.AccountService
 import dk.example.feedback.service.BootstrapService
 import dk.example.feedback.model.helpers.normalizedEmail
@@ -63,7 +62,7 @@ class AccountController(
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     fun modifyAccount(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: ModifyAccountInput,
@@ -87,15 +86,6 @@ class AccountController(
         )
     }
 
-    @PutMapping("/role")
-    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
-    fun updateRole(
-        @AuthenticationPrincipal principal: Jwt,
-        @RequestBody input: UpdateRoleInput,
-    ) {
-        firebaseService.setRole(userId = principal.getAccountId(), requestedRole = input.role)
-    }
-
     @PutMapping("/fcm-token")
     @PreAuthorize("isAuthenticated()")
     fun linkFCMTokenToAccount(
@@ -115,7 +105,7 @@ class AccountController(
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}') or hasAuthority('${RoleConstants.PARTICIPANT}')")
+    @PreAuthorize("hasAuthority('${RoleConstants.MANAGER}')")
     fun deleteAccount(
         @AuthenticationPrincipal principal: Jwt,
     ) {

@@ -371,44 +371,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /account/role:
-    put:
-      tags:
-      - Account
-      operationId: updateRole
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateRoleInput"
-        required: true
-      responses:
-        "200":
-          description: OK
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "409":
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
   /account/fcm-token:
     put:
       tags:
@@ -1426,15 +1388,6 @@ components:
           type: string
         phoneNumber:
           type: string
-    UpdateRoleInput:
-      type: object
-      description: Input payload for changing the authenticated account role.
-      properties:
-        role:
-          type: string
-          description: Target role for the account.
-      required:
-      - role
     LinkFCMTokenToAccountInput:
       type: object
       description: Input payload to link an FCM token to the authenticated account.

@@ -46,9 +46,9 @@ public struct AccountSection: Sendable {
         Reduce { state, action in
             switch action {
             case .settingsButtonTap:
+                guard state.bootstrap.role == .manager else { return .none }
                 state.destination = .profileSettings(
                     .init(
-                        role: state.bootstrap.role,
                         accountInfo: state.bootstrap.accountInfo
                     )
                 )
@@ -59,6 +59,7 @@ public struct AccountSection: Sendable {
                 return .send(.delegate(.navigateToSignUp))
                 
             case .deleteAccountButtonTapped:
+                guard state.bootstrap.role == .manager else { return .none }
                 return .send(.delegate(.deleteAccountButtonTapped))
                 
             case .binding:

@@ -17,56 +17,34 @@ public struct ActivityListView: View {
 
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            Group {
-                switch store.presentation {
-                case .overview:
-                    TimelineView(.periodic(from: .now, by: 60)) { context in
-                        ScrollView {
-                            HomeOverviewView(store: store, now: context.date)
-                                .padding()
+            HomeActivitiesView(store: store)
+                .background(LetsGrowLandingGradient().ignoresSafeArea())
+                .navigationTitle("Aktiviteter")
+                .refreshable { await store.send(.refresh).finish() }
+                .toolbar {
+                    if let onProfileButtonTap {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button("Profil", systemImage: "person.crop.circle", action: onProfileButtonTap)
+                                .accessibilityIdentifier("profile_button")
                         }
                     }
-                case .activities:
-                    HomeActivitiesView(store: store)
-                }
-            }
-            .background(LetsGrowLandingGradient().ignoresSafeArea())
-            .navigationTitle(store.presentation == .overview ? "Overblik" : "Aktiviteter")
-            .refreshable { await store.send(.refresh).finish() }
-            .toolbar {
-                if let onProfileButtonTap {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Profil", systemImage: "person.crop.circle", action: onProfileButtonTap)
-                            .accessibilityIdentifier("profile_button")
-                    }
-                }
-                if store.presentation == .activities {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Opret aktivitet", systemImage: "plus") { store.send(.createActivityButtonTap) }
                             .accessibilityIdentifier("my_activity_add_button")
                     }
                 }
-            }
-            .sheet(item: $store.scope(state: \.destination?.manageActivity, action: \.destination.manageActivity)) { activityStore in
-                ManageActivityView(store: activityStore)
-            }
-            .sheet(item: $store.scope(state: \.destination?.quickLook, action: \.destination.quickLook)) { detailStore in
-                NavigationStack {
-                    ActivityDetailView(store: detailStore)
+                .sheet(item: $store.scope(state: \.destination?.manageActivity, action: \.destination.manageActivity)) { activityStore in
+                    ManageActivityView(store: activityStore)
                 }
-                .environment(\.dismissActivitySheet, { store.send(.destination(.dismiss)) })
-                .presentationDetents([.large])
-            }
         } destination: { pathStore in
             switch pathStore.case {
-            case .unreadFeedback:
-                HomeUnreadFeedbackView(store: store)
             case .activityDetail(let detailStore):
                 ActivityDetailView(store: detailStore)
             case .eventDetail(let detailStore):
                 EventDetailFeatureView(store: detailStore)
             }
         }
+        .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
     }
 }
 
@@ -80,7 +58,7 @@ private struct HomeActivitiesView: View {
                     Text("Du har ingen aktiviteter endnu.").supportingTextStyle()
                 }
                 ForEach(store.activities) { activity in
-                    ActivityRowButton(activity: activity) { store.send(.activityTap(activity)) }
+                    ActivityRowButton(activity: activity, now: store.referenceDate ?? .now) { store.send(.activityTap(activity)) }
                 }
             }
             .padding()
@@ -89,29 +67,6 @@ private struct HomeActivitiesView: View {
     }
 }
 
-private struct HomeUnreadFeedbackView: View {
-    let store: StoreOf<ActivityList>
-
-    var body: some View {
-        let overview = HomeOverview(activities: store.activities, now: .now)
-        ScrollView {
-            LazyVStack(spacing: 12) {
-                if overview.unreadSessions.isEmpty {
-                    ContentUnavailableView("Du har læst al feedback", systemImage: "checkmark.circle")
-                }
-                ForEach(overview.unreadSessions) { session in
-                    HomeSessionCardView(session: session, isUpcoming: false) {
-                        store.send(.eventTap(activityId: session.activity.id, eventId: session.event.id))
-                    }
-                }
-            }
-            .padding()
-        }
-        .background(LetsGrowLandingGradient().ignoresSafeArea())
-        .navigationTitle("Ny feedback")
-    }
-}
-
-#Preview("Overblik") {
-    ActivityListView(store: .init(initialState: .init(bootstrap: .init(value: .mock()), presentation: .overview), reducer: { ActivityList() }))
+#Preview("Aktiviteter") {
+    ActivityListView(store: .init(initialState: .init(bootstrap: .init(value: .mock())), reducer: { ActivityList() }))
 }

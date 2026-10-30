@@ -60,13 +60,8 @@ struct APIClientLiveTests {
     @Test
     func `Account related generated inputs are forwarded correctly`() async throws {
         let fcmInput = LockIsolated<Operations.LinkFCMTokenToAccount.Input?>(nil)
-        let roleInput = LockIsolated<Operations.UpdateRole.Input?>(nil)
         let client = APIFixture.makeClient(
             api: MockAPI(
-                updateRoleHandler: { request in
-                    roleInput.setValue(request)
-                    return .ok
-                },
                 linkFCMTokenToAccountHandler: { request in
                     fcmInput.setValue(request)
                     return .ok
@@ -75,19 +70,13 @@ struct APIClientLiveTests {
         )
 
         try await client.linkFCMTokenToAccount("fcm-123")
-        try await client.updateRole(.manager)
 
         guard let capturedFCMInput = fcmInput.value, case .json(let fcmBody) = capturedFCMInput.body else {
             Issue.record("Expected linkFCMTokenToAccount JSON body")
             return
         }
-        guard let capturedRoleInput = roleInput.value, case .json(let roleBody) = capturedRoleInput.body else {
-            Issue.record("Expected updateRole JSON body")
-            return
-        }
 
         #expect(fcmBody.fcmToken == "fcm-123")
-        #expect(roleBody.role == "Manager")
     }
 
     @Test
@@ -176,7 +165,7 @@ struct APIClientLiveTests {
     @Test
     func `Submit feedback forwards mapped payload and updates participant cache`() async throws {
         let input = LockIsolated<Operations.SubmitFeedback.Input?>(nil)
-        let cache = APIClientCache(bootstrap: APIFixture.participantSession())
+        let cache = APIClientCache(bootstrap: APIFixture.anonymousSession())
         let feedback = FeedbackInput(
             type: .emoji(emoji: .veryHappy, comment: "Great"),
             questionId: APIFixture.questionId
@@ -309,7 +298,7 @@ struct APIClientLiveTests {
     @Test
     func `Join event appends the participant event to session`() async throws {
         let input = LockIsolated<Operations.JoinEvent.Input?>(nil)
-        let cache = APIClientCache(bootstrap: APIFixture.participantSession())
+        let cache = APIClientCache(bootstrap: APIFixture.anonymousSession())
         let client = APIFixture.makeClient(
             api: MockAPI(
                 joinEventHandler: { request in
@@ -347,7 +336,7 @@ struct APIClientLiveTests {
 
     @Test
     func `Updated session returns nil without a cached hash`() async throws {
-        let client = APIFixture.makeClient(api: MockAPI(), cache: APIClientCache(bootstrap: Bootstrap.mockParticipant()))
+        let client = APIFixture.makeClient(api: MockAPI(), cache: APIClientCache(bootstrap: Bootstrap.mockAnonymous()))
 
         let result = try await client.getBootstrapUpdate()
 
@@ -419,7 +408,7 @@ struct APIClientLiveTests {
 
     @Test
     func `Manager-only cache mutations throw when manager state is unavailable`() async throws {
-        let cache = APIClientCache(bootstrap: APIFixture.participantSession())
+        let cache = APIClientCache(bootstrap: APIFixture.anonymousSession())
 
         do {
             try await cache.markEventAsSeen(eventId: APIFixture.eventId)
@@ -596,12 +585,12 @@ private enum APIFixture {
         )
     }
 
-    static func participantSession() -> Bootstrap {
+    static func anonymousSession() -> Bootstrap {
         .init(
             participantEvents: [],
             managerData: nil,
             accountInfo: .init(name: "Participant", email: "participant@example.com", phoneNumber: nil),
-            role: .participant
+            role: nil
         )
     }
 
@@ -865,16 +854,13 @@ struct APIClientMappingTests {
     }
 
     @Test
-    func `Bootstrap maps manager participant and anonymous roles`() {
+    func `Bootstrap maps manager and anonymous access`() {
         let dto = APIFixture.managerDataDto()
         let manager = Bootstrap(APIFixture.bootstrapDto(role: "Manager", managerData: dto))
-        let participant = Bootstrap(APIFixture.bootstrapDto(role: "Participant"))
         let anonymous = Bootstrap(APIFixture.bootstrapDto(role: nil))
         #expect(manager.role == .manager)
         #expect(manager.managerData == ManagerData(dto))
         #expect(manager.managerData?.bootstrapHash == APIFixture.sessionHash)
-        #expect(participant.role == .participant)
-        #expect(participant.managerData == nil)
         #expect(anonymous.role == nil)
         #expect(anonymous.participantEvents.isEmpty)
     }

@@ -21,7 +21,6 @@ extension APIClient: TestDependencyKey {
         joinEvent: { _ in .mock() },
         markEventAsSeen: { _ in },
         sendNotification: { _ in },
-        updateRole: { _ in },
         getBootstrapUpdate: { .mock() },
         markNotificationHistoryAsSeen: { }
     )

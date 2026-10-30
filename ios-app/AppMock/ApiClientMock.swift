@@ -75,10 +75,6 @@ extension APIClient {
                 try await Task.sleep(for: .seconds(delay))
                 return ()
             },
-            updateRole: { _ in
-                try await Task.sleep(for: .seconds(delay))
-                return ()
-            },
             getBootstrapUpdate: {
                 try await Task.sleep(for: .seconds(delay))
                 return .mock()

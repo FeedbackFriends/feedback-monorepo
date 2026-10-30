@@ -70,7 +70,6 @@ class FirebaseMockEngine(userId: String) : FirebaseService, FirebaseAdminService
 //    suspend fun getToken(): SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor {
 //        val token = mutex.withLock {
 //            when (role) {
-//                Role.Participant -> mockJwtFactory.participantToken()
 //                Role.Organizer -> mockJwtFactory.organizerToken()
 //                else -> mockJwtFactory.anonymousToken()
 //            }

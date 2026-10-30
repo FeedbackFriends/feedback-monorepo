@@ -43,6 +43,12 @@ jobs:
       - name: Install SwiftLint
         run: brew install swiftlint
 
+      - name: Install screenshot tooling dependencies
+        run: |
+          python3 -m venv "$RUNNER_TEMP/ios-tools"
+          "$RUNNER_TEMP/ios-tools/bin/python" -m pip install -r ios-app/scripts/screenshot-requirements.txt
+          echo "$RUNNER_TEMP/ios-tools/bin" >> "$GITHUB_PATH"
+
       - name: Check lint script behavior
         run: python3 -m unittest discover -s ios-app/scripts/tests -v
 

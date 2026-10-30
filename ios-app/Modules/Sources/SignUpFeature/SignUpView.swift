@@ -69,10 +69,10 @@ public struct SignUpView: View {
 private extension SignUpView {
     var signUpView: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Forbedr aktiviteter")
+            Text("Dine aktiviteter")
                 .largeTitleTextStyle()
                 .foregroundStyle(Color.themeText.gradient)
-            Text("Log ind som mødeejer, eller svar hurtigt med en PIN-kode uden at oprette en konto.")
+            Text("Opret dig og få feedback på dine egne aktiviteter, uanset om det er møder, workshops eller oplæg.")
                 .bodyTextStyle()
                 .foregroundColor(.themeText)
             Button {

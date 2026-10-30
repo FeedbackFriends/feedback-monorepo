@@ -4,6 +4,7 @@ import SwiftUI
 
 struct ActivityCardView: View {
     let activity: Activity
+    var now: Date = .now
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -15,7 +16,7 @@ struct ActivityCardView: View {
 
             PillTagView(activity.events.count == 1 ? "1 session" : "\(activity.events.count) sessioner")
 
-            if let nextEvent = activity.events.filter({ $0.date > Date() }).min(by: { $0.date < $1.date }) {
+            if let nextEvent = activity.events.filter({ $0.date > now }).min(by: { $0.date < $1.date }) {
                 Label {
                     Text("Næste session: \(nextEvent.date.formatted(date: .abbreviated, time: .shortened))")
                 } icon: {
@@ -42,11 +43,12 @@ struct ActivityCardView: View {
 
 struct ActivityRowButton: View {
     let activity: Activity
+    var now: Date = .now
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            ActivityCardView(activity: activity)
+            ActivityCardView(activity: activity, now: now)
         }
         .buttonStyle(.plain)
     }

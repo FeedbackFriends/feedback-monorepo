@@ -84,6 +84,8 @@ private extension EventListView {
 }
 
 private struct EventListItemView: View {
+    @Environment(\.referenceDate) private var referenceDate
+    @Environment(\.calendar) private var calendar
     let event: Event
     let eventTitle: String
 
@@ -145,15 +147,15 @@ private struct EventListItemView: View {
     }
 
     private var sessionTitle: String {
-        if event.date.isToday {
+        if calendar.isDate(event.date, inSameDayAs: referenceDate ?? .now) {
             return "I dag kl. \(event.date.formatted(date: .omitted, time: .shortened))"
         }
 
-        if Calendar.current.isDateInYesterday(event.date) {
+        if calendar.isDate(event.date, inSameDayAs: calendar.date(byAdding: .day, value: -1, to: referenceDate ?? .now)!) {
             return "I går kl. \(event.date.formatted(date: .omitted, time: .shortened))"
         }
 
-        if Calendar.current.isDateInTomorrow(event.date) {
+        if calendar.isDate(event.date, inSameDayAs: calendar.date(byAdding: .day, value: 1, to: referenceDate ?? .now)!) {
             return "I morgen kl. \(event.date.formatted(date: .omitted, time: .shortened))"
         }
 

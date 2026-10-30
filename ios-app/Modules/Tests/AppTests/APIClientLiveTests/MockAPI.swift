@@ -22,9 +22,6 @@ struct MockAPI: APIProtocol {
     var deleteAccountHandler: @Sendable (Operations.DeleteAccount.Input) async throws -> Operations.DeleteAccount.Output = { _ in
         fatalError("MockAPI: deleteAccount unimplemented")
     }
-    var updateRoleHandler: @Sendable (Operations.UpdateRole.Input) async throws -> Operations.UpdateRole.Output = { _ in
-        fatalError("MockAPI: updateRole unimplemented")
-    }
     var linkFCMTokenToAccountHandler: @Sendable (Operations.LinkFCMTokenToAccount.Input) async throws -> Operations.LinkFCMTokenToAccount.Output = { _ in
         fatalError("MockAPI: linkFCMTokenToAccount unimplemented")
     }
@@ -105,9 +102,6 @@ struct MockAPI: APIProtocol {
         try await deleteAccountHandler(input)
     }
 
-    func updateRole(_ input: Operations.UpdateRole.Input) async throws -> Operations.UpdateRole.Output {
-        try await updateRoleHandler(input)
-    }
 
     func linkFCMTokenToAccount(_ input: Operations.LinkFCMTokenToAccount.Input) async throws -> Operations.LinkFCMTokenToAccount.Output {
         try await linkFCMTokenToAccountHandler(input)

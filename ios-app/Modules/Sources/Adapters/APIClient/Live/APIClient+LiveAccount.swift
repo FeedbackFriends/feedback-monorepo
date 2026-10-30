@@ -80,13 +80,5 @@ extension APIClient {
         }
     }
 
-    static func makeUpdateRole(api: APIProtocol) -> @Sendable (Role) async throws -> Void {
-        { role in
-            try await withAuthorization(forceRefreshAfter: true) {
-                _ = try await api.updateRole(.init(body: .json(.init(role: role.rawValue.uppercasingFirst()))))
-                return ()
-            }
-        }
-    }
 
 }

@@ -3,6 +3,8 @@ import SwiftUI
 import DesignSystem
 
 public struct NotificationHistoryView: View {
+    @Environment(\.locale) private var locale
+    @Environment(\.referenceDate) private var referenceDate
     let notificationHistoryItems: [NotificationHistoryItem]
     let activityManagerEventButtonTap: (NotificationHistoryItem) -> Void
     @Environment(\.dismiss) var dismiss
@@ -50,7 +52,7 @@ public struct NotificationHistoryView: View {
                                                     backgroundColor: .themeBlue
                                                 )
                                             }
-                                            Text(item.date.timeAgo())
+                                            Text(item.date.timeAgo(locale, relativeTo: referenceDate ?? .now))
                                                 .captionTextStyle()
                                             Spacer()
                                             

@@ -42,16 +42,14 @@ struct TabbarTests {
     }
 
     @Test
-    func `Anonymous users are moved from manager tabs to feedback`() async {
+    func `Anonymous users keep the activities tab`() async {
         let store = TestStore(initialState: Tabbar.State(
             bootstrap: .init(value: .mockAnonymous()), selectedTab: .activities
         )) {
             Tabbar()
         }
 
-        await store.send(.validateSelectedTab) {
-            $0.selectedTab = .feedback
-        }
+        await store.send(.validateSelectedTab)
     }
 
     @Test
@@ -64,13 +62,17 @@ struct TabbarTests {
     }
 
     @Test
-    func `Sign-up button forwards navigation`() async {
-        let store = TestStore(initialState: Tabbar.State(bootstrap: .init(value: .mockAnonymous()))) {
-            Tabbar()
-        }
+    func `Losing owner access clears activity navigation and keeps the login tab`() async {
+        let bootstrap = Shared(value: Bootstrap.mock())
+        var state = Tabbar.State(bootstrap: bootstrap, selectedTab: .activities)
+        state.activities.path.append(.activityDetail(.init(activityId: Activity.mock().id, bootstrap: bootstrap)))
+        let store = TestStore(initialState: state) { Tabbar() }
 
-        await store.send(.signUpButtonTap)
-        await store.receive(\.delegate, .navigateToSignUp)
+        bootstrap.withLock { $0 = .mockAnonymous() }
+        await store.send(.validateSelectedTab) {
+            $0.activities.path.removeAll()
+        }
+        #expect(store.state.selectedTab == .activities)
     }
 
     @Test

@@ -16,18 +16,19 @@ appId: dk.nicolaidam.letsgrow
 
 # Wait until logged-in manager UI is visible.
 - extendedWaitUntil:
-    visible: "Overblik"
+    visible: "Aktiviteter"
     timeout: 30000
 
-# Open the primary first-activity action on Overblik.
+# Open the activities tab.
+- tapOn: "Aktiviteter"
 
 # Open Create Activity.
 - extendedWaitUntil:
     visible:
-      id: "home_create_first_activity"
+      id: "my_activity_add_button"
     timeout: 10000
 - tapOn:
-    id: "home_create_first_activity"
+    id: "my_activity_add_button"
 
 - extendedWaitUntil:
     visible: "Opret aktivitet"

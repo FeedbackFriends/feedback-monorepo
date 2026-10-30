@@ -39,7 +39,6 @@ public struct APIClient: Sendable {
     @DependencyEndpoint
     public var sendNotification: @Sendable (_ input: SendNotificationInput) async throws -> Void
     @DependencyEndpoint
-    public var updateRole: @Sendable (_ role: Role) async throws -> Void
     public var getBootstrapUpdate: @Sendable () async throws -> Bootstrap?
     public var markNotificationHistoryAsSeen: @Sendable () async throws -> Void
 }

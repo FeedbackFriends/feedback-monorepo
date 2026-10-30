@@ -49,7 +49,6 @@ extension AuthClient {
             signInAnonymously: {
                 await mockAuthEngine.yield(.anonymous)
             },
-            fetchCustomRole: { .manager },
             googleLogin: {
                 await mockAuthEngine.yield(.authenticated)
             },

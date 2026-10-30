@@ -50,3 +50,6 @@ skills-lock.json
 .env
 firebase-debug.log
 scripts/tests/__pycache__/
+
+# Generated iOS screenshots and visual review gallery
+/screenshots/

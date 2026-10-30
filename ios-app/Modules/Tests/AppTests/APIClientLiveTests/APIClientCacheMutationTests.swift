@@ -11,7 +11,7 @@ struct APIClientCacheMutationTests {
 
     @Test
     func `Manager-only mutations throw when manager data is unavailable`() async throws {
-        let cache = APIClientCache(bootstrap: Self.participantBootstrap)
+        let cache = APIClientCache(bootstrap: Self.anonymousBootstrap)
 
         let mutations: [(String, @Sendable (APIClientCache) async throws -> Void)] = [
             ("deleteActivity", { cache in try await cache.deleteActivity(Self.activityId) }),
@@ -212,11 +212,11 @@ private extension APIClientCacheMutationTests {
     static let thirdNotificationId = UUID(uuidString: "00000000-0000-0000-0000-000000000008")!
     static let bootstrapHash = UUID(uuidString: "00000000-0000-0000-0000-000000000009")!
 
-    static let participantBootstrap = Bootstrap(
+    static let anonymousBootstrap = Bootstrap(
         participantEvents: [],
         managerData: nil,
         accountInfo: .init(name: "Participant", email: "participant@example.com", phoneNumber: nil),
-        role: .participant
+        role: nil
     )
 
     static func feedback(seen: Bool) -> Feedback {

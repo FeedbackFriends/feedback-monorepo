@@ -4,6 +4,9 @@ import Foundation
 import SwiftUI
 
 public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
+    #if DEBUG
+    @Environment(\.isScreenSnapshot) private var isScreenSnapshot
+    #endif
     @Bindable var store: StoreOf<FeedbackFlowCoordinator>
     @FocusState var commentTextfieldFocused: Bool
     @ViewBuilder var principalToolbarItem: () -> PrincipalToolbarItem
@@ -26,9 +29,74 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
     }
     
     public var body: some View {
+        navigation
+
+        .overlay(alignment: .bottom) {
+            bottomBar
+        }
+        .animation(.smooth, value: commentTextfieldFocused)
+        .synchronize($store.commentTextfieldFocused, self.$commentTextfieldFocused)
+        .sheet(
+            item: $store.scope(
+                state: \.destination?.ratingPrompt,
+                action: \.destination.ratingPrompt
+            ),
+            onDismiss: {
+                store.send(.ratingPromptDismissed)
+            },
+            content: { _ in
+                RatingAlertView()
+                    .presentationDetents([.height(300)])
+            }
+        )
+        .sensoryFeedback(.selection, trigger: store.questionIndex)
+        .statusBar(hidden: true)
+        .successOverlay(
+            message: "Tak for din feedback",
+            show: $store.presentSuccessOverlay,
+            enableAutomaticDismissal: false
+        )
+        .sheet(
+            item: $store.scope(state: \.destination?.showEventInfo, action: \.destination.showEventInfo),
+            content: { _ in
+                EventInfoView(
+                    eventTitle: store.title,
+                    ownerName: store.ownerInfo.name,
+                    ownerEmail: store.ownerInfo.email,
+                    ownerphoneNumber: store.ownerInfo.phoneNumber,
+                    date: store.date
+                )
+                .presentationDetents([.medium])
+            }
+        )
+
+        .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
+    }
+
+    @ViewBuilder
+    private var navigation: some View {
+        #if DEBUG
+        if isScreenSnapshot {
+            NavigationStack {
+                questionScreen(Store(initialState: store.path[store.questionIndex]) { EmptyReducer() })
+            }
+        } else {
+            liveNavigation
+        }
+        #else
+        liveNavigation
+        #endif
+    }
+
+    private var liveNavigation: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             ProgressView()
         } destination: { questionStore in
+            questionScreen(questionStore)
+        }
+    }
+
+    private func questionScreen(_ questionStore: StoreOf<FeedbackFlowCoordinator.Path>) -> some View {
             VStack(spacing: 0) {
                 questionView
                     .padding(.top, 20)
@@ -107,49 +175,8 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
                 .ignoresSafeArea()
             )
             .navigationBarBackButtonHidden(true)
-        }
-        .overlay(alignment: .bottom) {
-            bottomBar
-        }
-        .animation(.smooth, value: commentTextfieldFocused)
-        .synchronize($store.commentTextfieldFocused, self.$commentTextfieldFocused)
-        .sheet(
-            item: $store.scope(
-                state: \.destination?.ratingPrompt,
-                action: \.destination.ratingPrompt
-            ),
-            onDismiss: {
-                store.send(.ratingPromptDismissed)
-            },
-            content: { _ in
-                RatingAlertView()
-                    .presentationDetents([.height(300)])
-            }
-        )
-        .sensoryFeedback(.selection, trigger: store.questionIndex)
-        .statusBar(hidden: true)
-        .successOverlay(
-            message: "Tak for din feedback",
-            show: $store.presentSuccessOverlay,
-            enableAutomaticDismissal: false
-        )
-        .sheet(
-            item: $store.scope(state: \.destination?.showEventInfo, action: \.destination.showEventInfo),
-            content: { _ in
-                EventInfoView(
-                    eventTitle: store.title,
-                    ownerName: store.ownerInfo.name,
-                    ownerEmail: store.ownerInfo.email,
-                    ownerphoneNumber: store.ownerInfo.phoneNumber,
-                    date: store.date
-                )
-                .presentationDetents([.medium])
-            }
-        )
-        
-        .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
     }
-    
+
     var questionView: some View {
         VStack {
             Text("\(store.questionIndex + 1) af \(store.questions.count)")

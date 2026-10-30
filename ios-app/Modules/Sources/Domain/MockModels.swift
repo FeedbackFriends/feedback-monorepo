@@ -61,7 +61,7 @@ public extension FeedbackEventDto {
     )
 }
 
-public extension ParticipantSession {
+public extension AnonymousSession {
     static let mock = Self(
         participantEvents: .init(uniqueElements: (0...100).map { _ in .mock() }),
         accountInfo: .init(name: "Nicolai", email: "Nicolai@letsgrow.dk", phoneNumber: "88888888")
@@ -142,14 +142,6 @@ public extension Bootstrap {
             accountInfo: .init(name: nil, email: nil, phoneNumber: nil), role: nil
         )
     }
-    static func mockParticipant() -> Self {
-        Self(
-            participantEvents: .init(uniqueElements: []),
-            accountInfo: .init(name: nil, email: nil, phoneNumber: nil),
-            role: .participant
-        )
-    }
-    
 }
 
 public extension ParticipantEvent {

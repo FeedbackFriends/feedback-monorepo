@@ -76,7 +76,7 @@ class BootstrapService(
                 )
             }
 
-            Role.Participant, null -> null
+            null -> null
         }
         return BootstrapDto(
             role = role,

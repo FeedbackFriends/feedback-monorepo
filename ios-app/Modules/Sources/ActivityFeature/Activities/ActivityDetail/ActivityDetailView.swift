@@ -18,7 +18,6 @@ struct ActivityDetailView: View {
                     )
             }
         }
-        .modifier(ActivitySheetCloseButtonModifier())
         .sheet(
             item: $store.scope(
                 state: \.destination?.showDeleteConfirmation,

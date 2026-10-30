@@ -48,6 +48,9 @@ struct MeetingQualityCardView: View {
 }
 
 struct MeetingQualityLineChartView: View {
+    #if DEBUG
+    @Environment(\.isScreenSnapshot) private var isScreenSnapshot
+    #endif
     let points: [MeetingQualityPoint]
     let onPointTap: (MeetingQualityPoint) -> Void
     @State private var selectedPointId: MeetingQualityPoint.ID?
@@ -109,6 +112,17 @@ struct MeetingQualityLineChartView: View {
                 .foregroundStyle(Color.themeChartHighlighted.gradient)
                 .symbolSize(150)
             }
+        }
+        .chartPlotStyle { plot in
+            #if DEBUG
+            if isScreenSnapshot {
+                plot.drawingGroup(opaque: false, colorMode: .nonLinear)
+            } else {
+                plot
+            }
+            #else
+            plot
+            #endif
         }
         .chartOverlay { proxy in
             GeometryReader { geometry in

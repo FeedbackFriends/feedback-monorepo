@@ -17,7 +17,7 @@ public struct ManagerSession: Equatable, Sendable {
     }
 }
 
-public struct ParticipantSession: Equatable, Sendable {
+public struct AnonymousSession: Equatable, Sendable {
     public var participantEvents: IdentifiedArrayOf<ParticipantEvent>
     public var accountInfo: AccountInfo
     public init(
@@ -49,18 +49,11 @@ public struct Bootstrap: Equatable, Sendable {
 
     public enum Account: Equatable, Sendable {
         case manager(ManagerSession)
-        case participant(ParticipantSession)
+        case anonymous(AnonymousSession)
     }
 
     public var account: Account {
         switch role {
-        case .participant:
-            return .participant(
-                .init(
-                    participantEvents: self.participantEvents,
-                    accountInfo: accountInfo
-                )
-            )
         case .manager:
             return .manager(
                 .init(
@@ -70,7 +63,7 @@ public struct Bootstrap: Equatable, Sendable {
                 )
             )
         case .none:
-            return .participant(
+            return .anonymous(
                 .init(
                     participantEvents: self.participantEvents,
                     accountInfo: accountInfo
@@ -83,7 +76,7 @@ public struct Bootstrap: Equatable, Sendable {
         switch self.account {
         case .manager(let managerSession):
             return managerSession.managerData.notificationHistory
-        case .participant:
+        case .anonymous:
             return .init(items: [], unseenTotal: 0)
         }
     }
@@ -107,19 +100,6 @@ public struct Bootstrap: Equatable, Sendable {
             total + activity.events.reduce(0) { eventTotal, event in
                 eventTotal + (event.overallFeedbackSummary?.unseenResponses ?? 0)
             }
-        }
-    }
-}
-
-public enum UserType: Equatable, Sendable {
-    case manager(managerData: ManagerData, accountInfo: AccountInfo)
-    case participant(accountInfo: AccountInfo)
-    public var role: Role? {
-        switch self {
-        case .manager:
-            return Role.manager
-        case .participant:
-            return Role.participant
         }
     }
 }

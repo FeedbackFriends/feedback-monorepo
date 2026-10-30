@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+"""Capture the iOS catalog through native Xcode MCP, publish, and open its gallery."""
+import argparse
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+APP = Path(__file__).resolve().parents[1]
+
+
+class Xcode:
+    def __enter__(self):
+        self.process = subprocess.Popen(
+            ['xcrun', 'mcpbridge'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
+        self.sequence = 0
+        self.request('initialize', {
+            'protocolVersion': '2024-11-05', 'capabilities': {},
+            'clientInfo': {'name': 'letsgrow-screenshots', 'version': '1'}})
+        self.send({'jsonrpc': '2.0', 'method': 'notifications/initialized'})
+        return self
+
+    def __exit__(self, *args):
+        self.process.terminate()
+        self.process.wait()
+
+    def send(self, message):
+        self.process.stdin.write(json.dumps(message) + '\n')
+        self.process.stdin.flush()
+
+    def request(self, method, params):
+        self.sequence += 1
+        self.send({'jsonrpc': '2.0', 'id': self.sequence, 'method': method, 'params': params})
+        for line in self.process.stdout:
+            response = json.loads(line)
+            if response.get('id') != self.sequence:
+                continue
+            if 'error' in response:
+                raise RuntimeError(response['error']['message'])
+            return response['result']
+        raise RuntimeError('Xcode bridge closed. Open Xcode and enable its MCP access.')
+
+    def call(self, name, **arguments):
+        print(f'Xcode: {name}…', flush=True)
+        result = self.request('tools/call', {'name': name, 'arguments': arguments})
+        if result.get('isError'):
+            raise RuntimeError(json.dumps(result))
+        if 'structuredContent' in result:
+            return result['structuredContent']
+        return json.loads(next(item['text'] for item in result['content'] if item['type'] == 'text'))
+
+
+def run(*command):
+    subprocess.run([str(part) for part in command], check=True)
+
+
+def capture():
+    with Xcode() as xcode:
+        opened = xcode.call('XcodeOpenWorkspace', path=str(APP / 'Feedback.xcodeproj'))
+        workspace = opened['workspaceIdentifier']
+        arguments = {'workspaceIdentifier': workspace}
+        xcode.call('XcodeSwitchScheme', **arguments, schemeName='Feedback Localhost')
+        destinations = xcode.call('XcodeListRunDestinations', **arguments)['destinations']
+        active = next((item for item in destinations if item['isActive']), None)
+        if not active or not active['isSimulator'] or not active['isEligible']:
+            raise RuntimeError('Select an eligible iPhone simulator in Xcode, then run again.')
+        print(f'Simulator: {active["displayTitle"]}', flush=True)
+        xcode.call('XcodeSwitchTestPlan', **arguments, testPlanName='ScreenSnapshots')
+        try:
+            build = xcode.call('BuildProject', **arguments, buildForTesting=True)
+            successful = any(word in build['buildResult'].lower() for word in ('succeeded', 'successfully'))
+            if build['errors'] or not successful:
+                raise RuntimeError(f'Build failed: {build}')
+            tests = xcode.call('RunSomeTests', **arguments, tests=[
+                {'targetName': 'ScreenSnapshotTests',
+                 'testIdentifier': 'ScreenSnapshotTests/testCaptureCatalog()'}])
+            print(tests['summary'], flush=True)
+            counts = tests['counts']
+            if counts['total'] != 1 or counts['passed'] != 1:
+                raise RuntimeError(f'Capture failed; no images published. See {tests["fullSummaryPath"]}')
+        finally:
+            xcode.call('XcodeSwitchTestPlan', **arguments, testPlanName='UnitTests')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--no-open', action='store_true', help='Generate the gallery without opening a browser')
+    args = parser.parse_args()
+    python = APP / '.build/screenshot-tools/bin/python'
+    if not python.exists():
+        run(sys.executable, '-m', 'venv', python.parents[1])
+        run(python, '-m', 'pip', 'install', '-r', APP / 'scripts/screenshot-requirements.txt')
+    run(sys.executable, APP / 'scripts/screen-catalog.py', '--check')
+    capture()
+    run(sys.executable, APP / 'scripts/screen-catalog.py', '--publish', APP.parent / 'screenshots/capture')
+    run(python, APP / 'scripts/review-preview-catalog.py')
+    gallery = APP.parent / 'screenshots/index.html'
+    print(f'\nScreenshots: {APP.parent / "screenshots/capture"}\nGallery: {gallery}', flush=True)
+    if not args.no_open:
+        run('open', gallery)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (RuntimeError, OSError, subprocess.CalledProcessError) as error:
+        print(f'Error: {error}', file=sys.stderr)
+        sys.exit(1)

@@ -8,7 +8,5 @@ class MockJwtFactory(private val userId: String) {
 
     fun anonymousToken(): String = buildToken(role = null)
 
-    fun participantToken(): String = buildToken(role = Role.Participant)
-
     fun managerToken(): String = buildToken(role = Role.Manager)
 }

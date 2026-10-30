@@ -174,7 +174,7 @@ class E2ETest(
 
         mockMvc.perform(
             MockMvcRequestBuilders.get("/bootstrap")
-                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).participantToken()}")
+                .header("Authorization", "Bearer ${MockJwtFactory(inviteeId).managerToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
@@ -209,31 +209,52 @@ class E2ETest(
     }
 
     @Test
-    fun `account post uses requested participant role for bootstrap even when jwt role is manager`() {
-        val accountId = "account-role-override-participant"
-
-        val response = mockMvc.perform(
+    fun `anonymous accounts retain feedback access without manager data or owner permissions`() {
+        val accountId = "anonymous-feedback-access"
+        val token = MockJwtFactory(accountId).anonymousToken()
+        mockMvc.perform(
             MockMvcRequestBuilders.post("/account")
-                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)))
-                .header("Authorization", "Bearer ${MockJwtFactory(accountId).managerToken()}")
+                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = null, fcmToken = null)))
+                .header("Authorization", "Bearer $token")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andReturn()
+            .andExpect(jsonPath("$.role").isEmpty)
+            .andExpect(jsonPath("$.managerData").isEmpty)
 
-        val body = objectMapper.readTree(response.response.contentAsString)
-        assertEquals(Role.Participant.value, body.get("role").asText())
-        assertEquals(true, body.get("managerData").isNull)
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/activity")
+                .content(objectMapper.writeValueAsString(ActivityInput(
+                    title = "Not allowed", questions = emptyList(),
+                    runMode = ActivityRunMode.MANUAL, sendEmails = false,
+                )))
+                .header("Authorization", "Bearer $token")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isForbidden)
+
+        val managerId = "owner-for-anonymous-feedback"
+        createAccount(managerId)
+        val activityId = createActivity(managerId)
+        val event = createEvent(
+            managerId = managerId, activityId = activityId,
+            date = OffsetDateTime.parse("2026-04-03T09:00:00+00:00"), location = "Copenhagen",
+        )
+        submitEmojiFeedback(
+            participantId = accountId, pinCode = event.get("pinCode").asText(),
+            questionId = UUID.fromString(event.get("questionsSnapshot").get(0).get("id").asText()),
+            token = token,
+        )
+        assertTrue(eventRepo.accountDidSubmitFeedbackForEvent(UUID.fromString(event.get("id").asText()), accountId))
     }
 
     @Test
-    fun `account post uses requested manager role for bootstrap even when jwt role is participant`() {
+    fun `account post uses requested manager role for bootstrap even when jwt role is anonymous`() {
         val accountId = "account-role-override-manager"
 
         val response = mockMvc.perform(
             MockMvcRequestBuilders.post("/account")
                 .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Manager, fcmToken = null)))
-                .header("Authorization", "Bearer ${MockJwtFactory(accountId).participantToken()}")
+                .header("Authorization", "Bearer ${MockJwtFactory(accountId).anonymousToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
@@ -420,15 +441,15 @@ class E2ETest(
     private fun createParticipantAccount(accountId: String, email: String) {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/account")
-                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Participant, fcmToken = null)))
-                .header("Authorization", "Bearer ${MockJwtFactory(accountId).participantToken()}")
+                .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Manager, fcmToken = null)))
+                .header("Authorization", "Bearer ${MockJwtFactory(accountId).managerToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk)
 
         mockMvc.perform(
             MockMvcRequestBuilders.put("/account")
                 .content(objectMapper.writeValueAsString(ModifyAccountInput(name = null, email = email, phoneNumber = null)))
-                .header("Authorization", "Bearer ${MockJwtFactory(accountId).participantToken()}")
+                .header("Authorization", "Bearer ${MockJwtFactory(accountId).managerToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk)
     }
@@ -549,7 +570,10 @@ class E2ETest(
             .also { require(it.get("location").asText() == location) }
     }
 
-    private fun submitEmojiFeedback(participantId: String, pinCode: String, questionId: UUID) {
+    private fun submitEmojiFeedback(
+        participantId: String, pinCode: String, questionId: UUID,
+        token: String = MockJwtFactory(participantId).managerToken(),
+    ) {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/feedback/submit")
                 .content(
@@ -570,7 +594,7 @@ class E2ETest(
                         )
                     )
                 )
-                .header("Authorization", "Bearer ${MockJwtFactory(participantId).participantToken()}")
+                .header("Authorization", "Bearer $token")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk)
     }
@@ -596,7 +620,7 @@ class E2ETest(
                         )
                     )
                 )
-                .header("Authorization", "Bearer ${MockJwtFactory(participantId).participantToken()}")
+                .header("Authorization", "Bearer ${MockJwtFactory(participantId).managerToken()}")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk)
     }

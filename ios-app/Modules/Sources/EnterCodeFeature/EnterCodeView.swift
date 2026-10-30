@@ -40,7 +40,7 @@ private extension EnterCodeView {
                             new == true
                         }
                         .frame(maxWidth: Constants.maxWidthForLargeDevices)
-                    Button("Svar på feedback") {
+                    Button("Start") {
                         store.send(.startFeedbackButtonTap)
                     }
                     .disabled(store.disableStartFeedbackButton)
