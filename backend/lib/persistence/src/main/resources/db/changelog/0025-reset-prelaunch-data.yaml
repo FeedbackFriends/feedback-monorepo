@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0025-reset-prelaunch-data
+      author: codex
+      comment: Owner-authorized one-time prelaunch reset; preserve Liquibase history so subsequent starts retain new data.
+      changes:
+        - delete:
+            tableName: feedback
+        - delete:
+            tableName: notification_history
+        - delete:
+            tableName: new_feedback_notification
+        - delete:
+            tableName: fcm_token
+        - delete:
+            tableName: event_participant
+        - delete:
+            tableName: activity_invite
+        - delete:
+            tableName: pin_code
+        - delete:
+            tableName: question
+        - delete:
+            tableName: event
+        - delete:
+            tableName: activity
+        - delete:
+            tableName: account
+        - delete:
+            tableName: mail_listener_state
+        - delete:
+            tableName: zoho_processed_message
