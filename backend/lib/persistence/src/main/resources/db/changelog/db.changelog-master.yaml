@@ -91,3 +91,6 @@ databaseChangeLog:
   - include:
       file: 0023-add-activity-email-prefix.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0024-drop-activity-agenda.yaml
+      relativeToChangelogFile: true

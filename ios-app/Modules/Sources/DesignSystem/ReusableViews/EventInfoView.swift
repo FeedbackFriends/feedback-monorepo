@@ -3,7 +3,6 @@ import SwiftUI
 public struct EventInfoView: View {
     
     let eventTitle: String
-    let eventAgenda: String?
     let ownerName: String?
     let ownerEmail: String?
     let ownerphoneNumber: String?
@@ -11,14 +10,12 @@ public struct EventInfoView: View {
     
     public init(
         eventTitle: String,
-        eventAgenda: String?,
         ownerName: String?,
         ownerEmail: String?,
         ownerphoneNumber: String?,
         date: Date
     ) {
         self.eventTitle = eventTitle
-        self.eventAgenda = eventAgenda
         self.ownerName = ownerName
         self.ownerEmail = ownerEmail
         self.ownerphoneNumber = ownerphoneNumber
@@ -31,13 +28,6 @@ public struct EventInfoView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
-                    if let eventAgenda {
-                        Text("Agenda")
-                            .padding(.top, 8)
-                            .rowTitleTextStyle()
-                        Text(eventAgenda)
-                            .supportingTextStyle()
-                    }
                     Text("Dato")
                         .rowTitleTextStyle()
                     Text(date.formatted(date: Date.FormatStyle.DateStyle.abbreviated, time: .omitted))
@@ -85,7 +75,6 @@ public struct EventInfoView: View {
 #Preview("All data") {
     EventInfoView(
         eventTitle: "Title",
-        eventAgenda: "Agenda",
         ownerName: "Owner name",
         ownerEmail: "Owner email",
         ownerphoneNumber: "Owner phone",
@@ -96,7 +85,6 @@ public struct EventInfoView: View {
 #Preview("Some owner data") {
     EventInfoView(
         eventTitle: "Title",
-        eventAgenda: "Agenda",
         ownerName: "Owner name",
         ownerEmail: nil,
         ownerphoneNumber: nil,
@@ -107,7 +95,6 @@ public struct EventInfoView: View {
 #Preview("No owner data") {
     EventInfoView(
         eventTitle: "Title",
-        eventAgenda: "Agenda",
         ownerName: nil,
         ownerEmail: nil,
         ownerphoneNumber: nil,

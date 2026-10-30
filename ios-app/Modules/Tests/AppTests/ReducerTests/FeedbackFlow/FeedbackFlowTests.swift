@@ -18,7 +18,6 @@ struct FeedbackFlowTests {
         #expect(store.state.date == session.date)
         #expect(store.state.ownerInfo == session.ownerInfo)
         #expect(store.state.questionIndex == 0)
-        #expect(store.state.agenda == session.agenda)
     }
     
     @Test

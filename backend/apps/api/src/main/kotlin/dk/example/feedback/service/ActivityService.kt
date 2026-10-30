@@ -20,7 +20,6 @@ class ActivityService(
     fun createActivity(input: ActivityInput, jwt: Jwt): ActivityDto {
         val activity = activityRepo.persistActivity(
             title = input.title,
-            agenda = input.agenda,
             runMode = input.runMode,
             sendEmails = input.sendEmails,
             questions = input.questions.map {
@@ -41,7 +40,6 @@ class ActivityService(
         activityRepo.updateActivity(
             activityId = activityId,
             title = input.title,
-            agenda = input.agenda,
             runMode = input.runMode,
             sendEmails = input.sendEmails,
             questions = input.questions.map {

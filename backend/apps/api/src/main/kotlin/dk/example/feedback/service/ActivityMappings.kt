@@ -40,7 +40,6 @@ fun ActivityEntity.toActivityDto(
     return ActivityDto(
         id = id,
         title = title,
-        agenda = agenda,
         activityEmail = "$emailPrefix@letsgrow.dk",
         owner = OwnerDto(
             id = manager.id,

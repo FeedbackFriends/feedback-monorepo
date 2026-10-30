@@ -14,7 +14,6 @@ class ActivityDao(id: EntityID<UUID>) : CommonColumns<ActivityEntity>(id, Activi
     companion object : BaseCompanion<ActivityEntity, ActivityDao>(ActivityTable)
 
     var title by ActivityTable.title
-    var agenda by ActivityTable.agenda
     var emailPrefix by ActivityTable.emailPrefix
     var runMode by ActivityTable.runMode
     var sendEmails by ActivityTable.sendEmails
@@ -26,7 +25,6 @@ class ActivityDao(id: EntityID<UUID>) : CommonColumns<ActivityEntity>(id, Activi
         return ActivityEntity(
             id = id.value,
             title = title,
-            agenda = agenda,
             emailPrefix = emailPrefix,
             runMode = runMode,
             sendEmails = sendEmails,

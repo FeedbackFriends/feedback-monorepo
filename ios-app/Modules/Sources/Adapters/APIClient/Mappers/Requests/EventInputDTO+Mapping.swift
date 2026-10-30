@@ -37,7 +37,6 @@ public extension Components.Schemas.ActivityInput {
     init(legacyEvent event: EventInput) {
         self.init(
             title: event.title,
-            agenda: event.agenda,
             questions: event.questions.map(Components.Schemas.QuestionInput.init),
             runMode: .manual,
             invitedEmails: [],

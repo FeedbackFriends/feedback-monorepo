@@ -138,7 +138,6 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
             content: { _ in
                 EventInfoView(
                     eventTitle: store.title,
-                    eventAgenda: store.agenda,
                     ownerName: store.ownerInfo.name,
                     ownerEmail: store.ownerInfo.email,
                     ownerphoneNumber: store.ownerInfo.phoneNumber,

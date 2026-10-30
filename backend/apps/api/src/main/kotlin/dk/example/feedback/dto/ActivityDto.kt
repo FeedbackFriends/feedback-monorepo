@@ -19,7 +19,6 @@ data class ActivityDto(
     val id: UUID,
     @field:Schema(description = "Display title shown to managers and participants.")
     val title: String,
-    val agenda: String?,
     @field:Schema(description = "Calendar invite email address for creating events under this activity.")
     val activityEmail: String,
     val owner: OwnerDto,

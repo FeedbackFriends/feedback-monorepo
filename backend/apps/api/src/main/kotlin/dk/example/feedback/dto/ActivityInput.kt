@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class ActivityInput(
     @field:Schema(description = "Activity title shown in manager and participant views.")
     val title: String,
-    val agenda: String?,
     @field:Schema(description = "Ordered list of activity questions.")
     val questions: List<QuestionInput>,
     @field:Schema(description = "Run mode controlling event participation behavior.")

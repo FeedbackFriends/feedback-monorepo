@@ -22,7 +22,6 @@ public struct ManageActivity: Sendable {
         var activityId: UUID?
         var originalQuestionIds: Set<UUID> = []
         var title = ""
-        var description = ""
         var selectedTemplate: FeedbackTemplate?
         var questions: [EventInput.QuestionInput] = []
         var path: [Step] = []
@@ -44,7 +43,6 @@ public struct ManageActivity: Sendable {
             state.activityId = activity.id
             state.originalQuestionIds = Set(activity.questions.map(\.id))
             state.title = activity.title
-            state.description = activity.agenda ?? ""
             state.questions = activity.questions.map {
                 EventInput.QuestionInput(
                     id: $0.id,
@@ -121,7 +119,6 @@ public struct ManageActivity: Sendable {
             guard hasValidInput else { return nil }
             return ActivityInput(
                 title: title.trimmingCharacters(in: .whitespacesAndNewlines),
-                agenda: description.nilIfBlank,
                 questions: questions,
                 runMode: .automatic,
                 invitedEmails: sendEmails ? participants : [],

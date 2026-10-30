@@ -14,8 +14,7 @@ public struct EventDetailFeatureView: View {
         Group {
             if let event = store.event {
                 DetailSectionView(
-                    detail: event,
-                    agenda: store.activity?.agenda
+                    detail: event
                 )
             } else {
                 EmptyStateView(

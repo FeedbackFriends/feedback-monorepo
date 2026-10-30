@@ -699,13 +699,12 @@ struct APIClientMappingTests {
 
     @Test
     func `Legacy event input maps to activity configuration`() {
-        let input = EventInput(title: "Weekly retro", agenda: "Agenda", questions: [
+        let input = EventInput(title: "Weekly retro", questions: [
             .init(questionText: "How did it go?", feedbackType: .emoji),
             .init(questionText: "What should improve?", feedbackType: .comment)
         ])
         let dto = Components.Schemas.ActivityInput(legacyEvent: input)
         #expect(dto.title == input.title)
-        #expect(dto.agenda == input.agenda)
         #expect(dto.invitedEmails.isEmpty)
         #expect(dto.questions.map(\.questionText) == input.questions.map(\.questionText))
         #expect(dto.questions[0].feedbackType == .emoji)

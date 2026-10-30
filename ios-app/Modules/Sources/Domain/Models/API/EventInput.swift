@@ -3,7 +3,6 @@ import Utility
 
 public struct EventInput: Equatable, Sendable {
     public var title: String
-    public var agenda: String?
     public var date: Date
     public var durationInMinutes: Int
     public var location: String?
@@ -23,14 +22,12 @@ public struct EventInput: Equatable, Sendable {
     
     public init(
         title: String = "",
-        agenda: String? = nil,
         date: Date = Date().roundedUpcoming5Min(),
         durationInMinutes: Int = 30,
         location: String? = nil,
         questions: [QuestionInput] = []
     ) {
         self.title = title
-        self.agenda = agenda
         self.date = date
         self.durationInMinutes = durationInMinutes
         self.location = location
@@ -44,7 +41,6 @@ public extension EventInput {
     ) {
         self.init(
             title: activity.title,
-            agenda: activity.agenda,
             date: activity.date,
             durationInMinutes: activity.durationInMinutes,
             location: activity.location,

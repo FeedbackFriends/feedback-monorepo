@@ -9,44 +9,6 @@ private func nextDeterministicUUID() -> UUID {
     return uuid
 }
 
-public let mockAgenda =
-    """
-    1. Opening Remarks (5 minutes)
-    2. Team Member Updates (15 minutes)
-        - Progress since last meeting
-        - Roadblocks and challenges
-    3. Review of Action Items (10 minutes)
-        - Updates on assigned tasks
-    """
-
-public func generateAgenda() -> String? {
-    // 30% chance the agenda is nil
-    if Bool.random() && Bool.random() {
-        return nil
-    }
-    
-    // Generate a random agenda
-    let agendaItems = [
-        ("Opening Remarks", 5),
-        ("Team Member Updates", 15),
-        ("Review of Action Items", 10),
-        ("Project Updates", 20),
-        ("Brainstorming Session", 25),
-        ("Problem-Solving Workshop", 15),
-        ("Closing Remarks", 5)
-    ]
-    
-    let numberOfItems = Int.random(in: 2...5) // Random number of agenda items
-    let selectedItems = agendaItems.shuffled().prefix(numberOfItems)
-    
-    var agenda = ""
-    for (index, item) in selectedItems.enumerated() {
-        agenda += "\(index + 1). \(item.0) (\(item.1) minutes)\n"
-    }
-    
-    return agenda.trimmingCharacters(in: .whitespacesAndNewlines)
-}
-
 public func generateRandomDurationInMinutes() -> Int {
     Int.random(in: 0...2400)
 }
@@ -260,7 +222,6 @@ public extension Activity {
             id: nextDeterministicUUID(),
             title: generateFeedbackEventTitle(),
             activityEmail: "1234@letsgrow.dk",
-            agenda: generateAgenda(),
             date: generateRandomDate(),
             pinCode: generateRandomPin(),
             durationInMinutes: Int.random(in: 0...2400),
@@ -399,7 +360,6 @@ public extension Activity {
         id: nextDeterministicUUID(),
         title: "Standup Meeting",
         activityEmail: "1234@letsgrow.dk",
-        agenda: mockAgenda,
         date: .init(timeIntervalSince1970: 0),
         pinCode: PinCode(value: "1234"),
         durationInMinutes: 30,

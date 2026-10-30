@@ -34,7 +34,6 @@ class ActivityRepo {
 
     fun persistActivity(
         title: String,
-        agenda: String?,
         runMode: ActivityRunMode,
         sendEmails: Boolean,
         questions: List<ActivityQuestionUpsert>,
@@ -47,7 +46,6 @@ class ActivityRepo {
             ?: throw IllegalStateException("No activity email addresses available")
         val activity = ActivityDao.new {
             this.title = title
-            this.agenda = agenda
             this.emailPrefix = emailPrefix
             this.runMode = runMode
             this.sendEmails = sendEmails
@@ -61,7 +59,6 @@ class ActivityRepo {
     fun updateActivity(
         activityId: UUID,
         title: String,
-        agenda: String?,
         runMode: ActivityRunMode,
         sendEmails: Boolean,
         questions: List<ActivityQuestionUpsert>,
@@ -74,7 +71,6 @@ class ActivityRepo {
         }
         activity.apply {
             this.title = title
-            this.agenda = agenda
             this.runMode = runMode
             this.sendEmails = sendEmails
         }
@@ -105,12 +101,10 @@ class ActivityRepo {
     fun createMailListenerActivity(
         managerId: String,
         title: String,
-        agenda: String?,
         invitedEmails: List<String>,
     ): ActivityEntity {
         return persistActivity(
             title = title,
-            agenda = agenda,
             runMode = ActivityRunMode.AUTOMATIC,
             sendEmails = false,
             questions = emptyList(),

@@ -8,7 +8,7 @@ import Utility
 public struct ManageActivityView: View {
     @Bindable var store: StoreOf<ManageActivity>
     @Environment(\.dismiss) private var dismiss
-    private enum Field: Hashable { case title, agenda }
+    private enum Field: Hashable { case title }
     @FocusState private var focusedField: Field?
 
     public init(store: StoreOf<ManageActivity>) {
@@ -172,17 +172,6 @@ private extension ManageActivityView {
                 text: $store.title,
                 field: .title,
                 accessibilityIdentifier: "create_activity_title_input"
-            )
-
-            sectionDivider
-
-            inputField(
-                title: "Kontekst eller agenda",
-                prompt: "Skriv kontekst, agenda eller formål (valgfrit)",
-                text: $store.description,
-                field: .agenda,
-                axis: .vertical,
-                lineLimit: 2...4
             )
         }
     }

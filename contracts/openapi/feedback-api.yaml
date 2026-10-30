@@ -1263,8 +1263,6 @@ components:
         title:
           type: string
           description: Activity title shown in manager and participant views.
-        agenda:
-          type: string
         questions:
           type: array
           description: Ordered list of activity questions.
@@ -1323,8 +1321,6 @@ components:
         title:
           type: string
           description: Display title shown to managers and participants.
-        agenda:
-          type: string
         activityEmail:
           type: string
           description: Calendar invite email address for creating events under this

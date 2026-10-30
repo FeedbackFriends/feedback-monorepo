@@ -444,7 +444,6 @@ class E2ETest(
                     objectMapper.writeValueAsString(
                         ActivityInput(
                             title = "Weekly Retro",
-                            agenda = "Review the week",
                             questions = listOf(
                                 QuestionInput(
                                     questionText = "How did the event go?",
@@ -477,7 +476,6 @@ class E2ETest(
                     objectMapper.writeValueAsString(
                         ActivityInput(
                             title = "Trend Activity",
-                            agenda = "Track trend",
                             questions = listOf(
                                 QuestionInput(
                                     questionText = "Rate this event",
@@ -506,7 +504,6 @@ class E2ETest(
                     objectMapper.writeValueAsString(
                         ActivityInput(
                             title = "Weekly Retro",
-                            agenda = "Review the week",
                             questions = questions,
                             runMode = ActivityRunMode.MANUAL,
                             invitedEmails = emptyList(),

@@ -63,9 +63,6 @@ public struct FeedbackFlowCoordinator: Sendable {
         public var title: String {
             feedbackSession.title
         }
-        var agenda: String? {
-            feedbackSession.agenda
-        }
         var ownerInfo: OwnerInfo {
             feedbackSession.ownerInfo
         }

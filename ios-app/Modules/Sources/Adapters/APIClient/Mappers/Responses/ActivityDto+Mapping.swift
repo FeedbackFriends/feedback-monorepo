@@ -54,7 +54,6 @@ public extension Activity {
             id: UUID(uuidString: dto.id)!,
             title: dto.title,
             activityEmail: dto.activityEmail,
-            agenda: dto.agenda,
             date: .distantPast,
             pinCode: nil,
             durationInMinutes: 0,

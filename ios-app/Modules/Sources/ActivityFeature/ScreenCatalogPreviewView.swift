@@ -39,7 +39,6 @@ private enum CatalogActivity {
     static func createActivity(step: ManageActivity.Step? = nil, custom: Bool = false) -> ManageActivity.State {
         var state = ManageActivity.State.create()
         state.title = PreviewCatalogFixtures.activity.title
-        state.description = PreviewCatalogFixtures.activity.agenda ?? ""
         if let step {
             if step == .questions {
                 state.selectTemplate(custom ? .customQuestions : .standardMeeting)

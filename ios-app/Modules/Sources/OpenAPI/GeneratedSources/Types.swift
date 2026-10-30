@@ -1121,8 +1121,6 @@ public enum Components {
             ///
             /// - Remark: Generated from `#/components/schemas/ActivityInput/title`.
             public var title: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ActivityInput/agenda`.
-            public var agenda: Swift.String?
             /// Ordered list of activity questions.
             ///
             /// - Remark: Generated from `#/components/schemas/ActivityInput/questions`.
@@ -1146,21 +1144,18 @@ public enum Components {
             ///
             /// - Parameters:
             ///   - title: Activity title shown in manager and participant views.
-            ///   - agenda:
             ///   - questions: Ordered list of activity questions.
             ///   - runMode: Run mode controlling event participation behavior.
             ///   - invitedEmails:
             ///   - sendEmails:
             public init(
                 title: Swift.String,
-                agenda: Swift.String? = nil,
                 questions: [Components.Schemas.QuestionInput],
                 runMode: Components.Schemas.ActivityInput.RunModePayload,
                 invitedEmails: [Swift.String],
                 sendEmails: Swift.Bool
             ) {
                 self.title = title
-                self.agenda = agenda
                 self.questions = questions
                 self.runMode = runMode
                 self.invitedEmails = invitedEmails
@@ -1168,7 +1163,6 @@ public enum Components {
             }
             public enum CodingKeys: String, CodingKey {
                 case title
-                case agenda
                 case questions
                 case runMode
                 case invitedEmails
@@ -1234,8 +1228,6 @@ public enum Components {
             ///
             /// - Remark: Generated from `#/components/schemas/ActivityDto/title`.
             public var title: Swift.String
-            /// - Remark: Generated from `#/components/schemas/ActivityDto/agenda`.
-            public var agenda: Swift.String?
             /// Calendar invite email address for creating events under this activity.
             ///
             /// - Remark: Generated from `#/components/schemas/ActivityDto/activityEmail`.
@@ -1268,7 +1260,6 @@ public enum Components {
             /// - Parameters:
             ///   - id: Stable identifier for the activity.
             ///   - title: Display title shown to managers and participants.
-            ///   - agenda:
             ///   - activityEmail: Calendar invite email address for creating events under this activity.
             ///   - owner:
             ///   - runMode: Run mode that controls how events are joined and processed.
@@ -1280,7 +1271,6 @@ public enum Components {
             public init(
                 id: Swift.String,
                 title: Swift.String,
-                agenda: Swift.String? = nil,
                 activityEmail: Swift.String,
                 owner: Components.Schemas.OwnerDto,
                 runMode: Components.Schemas.ActivityDto.RunModePayload,
@@ -1292,7 +1282,6 @@ public enum Components {
             ) {
                 self.id = id
                 self.title = title
-                self.agenda = agenda
                 self.activityEmail = activityEmail
                 self.owner = owner
                 self.runMode = runMode
@@ -1305,7 +1294,6 @@ public enum Components {
             public enum CodingKeys: String, CodingKey {
                 case id
                 case title
-                case agenda
                 case activityEmail
                 case owner
                 case runMode

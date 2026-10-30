@@ -146,7 +146,6 @@ public struct ParticipantEvent: Equatable, Identifiable, Sendable {
     public let ownerInfo: OwnerInfo
     public let recentlyJoined: Bool
     public var title: String { "Event" }
-    public var agenda: String? { nil }
     
     public init(
         id: UUID,
@@ -431,7 +430,6 @@ public struct Activity: Equatable, Identifiable, Sendable {
     public let id: UUID
     public let activityEmail: String
     public var title: String
-    public var agenda: String?
     public var date: Date
     public let pinCode: PinCode?
     public var durationInMinutes: Int
@@ -494,7 +492,6 @@ public struct Activity: Equatable, Identifiable, Sendable {
         id: UUID,
         title: String,
         activityEmail: String,
-        agenda: String? = nil,
         date: Date,
         pinCode: PinCode?,
         durationInMinutes: Int,
@@ -512,7 +509,6 @@ public struct Activity: Equatable, Identifiable, Sendable {
         self.id = id
         self.title = title
         self.activityEmail = activityEmail
-        self.agenda = agenda
         self.date = date
         self.pinCode = pinCode
         self.durationInMinutes = durationInMinutes

@@ -6,7 +6,6 @@ public struct FeedbackEventDto: Equatable, Sendable {
     public let pinCode: PinCode
     public let date: Date
     public var title: String { "Event" }
-    public var agenda: String? { nil }
     public init(
         questions: [ParticipantQuestion],
         ownerInfo: OwnerInfo,

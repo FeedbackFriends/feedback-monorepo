@@ -504,7 +504,6 @@ export interface components {
         ActivityInput: {
             /** @description Activity title shown in manager and participant views. */
             title: string;
-            agenda?: string;
             /** @description Ordered list of activity questions. */
             questions: components["schemas"]["QuestionInput"][];
             /**
@@ -539,7 +538,6 @@ export interface components {
             id: string;
             /** @description Display title shown to managers and participants. */
             title: string;
-            agenda?: string;
             /** @description Calendar invite email address for creating events under this activity. */
             activityEmail: string;
             owner: components["schemas"]["OwnerDto"];

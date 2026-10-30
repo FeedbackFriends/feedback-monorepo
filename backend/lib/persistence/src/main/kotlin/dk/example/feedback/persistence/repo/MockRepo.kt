@@ -96,7 +96,6 @@ class MockRepo {
                 insertActivity(
                     activityId = activityId,
                     title = "Mock Manager Activity",
-                    agenda = "Deterministic manager seed data.",
                     manager = managerEntityId,
                     timestamp = seededAt,
                 )
@@ -187,7 +186,6 @@ class MockRepo {
             insertActivity(
                 activityId = activityId,
                 title = "Mock Participant Activity",
-                agenda = "Deterministic participant seed data.",
                 manager = managerEntityId,
                 timestamp = seededAt,
             )
@@ -266,14 +264,12 @@ class MockRepo {
     private fun insertActivity(
         activityId: UUID,
         title: String,
-        agenda: String,
         manager: EntityID<String>,
         timestamp: OffsetDateTime,
     ) {
         ActivityTable.insert {
             it[id] = EntityID(activityId, ActivityTable)
             it[ActivityTable.title] = title
-            it[ActivityTable.agenda] = agenda
             it[emailPrefix] = deterministicEmailPrefix(activityId.toString())
             it[runMode] = ActivityRunMode.MANUAL
             it[sendEmails] = false

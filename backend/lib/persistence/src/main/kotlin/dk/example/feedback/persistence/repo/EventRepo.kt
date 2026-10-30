@@ -416,7 +416,6 @@ class EventRepo {
 
     fun persistEvent(
         title: String,
-        agenda: String?,
         date: OffsetDateTime,
         location: String?,
         durationInMinutes: Int,
@@ -430,7 +429,6 @@ class EventRepo {
     ): EventEntity {
         val activity = ActivityRepo().persistActivity(
             title = title,
-            agenda = agenda,
             runMode = dk.example.feedback.model.enumerations.ActivityRunMode.MANUAL,
             sendEmails = false,
             questions = questions.map { (questionText, feedbackType) ->

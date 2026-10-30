@@ -58,7 +58,6 @@ public struct ParticipantEventsView: View {
             event.withState { event in
                 EventInfoView(
                     eventTitle: event.title,
-                    eventAgenda: event.agenda,
                     ownerName: event.ownerInfo.name,
                     ownerEmail: event.ownerInfo.email,
                     ownerphoneNumber: event.ownerInfo.phoneNumber,

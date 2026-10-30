@@ -125,14 +125,6 @@ private extension ManageEventView {
                     .foregroundStyle(Color.themeTextSecondary)
                     .fixedSize(horizontal: false, vertical: true)
 
-                if let agenda = store.eventInput.agenda, !agenda.isEmpty {
-                    Text(agenda)
-                        .supportingTextStyle()
-                        .foregroundStyle(Color.themeTextSecondary)
-                        .lineLimit(3)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
                 PillTagView {
                     HStack(spacing: 8) {
                         Image(systemName: "questionmark.circle")

@@ -5,7 +5,6 @@ import SwiftUI
 struct DetailSectionView: View {
     
     let detail: Event
-    let agenda: String?
     
     var body: some View {
         ScrollView {
@@ -33,13 +32,6 @@ private extension DetailSectionView {
             SectionHeaderView("Detaljer")
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
-                    if let agenda, !agenda.isEmpty {
-                        Text("Agenda")
-                            .rowTitleTextStyle()
-                        Text(agenda)
-                            .multilineTextAlignment(.leading)
-                            .supportingTextStyle()
-                    }
                         Text("Dato")
                         .rowTitleTextStyle()
                     Text(detail.formattedDate)
@@ -213,22 +205,18 @@ struct QuestionView: View {
 }
 
 #Preview("With feedback") {
-    let activity = Activity.mock()
     NavigationStack {
         DetailSectionView(
-            detail: Event.mock(),
-            agenda: activity.agenda
+            detail: Event.mock()
         )
         .navigationTitle("Session with feedback")
     }
 }
 
 #Preview("Empty feedback") {
-    let activity = Activity.mockEmpty
     NavigationStack {
         DetailSectionView(
-            detail: Event.mock(),
-            agenda: activity.agenda
+            detail: Event.mock()
         )
         .navigationTitle("Session empty feedback")
     }

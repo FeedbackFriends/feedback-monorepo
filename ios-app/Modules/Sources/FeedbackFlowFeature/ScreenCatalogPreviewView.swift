@@ -389,7 +389,7 @@ private func catalogFeedbackRatingPrompt() -> some View {
 private func catalogFeedbackEventInfo() -> some View {
     ScreenCatalogContainerView {
         EventInfoView(
-            eventTitle: "Ugentligt teammøde", eventAgenda: PreviewCatalogFixtures.activity.agenda,
+            eventTitle: "Ugentligt teammøde",
             ownerName: "Anna Jensen", ownerEmail: "anna@example.com",
             ownerphoneNumber: "+45 12 34 56 78", date: PreviewCatalogFixtures.now
         )

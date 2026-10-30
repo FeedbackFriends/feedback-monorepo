@@ -46,7 +46,7 @@ public enum PreviewCatalogFixtures {
 
     public static let activity = Activity(
         id: id(1), title: "Ugentligt teammøde", activityEmail: "teammoede@example.com",
-        agenda: "Del fremskridt, drøft udfordringer og aftal næste skridt.", date: now,
+        date: now,
         pinCode: nil, durationInMinutes: 30, location: "Mødelokale 2", ownerInfo: owner,
         trend: .init(
             direction: .improving, indicator: .positive, metric: .averageRating,

@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0024-drop-activity-agenda
+      author: codex
+      changes:
+        - dropColumn:
+            tableName: activity
+            columnName: agenda
