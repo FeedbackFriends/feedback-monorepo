@@ -24,6 +24,9 @@ public struct EventDetailFeature: Sendable {
         var hasMarkedAsSeen: Bool
         var showDeleteConfirmation = false
         var deleteEventInFlight = false
+        var wasDeleted = false
+        var confirmation = SuccessConfirmation.State()
+        var inviteAfterConfirmation = false
 
         var activity: Activity? {
             bootstrap.managerData?.activities.first { $0.id == activityId }
@@ -96,22 +99,25 @@ public struct EventDetailFeature: Sendable {
         case editButtonTapped
         case inviteButtonTapped
         case onTask
+        case deleteConfirmationDismissed
+        case confirmation(SuccessConfirmation.Action)
         case presentError(Error)
         case delegate(Delegate)
 
         public enum Delegate: Equatable, Sendable {
             case editActivity
+            case eventDeleted
         }
     }
 
     public init() {}
 
     @Dependency(\.apiClient) var apiClient
-    @Dependency(\.dismiss) var dismiss
     @Dependency(\.systemClient) var systemClient
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
+        Scope(state: \.confirmation, action: \.confirmation) { SuccessConfirmation() }
         Reduce { state, action in
             switch action {
             case .binding:
@@ -121,6 +127,7 @@ public struct EventDetailFeature: Sendable {
                 switch delegate {
                 case .dismissAndUpdateEvent, .dismissAndNavigateToEvent:
                     state.destination = nil
+                    state.confirmation.queue("Session gemt")
                     return .none
 
                 case .editActivity:
@@ -147,7 +154,7 @@ public struct EventDetailFeature: Sendable {
                 return .none
 
             case .deleteEventConfirmButtonTapped:
-                guard state.event != nil else { return .none }
+                guard state.event != nil, !state.deleteEventInFlight, !state.wasDeleted else { return .none }
                 state.deleteEventInFlight = true
                 let eventId = state.eventId
                 return .run { send in
@@ -161,10 +168,24 @@ public struct EventDetailFeature: Sendable {
 
             case .deleteEventSuccess:
                 state.deleteEventInFlight = false
+                let hadConfirmation = state.showDeleteConfirmation
                 state.showDeleteConfirmation = false
-                return .run { _ in
-                    await dismiss()
+                state.wasDeleted = true
+                return hadConfirmation ? .none : .send(.delegate(.eventDeleted))
+
+            case .deleteConfirmationDismissed:
+                guard state.wasDeleted else { return .none }
+                return .send(.delegate(.eventDeleted))
+
+            case .confirmation(.dismiss):
+                if state.inviteAfterConfirmation, let event = state.event {
+                    state.inviteAfterConfirmation = false
+                    state.destination = .invite(event)
                 }
+                return .none
+
+            case .confirmation:
+                return .none
 
             case .editButtonTapped:
                 guard let activity = state.activity, let event = state.event else { return .none }

@@ -29,6 +29,8 @@ public struct ActivityList: Sendable {
         /// Fixed time for deterministic previews; live screens follow the current time.
         public var referenceDate: Date?
         var isRefreshing = false
+        var confirmation = SuccessConfirmation.State()
+        var pendingCreatedActivity: Activity?
         var activities: [Activity] {
             guard bootstrap.role == .manager else { return [] }
             return ActivityInsightData.sorted(bootstrap.unwrappedManagerSession.managerData.activities.elements)
@@ -67,15 +69,18 @@ public struct ActivityList: Sendable {
         case refresh
         case refreshed(Bootstrap)
         case refreshFailed
+        case confirmation(SuccessConfirmation.Action)
+        case activityEditorDismissed
     }
     
     public init() {}
     
     @Dependency(\.apiClient) var apiClient
-    @Dependency(\.continuousClock) var clock
+
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
+        Scope(state: \.confirmation, action: \.confirmation) { SuccessConfirmation() }
         Reduce { state, action in
             switch action {
                 
@@ -86,17 +91,35 @@ public struct ActivityList: Sendable {
 
             case .destination(.presented(.manageActivity(.delegate(.dismissAndNavigateToDetail(let activity))))):
                 state.destination = nil
-                return .run { send in
-                    try await clock.sleep(for: .seconds(0.5))
-                    await send(.navigateToCreatedActivity(activity))
+                state.pendingCreatedActivity = activity
+                return .none
+
+            case .activityEditorDismissed:
+                if let activity = state.pendingCreatedActivity {
+                    state.pendingCreatedActivity = nil
+                    return .send(.navigateToCreatedActivity(activity))
                 }
+                if let id = state.path.ids.last, state.path[id: id]?.eventDetail != nil {
+                    return .send(.path(.element(id: id, action: .eventDetail(.confirmation(.transitionCompleted)))))
+                }
+                return .none
+
+            case .destination(.presented(.manageActivity(.delegate(.activityUpdated)))):
+                state.destination = nil
+                if let id = state.path.ids.last, var detail = state.path[id: id]?.eventDetail {
+                    detail.confirmation.queue("Aktivitet gemt")
+                    state.path[id: id] = .eventDetail(detail)
+                }
+                return .none
 
             case .navigateToCreatedActivity(let activity):
                 guard state.bootstrap.role == .manager else { return .none }
                 state.$bootstrap.withLock {
                     $0.managerData!.activities.updateOrAppend(activity)
                 }
-                state.openActivity(activity)
+                var detail = ActivityDetail.State(activityId: activity.id, bootstrap: state.$bootstrap)
+                detail.confirmation.queue("Aktivitet oprettet")
+                state.path.append(.activityDetail(detail))
                 return .none
 
             case .binding:
@@ -116,6 +139,19 @@ public struct ActivityList: Sendable {
                 guard let eventDetail = state.path[id: id]?.eventDetail,
                       let activity = state.bootstrap.managerData?.activities[id: eventDetail.activityId] else { return .none }
                 state.destination = .manageActivity(.edit(activity: activity))
+                return .none
+
+            case .path(.element(_, action: .activityDetail(.delegate(.activityDeleted)))):
+                state.path.removeAll()
+                state.confirmation.queue("Aktivitet slettet")
+                return .none
+
+            case .path(.element(let id, action: .eventDetail(.delegate(.eventDeleted)))):
+                state.path.pop(from: id)
+                state.confirmation.queue("Session slettet")
+                return .none
+
+            case .confirmation:
                 return .none
 
             case .activityTap(let activity):

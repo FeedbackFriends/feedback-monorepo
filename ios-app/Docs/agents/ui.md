@@ -30,5 +30,8 @@ Use the shared `DesignSystem` components before adding local styling:
 - `CircleIconView` owns resizable icons with circular backgrounds. Features supply the image and semantic colors.
 - `ContentSectionView` groups a section header, optional trailing action, and vertically stacked content.
 - `PinCodeTextFieldView` owns PIN entry appearance, number keyboard, focus binding, and input validation. Features own submission, request state, and focus synchronization.
+- Use `.successMessage(_:isPresented:)` for transient success confirmations. It presents the shared `SuccessMessageView` as a glass overlay at the top of the content, below navigation controls. Features own visibility, timers, and navigation; the component never dismisses a screen or dims its background.
 
 Keep domain-aware compositions such as `FeedbackTypeTagView` and session cards in their feature. Compose them from shared primitives rather than duplicating their visual styling. SwiftUI `Form`, `Section`, `Label`, and `ContentUnavailableView` remain suitable native building blocks.
+
+For activity/session mutations, the destination owns `SuccessConfirmation`. Queue the message when navigating, then start its timer from completed navigation (`onNavigationTransitionCompleted`) or sheet `onDismiss`. Close delete confirmation sheets before delegating navigation. Chain sheet dismissal and navigation through callbacks, never fixed sleeps.

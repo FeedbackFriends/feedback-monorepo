@@ -42,7 +42,7 @@ struct InitialiseFeedbackTests {
                 
                 #expect(flowState.feedbackSession == session)
                 #expect(flowState.submitFeedbackInFlight == false)
-                #expect(flowState.presentSuccessOverlay == false)
+                #expect(flowState.isSuccessMessagePresented == false)
                 #expect(flowState.commentTextfieldFocused == false)
                 #expect(flowState.questions.count == session.questions.count)
                 #expect(flowState.path.count == 1)

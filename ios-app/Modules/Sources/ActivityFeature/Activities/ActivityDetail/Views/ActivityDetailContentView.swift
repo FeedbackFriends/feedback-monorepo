@@ -23,6 +23,7 @@ struct ActivityDetailContentView: View {
         }
         .scrollIndicators(.hidden)
         .background(Color.themeBackground.ignoresSafeArea())
+        .successConfirmation(store.scope(state: \.confirmation, action: \.confirmation))
         .lineSpacing(5)
         .foregroundStyle(Color.themeText)
         .navigationTitle(activity.title)
@@ -141,7 +142,8 @@ private struct ActivityDetailSheetsModifier: ViewModifier {
                 item: $store.scope(
                     state: \.destination?.editActivity,
                     action: \.destination.editActivity
-                )
+                ),
+                onDismiss: { store.send(.editorDismissed) }
             ) { editStore in
                 ManageActivityView(store: editStore)
             }
@@ -149,7 +151,8 @@ private struct ActivityDetailSheetsModifier: ViewModifier {
                 item: $store.scope(
                     state: \.destination?.manageEvent,
                     action: \.destination.manageEvent
-                )
+                ),
+                onDismiss: { store.send(.editorDismissed) }
             ) { manageStore in
                 NavigationStack {
                     ManageEventView(store: manageStore)

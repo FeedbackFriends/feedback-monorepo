@@ -16,17 +16,21 @@ public struct EventDetailFeatureView: View {
                 DetailSectionView(
                     detail: event
                 )
+            } else if store.deleteEventInFlight || store.wasDeleted {
+                Color.themeBackground.ignoresSafeArea()
             } else {
                 EmptyStateView(
                     title: "Sessionen er ikke tilgængelig",
                     message: "Denne session kan ikke længere åbnes."
                 )
                 .padding(.horizontal, Theme.padding)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .frame(maxWidth: .infinity)
+        .successConfirmation(store.scope(state: \.confirmation, action: \.confirmation))
         .foregroundStyle(Color.themeText)
-        .background(Color.themeBackground)
+        .background(Color.themeBackground.ignoresSafeArea())
         .task { await store.send(.onTask).finish() }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -63,20 +67,24 @@ public struct EventDetailFeatureView: View {
                 }
             }
         }
-        .sheet(isPresented: $store.showDeleteConfirmation) {
-            DeleteConfirmationViewSheet(
-                title: "Slet session",
-                message: "Slet denne session og dens feedback?",
-                actionButton: {
-                    Button("Slet") {
-                        store.send(.deleteEventConfirmButtonTapped)
+        .sheet(
+            isPresented: $store.showDeleteConfirmation,
+            onDismiss: { store.send(.deleteConfirmationDismissed) },
+            content: {
+                DeleteConfirmationViewSheet(
+                    title: "Slet session",
+                    message: "Slet denne session og dens feedback?",
+                    actionButton: {
+                        Button("Slet") {
+                            store.send(.deleteEventConfirmButtonTapped)
+                        }
+                        .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
+                        .isLoading(store.deleteEventInFlight)
                     }
-                    .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
-                    .isLoading(store.deleteEventInFlight)
-                }
-            )
-            .presentationDetents([.height(340)])
-        }
+                )
+                .presentationDetents([.height(340)])
+            }
+        )
         .sheet(
             item: $store.scope(
                 state: \.destination?.invite,
@@ -102,7 +110,8 @@ public struct EventDetailFeatureView: View {
             item: $store.scope(
                 state: \.destination?.manageEvent,
                 action: \.destination.manageEvent
-            )
+            ),
+            onDismiss: { store.send(.confirmation(.transitionCompleted)) }
         ) { manageEventStore in
             NavigationStack {
                 ManageEventView(store: manageEventStore)

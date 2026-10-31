@@ -135,7 +135,9 @@ struct InsightFeatureTests {
         let store = TestStore(initialState: ActivityList.State(bootstrap: shared)) { ActivityList() }
         await store.send(.navigateToCreatedActivity(activity)) {
             $0.$bootstrap.withLock { $0.managerData!.activities.updateOrAppend(activity) }
-            $0.path.append(.activityDetail(.init(activityId: activity.id, bootstrap: shared)))
+            var detail = ActivityDetail.State(activityId: activity.id, bootstrap: shared)
+            detail.confirmation.queue("Aktivitet oprettet")
+            $0.path.append(.activityDetail(detail))
         }
         #expect(store.state.path.last?.activityDetail?.activityId == activity.id)
     }

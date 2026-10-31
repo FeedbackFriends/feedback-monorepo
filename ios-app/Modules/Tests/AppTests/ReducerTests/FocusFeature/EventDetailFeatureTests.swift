@@ -102,14 +102,14 @@ struct EventDetailFeatureTests {
 
         await store.send(.destination(.presented(.manageEvent(.delegate(.dismissAndUpdateEvent(updatedEvent)))))) {
             $0.destination = nil
+            $0.confirmation.queue("Session gemt")
         }
     }
 
     @Test
-    func `Delete confirmation button deletes event and dismisses detail`() async {
+    func `Delete confirmation button deletes event and tells parent to close detail`() async {
         let (session, activity, event) = makeSession()
         let deletedEventId = LockIsolated<UUID?>(nil)
-        let didDismiss = LockIsolated(false)
 
         let store = TestStore(
             initialState: EventDetailFeature.State(
@@ -122,9 +122,6 @@ struct EventDetailFeatureTests {
         } withDependencies: {
             $0.apiClient.deleteEvent = { eventId in
                 deletedEventId.setValue(eventId)
-            }
-            $0.dismiss = .init {
-                didDismiss.setValue(true)
             }
         }
 
@@ -139,10 +136,12 @@ struct EventDetailFeatureTests {
         await store.receive(\.deleteEventSuccess) {
             $0.deleteEventInFlight = false
             $0.showDeleteConfirmation = false
+            $0.wasDeleted = true
         }
+        await store.send(.deleteConfirmationDismissed)
+        await store.receive(\.delegate, .eventDeleted)
 
         #expect(deletedEventId.value == event.id)
-        #expect(didDismiss.value)
     }
 
     @Test

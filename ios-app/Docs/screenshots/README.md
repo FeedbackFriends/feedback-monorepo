@@ -1,6 +1,6 @@
 # iOS screenshot catalog
 
-The catalog now captures a curated set of **57 screen/state images, including the native sign-in alert** through the app-hosted Point-Free SnapshotTesting target. The alert uses the same capture and review pipeline, with presentation, title, message, and OK action checks before capture. Interactive SwiftUI previews remain available for development, but `RenderPreview` is no longer the screenshot generator.
+The catalog now captures a curated set of **58 screen/state images, including the native sign-in alert** through the app-hosted Point-Free SnapshotTesting target. The alert uses the same capture and review pipeline, with presentation, title, message, and OK action checks before capture. Interactive SwiftUI previews remain available for development, but `RenderPreview` is no longer the screenshot generator.
 
 Approved images remain in `Docs/screenshots/catalog/`. Capture and review commands never replace those images automatically. The initial comparison against Xcode-generated screenshots shows changes because the new capture profile has different dimensions and framing; those images need a one-time visual review before approving the new baseline.
 

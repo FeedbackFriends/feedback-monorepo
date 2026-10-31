@@ -24,11 +24,6 @@ public struct ManageEventView: View {
         }
         .scrollIndicators(.hidden)
         .background(Color.themeBackground.ignoresSafeArea())
-        .successOverlay(
-            message: store.successOverlayMessage,
-            show: $store.showSuccessOverlay,
-            enableAutomaticDismissal: false
-        )
         .toolbar {
             toolbarItems
         }

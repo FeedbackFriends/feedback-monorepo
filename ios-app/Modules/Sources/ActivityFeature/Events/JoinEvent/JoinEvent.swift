@@ -16,11 +16,11 @@ public struct JoinEvent: Sendable {
         @Presents var destination: Destination.State?
         var pinCodeInput: PinCodeInput
         var enterCodeKeyboardIsFocused = false
-        var showSuccessOverlay = false
+        var isSuccessMessagePresented = false
         var joinRequestInFlight = false
         var pinCodeTextfieldFocused = false
         var disableJoinButton: Bool {
-            if pinCodeInput.pinCode() == nil || joinRequestInFlight || showSuccessOverlay {
+            if pinCodeInput.pinCode() == nil || joinRequestInFlight || isSuccessMessagePresented {
                 return true
             }
             return false
@@ -48,6 +48,7 @@ public struct JoinEvent: Sendable {
     
     @Dependency(\.dismiss) var dismiss
     @Dependency(\.apiClient) var apiClient
+    @Dependency(\.continuousClock) var clock
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -93,8 +94,12 @@ public struct JoinEvent: Sendable {
                 
             case .joinSuccess(let pinCode):
                 state.joinRequestInFlight = false
-                state.showSuccessOverlay = true
-                return .send(.delegate(.navigateToParticipantEvent(withPinCode: pinCode)))
+                state.isSuccessMessagePresented = true
+                return .run { send in
+                    await send(.delegate(.navigateToParticipantEvent(withPinCode: pinCode)))
+                    try await clock.sleep(for: Constants.successMessageDuration)
+                    await dismiss()
+                }
                 
             case .delegate:
                 return .none

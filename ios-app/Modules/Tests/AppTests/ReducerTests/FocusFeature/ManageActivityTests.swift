@@ -61,6 +61,14 @@ struct ManageActivityTests {
     }
 
     @Test
+    func updateDelegatesResultToNavigationOwner() async {
+        let activity = Activity.mock()
+        let store = TestStore(initialState: ManageActivity.State.edit(activity: activity)) { ManageActivity() }
+        await store.send(.updateResponse(activity))
+        await store.receive(\.delegate, .activityUpdated(activity))
+    }
+
+    @Test
     func `Create recurring meeting failure shows error alert`() async {
         struct Failure: Error, Equatable {}
         var initialState = ManageActivity.State.create()

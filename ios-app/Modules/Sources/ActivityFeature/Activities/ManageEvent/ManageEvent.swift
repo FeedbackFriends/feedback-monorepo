@@ -2,7 +2,6 @@ import ComposableArchitecture
 import Domain
 import Foundation
 import Utility
-import DesignSystem
 
 @Reducer
 public struct ManageEvent: Sendable {
@@ -58,13 +57,10 @@ public struct ManageEvent: Sendable {
         var allDay: Bool
         var minutePicker: Int
         var hourPicker: Int
-        let successOverlayMessage: String
         @Presents var alert: AlertState<Never>?
-        var showSuccessOverlay = false
 
         var manageEventButtonDisabled: Bool {
             manageEventInFlight
-                || showSuccessOverlay
         }
 
         public static func create(
@@ -77,8 +73,7 @@ public struct ManageEvent: Sendable {
                 mode: .create,
                 activityId: activity.id,
                 eventId: nil,
-                eventInput: eventInput,
-                successOverlayMessage: "Session oprettet"
+                eventInput: eventInput
             )
         }
 
@@ -95,8 +90,7 @@ public struct ManageEvent: Sendable {
                 mode: .edit,
                 activityId: activity.id,
                 eventId: event.id,
-                eventInput: eventInput,
-                successOverlayMessage: "Session gemt"
+                eventInput: eventInput
             )
         }
 
@@ -105,7 +99,6 @@ public struct ManageEvent: Sendable {
             activityId: UUID,
             eventId: UUID?,
             eventInput: EventInput,
-            successOverlayMessage: String,
             startNowEnabled: Bool = false
         ) {
             self.mode = mode
@@ -118,7 +111,6 @@ public struct ManageEvent: Sendable {
             self.allDay = eventInput.durationInMinutes == .minutesOneDay
             self.minutePicker = eventInput.durationInMinutes % 60
             self.hourPicker = eventInput.durationInMinutes / 60
-            self.successOverlayMessage = successOverlayMessage
         }
 
         var date: Date
@@ -165,7 +157,6 @@ public struct ManageEvent: Sendable {
     @Dependency(\.date.now) var now
     @Dependency(\.apiClient) var apiClient
     @Dependency(\.dismiss) var dismiss
-    @Dependency(\.continuousClock) var clock
 
     private func calculateMinutes(hours: Int, minutes: Int) -> Int {
         (hours * 60) + minutes
@@ -225,6 +216,7 @@ public struct ManageEvent: Sendable {
                 return .send(.delegate(.editActivity))
 
             case .actionButtonTap:
+                guard !state.manageEventButtonDisabled else { return .none }
                 state.manageEventInFlight = true
                 let eventInput = state.eventInput
                 let sessionInput = SessionInput(
@@ -264,15 +256,11 @@ public struct ManageEvent: Sendable {
 
             case .manageEventResponse(let event):
                 state.manageEventInFlight = false
-                state.showSuccessOverlay = true
-                return .run { [mode = state.mode] send in
-                    try await clock.sleep(for: Constants.successOverlayDuration)
-                    switch mode {
-                    case .create:
-                        await send(.delegate(.dismissAndNavigateToEvent(event)))
-                    case .edit:
-                        await send(.delegate(.dismissAndUpdateEvent(event)))
-                    }
+                switch state.mode {
+                case .create:
+                    return .send(.delegate(.dismissAndNavigateToEvent(event)))
+                case .edit:
+                    return .send(.delegate(.dismissAndUpdateEvent(event)))
                 }
 
             case .presentError(let error):

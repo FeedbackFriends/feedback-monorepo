@@ -50,10 +50,6 @@ public struct JoinEventView: View {
             }
             .background(Color.themeSurface.ignoresSafeArea())
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
-            .successOverlay(
-                message: "Session fundet",
-                show: $store.showSuccessOverlay
-            )
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     CloseButtonView {
@@ -62,6 +58,7 @@ public struct JoinEventView: View {
                 }
             }
         }
+        .successMessage("Session fundet", isPresented: store.isSuccessMessagePresented)
         .presentationBackground(Color.themeSurface)
     }
 }

@@ -7,12 +7,19 @@ import SwiftUI
 extension JoinEvent.State {
     public static var screenCatalogSuccess: Self {
         var state = Self(pinCodeInput: .init(value: "1234"))
-        state.showSuccessOverlay = true
+        state.isSuccessMessagePresented = true
         return state
     }
 }
 
 extension ActivityList.State {
+    public static func screenCatalogDeletionSuccess(bootstrap: Shared<Bootstrap>) -> Self {
+        var state = Self(bootstrap: bootstrap, referenceDate: PreviewCatalogFixtures.now)
+        state.confirmation.message = "Aktivitet slettet"
+        state.confirmation.isPresented = true
+        return state
+    }
+
     public static var screenCatalogRefreshError: Self {
         var state = Self(
             bootstrap: PreviewCatalogFixtures.bootstrap(),
@@ -25,11 +32,14 @@ extension ActivityList.State {
 
 @MainActor
 private enum CatalogActivity {
-    static func detail(_ activity: Activity) -> some View {
-        NavigationStack {
-            ActivityDetailView(store: Store(initialState: ActivityDetail.State(
-                activityId: activity.id, bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity)
-            )) { EmptyReducer() })
+    static func detail(_ activity: Activity, sessionDeleted: Bool = false) -> some View {
+        var state = ActivityDetail.State(
+            activityId: activity.id, bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity)
+        )
+        state.confirmation.message = "Session slettet"
+        state.confirmation.isPresented = sessionDeleted
+        return NavigationStack {
+            ActivityDetailView(store: Store(initialState: state) { EmptyReducer() })
         }
     }
 
@@ -51,7 +61,7 @@ private enum CatalogActivity {
         input.date = PreviewCatalogFixtures.now.addingTimeInterval(86_400)
         return ManageEvent.State(
             mode: .create, activityId: PreviewCatalogFixtures.id(1), eventId: nil,
-            eventInput: input, successOverlayMessage: "Session oprettet"
+            eventInput: input
         )
     }
 
@@ -103,6 +113,16 @@ private func catalogActivityDetailNoSessions() -> some View {
 }
 
 #Preview("activity-detail.no-sessions.content-only") { catalogActivityDetailNoSessions() }
+
+@MainActor
+private func catalogActivityDetailSessionDeleted() -> some View {
+    ScreenCatalogContainerView {
+        CatalogActivity.detail(PreviewCatalogFixtures.emptyActivity, sessionDeleted: true)
+    }
+}
+
+// Screenshot: Last session deleted returns to its activity with a glass confirmation.
+#Preview("activity-detail.session-deleted") { catalogActivityDetailSessionDeleted() }
 
 @MainActor
 private func catalogActivityDetailNoFeedback() -> some View {
@@ -364,13 +384,17 @@ private func catalogCreateSessionSaving() -> some View {
 @MainActor
 private func catalogCreateSessionSuccess() -> some View {
     ScreenCatalogContainerView {
-        let state = {
-            var state = CatalogActivity.eventForm()
-            state.showSuccessOverlay = true
-            return state
-        }()
-        NavigationStack {
-            ManageEventView(store: Store(initialState: state) { EmptyReducer() })
+        var activity = PreviewCatalogFixtures.activity
+        let event = PreviewCatalogFixtures.upcomingEvent
+        activity.events = [event]
+        var state = EventDetailFeature.State(
+            activityId: activity.id, eventId: event.id,
+            bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity)
+        )
+        state.confirmation.message = "Session oprettet"
+        state.confirmation.isPresented = true
+        return NavigationStack {
+            EventDetailFeatureView(store: Store(initialState: state) { EmptyReducer() })
         }
     }
 }
@@ -664,7 +688,7 @@ func catalogJoinSessionSuccess() -> some View {
     ScreenCatalogContainerView {
         let state = {
             var state = JoinEvent.State(pinCodeInput: .init(value: "1234"))
-            state.showSuccessOverlay = true
+            state.isSuccessMessagePresented = true
             return state
         }()
         JoinEventView(store: Store(initialState: state) { EmptyReducer() })
@@ -967,6 +991,9 @@ private func catalogExtraSessionResultsCommentEmpty() -> some View {
 enum ActivityFeatureScreenSnapshotCatalog {
     static var samples: [ScreenSnapshotSample] {
         [
+            .init(id: "activity-detail.session-deleted", size: CGSize(width: 402, height: 874)) {
+                catalogActivityDetailSessionDeleted()
+            },
             .init(id: "activity-detail.no-feedback", size: CGSize(width: 402, height: 874)) {
                 catalogActivityDetailNoFeedback()
             },

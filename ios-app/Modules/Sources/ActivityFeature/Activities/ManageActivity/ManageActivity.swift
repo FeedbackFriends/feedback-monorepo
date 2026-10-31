@@ -158,13 +158,13 @@ public struct ManageActivity: Sendable {
 
         public enum Delegate: Equatable {
             case dismissAndNavigateToDetail(Activity)
+            case activityUpdated(Activity)
         }
     }
 
     public init() {}
 
     @Dependency(\.apiClient) var apiClient
-    @Dependency(\.dismiss) var dismiss
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -251,9 +251,9 @@ public struct ManageActivity: Sendable {
                 state.createActivityRequestInFlight = false
                 return .send(.delegate(.dismissAndNavigateToDetail(activity)))
 
-            case .updateResponse:
+            case .updateResponse(let activity):
                 state.createActivityRequestInFlight = false
-                return .run { _ in await dismiss() }
+                return .send(.delegate(.activityUpdated(activity)))
 
             case .presentError(let error):
                 state.createActivityRequestInFlight = false

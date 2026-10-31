@@ -351,7 +351,7 @@ private func catalogFeedbackSuccess() -> some View {
             var state = CatalogFeedback.state(.zeroToTen(.init(
                 questionId: PreviewCatalogFixtures.id(10), questionText: PreviewCatalogFixtures.questionText, rating: 8
             )))
-            state.presentSuccessOverlay = true
+            state.isSuccessMessagePresented = true
             return state
         }()
         CatalogFeedback.view(state)

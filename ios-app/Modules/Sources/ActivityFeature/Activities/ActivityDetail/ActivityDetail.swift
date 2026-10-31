@@ -1,5 +1,4 @@
 import Domain
-import DesignSystem
 import Foundation
 import ComposableArchitecture
 import Utility
@@ -31,6 +30,10 @@ public struct ActivityDetail: Sendable {
         }
         @Presents var destination: Destination.State?
         var deleteActivityInFlight = false
+        var confirmation = SuccessConfirmation.State()
+        var pendingEvent: Event?
+        var pendingEventInvite = false
+        var activityWasDeleted = false
         @Shared var bootstrap: Bootstrap
         
         var navigationTitle: String {
@@ -64,21 +67,29 @@ public struct ActivityDetail: Sendable {
         case deleteActivityCancelButtonTap
         case deleteActivityConfirmButtonTap
         case deleteActivitySuccess
+        case confirmation(SuccessConfirmation.Action)
+        case editorDismissed
+        case deleteConfirmationDismissed
+        case delegate(Delegate)
         case navigateToEvent(Event, presentInvite: Bool)
         case presentError(Error)
         case showHowItWorksButtonTap
+
+        public enum Delegate: Equatable, Sendable {
+            case activityDeleted
+        }
     }
     
     public init() {}
     
     @Dependency(\.calendar) var calendar
-    @Dependency(\.dismiss) var dismiss
-    @Dependency(\.continuousClock) var clock
     @Dependency(\.apiClient) var apiClient
     @Dependency(\.systemClient) var systemClient
+
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
+        Scope(state: \.confirmation, action: \.confirmation) { SuccessConfirmation() }
         Reduce { state, action in
             switch action {
                 
@@ -91,13 +102,14 @@ public struct ActivityDetail: Sendable {
                 
                 case .dismissAndNavigateToEvent(let event):
                     state.destination = nil
-                    return .run { send in
-                        try await clock.sleep(for: .seconds(0.2))
-                        await send(.navigateToEvent(event, presentInvite: true))
-                    }
+                    state.pendingEvent = event
+                    state.pendingEventInvite = true
+                    return .none
                 case .dismissAndUpdateEvent(let event):
                     state.destination = nil
-                    return .send(.navigateToEvent(event, presentInvite: false))
+                    state.pendingEvent = event
+                    state.pendingEventInvite = false
+                    return .none
                 case .editActivity:
                     guard let activity = state.activity else { return .none }
                     state.destination = .editActivity(ManageActivity.State.edit(activity: activity))
@@ -110,6 +122,32 @@ public struct ActivityDetail: Sendable {
             case .destination(.presented(.eventDetail(.delegate(.editActivity)))):
                 guard let activity = state.activity else { return .none }
                 state.destination = .editActivity(ManageActivity.State.edit(activity: activity))
+                return .none
+
+            case .destination(.presented(.eventDetail(.delegate(.eventDeleted)))):
+                state.destination = nil
+                state.confirmation.queue("Session slettet")
+                return .none
+
+            case .destination(.presented(.editActivity(.delegate(.activityUpdated)))):
+                state.destination = nil
+                state.confirmation.queue("Aktivitet gemt")
+                return .none
+
+            case .editorDismissed:
+                if let event = state.pendingEvent {
+                    let invite = state.pendingEventInvite
+                    state.pendingEvent = nil
+                    state.pendingEventInvite = false
+                    return .send(.navigateToEvent(event, presentInvite: invite))
+                }
+                return .send(.confirmation(.transitionCompleted))
+
+            case .deleteConfirmationDismissed:
+                guard state.activityWasDeleted else { return .none }
+                return .send(.delegate(.activityDeleted))
+
+            case .confirmation:
                 return .none
 
             case .destination(.presented(.sessionList(.delegate(.eventTapped(let event))))):
@@ -184,24 +222,23 @@ public struct ActivityDetail: Sendable {
                 return .none
 
             case .navigateToEvent(let event, let presentInvite):
-                let destination: EventDetailFeature.Destination.State? = presentInvite ? .invite(event) : nil
-                state.destination = .eventDetail(
-                    EventDetailFeature.State(
-                        activityId: state.activityId,
-                        eventId: event.id,
-                        destination: destination,
-                        bootstrap: state.$bootstrap
-                    )
+                var detail = EventDetailFeature.State(
+                    activityId: state.activityId, eventId: event.id, bootstrap: state.$bootstrap
                 )
+                detail.confirmation.queue(presentInvite ? "Session oprettet" : "Session gemt")
+                detail.inviteAfterConfirmation = presentInvite
+                state.destination = .eventDetail(detail)
                 return .none
                 
             case .deleteActivitySuccess:
                 state.deleteActivityInFlight = false
+                let hadConfirmation = state.destination?.showDeleteConfirmation != nil
                 state.destination = nil
-                return .run { _ in
-                    try await clock.sleep(for: Constants.successOverlayDuration)
-                    await self.dismiss()
-                }
+                state.activityWasDeleted = true
+                return hadConfirmation ? .none : .send(.delegate(.activityDeleted))
+
+            case .delegate:
+                return .none
 
             case .presentError(let error):
                 state.deleteActivityInFlight = false

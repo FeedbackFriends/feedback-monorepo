@@ -26,7 +26,6 @@ struct ManageEventTests {
 
         await store.receive(\.manageEventResponse) {
             $0.manageEventInFlight = false
-            $0.showSuccessOverlay = true
         }
         await store.receive(\.delegate, .dismissAndNavigateToEvent(mockEvent))
     }
@@ -77,7 +76,6 @@ struct ManageEventTests {
 
         await store.receive(\.manageEventResponse) {
             $0.manageEventInFlight = false
-            $0.showSuccessOverlay = true
         }
         await store.receive(\.delegate, .dismissAndUpdateEvent(updatedEvent))
     }

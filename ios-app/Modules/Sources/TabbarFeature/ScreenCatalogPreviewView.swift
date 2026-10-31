@@ -11,10 +11,13 @@ import EnterCodeFeature
 private struct ScreenCatalogPreviewView: View {
     private let store: StoreOf<Tabbar>
 
-    init(tab: Tab = .activities, empty: Bool = false) {
+    init(tab: Tab = .activities, empty: Bool = false, deletionSuccess: Bool = false) {
         AppTheme.setUp()
         var state = Tabbar.State(bootstrap: PreviewCatalogFixtures.bootstrap(empty: empty), selectedTab: tab)
         state.activities.referenceDate = PreviewCatalogFixtures.now
+        if deletionSuccess {
+            state.activities = .screenCatalogDeletionSuccess(bootstrap: state.$bootstrap)
+        }
         store = Store(initialState: state) { EmptyReducer() }
     }
 
@@ -37,6 +40,11 @@ private struct ScreenCatalogPreviewView: View {
 // Screenshot: Distinct empty layout.
 #Preview("activities.empty") {
     ScreenCatalogPreviewView(tab: .activities, empty: true)
+}
+
+// Screenshot: Deletion returns to the empty list with a brief confirmation.
+#Preview("activities.deleted") {
+    ScreenCatalogPreviewView(tab: .activities, empty: true, deletionSuccess: true)
 }
 
 @MainActor
@@ -222,6 +230,9 @@ enum TabbarFeatureScreenSnapshotCatalog {
             },
             .init(id: "activities.empty", size: CGSize(width: 402, height: 874)) {
                 ScreenCatalogPreviewView(tab: .activities, empty: true)
+            },
+            .init(id: "activities.deleted", size: CGSize(width: 402, height: 874)) {
+                ScreenCatalogPreviewView(tab: .activities, empty: true, deletionSuccess: true)
             },
             .init(id: "profile.anonymous", size: CGSize(width: 402, height: 874)) {
                 catalogProfile(role: nil)

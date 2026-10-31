@@ -34,7 +34,7 @@ public struct FeedbackFlowCoordinator: Sendable {
         var path: StackState<Path.State>
         public var isPreview = false
         var submitFeedbackInFlight: Bool
-        var presentSuccessOverlay: Bool
+        var isSuccessMessagePresented: Bool
         var feedbackItemCompleted: Bool {
             switch path[questionIndex] {
                 
@@ -138,10 +138,10 @@ public struct FeedbackFlowCoordinator: Sendable {
                 return .none
                 
             case .submitFeedbackResponse(let shouldPrompt):
-                state.presentSuccessOverlay = true
+                state.isSuccessMessagePresented = true
                 state.submitFeedbackInFlight = false
                 return .run { send in
-                    try await clock.sleep(for: Constants.successOverlayDuration)
+                    try await clock.sleep(for: Constants.successMessageDuration)
                     if shouldPrompt {
                         await send(.presentRatingPrompt)
                     } else {
@@ -172,6 +172,7 @@ public struct FeedbackFlowCoordinator: Sendable {
                 return .send(.navigateToNextQuestion)
                 
             case .submitButtonTap:
+                guard !state.submitFeedbackInFlight, !state.isSuccessMessagePresented else { return .none }
                 if state.isPreview {
                     return .run { _ in await dismiss() }
                 }
@@ -193,6 +194,7 @@ public struct FeedbackFlowCoordinator: Sendable {
                 return .none
                 
             case .presentRatingPrompt:
+                state.isSuccessMessagePresented = false
                 state.destination = .ratingPrompt
                 return .none
                 
@@ -234,7 +236,7 @@ extension FeedbackFlowCoordinator.State {
         return .init(
             path: .init([first]),
             submitFeedbackInFlight: false,
-            presentSuccessOverlay: false,
+            isSuccessMessagePresented: false,
             questions: questionStates,
             feedbackSession: feedbackSession,
             commentTextfieldFocused: false

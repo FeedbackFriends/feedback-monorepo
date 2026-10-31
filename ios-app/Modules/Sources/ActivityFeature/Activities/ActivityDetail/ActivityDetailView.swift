@@ -10,19 +10,15 @@ struct ActivityDetailView: View {
             if let activity = store.activity {
                 ActivityDetailContentView(store: store, activity: activity)
             } else {
-                EmptyView()
-                    .successOverlay(
-                        message: "Aktivitet slettet",
-                        show: .constant(true),
-                        enableAutomaticDismissal: true
-                    )
+                Color.themeBackground.ignoresSafeArea()
             }
         }
         .sheet(
             item: $store.scope(
                 state: \.destination?.showDeleteConfirmation,
                 action: \.destination.showDeleteConfirmation
-            )
+            ),
+            onDismiss: { store.send(.deleteConfirmationDismissed) }
         ) { _ in
             DeleteConfirmationViewSheet(
                 title: "Slet aktivitet",

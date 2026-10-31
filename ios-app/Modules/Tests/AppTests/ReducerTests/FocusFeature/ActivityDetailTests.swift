@@ -6,13 +6,59 @@ import Testing
 
 @MainActor
 struct ActivityDetailTests {
+    @Test
+    func `Deleting a session returns to activity and briefly shows confirmation`() async {
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
+        let event = Event.mock()
+        bootstrap.withLock { $0.managerData!.activities[id: activity.id]!.events = [event] }
+        let clock = TestClock()
+        let store = TestStore(initialState: ActivityDetail.State(
+            activityId: activity.id,
+            destination: .eventDetail(.init(activityId: activity.id, eventId: event.id, bootstrap: bootstrap)),
+            bootstrap: bootstrap
+        )) {
+            ActivityDetail()
+        } withDependencies: {
+            $0.continuousClock = clock
+            $0.apiClient.deleteEvent = { id in
+                bootstrap.withLock { $0.managerData!.activities[id: activity.id]!.events.removeAll { $0.id == id } }
+            }
+        }
+        await store.send(.destination(.presented(.eventDetail(.deleteEventConfirmButtonTapped)))) {
+            var detail = $0.destination!.eventDetail!
+            detail.deleteEventInFlight = true
+            $0.destination = .eventDetail(detail)
+        }
+        await store.receive(\.destination.eventDetail.deleteEventSuccess) {
+            $0.$bootstrap.withLock { $0.managerData!.activities[id: activity.id]!.events.removeAll { $0.id == event.id } }
+            var detail = $0.destination!.eventDetail!
+            detail.deleteEventInFlight = false
+            detail.wasDeleted = true
+            $0.destination = .eventDetail(detail)
+        }
+        await store.receive(\.destination.eventDetail.delegate, .eventDeleted) {
+            $0.destination = nil
+            $0.confirmation.queue("Session slettet")
+        }
+        #expect(store.state.activity?.events.contains { $0.id == event.id } == false)
+        #expect(!store.state.confirmation.isPresented)
+        await clock.advance(by: .seconds(2))
+        await store.send(.confirmation(.transitionCompleted)) {
+            $0.confirmation.isPending = false
+            $0.confirmation.isPresented = true
+        }
+        await clock.advance(by: .seconds(1))
+        await store.receive(\.confirmation.dismiss) {
+            $0.confirmation.isPresented = false
+        }
+    }
 
     @Test
-    func `Delete confirmation button deletes activity and dismisses detail`() async {
+    func `Delete confirmation button deletes activity and immediately notifies list`() async {
         let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
         let activity = bootstrap.wrappedValue.managerData!.activities[0]
         let deletedActivityId = LockIsolated<UUID?>(nil)
-        let didDismiss = LockIsolated(false)
 
         let store = await TestStore(
             initialState: ActivityDetail.State(
@@ -24,10 +70,6 @@ struct ActivityDetailTests {
         } withDependencies: {
             $0.apiClient.deleteActivity = { id in
                 deletedActivityId.setValue(id)
-            }
-            $0.continuousClock = ImmediateClock()
-            $0.dismiss = .init {
-                didDismiss.setValue(true)
             }
         }
 
@@ -43,10 +85,12 @@ struct ActivityDetailTests {
         await store.receive(\.deleteActivitySuccess) {
             $0.deleteActivityInFlight = false
             $0.destination = nil
+            $0.activityWasDeleted = true
         }
+        await store.send(.deleteConfirmationDismissed)
+        await store.receive(\.delegate, .activityDeleted)
 
         #expect(deletedActivityId.value == activity.id)
-        #expect(didDismiss.value)
     }
 
     @Test
@@ -148,7 +192,7 @@ struct ActivityDetailTests {
     }
 
     @Test
-    func `Create session delegate closes sheet and navigates to session detail with invite`() async {
+    func `Create session waits for sheet dismissal before navigation and queues confirmation`() async {
         let event = Event(
             id: UUID(),
             date: Date(timeIntervalSince1970: 1_000),
@@ -175,18 +219,44 @@ struct ActivityDetailTests {
 
         await store.send(.destination(.presented(.manageEvent(.delegate(.dismissAndNavigateToEvent(event)))))) {
             $0.destination = nil
+            $0.pendingEvent = event
+            $0.pendingEventInvite = true
         }
-
+        await store.send(.editorDismissed) {
+            $0.pendingEvent = nil
+            $0.pendingEventInvite = false
+        }
         await store.receive(\.navigateToEvent) {
-            $0.destination = .eventDetail(
-                EventDetailFeature.State(
-                    activityId: activity.id,
-                    eventId: event.id,
-                    destination: .invite(event),
-                    bootstrap: bootstrap
-                )
+            var detail = EventDetailFeature.State(
+                activityId: activity.id, eventId: event.id, bootstrap: bootstrap
             )
+            detail.confirmation.queue("Session oprettet")
+            detail.inviteAfterConfirmation = true
+            $0.destination = .eventDetail(detail)
         }
+    }
+
+    @Test
+    func activityUpdateQueuesFeedbackUntilEditorHasClosed() async {
+        let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
+        let activity = bootstrap.wrappedValue.managerData!.activities[0]
+        let clock = TestClock()
+        let store = TestStore(initialState: ActivityDetail.State(
+            activityId: activity.id, destination: .editActivity(.edit(activity: activity)), bootstrap: bootstrap
+        )) { ActivityDetail() } withDependencies: { $0.continuousClock = clock }
+        await store.send(.destination(.presented(.editActivity(.delegate(.activityUpdated(activity)))))) {
+            $0.destination = nil
+            $0.confirmation.queue("Aktivitet gemt")
+        }
+        await clock.advance(by: .seconds(5))
+        #expect(!store.state.confirmation.isPresented)
+        await store.send(.editorDismissed)
+        await store.receive(\.confirmation.transitionCompleted) {
+            $0.confirmation.isPending = false
+            $0.confirmation.isPresented = true
+        }
+        await clock.advance(by: .seconds(1))
+        await store.receive(\.confirmation.dismiss) { $0.confirmation.isPresented = false }
     }
 
     @Test

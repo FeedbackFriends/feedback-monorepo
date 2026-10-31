@@ -20,6 +20,7 @@ public struct ActivityListView: View {
             HomeActivitiesView(store: store)
                 .background(LetsGrowLandingGradient().ignoresSafeArea())
                 .navigationTitle("Aktiviteter")
+                .successConfirmation(store.scope(state: \.confirmation, action: \.confirmation))
                 .refreshable { await store.send(.refresh).finish() }
                 .toolbar {
                     if let onProfileButtonTap {
@@ -33,9 +34,13 @@ public struct ActivityListView: View {
                             .accessibilityIdentifier("my_activity_add_button")
                     }
                 }
-                .sheet(item: $store.scope(state: \.destination?.manageActivity, action: \.destination.manageActivity)) { activityStore in
-                    ManageActivityView(store: activityStore)
-                }
+                .sheet(
+                    item: $store.scope(state: \.destination?.manageActivity, action: \.destination.manageActivity),
+                    onDismiss: { store.send(.activityEditorDismissed) },
+                    content: { activityStore in
+                        ManageActivityView(store: activityStore)
+                    }
+                )
         } destination: { pathStore in
             switch pathStore.case {
             case .activityDetail(let detailStore):

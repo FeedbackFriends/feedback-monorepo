@@ -6,10 +6,14 @@ import Foundation
 struct JoinEventTests {
     @Test
     func `Join event succeeds and navigates to participant event`() async {
+        let clock = TestClock()
+        let didDismiss = LockIsolated(false)
         let store = await TestStore(initialState: JoinEvent.State(pinCodeInput: .init(value: "1234"))) {
             JoinEvent()
         } withDependencies: {
             $0.apiClient.joinEvent = { _ in .mock() }
+            $0.continuousClock = clock
+            $0.dismiss = .init { didDismiss.setValue(true) }
         }
         await store.send(.binding(.set(\.pinCodeTextfieldFocused, true))) {
             $0.pinCodeTextfieldFocused = true
@@ -21,9 +25,13 @@ struct JoinEventTests {
         
         await store.receive(\.joinSuccess) {
             $0.joinRequestInFlight = false
-            $0.showSuccessOverlay = true
+            $0.isSuccessMessagePresented = true
         }
         await store.receive(\.delegate, .navigateToParticipantEvent(withPinCode: .init(value: "1234")))
+        #expect(!didDismiss.value)
+        await clock.advance(by: .seconds(1))
+        await store.finish()
+        #expect(didDismiss.value)
     }
     
     @Test

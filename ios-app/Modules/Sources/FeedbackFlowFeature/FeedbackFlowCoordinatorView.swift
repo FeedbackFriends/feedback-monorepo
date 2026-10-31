@@ -20,7 +20,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
         !store.feedbackItemCompleted
     }
     var disableSubmitButton: Bool {
-        !store.feedbackItemCompleted
+        !store.feedbackItemCompleted || store.submitFeedbackInFlight || store.isSuccessMessagePresented
     }
     
     public init(store: StoreOf<FeedbackFlowCoordinator>, principalToolbarItem: @escaping () -> PrincipalToolbarItem) {
@@ -51,11 +51,6 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
         )
         .sensoryFeedback(.selection, trigger: store.questionIndex)
         .statusBar(hidden: true)
-        .successOverlay(
-            message: "Tak for din feedback",
-            show: $store.presentSuccessOverlay,
-            enableAutomaticDismissal: false
-        )
         .sheet(
             item: $store.scope(state: \.destination?.showEventInfo, action: \.destination.showEventInfo),
             content: { _ in
@@ -175,6 +170,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
                 .ignoresSafeArea()
             )
             .navigationBarBackButtonHidden(true)
+            .successMessage("Tak for din feedback", isPresented: store.isSuccessMessagePresented)
     }
 
     var questionView: some View {

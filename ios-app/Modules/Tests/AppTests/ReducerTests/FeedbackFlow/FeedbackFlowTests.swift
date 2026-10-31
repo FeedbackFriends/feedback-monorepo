@@ -121,14 +121,16 @@ struct FeedbackFlowTests {
         }
         
         await store.receive(\.submitFeedbackResponse) {
-            $0.presentSuccessOverlay = true
+            $0.isSuccessMessagePresented = true
             $0.submitFeedbackInFlight = false
         }
         
-        // 2 Sec delay while success is shown
-        await clock.advance(by: .seconds(2))
+        // The success message is shown for one second.
+        await store.send(.submitButtonTap)
+        await clock.advance(by: .seconds(1))
         // Rating presented
         await store.receive(\.presentRatingPrompt) {
+            $0.isSuccessMessagePresented = false
             $0.destination = .ratingPrompt
         }
         #expect(didDismiss.value == false)
@@ -153,7 +155,7 @@ struct FeedbackFlowTests {
             $0.submitFeedbackInFlight = true
         }
         await store.receive(\.submitFeedbackResponse) {
-            $0.presentSuccessOverlay = true
+            $0.isSuccessMessagePresented = true
             $0.submitFeedbackInFlight = false
         }
         #expect(didDismiss.value)
@@ -257,7 +259,7 @@ private extension FeedbackFlowTests {
                 ]
             ),
             submitFeedbackInFlight: false,
-            presentSuccessOverlay: false,
+            isSuccessMessagePresented: false,
             questions: IdentifiedArrayOf<FeedbackFlowCoordinator.Path.State>.init(
                 arrayLiteral: .emoji(question1), .emoji(question2)
             ),
