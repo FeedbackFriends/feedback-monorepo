@@ -1,0 +1,19 @@
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivityView.swift
+  s_7374d8221a273d::t_73e2f09669dbbf 55,109,116-121,163,276,280-282
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7a897d57a2f7cee1445d4e18b8076f1921d2e8de",
+  "prompts": {},
+  "sessions": {
+    "s_7374d8221a273d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1921f-4f32-7010-9975-423c092226d1",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
