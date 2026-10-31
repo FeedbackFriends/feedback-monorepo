@@ -22,9 +22,9 @@ public struct PinCodeTextFieldView<Background: ShapeStyle>: View {
     public var body: some View {
         TextField("", text: $input.value)
             .accessibilityLabel("PIN-kode")
-            .rowTitleTextStyle()
+            .font(.montserratSemiBold, 15)
+            .textInputForegroundStyle()
             .padding()
-            .foregroundStyle(Color.themeText)
             .background(background, in: Capsule(style: .continuous))
             .keyboardType(.numberPad)
             .multilineTextAlignment(.center)

@@ -1,6 +1,18 @@
 import SwiftUI
 
 public extension View {
+    /// Keeps entered text fully white in dark mode and black in light mode.
+    func textInputForegroundStyle() -> some View {
+        modifier(TextInputForegroundStyleModifier())
+    }
+
+    /// Shared typography and high contrast color for text entry.
+    func textInputTextStyle() -> some View {
+        self
+            .font(.montserratRegular, 14)
+            .modifier(TextInputForegroundStyleModifier())
+    }
+
     /// Use for prominent screen or display titles.
     func largeTitleTextStyle() -> some View {
         modifier(TextStyleModifier(style: .largeTitle))
@@ -122,4 +134,12 @@ private struct TextStyleDefinition {
     let fontName: Font.FontName
     let size: CGFloat
     let color: Color
+}
+
+private struct TextInputForegroundStyleModifier: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+
+    func body(content: Content) -> some View {
+        content.foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
+    }
 }

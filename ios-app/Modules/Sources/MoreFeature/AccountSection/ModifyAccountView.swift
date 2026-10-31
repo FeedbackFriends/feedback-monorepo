@@ -16,11 +16,13 @@ public struct ModifyAccountView: View {
             Form {
                 Section {
                     TextField("Name", text: $store.nameInput)
+                        .textInputTextStyle()
                 } header: {
                     SectionHeaderView("Name", horizontalPadding: 0)
                 }
                 Section {
                     TextField("Email", text: $store.emailInput)
+                        .textInputTextStyle()
                 } header: {
                     SectionHeaderView("Email", horizontalPadding: 0)
                 } footer: {
@@ -28,6 +30,7 @@ public struct ModifyAccountView: View {
                 }
                 Section {
                     TextField("Phone number", text: $store.phoneNumberInput)
+                        .textInputTextStyle()
                 } header: {
                     SectionHeaderView("Phone number", horizontalPadding: 0)
                 }
