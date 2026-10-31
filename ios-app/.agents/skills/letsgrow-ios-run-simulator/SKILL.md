@@ -7,6 +7,16 @@ description: Build, test, launch, and verify LetsGrow iOS changes through native
 
 Follow [the iOS policy](../../../AGENTS.md). Setup and configuration ownership are in [the harness overview](../../../Docs/agent-harness.md). Use native `mcp__xcode` tools. Default to `Feedback Localhost`; an explicitly requested production run uses `Feedback Production` (Release). A request only to launch or build does not require the full verification sequence below. For backend preparation, use the root `letsgrow-ios-localhost` or `letsgrow-ios-production` skill as appropriate.
 
+## Apple's current guidance
+
+Discover the native Xcode MCP capabilities available in the current session. Load relevant Apple-provided skills or instructions through the discovery/read mechanisms actually exposed by the client or referenced in tool responses. Do not assume a particular Apple skill name, filesystem location, or version, and do not install or copy skills merely because a tool mentions one.
+
+Use Apple's available guidance for tool syntax and operation. Resolve tool names and arguments from the current tool descriptions; the names below describe the existing workflow rather than pinning an Xcode API version.
+
+If a tool response references guidance that the client does not expose, continue directly through native Xcode MCP when its tool descriptions provide enough information to perform the task. A referenced skill or suggested delegation is not by itself a blocker or a requirement to spawn another agent. Delegate only when authorized by the user or applicable repository instructions. Report a blocker when the required native capability, permission, or operational information is actually unavailable; distinguish this from a missing optional instruction resource. Never invent interaction syntax or replace native Xcode MCP with another automation backend.
+
+## Workflow
+
 1. Discover the workspace with `XcodeListWorkspaces`, matching the absolute `ios-app/Feedback.xcodeproj` path in the current checkout. Other LetsGrow or Dinero windows may be open. Open the project with `XcodeOpenWorkspace` only when absent; list again if opening times out. Pass the discovered identifier to later workspace tools.
 2. Select the chosen scheme using `XcodeSwitchScheme` (`Feedback Localhost` by default, `Feedback Production` for an explicit production run). Confirm the destination with `XcodeListRunDestinations`. Keep the active eligible simulator unless the user chooses another; if none is active, select an eligible simulator explicitly and report it. Never run on a physical device implicitly.
 3. For tests, use `Feedback Localhost`, inspect `XcodeListTestPlans`, and select `UnitTests` with `XcodeSwitchTestPlan` if needed. `GetTestList` must discover enabled tests from both `AppTests` and `InsightsTests`; inspect its full list file when inline results are truncated. Missing plans, targets, or zero discovered tests are blockers, not a passing test run. Do not switch schemes to hide configuration failures. A production launch does not run tests; if tests were also requested, run them on Localhost and explicitly reselect Production before the production build/run.

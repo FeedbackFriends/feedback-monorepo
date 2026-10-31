@@ -6,7 +6,7 @@ Use Swift Package Manager. The main project is `Feedback.xcodeproj`; the develop
 
 - Never create or switch branches unless the user explicitly asks.
 - When asked to commit and push, commit the intended changes and push the current branch.
-- Use native Xcode MCP for Xcode/simulator operations; read the simulator guide before build, test, launch, or verification work.
+- Use native Xcode MCP for Xcode/simulator operations and discover Apple's available built-in guidance dynamically; read the simulator guide before build, test, launch, or verification work.
 
 ## Non-standard validation
 

@@ -24,6 +24,8 @@ The checked-in project configuration starts Apple's native server using `xcrun m
 
 Verify the connection with `XcodeListWorkspaces`. Match this checkout's absolute `ios-app/Feedback.xcodeproj` path; use `XcodeOpenWorkspace` if absent. Follow Xcode's authorization prompts yourself if required. A missing connection or denied operation is a blocker to report, not a reason to switch local automation tools.
 
+Apple's built-in guidance is discovered from the current client and native Xcode MCP responses. Its names and availability may change between Xcode and client versions, so this repository does not pin or vendor those skills. Follow the [simulator workflow](../.agents/skills/letsgrow-ios-run-simulator/SKILL.md) for discovery and direct native operation when a referenced instruction resource is not exposed. Repository workflows retain LetsGrow-specific scheme, test, login, and verification rules.
+
 ## Tests and local services
 
 ### Device Hub windows
