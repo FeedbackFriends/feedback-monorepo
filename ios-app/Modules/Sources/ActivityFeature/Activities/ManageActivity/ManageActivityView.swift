@@ -8,6 +8,9 @@ import Utility
 public struct ManageActivityView: View {
     @Bindable var store: StoreOf<ManageActivity>
     @Environment(\.dismiss) private var dismiss
+    #if DEBUG
+    @Environment(\.isScreenSnapshot) private var isScreenSnapshot
+    #endif
     private enum Field: Hashable { case title }
     @FocusState private var focusedField: Field?
 
@@ -56,6 +59,13 @@ private extension ManageActivityView {
                 feedbackSection
             }
         }
+        .task {
+            guard store.mode == .create, store.path.isEmpty else { return }
+            #if DEBUG
+            guard !isScreenSnapshot else { return }
+            #endif
+            focusedField = .title
+        }
         .safeAreaInset(edge: .bottom) {
             if store.mode == .create {
                 nextButton
@@ -67,36 +77,19 @@ private extension ManageActivityView {
 
     var templateStep: some View {
         stepPage {
-            stepHeader(number: 2, title: "Vælg feedbackskabelon", subtitle: "Vælg et udgangspunkt. Du kan tilpasse spørgsmålene i næste trin.")
+            stepHeader(number: 2, title: "Vælg feedbackskabelon", subtitle: "Vælg et udgangspunkt, og tilpas spørgsmålene til din aktivitet.")
             feedbackSection
         }
-        .safeAreaInset(edge: .bottom) { nextButton }
+        .safeAreaInset(edge: .bottom) { submitButton }
     }
 
     var questionsStep: some View {
-        VStack(spacing: 0) {
-            if store.mode == .create {
-                stepHeader(
-                    number: 3,
-                    title: "Tilpas dine spørgsmål",
-                    subtitle: store.selectedTemplate == .customQuestions
-                        ? "Tilføj de spørgsmål, du vil stille deltagerne."
-                        : "Spørgsmålene kommer fra skabelonen “\(store.selectedTemplate?.title ?? "")”. Tryk på et spørgsmål for at ændre det."
-                )
-                .padding(Theme.padding)
-            }
-            QuestionsListView(
-                questionsInputs: $store.questions,
-                onPreview: { store.send(.previewRequested($0)) }
-            )
-        }
+        QuestionsListView(
+            questionsInputs: $store.questions,
+            onPreview: { store.send(.previewRequested($0)) }
+        )
         .background(Color.themeBackground.ignoresSafeArea())
         .toolbar { closeButton }
-        .safeAreaInset(edge: .bottom) {
-            if store.mode == .create {
-                submitButton
-            }
-        }
     }
 
     func stepPage<Content: View>(@ViewBuilder content: () -> Content) -> some View {
@@ -115,7 +108,7 @@ private extension ManageActivityView {
 
     func stepHeader(number: Int, title: String, subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Trin \(number) af 3")
+            Text("Trin \(number) af 2")
                 .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
             Text(title)
@@ -213,7 +206,7 @@ private extension ManageActivityView {
                 .transition(.blurReplace)
             }
 
-            if store.mode == .edit && store.selectedTemplate != nil {
+            if store.selectedTemplate != nil {
                 sectionDivider
                 questionsSection
             }

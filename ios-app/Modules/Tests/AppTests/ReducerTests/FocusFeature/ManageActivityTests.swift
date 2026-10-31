@@ -35,7 +35,7 @@ struct ManageActivityTests {
         var initialState = ManageActivity.State.create()
         initialState.title = "Weekly team sync"
         initialState.selectTemplate(.standardMeeting)
-        initialState.path = [.template, .questions]
+        initialState.path = [.template]
 
         let store = TestStore(initialState: initialState) {
             ManageActivity()
@@ -66,7 +66,7 @@ struct ManageActivityTests {
         var initialState = ManageActivity.State.create()
         initialState.title = "Weekly team sync"
         initialState.selectTemplate(.standardMeeting)
-        initialState.path = [.template, .questions]
+        initialState.path = [.template]
 
         let store = TestStore(initialState: initialState) {
             ManageActivity()
@@ -109,15 +109,18 @@ struct ManageActivityTests {
     }
 
     @Test
-    func `Creation cannot submit from the name or template screen`() async {
+    func `Creation cannot submit from the name screen or question editor`() async {
         var state = ManageActivity.State.create()
         state.title = "Teammøde"
         state.selectTemplate(.standardMeeting)
         let store = TestStore(initialState: state) { ManageActivity() }
         await store.send(.actionButtonTap)
         await store.send(.nextButtonTap) { $0.path = [.template] }
+        #expect(!store.state.isSubmitDisabled)
+        await store.send(.binding(.set(\.path, [.template, .questions]))) {
+            $0.path = [.template, .questions]
+        }
         await store.send(.actionButtonTap)
-        await store.send(.nextButtonTap) { $0.path = [.template, .questions] }
         #expect(!store.state.createActivityRequestInFlight)
     }
 
@@ -131,7 +134,9 @@ struct ManageActivityTests {
         let originalQuestions = state.questions
         let store = TestStore(initialState: state) { ManageActivity() }
         await store.send(.binding(.set(\.path, [.template]))) { $0.path = [.template] }
-        await store.send(.nextButtonTap) { $0.path = [.template, .questions] }
+        #expect(!store.state.isSubmitDisabled)
+        await store.send(.binding(.set(\.path, []))) { $0.path = [] }
+        await store.send(.nextButtonTap) { $0.path = [.template] }
         #expect(store.state.title == "Teammøde")
         #expect(store.state.questions == originalQuestions)
     }
@@ -154,7 +159,7 @@ struct ManageActivityTests {
         var state = ManageActivity.State.create()
         state.title = "Teammøde"
         state.selectTemplate(.customQuestions)
-        state.path = [.template, .questions]
+        state.path = [.template]
         #expect(state.isSubmitDisabled)
         state.questions = [.init(questionText: "   ", feedbackType: .comment)]
         #expect(state.isSubmitDisabled)

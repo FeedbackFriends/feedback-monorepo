@@ -85,13 +85,13 @@ public struct ManageActivity: Sendable {
             guard !createActivityRequestInFlight else { return true }
             switch path.last {
             case nil: return isTitleMissing
-            case .template: return selectedTemplate == nil
+            case .template: return true
             case .questions: return true
             }
         }
 
         var isSubmitDisabled: Bool {
-            !hasValidInput || createActivityRequestInFlight || (mode == .create && path.last != .questions)
+            !hasValidInput || createActivityRequestInFlight || (mode == .create && path.last != .template)
         }
 
         var hasCustomizedQuestions: Bool {
@@ -216,10 +216,7 @@ public struct ManageActivity: Sendable {
                 case nil:
                     guard !state.isTitleMissing else { return .none }
                     state.path.append(.template)
-                case .template:
-                    guard state.selectedTemplate != nil else { return .none }
-                    state.path.append(.questions)
-                case .questions:
+                case .template, .questions:
                     return .none
                 }
                 return .none

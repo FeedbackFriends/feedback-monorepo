@@ -117,6 +117,7 @@ private func catalogActivityDetailNoFeedback() -> some View {
     }
 }
 
+// Screenshot: Activity with sessions but no feedback hides the trend section.
 #Preview("activity-detail.no-feedback") { catalogActivityDetailNoFeedback() }
 
 @MainActor
@@ -181,6 +182,7 @@ private func catalogCreateActivityTemplates() -> some View {
     }
 }
 
+// Screenshot: Combined feedback step before choosing a template.
 #Preview("create-activity.templates") { catalogCreateActivityTemplates() }
 
 @MainActor
@@ -206,7 +208,8 @@ private func catalogCreateActivityCustomEmpty() -> some View {
 private func catalogCreateActivitySaving() -> some View {
     ScreenCatalogContainerView {
         let state = {
-            var state = CatalogActivity.createActivity(step: .questions)
+            var state = CatalogActivity.createActivity(step: .template)
+            state.selectTemplate(.standardMeeting)
             state.createActivityRequestInFlight = true
             return state
         }()
@@ -228,6 +231,7 @@ private func catalogCreateActivityTemplateSelected() -> some View {
     }
 }
 
+// Screenshot: Combined feedback step with questions and create action.
 #Preview("create-activity.template-selected") { catalogCreateActivityTemplateSelected() }
 
 @MainActor
@@ -963,11 +967,20 @@ private func catalogExtraSessionResultsCommentEmpty() -> some View {
 enum ActivityFeatureScreenSnapshotCatalog {
     static var samples: [ScreenSnapshotSample] {
         [
+            .init(id: "activity-detail.no-feedback", size: CGSize(width: 402, height: 874)) {
+                catalogActivityDetailNoFeedback()
+            },
             .init(id: "create-activity.details", size: CGSize(width: 402, height: 874)) {
                 catalogCreateActivityDetails()
             },
+            .init(id: "create-activity.templates", size: CGSize(width: 402, height: 874)) {
+                catalogCreateActivityTemplates()
+            },
             .init(id: "create-activity.questions", size: CGSize(width: 402, height: 874)) {
                 catalogCreateActivityQuestions()
+            },
+            .init(id: "create-activity.template-selected", size: CGSize(width: 402, height: 874)) {
+                catalogCreateActivityTemplateSelected()
             },
             .init(id: "create-session.scheduled", size: CGSize(width: 402, height: 874)) {
                 catalogCreateSessionScheduled()
