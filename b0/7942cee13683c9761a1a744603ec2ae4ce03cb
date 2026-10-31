@@ -1,0 +1,23 @@
+ios-app/CI_scripts/ci_post_clone.sh
+  s_7374d8221a273d::t_7ab533449d52ac 15,20-27,33-37
+ios-app/CI_scripts/ci_pre_xcodebuild.sh
+  s_7374d8221a273d::t_e8c46a0491b076 10-11
+ios-app/README.md
+  s_7374d8221a273d::t_80b414f9beca02 121-122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b07942cee13683c9761a1a744603ec2ae4ce03cb",
+  "prompts": {},
+  "sessions": {
+    "s_7374d8221a273d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1921f-4f32-7010-9975-423c092226d1",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
