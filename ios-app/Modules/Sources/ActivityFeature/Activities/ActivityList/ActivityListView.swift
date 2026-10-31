@@ -57,18 +57,42 @@ private struct HomeActivitiesView: View {
     let store: StoreOf<ActivityList>
 
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 16) {
+        GeometryReader { geometry in
+            ScrollView {
                 if store.activities.isEmpty {
-                    Text("Du har ingen aktiviteter endnu.").supportingTextStyle()
-                }
-                ForEach(store.activities) { activity in
-                    ActivityRowButton(activity: activity, now: store.referenceDate ?? .now) { store.send(.activityTap(activity)) }
+                    emptyState
+                        .frame(minHeight: geometry.size.height)
+                } else {
+                    LazyVStack(spacing: 16) {
+                        ForEach(store.activities) { activity in
+                            ActivityRowButton(activity: activity, now: store.referenceDate ?? .now) { store.send(.activityTap(activity)) }
+                        }
+                    }
+                    .padding()
                 }
             }
-            .padding()
+            .background(LetsGrowLandingGradient().ignoresSafeArea())
         }
-        .background(LetsGrowLandingGradient().ignoresSafeArea())
+    }
+
+    private var emptyState: some View {
+        ContentUnavailableView {
+            Label {
+                Text("Opret din første aktivitet")
+                    .titleTextStyle()
+                    .foregroundStyle(Color.themeText)
+            } icon: {
+                Image(systemName: "calendar.badge.plus")
+                    .foregroundStyle(Color.themePrimaryAction)
+            }
+        } description: {
+            VStack(spacing: 12) {
+                Text("Få feedback efter møder, workshops og oplæg.")
+                Text("Tryk på + øverst til højre for at komme i gang.")
+            }
+            .supportingTextStyle()
+            .foregroundStyle(Color.themeTextSecondary)
+        }
     }
 }
 
