@@ -1,0 +1,19 @@
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/ActivityListView.swift
+  s_a3e158117da63d::t_59faa92e86a203 60-61,63-71,74-94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "241ea366d4f5e8b934f95d025d337503179fae20",
+  "prompts": {},
+  "sessions": {
+    "s_a3e158117da63d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a192df-1b7e-7131-a8af-2bf10f66d904",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
