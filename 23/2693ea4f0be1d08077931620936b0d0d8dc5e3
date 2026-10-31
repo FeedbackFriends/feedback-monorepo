@@ -1,0 +1,25 @@
+ios-app/.agents/skills/letsgrow-ios-run-simulator/SKILL.md
+  s_d1a183784cf41e::t_d3db4c5b702494 10-19
+ios-app/AGENTS.md
+  s_d1a183784cf41e::t_fe394cc45fb49e 9
+ios-app/Docs/agent-harness.md
+  s_d1a183784cf41e::t_eaac9fb972f45b 27-28
+ios-app/Docs/agents/simulator.md
+  s_d1a183784cf41e::t_672e7df4a0e636 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "232693ea4f0be1d08077931620936b0d0d8dc5e3",
+  "prompts": {},
+  "sessions": {
+    "s_d1a183784cf41e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1916b-cdc9-7181-abde-ba6e62a0b11d",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
