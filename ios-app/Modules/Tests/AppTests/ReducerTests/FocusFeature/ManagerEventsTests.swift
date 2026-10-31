@@ -66,7 +66,7 @@ struct ManagerEventsTests {
         } withDependencies: {
             $0.continuousClock = clock
             $0.apiClient.deleteActivity = { id in
-                bootstrap.withLock { $0.managerData!.activities.remove(id: id) }
+                bootstrap.withLock { _ = $0.managerData!.activities.remove(id: id) }
             }
         }
 
@@ -80,7 +80,7 @@ struct ManagerEventsTests {
             $0.path[id: detailId] = .activityDetail(detail)
         }
         await store.receive(\.path[id: detailId].activityDetail.deleteActivitySuccess) {
-            $0.$bootstrap.withLock { $0.managerData!.activities.remove(id: activity.id) }
+            $0.$bootstrap.withLock { _ = $0.managerData!.activities.remove(id: activity.id) }
             var detail = $0.path[id: detailId]!.activityDetail!
             detail.deleteActivityInFlight = false
             detail.activityWasDeleted = true

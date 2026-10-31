@@ -96,7 +96,9 @@ struct StartupLoadingView: View {
         .preferredColorScheme(.dark)
 }
 
+#if DEBUG
 #Preview("Startup · Still") {
     StartupLoadingView()
         .environment(\.isScreenSnapshot, true)
 }
+#endif
