@@ -1,0 +1,21 @@
+ios-app/Modules/Sources/RootFeature/StartupLoadingView.swift
+  s_e8571098e66441::t_45ce432fa8c8ef 99,104
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ManagerEventsTests.swift
+  s_e8571098e66441::t_064bdd0e0091c4 69,83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1fff97f6b40400971f3c7d3835474793b6496463",
+  "prompts": {},
+  "sessions": {
+    "s_e8571098e66441": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f293a872-2636-4a60-8f51-d5f01c5cbdea",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
