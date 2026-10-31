@@ -1,0 +1,29 @@
+ios-app/Resources/Assets.xcassets/LaunchBackground.colorset/Contents.json
+  s_8bd54962549778::t_6882c2baf38d5d 1-36
+ios-app/Resources/Assets.xcassets/LaunchLogo.imageset/Contents.json
+  s_8bd54962549778::t_9bc23afe0942b9 1-25
+"ios-app/Resources/Launch Screen.storyboard"
+  s_8bd54962549778::t_c776713c06f920 18-26,28-32,42,46-47
+ios-app/Feedback.xcodeproj/project.pbxproj
+  s_8bd54962549778::t_b347bc2e472599 6,48-59,71-80,147-151,211-227,412-416,593-636,692-693,699-700,912-927,939-946,1233-1234,1285-1286,1337-1338,1714-1821,2096-2115,2138-2156,2202-2243
+ios-app/Modules/Sources/RootFeature/RootFeatureView.swift
+  s_8bd54962549778::t_4a9c1626bcdce7 8,17,21-22,34-35,37
+ios-app/Modules/Sources/RootFeature/StartupLoadingView.swift
+  s_8bd54962549778::t_27aab8bce158ac 1-102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "042e99f4df79b3e4b093c3c5874ca3a8a2d1edbd",
+  "prompts": {},
+  "sessions": {
+    "s_8bd54962549778": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1936a-adfa-7093-9aaf-8ce72909ba2e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
