@@ -148,19 +148,22 @@ private extension TabbarView {
         }
     }
 
+    @ToolbarContentBuilder
     var profileSettingsToolbarItem: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                store.send(.accountSection(.settingsButtonTap))
-            } label: {
-                Image.settings
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 16, height: 16)
+        if isManager {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    store.send(.accountSection(.settingsButtonTap))
+                } label: {
+                    Image.settings
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 16, height: 16)
+                }
+                .foregroundStyle(Color.themeText)
+                .accessibilityLabel("Indstillinger")
+                .accessibilityIdentifier("profile_settings_button")
             }
-            .foregroundStyle(Color.themeText)
-            .accessibilityLabel("Indstillinger")
-            .accessibilityIdentifier("profile_settings_button")
         }
     }
 
