@@ -1,0 +1,91 @@
+ios-app/Docs/agents/ui.md
+  s_a3e158117da63d::t_1cc651aac35133 33,36-37
+ios-app/Docs/screenshots/README.md
+  s_7374d8221a273d::t_21ab34bda9610d 3
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/ActivityDetail.swift
+  s_a3e158117da63d::t_b910f2daa632a1 33-36,70-73,77-80,88,92,105-107,110-112,127-152,225-226,228-230,235,237-241
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/ActivityDetailView.swift
+  s_a3e158117da63d::t_d476834b5a2635 13,20-21
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailContentView.swift
+  s_a3e158117da63d::t_2424cd6d204ae6 26,145-146,154-155
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/ActivityList.swift
+  s_a3e158117da63d::t_3b4441fe86471a 32-33,72-73,79,83,94-103,105-113,120-122,143-155
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/ActivityListView.swift
+  s_a3e158117da63d::t_78ec266263cec2 23,37-43
+ios-app/Modules/Sources/ActivityFeature/Activities/EventDetail/EventDetailFeature.swift
+  s_a3e158117da63d::t_8dd54547b79d54 27-29,102-103,109,120,130,157,171,173-183,185-188
+ios-app/Modules/Sources/ActivityFeature/Activities/EventDetail/EventDetailFeatureView.swift
+  s_a3e158117da63d::t_ac863bda584e88 19-20,27,31,33,70-82,84-87,113-114
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivity.swift
+  s_a3e158117da63d::t_a7aad4926ece9a 161,254,256
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/ManageEvent.swift
+  s_a3e158117da63d::t_504be73a87e6da 76,93,219,259-263
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_a3e158117da63d::t_82481afe92ffae 10,16-22,35-42,64,117-126,387-397,691,994-996
+ios-app/Modules/Sources/ActivityFeature/SuccessConfirmation/SuccessConfirmation.swift
+  s_a3e158117da63d::t_e9e46429bcbe2d 1-2,4-11,13-16,19-22,25-44
+ios-app/Modules/Sources/ActivityFeature/SuccessConfirmation/SuccessConfirmationViewModifier.swift
+  s_a3e158117da63d::t_3a95a8ab94b3ea 1-10
+ios-app/Modules/Sources/DesignSystem/ViewModifiers/NavigationTransitionCompletedModifier.swift
+  s_a3e158117da63d::t_4fe1665d940c03 1-38
+ios-app/Modules/Sources/FeedbackFlowFeature/ScreenCatalogPreviewView.swift
+  s_7374d8221a273d::t_91b64530c97320 354
+ios-app/Modules/Sources/TabbarFeature/ScreenCatalogPreviewView.swift
+  s_7374d8221a273d::t_7b8b0e9160fed2 14,18-20,45-49,234-236
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ActivityDetailTests.swift
+  s_a3e158117da63d::t_8c85eac12a39f1 9-55,58,88,90-91,195,222-227,230-231,233-256,258-259
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/EventDetailFeatureTests.swift
+  s_a3e158117da63d::t_3c43a05f2e2c74 105,110,139,141-142
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ManageActivityTests.swift
+  s_a3e158117da63d::t_73bd9ab4d4330f 63-70
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ManagerEventsTests.swift
+  s_a3e158117da63d::t_f81decb016dec1 9-106,142-147,152-154
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/SuccessConfirmationTests.swift
+  s_a3e158117da63d::t_3e0e0b68be079a 1-26
+ios-app/Modules/Tests/AppTests/ReducerTests/Tabbar/InitialiseFeedbackTests.swift
+  s_7374d8221a273d::t_b3e9a895a1d476 45
+ios-app/Modules/Tests/InsightsTests/InsightsTests.swift
+  s_a3e158117da63d::t_bc6ef602cffd20 138-140
+ios-app/Modules/Sources/ActivityFeature/Events/JoinEvent/JoinEvent.swift
+  s_7374d8221a273d::t_de7e1830dbbbfd 19,23,51,97-102
+ios-app/Modules/Sources/ActivityFeature/Events/JoinEvent/JoinEventView.swift
+  s_7374d8221a273d::t_004528b338dc21 61
+ios-app/Modules/Sources/DesignSystem/Constants.swift
+  s_7374d8221a273d::t_b58e3349b6b467 4
+ios-app/Modules/Sources/DesignSystem/ReusableViews/SuccessMessageView.swift
+  s_7374d8221a273d::t_4b02f60d3219f3 2,4-9,12-16,18-37,39-40
+ios-app/Modules/Sources/DesignSystem/ViewModifiers/SuccessMessageModifier.swift
+  s_7374d8221a273d::t_4428b243d878c0 1-20
+ios-app/Modules/Sources/FeedbackFlowFeature/FeedbackFlowCoordinator.swift
+  s_7374d8221a273d::t_06c2951bd275e4 37,141,144,175,197,239
+ios-app/Modules/Sources/FeedbackFlowFeature/FeedbackFlowCoordinatorView.swift
+  s_7374d8221a273d::t_3b87a12b53bf52 23,173
+ios-app/Modules/Tests/AppTests/ReducerTests/FeedbackFlow/FeedbackFlowTests.swift
+  s_7374d8221a273d::t_b344bca32500c4 124,128-130,133,158,262
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/JoinEventTests.swift
+  s_7374d8221a273d::t_64cb048822d6c2 9-10,15-16,28,31-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f3aa5c23701966166a76269630ededc058773ca1",
+  "prompts": {},
+  "sessions": {
+    "s_7374d8221a273d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1921f-4f32-7010-9975-423c092226d1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_a3e158117da63d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a192df-1b7e-7131-a8af-2bf10f66d904",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
