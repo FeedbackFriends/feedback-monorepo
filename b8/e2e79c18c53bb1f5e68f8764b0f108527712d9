@@ -1,0 +1,37 @@
+ios-app/Docs/agents/ui.md
+  s_006c6a6bbe6b84::t_c47cd64dd95fab 33-34
+ios-app/Modules/Sources/DesignSystem/ReusableViews/PinCodeTextFieldView.swift
+  s_58f1ecfb570501::t_024563fdc1a19b 25-26
+ios-app/Modules/Sources/DesignSystem/Styles/ButtonStyles/InlineActionButtonStyle.swift
+  s_006c6a6bbe6b84::t_67065979943898 1-16
+ios-app/Modules/Sources/DesignSystem/Styles/OtherStyles/TextStyles.swift
+  s_58f1ecfb570501::t_9680eec4c799ee 4-15,138-145
+ios-app/Modules/Sources/FeedbackFlowFeature/Views/FeedbackElaborationTextField.swift
+  s_58f1ecfb570501::t_aed1ea582cee6d 16
+ios-app/Modules/Sources/MoreFeature/AccountSection/ModifyAccountView.swift
+  s_58f1ecfb570501::t_b6fc701eab5173 19,25,33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b8e2e79c18c53bb1f5e68f8764b0f108527712d9",
+  "prompts": {},
+  "sessions": {
+    "s_006c6a6bbe6b84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19359-5586-7a92-82ac-94f15a488e90",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_58f1ecfb570501": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1934d-d98a-7de3-93b8-ee661c7650ae",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
