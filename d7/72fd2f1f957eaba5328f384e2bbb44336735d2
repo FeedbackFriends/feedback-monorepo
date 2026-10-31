@@ -1,0 +1,41 @@
+ios-app/Docs/features/overview.md
+  s_006c6a6bbe6b84::t_21fca664b77ec8 1-244
+ios-app/Docs/screenshots/README.md
+  s_006c6a6bbe6b84::t_256388c0f6e9e1 3,11
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivityView.swift
+  s_006c6a6bbe6b84::t_b3ae85bde08098 13,32,52,73,122,124,136,147-152,156,186,189,208-215,219-220,222-223,225
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/ManageEventView.swift
+  s_006c6a6bbe6b84::t_79a301c1607867 143,289
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionPickerView.swift
+  s_006c6a6bbe6b84::t_2e3a9b38bd3dc4 4,24-26,35,41,47,51-52,71-82,86-88,90,92,95-102,104-105,108,117,126-138,143-177,179-199,201,203
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionsListView.swift
+  s_006c6a6bbe6b84::t_e7924b6f150e70 8-14,17,23-32,34-39,41-46,50-63,65,75,77-79,89-94,96,110,118
+ios-app/Modules/Sources/ActivityFeature/Activities/SelectionOptionRowView.swift
+  s_0b2781159a9454::t_e1670c6a0253c9 4-27,29-41,43,45-53,55,57-59,61-65,67-70
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_006c6a6bbe6b84::t_18b26dac273595 421,433,445,451,490,503,507,509-512,516-517,1028-1030,1037-1044
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d772fd2f1f957eaba5328f384e2bbb44336735d2",
+  "prompts": {},
+  "sessions": {
+    "s_006c6a6bbe6b84": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19359-5586-7a92-82ac-94f15a488e90",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_0b2781159a9454": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19323-06b6-7fe3-8006-f900efd4643a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
