@@ -118,6 +118,8 @@ Schemes select different environments (Prod/Debug/Localhost/Mock) using `.xcconf
 - GitHub Actions builds the iOS app, runs both unit-test targets, and gates changed-line lint in the path-filtered `iOS` workflow. See [CI setup and cost assumptions](Docs/agent-harness.md#ci).
 - The existing `CI` workflow separately verifies generated Swift OpenAPI sources against the canonical contract.
 - `ios-app/CI_scripts/` contains separate Xcode Cloud hooks; GitHub Actions does not invoke them.
+- Xcode Cloud hooks resolve app files under `CI_PRIMARY_REPOSITORY_PATH/ios-app/`. The pre-build hook writes environment-provided secrets to `ios-app/App/Config/secrets.xcconfig`.
+- The post-clone hook optionally pushes a version/build Git tag to the checkout's `origin` when `GITHUB_WRITE_PAT` is configured. Internal testing does not require this token; without it, tagging is skipped. The token must have write access to the monorepo if tagging is enabled.
 
 
 ## 🏗️ Architecture

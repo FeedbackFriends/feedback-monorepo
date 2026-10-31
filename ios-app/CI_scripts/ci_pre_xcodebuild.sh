@@ -7,8 +7,8 @@ if [ "${TEST_RUNNER_CI:-}" = "TRUE" ]; then
 fi
 
 CI_PRIMARY_REPOSITORY_PATH="${CI_PRIMARY_REPOSITORY_PATH:-$(pwd)}"
-mkdir -p "$CI_PRIMARY_REPOSITORY_PATH/App/Config"
-SECRETS_FILE="$CI_PRIMARY_REPOSITORY_PATH/App/Config/secrets.xcconfig"
+mkdir -p "$CI_PRIMARY_REPOSITORY_PATH/ios-app/App/Config"
+SECRETS_FILE="$CI_PRIMARY_REPOSITORY_PATH/ios-app/App/Config/secrets.xcconfig"
 
 {
   echo "SENTRY_DSN_URL = ${SENTRY_DSN_URL:-}"
