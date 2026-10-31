@@ -52,7 +52,7 @@ private extension ManageActivityView {
     var detailsStep: some View {
         stepPage {
             if store.mode == .create {
-                stepHeader(number: 1, title: "Giv aktiviteten et navn", subtitle: "Brug et navn, du kan genkende, når du følger din feedback.")
+                stepHeader(number: 1, title: "Giv aktiviteten et navn")
             }
             detailsSection
             if store.mode == .edit {
@@ -106,17 +106,19 @@ private extension ManageActivityView {
         .toolbar { closeButton }
     }
 
-    func stepHeader(number: Int, title: String, subtitle: String) -> some View {
+    func stepHeader(number: Int, title: String, subtitle: String? = nil) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Trin \(number) af 2")
                 .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
             Text(title)
                 .titleTextStyle()
-            Text(subtitle)
-                .supportingTextStyle()
-                .foregroundStyle(Color.themeTextSecondary)
-                .fixedSize(horizontal: false, vertical: true)
+            if let subtitle {
+                Text(subtitle)
+                    .supportingTextStyle()
+                    .foregroundStyle(Color.themeTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .foregroundStyle(Color.themeText)
@@ -158,7 +160,7 @@ private extension ManageActivityView {
     }
 
     var detailsSection: some View {
-        section(title: "Aktivitet") {
+        section(title: store.mode == .create ? nil : "Aktivitet") {
             inputField(
                 title: "Aktivitetens navn",
                 prompt: "Fx månedligt teammøde, workshop eller træning",
@@ -271,11 +273,13 @@ private extension ManageActivityView {
 
     @ViewBuilder
     func section<Content: View>(
-        title: String,
+        title: String?,
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading) {
-            SectionHeaderView(title)
+            if let title {
+                SectionHeaderView(title)
+            }
 
             VStack(alignment: .leading, spacing: 12) {
                 content()
