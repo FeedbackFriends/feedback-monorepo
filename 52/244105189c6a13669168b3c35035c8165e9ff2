@@ -1,0 +1,27 @@
+ios-app/Docs/features/create-activity.md
+  s_d1a183784cf41e::t_57a5725b2cda3d 5,7-8,12
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivity.swift
+  s_d1a183784cf41e::t_0ed41ba1451cc0 88,94,219
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivityView.swift
+  s_d1a183784cf41e::t_b5e6bef75d5e6f 11-13,62-68,80,83,87-90,111,209
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_d1a183784cf41e::t_89c87a150cddf2 120,185,211-212,234,970-972,976-978,982-984
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ManageActivityTests.swift
+  s_d1a183784cf41e::t_83a70440deba63 38,69,112,119-122,137-139,162
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "52244105189c6a13669168b3c35035c8165e9ff2",
+  "prompts": {},
+  "sessions": {
+    "s_d1a183784cf41e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1916b-cdc9-7181-abde-ba6e62a0b11d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
