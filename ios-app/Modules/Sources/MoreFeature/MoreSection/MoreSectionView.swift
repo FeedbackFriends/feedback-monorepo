@@ -40,7 +40,6 @@ public struct MoreSectionView: View {
                     Link(destination: privacyPolicyUrl) {
                         listElementView(image: .moreSectiondocPlaintext, label: "Privatlivspolitik")
                     }
-                    .onOpenURL(prefersInApp: true)
                 }
                 Button {
                     store.send(.onSupportUsButtonTap)
