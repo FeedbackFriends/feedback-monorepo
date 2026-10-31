@@ -1,0 +1,19 @@
+ios-app/Modules/Sources/TabbarFeature/TabbarView.swift
+  s_62bff887fa7a81::t_1de6959c4ee19e 151,153-165
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7918c4e785819a5ac933f427aadb59877e90f67d",
+  "prompts": {},
+  "sessions": {
+    "s_62bff887fa7a81": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18e28-ff43-7a70-8a7a-1ca3532acd3b",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
