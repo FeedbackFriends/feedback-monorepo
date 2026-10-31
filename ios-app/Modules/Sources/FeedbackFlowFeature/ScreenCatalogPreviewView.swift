@@ -358,7 +358,6 @@ private func catalogFeedbackSuccess() -> some View {
     }
 }
 
-// Screenshot: Distinct screen or presentation.
 #Preview("feedback.success") {
     catalogFeedbackSuccess()
 }
@@ -480,9 +479,6 @@ enum FeedbackFlowFeatureScreenSnapshotCatalog {
             },
             .init(id: "feedback.comment.populated", size: CGSize(width: 402, height: 874)) {
                 catalogFeedbackCommentPopulated()
-            },
-            .init(id: "feedback.success", size: CGSize(width: 402, height: 874)) {
-                catalogFeedbackSuccess()
             },
             .init(id: "feedback.rating-prompt", size: CGSize(width: 402, height: 874)) {
                 catalogFeedbackRatingPrompt()

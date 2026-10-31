@@ -2,7 +2,6 @@
 import Testing
 import ComposableArchitecture
 import Domain
-import FeedbackFlowFeature
 
 @MainActor
 struct ManageActivityTests {
@@ -225,26 +224,5 @@ struct ManageActivityTests {
         #expect(store.state.alert == nil)
     }
 
-    @Test(arguments: [false, true])
-    func `Preview close and completion dismiss only preview preserving questions`(complete: Bool) async {
-        var state = ManageActivity.State.create()
-        state.selectTemplate(.standardMeeting)
-        state.path = [.template, .questions]
-        let originalQuestions = state.questions
-        var preview = FeedbackFlowCoordinator.State.initialState(feedbackSession: .init(
-            questions: originalQuestions.map {
-                ParticipantQuestion(id: $0.id, questionText: $0.questionText, feedbackType: $0.feedbackType)
-            },
-            ownerInfo: .init(name: nil, email: nil, phoneNumber: nil),
-            pinCode: .init(value: "Preview"), date: .now
-        ))
-        preview.isPreview = true
-        state.previewSession = preview
-        let store = TestStore(initialState: state) { ManageActivity() }
-        await store.send(.previewSession(.presented(complete ? .submitButtonTap : .dismissButtonTap)))
-        await store.receive(\.previewSession.dismiss) { $0.previewSession = nil }
-        #expect(store.state.questions == originalQuestions)
-        #expect(store.state.path == [.template, .questions])
-    }
 
 }

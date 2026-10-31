@@ -1,6 +1,7 @@
 import SwiftUI
 import Domain
 import DesignSystem
+import FeedbackFlowFeature
 
 struct QuestionPickerView: View {
 
@@ -20,9 +21,9 @@ struct QuestionPickerView: View {
             "Nyt spørgsmål"
         }
     }
-    @State var feedbackTypeSelected: FeedbackType
-    @State var questionTextField: String
-    @State private var showFeedbackInfo = false
+    @State private var feedbackTypeSelected: FeedbackType?
+    @State private var questionTextField: String
+    @State private var isChoosingFeedbackType: Bool
     @Environment(\.dismiss) private var dismiss
     #if DEBUG
     @Environment(\.isScreenSnapshot) private var isScreenSnapshot
@@ -31,28 +32,29 @@ struct QuestionPickerView: View {
 
     init(
         existingQuestionID: EventInput.QuestionInput.ID?,
-        feedbackTypeSelected: FeedbackType,
+        feedbackTypeSelected: FeedbackType? = nil,
         questionTextField: String,
         questionSelected: @escaping (_ input: EventInput.QuestionInput) -> Void
     ) {
         self.existingQuestionID = existingQuestionID
         self._feedbackTypeSelected = State(initialValue: feedbackTypeSelected)
+        self._isChoosingFeedbackType = State(initialValue: feedbackTypeSelected == nil)
         self._questionTextField = State(initialValue: questionTextField)
         self.questionSelected = questionSelected
     }
 
     private var isQuestionValid: Bool {
-        !questionTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        feedbackTypeSelected != nil && !questionTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     private func commitQuestion() {
+        let trimmed = questionTextField.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let feedbackTypeSelected, !trimmed.isEmpty else { return }
         Task {
             withAnimation {
                 dismiss()
             }
             try await Task.sleep(for: .seconds(0.3))
-            let trimmed = questionTextField.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmed.isEmpty else { return }
             var input = EventInput.QuestionInput(questionText: trimmed, feedbackType: feedbackTypeSelected)
             if let existingQuestionID {
                 input.id = existingQuestionID
@@ -66,110 +68,44 @@ struct QuestionPickerView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    Section {
-                        VStack(spacing: 8) {
-                            ForEach(FeedbackType.allCases, id: \.self) { type in
-                                let isSelected = type == feedbackTypeSelected
-                                Button {
-                                    withAnimation {
-                                        feedbackTypeSelected = type
-                                    }
-                                } label: {
-                                    FeedbackTypeOptionView(type: type, isSelected: isSelected)
-                                }
-                                .buttonStyle(ScalingButtonStyle())
-                                .accessibilityLabel(type.title)
-                                .accessibilityHint(type.helpDescription)
-                            }
-                        }
-                        .background(Color.themeBackground)
-
-                        SelectedFeedbackTypeView(type: feedbackTypeSelected)
-                    } header: {
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack(spacing: 8) {
-                                SectionHeaderView("Svartype", horizontalPadding: 0)
-                                Spacer()
-                                Button {
-                                    showFeedbackInfo = true
-                                } label: {
-                                    Image.info
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 18, height: 18)
-                                        .foregroundStyle(Color.themeText)
-                                        .padding(8)
-                                        .background(Color.themeSurface)
-                                        .clipShape(Circle())
-                                }
-                                .buttonStyle(ScalingButtonStyle())
-                                .accessibilityLabel("Læs om svartyper")
-                            }
-                            Text("Vælg hvordan deltagerne skal svare på spørgsmålet.")
-                                .supportingTextStyle()
-                                .foregroundStyle(Color.themeTextSecondary)
+                VStack(alignment: .leading, spacing: 24) {
+                    questionSection
+                    answerTypeSection
+                    if let feedbackTypeSelected {
+                        VStack(alignment: .leading, spacing: 12) {
+                            SectionHeaderView("Sådan ser deltagerne det")
+                            FeedbackQuestionIllustrationView(
+                                questionText: questionTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                    ? "Dit spørgsmål vises her" : questionTextField,
+                                feedbackType: feedbackTypeSelected
+                            )
+                            .id(feedbackTypeSelected)
                         }
                     }
-
-                    Section {
-                        VStack(alignment: .leading, spacing: 10) {
-                            TextField("Skriv spørgsmålet", text: $questionTextField, axis: .vertical)
-                                .focused($isQuestionFocused)
-                                .bodyTextStyle()
-                                .foregroundColor(Color.themeText)
-                                .textInputAutocapitalization(.sentences)
-                                .submitLabel(.go)
-                                .lineLimit(3...6)
-                                .padding(.trailing, questionTextField.isEmpty ? 0 : 28)
-                                .overlay(alignment: .topTrailing) {
-                                    if !questionTextField.isEmpty {
-                                        Button {
-                                            questionTextField = ""
-                                        } label: {
-                                            Image.xmarkCircleFill
-                                                .foregroundStyle(Color.themeTextSecondary)
-                                        }
-                                        .foregroundStyle(Color.themeTextSecondary)
-                                        .padding(.top, 2)
-                                    }
-                                }
-                            Text("Skriv kort og konkret. Gode spørgsmål er nemme at svare på lige efter sessionen.")
-                                .supportingTextStyle()
-                                .foregroundStyle(Color.themeTextSecondary)
-                        }
-                        .padding(Theme.padding)
-                        .background(Color.themeSurface)
-                        .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-                    } header: {
-                        SectionHeaderView("Spørgsmål", horizontalPadding: 0)
-                    }
-
-                    Button(text, action: commitQuestion)
-                        .buttonStyle(LargeButtonStyle())
-                        .disabled(!isQuestionValid)
-                        .padding(.bottom, 18)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-                .sensoryFeedback(.selection, trigger: feedbackTypeSelected)
-                .sheet(isPresented: $showFeedbackInfo) {
-                    FeedbackTypeInfoSheetView()
-                }
-                .scrollContentBackground(.hidden)
-                .scrollDismissesKeyboard(.interactively)
-                .navigationBarTitleDisplayMode(.inline)
+                .frame(maxWidth: Constants.maxWidthForLargeDevices)
+                .padding(Theme.padding)
+                .frame(maxWidth: .infinity)
             }
+            .scrollDismissesKeyboard(.interactively)
             .background(Color.themeBackground.ignoresSafeArea())
+            .foregroundStyle(Color.themeText)
             .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .bottom) {
+                Button(text, action: commitQuestion)
+                    .buttonStyle(LargeButtonStyle())
+                    .disabled(!isQuestionValid)
+                    .padding(Theme.padding)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.themeBackground)
+            }
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    CloseButtonView {
-                        self.dismiss()
-                    }
+                ToolbarItem(placement: .topBarTrailing) {
+                    CloseButtonView { dismiss() }
                 }
             }
+            .sensoryFeedback(.selection, trigger: feedbackTypeSelected)
             .onAppear {
                 #if DEBUG
                 isQuestionFocused = !isScreenSnapshot
@@ -178,7 +114,7 @@ struct QuestionPickerView: View {
                 #endif
             }
             .background {
-                /// this makes the keyboard to appear with a single animation
+                /// This makes the keyboard appear with a single animation.
                 FirstResponderFieldView()
                     .frame(width: 0, height: 0)
                     .opacity(0)
@@ -186,75 +122,91 @@ struct QuestionPickerView: View {
             }
         }
     }
-}
 
-private struct FeedbackTypeOptionView: View {
-    let type: FeedbackType
-    let isSelected: Bool
+    private var questionSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SectionHeaderView("Spørgsmål")
 
-    var body: some View {
-        HStack(spacing: 12) {
-            CircleIconView(
-                type.image,
-                foregroundColor: isSelected ? .themeOnPrimaryAction : .themePrimaryAction,
-                backgroundColor: isSelected ? .themePrimaryAction : .themePrimaryAction.opacity(0.12)
+            TextInputView(
+                title: "Hvad vil du gerne vide?",
+                prompt: "Fx hvor nyttigt var mødet for dig?",
+                text: $questionTextField,
+                isFocused: $isQuestionFocused,
+                axis: .vertical,
+                lineLimit: 2...6,
+                accessibilityLabel: "Spørgsmål",
+                accessibilityIdentifier: "question_editor_input"
             )
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(type.title)
-                    .rowTitleTextStyle()
-                    .foregroundStyle(Color.themeText)
-                Text(type.shortDescription)
-                    .captionTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-            }
-
-            Spacer(minLength: 0)
-
-            Image.checkmarkCircleFill
-                .resizable()
-                .scaledToFit()
-                .frame(width: 20, height: 20)
-                .foregroundStyle(isSelected ? Color.themePrimaryAction : Color.clear)
-        }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 14)
-        .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
-        .background(isSelected ? Color.themeSurface : Color.themeSurface.opacity(0.58))
-        .clipShape(Capsule(style: .continuous))
-        .overlay {
-            Capsule(style: .continuous)
-                .stroke(isSelected ? Color.themePrimaryAction.opacity(0.65) : Color.clear, lineWidth: 2)
         }
     }
-}
 
-private struct SelectedFeedbackTypeView: View {
-    let type: FeedbackType
+    private var answerTypeSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SectionHeaderView("Svartype")
 
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            CircleIconView(type.image, size: 18, padding: 8)
+            VStack(alignment: .leading, spacing: 12) {
+                if let feedbackTypeSelected {
+                    Button {
+                        isQuestionFocused = false
+                        isChoosingFeedbackType.toggle()
+                    } label: {
+                        HStack(spacing: 12) {
+                            feedbackTypeSelected.image
+                                .foregroundStyle(Color.themePrimaryAction)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(feedbackTypeSelected.title)
+                                    .rowTitleTextStyle()
+                                Text(feedbackTypeSelected.shortDescription)
+                                    .supportingTextStyle()
+                                    .foregroundStyle(Color.themeTextSecondary)
+                            }
+                            Spacer()
+                            Text(isChoosingFeedbackType ? "Luk" : "Skift")
+                                .foregroundStyle(Color.themePrimaryAction)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(15)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("question_editor_change_type")
+                } else {
+                    Text("Vælg hvordan deltagerne skal svare.")
+                        .rowTitleTextStyle()
+                        .padding(15)
+                }
 
-            VStack(alignment: .leading, spacing: 5) {
-                Text("Valgt: \(type.title)")
-                    .rowTitleTextStyle()
-                    .foregroundStyle(Color.themeText)
-                Text(type.helpDescription)
-                    .supportingTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                if isChoosingFeedbackType {
+                    VStack(spacing: 12) {
+                        ForEach(FeedbackType.allCases, id: \.self) { type in
+                            SelectionOptionRowView(
+                                title: type.title,
+                                subtitle: type.shortDescription,
+                                icon: type.image,
+                                isSelected: type == feedbackTypeSelected,
+                                accessibilityIdentifier: "question_editor_type_\(type.rawValue)"
+                            ) {
+                                isQuestionFocused = false
+                                feedbackTypeSelected = type
+                                isChoosingFeedbackType = false
+                            }
+                            .accessibilityHint(type.helpDescription)
+                        }
+                    }
+                    .padding(.horizontal, 15)
+                    .padding(.bottom, 15)
+                    .transition(.blurReplace)
+                }
             }
+            .surfaceCard(padding: 0)
         }
-        .surfaceCard()
-        .animation(.default, value: type)
+        .animation(.smooth, value: isChoosingFeedbackType)
     }
 }
 
 #Preview("Empty - Create") {
     QuestionPickerView(
         existingQuestionID: nil,
-        feedbackTypeSelected: .emoji,
         questionTextField: "",
         questionSelected: { _ in }
     )

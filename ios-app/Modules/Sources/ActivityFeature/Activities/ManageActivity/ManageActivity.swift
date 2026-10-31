@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import Domain
 import Foundation
-import FeedbackFlowFeature
 import Utility
 
 @Reducer
@@ -27,7 +26,6 @@ public struct ManageActivity: Sendable {
         var path: [Step] = []
         var isChoosingTemplate = true
         var templateQuestions: [EventInput.QuestionInput] = []
-        @Presents var previewSession: FeedbackFlowCoordinator.State?
         var createActivityRequestInFlight = false
         @Presents var alert: AlertState<Action.Alert>?
 
@@ -147,8 +145,6 @@ public struct ManageActivity: Sendable {
         case presentError(Error)
         case templateSelected(FeedbackTemplate)
         case changeTemplateTapped
-        case previewRequested(FeedbackFlowCoordinator.State)
-        case previewSession(PresentationAction<FeedbackFlowCoordinator.Action>)
         case alert(PresentationAction<Alert>)
 
         public enum Alert: Equatable, Sendable {
@@ -200,14 +196,6 @@ public struct ManageActivity: Sendable {
 
             case .alert(.presented(.replaceTemplate(let template))):
                 state.selectTemplate(template)
-                return .none
-
-            case .previewRequested(var preview):
-                preview.isPreview = true
-                state.previewSession = preview
-                return .none
-
-            case .previewSession:
                 return .none
 
             case .nextButtonTap:
@@ -268,6 +256,5 @@ public struct ManageActivity: Sendable {
             }
         }
         .ifLet(\.$alert, action: \.alert)
-        .ifLet(\.$previewSession, action: \.previewSession) { FeedbackFlowCoordinator() }
     }
 }

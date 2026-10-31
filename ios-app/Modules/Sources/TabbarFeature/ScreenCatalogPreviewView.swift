@@ -42,7 +42,6 @@ private struct ScreenCatalogPreviewView: View {
     ScreenCatalogPreviewView(tab: .activities, empty: true)
 }
 
-// Screenshot: Deletion returns to the empty list with a brief confirmation.
 #Preview("activities.deleted") {
     ScreenCatalogPreviewView(tab: .activities, empty: true, deletionSuccess: true)
 }
@@ -143,7 +142,6 @@ private func catalogJoinSessionSheet(success: Bool = false) -> some View {
     catalogJoinSessionSheet()
 }
 
-// Screenshot: Success overlay within the join-session sheet.
 #Preview("join-session.success") {
     catalogJoinSessionSheet(success: true)
 }
@@ -231,9 +229,6 @@ enum TabbarFeatureScreenSnapshotCatalog {
             .init(id: "activities.empty", size: CGSize(width: 402, height: 874)) {
                 ScreenCatalogPreviewView(tab: .activities, empty: true)
             },
-            .init(id: "activities.deleted", size: CGSize(width: 402, height: 874)) {
-                ScreenCatalogPreviewView(tab: .activities, empty: true, deletionSuccess: true)
-            },
             .init(id: "profile.anonymous", size: CGSize(width: 402, height: 874)) {
                 catalogProfile(role: nil)
             },
@@ -252,9 +247,6 @@ enum TabbarFeatureScreenSnapshotCatalog {
             },
             .init(id: "join-session.ready", size: CGSize(width: 402, height: 874)) {
                 catalogJoinSessionSheet()
-            },
-            .init(id: "join-session.success", size: CGSize(width: 402, height: 874)) {
-                catalogJoinSessionSheet(success: true)
             },
             .init(id: "feedback-code.ready", size: CGSize(width: 402, height: 874)) {
                 catalogRoutedScreen(tab: .feedback) { state in

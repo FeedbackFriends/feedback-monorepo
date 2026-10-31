@@ -140,7 +140,7 @@ private extension ManageEventView {
             } label: {
                 Label("Rediger aktivitet", systemImage: "pencil")
             }
-            .buttonStyle(SecondaryTextButtonStyle())
+            .buttonStyle(InlineActionButtonStyle())
             .accessibilityIdentifier("event_form_edit_activity_button")
         }
     }
@@ -286,8 +286,7 @@ private extension ManageEventView {
                 axis: axis
             )
             .accessibilityIdentifier(accessibilityIdentifier ?? "")
-            .supportingTextStyle()
-            .foregroundStyle(Color.themeTextSecondary)
+            .textInputTextStyle()
             .lineLimit(lineLimit ?? 1...1)
         }
     }

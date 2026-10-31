@@ -1,6 +1,6 @@
 # iOS screenshot catalog
 
-The catalog now captures a curated set of **58 screen/state images, including the native sign-in alert** through the app-hosted Point-Free SnapshotTesting target. The alert uses the same capture and review pipeline, with presentation, title, message, and OK action checks before capture. Interactive SwiftUI previews remain available for development, but `RenderPreview` is no longer the screenshot generator.
+The catalog now captures a curated set of **56 screen/state images, including the native sign-in alert** through the app-hosted Point-Free SnapshotTesting target. The alert uses the same capture and review pipeline, with presentation, title, message, and OK action checks before capture. Interactive SwiftUI previews remain available for development, but `RenderPreview` is no longer the screenshot generator.
 
 Approved images remain in `Docs/screenshots/catalog/`. Capture and review commands never replace those images automatically. The initial comparison against Xcode-generated screenshots shows changes because the new capture profile has different dimensions and framing; those images need a one-time visual review before approving the new baseline.
 
@@ -8,7 +8,7 @@ Approved images remain in `Docs/screenshots/catalog/`. Capture and review comman
 
 Named `#Preview` declarations with a `// Screenshot: <reason>` comment directly above them in each feature's `ScreenCatalogPreviewView.swift` are the capture inventory. Unmarked previews remain available in Xcode without being captured.
 
-Select one representative layout per screen. Add empty, error, role, or presentation variants only when they materially change content or layout. Loading, saving, disabled buttons, partial input, and each individual answer value do not need screenshots on every screen. Keep a representative example where the visual design itself needs coverage (such as the startup loading screen). Use standard-height captures; full-content variants are excluded from the catalog. New previews are excluded from capture until explicitly selected with a reason. Shared fixtures live in `Domain/PreviewCatalogFixtures.swift`. `screen-catalog.json` describes the capture profile.
+Select one representative layout per screen. Add empty, error, role, or presentation variants only when they materially change content or layout. Loading, saving, disabled buttons, partial input, and each individual answer value do not need screenshots on every screen. Keep a representative example where the visual design itself needs coverage (such as the startup loading screen). Use standard-height captures; full-content variants are excluded from the catalog. New previews are excluded from capture until explicitly selected with a reason. Success and deletion-complete variants stay out of the screenshot catalog; captured states must not show success toasts. Shared fixtures live in `Domain/PreviewCatalogFixtures.swift`. `screen-catalog.json` describes the capture profile.
 
 Generate the test factories after changing a selected preview or its screenshot selection:
 

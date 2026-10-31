@@ -121,7 +121,6 @@ private func catalogActivityDetailSessionDeleted() -> some View {
     }
 }
 
-// Screenshot: Last session deleted returns to its activity with a glass confirmation.
 #Preview("activity-detail.session-deleted") { catalogActivityDetailSessionDeleted() }
 
 @MainActor
@@ -399,7 +398,6 @@ private func catalogCreateSessionSuccess() -> some View {
     }
 }
 
-// Screenshot: Distinct screen or presentation.
 #Preview("create-session.success") { catalogCreateSessionSuccess() }
 
 @MainActor
@@ -420,7 +418,7 @@ private func catalogEditSessionPopulated() -> some View {
 private func catalogQuestionsPopulated() -> some View {
     ScreenCatalogContainerView {
         NavigationStack {
-            QuestionsListView(questionsInputs: .constant(CatalogActivity.questionInputs), onPreview: { _ in })
+            QuestionsListView(questionsInputs: .constant(CatalogActivity.questionInputs))
         }
     }
 }
@@ -432,7 +430,7 @@ private func catalogQuestionsPopulated() -> some View {
 private func catalogQuestionsEmpty() -> some View {
     ScreenCatalogContainerView {
         NavigationStack {
-            QuestionsListView(questionsInputs: .constant([]), onPreview: { _ in })
+            QuestionsListView(questionsInputs: .constant([]))
         }
     }
 }
@@ -444,12 +442,13 @@ private func catalogQuestionsEmpty() -> some View {
 private func catalogQuestionEditorEmpty() -> some View {
     ScreenCatalogContainerView {
         QuestionPickerView(
-            existingQuestionID: nil, feedbackTypeSelected: .emoji,
+            existingQuestionID: nil,
             questionTextField: "", questionSelected: { _ in }
         )
     }
 }
 
+// Screenshot: New questions require an explicit answer type selection.
 #Preview("question-editor.empty") { catalogQuestionEditorEmpty() }
 
 @MainActor
@@ -488,6 +487,7 @@ func catalogQuestionEditorThumbs() -> some View {
     }
 }
 
+// Screenshot: Participant illustration for thumbs answers.
 #Preview("question-editor.thumbs") { catalogQuestionEditorThumbs() }
 
 @MainActor
@@ -500,20 +500,21 @@ private func catalogQuestionEditorComment() -> some View {
     }
 }
 
+// Screenshot: Participant illustration for free text answers.
 #Preview("question-editor.comment") { catalogQuestionEditorComment() }
 
 @MainActor
-private func catalogQuestionsAnswerTypeHelp() -> some View {
+private func catalogQuestionEditorEmoji() -> some View {
     ScreenCatalogContainerView {
-        catalogQuestionEditorEdit()
-            .sheet(isPresented: .constant(true)) {
-                FeedbackTypeInfoSheetView()
-            }
+        QuestionPickerView(
+            existingQuestionID: nil, feedbackTypeSelected: .emoji,
+            questionTextField: "Hvor nyttigt var mødet for dig?", questionSelected: { _ in }
+        )
     }
 }
 
-// Screenshot: Sheet presentation over the question editor.
-#Preview("questions.answer-type-help") { catalogQuestionsAnswerTypeHelp() }
+// Screenshot: Participant illustration for emoji answers.
+#Preview("question-editor.emoji") { catalogQuestionEditorEmoji() }
 
 @MainActor
 private func catalogActivityHowItWorks() -> some View {
@@ -991,9 +992,6 @@ private func catalogExtraSessionResultsCommentEmpty() -> some View {
 enum ActivityFeatureScreenSnapshotCatalog {
     static var samples: [ScreenSnapshotSample] {
         [
-            .init(id: "activity-detail.session-deleted", size: CGSize(width: 402, height: 874)) {
-                catalogActivityDetailSessionDeleted()
-            },
             .init(id: "activity-detail.no-feedback", size: CGSize(width: 402, height: 874)) {
                 catalogActivityDetailNoFeedback()
             },
@@ -1018,9 +1016,6 @@ enum ActivityFeatureScreenSnapshotCatalog {
             .init(id: "create-session.all-day", size: CGSize(width: 402, height: 874)) {
                 catalogCreateSessionAllDay()
             },
-            .init(id: "create-session.success", size: CGSize(width: 402, height: 874)) {
-                catalogCreateSessionSuccess()
-            },
             .init(id: "edit-session.populated", size: CGSize(width: 402, height: 874)) {
                 catalogEditSessionPopulated()
             },
@@ -1030,14 +1025,23 @@ enum ActivityFeatureScreenSnapshotCatalog {
             .init(id: "questions.empty", size: CGSize(width: 402, height: 874)) {
                 catalogQuestionsEmpty()
             },
+            .init(id: "question-editor.empty", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionEditorEmpty()
+            },
             .init(id: "question-editor.edit", size: CGSize(width: 402, height: 874)) {
                 catalogQuestionEditorEdit()
             },
             .init(id: "question-editor.long-text", size: CGSize(width: 402, height: 874)) {
                 catalogQuestionEditorLongText()
             },
-            .init(id: "questions.answer-type-help", size: CGSize(width: 402, height: 874)) {
-                catalogQuestionsAnswerTypeHelp()
+            .init(id: "question-editor.thumbs", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionEditorThumbs()
+            },
+            .init(id: "question-editor.comment", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionEditorComment()
+            },
+            .init(id: "question-editor.emoji", size: CGSize(width: 402, height: 874)) {
+                catalogQuestionEditorEmoji()
             },
             .init(id: "activity.how-it-works", size: CGSize(width: 402, height: 874)) {
                 catalogActivityHowItWorks()
