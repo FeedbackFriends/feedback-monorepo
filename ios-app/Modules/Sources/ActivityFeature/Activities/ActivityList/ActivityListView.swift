@@ -87,7 +87,6 @@ private struct HomeActivitiesView: View {
             }
         } description: {
             VStack(spacing: 12) {
-                Text("Få feedback efter møder, workshops og oplæg.")
                 Text("Tryk på + øverst til højre for at komme i gang.")
             }
             .supportingTextStyle()
