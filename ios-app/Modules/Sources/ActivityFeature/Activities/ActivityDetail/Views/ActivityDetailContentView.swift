@@ -69,10 +69,12 @@ struct ActivityDetailContentView: View {
         }
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
-                Button {
-                    store.send(.showHowItWorksButtonTap)
-                } label: {
-                    Label("Fra kalender til feedback", systemImage: "questionmark.circle")
+                if !activity.events.isEmpty {
+                    Button {
+                        store.send(.showHowItWorksButtonTap)
+                    } label: {
+                        Label("Fra kalender til feedback", systemImage: "questionmark.circle")
+                    }
                 }
 
                 Button {

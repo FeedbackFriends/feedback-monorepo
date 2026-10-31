@@ -33,11 +33,9 @@ struct ActivityTrendSectionView: View {
 
     var body: some View {
         let data = ActivityInsightData(activity: activity)
-        VStack(alignment: .leading, spacing: 12) {
-            SectionHeaderView("Udvikling over tid")
-            if data.feedbackEvents.isEmpty {
-                Text("Din indsigt starter med den første feedback.").supportingTextStyle()
-            } else {
+        if !data.feedbackEvents.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                SectionHeaderView("Udvikling over tid")
                 InsightTrendView(data: data)
                 if data.feedbackEvents.count == 1 {
                     Text("Se udviklingen, når flere sessioner har fået feedback.").supportingTextStyle()
