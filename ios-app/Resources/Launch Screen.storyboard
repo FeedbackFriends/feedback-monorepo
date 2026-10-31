@@ -15,8 +15,21 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="splash-logo">
+                                <rect key="frame" x="133" y="372" width="124" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="124" id="splash-width"/>
+                                    <constraint firstAttribute="height" constant="100" id="splash-height"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <color key="backgroundColor" name="background"/>
+                        <color key="backgroundColor" name="LaunchBackground"/>
+                        <constraints>
+                            <constraint firstItem="splash-logo" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="splash-center-x"/>
+                            <constraint firstItem="splash-logo" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="splash-center-y"/>
+                        </constraints>
                         <color key="tintColor" name="AccentColor"/>
                     </view>
                 </viewController>
@@ -26,11 +39,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="LaunchLogo" width="550" height="425"/>
         <namedColor name="AccentColor">
             <color red="0.15294117647058825" green="0.6705882352941176" blue="0.52156862745098043" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
-        <namedColor name="background">
-            <color red="0.93699997663497925" green="0.94499999284744263" blue="0.99599999189376831" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        <namedColor name="LaunchBackground">
+            <color red="0.946" green="0.957" blue="0.994" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

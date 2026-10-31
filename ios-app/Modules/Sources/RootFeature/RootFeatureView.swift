@@ -5,6 +5,7 @@ import DesignSystem
 import SignUpFeature
 
 public struct RootFeatureView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     @Bindable var store: StoreOf<RootFeature>
     
@@ -13,11 +14,12 @@ public struct RootFeatureView: View {
     }
     
     public var body: some View {
-        VStack {
+        ZStack {
             switch store.destination {
                 
             case .isLoading:
-                LoadingView()
+                StartupLoadingView()
+                    .transition(.opacity)
                 
             case .signUp:
                 signUpView
@@ -29,8 +31,10 @@ public struct RootFeatureView: View {
                 loggedInView
             }
         }
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.background(Color.themeBackground.ignoresSafeArea())
 		.tint(Color.themePrimaryAction)
-        .animation(.linear(duration: 0.8), value: store.destination)
+        .animation(.easeInOut(duration: reduceMotion ? 0 : 0.55), value: store.destination)
         .alert($store.scope(state: \.logout.destination?.alert, action: \.logout.destination.alert))
     }
     
@@ -63,28 +67,6 @@ public struct RootFeatureView: View {
             .padding(.bottom, 20)
         }
         .background(Color.themeBackground.ignoresSafeArea())
-    }
-}
-
-struct LoadingView: View {
-    @State var didLoad: Bool = false
-    var body: some View {
-        VStack {
-            if didLoad {
-                LottieView(lottieFile: .loading, loopMode: true)
-                    .frame(width: 400, height: 50)
-                Text("Loading data")
-                    .padding(.top, 20)
-                    .bodyTextStyle()
-                    .foregroundStyle(Color.themeTextSecondary)
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.themeBackground.ignoresSafeArea())
-        .onAppear {
-            didLoad = true
-        }
-        .animation(.linear(duration: 0.3), value: didLoad)
     }
 }
 
