@@ -1,0 +1,21 @@
+ios-app/Modules/Sources/ActivityFeature/Insights/ActivityInsightSectionsView.swift
+  s_d1a183784cf41e::t_2e10ff7b6a3ddf 36-38
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailContentView.swift
+  s_d1a183784cf41e::t_2810decc467bc5 72-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ffaf89897dedf001462ace97c24d5af8b6d91fcd",
+  "prompts": {},
+  "sessions": {
+    "s_d1a183784cf41e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1916b-cdc9-7181-abde-ba6e62a0b11d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
