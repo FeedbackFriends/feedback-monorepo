@@ -1,0 +1,39 @@
+.github/workflows/ios.yml
+  s_7d58ddcdccbc7e::t_196fd1dd7404ae 55-60,105,110-115
+ios-app/scripts/test-notifications.py
+  s_7d58ddcdccbc7e::t_012b76c05d5d21 1-286
+ios-app/scripts/tests/test_notification_runner.py
+  s_7d58ddcdccbc7e::t_c1f68b33012e21 1-122
+ios-app/.maestro/notifications/feedback-received.yaml
+  s_7d58ddcdccbc7e::t_45d3a7b5498f6e 1-75
+ios-app/.maestro/notifications/support/prepare.yaml
+  s_7d58ddcdccbc7e::t_422c65f5125171 1-27
+ios-app/Modules/Sources/TabbarFeature/Tabbar.swift
+  s_7d58ddcdccbc7e::t_062e72f01e5e92 97,112-113,149-162
+ios-app/Modules/Tests/AppTests/ReducerTests/Tabbar/TabbarTests.swift
+  s_7d58ddcdccbc7e::t_aba9a8c5ff31e4 7,12-49
+ios-app/scripts/check-localized-copy.py
+  s_7d58ddcdccbc7e::t_97dc63e618ac08 1-93
+ios-app/scripts/tests/test_localized_copy.py
+  s_7d58ddcdccbc7e::t_0e3007cad426c6 1-84
+ios-app/scripts/tests/test_validate_localization.py
+  s_7d58ddcdccbc7e::t_d393e6b88980ef 1-187
+ios-app/scripts/validate-localization.py
+  s_7d58ddcdccbc7e::t_6a1ecea74d9326 1-207
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a9f700969d02b2deb5cb540e8f6a37c66a08009e",
+  "prompts": {},
+  "sessions": {
+    "s_7d58ddcdccbc7e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a7fa-f52d-78f2-bc92-d4958449ed11",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
