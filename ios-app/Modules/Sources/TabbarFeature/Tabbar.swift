@@ -94,6 +94,7 @@ public struct Tabbar: Sendable {
         case toolbar(Toolbar)
         case delegate(Delegate)
         case tabbarLifecyle(TabbarLifecycle.Action)
+        case notificationAuthorizationFailed(Error)
         case deleteAccount(DeleteAccount.Action)
         case signUp(SignUp.Action)
         case dismissFeedbackFlow
@@ -108,6 +109,8 @@ public struct Tabbar: Sendable {
     }
     
     public init() {}
+
+    @Dependency(\.notificationClient) var notificationClient
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -143,6 +146,20 @@ public struct Tabbar: Sendable {
                 state.initialiseFeedback.destination = nil
                 return .none
                 
+            case .tabbarLifecyle(.delegate(.presentNotificationPermissionPrompt)):
+                guard state.bootstrap.managerData != nil else { return .none }
+                return .run { send in
+                    do {
+                        _ = try await notificationClient.requestAuthorization()
+                    } catch {
+                        await send(.notificationAuthorizationFailed(error))
+                    }
+                }
+
+            case .notificationAuthorizationFailed(let error):
+                state.destination = .alert(.init(error: error))
+                return .none
+
             case .tabbarLifecyle:
                 return .none
                 

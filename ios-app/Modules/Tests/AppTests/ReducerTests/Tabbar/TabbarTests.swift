@@ -4,10 +4,49 @@
 @testable import MoreFeature
 import ComposableArchitecture
 import Domain
+import Foundation
 import Testing
 
 @MainActor
 struct TabbarTests {
+    @Test
+    func notificationPermissionRequestsUseTheLiveDependencyPath() async {
+        let requested = LockIsolated(false)
+        let store = TestStore(initialState: Tabbar.State(bootstrap: .init(value: .mock()))) {
+            Tabbar()
+        } withDependencies: {
+            $0.notificationClient.requestAuthorization = {
+                requested.setValue(true)
+                return true
+            }
+        }
+        await store.send(.tabbarLifecyle(.delegate(.presentNotificationPermissionPrompt)))
+        await store.finish()
+        #expect(requested.value)
+    }
+
+    @Test
+    func anonymousUsersDoNotRequestNotificationPermission() async {
+        let store = TestStore(initialState: Tabbar.State(bootstrap: .init(value: .mockAnonymous()))) {
+            Tabbar()
+        }
+        await store.send(.tabbarLifecyle(.delegate(.presentNotificationPermissionPrompt)))
+    }
+
+    @Test
+    func notificationAuthorizationFailuresUseLocalizedErrors() async {
+        let failure = URLError(.notConnectedToInternet)
+        let store = TestStore(initialState: Tabbar.State(bootstrap: .init(value: .mock()))) {
+            Tabbar()
+        } withDependencies: {
+            $0.notificationClient.requestAuthorization = { throw failure }
+        }
+        await store.send(.tabbarLifecyle(.delegate(.presentNotificationPermissionPrompt)))
+        await store.receive(\.notificationAuthorizationFailed) {
+            $0.destination = .alert(.init(error: failure))
+        }
+    }
+
     @Test
     func `Account sign out forwards navigation to sign-up`() async {
         let store = TestStore(initialState: Tabbar.State(bootstrap: .init(value: .mock()))) {

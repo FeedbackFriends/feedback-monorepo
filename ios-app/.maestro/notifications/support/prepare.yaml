@@ -1,0 +1,27 @@
+appId: dk.nicolaidam.letsgrow
+---
+# Normal owner startup requests system authorization after real backend login.
+# A fresh simulator must show this prompt; an already-authorized one can skip it.
+- extendedWaitUntil:
+    visible: "Allow|Tillad|Give feedback|Giv feedback"
+    timeout: 45000
+- tapOn:
+    text: "Allow|Tillad"
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: profile_button
+    timeout: 15000
+- tapOn: "Activities|Aktiviteter"
+- extendedWaitUntil:
+    visible:
+      id: my_activity_add_button
+    timeout: 30000
+# Foreground delivery must happen while the normal app screen is still visible.
+# The verification flow subsequently opens Notification Center to inspect the
+# persistent notification; it does not rely on the transient banner's timing.
+- runFlow:
+    when:
+      true: ${APP_STATE !== 'foreground'}
+    commands:
+      - pressKey: Home
