@@ -1,0 +1,239 @@
+ios-app/App/DebugMenuView.swift
+  s_285bbb30dd4be7::t_3cfdd677e0eae3 1,152,175,177,183,185,191,194,197,199,201-202,210,213,215,220-221,237,242,245,250,254,261
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/ActivityDetail.swift
+  s_285bbb30dd4be7::t_9f8c517596976f 1,41,45,130,135,201,229
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/ActivityDetailSessionGrouping.swift
+  s_285bbb30dd4be7::t_79e0151fa19f76 1,33-35,39,43,47
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/ActivityDetailView.swift
+  s_285bbb30dd4be7::t_ecfe8fcbd02a7d 1,25-26,28
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailContentView.swift
+  s_285bbb30dd4be7::t_c96736eb0e0b99 1,65,69,78,85,92,98,114,128
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailHowItWorksView.swift
+  s_285bbb30dd4be7::t_c90e6cdeeec058 1,13,18,27,44,56,62-63,65
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailSupportViews.swift
+  s_285bbb30dd4be7::t_84b6413e79dff7 1,64-66,81-82,90-91,97-98,105,110-111,185,204,225,235,239,323-325,329-331,336,339
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/ActivityList.swift
+  s_285bbb30dd4be7::t_8bdcd76de87da4 1,111,122,147,152,203,205-206,208
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/ActivityListView.swift
+  s_285bbb30dd4be7::t_6f2778df5a8a8b 1,23,29,34,82,91
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/Views/ActivityRowView.swift
+  s_285bbb30dd4be7::t_324046431a4638 1,18,22,29,34,38
+ios-app/Modules/Sources/ActivityFeature/Activities/EventDetail/EventDetailFeature.swift
+  s_285bbb30dd4be7::t_1739289659c702 1,53,58,66,125,193
+ios-app/Modules/Sources/ActivityFeature/Activities/EventDetail/EventDetailFeatureView.swift
+  s_285bbb30dd4be7::t_7a80f171835fde 1,24-25,46,56,66,76-77,79,103-104
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/FeedbackTemplate.swift
+  s_285bbb30dd4be7::t_8e0cea354f526d 1,16-20,27,29,31,33,35,53-55,60-62,67-69,74-76
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivity.swift
+  s_285bbb30dd4be7::t_d4115b14d5c0af 1,62-63,69-70,105,107,112,114,180,183,185,187
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivityView.swift
+  s_285bbb30dd4be7::t_1cf5f49dd221d5 1,41,66,96,122,135,150,154-155,164,177,220
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/FeedbackType+Extensions.swift
+  s_285bbb30dd4be7::t_346805031fdd88 1,9-13,19-23,39-43
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/ManageEvent.swift
+  s_285bbb30dd4be7::t_656a1b43cc6e2f 1,34,36,38,40,42,44,46,122,124,129,244
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/ManageEventView.swift
+  s_285bbb30dd4be7::t_aebcfbde61ba7c 1,79,81-82,100,112,119,131,142,151,160,170,180,205,216,222,229,242
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionPickerView.swift
+  s_285bbb30dd4be7::t_056308346efd2b 1,13,15,20,22,77,80,129,132-133,138,146,165,175
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionsListView.swift
+  s_285bbb30dd4be7::t_f85a900974af8c 1,28-29,61,68,91
+ios-app/Modules/Sources/ActivityFeature/Events/EventDetail/DetailSectionView.swift
+  s_285bbb30dd4be7::t_36c270afc0adab 1,33,36,40,45,51,58,84,101,114,134,154,158,178,180,200,216,225
+ios-app/Modules/Sources/ActivityFeature/Events/EventDetail/FeedbackCommentRowView.swift
+  s_285bbb30dd4be7::t_35b0acb049df53 1,68,141,147,187,207,227,247,266
+ios-app/Modules/Sources/ActivityFeature/Events/EventDetail/InviteView.swift
+  s_285bbb30dd4be7::t_025bf2f2c1ec78 1,23,42,69,82,116
+ios-app/Modules/Sources/ActivityFeature/Events/JoinEvent/JoinEventView.swift
+  s_285bbb30dd4be7::t_d1d18f6deef947 1,19,21,32,62,80
+ios-app/Modules/Sources/ActivityFeature/Events/NotificationHistoryView.swift
+  s_285bbb30dd4be7::t_0b9566461b055f 1,26-27,44,49,55,70
+ios-app/Modules/Sources/ActivityFeature/Insights/ActivityInsightData.swift
+  s_285bbb30dd4be7::t_ea31425fa7d8b0 1,86-89
+ios-app/Modules/Sources/ActivityFeature/Insights/ActivityInsightSectionsView.swift
+  s_285bbb30dd4be7::t_5825c1c3645491 1,15,23,39,42,45,65,67,83,105,107,133
+ios-app/Modules/Sources/ActivityFeature/Insights/InsightTrendView.swift
+  s_285bbb30dd4be7::t_5d74ff2ad7f499 1,13
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_285bbb30dd4be7::t_99d856a5d15291 1,19,40,394,799
+ios-app/Modules/Sources/ActivityFeature/Shared/FeedbackPercentageBar.swift
+  s_285bbb30dd4be7::t_d76d92ce260f6f 1,33
+ios-app/Modules/Sources/ActivityFeature/Shared/FeedbackTypeTagView.swift
+  s_285bbb30dd4be7::t_b7e21093b0d0c3 45
+ios-app/Modules/Sources/ActivityFeature/Shared/Lists/EventListView.swift
+  s_285bbb30dd4be7::t_39e248db8f9102 1,7-11,15-16,45,49,125,130,154,158,162,165,189,192,196
+ios-app/Modules/Sources/Adapters/APIClient/APIClientCache.swift
+  s_285bbb30dd4be7::t_b32b2bc0c29f2a 6,11-12
+ios-app/Modules/Sources/Adapters/APIClient/APIErrorMiddleware.swift
+  s_285bbb30dd4be7::t_1fc68c46ef5687 1-48
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+LiveEvents.swift
+  s_285bbb30dd4be7::t_08c5dc1267e229 88,90,92,94-96
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+LiveFeedback.swift
+  s_285bbb30dd4be7::t_83186120308c7f 14,16,18,20-22
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+LiveSession.swift
+  s_285bbb30dd4be7::t_ba991a5143e334 41,43,45,47-49
+ios-app/Modules/Sources/Adapters/APIClient/Mappers/Responses/ApiError+Mapping.swift
+  s_285bbb30dd4be7::t_c51a94a516f94e 5,11-12
+ios-app/Modules/Sources/Adapters/APIClient/WithAuthorization.swift
+  s_285bbb30dd4be7::t_8b31b61079526d 16-20
+ios-app/Modules/Sources/Adapters/AuthClient/AuthClientLive.swift
+  s_285bbb30dd4be7::t_e9eee06b6ff993 68
+ios-app/Modules/Sources/Adapters/AuthClient/AuthErrorMapping.swift
+  s_285bbb30dd4be7::t_d7b62727821ba1 1-55
+ios-app/Modules/Sources/DesignSystem/ReusableViews/Banner.swift
+  s_285bbb30dd4be7::t_c9a9729e5b453b 58
+ios-app/Modules/Sources/DesignSystem/ReusableViews/CloseView.swift
+  s_285bbb30dd4be7::t_6282e19b6756f7 1,15
+ios-app/Modules/Sources/DesignSystem/ReusableViews/DeleteConfirmationViewSheet.swift
+  s_285bbb30dd4be7::t_fa4dbe08b50e73 1,29
+ios-app/Modules/Sources/DesignSystem/ReusableViews/EmptyStateView.swift
+  s_285bbb30dd4be7::t_5def7401e05697 1,9,37
+ios-app/Modules/Sources/DesignSystem/ReusableViews/ErrorView.swift
+  s_285bbb30dd4be7::t_4f7c22d8c92bb2 1,31,41
+ios-app/Modules/Sources/DesignSystem/ReusableViews/EventInfoView.swift
+  s_285bbb30dd4be7::t_8d7ad99494ebb7 1,32,34,37,78,88,98
+ios-app/Modules/Sources/DesignSystem/ReusableViews/PillTagView.swift
+  s_285bbb30dd4be7::t_036eeabbc92852 1,65
+ios-app/Modules/Sources/DesignSystem/ReusableViews/PinCodeTextFieldView.swift
+  s_285bbb30dd4be7::t_37b5b143d3e858 1,25
+ios-app/Modules/Sources/DesignSystem/Styles/ButtonStyles/PrimaryTextButtonStyle.swift
+  s_285bbb30dd4be7::t_1a5aa4af8ea84a 43,50
+ios-app/Modules/Sources/Domain/AlertState+Extension.swift
+  s_285bbb30dd4be7::t_b9f67a6b701055 3,7-13
+ios-app/Modules/Sources/Domain/Error+Extension.swift
+  s_285bbb30dd4be7::t_61687083a05a4b 2,7-30,33-61,63-92,94
+ios-app/Modules/Sources/Domain/Errors/ApiError.swift
+  s_285bbb30dd4be7::t_f5125ab4488959 4,15-16,18
+ios-app/Modules/Sources/Domain/Errors/AppFailure.swift
+  s_285bbb30dd4be7::t_2cc8b96f497328 2-16
+ios-app/Modules/Sources/Domain/MockModels.swift
+  s_285bbb30dd4be7::t_c22547f8d03d4d 20,25,30,35,40,45,158,173,257,272,278,288-307,310,353,364,371,389,392,395,398,401,404,407,415,434,439,447,450,455,469,474,492,497,533-537
+ios-app/Modules/Sources/Domain/Models/API/Bootstrap.swift
+  s_285bbb30dd4be7::t_de4dfe0e72b62d 1,129,361,365,410,413
+ios-app/Modules/Sources/Domain/Models/API/FeedbackSession.swift
+  s_285bbb30dd4be7::t_178140933c831e 1,9
+ios-app/Modules/Sources/Domain/Models/Feedback.swift
+  s_285bbb30dd4be7::t_e702b0c5cbeceb 1,68,70,72,74,76
+ios-app/Modules/Sources/Domain/Models/Role.swift
+  s_285bbb30dd4be7::t_89afed8c402500 1,8
+ios-app/Modules/Sources/Domain/PreviewCatalogFixtures.swift
+  s_285bbb30dd4be7::t_f4ac3ed1eb512b 1,85
+ios-app/Modules/Sources/EnterCodeFeature/EnterCodeView.swift
+  s_285bbb30dd4be7::t_ffad9bc53ac145 1,33,44
+ios-app/Modules/Sources/FeedbackFlowFeature/CommentFeedback/CommentFeedbackView.swift
+  s_285bbb30dd4be7::t_650fa4928bcf75 36
+ios-app/Modules/Sources/FeedbackFlowFeature/EmojiFeedback/EmojiFeedbackView.swift
+  s_285bbb30dd4be7::t_e2d90581e25ece 74
+ios-app/Modules/Sources/FeedbackFlowFeature/FeedbackFlowCoordinatorView.swift
+  s_285bbb30dd4be7::t_146e21e2c53123 1,134,174,179,211,219
+ios-app/Modules/Sources/FeedbackFlowFeature/FeedbackQuestionIllustrationView.swift
+  s_285bbb30dd4be7::t_1ec1c181af993c 1,49
+ios-app/Modules/Sources/FeedbackFlowFeature/OpinionFeedback/OpinionFeedbackView.swift
+  s_285bbb30dd4be7::t_8c39682a733610 1,88,108
+ios-app/Modules/Sources/FeedbackFlowFeature/ThumpsFeedback/ThumpsFeedbackView.swift
+  s_285bbb30dd4be7::t_54b74a28c0b784 98
+ios-app/Modules/Sources/FeedbackFlowFeature/Views/FeedbackElaborationTextField.swift
+  s_285bbb30dd4be7::t_cadec06264602f 1,12
+ios-app/Modules/Sources/FeedbackFlowFeature/Views/RatingAlertView.swift
+  s_285bbb30dd4be7::t_3457c6dd09f5be 1,16-17,40,48,90
+ios-app/Modules/Sources/FeedbackFlowFeature/ZeroToTenFeedback/ZeroToTenFeedbackView.swift
+  s_285bbb30dd4be7::t_11fbe5e33e45c9 1,22,26,35,67
+ios-app/Modules/Sources/Localization/AppBundleResources/Localizable.xcstrings
+  s_7d58ddcdccbc7e::t_d45eb2c314cdec 1-114
+ios-app/Modules/Sources/Localization/L10n.swift
+  s_285bbb30dd4be7::t_7fc022b9362aeb 1-14
+ios-app/Modules/Sources/Localization/LocalizedFormat.swift
+  s_285bbb30dd4be7::t_2d9ecf2e770356 1-74
+ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings
+  s_7d58ddcdccbc7e::t_c92f6bde6444cf 1-5792
+ios-app/Modules/Sources/MoreFeature/AccountSection/ModifyAccountView.swift
+  s_285bbb30dd4be7::t_72e15a2227e35f 1,19,22,25,28,30,33,36,43,46
+ios-app/Modules/Sources/MoreFeature/AccountSection/ProfileSettingsView.swift
+  s_285bbb30dd4be7::t_067b6fac15b9aa 1,18,29-30,86,89,104,107,115,123,135,144
+ios-app/Modules/Sources/MoreFeature/MoreSection/MoreSection.swift
+  s_285bbb30dd4be7::t_e80ecf1232fd04 1,52,55,60,63
+ios-app/Modules/Sources/MoreFeature/MoreSection/MoreSectionView.swift
+  s_285bbb30dd4be7::t_581c8ed5065877 1,38,42,52,59,77,82,85,93,96
+ios-app/Modules/Sources/RootFeature/RootFeatureView.swift
+  s_285bbb30dd4be7::t_6936661001f94f 6,40,64
+ios-app/Modules/Sources/RootFeature/StartupLoadingView.swift
+  s_285bbb30dd4be7::t_f69b45820728ed 1,47
+ios-app/Modules/Sources/SignUpFeature/ScreenCatalogPreviewView.swift
+  s_285bbb30dd4be7::t_b1e82f02591c34 1,45,47,49
+ios-app/Modules/Sources/SignUpFeature/SignUp.swift
+  s_285bbb30dd4be7::t_da49cb8e474366 1,95,100
+ios-app/Modules/Sources/SignUpFeature/SignUpView.swift
+  s_285bbb30dd4be7::t_cffb0c63de164c 1,44,73,76,94,116,144-145,151,157
+ios-app/Modules/Sources/TabbarFeature/DeleteAccount.swift
+  s_285bbb30dd4be7::t_ee4b0c271cd933 1,56,61,65,68,77,82,85,127,131,134
+ios-app/Modules/Sources/TabbarFeature/NotificationPermissionView.swift
+  s_285bbb30dd4be7::t_4348c8b4cf90c2 1,16,23,30,42,79
+ios-app/Modules/Sources/TabbarFeature/TabbarView.swift
+  s_285bbb30dd4be7::t_f79175772fb106 1,91,94,127,145,165
+ios-app/Modules/Sources/Utility/DeviceInfo.swift
+  s_285bbb30dd4be7::t_501d53529052de 1,40-42,67
+ios-app/Modules/Tests/AppTests/ReducerTests/Tabbar/DeleteAccountTests.swift
+  s_285bbb30dd4be7::t_783bb0340b092a 22,24-25,27,41,43,45,64,69,73,76,94,107,109,111,120
+ios-app/Modules/Tests/AppTests/UnitTests/DateTests.swift
+  s_7d58ddcdccbc7e::t_7204be2faa64c6 4,42,49-50,54-129
+ios-app/Modules/Tests/AppTests/UnitTests/ErrorAdapterTests.swift
+  s_285bbb30dd4be7::t_1b61c02dc86103 1-80
+ios-app/Modules/Tests/AppTests/UnitTests/PresentableErrorTests.swift
+  s_285bbb30dd4be7::t_80bba1f21e5fed 2-3,9-24,26-36,38-43,45-58,61-68,71-75
+ios-app/Resources/Localizable.xcstrings
+  s_285bbb30dd4be7::t_75bb46e57639ad 1
+ios-app/ScreenSnapshots.xctestplan
+  s_7d58ddcdccbc7e::t_4b82d014085b2c 10-11
+ios-app/App/AppDelegate.swift
+  s_7d58ddcdccbc7e::t_3a2577d0f5791c 29
+ios-app/Feedback.xcodeproj/project.pbxproj
+  s_7d58ddcdccbc7e::t_4b21618ec152c1 119,413,686,689,1777,1796,1815
+ios-app/Feedback.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+  s_285bbb30dd4be7::t_5d67d385b85368 2,364-372
+ios-app/Modules/Package.swift
+  s_285bbb30dd4be7::t_f7f784e30c959d 8,69,108,139,152,166,177,187,197,208,222,230,239-242,254,267-268,273
+ios-app/Modules/Sources/ActivityFeature/Events/EventDetail/QuestionSummaryViews.swift
+  s_7d58ddcdccbc7e::t_53e40e20f6c9b9 1,134-135,142,151,160,169,176,233,235
+ios-app/Modules/Sources/DesignSystem/ScreenCatalogContainerView.swift
+  s_7d58ddcdccbc7e::t_c30d764485f065 3,38
+ios-app/Modules/Sources/Localization/xcstrings-tool-config.json
+  s_285bbb30dd4be7::t_3cfe29dd38643b 1-4
+ios-app/Modules/Sources/Utility/Extensions/Date+Extension.swift
+  s_285bbb30dd4be7::t_0da182be547d2b 2,6,9,42,44
+ios-app/Modules/Tests/AppTests/UnitTests/LocalizationTests.swift
+  s_7d58ddcdccbc7e::t_76a93b9e7be5a6 1-117
+ios-app/Modules/Tests/InsightsTests/Fixtures/feedback-received.apns
+  s_285bbb30dd4be7::t_060c62480da216 1-13
+ios-app/Modules/Tests/InsightsTests/NotificationTests.swift
+  s_285bbb30dd4be7::t_0cc308b9c8889a 1-98
+ios-app/Modules/Tests/ScreenSnapshotTests/ScreenSnapshotTests.swift
+  s_7d58ddcdccbc7e::t_ddead5338d2c93 2,57,107,109-111,113-114
+ios-app/SnapshotHost-Info.plist
+  s_7d58ddcdccbc7e::t_fe25812ce619d0 1-11
+ios-app/UnitTests.xctestplan
+  s_7d58ddcdccbc7e::t_b9dd3f1b8a26cc 12-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b811df720a2900e5af949ecc4f3fb2f483256d41",
+  "prompts": {},
+  "sessions": {
+    "s_285bbb30dd4be7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19670-434d-7a72-86aa-1e8dedbf085e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_7d58ddcdccbc7e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a7fa-f52d-78f2-bc92-d4958449ed11",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
