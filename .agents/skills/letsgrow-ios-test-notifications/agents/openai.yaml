@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow iOS Notification Tests"
+  short_description: "Run the iOS notification test command"
+  default_prompt: "Use $letsgrow-ios-test-notifications to run the notification test command."

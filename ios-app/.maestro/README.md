@@ -4,6 +4,12 @@ Localhost Maestro setup for seeded iOS simulator E2E.
 
 Long-term plan: `../Docs/plans/2026-06-07-ios-maestro-e2e-plan.md`.
 
+Notification localization and tap checks have a separate [notification guide](notifications/README.md).
+Run `python3 ios-app/scripts/test-notifications.py` for notification injection and
+UI assertions against the real local backend. It uses the data-preserving
+`ios-backend localhost` startup and existing manager login. Add `--seed-manager`
+only to replace the standard sample fixture; no whole-database reset is used.
+
 ## Prerequisites
 
 - Docker
