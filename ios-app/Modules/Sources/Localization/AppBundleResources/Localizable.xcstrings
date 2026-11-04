@@ -1,0 +1,114 @@
+{
+  "sourceLanguage" : "da",
+  "strings" : {
+    "notification_feedback_received_body" : {
+      "comment" : "Remote push body. APNs loc-args are strings: 1 = new response count, 2 = user-authored session title. Preserve the order and both %@ types. Count-neutral wording supports 1 and many without converting the server string argument to a numeric plural.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har modtaget %1$@ feedbacksvar på ‘%2$@’."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New feedback for ‘%2$@’ · Responses: %1$@"
+          }
+        }
+      }
+    },
+    "notification_feedback_received_title" : {
+      "comment" : "Remote push title for newly received feedback.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny feedback 🔥"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New feedback 🔥"
+          }
+        }
+      }
+    },
+    "notification_start_feedback_body" : {
+      "comment" : "Legacy start-feedback push body. No current sender found in this repository; retained for compatibility with queued or external payloads.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryk for at give feedback på sessionen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to give feedback on the session."
+          }
+        }
+      }
+    },
+    "notification_start_feedback_title" : {
+      "comment" : "Legacy start-feedback push title; retained for payload compatibility.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det er tid til feedback 🔥"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time for feedback 🔥"
+          }
+        }
+      }
+    },
+    "notification_team_invite_received_body" : {
+      "comment" : "Legacy team-invitation push body; retained for payload compatibility.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryk for at acceptere invitationen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to accept the invitation."
+          }
+        }
+      }
+    },
+    "notification_team_invite_received_title" : {
+      "comment" : "Legacy team-invitation push title; retained for payload compatibility.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har modtaget en teaminvitation 🔥"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have received a team invitation 🔥"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

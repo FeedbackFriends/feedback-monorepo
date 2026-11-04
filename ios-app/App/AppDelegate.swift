@@ -26,6 +26,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             transport: URLSessionTransport(),
             middlewares: [
                 AuthorisationMiddleware(),
+                APIErrorMiddleware(),
                 DelayMiddleware(),
                 DeviceIdHeaderMiddleware(deviceId: DeviceInfo().deviceID())
             ]

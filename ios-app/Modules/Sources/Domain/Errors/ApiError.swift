@@ -1,6 +1,7 @@
 import Foundation
 
 public struct ApiError: Error, Sendable {
+    let statusCode: Int?
     let timestamp: String?
     let message: String?
     let domainCode: DomainCode?
@@ -11,8 +12,10 @@ public struct ApiError: Error, Sendable {
         message: String?,
         domainCode: DomainCode?,
         exceptionType: String?,
-        path: String?
+        path: String?,
+        statusCode: Int? = nil
     ) {
+        self.statusCode = statusCode
         self.timestamp = timestamp
         self.message = message
         self.domainCode = domainCode

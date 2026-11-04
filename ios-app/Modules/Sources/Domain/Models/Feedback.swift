@@ -1,3 +1,4 @@
+import Localization
 import Foundation
 
 public struct Feedback: Equatable, Identifiable, Sendable {
@@ -64,15 +65,15 @@ public extension Opinion {
     var localized: String {
         switch self {
         case .stronglyDisagree:
-            return "Helt uenig"
+            return String(appStrings: .feedbackStronglyDisagree)
         case .disagree:
-            return "Uenig"
+            return String(appStrings: .feedbackDisagree)
         case .neutral:
-            return "Neutral"
+            return String(appStrings: .feedbackNeutral)
         case .agree:
-            return "Enig"
+            return String(appStrings: .feedbackAgree)
         case .stronglyAgree:
-            return "Helt enig"
+            return String(appStrings: .feedbackStronglyAgree)
         }
     }
 }

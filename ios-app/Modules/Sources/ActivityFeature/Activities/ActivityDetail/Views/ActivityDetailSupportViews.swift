@@ -1,3 +1,4 @@
+import Localization
 import Charts
 import DesignSystem
 import Domain
@@ -60,9 +61,9 @@ struct MeetingQualityLineChartView: View {
             ForEach(points) { point in
                 if points.count > 1 {
                     AreaMark(
-                        x: .value("Session", xValue(for: point)),
-                        yStart: .value("Bund", 0),
-                        yEnd: .value("Feedbackscore", point.value)
+                        x: .value(String(appStrings: .commonSession), xValue(for: point)),
+                        yStart: .value(String(appStrings: .insightsBaseline), 0),
+                        yEnd: .value(String(appStrings: .insightsScore), point.value)
                     )
                     .interpolationMethod(.monotone)
                     .foregroundStyle(
@@ -77,8 +78,8 @@ struct MeetingQualityLineChartView: View {
                     )
 
                     LineMark(
-                        x: .value("Session", xValue(for: point)),
-                        y: .value("Feedbackscore", point.value)
+                        x: .value(String(appStrings: .commonSession), xValue(for: point)),
+                        y: .value(String(appStrings: .insightsScore), point.value)
                     )
                     .interpolationMethod(.monotone)
                     .foregroundStyle(Color.themeChartHighlighted.gradient)
@@ -86,28 +87,28 @@ struct MeetingQualityLineChartView: View {
                 }
 
                 PointMark(
-                    x: .value("Session", xValue(for: point)),
-                    y: .value("Feedbackscore", point.value)
+                    x: .value(String(appStrings: .commonSession), xValue(for: point)),
+                    y: .value(String(appStrings: .insightsScore), point.value)
                 )
                 .foregroundStyle(Color.themeSurface)
                 .symbolSize(point.id == latestPoint?.id ? 116 : 72)
 
                 PointMark(
-                    x: .value("Session", xValue(for: point)),
-                    y: .value("Feedbackscore", point.value)
+                    x: .value(String(appStrings: .commonSession), xValue(for: point)),
+                    y: .value(String(appStrings: .insightsScore), point.value)
                 )
                     .foregroundStyle(Color.themeChartHighlighted.gradient)
                     .symbolSize(point.id == latestPoint?.id ? 72 : 42)
             }
 
             if let selectedPoint {
-                RuleMark(x: .value("Valgt session", xValue(for: selectedPoint)))
+                RuleMark(x: .value(String(appStrings: .insightsSelectedSession), xValue(for: selectedPoint)))
                     .foregroundStyle(Color.themeChartHighlighted.opacity(0.24))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [4, 5]))
 
                 PointMark(
-                    x: .value("Valgt session", xValue(for: selectedPoint)),
-                    y: .value("Feedbackscore", selectedPoint.value)
+                    x: .value(String(appStrings: .insightsSelectedSession), xValue(for: selectedPoint)),
+                    y: .value(String(appStrings: .insightsScore), selectedPoint.value)
                 )
                 .foregroundStyle(Color.themeChartHighlighted.gradient)
                 .symbolSize(150)
@@ -181,7 +182,7 @@ struct MeetingQualityLineChartView: View {
         .chartXScale(domain: xDomain)
         .chartYScale(domain: 0...5)
         .chartYAxisLabel(position: .leading, alignment: .top) {
-            Text("Score")
+            Text(String(appStrings: .insightsScoreLabel))
                 .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
         }
@@ -200,7 +201,7 @@ struct MeetingQualityLineChartView: View {
                 AxisValueLabel {
                     if let index = axisValue.as(Double.self).map(Int.init),
                        points.indices.contains(index) {
-                        Text(points[index].date.formatted(.dateTime.day().month()))
+                        Text(L10n.Format.dayMonth(points[index].date))
                             .foregroundStyle(Color.themeTextSecondary)
                     }
                 }
@@ -221,7 +222,7 @@ struct MeetingQualityLineChartView: View {
                 .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         }
         .frame(height: 190)
-        .accessibilityLabel("Feedback over tid")
+        .accessibilityLabel(String(appStrings: .insightsChartTitle))
         .accessibilityValue(accessibilitySummary)
     }
 
@@ -231,11 +232,11 @@ struct MeetingQualityLineChartView: View {
             onPointTap(point)
         } label: {
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(String(format: "%.1f", point.value)) / 5")
+                Text(String(appStrings: .insightsScoreValue(L10n.Format.number(point.value))))
                     .captionTextStyle()
                     .foregroundStyle(Color.themeText)
 
-                Text(point.date.formatted(.dateTime.day().month()))
+                Text(L10n.Format.dayMonth(point.date))
                     .captionTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
             }
@@ -319,22 +320,22 @@ struct MeetingQualityLineChartView: View {
     }
 
     private func pointSelectionAccessibilityLabel(_ point: MeetingQualityPoint) -> String {
-        let score = String(format: "%.1f", point.value)
-        let date = point.date.formatted(.dateTime.day().month())
-        return "Vis session fra \(date), score \(score) ud af 5"
+        let score = L10n.Format.number(point.value)
+        let date = L10n.Format.dayMonth(point.date)
+        return String(appStrings: .insightsSelectSession(date, score))
     }
 
     private func pointNavigationAccessibilityLabel(_ point: MeetingQualityPoint) -> String {
-        let score = String(format: "%.1f", point.value)
-        let date = point.date.formatted(.dateTime.day().month())
-        return "Åbn session fra \(date), score \(score) ud af 5"
+        let score = L10n.Format.number(point.value)
+        let date = L10n.Format.dayMonth(point.date)
+        return String(appStrings: .insightsOpenSession(date, score))
     }
 
     private var accessibilitySummary: String {
         guard let latestPoint = points.last else {
-            return "Ingen sessioner med rating"
+            return String(appStrings: .insightsNoRatings)
         }
 
-        return "Seneste score \(String(format: "%.1f", latestPoint.value)) ud af 5"
+        return String(appStrings: .insightsLatestScore(L10n.Format.number(latestPoint.value)))
     }
 }

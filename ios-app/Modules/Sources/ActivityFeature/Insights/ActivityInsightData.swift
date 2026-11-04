@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import Foundation
 
@@ -82,10 +83,10 @@ struct InsightQuestionHistory: Identifiable {
 extension ActivityTrend {
     var insightTitle: String {
         switch direction {
-        case .improving: "Feedbacken går frem"
-        case .stable: "Feedbacken er stabil"
-        case .declining: "Feedbacken går tilbage"
-        case .insufficientData: "Afventer flere sessioner med rating"
+        case .improving: String(appStrings: .insightsImproving)
+        case .stable: String(appStrings: .insightsStable)
+        case .declining: String(appStrings: .insightsDeclining)
+        case .insufficientData: String(appStrings: .insightsInsufficientData)
         }
     }
 

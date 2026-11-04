@@ -1,3 +1,4 @@
+import Localization
 #if DEBUG
 import ComposableArchitecture
 import Foundation
@@ -81,7 +82,7 @@ public enum PreviewCatalogFixtures {
     }
 
     public static var error: PresentableError { PresentableError(
-        title: "Kunne ikke hente data", message: "Prøv igen om lidt. Dine ændringer er ikke gemt."
+        title: String(appStrings: .errorsGenericTitle), message: String(appStrings: .errorsGenericMessage)
     ) }
 
     public static func bootstrap(activity: Activity) -> Shared<Bootstrap> {

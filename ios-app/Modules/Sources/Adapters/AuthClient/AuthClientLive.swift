@@ -65,7 +65,7 @@ public extension AuthClient {
                 try await Auth.auth().signIn(withCustomToken: customToken)
                 _ = try await Auth.auth().currentUser?.getIDTokenResult(forcingRefresh: true)
             }
-        )
+        ).mappingAuthenticationErrors()
     }
 }
 

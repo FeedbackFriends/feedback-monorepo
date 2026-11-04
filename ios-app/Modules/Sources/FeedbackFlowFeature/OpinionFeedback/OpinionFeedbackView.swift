@@ -1,3 +1,4 @@
+import Localization
 import DesignSystem
 import ComposableArchitecture
 import Domain
@@ -84,7 +85,7 @@ public struct OpinionFeedbackView: View {
                         .foregroundColor(.themeText)
                     Spacer(minLength: 0)
                     if isSelected {
-                        Text("Skift")
+                        Text(String(appStrings: .commonChange))
                             .captionTextStyle()
                             .foregroundColor(.themeTextSecondary)
                     }
@@ -104,7 +105,7 @@ public struct OpinionFeedbackView: View {
         store: StoreOf<OpinionFeedback>(
             initialState: OpinionFeedback.State(
                 questionId: UUID(),
-                questionText: "Hello world"
+                questionText: "Hvordan var mødet?"
             ),
             reducer: { OpinionFeedback() }
         ),

@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import Domain
 import Foundation
@@ -58,15 +59,15 @@ public struct ManageActivity: Sendable {
 
         var navigationTitle: String {
             switch mode {
-            case .create: return "Opret aktivitet"
-            case .edit: return "Rediger aktivitet"
+            case .create: return String(appStrings: .activityCreate)
+            case .edit: return String(appStrings: .activityEdit)
             }
         }
 
         var actionButtonTitle: String {
             switch mode {
-            case .create: return "Opret"
-            case .edit: return "Gem"
+            case .create: return String(appStrings: .commonCreate)
+            case .edit: return String(appStrings: .commonSave)
             }
         }
 
@@ -101,16 +102,16 @@ public struct ManageActivity: Sendable {
 
         var questionsSectionTitle: String {
             if questions.isEmpty {
-                return "Byg dine spørgsmål"
+                return String(appStrings: .activityBuildQuestions)
             }
-            return questions.count == 1 ? "1 spørgsmål klar" : "\(questions.count) spørgsmål klar"
+            return String(appStrings: .activityReadyQuestions(questions.count))
         }
 
         var questionsSectionSubtitle: String {
             if selectedTemplate == .customQuestions && questions.isEmpty {
-                return "Start fra bunden"
+                return String(appStrings: .activityStartEmpty)
             }
-            return "Åbn listen for at tilpasse spørgsmålene"
+            return String(appStrings: .activityCustomizeHelp)
         }
 
         var activityInput: ActivityInput? {
@@ -176,14 +177,14 @@ public struct ManageActivity: Sendable {
                 }
                 if state.hasCustomizedQuestions {
                     state.alert = AlertState {
-                        TextState("Erstat dine tilpassede spørgsmål?")
+                        TextState(String(appStrings: .activityReplaceTitle))
                     } actions: {
                         ButtonState(role: .destructive, action: .replaceTemplate(template)) {
-                            TextState("Erstat")
+                            TextState(String(appStrings: .activityReplace))
                         }
-                        ButtonState(role: .cancel) { TextState("Annuller") }
+                        ButtonState(role: .cancel) { TextState(String(appStrings: .commonCancel)) }
                     } message: {
-                        TextState("Spørgsmålene erstattes med spørgsmålene fra den nye skabelon.")
+                        TextState(String(appStrings: .activityReplaceMessage))
                     }
                 } else {
                     state.selectTemplate(template)

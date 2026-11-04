@@ -1,3 +1,4 @@
+import Localization
 import Foundation
 import SwiftUI
 import ComposableArchitecture
@@ -40,7 +41,7 @@ public struct SignUpView: View {
             .toolbar {
                 if let onProfileButtonTap {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button("Profil", systemImage: "person.crop.circle", action: onProfileButtonTap)
+                        Button(String(appStrings: .commonProfile), systemImage: "person.crop.circle", action: onProfileButtonTap)
                             .accessibilityIdentifier("profile_button")
                     }
                 }
@@ -69,10 +70,10 @@ public struct SignUpView: View {
 private extension SignUpView {
     var signUpView: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Dine aktiviteter")
+            Text(String(appStrings: .signInTitle))
                 .largeTitleTextStyle()
                 .foregroundStyle(Color.themeText.gradient)
-            Text("Opret dig og få feedback på dine egne aktiviteter, uanset om det er møder, workshops eller oplæg.")
+            Text(String(appStrings: .signInExplanation))
                 .bodyTextStyle()
                 .foregroundColor(.themeText)
             Button {
@@ -90,7 +91,7 @@ private extension SignUpView {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 18, height: 18)
-                    Text("Fortsæt med Apple")
+                    Text(String(appStrings: .signInApple))
                     Spacer()
                 }
                 .padding(.leading, 24)
@@ -112,7 +113,7 @@ private extension SignUpView {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 24, height: 24)
-                    Text("Fortsæt med Google")
+                    Text(String(appStrings: .signInGoogle))
                         .foregroundStyle(Color.themeText)
                     Spacer()
                 }
@@ -140,20 +141,20 @@ private struct E2EAuthenticationDebugView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("E2E login") {
-                    Button("Login with injected E2E token") {
+                Section(String(appStrings: .debugE2eLogin)) {
+                    Button(String(appStrings: .debugInjectedLogin)) {
                         store.send(.e2eLoginWithInjectedTokenTap)
                     }
                     .accessibilityIdentifier("e2e_login_with_injected_token")
                 }
                 if let status = store.e2eAuthenticationStatus {
-                    Section("Status") {
+                    Section(String(appStrings: .debugStatus)) {
                         Text(status)
                             .captionTextStyle()
                     }
                 }
             }
-            .navigationTitle("E2E authentication")
+            .navigationTitle(String(appStrings: .debugAuthentication))
         }
     }
 }

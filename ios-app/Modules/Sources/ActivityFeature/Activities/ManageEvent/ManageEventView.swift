@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import DesignSystem
 import Domain
@@ -75,10 +76,10 @@ private extension ManageEventView {
 
     var content: some View {
         VStack(alignment: .leading, spacing: 12) {
-            section(title: "Tid og sted") {
+            section(title: String(appStrings: .sessionTimeAndPlace)) {
                 inputField(
-                    title: "Lokation",
-                    prompt: "Lokation (valgfrit)",
+                    title: String(appStrings: .commonLocation),
+                    prompt: String(appStrings: .sessionOptionalLocation),
                     text: $store.eventInput.location.asNonOptional(),
                     accessibilityIdentifier: "event_form_location_input"
                 )
@@ -96,7 +97,7 @@ private extension ManageEventView {
     var eventTimeFields: some View {
         VStack(alignment: .leading, spacing: 12) {
             Toggle(isOn: $store.allDay) {
-                Text("Hele dagen")
+                Text(String(appStrings: .sessionAllDay))
                     .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
             }
@@ -108,14 +109,14 @@ private extension ManageEventView {
     }
 
     var feedbackSetupSection: some View {
-        section(title: "Feedbackopsætning") {
+        section(title: String(appStrings: .sessionFeedbackSetup)) {
             VStack(alignment: .leading, spacing: 10) {
                 Text(store.eventInput.title)
                     .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
                     .fixedSize(horizontal: false, vertical: true)
 
-                Text("Denne session bruger feedbackspørgsmålene fra aktiviteten.")
+                Text(String(appStrings: .sessionInheritedQuestions))
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -127,7 +128,7 @@ private extension ManageEventView {
                     }
                 }
 
-                Text("Rediger aktiviteten, hvis spørgsmålene skal ændres for kommende sessioner.")
+                Text(String(appStrings: .sessionEditQuestionsHelp))
                     .supportingTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -138,7 +139,7 @@ private extension ManageEventView {
             Button {
                 store.send(.editActivityButtonTap)
             } label: {
-                Label("Rediger aktivitet", systemImage: "pencil")
+                Label(String(appStrings: .activityEdit), systemImage: "pencil")
             }
             .buttonStyle(InlineActionButtonStyle())
             .accessibilityIdentifier("event_form_edit_activity_button")
@@ -147,7 +148,7 @@ private extension ManageEventView {
 
     var questionCountText: String {
         let count = store.eventInput.questions.count
-        return count == 1 ? "1 spørgsmål" : "\(count) spørgsmål"
+        return String(appStrings: .questionsCount(count))
     }
 
     @ViewBuilder
@@ -156,7 +157,7 @@ private extension ManageEventView {
             sectionDivider
 
             Toggle(isOn: $store.startNowEnabled) {
-                Text("Start nu")
+                Text(String(appStrings: .sessionStartNow))
                     .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
             }
@@ -166,7 +167,7 @@ private extension ManageEventView {
                 sectionDivider
 
                 datePickerRow(
-                    title: "Tidspunkt",
+                    title: String(appStrings: .sessionTime),
                     selection: $store.eventInput.date,
                     range: store.date.roundedUpcoming5Min()...,
                     displayedComponents: [DatePickerComponents.date, DatePickerComponents.hourAndMinute]
@@ -176,7 +177,7 @@ private extension ManageEventView {
             sectionDivider
 
             HStack {
-                Text("Varighed")
+                Text(String(appStrings: .commonDuration))
                     .rowTitleTextStyle()
                     .foregroundStyle(Color.themeText)
 
@@ -201,7 +202,7 @@ private extension ManageEventView {
                             .tag(ManageEvent.State.DurationPicker.other)
                     },
                     label: {
-                        Text("Varighed")
+                        Text(String(appStrings: .commonDuration))
                     }
                 )
                 .pickerStyle(.menu)
@@ -212,20 +213,20 @@ private extension ManageEventView {
                 sectionDivider
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Tilpasset varighed")
+                    Text(String(appStrings: .sessionCustomDuration))
                         .rowTitleTextStyle()
 
                     HStack {
                         Picker("", selection: $store.hourPicker) {
                             ForEach(0..<24, id: \.self) { number in
-                                Text(number == 1 ? "1 time" : "\(number) timer").tag(number)
+                                Text(String(appStrings: .sessionHourCount(number))).tag(number)
                             }
                         }
                         .pickerStyle(WheelPickerStyle())
 
                         Picker("", selection: $store.minutePicker) {
                             ForEach(0..<60, id: \.self) { number in
-                                Text("\(number) min").tag(number)
+                                Text(String(appStrings: .sessionMinuteCount(number))).tag(number)
                             }
                         }
                         .pickerStyle(WheelPickerStyle())
@@ -238,7 +239,7 @@ private extension ManageEventView {
             sectionDivider
 
             datePickerRow(
-                title: "Time",
+                title: String(appStrings: .commonDate),
                 selection: $store.eventInput.date,
                 range: store.date...,
                 displayedComponents: [DatePickerComponents.date]

@@ -1,16 +1,19 @@
+import Localization
 import Domain
 import DesignSystem
 import SwiftUI
 
 public struct EventListSection: Identifiable, Equatable, Sendable {
+    public enum SectionID: String, Sendable {
+        case current, upcoming, previous
+    }
+
+    public let id: SectionID
     public let title: String
     public let events: [Event]
 
-    public var id: String {
-        title
-    }
-
-    public init(title: String, events: [Event]) {
+    public init(id: SectionID, title: String, events: [Event]) {
+        self.id = id
         self.title = title
         self.events = events
     }
@@ -39,11 +42,11 @@ public struct EventListView: View {
             if sections.isEmpty {
                 VStack(alignment: .center, spacing: 14) {
                     VStack(spacing: 6) {
-                        Text("Ingen sessioner endnu")
+                        Text(String(appStrings: .sessionEmptyTitle))
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
 
-                        Text("Brug kalenderopsætning til fast feedback. Tilføj kun en enkelt session ved behov.")
+                        Text(String(appStrings: .sessionEmptyMessage))
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                             .multilineTextAlignment(.center)
@@ -119,12 +122,12 @@ private struct EventListItemView: View {
 
             if let overallFeedbackSummary = event.overallFeedbackSummary, overallFeedbackSummary.unseenResponses > 0 {
                 PillTagView(
-                    "\(overallFeedbackSummary.unseenResponses) nye",
+                    String(appStrings: .feedbackNewCount(overallFeedbackSummary.unseenResponses)),
                     style: .badge,
                     foregroundColor: .themeOnPrimaryAction,
                     backgroundColor: .themeBlue
                 )
-                    .accessibilityLabel("\(overallFeedbackSummary.unseenResponses) nye svar")
+                    .accessibilityLabel(String(appStrings: .feedbackNewResponses(overallFeedbackSummary.unseenResponses)))
             }
 
             Image.chevronRight
@@ -148,18 +151,18 @@ private struct EventListItemView: View {
 
     private var sessionTitle: String {
         if calendar.isDate(event.date, inSameDayAs: referenceDate ?? .now) {
-            return "I dag kl. \(event.date.formatted(date: .omitted, time: .shortened))"
+            return String(appStrings: .sessionToday(L10n.Format.date(event.date, date: .omitted, time: .shortened)))
         }
 
         if calendar.isDate(event.date, inSameDayAs: calendar.date(byAdding: .day, value: -1, to: referenceDate ?? .now)!) {
-            return "I går kl. \(event.date.formatted(date: .omitted, time: .shortened))"
+            return String(appStrings: .sessionYesterday(L10n.Format.date(event.date, date: .omitted, time: .shortened)))
         }
 
         if calendar.isDate(event.date, inSameDayAs: calendar.date(byAdding: .day, value: 1, to: referenceDate ?? .now)!) {
-            return "I morgen kl. \(event.date.formatted(date: .omitted, time: .shortened))"
+            return String(appStrings: .sessionTomorrow(L10n.Format.date(event.date, date: .omitted, time: .shortened)))
         }
 
-        return event.date.formatted(date: .abbreviated, time: .shortened)
+        return L10n.Format.date(event.date, time: .shortened)
     }
 
     private var feedbackSummary: some View {
@@ -183,14 +186,14 @@ private struct EventListItemView: View {
 
     private var responseText: String {
         guard let responses = event.overallFeedbackSummary?.responses else {
-            return "Ingen svar endnu"
+            return String(appStrings: .feedbackNoResponses)
         }
 
-        return responses == 1 ? "1 svar" : "\(responses) svar"
+        return String(appStrings: .feedbackResponseCount(responses))
     }
 
     private var accessibilityLabel: String {
-        "\(eventTitle), \(event.formattedDate), \(responseText)"
+        String(appStrings: .sessionRowAccessibility(eventTitle, event.formattedDate, responseText))
     }
 
     private var hasLocation: Bool {

@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import SwiftUI
 
@@ -5,21 +6,21 @@ extension FeedbackType {
     
     var title: String {
         switch self {
-        case .emoji: return "Emoji"
-        case .comment: return "Kommentar"
-        case .thumpsUpThumpsDown: return "Tommel op/ned"
-        case .opinion: return "Enighed"
-        case .zeroToTen: return "0–10"
+        case .emoji: return String(appStrings: .answerTypesEmoji)
+        case .comment: return String(appStrings: .answerTypesComment)
+        case .thumpsUpThumpsDown: return String(appStrings: .answerTypesThumbs)
+        case .opinion: return String(appStrings: .answerTypesOpinion)
+        case .zeroToTen: return String(appStrings: .answerTypesRating)
         }
     }
 
     var shortDescription: String {
         switch self {
-        case .emoji: return "Hurtig stemning"
-        case .comment: return "Fri tekst"
-        case .thumpsUpThumpsDown: return "Ja eller nej"
-        case .opinion: return "Hvor enig?"
-        case .zeroToTen: return "Præcis vurdering"
+        case .emoji: return String(appStrings: .answerTypesEmojiSubtitle)
+        case .comment: return String(appStrings: .answerTypesCommentSubtitle)
+        case .thumpsUpThumpsDown: return String(appStrings: .answerTypesThumbsSubtitle)
+        case .opinion: return String(appStrings: .answerTypesOpinionSubtitle)
+        case .zeroToTen: return String(appStrings: .answerTypesRatingSubtitle)
         }
     }
     
@@ -35,11 +36,11 @@ extension FeedbackType {
     
     var helpDescription: String {
         switch self {
-        case .emoji: return "Deltageren vælger en emoji. Brug den til hurtige temperaturmålinger efter en session."
-        case .comment: return "Deltageren skriver et frit svar. Brug den, når du vil forstå årsagen bag feedbacken."
-        case .thumpsUpThumpsDown: return "Deltageren vælger tommel op eller ned. Brug den til klare ja/nej-spørgsmål."
-        case .opinion: return "Deltageren angiver graden af enighed. Brug den til udsagn som kan vurderes fra uenig til enig."
-        case .zeroToTen: return "Deltageren giver en score fra 0 til 10. Brug den, når du vil følge udviklingen over tid."
+        case .emoji: return String(appStrings: .answerTypesEmojiHelp)
+        case .comment: return String(appStrings: .answerTypesCommentHelp)
+        case .thumpsUpThumpsDown: return String(appStrings: .answerTypesThumbsHelp)
+        case .opinion: return String(appStrings: .answerTypesOpinionHelp)
+        case .zeroToTen: return String(appStrings: .answerTypesRatingHelp)
         }
     }
 }

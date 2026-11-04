@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import DesignSystem
 import SwiftUI
@@ -14,7 +15,7 @@ struct ProfileSectionView: View {
                 updateProfileButtonTap()
             } label: {
                 VStack(alignment: .leading) {
-                    Text(name ?? "Not found")
+                    Text(name ?? String(appStrings: .profileMissingValue))
                         .bodyTextStyle()
                     HStack {
                         Image.personCircleFill
@@ -25,8 +26,8 @@ struct ProfileSectionView: View {
                             .background(Color.themeSurfaceSecondary)
                             .clipShape(Circle())
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(email ?? "Not found")
-                            Text(phoneNumber ?? "Not found")
+                            Text(email ?? String(appStrings: .profileMissingValue))
+                            Text(phoneNumber ?? String(appStrings: .profileMissingValue))
                         }
                         .captionTextStyle()
                         Spacer()
@@ -82,10 +83,10 @@ public struct ProfileSettingsView: View {
                     )
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Notifikationer i appen")
+                        Text(String(appStrings: .profileAppNotifications))
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
-                        Text("Få påmindelser og opdateringer om dine møder.")
+                        Text(String(appStrings: .profileAppNotificationsHelp))
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
@@ -100,10 +101,10 @@ public struct ProfileSettingsView: View {
                     )
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Møder på mail")
+                        Text(String(appStrings: .profileEmailUpdates))
                             .rowTitleTextStyle()
                             .foregroundStyle(Color.themeText)
-                        Text("Modtag mødeopdateringer i din indbakke.")
+                        Text(String(appStrings: .profileEmailUpdatesHelp))
                             .supportingTextStyle()
                             .foregroundStyle(Color.themeTextSecondary)
                     }
@@ -111,7 +112,7 @@ public struct ProfileSettingsView: View {
                 .tint(Color.themePrimaryAction)
                 .disabled(store.isLoading)
             } header: {
-                SectionHeaderView("Kommunikation", horizontalPadding: 0)
+                SectionHeaderView(String(appStrings: .profileCommunication), horizontalPadding: 0)
             }
 
             if let logoutButtonTap {
@@ -119,7 +120,7 @@ public struct ProfileSettingsView: View {
                     Button {
                         logoutButtonTap()
                     } label: {
-                        listElementView(image: .moreSectionPortraitAndArrowRight, label: "Log ud")
+                        listElementView(image: .moreSectionPortraitAndArrowRight, label: String(appStrings: .commonLogout))
                     }
                 } 
             }
@@ -131,7 +132,7 @@ public struct ProfileSettingsView: View {
                     } label: {
                         listElementView(
                             image: .moreSectionTrash,
-                            label: "Slet konto",
+                            label: String(appStrings: .accountDeleteAction),
                             isLoading: isDeleteAccountLoading
                         )
                     }
@@ -140,7 +141,7 @@ public struct ProfileSettingsView: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.themeBackground)
-        .navigationTitle("Indstillinger")
+        .navigationTitle(String(appStrings: .commonSettings))
         .navigationDestination(
             item: $store.scope(
                 state: \.destination?.modifyAccount,

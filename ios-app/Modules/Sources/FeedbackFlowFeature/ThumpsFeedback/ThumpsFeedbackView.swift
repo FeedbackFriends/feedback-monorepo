@@ -95,7 +95,7 @@ struct ThumpsFeedbackView: View {
         store: StoreOf<ThumpsFeedback>(
             initialState: ThumpsFeedback.State(
                 questionId: UUID(),
-                questionText: "Hello world"
+                questionText: "Hvordan var mødet?"
             ),
             reducer: { ThumpsFeedback() }
         ),

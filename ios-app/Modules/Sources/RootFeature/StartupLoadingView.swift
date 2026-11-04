@@ -1,3 +1,4 @@
+import Localization
 import DesignSystem
 import SwiftUI
 
@@ -43,7 +44,7 @@ struct StartupLoadingView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Lets Grow. Indlæser.")
+        .accessibilityLabel(String(appStrings: .startupLoading))
         .accessibilityIdentifier("startup.loading")
         .task {
             withAnimation(.easeOut(duration: reduceMotion ? 0 : 0.55)) {

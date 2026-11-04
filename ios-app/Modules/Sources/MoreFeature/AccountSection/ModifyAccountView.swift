@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import SwiftUI
 import Domain
@@ -15,34 +16,34 @@ public struct ModifyAccountView: View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("Name", text: $store.nameInput)
+                    TextField(String(appStrings: .profileName), text: $store.nameInput)
                         .textInputTextStyle()
                 } header: {
-                    SectionHeaderView("Name", horizontalPadding: 0)
+                    SectionHeaderView(String(appStrings: .profileName), horizontalPadding: 0)
                 }
                 Section {
-                    TextField("Email", text: $store.emailInput)
+                    TextField(String(appStrings: .profileEmail), text: $store.emailInput)
                         .textInputTextStyle()
                 } header: {
-                    SectionHeaderView("Email", horizontalPadding: 0)
+                    SectionHeaderView(String(appStrings: .profileEmail), horizontalPadding: 0)
                 } footer: {
-                    Text("Use the same email as your calendar account (Google, Outlook, etc.).")
+                    Text(String(appStrings: .profileCalendarEmailHelp))
                 }
                 Section {
-                    TextField("Phone number", text: $store.phoneNumberInput)
+                    TextField(String(appStrings: .profilePhone), text: $store.phoneNumberInput)
                         .textInputTextStyle()
                 } header: {
-                    SectionHeaderView("Phone number", horizontalPadding: 0)
+                    SectionHeaderView(String(appStrings: .profilePhone), horizontalPadding: 0)
                 }
             }
             .supportingTextStyle()
             .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
             .scrollContentBackground(.hidden)
             .background(Color.themeBackground.ignoresSafeArea())
-            .navigationTitle("Edit profile")
+            .navigationTitle(String(appStrings: .profileEdit))
             .toolbar {
 				ToolbarItem(placement: .primaryAction) {
-					Button("Save") {
+					Button(String(appStrings: .commonSave)) {
 						store.send(.saveButtonTap)
 					}
 					.buttonStyle(PrimaryTextButtonStyle())

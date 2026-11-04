@@ -2,13 +2,14 @@ import Domain
 import OpenAPI
 
 public extension ApiError {
-    init(_ dto: Components.Schemas.ApiError) {
+    init(_ dto: Components.Schemas.ApiError, statusCode: Int? = nil) {
         self.init(
             timestamp: dto.timestamp,
             message: dto.message,
             domainCode: dto.domainCode.map { DomainCode($0) },
             exceptionType: dto.exceptionType,
-            path: dto.path
+            path: dto.path,
+            statusCode: statusCode
         )
     }
 }

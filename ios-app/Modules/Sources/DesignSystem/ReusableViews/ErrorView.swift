@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 import Foundation
 import Domain
@@ -27,7 +28,7 @@ public struct ErrorView: View {
                 .frame(width: exclamationmark, height: exclamationmark)
                 .foregroundColor(.themeVerySad)
             
-            Text("\(error.title) 💩")
+            Text(error.title)
                 .rowTitleTextStyle()
                 .foregroundColor(.themeText)
             
@@ -37,7 +38,7 @@ public struct ErrorView: View {
                 .multilineTextAlignment(.center)
             
             if let tryAgainButtonTapped {
-                Button("Try again", action: tryAgainButtonTapped)
+                Button(String(appStrings: .commonRetry), action: tryAgainButtonTapped)
                     .buttonStyle(PrimaryTextButtonStyle())
                     .isLoading(isLoading)
                     .disabled(isLoading)

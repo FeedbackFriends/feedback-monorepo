@@ -1,3 +1,4 @@
+import Localization
 #if DEBUG
 import ComposableArchitecture
 import SwiftUI
@@ -148,7 +149,7 @@ struct DebugMenuView: View {
     private func runAction(actionName: String, operation: @escaping () async throws -> Void) async {
         do {
             try await operation()
-            handleSuccess("\(actionName) succeeded")
+            handleSuccess(String(appStrings: .debugActionSucceeded(actionName)))
         } catch {
             alert = error.localizedDescription
             Logger.debug(error.localizedDescription)
@@ -171,34 +172,34 @@ struct DebugMenuView: View {
                 }
                 if debugMenuExpanded {
                     VStack {
-                        Button("Show session data") {
+                        Button(String(appStrings: .debugShowSession)) {
                             Task {
-                                await runAction(actionName: "Show session data") {
+                                await runAction(actionName: String(appStrings: .debugShowSession)) {
                                     let session = try await apiClient.getBootstrap()
                                     self.sessionSheet = session
                                 }
                             }
                         }
-                        Button("Print id token") {
+                        Button(String(appStrings: .debugPrintIdToken)) {
                             Task {
-                                await runAction(actionName: "Print id token") {
+                                await runAction(actionName: String(appStrings: .debugPrintIdToken)) {
                                     let token = try await Auth.auth().currentUser?.getIDToken()
                                     Logger.debug(token ?? "Not found")
                                 }
                             }
                         }
-                        Button("Print fcm token") {
+                        Button(String(appStrings: .debugPrintFcmToken)) {
                             Task { @MainActor in
                                 Logger.debug(Messaging.messaging().fcmToken ?? "Not found")
-                                handleSuccess("Print fcm token succeeded")
+                                handleSuccess(String(appStrings: .debugPrintFcmSucceeded))
                             }
                         }
-                        Button("Local mock notification") {
+                        Button(String(appStrings: .debugMockNotification)) {
                             Task {
-                                await runAction(actionName: "Local mock notification") {
+                                await runAction(actionName: String(appStrings: .debugMockNotification)) {
                                     notificationClient.scheduleLocalNotification(
-                                        title: "mock title",
-                                        body: "mock body",
+                                        title: String(appStrings: .debugMockTitle),
+                                        body: String(appStrings: .debugMockBody),
                                         userInfo: [:],
                                         presentAfterDelayInSeconds: 5,
                                         id: "mock_notification"
@@ -206,18 +207,18 @@ struct DebugMenuView: View {
                                 }
                             }
                         }
-                        Button("Crash") {
+                        Button(String(appStrings: .debugCrash)) {
                             fatalError("Debug crash")
                         }
-                        Button("Logout") {
+                        Button(String(appStrings: .commonLogout)) {
                             Task {
-                                await runAction(actionName: "Logout") {
+                                await runAction(actionName: String(appStrings: .commonLogout)) {
                                     try Auth.auth().signOut()
                                 }
                             }
                         }
-                        Button("Hide") {
-                            alert = "Hide succeeded"
+                        Button(String(appStrings: .debugHide)) {
+                            alert = String(appStrings: .debugHideSucceeded)
                             hideDebugMenu = true
                         }
                         if let alert {
@@ -233,31 +234,31 @@ struct DebugMenuView: View {
             .sheet(item: $sessionSheet, content: { session in
                 NavigationStack {
                     List {
-                        Section("Server session") {
+                        Section(String(appStrings: .debugServerSession)) {
                             if let jsonString = prettyJSONString(session) {
                                 Text(jsonString)
                                     .supportingTextStyle()
                             } else {
-                                Text("Failed to encode session")
+                                Text(String(appStrings: .debugEncodingFailed))
                             }
                         }
-                        Section("Local session") {
+                        Section(String(appStrings: .debugLocalSession)) {
                             if let localSession, let jsonString = prettyJSONString(localSession) {
                                 Text(jsonString)
                                     .supportingTextStyle()
                             } else {
-                                Text("No local session")
+                                Text(String(appStrings: .debugNoSession))
                             }
                         }
                     }
-                    .navigationTitle("Debug session")
+                    .navigationTitle(String(appStrings: .debugSessionTitle))
                 }
             })
             .task {
                 guard !didAttemptE2EAutoLogin else { return }
                 didAttemptE2EAutoLogin = true
                 guard let token = E2EAutoLoginConfig.tokenFromLaunchArguments() else { return }
-                await runAction(actionName: "E2E auto login") {
+                await runAction(actionName: String(appStrings: .debugAutoLogin)) {
                     try await Auth.auth().signIn(withCustomToken: token)
                     _ = try await Auth.auth().currentUser?.getIDTokenResult(forcingRefresh: true)
                 }

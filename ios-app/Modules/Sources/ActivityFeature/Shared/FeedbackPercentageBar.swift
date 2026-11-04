@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import SwiftUI
 import DesignSystem
@@ -29,7 +30,7 @@ struct EmptyFeedbackSegmentationStatsView: View {
         }
         .frame(minHeight: 24)
         .overlay(alignment: .center) {
-            Text("Ingen feedback endnu")
+            Text(String(appStrings: .feedbackNoFeedback))
                 .captionTextStyle()
                 .foregroundColor(Color.themeTextSecondary)
         }

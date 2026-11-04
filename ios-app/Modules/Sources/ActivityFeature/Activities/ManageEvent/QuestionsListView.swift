@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 import Domain
 import DesignSystem
@@ -24,8 +25,8 @@ struct QuestionsListView: View {
             Section {
                 if questionsInputs.isEmpty {
                     EmptyStateView(
-                        title: "Ingen spørgsmål",
-                        message: "Tilføj dit første spørgsmål nedenfor."
+                        title: String(appStrings: .questionsEmptyTitle),
+                        message: String(appStrings: .questionsEmptyMessage)
                     )
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 24)
@@ -57,14 +58,14 @@ struct QuestionsListView: View {
                 Button {
                     presentSelectQuestionSheet = QuestionDraft(question: nil)
                 } label: {
-                    Label("Tilføj spørgsmål", systemImage: "plus")
+                    Label(String(appStrings: .questionsAdd), systemImage: "plus")
                 }
                 .buttonStyle(InlineActionButtonStyle())
                 .accessibilityIdentifier("questions_add_question")
             }
             .listRowBackground(Color.themeSurface)
         }
-        .navigationTitle("Spørgsmål")
+        .navigationTitle(String(appStrings: .commonQuestions))
         .navigationBarTitleDisplayMode(.inline)
         .background(Color.themeBackground.ignoresSafeArea())
         .scrollContentBackground(.hidden)
@@ -87,7 +88,7 @@ struct QuestionsListView: View {
             }
         )
         .safeAreaInset(edge: .bottom) {
-            Button("Gem") { dismiss() }
+            Button(String(appStrings: .commonSave)) { dismiss() }
                 .buttonStyle(LargeButtonStyle())
                 .accessibilityIdentifier("questions_save")
                 .padding(Theme.padding)

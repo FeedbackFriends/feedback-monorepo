@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 
 public struct CloseButtonView: View {
@@ -11,6 +12,7 @@ public struct CloseButtonView: View {
         Button(role: .close) {
             dismiss()
         }
+        .accessibilityLabel(String(appStrings: .commonClose))
         .tint(Color.themeText)
     }
 }

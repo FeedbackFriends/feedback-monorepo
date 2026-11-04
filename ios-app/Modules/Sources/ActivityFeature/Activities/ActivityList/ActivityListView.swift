@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import ComposableArchitecture
 import DesignSystem
@@ -19,18 +20,18 @@ public struct ActivityListView: View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             HomeActivitiesView(store: store)
                 .background(LetsGrowLandingGradient().ignoresSafeArea())
-                .navigationTitle("Aktiviteter")
+                .navigationTitle(String(appStrings: .commonActivities))
                 .successConfirmation(store.scope(state: \.confirmation, action: \.confirmation))
                 .refreshable { await store.send(.refresh).finish() }
                 .toolbar {
                     if let onProfileButtonTap {
                         ToolbarItem(placement: .topBarLeading) {
-                            Button("Profil", systemImage: "person.crop.circle", action: onProfileButtonTap)
+                            Button(String(appStrings: .commonProfile), systemImage: "person.crop.circle", action: onProfileButtonTap)
                                 .accessibilityIdentifier("profile_button")
                         }
                     }
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("Opret aktivitet", systemImage: "plus") { store.send(.createActivityButtonTap) }
+                        Button(String(appStrings: .activityCreate), systemImage: "plus") { store.send(.createActivityButtonTap) }
                             .accessibilityIdentifier("my_activity_add_button")
                     }
                 }
@@ -78,7 +79,7 @@ private struct HomeActivitiesView: View {
     private var emptyState: some View {
         ContentUnavailableView {
             Label {
-                Text("Opret din første aktivitet")
+                Text(String(appStrings: .activityEmptyTitle))
                     .titleTextStyle()
                     .foregroundStyle(Color.themeText)
             } icon: {
@@ -87,7 +88,7 @@ private struct HomeActivitiesView: View {
             }
         } description: {
             VStack(spacing: 12) {
-                Text("Tryk på + øverst til højre for at komme i gang.")
+                Text(String(appStrings: .activityEmptyMessage))
             }
             .supportingTextStyle()
             .foregroundStyle(Color.themeTextSecondary)

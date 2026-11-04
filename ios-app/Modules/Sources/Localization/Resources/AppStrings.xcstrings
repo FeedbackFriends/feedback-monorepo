@@ -1,0 +1,5792 @@
+{
+  "sourceLanguage" : "da",
+  "strings" : {
+    "account.deleteAction" : {
+      "comment" : "Account: deleteAction. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slet konto"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete account"
+          }
+        }
+      }
+    },
+    "account.deleteMessage" : {
+      "comment" : "Account: deleteMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle data på din konto bliver slettet og kan ikke gendannes."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All data in your account will be deleted and cannot be recovered."
+          }
+        }
+      }
+    },
+    "account.deleteTitle" : {
+      "comment" : "Account: deleteTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vil du slette din konto?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete your account?"
+          }
+        }
+      }
+    },
+    "account.deletedMessage" : {
+      "comment" : "Account: deletedMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tak, fordi du brugte LetsGrow."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thank you for using LetsGrow."
+          }
+        }
+      }
+    },
+    "account.deletedTitle" : {
+      "comment" : "Account: deletedTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontoen er slettet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account deleted"
+          }
+        }
+      }
+    },
+    "activity.allSessions" : {
+      "comment" : "Activity: allSessions. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle sessioner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All sessions"
+          }
+        }
+      }
+    },
+    "activity.awaitingFeedback" : {
+      "comment" : "Activity: awaitingFeedback. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afventer første feedback"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for the first feedback"
+          }
+        }
+      }
+    },
+    "activity.buildQuestions" : {
+      "comment" : "Activity: buildQuestions. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Byg dine spørgsmål"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Build your questions"
+          }
+        }
+      }
+    },
+    "activity.calendarAccountHelp" : {
+      "comment" : "Activity: calendarAccountHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitationen skal sendes fra mailadressen på din LetsGrow-konto. Du kan ændre den under Profil."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send the invitation from the email address on your LetsGrow account. You can change it under Profile."
+          }
+        }
+      }
+    },
+    "activity.calendarSetupMessage" : {
+      "comment" : "Activity: calendarSetupMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug det kalenderværktøj, du allerede planlægger i, og inviter blot 'LetsGrow'-mailen. Så oprettes sessionen automatisk her i appen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the calendar you already plan in and invite the LetsGrow email address. The session will appear here in the app automatically."
+          }
+        }
+      }
+    },
+    "activity.calendarSetupTitle" : {
+      "comment" : "Activity: calendarSetupTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fra kalender til feedback"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From calendar to feedback"
+          }
+        }
+      }
+    },
+    "activity.copyEmailMessage" : {
+      "comment" : "Activity: copyEmailMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sæt den ind i den kalenderaftale, du allerede bruger."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paste it into the calendar event you already use."
+          }
+        }
+      }
+    },
+    "activity.copyEmailTitle" : {
+      "comment" : "Activity: copyEmailTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mailen er kopieret"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email address copied"
+          }
+        }
+      }
+    },
+    "activity.create" : {
+      "comment" : "Activity: create. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opret aktivitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create activity"
+          }
+        }
+      }
+    },
+    "activity.created" : {
+      "comment" : "Activity: created. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivitet oprettet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity created"
+          }
+        }
+      }
+    },
+    "activity.current" : {
+      "comment" : "Activity: current. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current"
+          }
+        }
+      }
+    },
+    "activity.customizeHelp" : {
+      "comment" : "Activity: customizeHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn listen for at tilpasse spørgsmålene"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open the list to customize the questions"
+          }
+        }
+      }
+    },
+    "activity.deleteMessage" : {
+      "comment" : "Activity: deleteMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slet denne aktivitet og al feedback?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete this activity and all its feedback?"
+          }
+        }
+      }
+    },
+    "activity.deleteTitle" : {
+      "comment" : "Activity: deleteTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slet aktivitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete activity"
+          }
+        }
+      }
+    },
+    "activity.deleted" : {
+      "comment" : "Activity: deleted. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivitet slettet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity deleted"
+          }
+        }
+      }
+    },
+    "activity.edit" : {
+      "comment" : "Activity: edit. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rediger aktivitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit activity"
+          }
+        }
+      }
+    },
+    "activity.emptyMessage" : {
+      "comment" : "Activity: emptyMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryk på + øverst til højre for at komme i gang."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap + in the top right to get started."
+          }
+        }
+      }
+    },
+    "activity.emptyTitle" : {
+      "comment" : "Activity: emptyTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opret din første aktivitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create your first activity"
+          }
+        }
+      }
+    },
+    "activity.manualSessionHelp" : {
+      "comment" : "Activity: manualSessionHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kan også oprette en session manuelt med Opret øverst til højre."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can also create a session manually using Create in the top right."
+          }
+        }
+      }
+    },
+    "activity.moreActions" : {
+      "comment" : "Activity: moreActions. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flere handlinger for aktivitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More activity actions"
+          }
+        }
+      }
+    },
+    "activity.name" : {
+      "comment" : "Activity: name. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivitetens navn"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity name"
+          }
+        }
+      }
+    },
+    "activity.namePrompt" : {
+      "comment" : "Activity: namePrompt. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fx månedligt teammøde, workshop eller træning"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For example, a monthly team meeting, workshop or training"
+          }
+        }
+      }
+    },
+    "activity.nameStep" : {
+      "comment" : "Activity: nameStep. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giv aktiviteten et navn"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name your activity"
+          }
+        }
+      }
+    },
+    "activity.nextSession" : {
+      "comment" : "Activity: nextSession. Arguments in order: date (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Næste session: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next session: %@"
+          }
+        }
+      }
+    },
+    "activity.noUpcoming" : {
+      "comment" : "Activity: noUpcoming. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen kommende sessioner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No upcoming sessions"
+          }
+        }
+      }
+    },
+    "activity.previous" : {
+      "comment" : "Activity: previous. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidligere"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous"
+          }
+        }
+      }
+    },
+    "activity.readyQuestions" : {
+      "comment" : "Activity: readyQuestions. Arguments in order: count (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld spørgsmål klar"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld spørgsmål klar"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld question ready"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld questions ready"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "activity.replace" : {
+      "comment" : "Activity: replace. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstat"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replace"
+          }
+        }
+      }
+    },
+    "activity.replaceMessage" : {
+      "comment" : "Activity: replaceMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spørgsmålene erstattes med spørgsmålene fra den nye skabelon."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your questions will be replaced with the questions from the new template."
+          }
+        }
+      }
+    },
+    "activity.replaceTitle" : {
+      "comment" : "Activity: replaceTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstat dine tilpassede spørgsmål?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replace your custom questions?"
+          }
+        }
+      }
+    },
+    "activity.saved" : {
+      "comment" : "Activity: saved. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivitet gemt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity saved"
+          }
+        }
+      }
+    },
+    "activity.seeAll" : {
+      "comment" : "Activity: seeAll. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se alle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See all"
+          }
+        }
+      }
+    },
+    "activity.sessionCount" : {
+      "comment" : "Number of sessions. Argument 1: count (Int); zero uses the other form.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld session"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld sessioner"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld session"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld sessions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "activity.startEmpty" : {
+      "comment" : "Activity: startEmpty. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start fra bunden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start from scratch"
+          }
+        }
+      }
+    },
+    "activity.stepProgress" : {
+      "comment" : "Activity: stepProgress. Arguments in order: current (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trin %lld af 2"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step %lld of 2"
+          }
+        }
+      }
+    },
+    "activity.template" : {
+      "comment" : "Activity: template. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedbackskabelon"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback template"
+          }
+        }
+      }
+    },
+    "activity.templateHelp" : {
+      "comment" : "Activity: templateHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vælg et udgangspunkt, og tilpas spørgsmålene til din aktivitet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a starting point and adapt the questions to your activity."
+          }
+        }
+      }
+    },
+    "activity.templateStep" : {
+      "comment" : "Activity: templateStep. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vælg feedbackskabelon"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a feedback template"
+          }
+        }
+      }
+    },
+    "activity.unknown" : {
+      "comment" : "Activity: unknown. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ukendt aktivitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown activity"
+          }
+        }
+      }
+    },
+    "activity.upcoming" : {
+      "comment" : "Activity: upcoming. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommende"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming"
+          }
+        }
+      }
+    },
+    "answerTypes.comment" : {
+      "comment" : "AnswerTypes: comment. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommentar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment"
+          }
+        }
+      }
+    },
+    "answerTypes.commentHelp" : {
+      "comment" : "AnswerTypes: commentHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deltageren skriver et frit svar. Brug den, når du vil forstå årsagen bag feedbacken."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participants write a free-text answer. Use this to understand the reasons behind their feedback."
+          }
+        }
+      }
+    },
+    "answerTypes.commentSubtitle" : {
+      "comment" : "AnswerTypes: commentSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fri tekst"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free text"
+          }
+        }
+      }
+    },
+    "answerTypes.emoji" : {
+      "comment" : "AnswerTypes: emoji. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emoji"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emoji"
+          }
+        }
+      }
+    },
+    "answerTypes.emojiHelp" : {
+      "comment" : "AnswerTypes: emojiHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deltageren vælger en emoji. Brug den til hurtige temperaturmålinger efter en session."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participants choose an emoji. Use this for a quick mood check after a session."
+          }
+        }
+      }
+    },
+    "answerTypes.emojiSubtitle" : {
+      "comment" : "AnswerTypes: emojiSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hurtig stemning"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick mood check"
+          }
+        }
+      }
+    },
+    "answerTypes.opinion" : {
+      "comment" : "AnswerTypes: opinion. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enighed"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agreement"
+          }
+        }
+      }
+    },
+    "answerTypes.opinionHelp" : {
+      "comment" : "AnswerTypes: opinionHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deltageren angiver graden af enighed. Brug den til udsagn som kan vurderes fra uenig til enig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participants indicate how much they agree. Use this for statements that can be rated from disagree to agree."
+          }
+        }
+      }
+    },
+    "answerTypes.opinionSubtitle" : {
+      "comment" : "AnswerTypes: opinionSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvor enig?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How much do you agree?"
+          }
+        }
+      }
+    },
+    "answerTypes.rating" : {
+      "comment" : "AnswerTypes: rating. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0–10"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0–10"
+          }
+        }
+      }
+    },
+    "answerTypes.ratingHelp" : {
+      "comment" : "AnswerTypes: ratingHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deltageren giver en score fra 0 til 10. Brug den, når du vil følge udviklingen over tid."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participants give a score from 0 to 10. Use this to track changes over time."
+          }
+        }
+      }
+    },
+    "answerTypes.ratingSubtitle" : {
+      "comment" : "AnswerTypes: ratingSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Præcis vurdering"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detailed rating"
+          }
+        }
+      }
+    },
+    "answerTypes.thumbs" : {
+      "comment" : "AnswerTypes: thumbs. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tommel op/ned"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thumbs up/down"
+          }
+        }
+      }
+    },
+    "answerTypes.thumbsHelp" : {
+      "comment" : "AnswerTypes: thumbsHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deltageren vælger tommel op eller ned. Brug den til klare ja/nej-spørgsmål."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participants choose thumbs up or down. Use this for clear yes/no questions."
+          }
+        }
+      }
+    },
+    "answerTypes.thumbsSubtitle" : {
+      "comment" : "AnswerTypes: thumbsSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja eller nej"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes or no"
+          }
+        }
+      }
+    },
+    "common.activities" : {
+      "comment" : "Common: activities. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktiviteter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activities"
+          }
+        }
+      }
+    },
+    "common.activity" : {
+      "comment" : "Common: activity. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity"
+          }
+        }
+      }
+    },
+    "common.calendar" : {
+      "comment" : "Common: calendar. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalender"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar"
+          }
+        }
+      }
+    },
+    "common.cancel" : {
+      "comment" : "Action: cancel without applying changes.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuller"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "common.change" : {
+      "comment" : "Common: change. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skift"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change"
+          }
+        }
+      }
+    },
+    "common.close" : {
+      "comment" : "Action: close the current presentation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luk"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        }
+      }
+    },
+    "common.comments" : {
+      "comment" : "Common: comments. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommentarer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comments"
+          }
+        }
+      }
+    },
+    "common.continueAction" : {
+      "comment" : "Common: continueAction. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortsæt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
+    "common.copy" : {
+      "comment" : "Common: copy. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopiér"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy"
+          }
+        }
+      }
+    },
+    "common.create" : {
+      "comment" : "Common: create. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opret"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        }
+      }
+    },
+    "common.date" : {
+      "comment" : "Common: date. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dato"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        }
+      }
+    },
+    "common.delete" : {
+      "comment" : "Common: delete. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        }
+      }
+    },
+    "common.details" : {
+      "comment" : "Common: details. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detaljer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details"
+          }
+        }
+      }
+    },
+    "common.duration" : {
+      "comment" : "Common: duration. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varighed"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duration"
+          }
+        }
+      }
+    },
+    "common.finish" : {
+      "comment" : "Common: finish. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afslut"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish"
+          }
+        }
+      }
+    },
+    "common.forward" : {
+      "comment" : "Common: forward. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videre"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
+    "common.giveFeedback" : {
+      "comment" : "Common: giveFeedback. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giv feedback"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Give feedback"
+          }
+        }
+      }
+    },
+    "common.invite" : {
+      "comment" : "Common: invite. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inviter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invite"
+          }
+        }
+      }
+    },
+    "common.location" : {
+      "comment" : "Common: location. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokation"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        }
+      }
+    },
+    "common.logout" : {
+      "comment" : "Action: log out.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log ud"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log out"
+          }
+        }
+      }
+    },
+    "common.newBadge" : {
+      "comment" : "Common: newBadge. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New"
+          }
+        }
+      }
+    },
+    "common.next" : {
+      "comment" : "Common: next. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Næste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        }
+      }
+    },
+    "common.notNow" : {
+      "comment" : "Common: notNow. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke nu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not now"
+          }
+        }
+      }
+    },
+    "common.ok" : {
+      "comment" : "Action: acknowledge a message.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "common.pinCode" : {
+      "comment" : "Common: pinCode. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIN-kode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIN code"
+          }
+        }
+      }
+    },
+    "common.profile" : {
+      "comment" : "Common: profile. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile"
+          }
+        }
+      }
+    },
+    "common.questions" : {
+      "comment" : "Common: questions. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spørgsmål"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questions"
+          }
+        }
+      }
+    },
+    "common.retry" : {
+      "comment" : "Action: retry the failed operation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv igen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        }
+      }
+    },
+    "common.save" : {
+      "comment" : "Action: save changes.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gem"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        }
+      }
+    },
+    "common.session" : {
+      "comment" : "Common: session. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session"
+          }
+        }
+      }
+    },
+    "common.settings" : {
+      "comment" : "Common: settings. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indstillinger"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "common.start" : {
+      "comment" : "Common: start. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        }
+      }
+    },
+    "common.tryAgain" : {
+      "comment" : "Retry instruction after logout failure.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again."
+          }
+        }
+      }
+    },
+    "common.unknown" : {
+      "comment" : "Common: unknown. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ukendt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        }
+      }
+    },
+    "debug.actionSucceeded" : {
+      "comment" : "Debug: actionSucceeded. Argument: action name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ lykkedes"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ succeeded"
+          }
+        }
+      }
+    },
+    "debug.authentication" : {
+      "comment" : "Debug: authentication. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E2E-godkendelse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E2E authentication"
+          }
+        }
+      }
+    },
+    "debug.autoLogin" : {
+      "comment" : "Debug: autoLogin. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisk E2E-login"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic E2E login"
+          }
+        }
+      }
+    },
+    "debug.crash" : {
+      "comment" : "Debug: crash. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test nedbrud"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test crash"
+          }
+        }
+      }
+    },
+    "debug.e2eLogin" : {
+      "comment" : "Debug: e2eLogin. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E2E-login"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E2E login"
+          }
+        }
+      }
+    },
+    "debug.encodingFailed" : {
+      "comment" : "Debug: encodingFailed. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunne ikke kode sessionen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not encode the session"
+          }
+        }
+      }
+    },
+    "debug.hide" : {
+      "comment" : "Debug: hide. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjul"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide"
+          }
+        }
+      }
+    },
+    "debug.hideSucceeded" : {
+      "comment" : "Debug: hideSucceeded. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjult"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hidden"
+          }
+        }
+      }
+    },
+    "debug.injectedLogin" : {
+      "comment" : "Debug: injectedLogin. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log ind med indsat E2E-token"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log in with an injected E2E token"
+          }
+        }
+      }
+    },
+    "debug.localSession" : {
+      "comment" : "Debug: localSession. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokal session"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local session"
+          }
+        }
+      }
+    },
+    "debug.loginSucceeded" : {
+      "comment" : "Debug: loginSucceeded. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login med indsat E2E-token lykkedes"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login with an injected E2E token succeeded"
+          }
+        }
+      }
+    },
+    "debug.mockBody" : {
+      "comment" : "Debug: mockBody. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dette er en lokal testnotifikation."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is a local test notification."
+          }
+        }
+      }
+    },
+    "debug.mockNotification" : {
+      "comment" : "Debug: mockNotification. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokal testnotifikation"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local test notification"
+          }
+        }
+      }
+    },
+    "debug.mockTitle" : {
+      "comment" : "Debug: mockTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testnotifikation"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test notification"
+          }
+        }
+      }
+    },
+    "debug.noSession" : {
+      "comment" : "Debug: noSession. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen lokal session"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No local session"
+          }
+        }
+      }
+    },
+    "debug.noToken" : {
+      "comment" : "Debug: noToken. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intet indsat E2E-token fundet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No injected E2E token found"
+          }
+        }
+      }
+    },
+    "debug.printFcmSucceeded" : {
+      "comment" : "Debug: printFcmSucceeded. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FCM-token udskrevet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FCM token printed"
+          }
+        }
+      }
+    },
+    "debug.printFcmToken" : {
+      "comment" : "Debug: printFcmToken. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udskriv FCM-token"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Print FCM token"
+          }
+        }
+      }
+    },
+    "debug.printIdToken" : {
+      "comment" : "Debug: printIdToken. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udskriv ID-token"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Print ID token"
+          }
+        }
+      }
+    },
+    "debug.serverSession" : {
+      "comment" : "Debug: serverSession. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serversession"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server session"
+          }
+        }
+      }
+    },
+    "debug.sessionTitle" : {
+      "comment" : "Debug: sessionTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testsession"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test session"
+          }
+        }
+      }
+    },
+    "debug.showSession" : {
+      "comment" : "Debug: showSession. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis sessionsdata"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show session data"
+          }
+        }
+      }
+    },
+    "debug.status" : {
+      "comment" : "Debug: status. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
+    "emptyState.title" : {
+      "comment" : "EmptyState: title. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intet at vise endnu."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing to show yet."
+          }
+        }
+      }
+    },
+    "errors.alreadyJoined.message" : {
+      "comment" : "User already joined this session.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede tilmeldt dig denne session."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have already joined this session."
+          }
+        }
+      }
+    },
+    "errors.alreadyJoined.title" : {
+      "comment" : "Session already joined.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede deltaget"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Already joined"
+          }
+        }
+      }
+    },
+    "errors.authentication.message" : {
+      "comment" : "Auth SDK or local setup failure.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login kunne ikke gennemføres. Prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We could not complete your login. Try again."
+          }
+        }
+      }
+    },
+    "errors.authentication.title" : {
+      "comment" : "Authentication failed.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunne ikke logge ind"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not log in"
+          }
+        }
+      }
+    },
+    "errors.cacheUpdate.message" : {
+      "comment" : "Local state update failed; server operation may have succeeded.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visningen kunne ikke opdateres. Opdater siden for at hente de nyeste oplysninger."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We could not update this view. Refresh to get the latest information."
+          }
+        }
+      }
+    },
+    "errors.conflict.message" : {
+      "comment" : "State conflict without a domain code.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indholdet er blevet ændret. Opdater, og prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The content has changed. Refresh and try again."
+          }
+        }
+      }
+    },
+    "errors.connection.message" : {
+      "comment" : "Connection, host or secure connection failure.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi kunne ikke oprette forbindelse. Prøv igen om lidt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We could not connect. Try again in a moment."
+          }
+        }
+      }
+    },
+    "errors.duplicateFeedback.message" : {
+      "comment" : "Duplicate feedback on a session.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede givet feedback på denne session."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have already given feedback on this session."
+          }
+        }
+      }
+    },
+    "errors.duplicateFeedback.title" : {
+      "comment" : "Feedback was already submitted.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback allerede sendt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback already submitted"
+          }
+        }
+      }
+    },
+    "errors.forbidden.message" : {
+      "comment" : "Resource access denied.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har ikke adgang til dette indhold."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You do not have access to this content."
+          }
+        }
+      }
+    },
+    "errors.generic.message" : {
+      "comment" : "Safe fallback; never include technical diagnostics.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noget gik galt. Prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong. Try again."
+          }
+        }
+      }
+    },
+    "errors.generic.title" : {
+      "comment" : "Title for an unexpected error.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der opstod en fejl"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occurred"
+          }
+        }
+      }
+    },
+    "errors.invalidPin.message" : {
+      "comment" : "PIN did not match an active session.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIN-koden passer ikke til en aktiv session. Tjek koden, og prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The PIN code does not match an active session. Check the code and try again."
+          }
+        }
+      }
+    },
+    "errors.invalidPin.title" : {
+      "comment" : "Invalid session PIN.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ugyldig PIN-kode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid PIN code"
+          }
+        }
+      }
+    },
+    "errors.inviteUnavailable.message" : {
+      "comment" : "Missing invitation link.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitationslinket kunne ikke oprettes. Prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We could not create the invitation link. Try again."
+          }
+        }
+      }
+    },
+    "errors.loginCancelled.message" : {
+      "comment" : "Fallback only; normal user cancellation is silent.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login blev annulleret."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login was cancelled."
+          }
+        }
+      }
+    },
+    "errors.logout.title" : {
+      "comment" : "Logout failed after account deletion.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunne ikke logge ud"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not log out"
+          }
+        }
+      }
+    },
+    "errors.notAllowed.title" : {
+      "comment" : "Action is not allowed.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen adgang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Access denied"
+          }
+        }
+      }
+    },
+    "errors.notFound.message" : {
+      "comment" : "Requested resource missing.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indholdet findes ikke længere. Opdater, og prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This content is no longer available. Refresh and try again."
+          }
+        }
+      }
+    },
+    "errors.offline.message" : {
+      "comment" : "Offline recovery action.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tjek din internetforbindelse, og prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check your internet connection and try again."
+          }
+        }
+      }
+    },
+    "errors.offline.title" : {
+      "comment" : "Device appears offline.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen internetforbindelse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection"
+          }
+        }
+      }
+    },
+    "errors.ownSession.message" : {
+      "comment" : "Owner cannot join their own session.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kan ikke deltage i din egen session."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You cannot join your own session."
+          }
+        }
+      }
+    },
+    "errors.rateLimited.message" : {
+      "comment" : "Rate limit or auth throttling.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der er for mange forsøg lige nu. Vent lidt, og prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There are too many attempts right now. Wait a moment and try again."
+          }
+        }
+      }
+    },
+    "errors.refresh.message" : {
+      "comment" : "Activity refresh recovery message.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dine aktiviteter kunne ikke opdateres. Prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We could not refresh your activities. Try again."
+          }
+        }
+      }
+    },
+    "errors.refresh.title" : {
+      "comment" : "Activity refresh failed.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunne ikke opdatere"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not refresh"
+          }
+        }
+      }
+    },
+    "errors.selfFeedback.message" : {
+      "comment" : "Self feedback is not allowed.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kan ikke give feedback til dig selv."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You cannot give feedback to yourself."
+          }
+        }
+      }
+    },
+    "errors.server.message" : {
+      "comment" : "Server temporarily unavailable.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der opstod en serverfejl. Prøv igen om lidt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A server error occurred. Try again in a moment."
+          }
+        }
+      }
+    },
+    "errors.sessionUnavailable.message" : {
+      "comment" : "Missing local session identifier.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessionen kunne ikke findes. Opdater, og prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We could not find the session. Refresh and try again."
+          }
+        }
+      }
+    },
+    "errors.signIn.message" : {
+      "comment" : "Authentication required.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du skal logge ind igen for at fortsætte."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log in again to continue."
+          }
+        }
+      }
+    },
+    "errors.signIn.title" : {
+      "comment" : "Session expired or authentication required.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log ind igen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log in again"
+          }
+        }
+      }
+    },
+    "errors.timeout.message" : {
+      "comment" : "Timeout recovery action.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi fik ikke svar i tide. Prøv igen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We did not receive a response in time. Try again."
+          }
+        }
+      }
+    },
+    "errors.timeout.title" : {
+      "comment" : "Request timed out.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det tog for lang tid"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The request took too long"
+          }
+        }
+      }
+    },
+    "feedback.agree" : {
+      "comment" : "Feedback: agree. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agree"
+          }
+        }
+      }
+    },
+    "feedback.disagree" : {
+      "comment" : "Feedback: disagree. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uenig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disagree"
+          }
+        }
+      }
+    },
+    "feedback.elaboration" : {
+      "comment" : "Feedback: elaboration. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uddyb gerne hvorfor"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tell us more about why"
+          }
+        }
+      }
+    },
+    "feedback.enterPin" : {
+      "comment" : "Feedback: enterPin. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indtast PIN-kode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter PIN code"
+          }
+        }
+      }
+    },
+    "feedback.expired" : {
+      "comment" : "Feedback: expired. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udløbet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expired"
+          }
+        }
+      }
+    },
+    "feedback.joinTitle" : {
+      "comment" : "Feedback: joinTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Svar på feedback"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Give feedback"
+          }
+        }
+      }
+    },
+    "feedback.neutral" : {
+      "comment" : "Feedback: neutral. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neutral"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neutral"
+          }
+        }
+      }
+    },
+    "feedback.newCount" : {
+      "comment" : "Feedback: newCount. Arguments in order: count (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld nyt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld nye"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld new"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld new"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "feedback.newResponses" : {
+      "comment" : "Feedback: newResponses. Arguments in order: count (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld nyt svar"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld nye svar"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld new response"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld new responses"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "feedback.noComments" : {
+      "comment" : "Feedback: noComments. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen kommentarer endnu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No comments yet"
+          }
+        }
+      }
+    },
+    "feedback.noFeedback" : {
+      "comment" : "Feedback: noFeedback. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen feedback endnu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No feedback yet"
+          }
+        }
+      }
+    },
+    "feedback.noResponses" : {
+      "comment" : "Feedback: noResponses. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen svar endnu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No responses yet"
+          }
+        }
+      }
+    },
+    "feedback.outOfTen" : {
+      "comment" : "Feedback: outOfTen. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "af 10"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "out of 10"
+          }
+        }
+      }
+    },
+    "feedback.previewAccessibility" : {
+      "comment" : "Feedback: previewAccessibility. Arguments in order: question (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eksempel på deltagernes visning. %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview of what participants see. %@"
+          }
+        }
+      }
+    },
+    "feedback.questionNumber" : {
+      "comment" : "Feedback: questionNumber. Arguments in order: number (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spørgsmål %lld"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Question %lld"
+          }
+        }
+      }
+    },
+    "feedback.questionProgress" : {
+      "comment" : "Question progress. Argument 1: current one-based question (Int). Argument 2: total questions (Int).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld af %2$lld"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "feedback.rateApp" : {
+      "comment" : "Feedback: rateApp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vurder appen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate the app"
+          }
+        }
+      }
+    },
+    "feedback.rating" : {
+      "comment" : "Feedback: rating. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vurdering"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rating"
+          }
+        }
+      }
+    },
+    "feedback.ratingPromptMessage" : {
+      "comment" : "Feedback: ratingPromptMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En vurdering i App Store kan hjælpe andre mødeejere med at finde LetsGrow."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A rating in the App Store can help other meeting owners find LetsGrow."
+          }
+        }
+      }
+    },
+    "feedback.ratingPromptTitle" : {
+      "comment" : "Feedback: ratingPromptTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er LetsGrow nyttig indtil videre?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finding LetsGrow useful so far?"
+          }
+        }
+      }
+    },
+    "feedback.responseCount" : {
+      "comment" : "Feedback: responseCount. Arguments in order: count (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld svar"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld svar"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld response"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld responses"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "feedback.sessionFound" : {
+      "comment" : "Feedback: sessionFound. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session fundet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session found"
+          }
+        }
+      }
+    },
+    "feedback.stronglyAgree" : {
+      "comment" : "Feedback: stronglyAgree. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helt enig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strongly agree"
+          }
+        }
+      }
+    },
+    "feedback.stronglyDisagree" : {
+      "comment" : "Feedback: stronglyDisagree. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helt uenig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strongly disagree"
+          }
+        }
+      }
+    },
+    "feedback.submit" : {
+      "comment" : "Feedback: submit. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send svar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Submit responses"
+          }
+        }
+      }
+    },
+    "feedback.thankYou" : {
+      "comment" : "Feedback: thankYou. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tak for din feedback"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thank you for your feedback"
+          }
+        }
+      }
+    },
+    "feedback.totalResponses" : {
+      "comment" : "Feedback: totalResponses. Arguments in order: count (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld svar i alt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld svar i alt"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld response in total"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld responses in total"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "insights.baseline" : {
+      "comment" : "Insights: baseline. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bund"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum"
+          }
+        }
+      }
+    },
+    "insights.chartTitle" : {
+      "comment" : "Insights: chartTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback over tid"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback over time"
+          }
+        }
+      }
+    },
+    "insights.comparison" : {
+      "comment" : "Insights: comparison. Arguments in order: sessions (Int), responses (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sammenligner de seneste %#@sessions@ med vurderinger · %2$lld vurderingssvar"
+          },
+          "substitutions" : {
+            "sessions" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg session"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg sessioner"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparing the latest %#@sessions@ with ratings · Ratings: %2$lld"
+          },
+          "substitutions" : {
+            "sessions" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg session"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg sessions"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "insights.declining" : {
+      "comment" : "Insights: declining. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedbacken går tilbage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback is declining"
+          }
+        }
+      }
+    },
+    "insights.historyHelp" : {
+      "comment" : "Insights: historyHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hele historikken · Resultater vises på spørgsmålets egen svarskala."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full history · Results use each question’s own response scale."
+          }
+        }
+      }
+    },
+    "insights.improving" : {
+      "comment" : "Insights: improving. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedbacken går frem"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback is improving"
+          }
+        }
+      }
+    },
+    "insights.insufficientData" : {
+      "comment" : "Insights: insufficientData. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afventer flere sessioner med vurderinger"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for more sessions with ratings"
+          }
+        }
+      }
+    },
+    "insights.latestScore" : {
+      "comment" : "Insights: latestScore. Arguments in order: score (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seneste score %@ ud af 5"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latest score %@ out of 5"
+          }
+        }
+      }
+    },
+    "insights.noAnswers" : {
+      "comment" : "Insights: noAnswers. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen svar på spørgsmålet i denne session."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No answers to this question in this session."
+          }
+        }
+      }
+    },
+    "insights.noRatings" : {
+      "comment" : "Insights: noRatings. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen sessioner med vurderinger"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No sessions with ratings"
+          }
+        }
+      }
+    },
+    "insights.openComments" : {
+      "comment" : "Insights: openComments. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn sessionen for at læse kommentarerne."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open the session to read the comments."
+          }
+        }
+      }
+    },
+    "insights.openSession" : {
+      "comment" : "Insights: openSession. Arguments in order: date (String), score (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn session fra %1$@, score %2$@ ud af 5"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open session from %1$@, score %2$@ out of 5"
+          }
+        }
+      }
+    },
+    "insights.opinionResponses" : {
+      "comment" : "Insights: opinionResponses. Arguments in order: opinion (String), count (Int), total (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$lld af %3$lld svar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, responses: %2$lld of %3$lld"
+          }
+        }
+      }
+    },
+    "insights.questions" : {
+      "comment" : "Insights: questions. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spørgsmål og feedback"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questions and feedback"
+          }
+        }
+      }
+    },
+    "insights.score" : {
+      "comment" : "Insights: score. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedbackscore"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback score"
+          }
+        }
+      }
+    },
+    "insights.scoreHelp" : {
+      "comment" : "Insights: scoreHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedbackscore fra 0 til 5, baseret på sessionernes 0–10-svar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback score from 0 to 5, based on the sessions’ 0–10 responses."
+          }
+        }
+      }
+    },
+    "insights.scoreLabel" : {
+      "comment" : "Insights: scoreLabel. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Score"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Score"
+          }
+        }
+      }
+    },
+    "insights.scoreValue" : {
+      "comment" : "Insights: scoreValue. Arguments in order: score (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ / 5"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ / 5"
+          }
+        }
+      }
+    },
+    "insights.selectSession" : {
+      "comment" : "Insights: selectSession. Arguments in order: date (String), score (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis session fra %1$@, score %2$@ ud af 5"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show session from %1$@, score %2$@ out of 5"
+          }
+        }
+      }
+    },
+    "insights.selectedSession" : {
+      "comment" : "Insights: selectedSession. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valgt session"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected session"
+          }
+        }
+      }
+    },
+    "insights.stable" : {
+      "comment" : "Insights: stable. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedbacken er stabil"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback is stable"
+          }
+        }
+      }
+    },
+    "insights.trend" : {
+      "comment" : "Insights: trend. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udvikling over tid"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trend over time"
+          }
+        }
+      }
+    },
+    "insights.trendHelp" : {
+      "comment" : "Insights: trendHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se udviklingen, når flere sessioner har fået feedback."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See the trend as more sessions receive feedback."
+          }
+        }
+      }
+    },
+    "more.bugSubject" : {
+      "comment" : "More: bugSubject. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fejl i LetsGrow"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bug in LetsGrow"
+          }
+        }
+      }
+    },
+    "more.contact" : {
+      "comment" : "More: contact. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakt os"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact us"
+          }
+        }
+      }
+    },
+    "more.emailBody" : {
+      "comment" : "More: emailBody. Arguments in order: device (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Skriv din besked her>\n\nEnhedsoplysninger\n%@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Write your message here>\n\nDevice information\n%@"
+          }
+        }
+      }
+    },
+    "more.feedbackSubject" : {
+      "comment" : "More: feedbackSubject. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback til LetsGrow"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback for LetsGrow"
+          }
+        }
+      }
+    },
+    "more.general" : {
+      "comment" : "More: general. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generelt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        }
+      }
+    },
+    "more.privacy" : {
+      "comment" : "More: privacy. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privatlivspolitik"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy policy"
+          }
+        }
+      }
+    },
+    "more.reportBug" : {
+      "comment" : "More: reportBug. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapportér en fejl"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report a bug"
+          }
+        }
+      }
+    },
+    "more.sendFeedback" : {
+      "comment" : "More: sendFeedback. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send feedback til os"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send us feedback"
+          }
+        }
+      }
+    },
+    "more.shareMessage" : {
+      "comment" : "More: shareMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hjælp andre med at få ærlig feedback og forbedre deres aktiviteter."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help others get honest feedback and improve their activities."
+          }
+        }
+      }
+    },
+    "more.shareTitle" : {
+      "comment" : "More: shareTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del LetsGrow med andre"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share LetsGrow with others"
+          }
+        }
+      }
+    },
+    "more.support" : {
+      "comment" : "More: support. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Støt os"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support us"
+          }
+        }
+      }
+    },
+    "notifications.allow" : {
+      "comment" : "Notifications: allow. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tillad notifikationer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow notifications"
+          }
+        }
+      }
+    },
+    "notifications.emptyMessage" : {
+      "comment" : "Notifications: emptyMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Når der er nyt om sessionerne, ser du det her."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updates about your sessions will appear here."
+          }
+        }
+      }
+    },
+    "notifications.emptyTitle" : {
+      "comment" : "Notifications: emptyTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intet at vise endnu."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing to show yet."
+          }
+        }
+      }
+    },
+    "notifications.permissionMessage" : {
+      "comment" : "Notifications: permissionMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tillad notifikationer, så du kan få besked, når der er nyt om dine sessioner."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow notifications to hear about updates to your sessions."
+          }
+        }
+      }
+    },
+    "notifications.receivedFeedback" : {
+      "comment" : "Notifications: receivedFeedback. Arguments in order: count (Int), title (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Du har modtaget %1$lld nyt feedbacksvar på ‘%2$@’."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Du har modtaget %1$lld nye feedbacksvar på ‘%2$@’."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You have received %1$lld new feedback response for ‘%2$@’."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You have received %1$lld new feedback responses for ‘%2$@’."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "notifications.title" : {
+      "comment" : "Notifications: title. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifikationer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
+          }
+        }
+      }
+    },
+    "profile.appNotifications" : {
+      "comment" : "Profile: appNotifications. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifikationer i appen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App notifications"
+          }
+        }
+      }
+    },
+    "profile.appNotificationsHelp" : {
+      "comment" : "Profile: appNotificationsHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Få påmindelser og opdateringer om dine møder."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get reminders and updates about your meetings."
+          }
+        }
+      }
+    },
+    "profile.calendarEmailHelp" : {
+      "comment" : "Profile: calendarEmailHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug samme e-mailadresse som i din kalenderkonto (Google, Outlook osv.)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the same email address as your calendar account (Google, Outlook, etc.)."
+          }
+        }
+      }
+    },
+    "profile.communication" : {
+      "comment" : "Profile: communication. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommunikation"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Communication"
+          }
+        }
+      }
+    },
+    "profile.edit" : {
+      "comment" : "Profile: edit. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rediger profil"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit profile"
+          }
+        }
+      }
+    },
+    "profile.email" : {
+      "comment" : "Profile: email. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email"
+          }
+        }
+      }
+    },
+    "profile.emailUpdates" : {
+      "comment" : "Profile: emailUpdates. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Møder på mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting emails"
+          }
+        }
+      }
+    },
+    "profile.emailUpdatesHelp" : {
+      "comment" : "Profile: emailUpdatesHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modtag mødeopdateringer i din indbakke."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Receive meeting updates in your inbox."
+          }
+        }
+      }
+    },
+    "profile.missingValue" : {
+      "comment" : "Profile: missingValue. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke angivet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not provided"
+          }
+        }
+      }
+    },
+    "profile.name" : {
+      "comment" : "Profile: name. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navn"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "profile.phone" : {
+      "comment" : "Profile: phone. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefonnummer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phone number"
+          }
+        }
+      }
+    },
+    "profile.roleOwner" : {
+      "comment" : "Profile: roleOwner. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mødeejer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting owner"
+          }
+        }
+      }
+    },
+    "questions.add" : {
+      "comment" : "Questions: add. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilføj spørgsmål"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add question"
+          }
+        }
+      }
+    },
+    "questions.answerHelp" : {
+      "comment" : "Questions: answerHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vælg hvordan deltagerne skal svare."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose how participants should respond."
+          }
+        }
+      }
+    },
+    "questions.answerType" : {
+      "comment" : "Questions: answerType. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Svartype"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Response type"
+          }
+        }
+      }
+    },
+    "questions.count" : {
+      "comment" : "Questions: count. Arguments in order: count (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld spørgsmål"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld spørgsmål"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld question"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld questions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "questions.edit" : {
+      "comment" : "Questions: edit. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rediger spørgsmål"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit question"
+          }
+        }
+      }
+    },
+    "questions.emptyMessage" : {
+      "comment" : "Questions: emptyMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilføj dit første spørgsmål nedenfor."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add your first question below."
+          }
+        }
+      }
+    },
+    "questions.emptyTitle" : {
+      "comment" : "Questions: emptyTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen spørgsmål"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No questions"
+          }
+        }
+      }
+    },
+    "questions.inputPrompt" : {
+      "comment" : "Questions: inputPrompt. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fx hvor nyttigt var mødet for dig?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For example, how useful was the meeting for you?"
+          }
+        }
+      }
+    },
+    "questions.inputTitle" : {
+      "comment" : "Questions: inputTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad vil du gerne vide?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What would you like to know?"
+          }
+        }
+      }
+    },
+    "questions.newTitle" : {
+      "comment" : "Questions: newTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nyt spørgsmål"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New question"
+          }
+        }
+      }
+    },
+    "questions.previewPlaceholder" : {
+      "comment" : "Questions: previewPlaceholder. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit spørgsmål vises her"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your question will appear here"
+          }
+        }
+      }
+    },
+    "questions.previewTitle" : {
+      "comment" : "Questions: previewTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sådan ser deltagerne det"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What participants see"
+          }
+        }
+      }
+    },
+    "questions.saveChange" : {
+      "comment" : "Questions: saveChange. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gem ændring"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save change"
+          }
+        }
+      }
+    },
+    "session.allDay" : {
+      "comment" : "Session: allDay. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hele dagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All day"
+          }
+        }
+      }
+    },
+    "session.allDayDate" : {
+      "comment" : "Session: allDayDate. Arguments in order: date (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: Hele dagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: All day"
+          }
+        }
+      }
+    },
+    "session.create" : {
+      "comment" : "Session: create. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opret session"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create session"
+          }
+        }
+      }
+    },
+    "session.created" : {
+      "comment" : "Session: created. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session oprettet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session created"
+          }
+        }
+      }
+    },
+    "session.customDuration" : {
+      "comment" : "Session: customDuration. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilpasset varighed"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom duration"
+          }
+        }
+      }
+    },
+    "session.deleteMessage" : {
+      "comment" : "Session: deleteMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slet denne session og dens feedback?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete this session and its feedback?"
+          }
+        }
+      }
+    },
+    "session.deleteTitle" : {
+      "comment" : "Session: deleteTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slet session"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete session"
+          }
+        }
+      }
+    },
+    "session.deleted" : {
+      "comment" : "Session: deleted. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session slettet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session deleted"
+          }
+        }
+      }
+    },
+    "session.edit" : {
+      "comment" : "Session: edit. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rediger session"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit session"
+          }
+        }
+      }
+    },
+    "session.editQuestionsHelp" : {
+      "comment" : "Session: editQuestionsHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rediger aktiviteten, hvis spørgsmålene skal ændres for kommende sessioner."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit the activity to change the questions for upcoming sessions."
+          }
+        }
+      }
+    },
+    "session.emptyMessage" : {
+      "comment" : "Session: emptyMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug kalenderopsætning til fast feedback. Tilføj kun en enkelt session ved behov."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use calendar setup for recurring feedback. Add a single session only when needed."
+          }
+        }
+      }
+    },
+    "session.emptyTitle" : {
+      "comment" : "Session: emptyTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen sessioner endnu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No sessions yet"
+          }
+        }
+      }
+    },
+    "session.feedbackSetup" : {
+      "comment" : "Session: feedbackSetup. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedbackopsætning"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback setup"
+          }
+        }
+      }
+    },
+    "session.hourCount" : {
+      "comment" : "Session: hourCount. Arguments in order: count (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld time"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld timer"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld hour"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld hours"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "session.inheritedQuestions" : {
+      "comment" : "Session: inheritedQuestions. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denne session bruger feedbackspørgsmålene fra aktiviteten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This session uses the activity’s feedback questions."
+          }
+        }
+      }
+    },
+    "session.invite.message" : {
+      "comment" : "Complete invitation. Arguments: 1 user-authored title (String), 2 PIN preserving leading zeros (String), 3 URL (String). Preserve all parameters verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du er inviteret til at give feedback på %1$@.\nBrug PIN-kode %2$@ for at svare.\n\nÅbn linket for at svare:\n%3$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are invited to give feedback on %1$@.\nUse PIN code %2$@ to respond.\n\nOpen the link to respond:\n%3$@"
+          }
+        }
+      }
+    },
+    "session.inviteHelp" : {
+      "comment" : "Session: inviteHelp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del linket med de deltagere, du gerne vil have feedback fra."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share the link with the participants you would like feedback from."
+          }
+        }
+      }
+    },
+    "session.inviteUnavailableMessage" : {
+      "comment" : "Session: inviteUnavailableMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitationer er ikke tilgængelige for denne session lige nu."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitations are not available for this session right now."
+          }
+        }
+      }
+    },
+    "session.inviteUnavailableTitle" : {
+      "comment" : "Session: inviteUnavailableTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitation ikke tilgængelig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitation unavailable"
+          }
+        }
+      }
+    },
+    "session.minuteCount" : {
+      "comment" : "Session: minuteCount. Arguments in order: count (Int). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        }
+      }
+    },
+    "session.newTitle" : {
+      "comment" : "Session: newTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny session"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New session"
+          }
+        }
+      }
+    },
+    "session.optionalLocation" : {
+      "comment" : "Session: optionalLocation. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokation (valgfrit)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location (optional)"
+          }
+        }
+      }
+    },
+    "session.otherDuration" : {
+      "comment" : "Session: otherDuration. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other"
+          }
+        }
+      }
+    },
+    "session.owner" : {
+      "comment" : "Session: owner. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrangør"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organizer"
+          }
+        }
+      }
+    },
+    "session.rowAccessibility" : {
+      "comment" : "Session: rowAccessibility. Arguments in order: title (String), date (String), responses (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@, %3$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "session.saved" : {
+      "comment" : "Session: saved. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session gemt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session saved"
+          }
+        }
+      }
+    },
+    "session.shareLink" : {
+      "comment" : "Session: shareLink. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del link"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share link"
+          }
+        }
+      }
+    },
+    "session.sharePin" : {
+      "comment" : "Session: sharePin. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del PIN-kode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share PIN code"
+          }
+        }
+      }
+    },
+    "session.startNow" : {
+      "comment" : "Session: startNow. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start nu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start now"
+          }
+        }
+      }
+    },
+    "session.time" : {
+      "comment" : "Session: time. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidspunkt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time"
+          }
+        }
+      }
+    },
+    "session.timeAndPlace" : {
+      "comment" : "Session: timeAndPlace. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tid og sted"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time and place"
+          }
+        }
+      }
+    },
+    "session.today" : {
+      "comment" : "Session: today. Arguments in order: time (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I dag kl. %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today at %@"
+          }
+        }
+      }
+    },
+    "session.tomorrow" : {
+      "comment" : "Session: tomorrow. Arguments in order: time (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I morgen kl. %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tomorrow at %@"
+          }
+        }
+      }
+    },
+    "session.unavailableMessage" : {
+      "comment" : "Session: unavailableMessage. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denne session kan ikke længere åbnes."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This session can no longer be opened."
+          }
+        }
+      }
+    },
+    "session.unavailableTitle" : {
+      "comment" : "Session: unavailableTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessionen er ikke tilgængelig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session unavailable"
+          }
+        }
+      }
+    },
+    "session.yesterday" : {
+      "comment" : "Session: yesterday. Arguments in order: time (String). User content stays verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I går kl. %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday at %@"
+          }
+        }
+      }
+    },
+    "signIn.apple" : {
+      "comment" : "SignIn: apple. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortsæt med Apple"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue with Apple"
+          }
+        }
+      }
+    },
+    "signIn.explanation" : {
+      "comment" : "SignIn: explanation. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opret dig og få feedback på dine egne aktiviteter, uanset om det er møder, workshops eller oplæg."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign up to get feedback on your own activities, whether they are meetings, workshops or talks."
+          }
+        }
+      }
+    },
+    "signIn.google" : {
+      "comment" : "SignIn: google. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortsæt med Google"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue with Google"
+          }
+        }
+      }
+    },
+    "signIn.title" : {
+      "comment" : "SignIn: title. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dine aktiviteter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your activities"
+          }
+        }
+      }
+    },
+    "startup.loading" : {
+      "comment" : "Startup: loading. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LetsGrow. Indlæser."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LetsGrow. Loading."
+          }
+        }
+      }
+    },
+    "support.appDetails" : {
+      "comment" : "Support email app section. Arguments: name, version, build, bundle ID.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App:\nNavn: %1$@\nVersion: %2$@\nBuild: %3$@\nBundle-id: %4$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App:\nName: %1$@\nVersion: %2$@\nBuild: %3$@\nBundle ID: %4$@"
+          }
+        }
+      }
+    },
+    "support.deviceDetails" : {
+      "comment" : "Support email device section. Arguments: name, model, OS, OS version, vendor ID.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enhed:\nNavn: %1$@\nModel: %2$@\nSystem: %3$@ %4$@\nEnheds-id: %5$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Device:\nName: %1$@\nModel: %2$@\nSystem: %3$@ %4$@\nDevice ID: %5$@"
+          }
+        }
+      }
+    },
+    "templates.clearPurpose" : {
+      "comment" : "Templates: clearPurpose. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Var formålet tydeligt?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was the purpose clear?"
+          }
+        }
+      }
+    },
+    "templates.customSubtitle" : {
+      "comment" : "Templates: customSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start tomt og skriv dine egne spørgsmål"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start from scratch and write your own questions"
+          }
+        }
+      }
+    },
+    "templates.customTitle" : {
+      "comment" : "Templates: customTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Egne spørgsmål"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom questions"
+          }
+        }
+      }
+    },
+    "templates.energy" : {
+      "comment" : "Templates: energy. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvordan var energien i mødet?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How was the energy in the meeting?"
+          }
+        }
+      }
+    },
+    "templates.followUp" : {
+      "comment" : "Templates: followUp. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad skal vi følge op på?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What should we follow up on?"
+          }
+        }
+      }
+    },
+    "templates.improveNext" : {
+      "comment" : "Templates: improveNext. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad skal vi forbedre næste gang?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What should we improve next time?"
+          }
+        }
+      }
+    },
+    "templates.improveNextTime" : {
+      "comment" : "Templates: improveNextTime. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad skal vi forbedre til næste gang?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What should we improve for next time?"
+          }
+        }
+      }
+    },
+    "templates.improvements" : {
+      "comment" : "Templates: improvements. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad kan blive bedre?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What could be better?"
+          }
+        }
+      }
+    },
+    "templates.involvement" : {
+      "comment" : "Templates: involvement. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Følte du dig involveret?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Did you feel involved?"
+          }
+        }
+      }
+    },
+    "templates.meetingValue" : {
+      "comment" : "Templates: meetingValue. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Var mødet værdifuldt?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was the meeting valuable?"
+          }
+        }
+      }
+    },
+    "templates.nextStep" : {
+      "comment" : "Templates: nextStep. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Var næste skridt tydeligt?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was the next step clear?"
+          }
+        }
+      }
+    },
+    "templates.overallRating" : {
+      "comment" : "Templates: overallRating. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samlet vurdering"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overall rating"
+          }
+        }
+      }
+    },
+    "templates.retroSubtitle" : {
+      "comment" : "Templates: retroSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad virkede, hvad skal ændres og samlet vurdering"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What worked, what should change and an overall rating"
+          }
+        }
+      }
+    },
+    "templates.retroTitle" : {
+      "comment" : "Templates: retroTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retrospektiv"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retrospective"
+          }
+        }
+      }
+    },
+    "templates.standardSubtitle" : {
+      "comment" : "Templates: standardSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Værdi, tydelighed og én forbedring"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Value, clarity and one improvement"
+          }
+        }
+      }
+    },
+    "templates.standardTitle" : {
+      "comment" : "Templates: standardTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard mødefeedback"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard meeting feedback"
+          }
+        }
+      }
+    },
+    "templates.teamSubtitle" : {
+      "comment" : "Templates: teamSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Energi, deltagelse og opfølgning"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Energy, participation and follow-up"
+          }
+        }
+      }
+    },
+    "templates.teamTitle" : {
+      "comment" : "Templates: teamTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teammøde"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Team meeting"
+          }
+        }
+      }
+    },
+    "templates.workedWell" : {
+      "comment" : "Templates: workedWell. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad fungerede godt?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What worked well?"
+          }
+        }
+      }
+    },
+    "templates.workshopSubtitle" : {
+      "comment" : "Templates: workshopSubtitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nytte, tydelighed og åben forbedring"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usefulness, clarity and ideas for improvement"
+          }
+        }
+      }
+    },
+    "templates.workshopTitle" : {
+      "comment" : "Templates: workshopTitle. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workshop"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workshop"
+          }
+        }
+      }
+    },
+    "templates.workshopValue" : {
+      "comment" : "Templates: workshopValue. App-owned Danish interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvor nyttig var workshoppen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How useful was the workshop?"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

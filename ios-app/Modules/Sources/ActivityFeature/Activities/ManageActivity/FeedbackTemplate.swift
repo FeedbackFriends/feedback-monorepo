@@ -1,3 +1,4 @@
+import Localization
 import Foundation
 import Domain
 
@@ -12,26 +13,26 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .standardMeeting: return "Standard mødefeedback"
-        case .teamMeeting: return "Teammøde"
-        case .retrospective: return "Retrospektiv"
-        case .workshop: return "Workshop"
-        case .customQuestions: return "Egne spørgsmål"
+        case .standardMeeting: return String(appStrings: .templatesStandardTitle)
+        case .teamMeeting: return String(appStrings: .templatesTeamTitle)
+        case .retrospective: return String(appStrings: .templatesRetroTitle)
+        case .workshop: return String(appStrings: .templatesWorkshopTitle)
+        case .customQuestions: return String(appStrings: .templatesCustomTitle)
         }
     }
 
     var subtitle: String {
         switch self {
         case .standardMeeting:
-            return "Værdi, tydelighed og én forbedring"
+            return String(appStrings: .templatesStandardSubtitle)
         case .teamMeeting:
-            return "Energi, deltagelse og opfølgning"
+            return String(appStrings: .templatesTeamSubtitle)
         case .retrospective:
-            return "Hvad virkede, hvad skal ændres og samlet vurdering"
+            return String(appStrings: .templatesRetroSubtitle)
         case .workshop:
-            return "Nytte, tydelighed og åben forbedring"
+            return String(appStrings: .templatesWorkshopSubtitle)
         case .customQuestions:
-            return "Start tomt og skriv dine egne spørgsmål"
+            return String(appStrings: .templatesCustomSubtitle)
         }
     }
 
@@ -49,30 +50,30 @@ public enum FeedbackTemplate: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .standardMeeting:
             return [
-                .init(questionText: "Var mødet værdifuldt?", feedbackType: .emoji),
-                .init(questionText: "Var formålet tydeligt?", feedbackType: .opinion),
-                .init(questionText: "Hvad skal vi forbedre til næste gang?", feedbackType: .comment)
+                .init(questionText: String(appStrings: .templatesMeetingValue), feedbackType: .emoji),
+                .init(questionText: String(appStrings: .templatesClearPurpose), feedbackType: .opinion),
+                .init(questionText: String(appStrings: .templatesImproveNextTime), feedbackType: .comment)
             ]
 
         case .teamMeeting:
             return [
-                .init(questionText: "Hvordan var energien i mødet?", feedbackType: .emoji),
-                .init(questionText: "Følte du dig involveret?", feedbackType: .opinion),
-                .init(questionText: "Hvad skal vi følge op på?", feedbackType: .comment)
+                .init(questionText: String(appStrings: .templatesEnergy), feedbackType: .emoji),
+                .init(questionText: String(appStrings: .templatesInvolvement), feedbackType: .opinion),
+                .init(questionText: String(appStrings: .templatesFollowUp), feedbackType: .comment)
             ]
 
         case .retrospective:
             return [
-                .init(questionText: "Hvad fungerede godt?", feedbackType: .comment),
-                .init(questionText: "Hvad kan blive bedre?", feedbackType: .comment),
-                .init(questionText: "Samlet vurdering", feedbackType: .zeroToTen)
+                .init(questionText: String(appStrings: .templatesWorkedWell), feedbackType: .comment),
+                .init(questionText: String(appStrings: .templatesImprovements), feedbackType: .comment),
+                .init(questionText: String(appStrings: .templatesOverallRating), feedbackType: .zeroToTen)
             ]
 
         case .workshop:
             return [
-                .init(questionText: "Hvor nyttig var workshoppen?", feedbackType: .zeroToTen),
-                .init(questionText: "Var næste skridt tydeligt?", feedbackType: .opinion),
-                .init(questionText: "Hvad skal vi forbedre næste gang?", feedbackType: .comment)
+                .init(questionText: String(appStrings: .templatesWorkshopValue), feedbackType: .zeroToTen),
+                .init(questionText: String(appStrings: .templatesNextStep), feedbackType: .opinion),
+                .init(questionText: String(appStrings: .templatesImproveNext), feedbackType: .comment)
             ]
 
         case .customQuestions:

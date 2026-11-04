@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 import DesignSystem
 
@@ -12,21 +13,21 @@ struct NotificationPermissionView: View {
                 Spacer()
                 LottieView(lottieFile: .messagePermission)
                     .frame(width: 300, height: 200)
-                    Text("Please allow notifications so we can send you important messages.")
+                    Text(String(appStrings: .notificationsPermissionMessage))
                         .padding(.top, 30)
                         .bodyTextStyle()
                         .padding(.horizontal, 60)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.themeText)
                 Spacer()
-                givePermissionButton("Give permission") {
+                givePermissionButton(String(appStrings: .notificationsAllow)) {
                     requestAuthorizationButtonTap()
                 }
                 .padding(16)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .toolbar { toolbarContent }
-            .navigationTitle("Messaging")
+            .navigationTitle(String(appStrings: .notificationsTitle))
             .navigationBarTitleDisplayMode(.large)
             .background(Color.themeBackground.ignoresSafeArea())
         }
@@ -38,7 +39,7 @@ private extension NotificationPermissionView {
     var toolbarContent: some ToolbarContent {
         Group {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Not now") {
+                Button(String(appStrings: .commonNotNow)) {
                     dismissButtonTap()
                 }
                 .buttonStyle(SecondaryTextButtonStyle())
@@ -75,7 +76,7 @@ private extension NotificationPermissionView {
 
 #Preview {
     @Previewable @State var showSheet: Bool = false
-    Button("Show sheet") {
+    Button("Vis vindue") {
         showSheet = true
     }
     .sheet(isPresented: $showSheet) {

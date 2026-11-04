@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import SwiftUI
 import DesignSystem
@@ -18,11 +19,11 @@ struct ZeroToTenFeedbackView: View {
     var body: some View {
         VStack(spacing: 8) {
             HStack {
-                Text("\(store.ratingAsInt)")
+                Text(L10n.Format.integer(store.ratingAsInt))
                     .titleTextStyle()
                     .monospacedDigit()
                     .foregroundStyle(store.ratingAsInt.ratingColor)
-                Text("af 10")
+                Text(String(appStrings: .feedbackOutOfTen))
                     .bodyTextStyle()
                     .foregroundStyle(Color.themeText)
             }
@@ -31,7 +32,7 @@ struct ZeroToTenFeedbackView: View {
                 in: 0...10,
                 step: 1
             ) {
-                Text("Vurdering")
+                Text(String(appStrings: .feedbackRating))
             } minimumValueLabel: {
                 Text("0").rowTitleTextStyle()
             } maximumValueLabel: {
@@ -63,7 +64,7 @@ struct ZeroToTenFeedbackView: View {
         store: StoreOf<ZeroToTenFeedback>(
             initialState: ZeroToTenFeedback.State(
                 questionId: UUID(),
-                questionText: "Hello world"
+                questionText: "Hvordan var mødet?"
             ),
             reducer: { ZeroToTenFeedback() }
         ),

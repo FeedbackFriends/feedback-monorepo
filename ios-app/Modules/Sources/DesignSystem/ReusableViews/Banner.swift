@@ -55,7 +55,7 @@ public extension View {
     @Previewable @State var bannerState: BannerState?
     
     VStack {
-        Button("Trigger Banner") {
+        Button("Vis besked") {
             bannerState = .serverError("Server is down!")
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 bannerState = nil

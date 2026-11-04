@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import Foundation
 import ComposableArchitecture
@@ -37,11 +38,11 @@ public struct ActivityDetail: Sendable {
         @Shared var bootstrap: Bootstrap
         
         var navigationTitle: String {
-            activity?.title ?? "Ukendt aktivitet"
+            activity?.title ?? String(appStrings: .activityUnknown)
         }
         var navigationSubTitle: String {
             let count = activity?.events.count ?? 0
-            return count == 1 ? "1 session" : "\(count) sessioner"
+            return String(appStrings: .activitySessionCount(count))
         }
 
         public init(
@@ -126,12 +127,12 @@ public struct ActivityDetail: Sendable {
 
             case .destination(.presented(.eventDetail(.delegate(.eventDeleted)))):
                 state.destination = nil
-                state.confirmation.queue("Session slettet")
+                state.confirmation.queue(String(appStrings: .sessionDeleted))
                 return .none
 
             case .destination(.presented(.editActivity(.delegate(.activityUpdated)))):
                 state.destination = nil
-                state.confirmation.queue("Aktivitet gemt")
+                state.confirmation.queue(String(appStrings: .activitySaved))
                 return .none
 
             case .editorDismissed:
@@ -197,7 +198,7 @@ public struct ActivityDetail: Sendable {
                 guard !grouping.sections.isEmpty else { return .none }
                 state.destination = .sessionList(
                     ActivityDetailSessionList.State(
-                        title: "Alle sessioner",
+                        title: String(appStrings: .activityAllSessions),
                         eventTitle: activity.title,
                         sections: grouping.sections
                     )
@@ -225,7 +226,7 @@ public struct ActivityDetail: Sendable {
                 var detail = EventDetailFeature.State(
                     activityId: state.activityId, eventId: event.id, bootstrap: state.$bootstrap
                 )
-                detail.confirmation.queue(presentInvite ? "Session oprettet" : "Session gemt")
+                detail.confirmation.queue(presentInvite ? String(appStrings: .sessionCreated) : String(appStrings: .sessionSaved))
                 detail.inviteAfterConfirmation = presentInvite
                 state.destination = .eventDetail(detail)
                 return .none

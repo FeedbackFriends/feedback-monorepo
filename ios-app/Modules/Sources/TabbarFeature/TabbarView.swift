@@ -1,3 +1,4 @@
+import Localization
 import ActivityFeature
 import MoreFeature
 import DesignSystem
@@ -87,10 +88,10 @@ private extension TabbarView {
                 }
             } label: {
                 Image.letsGrowIconTab
-                Text("Giv feedback")
+                Text(String(appStrings: .commonGiveFeedback))
             }
 
-            SwiftUI.Tab("Aktiviteter", systemImage: "rectangle.stack", value: Tab.activities) {
+            SwiftUI.Tab(String(appStrings: .commonActivities), systemImage: "rectangle.stack", value: Tab.activities) {
                 if isManager {
                     ActivityListView(
                         store: store.scope(state: \.activities, action: \.activities),
@@ -123,7 +124,7 @@ private extension TabbarView {
                 store: store.scope(state: \.accountSection, action: \.accountSection),
                 isDeleteAccountLoading: store.deleteAccount.deleteAccountInFlight
             )
-            .navigationTitle("Profil")
+            .navigationTitle(String(appStrings: .commonProfile))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     CloseButtonView {
@@ -141,7 +142,7 @@ private extension TabbarView {
 
     var profileToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            Button("Profil", systemImage: "person.crop.circle") {
+            Button(String(appStrings: .commonProfile), systemImage: "person.crop.circle") {
                 store.send(.toolbar(.profileButtonTap))
             }
             .accessibilityIdentifier("profile_button")
@@ -161,7 +162,7 @@ private extension TabbarView {
                         .frame(width: 16, height: 16)
                 }
                 .foregroundStyle(Color.themeText)
-                .accessibilityLabel("Indstillinger")
+                .accessibilityLabel(String(appStrings: .commonSettings))
                 .accessibilityIdentifier("profile_settings_button")
             }
         }

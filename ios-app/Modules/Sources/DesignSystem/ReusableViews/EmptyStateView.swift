@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 
 public struct EmptyStateView: View {
@@ -5,7 +6,7 @@ public struct EmptyStateView: View {
     let title: String
     let message: String
     
-    public init(title: String = "Nothing here yet.", message: String) {
+    public init(title: String = String(appStrings: .emptyStateTitle), message: String) {
         self.title = title
         self.message = message
     }
@@ -33,6 +34,6 @@ public struct EmptyStateView: View {
 
 #Preview {
     EmptyStateView(
-        message: "Message bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        message: "Her vises beskeden, når der er nyt om dine sessioner."
     )
 }

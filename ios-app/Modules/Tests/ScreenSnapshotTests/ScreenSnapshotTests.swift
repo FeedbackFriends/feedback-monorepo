@@ -1,4 +1,5 @@
 import DesignSystem
+import Localization
 import SnapshotTesting
 import SwiftUI
 import UIKit
@@ -53,7 +54,7 @@ nonisolated final class ScreenSnapshotTests: XCTestCase {
             "renderer": "Point-Free SnapshotTesting", "ids": samples.map(\.id), "failures": [], "reviewMode": "visual",
             "systemVersion": UIDevice.current.systemVersion,
             "simulatorModel": ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] ?? "unknown",
-            "scale": 3, "locale": "da_DK", "appearance": "light", "dynamicType": "large"
+            "scale": 3, "locale": L10n.locale.identifier, "appearance": "light", "dynamicType": "large"
         ]
         try JSONSerialization.data(withJSONObject: manifest, options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("manifest.json"), options: .atomic)
@@ -103,13 +104,14 @@ nonisolated final class ScreenSnapshotTests: XCTestCase {
         try await waitUntilReady(controller: controller, window: window, identifier: identifier, requiresAlert: verifiesAlert, requiresSheet: requiresSheet)
         if verifiesAlert {
             let alert = try XCTUnwrap(controller.presentedViewController as? UIAlertController)
+            let english = L10n.locale.language.languageCode?.identifier == "en"
             if verifiesRefreshAlert {
-                XCTAssertEqual(alert.title, "Kunne ikke opdatere")
-                XCTAssertEqual(alert.message, "Dine aktiviteter kunne ikke opdateres. Prøv igen.")
-                XCTAssertEqual(alert.actions.map(\.title), ["Prøv igen", "Annuller"])
+                XCTAssertEqual(alert.title, english ? "Could not refresh" : "Kunne ikke opdatere")
+                XCTAssertEqual(alert.message, english ? "We could not refresh your activities. Try again." : "Dine aktiviteter kunne ikke opdateres. Prøv igen.")
+                XCTAssertEqual(alert.actions.map(\.title), english ? ["Try again", "Cancel"] : ["Prøv igen", "Annuller"])
             } else {
-                XCTAssertEqual(alert.title, "Login mislykkedes")
-                XCTAssertEqual(alert.message, "Prøv at logge ind igen.")
+                XCTAssertEqual(alert.title, english ? "Could not log in" : "Kunne ikke logge ind")
+                XCTAssertEqual(alert.message, english ? "We could not complete your login. Try again." : "Login kunne ikke gennemføres. Prøv igen.")
                 XCTAssertEqual(alert.actions.map(\.title), ["OK"])
             }
         }

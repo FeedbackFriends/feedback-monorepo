@@ -9,6 +9,8 @@
     }
   ],
   "defaultOptions" : {
+    "language" : "da",
+    "region" : "DK",
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [

@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 
 public struct DeleteConfirmationViewSheet<ActionButton: View>: View {
@@ -25,7 +26,7 @@ public struct DeleteConfirmationViewSheet<ActionButton: View>: View {
                 Text(message)
                     .bodyTextStyle()
                 actionButton
-                Button("Annuller") {
+                Button(String(appStrings: .commonCancel)) {
                     dismiss()
                 }
                 .buttonStyle(LargeBoxButtonStyle(style: .secondary))

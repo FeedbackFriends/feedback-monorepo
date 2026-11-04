@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import DesignSystem
 import Domain
@@ -45,7 +46,7 @@ public struct FeedbackQuestionIllustrationView: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Eksempel på deltagernes visning. \(questionText)")
+        .accessibilityLabel(String(appStrings: .feedbackPreviewAccessibility(questionText)))
     }
 
     @ViewBuilder

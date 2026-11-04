@@ -40,14 +40,14 @@ public struct PrimaryTextButtonStyle: ButtonStyle {
         Text("")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Enabled") {
+                    Button("Aktiveret") {
                         
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                 }
                 .sharedBackgroundVisibility(.hidden)
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Disabled") {
+                    Button("Deaktiveret") {
                         
                     }
                     .buttonStyle(PrimaryTextButtonStyle())

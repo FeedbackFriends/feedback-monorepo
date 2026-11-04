@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import DesignSystem
 import SwiftUI
@@ -21,10 +22,10 @@ struct ActivityDetailView: View {
             onDismiss: { store.send(.deleteConfirmationDismissed) }
         ) { _ in
             DeleteConfirmationViewSheet(
-                title: "Slet aktivitet",
-                message: "Slet denne aktivitet og al feedback?",
+                title: String(appStrings: .activityDeleteTitle),
+                message: String(appStrings: .activityDeleteMessage),
                 actionButton: {
-                    Button("Slet") {
+                    Button(String(appStrings: .commonDelete)) {
                         store.send(.deleteActivityConfirmButtonTap)
                     }
                     .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))

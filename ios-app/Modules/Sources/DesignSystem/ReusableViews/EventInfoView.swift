@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 
 public struct EventInfoView: View {
@@ -28,12 +29,12 @@ public struct EventInfoView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Dato")
+                    Text(String(appStrings: .commonDate))
                         .rowTitleTextStyle()
-                    Text(date.formatted(date: Date.FormatStyle.DateStyle.abbreviated, time: .omitted))
+                    Text(L10n.Format.date(date))
                         .supportingTextStyle()
                     if ownerName != nil || ownerEmail != nil || ownerphoneNumber != nil {
-                        Text("Arrangør")
+                        Text(String(appStrings: .sessionOwner))
                             .rowTitleTextStyle()
                         if let ownerName {
                             Text(ownerName)
@@ -74,7 +75,7 @@ public struct EventInfoView: View {
 
 #Preview("All data") {
     EventInfoView(
-        eventTitle: "Title",
+        eventTitle: "Titel",
         ownerName: "Owner name",
         ownerEmail: "Owner email",
         ownerphoneNumber: "Owner phone",
@@ -84,7 +85,7 @@ public struct EventInfoView: View {
 
 #Preview("Some owner data") {
     EventInfoView(
-        eventTitle: "Title",
+        eventTitle: "Titel",
         ownerName: "Owner name",
         ownerEmail: nil,
         ownerphoneNumber: nil,
@@ -94,7 +95,7 @@ public struct EventInfoView: View {
 
 #Preview("No owner data") {
     EventInfoView(
-        eventTitle: "Title",
+        eventTitle: "Titel",
         ownerName: nil,
         ownerEmail: nil,
         ownerphoneNumber: nil,

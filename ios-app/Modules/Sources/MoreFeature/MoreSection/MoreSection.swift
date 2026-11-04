@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import Foundation
 import DesignSystem
@@ -48,28 +49,18 @@ public struct MoreSection: Sendable {
                 }
                 
             case .onFeedbackButtonTap:
-                let subject = "Feedback"
+                let subject = String(appStrings: .moreFeedbackSubject)
                 return .run { [openURL = self.openURL, systemClient = self.systemClient] _ in
                     let deviceSummary = await MainActor.run { DeviceInfo().summary() }
-                    let body = """
-                        <Add your message here>
-                        
-                        Device info
-                        \(deviceSummary)
-                        """
+                    let body = String(appStrings: .moreEmailBody(deviceSummary))
                     await openURL(systemClient.openEmail(subject: subject, body: body))
                 }
                 
             case .onReportBugButtonTap:
-                let subject = "Bug"
+                let subject = String(appStrings: .moreBugSubject)
                 return .run { [openURL = self.openURL, systemClient = self.systemClient] _ in
                     let deviceSummary = await MainActor.run { DeviceInfo().summary() }
-                    let body = """
-                        <Add your message here>
-                        
-                        Device info
-                        \(deviceSummary)
-                        """
+                    let body = String(appStrings: .moreEmailBody(deviceSummary))
                     await openURL(systemClient.openEmail(subject: subject, body: body))
                 }
                 

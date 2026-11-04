@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 import DesignSystem
 import Domain
@@ -37,7 +38,7 @@ private extension ManageActivityView {
     var detailsStep: some View {
         stepPage {
             if store.mode == .create {
-                stepHeader(number: 1, title: "Giv aktiviteten et navn")
+                stepHeader(number: 1, title: String(appStrings: .activityNameStep))
             }
             detailsSection
             if store.mode == .edit {
@@ -62,7 +63,7 @@ private extension ManageActivityView {
 
     var templateStep: some View {
         stepPage {
-            stepHeader(number: 2, title: "Vælg feedbackskabelon", subtitle: "Vælg et udgangspunkt, og tilpas spørgsmålene til din aktivitet.")
+            stepHeader(number: 2, title: String(appStrings: .activityTemplateStep), subtitle: String(appStrings: .activityTemplateHelp))
             feedbackSection
         }
         .safeAreaInset(edge: .bottom) { submitButton }
@@ -92,7 +93,7 @@ private extension ManageActivityView {
 
     func stepHeader(number: Int, title: String, subtitle: String? = nil) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Trin \(number) af 2")
+            Text(String(appStrings: .activityStepProgress(number)))
                 .captionTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
             Text(title)
@@ -118,7 +119,7 @@ private extension ManageActivityView {
     }
 
     var nextButton: some View {
-        Button("Videre") {
+        Button(String(appStrings: .commonForward)) {
             isTitleFocused = false
             store.send(.nextButtonTap)
             if store.isTitleMissing { isTitleFocused = true }
@@ -131,7 +132,7 @@ private extension ManageActivityView {
     }
 
     var submitButton: some View {
-        Button(store.mode == .create ? "Opret aktivitet" : store.actionButtonTitle) {
+        Button(store.mode == .create ? String(appStrings: .activityCreate) : store.actionButtonTitle) {
             store.send(.actionButtonTap)
             if store.isTitleMissing { isTitleFocused = true }
         }
@@ -146,12 +147,12 @@ private extension ManageActivityView {
     var detailsSection: some View {
         VStack(alignment: .leading) {
             if store.mode == .edit {
-                SectionHeaderView("Aktivitet")
+                SectionHeaderView(String(appStrings: .commonActivity))
             }
 
             TextInputView(
-                title: "Aktivitetens navn",
-                prompt: "Fx månedligt teammøde, workshop eller træning",
+                title: String(appStrings: .activityName),
+                prompt: String(appStrings: .activityNamePrompt),
                 text: $store.title,
                 isFocused: $isTitleFocused,
                 accessibilityIdentifier: "create_activity_title_input"
@@ -160,7 +161,7 @@ private extension ManageActivityView {
     }
 
     var feedbackSection: some View {
-        section(title: "Feedbackskabelon") {
+        section(title: String(appStrings: .activityTemplate)) {
             if let selectedTemplate = store.selectedTemplate {
                 HStack(spacing: 12) {
                     Image(systemName: selectedTemplate.icon)
@@ -173,7 +174,7 @@ private extension ManageActivityView {
                             .foregroundStyle(Color.themeTextSecondary)
                     }
                     Spacer()
-                    Button(store.isChoosingTemplate ? "Luk" : "Skift") {
+                    Button(store.isChoosingTemplate ? String(appStrings: .commonClose) : String(appStrings: .commonChange)) {
                         store.send(.changeTemplateTapped)
                     }
                     .buttonStyle(SecondaryTextButtonStyle())
@@ -216,7 +217,7 @@ private extension ManageActivityView {
             Button {
                 store.path.append(.questions)
             } label: {
-                Label(store.questions.isEmpty ? "Tilføj spørgsmål" : "Rediger spørgsmål",
+                Label(store.questions.isEmpty ? String(appStrings: .questionsAdd) : String(appStrings: .questionsEdit),
                       systemImage: store.questions.isEmpty ? "plus" : "pencil")
             }
             .buttonStyle(InlineActionButtonStyle())
