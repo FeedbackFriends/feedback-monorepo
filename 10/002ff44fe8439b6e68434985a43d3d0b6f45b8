@@ -1,0 +1,55 @@
+.agents/skills/letsgrow-ios-test-notifications/SKILL.md
+  s_285bbb30dd4be7::t_8a32ce1fc6123e 1-14
+.agents/skills/letsgrow-ios-test-notifications/agents/openai.yaml
+  s_285bbb30dd4be7::t_b66b3b1cd1d3ba 1-4
+docs/ios-localization-conventions.md
+  s_7d58ddcdccbc7e::t_2727b309cc7871 1-88
+docs/ios-localization-inventory.md
+  s_7d58ddcdccbc7e::t_265c9d56f1d2ab 1-153
+docs/localization-phases.md
+  s_7d58ddcdccbc7e::t_daf51f23f78b21 1-198
+docs/localization-plan.md
+  s_285bbb30dd4be7::t_52ab42cce68494 1-142
+ios-app/.maestro/README.md
+  s_7d58ddcdccbc7e::t_0f4936cd204e35 7-12
+ios-app/.maestro/notifications/README.md
+  s_7d58ddcdccbc7e::t_550c1f4fb1b1c5 1-92
+ios-app/Docs/agents/product-language.md
+  s_3130fbfb69bea0::t_807b17770dc59d 11-14
+ios-app/Docs/localization.md
+  s_7d58ddcdccbc7e::t_201e9893ec68c2 1-165
+ios-app/Docs/screenshots/README.md
+  s_7d58ddcdccbc7e::t_ebeff7fee4cab0 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "10002ff44fe8439b6e68434985a43d3d0b6f45b8",
+  "prompts": {},
+  "sessions": {
+    "s_285bbb30dd4be7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19670-434d-7a72-86aa-1e8dedbf085e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_3130fbfb69bea0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17f950d7-ade0-4593-b237-011044992a0c",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_7d58ddcdccbc7e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a7fa-f52d-78f2-bc92-d4958449ed11",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
