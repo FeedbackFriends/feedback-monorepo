@@ -15,7 +15,7 @@ Outcome: the backend, contract, web, and iOS contain only the improvement-loop m
 
 ## Rebrand series
 
-Last in the series. Depends on **06** and **07**. See `01-rebrand-landing-coming-soon.md` for the series map.
+Last in the series. Depends on **06** and **07**. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

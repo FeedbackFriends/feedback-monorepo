@@ -6,9 +6,16 @@ test.describe("route smoke tests", () => {
 
     await expect(
       page.getByRole("heading", {
-        name: "Gør jeres faste møder bedre, uge for uge",
+        name: "Gør arbejdsdagen lidt bedre",
       })
     ).toBeVisible()
+    await expect(page.getByRole("link", { name: "Få tidlig adgang", exact: true }).first()).toHaveAttribute("href", "mailto:hello@letsgrow.dk")
+    await expect(page.getByRole("link", { name: "hello@letsgrow.dk", exact: true })).toHaveAttribute("href", "mailto:hello@letsgrow.dk")
+    await expect(page.getByRole("heading", { name: "Snart: Fra idé til forbedring i 4 enkle trin" })).toBeAttached()
+    await expect(page.getByRole("link", { name: /Hent.*app|App Store/i })).toHaveCount(0)
+    await expect(page.getByText("Integreret med disse kalenderværktøjer")).toHaveCount(0)
+    await expect(page.locator("html")).toHaveAttribute("lang", "da")
+    await expect(page).toHaveTitle("Lets Grow – Fra feedback til forbedring")
   })
 
   test("renders the privacy policy page", async ({ page }) => {

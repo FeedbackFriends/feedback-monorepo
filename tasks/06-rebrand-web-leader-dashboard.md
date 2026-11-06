@@ -22,7 +22,7 @@ Outcome: a data-driven `/dashboard` replaces the static meeting-era pages (Profi
 
 ## Rebrand series
 
-Depends on **02–05**. It can be built incrementally as each lands. It must reach parity before task 07 (phase 2) removes the iOS manager features. See `01-rebrand-landing-coming-soon.md` for the series map.
+Depends on **02–05**. It can be built incrementally as each lands. It must reach parity before task 07 (phase 2) removes the iOS manager features. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

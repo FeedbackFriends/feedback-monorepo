@@ -17,7 +17,7 @@ Outcome: a leader can switch the web app between Danish and English. Danish stay
 
 ## Rebrand series
 
-Best done after **06** (leader dashboard) and **08** (marketing copy), so the strings are stable. See `01-rebrand-landing-coming-soon.md` for the series map.
+Best done after **06** (leader dashboard) and **08** (marketing copy), so the strings are stable. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

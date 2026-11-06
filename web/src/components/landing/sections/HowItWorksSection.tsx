@@ -5,27 +5,23 @@ import { fadeInUp, stagger } from "@/components/landing/motion"
 
 const steps = [
   {
-    title: "Planlæg mødet som du plejer",
-    description:
-      "Du bliver i de værktøjer, du allerede bruger - Google, Outlook, Teams osv.",
+    title: "Foreslå en forbedring",
+    description: "Del det, der kan gøre arbejdsdagen bedre. Vi bygger en tryg vej til at komme med idéer anonymt.",
     highlight: false,
   },
   {
-    title: "Tilføj én deltager",
-    description:
-      "Opret en aktivitet i Lets Grow, og invitér dens mailadresse til mødet. Så oprettes sessionen automatisk.",
+    title: "Støt teamets idéer",
+    description: "Vis, hvilke forslag der betyder noget for dig, og giv fælles behov opbakning.",
     highlight: true,
   },
   {
-    title: "Deltagerne giver feedback",
-    description:
-      "Efter mødet svarer deltagerne på få, relevante spørgsmål direkte fra mobilen.",
+    title: "Beslut og afprøv",
+    description: "Lederen forklarer næste skridt, og teamet afprøver en konkret ændring i hverdagen.",
     highlight: false,
   },
   {
-    title: "Se hvad der faktisk virker",
-    description:
-      "Få klare indsigter og følg din udvikling over tid.",
+    title: "Følg op sammen",
+    description: "Vurdér, om ændringen hjalp, og se, hvad teamet fortsætter med, justerer eller stopper.",
     highlight: false,
   },
 ]
@@ -45,7 +41,7 @@ function HowItWorksSection() {
       >
         <motion.div className="mx-auto mb-8 max-w-3xl space-y-4 text-center" variants={fadeInUp}>
           <h2 className="text-3xl font-bold text-[#282A47] sm:text-4xl">
-            Fra møde til indsigt - i 4 enkle trin
+            Snart: Fra idé til forbedring i 4 enkle trin
           </h2>
         </motion.div>
 

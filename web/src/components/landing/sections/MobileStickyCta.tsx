@@ -18,15 +18,15 @@ function MobileStickyCta({ ctaHref, visible }: MobileStickyCtaProps) {
       <div className="container py-3">
         <div className="flex items-center gap-3 rounded-3xl border border-[#DCE3F4] bg-white/90 p-3 shadow-[0_18px_40px_-30px_rgba(40,42,71,0.5)]">
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-[#282A47]">Klar til at prøve?</p>
+            <p className="text-sm font-semibold text-[#282A47]">Vil I være med?</p>
             <p className="text-xs leading-5 text-muted-foreground">
-              Giv dit næste møde feedback - uden ekstra arbejde.
+              Den nye Lets Grow kommer snart.
             </p>
           </div>
 
           <PrimaryButton asChild className="h-11 shrink-0 px-5 text-sm" size="sm">
             <a href={ctaHref} target="_blank" rel="noopener noreferrer">
-              Hent appen
+              Kontakt os
               <ArrowRight className="ml-1.5 h-4 w-4" />
             </a>
           </PrimaryButton>

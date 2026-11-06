@@ -11,9 +11,9 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: "Lets Grow",
+  title: "Lets Grow – Fra feedback til forbedring",
   description:
-    "Lets Grow helps teams improve recurring meetings with simple automated feedback.",
+    "Snart: Gør medarbejdernes idéer til en bedre arbejdsdag. Lets Grow samler forslag, opbakning og synlig opfølgning.",
 }
 
 type RootLayoutProps = Readonly<{
@@ -22,7 +22,7 @@ type RootLayoutProps = Readonly<{
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" className={montserrat.variable}>
+    <html lang="da" className={montserrat.variable}>
       <body className="font-sans">
         <AuthProvider>{children}</AuthProvider>
       </body>

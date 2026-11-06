@@ -20,7 +20,7 @@ Outcome:
 
 ## Rebrand series
 
-Depends on **02** (teams and memberships). Feeds 04 (decisions), 06 (web dashboard), and 07 (iOS employee app). See `01-rebrand-landing-coming-soon.md` for the series map.
+Depends on **02** (teams and memberships). Feeds 04 (decisions), 06 (web dashboard), and 07 (iOS employee app). The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

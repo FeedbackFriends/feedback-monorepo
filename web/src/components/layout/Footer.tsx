@@ -20,10 +20,10 @@ function Footer() {
               Privatlivspolitik
             </Link>
             <a
-              href="mailto:kontakt@letsgrow.dk"
+              href="mailto:hello@letsgrow.dk"
               className="transition-colors hover:text-foreground"
             >
-              kontakt@letsgrow.dk
+              hello@letsgrow.dk
             </a>
           </div>
         </div>

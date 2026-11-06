@@ -17,7 +17,7 @@ Outcome: an HR user signs in on web and sees an organization-wide overview of pr
 
 ## Rebrand series
 
-Depends on **02** (organization → team model) and **06** (leader dashboard and metrics). See `01-rebrand-landing-coming-soon.md` for the series map.
+Depends on **02** (organization → team model) and **06** (leader dashboard and metrics). The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

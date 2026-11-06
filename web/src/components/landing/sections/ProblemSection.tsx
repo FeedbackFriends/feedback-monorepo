@@ -52,18 +52,18 @@ function ProblemSection() {
                   className="text-3xl font-bold leading-tight text-[#282A47] sm:text-4xl"
                   variants={fadeInUp}
                 >
-                  Alle nikker.
+                  Alle har idéer.
                   <br />
-                  Ingen siger noget.
+                  For få bliver til noget.
                 </motion.h2>
 
                 <motion.p
                   className="text-lg font-normal leading-9 italic text-[#282A47]"
                   variants={fadeInUp}
                 >
-                  Men hvad tænkte de {" "}
+                  Hvad hvis input blev til {" "}
                   <span className="relative inline-block">
-                    egentlig
+                    handling
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 144 14"
@@ -84,16 +84,16 @@ function ProblemSection() {
                 </motion.p>
 
                 <motion.p className="text-lg leading-8 text-[#4A5568]" variants={fadeInUp}>
-                  De fleste møder føles som succes i øjeblikket. Men uden ærlig
-                  feedback ved du ikke, hvad der faktisk virkede - eller hvad du
-                  skal gøre anderledes næste gang.
+                  Medarbejderne ved, hvad der spænder ben i hverdagen. Men når
+                  forslag forsvinder uden svar, bliver det svært at tro på,
+                  at det nytter at sige noget.
                 </motion.p>
 
                 <motion.p
                   className="text-lg font-semibold leading-9 text-[#282A47]"
                   variants={fadeInUp}
                 >
-                  Og derfor bliver det svært at blive bedre.
+                  Gode idéer fortjener et svar – og et næste skridt.
                 </motion.p>
               </div>
             </motion.div>

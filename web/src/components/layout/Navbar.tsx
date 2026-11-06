@@ -23,8 +23,8 @@ type NavbarProps = {
 
 const navItems = [
   { href: "/#problem", label: "Problem" },
-  { href: "/#how-it-works", label: "Fra møde til feedback" },
-  { href: "/#app-store", label: "Hent appen" },
+  { href: "/#how-it-works", label: "Fra idé til forbedring" },
+  { href: "/#app-store", label: "Tidlig adgang" },
 ]
 
 function Navbar({ ctaHref, ctaLabel }: NavbarProps) {

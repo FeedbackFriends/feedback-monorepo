@@ -4,10 +4,10 @@ import { motion } from "framer-motion"
 import { fadeInUp, stagger } from "@/components/landing/motion"
 
 const benefits = [
-  "Opdag hvad der virker (og hvad der ikke gør)",
-  "Få ærlig feedback - ikke bare \"det var godt\"",
-  "Følg din udvikling over tid",
-  "Skab bedre møder, hver gang",
+  "Giv medarbejdernes idéer en tydelig vej frem",
+  "Se hvilke forbedringer teamet bakker op om",
+  "Gør beslutninger og næste skridt synlige",
+  "Følg op på, om ændringerne faktisk hjælper",
 ]
 
 function OutcomesSection() {
@@ -22,7 +22,7 @@ function OutcomesSection() {
       >
         <motion.div className="mx-auto max-w-3xl space-y-4 text-center" variants={fadeInUp}>
           <h2 className="text-3xl font-bold text-[#282A47] sm:text-4xl">
-            Se hvad du får ud af det
+            Færre målinger. Flere synlige forbedringer.
           </h2>
         </motion.div>
 

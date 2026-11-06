@@ -1,7 +1,7 @@
 'use client'
 
 import { type MouseEvent, useEffect, useRef, useState } from "react"
-import { appStoreUrl } from "@/components/landing/content"
+import { contactUrl } from "@/components/landing/content"
 import AppStoreCtaSection from "@/components/landing/sections/AppStoreCtaSection"
 import HeroSection from "@/components/landing/sections/HeroSection"
 import HowItWorksSection from "@/components/landing/sections/HowItWorksSection"
@@ -100,7 +100,7 @@ function LandingPage() {
           <HowItWorksSection />
           <OutcomesSection />
           <AppStoreCtaSection />
-          <MobileStickyCta ctaHref={appStoreUrl} visible={showMobileStickyCta} />
+          <MobileStickyCta ctaHref={contactUrl} visible={showMobileStickyCta} />
       </>
   )
 }

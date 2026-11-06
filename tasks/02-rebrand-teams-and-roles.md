@@ -25,7 +25,7 @@ Outcome:
 
 ## Rebrand series
 
-This is the first backend and app task. It can run in parallel with 01, the coming-soon landing page. See `01-rebrand-landing-coming-soon.md` for the series map.
+This is the first backend and app task. It can run in parallel with 01, the coming-soon landing page. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

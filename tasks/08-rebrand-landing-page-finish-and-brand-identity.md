@@ -36,7 +36,7 @@ Outcome:
 
 ## Rebrand series
 
-Depends on **01** (coming-soon page) and on the shipped features in **06** (web leader dashboard) and **07** (iOS employee app). Copy must describe only what has shipped, including the anonymity model decided in 03. See `01-rebrand-landing-coming-soon.md` for the series map.
+Depends on **01** (coming-soon page) and on the shipped features in **06** (web leader dashboard) and **07** (iOS employee app). Copy must describe only what has shipped, including the anonymity model decided in 03. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

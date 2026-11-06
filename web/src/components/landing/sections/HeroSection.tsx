@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion"
 import type { MouseEventHandler, Ref } from "react"
-import Image from "next/image"
+import { Lightbulb, HeartHandshake, MessageCircle, Target, TrendingUp, Users } from "lucide-react"
 import PhoneFrames from "@/components/landing/PhoneFrames"
-import { appStoreUrl, calendarPlatforms } from "@/components/landing/content"
+import { contactUrl } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
 import PrimaryButton from "@/components/ui/PrimaryButton"
 import SecondaryButton from "@/components/ui/SecondaryButton"
@@ -22,7 +22,7 @@ function HeroSection({
   return (
     <section
       ref={heroSectionRef}
-      className="container flex min-h-screen items-center py-12 sm:py-16"
+      className="container flex min-h-screen items-center pb-12 pt-28 sm:py-16"
     >
       <div className="grid w-full items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
         <motion.div
@@ -39,12 +39,12 @@ function HeroSection({
               />
               <h1 className="pb-1 text-4xl font-bold leading-[1.14] tracking-tight sm:text-5xl sm:leading-[1.1] lg:text-6xl">
                 <span className="block text-hero-heading">
-                  Bliv klogere på
+                  Gør arbejdsdagen
                 </span>
                 <span className="mt-2 block text-hero-heading">
-                  hvad der{" "}
+                  lidt{" "}
                   <span className="relative inline-block">
-                    virker
+                    bedre
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 144 14"
@@ -66,7 +66,7 @@ function HeroSection({
             </div>
 
             <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-                Få ærlig feedback efter møder, workshops, oplæg og andre aktiviteter, så du kan se mønstre, justere undervejs og blive bedre til det, der gør en forskel.
+                Snart kan medarbejdere foreslå forbedringer anonymt, støtte hinandens idéer og følge med i, hvad der bliver gjort. Lets Grow – fra feedback til forbedring.
             </p>
           </motion.div>
 
@@ -75,8 +75,8 @@ function HeroSection({
             variants={fadeInUp}
           >
             <PrimaryButton asChild className="h-12 px-6" size="lg">
-              <a href={appStoreUrl} target="_blank" rel="noopener noreferrer">
-                Hent på App Store
+              <a href={contactUrl} target="_blank" rel="noopener noreferrer">
+                Få tidlig adgang
               </a>
             </PrimaryButton>
             <SecondaryButton
@@ -85,7 +85,7 @@ function HeroSection({
               className={`h-12 border-[#DCE3F4] bg-transparent px-6 ${navbarSurfaceShadowClass} hover:bg-transparent active:bg-transparent`}
             >
               <a href="#how-it-works" onClick={onHowItWorksClick}>
-                Se hvordan det virker
+                Se hvad der kommer
               </a>
             </SecondaryButton>
           </motion.div>
@@ -95,29 +95,22 @@ function HeroSection({
             variants={fadeInUp}
           >
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#6A6D88]">
-              Integreret med disse kalenderværktøjer
+              En bedre arbejdsdag begynder med teamet
             </p>
             <div className="mt-4 flex flex-wrap items-start gap-x-4 gap-y-3 sm:gap-x-5">
-              {calendarPlatforms.map((platform) => (
-                <div
-                  key={platform.name}
-                  className="group flex w-14 flex-col items-center gap-1 opacity-80 transition-all duration-300 hover:-translate-y-0.5 hover:opacity-100 sm:w-16"
-                  title={platform.name}
-                >
+              {[
+                { name: "Idéer", Icon: Lightbulb },
+                { name: "Opbakning", Icon: HeartHandshake },
+                { name: "Dialog", Icon: MessageCircle },
+                { name: "Handling", Icon: Target },
+                { name: "Udvikling", Icon: TrendingUp },
+                { name: "Trivsel", Icon: Users },
+              ].map(({ name, Icon }) => (
+                <div key={name} className="group flex w-14 flex-col items-center gap-1 opacity-80 transition-all duration-300 hover:-translate-y-0.5 hover:opacity-100 sm:w-16" title={name}>
                   <div className="relative flex h-10 w-10 items-center justify-center sm:h-11 sm:w-11">
-                    <Image
-                      src={platform.icon}
-                      alt={platform.name}
-                      fill
-                      sizes="(min-width: 640px) 44px, 40px"
-                      className="max-h-8 max-w-8 object-contain sm:max-h-9 sm:max-w-9"
-                    />
+                    <Icon aria-hidden="true" className="h-7 w-7 text-primary" />
                   </div>
-                  <span className="text-center text-[11px] font-medium leading-3 text-[#5B5F7B] sm:text-xs">
-                    {platform.name
-                      .replace("Microsoft ", "")
-                      .replace(" Calendar", "")}
-                  </span>
+                  <span className="text-center text-[11px] font-medium leading-3 text-[#5B5F7B] sm:text-xs">{name}</span>
                 </div>
               ))}
             </div>

@@ -26,3 +26,5 @@ export const calendarPlatforms = [
     icon: "/proton-calendar.png",
   },
 ]
+
+export const contactUrl = "mailto:hello@letsgrow.dk"
