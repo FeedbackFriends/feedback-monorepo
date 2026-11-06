@@ -36,6 +36,9 @@ struct FeedbackTypeTagView: View {
             PillTagView {
                 HStack(spacing: 6) {
                     feedbackType.image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 16, height: 16)
                         .captionTextStyle()
                         .fontWeight(.semibold)
                         .foregroundStyle(Color.themeText)

@@ -1219,6 +1219,14 @@
         }
       }
     },
+    "common.choose" : {
+      "comment" : "Explicitly choose or confirm a temporary selection.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : { "stringUnit" : { "state" : "translated", "value" : "Vælg" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Choose" } }
+      }
+    },
     "common.close" : {
       "comment" : "Action: close the current presentation.",
       "extractionState" : "manual",

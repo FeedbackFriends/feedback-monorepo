@@ -453,6 +453,62 @@ private func catalogQuestionEditorEmpty() -> some View {
 #Preview("question-editor.empty") { catalogQuestionEditorEmpty() }
 
 @MainActor
+private func catalogAnswerTypePicker(_ type: FeedbackType?) -> some View {
+    ScreenCatalogContainerView {
+        QuestionAnswerTypePickerView(
+            selectedType: type,
+            questionText: "Hvor nyttigt var mødet for dig?",
+            onChoose: { _ in }
+        )
+    }
+}
+
+// Screenshot: Answer-type sheet before an explicit choice.
+#Preview("answer-type-picker.empty") { catalogAnswerTypePicker(nil) }
+
+// Screenshot: Emoji choice and participant preview in the sheet.
+#Preview("answer-type-picker.emoji") { catalogAnswerTypePicker(.emoji) }
+
+// Screenshot: Comment choice and participant preview in the sheet.
+#Preview("answer-type-picker.comment") { catalogAnswerTypePicker(.comment) }
+
+// Screenshot: Thumbs choice and participant preview in the sheet.
+#Preview("answer-type-picker.thumbs") { catalogAnswerTypePicker(.thumpsUpThumpsDown) }
+
+// Screenshot: Opinion choice and participant preview in the sheet.
+#Preview("answer-type-picker.opinion") { catalogAnswerTypePicker(.opinion) }
+
+// Screenshot: Rating choice and participant preview in the sheet.
+#Preview("answer-type-picker.rating") { catalogAnswerTypePicker(.zeroToTen) }
+
+@MainActor
+private func catalogAnswerTypeIcons() -> some View {
+    ScreenCatalogContainerView {
+        VStack(spacing: 16) {
+            ForEach([ColorScheme.light, .dark], id: \.self) { scheme in
+                VStack(spacing: 12) {
+                    ForEach(FeedbackType.allCases, id: \.self) { type in
+                        HStack(spacing: 20) {
+                            type.image.resizable().scaledToFit().frame(width: 24, height: 24)
+                            type.image.resizable().scaledToFit().frame(width: 32, height: 32)
+                            Text(type.title).rowTitleTextStyle()
+                            Spacer()
+                        }
+                        .foregroundStyle(Color.themeText)
+                    }
+                }
+                .padding(Theme.padding)
+                .background(Color.themeBackground)
+                .environment(\.colorScheme, scheme)
+            }
+        }
+    }
+}
+
+// Screenshot: All five native SVG template assets at 24 and 32pt in both themes.
+#Preview("answer-type-icons.sizes-and-themes") { catalogAnswerTypeIcons() }
+
+@MainActor
 private func catalogQuestionEditorEdit() -> some View {
     ScreenCatalogContainerView {
         QuestionPickerView(
@@ -1028,6 +1084,27 @@ enum ActivityFeatureScreenSnapshotCatalog {
             },
             .init(id: "question-editor.empty", size: CGSize(width: 402, height: 874)) {
                 catalogQuestionEditorEmpty()
+            },
+            .init(id: "answer-type-picker.empty", size: CGSize(width: 402, height: 874)) {
+                catalogAnswerTypePicker(nil)
+            },
+            .init(id: "answer-type-picker.emoji", size: CGSize(width: 402, height: 874)) {
+                catalogAnswerTypePicker(.emoji)
+            },
+            .init(id: "answer-type-picker.comment", size: CGSize(width: 402, height: 874)) {
+                catalogAnswerTypePicker(.comment)
+            },
+            .init(id: "answer-type-picker.thumbs", size: CGSize(width: 402, height: 874)) {
+                catalogAnswerTypePicker(.thumpsUpThumpsDown)
+            },
+            .init(id: "answer-type-picker.opinion", size: CGSize(width: 402, height: 874)) {
+                catalogAnswerTypePicker(.opinion)
+            },
+            .init(id: "answer-type-picker.rating", size: CGSize(width: 402, height: 874)) {
+                catalogAnswerTypePicker(.zeroToTen)
+            },
+            .init(id: "answer-type-icons.sizes-and-themes", size: CGSize(width: 402, height: 874)) {
+                catalogAnswerTypeIcons()
             },
             .init(id: "question-editor.edit", size: CGSize(width: 402, height: 874)) {
                 catalogQuestionEditorEdit()

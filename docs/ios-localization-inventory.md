@@ -126,3 +126,5 @@ The latest recorded native run on 2026-11-04 passed build-for-testing and all 22
 Closeout on 2026-11-06 passed validation of 313 catalog keys and signatures, the direct-copy guard over 215 Swift files, and all 70 Python tooling tests. A targeted inspection of literal-bearing presentation/return sites found reviewed preview, brand, numeric, user-data, and diagnostic cases. This is not a full Swift-parser analysis or a fresh runtime acceptance run.
 
 The user will perform broader manual owner/anonymous, language/device/provider, local/transient-notification, and physical-device push testing, opening a new task for any problem found. Accessibility verification was excluded by the user. The former implementation task is removed; manual coverage is not represented as an open implementation blocker or a passing test.
+
+Maintenance 2026-11-06: answer-type selection now uses an explicit temporary-choice sheet; `common.choose` supplies Danish “Vælg” and English “Choose” for opening/confirming that selection. Question text remains user data.

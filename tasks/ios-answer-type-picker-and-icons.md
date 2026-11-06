@@ -1,5 +1,5 @@
 ---
-status: ready
+status: in-progress
 areas: [ios]
 created: 2026-11-06
 updated: 2026-11-06
@@ -62,7 +62,7 @@ Fem redigerbare SVG-kilder, native iOS-assetintegration og alle eksisterende sva
 
 - Bundling: Delopgaverne kan leveres i samme ændring og verificeres samlet. Hvert acceptkriterium gælder fortsat; bundlingen udvider ikke produktscope.
 - Unresolved: None.
-- Execution constraints: Kun refinement er bestilt. Ingen implementering, commits, deployment eller ændringer af produktdata er udført.
+- Execution authorization 2026-11-06: brugeren har bestilt hele backloggen implementeret med ét task-fix pr. commit. Ingen deployment, push eller produktionsændringer. Lokalt reset/testdata afventer svar på separat spørgsmål.
 
 ## Acceptance criteria
 
@@ -79,15 +79,15 @@ Fem redigerbare SVG-kilder, native iOS-assetintegration og alle eksisterende sva
 
 ### Sheet og valg
 
-- [ ] Udskil sheet med midlertidig valgt type og genbrug FeedbackQuestionIllustrationView.
-- [ ] Flyt inline-valg til sheet, skjul tastaturet ved åbning og implementer bekræft/annuller-semantik.
-- [ ] Opdater katalog for uvalgt, redigering, sheet og fem previews; verificer QuestionPicker-kaldere.
+- [x] Udskil sheet med midlertidig valgt type og genbrug FeedbackQuestionIllustrationView.
+- [x] Flyt inline-valg til sheet, skjul tastaturet ved åbning og implementer bekræft/annuller-semantik.
+- [x] Opdater katalog for uvalgt, redigering, sheet og fem previews; verificer QuestionPicker-kaldere.
 
 ### SVG-ikoner
 
-- [ ] Gennemgå de reelle svarkontroller; tegn fem SVG-kilder og en samlet preview med labels ved 24/32 pt i lys/mørk.
-- [ ] Integrer som native template-assets i DesignSystem og udskift den eksisterende mapping.
-- [ ] Kontroller alle kaldere, tilgængelighedslabels og katalog; dokumenter placering og evt. konverteringskommando.
+- [x] Gennemgå de reelle svarkontroller; tegn fem SVG-kilder og en samlet preview med labels ved 24/32 pt i lys/mørk.
+- [x] Integrer som native template-assets i DesignSystem og udskift den eksisterende mapping.
+- [x] Kontroller alle kaldere, tilgængelighedslabels og katalog; dokumenter placering og evt. konverteringskommando.
 
 
 ## Verification
@@ -114,11 +114,15 @@ Gennemfør fælles build/lint og fuldt katalogreview én gang efter alle delænd
 
 ## Human review
 
-Not implemented yet. Forklar flow, arkitekturbeslutninger, tradeoffs, læsesti og verifikationsgrænser efter docs/agents/human-review.md.
+QuestionPickerView ejer fortsat editorens lokale tekst og bekræftede type. Det nye QuestionAnswerTypePickerView ejer et isoleret midlertidigt valg i sit sheet: rækkevalg opdaterer kun preview, Vælg kalder onChoose og lukker, mens dismiss/swipe aldrig kalder onChoose. Ny editor er uvalgt og åbner ikke sheet automatisk; redigering giver eksisterende type til sheetet. FeedbackQuestionIllustrationView genbruges uden API-/PIN-/sessionkobling. Spørgsmåls-save validerer tekst/type og bevarer ID før callback; den gamle faste 300ms-forsinkelse er fjernet til fordel for synkron opdatering af parent-binding og dismiss.
+
+DesignSystem eksponerer de samme fem Image-helpers, nu med native template-SVG i Images.xcassets. Alle kaldere er gennemgået; label-tags får eksplicit 16pt resizable-billede, sheet bruger 24pt, editor 32pt. Vektorformat og tema/sizes er dokumenteret i `docs/ios-answer-type-icons.md`; ingen runtime-renderer/dependency tilføjet. Eksisterende TCA/Domain-/DesignSystem-grænser bevares; lokal sheet-state følger editorens eksisterende viewejerskab.
+
+Læsesti: `ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionPickerView.swift` → `QuestionAnswerTypePickerView.swift` → `ios-app/Modules/Sources/FeedbackFlowFeature/FeedbackQuestionIllustrationView.swift` → `ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.swift` → `docs/ios-answer-type-icons.md`.
 
 ## Handoff
 
-- Completed: Relaterede taskplaner samlet med alle acceptkriterier, beslutninger og verifikationsscenarier bevaret. Ingen produktændringer.
-- Verification results: Not run. Kun refinement og kontrol af taskstruktur/referencer.
-- Blockers: None.
-- Next action: Læs konteksten for delopgaverne, gennemfør implementeringsplanen og afslut med én samlet iOS-verifikation.
+- Completed: Separat sheet med midlertidigt valg og alle fem deltagerpreviews; uvalgt oprettelse og eksisterende redigering; Vælg-lokalisering på dansk/engelsk. Fem selvstændige SVG-assets og alle eksisterende mappings/kaldere integreret. Katalog tilføjet for uvalgt sheet, fem typer og 24/32pt i lys/mørk.
+- Verification results: 2026-11-06 Feedback Localhost / LetsGrow Manager iOS 27.2: native buildForTesting bestået; native SVG assetkompilering bestået. SwiftLint --base HEAD: 0 violations i 5 filer. Catalog --generate/--check: 66 states. validate-localization.py: 309 nøgler gyldige; localized-copy guard: 218 filer. Frisk ScreenSnapshots: 1 passed, 0 failed; 66 originale PNGer publiceret. Alle gennemgået via tidligere identiske hashes og friske kontaktark af ændrede billeder; emoji- og ratingikon forbedret efter første gennemgang og gen-captured/geninspiceret. `screenshots/review/answer-type-findings.json` indeholder IDs/hashes, `screenshots/index.html` galleri. Assetoversigt viser begge temaer. Ingen baselineaccept.
+- Blockers: Native interaktionssession-fejlen i `tasks/ios-text-input-full-surface-focus.md` blokerer tryk/swipe/annuller/genåbn/save-ID-journey og Dynamic Type/VoiceOver. Snapshot viser at lang opinion-/ratingpreview kan ligge delvist under fold; ScrollView gør indholdet tilgængeligt, men scroll er endnu ikke live-verificeret. Tasken beholdes for required interaction checks.
+- Next action: Når native DeviceInteraction fungerer, gennemfør AC-1–4 som create/edit inkl. annullering, bekræftelse, ID/tekst, langt indhold og stor tekst; kontrollér farvetint/VoiceOver i lys/mørk. Fysisk tjekliste er udvidet.

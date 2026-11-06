@@ -2,7 +2,6 @@ import Localization
 import SwiftUI
 import Domain
 import DesignSystem
-import FeedbackFlowFeature
 
 struct QuestionPickerView: View {
 
@@ -39,7 +38,7 @@ struct QuestionPickerView: View {
     ) {
         self.existingQuestionID = existingQuestionID
         self._feedbackTypeSelected = State(initialValue: feedbackTypeSelected)
-        self._isChoosingFeedbackType = State(initialValue: feedbackTypeSelected == nil)
+        self._isChoosingFeedbackType = State(initialValue: false)
         self._questionTextField = State(initialValue: questionTextField)
         self.questionSelected = questionSelected
     }
@@ -51,23 +50,12 @@ struct QuestionPickerView: View {
     private func commitQuestion() {
         let trimmed = questionTextField.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let feedbackTypeSelected, !trimmed.isEmpty else { return }
-        Task {
-            withAnimation {
-                dismiss()
-            }
-            do {
-                try await Task.sleep(for: .seconds(0.3))
-            } catch {
-                return
-            }
-            var input = EventInput.QuestionInput(questionText: trimmed, feedbackType: feedbackTypeSelected)
-            if let existingQuestionID {
-                input.id = existingQuestionID
-            }
-            withAnimation {
-                questionSelected(input)
-            }
+        var input = EventInput.QuestionInput(questionText: trimmed, feedbackType: feedbackTypeSelected)
+        if let existingQuestionID {
+            input.id = existingQuestionID
         }
+        questionSelected(input)
+        dismiss()
     }
 
     var body: some View {
@@ -76,17 +64,6 @@ struct QuestionPickerView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     questionSection
                     answerTypeSection
-                    if let feedbackTypeSelected {
-                        VStack(alignment: .leading, spacing: 12) {
-                            SectionHeaderView(String(appStrings: .questionsPreviewTitle))
-                            FeedbackQuestionIllustrationView(
-                                questionText: questionTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                                    ? String(appStrings: .questionsPreviewPlaceholder) : questionTextField,
-                                feedbackType: feedbackTypeSelected
-                            )
-                            .id(feedbackTypeSelected)
-                        }
-                    }
                 }
                 .frame(maxWidth: Constants.maxWidthForLargeDevices)
                 .padding(Theme.padding)
@@ -148,64 +125,40 @@ struct QuestionPickerView: View {
     private var answerTypeSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             SectionHeaderView(String(appStrings: .questionsAnswerType))
-
-            VStack(alignment: .leading, spacing: 12) {
-                if let feedbackTypeSelected {
-                    Button {
-                        isQuestionFocused = false
-                        isChoosingFeedbackType.toggle()
-                    } label: {
-                        HStack(spacing: 12) {
-                            feedbackTypeSelected.image
-                                .foregroundStyle(Color.themePrimaryAction)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(feedbackTypeSelected.title)
-                                    .rowTitleTextStyle()
-                                Text(feedbackTypeSelected.shortDescription)
-                                    .supportingTextStyle()
-                                    .foregroundStyle(Color.themeTextSecondary)
-                            }
-                            Spacer()
-                            Text(isChoosingFeedbackType ? String(appStrings: .commonClose) : String(appStrings: .commonChange))
-                                .foregroundStyle(Color.themePrimaryAction)
+            Button {
+                isQuestionFocused = false
+                isChoosingFeedbackType = true
+            } label: {
+                HStack(spacing: 12) {
+                    if let feedbackTypeSelected {
+                        feedbackTypeSelected.image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                            .foregroundStyle(Color.themePrimaryAction)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(feedbackTypeSelected.title).rowTitleTextStyle()
+                            Text(feedbackTypeSelected.shortDescription).supportingTextStyle()
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(15)
-                        .contentShape(Rectangle())
+                    } else {
+                        Text(String(appStrings: .questionsAnswerHelp)).supportingTextStyle()
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("question_editor_change_type")
-                } else {
-                    Text(String(appStrings: .questionsAnswerHelp))
+                    Spacer()
+                    Text(String(appStrings: feedbackTypeSelected == nil ? .commonChoose : .commonChange))
                         .rowTitleTextStyle()
-                        .padding(15)
+                        .foregroundStyle(Color.themePrimaryAction)
                 }
-
-                if isChoosingFeedbackType {
-                    VStack(spacing: 12) {
-                        ForEach(FeedbackType.allCases, id: \.self) { type in
-                            SelectionOptionRowView(
-                                title: type.title,
-                                subtitle: type.shortDescription,
-                                icon: type.image,
-                                isSelected: type == feedbackTypeSelected,
-                                accessibilityIdentifier: "question_editor_type_\(type.rawValue)"
-                            ) {
-                                isQuestionFocused = false
-                                feedbackTypeSelected = type
-                                isChoosingFeedbackType = false
-                            }
-                            .accessibilityHint(type.helpDescription)
-                        }
-                    }
-                    .padding(.horizontal, 15)
-                    .padding(.bottom, 15)
-                    .transition(.blurReplace)
-                }
+                .surfaceCard(padding: 15)
             }
-            .surfaceCard(padding: 0)
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("question_editor_change_type")
         }
-        .animation(.smooth, value: isChoosingFeedbackType)
+        .sheet(isPresented: $isChoosingFeedbackType) {
+            QuestionAnswerTypePickerView(
+                selectedType: feedbackTypeSelected,
+                questionText: questionTextField
+            ) { feedbackTypeSelected = $0 }
+        }
     }
 }
 
