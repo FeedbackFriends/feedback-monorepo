@@ -1,0 +1,35 @@
+.agents/skills/lg-create-task/SKILL.md
+  s_7dc6f4ce9b50dd::t_d4479efc2ec3cc 20,34,36-38
+.agents/skills/lg-implement/SKILL.md
+  s_7dc6f4ce9b50dd::t_57e11bdf60e20d 32,36,40
+.agents/skills/lg-review/SKILL.md
+  s_7dc6f4ce9b50dd::t_c47a5fac30eabb 8,10
+.agents/skills/lg-verify/SKILL.md
+  s_7dc6f4ce9b50dd::t_0370a62e49a9cf 26
+AGENTS.md
+  s_7dc6f4ce9b50dd::t_01443002c679ab 8
+docs/agents/human-review.md
+  s_7dc6f4ce9b50dd::t_e586ea8c4cd6a0 5,12
+docs/agents/task-workflow.md
+  s_7dc6f4ce9b50dd::t_424ea36bbd7b0d 9,33
+ios-app/Docs/agents/feature-workflow.md
+  s_7dc6f4ce9b50dd::t_4d7036f6ac286f 23
+tasks/README.md
+  s_7dc6f4ce9b50dd::t_57a5631aebdc9e 21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "61138489887ca91981d5c6c963f8cb1dd20c6c77",
+  "prompts": {},
+  "sessions": {
+    "s_7dc6f4ce9b50dd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b058-96f9-7a31-865e-124fd8b27f37",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
