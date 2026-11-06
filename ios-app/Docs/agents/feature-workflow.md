@@ -20,7 +20,7 @@ All upcoming work lives in root [tasks/](../../../tasks/README.md), one Markdown
 
 Refinement always creates or updates the file. It includes code-grounded context, decisions and open questions, acceptance criteria, an implementation checklist, verification scenarios, and the next action. Large tasks have ordered phases in that file. A ready task must make sense to an agent that has not seen the original chat.
 
-Implementation reads that file first, works through the authorized scope/phases, and updates status, acceptance/checklist progress, actual verification evidence, and handoff notes in place. A request to implement the whole task continues through phase boundaries; a request for one phase stops there and records what remains. A task is done only when its acceptance criteria and required verification are satisfied.
+Implementation reads that file first, works through the authorized scope/phases, and updates status, acceptance/checklist progress, actual verification evidence, and handoff notes in place. A request to implement the whole task continues through phase boundaries; a request for one phase stops there and records what remains. Once the whole task satisfies acceptance and required verification, include its human-review guide and results in the final response and delete the task file following the create-task completion procedure. Partially completed tasks stay in place.
 
 Facts belong in their existing architecture or domain documentation home. Link those sources from the task rather than maintaining another glossary. Technical documentation can remain under `docs/`; upcoming task plans belong in `tasks/`.
 

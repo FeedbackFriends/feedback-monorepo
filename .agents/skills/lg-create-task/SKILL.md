@@ -17,7 +17,7 @@ Use [the task template](assets/task.md) as the canonical structure. `tasks/READM
 
 Preserve the template's frontmatter keys and top-level sections. Replace placeholders with known facts; use `None` or explicit `Unresolved: ...` where appropriate. Do not invent decisions or mark unchecked work complete. Keep detail proportional to the work so a small fix remains a short task.
 
-- `status`: `draft`, `ready`, `in-progress`, `blocked`, or `done`.
+- `status`: `draft`, `ready`, `in-progress`, or `blocked`. Completed tasks are removed rather than stored with a terminal status.
 - `areas`: one or more of `ios`, `backend`, `web`, `tooling`, `docs`.
 - `created` and `updated`: ISO dates (`YYYY-MM-DD`); preserve `created` on updates.
 - Problem/outcome and scope describe observable behavior and explicit exclusions.
@@ -31,6 +31,8 @@ Preserve the template's frontmatter keys and top-level sections. Replace placeho
 
 ## Lifecycle and handoff
 
-Use `draft` for captured ideas or plans with material unknowns. Use `ready` when scope, decisions, acceptance, and verification are actionable. Implementation sets `in-progress`; use `blocked` when a dependency prevents further meaningful progress and record what unblocks it. Mark `done` only after the task's acceptance and required verification are satisfied. Keep completed files in place with their results; do not delete or move them automatically.
+Use `draft` for captured ideas or plans with material unknowns. Use `ready` when scope, decisions, acceptance, and verification are actionable. Implementation sets `in-progress`; use `blocked` when a dependency prevents further meaningful progress and record what unblocks it. When all acceptance criteria and required verification are satisfied, prepare the final human-review explanation and actual verification results, then delete the task file. `tasks/` contains unfinished work only: do not keep a `done` file or move it to a completed/archive directory. A completed phase does not finish a task with remaining scope; retain that file and its next action.
 
-Always save the file and return its path and readiness. Creating/refining a task does not start implementation unless the user already requested it. If implementation is authorized and the task is ready, continue without another approval gate. Update status, checkboxes, evidence, and handoff as work progresses so another agent can resume accurately. Do not overwrite unrelated concurrent edits to a task.
+Before deletion, move any still-needed architectural or usage documentation into its existing documentation home and update live references to the task so they do not become broken links. Keep the final response self-contained with decisions, source reading links, evidence, and limits rather than linking to the removed file. Git history preserves previously committed task plans. Deletion is part of completing the task and does not require another confirmation; it does not authorize a Git commit or push.
+
+For unfinished work, save the file and return its path and readiness. For completed work, report completion and removal instead. Creating/refining a task does not start implementation unless the user already requested it. If implementation is authorized and the task is ready, continue without another approval gate. Update status, checkboxes, evidence, and handoff as work progresses so another agent can resume accurately. Do not overwrite unrelated concurrent edits to a task.
