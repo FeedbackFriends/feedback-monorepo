@@ -206,13 +206,13 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sæt den ind i den kalenderaftale, du allerede bruger."
+            "value" : "Indsæt den som deltager i din kalenderinvitation."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Paste it into the calendar event you already use."
+            "value" : "Paste it as an attendee in your calendar invitation."
           }
         }
       }
@@ -224,7 +224,7 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mailen er kopieret"
+            "value" : "Mailadressen er kopieret"
           }
         },
         "en" : {

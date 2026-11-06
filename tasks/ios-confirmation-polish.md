@@ -1,5 +1,5 @@
 ---
-status: ready
+status: in-progress
 areas: [ios]
 created: 2026-11-06
 updated: 2026-11-06
@@ -70,12 +70,12 @@ Alertens titel og hjælpetekst ved kopiering af aktivitetsmail. Ingen ændring a
 
 ### Toastens haptik
 
-- [ ] Beting success-modifierens haptik på overgang til synlig; gennemgå kaldere uden at ændre deres timere.
+- [x] Beting success-modifierens haptik på overgang til synlig; gennemgå kaldere uden at ændre deres timere.
 - [ ] Kontroller eksisterende success-flow-tests og visning/fjernelse på en fysisk enhed.
 
 ### Kopiering af mailadresse
 
-- [ ] Opdater eksisterende semantiske lokaliseringsnøgler og inventory; gennemgå lang tekst i alerten.
+- [x] Opdater eksisterende semantiske lokaliseringsnøgler og inventory; gennemgå lang tekst i alerten.
 
 
 ## Verification
@@ -100,11 +100,13 @@ Gennemfør fælles build/lint og fuldt katalogreview én gang efter alle delænd
 
 ## Human review
 
-Not implemented yet. Forklar flow, arkitekturbeslutninger, tradeoffs, læsesti og verifikationsgrænser efter docs/agents/human-review.md.
+Eksisterende ansvar bevares: DesignSystem successMessage reagerer nu kun på false → true med Apples sensoryFeedback-condition; features ejer stadig timers, animation og navigation. Fejlbanneret er uændret. De eksisterende activity.copyEmailTitle/Message-nøgler er rettet på dansk/engelsk; onCopyEmail og clipboard-transport er uændret.
+
+Læsesti: `ios-app/Modules/Sources/DesignSystem/ViewModifiers/SuccessMessageModifier.swift` → `ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/SuccessConfirmationTests.swift` → `ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailHowItWorksView.swift` → `ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings`.
 
 ## Handoff
 
-- Completed: Relaterede taskplaner samlet med alle acceptkriterier, beslutninger og verifikationsscenarier bevaret. Ingen produktændringer.
-- Verification results: Not run. Kun refinement og kontrol af taskstruktur/referencer.
-- Blockers: None.
-- Next action: Læs konteksten for delopgaverne, gennemfør implementeringsplanen og afslut med én samlet iOS-verifikation.
+- Completed: Haptik begrænset til visning, kaldere gennemgået uden timerændringer; aktivitetsmail-alert præciseret i begge sprog og inventory opdateret.
+- Verification results: 2026-11-06 Feedback Localhost / LetsGrow Manager iOS 27.2: native BuildProject og buildForTesting bestået; SuccessConfirmationTests/waitsForCompletedTransitionAndIgnoresDuplicateCallbacks(): 1 passed. SwiftLint --base HEAD: 0 violations i 1 fil. validate-localization.py: 313 nøgler gyldige; check-localized-copy.py: 215 filer bestået. Frisk ScreenSnapshots: 1 passed, 56 billeder publiceret; 52 hashes uændrede fra gennemgået fokus-capture og 4 ændrede billeder geninspiceret. Findings/hashes: `screenshots/review/confirmation-findings.json`; galleri `screenshots/index.html`. Ingen baselines accepteret.
+- Blockers: Fysisk haptik kræver Nicolais test, samlet i `tasks/ios-physical-device-verification.md`. Live alert/clipboard-kontrol er blokeret af native Xcode-interaktionssession-fejlen dokumenteret i `tasks/ios-text-input-full-surface-focus.md`; screenshotkataloget viser ikke copy-alerten. Ingen fuld runtime-verifikation hævdes.
+- Next action: Få native interaktionssession tilbage, kontrollér copy-alert/clipboard i begge sprog og genstart appen med rettelsen. Nicolai udfører fysisk haptiktest; tasken beholdes indtil required checks er dækket.

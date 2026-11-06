@@ -15,6 +15,8 @@ public extension View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: isPresented)
-        .sensoryFeedback(.success, trigger: isPresented)
+        .sensoryFeedback(.success, trigger: isPresented) { wasPresented, isPresented in
+            !wasPresented && isPresented
+        }
     }
 }

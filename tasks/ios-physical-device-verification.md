@@ -31,11 +31,12 @@ Fysiske kontroller fra implementeringsopgaverne. Listen udvides løbende før re
 ## Acceptance criteria
 
 - [ ] AC-1: Success-toast giver kun én success-haptik ved visning; automatisk fjernelse og navigation giver ingen; en senere ny toast giver haptik igen.
+- [ ] AC-3: Kopiér aktivitetsmail i dansk og engelsk: alerten identificerer adressen og kalenderdeltager-handlingen; indsæt i et tekstfelt og bekræft uændret adresse; luk med OK.
 - [ ] AC-2: Alle efterfølgende tilføjede fysiske kontroller er udført og deres build/enhed/resultat registreret.
 
 ## Implementation plan
 
-- [ ] Implementér haptikrettelsen i `ios-confirmation-polish.md`, og tilføj commitreference her før levering.
+- [x] Implementér haptikrettelsen i `ios-confirmation-polish.md`, og tilføj commitreference her før levering.
 - [ ] Tilføj relevante fysiske kontroller løbende med reproduktionstrin og forventning.
 - [ ] Nicolai gennemfører og registrerer resultater; fejl følges op i særskilt task ved behov.
 
@@ -53,6 +54,6 @@ Eksisterende ansvarsdeling bevares: DesignSystem ejer haptik, features ejer timi
 ## Handoff
 
 - Completed: Samlet fysisk tjekliste oprettet efter brugerens ønske.
-- Verification results: Not run. Haptikrettelsen er endnu ikke implementeret.
+- Verification results: Not run. Haptikrettelsen er implementeret i confirmation-polish; build/lint, success-flow-test og katalogcapture består. Fysisk vibration og live clipboard er ikke testet.
 - Blockers: Kræver Nicolais fysiske iPhone og testresultater.
 - Next action: Ved implementering af confirmation-polish tilføjes commitreference og faktisk automatisk evidens; Nicolai tester derefter AC-1.
