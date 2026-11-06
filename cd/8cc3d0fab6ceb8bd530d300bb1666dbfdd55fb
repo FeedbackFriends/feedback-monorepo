@@ -1,0 +1,25 @@
+ios-app/Docs/agent-harness.md
+  s_af28fb44dd777f::t_b1bbe5a6930115 36-64
+ios-app/Feedback.xcodeproj/project.xcproj
+  s_af28fb44dd777f::t_75707f07d3e14c 39-40,44,46-396,398,400-411,413,415-420,423,429-446,448,450-480,482-526,528,530-532,535,537-545,547,549-682,684,686-700,705-735,737-1235,1237-1240,1242-2238
+ios-app/scripts/sync-guidance-navigator.py
+  s_af28fb44dd777f::t_6571480c42de35 1-97
+ios-app/scripts/tests/test_guidance_navigator.py
+  s_af28fb44dd777f::t_d405a3d0fc8c77 1-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cd8cc3d0fab6ceb8bd530d300bb1666dbfdd55fb",
+  "prompts": {},
+  "sessions": {
+    "s_af28fb44dd777f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b0de-8a23-7181-ad3b-76c11ec92e2c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
