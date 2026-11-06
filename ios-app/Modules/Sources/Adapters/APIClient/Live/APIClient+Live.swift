@@ -27,7 +27,8 @@ public extension APIClient {
             markEventAsSeen: makeMarkEventAsSeen(api: api, sessionCache: sessionCache),
             sendNotification: makeSendNotification(api: api),
             getBootstrapUpdate: makeGetBootstrapUpdate(api: api, sessionCache: sessionCache),
-            markNotificationHistoryAsSeen: makeMarkNotificationHistoryAsSeen(api: api, sessionCache: sessionCache)
+            markNotificationHistoryAsSeen: makeMarkNotificationHistoryAsSeen(api: api, sessionCache: sessionCache),
+            submitProductContact: makeSubmitProductContact(api: api)
         )
     }
 }

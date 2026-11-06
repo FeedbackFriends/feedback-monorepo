@@ -14,6 +14,42 @@ extension MoreSection.State {
 }
 
 @MainActor
+private func catalogProductContact(kind: ProductContactKind, retry: Bool = false) -> some View {
+    var state = ProductContact.State(kind: kind, submissionID: PreviewCatalogFixtures.id(70))
+    if kind == .bugReport {
+        state.message = "Når jeg åbner aktivitetslisten, vises indholdet ikke efter opdatering."
+        state.expectedBehavior = "Jeg forventede at se mine aktiviteter igen."
+        state.contactEmail = "anna@example.com"
+    }
+    if retry {
+        state.error = URLError(.notConnectedToInternet).localized
+    }
+    return ScreenCatalogContainerView {
+        ProductContactView(store: Store(initialState: state) { EmptyReducer() })
+    }
+}
+
+// Screenshot: Product feedback uses the shared emoji control and accepts comment-only input.
+#Preview("product-contact.feedback") { catalogProductContact(kind: .productFeedback) }
+
+// Screenshot: Bug report has required description and optional expected behavior/contact email.
+#Preview("product-contact.bug-report") { catalogProductContact(kind: .bugReport) }
+
+// Screenshot: Network failure retains the bug report and offers safe retry.
+#Preview("product-contact.retry") { catalogProductContact(kind: .bugReport, retry: true) }
+
+@MainActor
+private func catalogProductContactConfirmation() -> some View {
+    var state = ProductContact.State(kind: .bugReport, submissionID: PreviewCatalogFixtures.id(70))
+    state.receipt = .init(id: state.submissionID, receivedAt: PreviewCatalogFixtures.now)
+    return ScreenCatalogContainerView {
+        ProductContactView(store: Store(initialState: state) { EmptyReducer() })
+    }
+}
+
+#Preview("product-contact.confirmation") { catalogProductContactConfirmation() }
+
+@MainActor
 private func catalogSettingsManager() -> some View {
     ScreenCatalogContainerView {
         let state = {
@@ -138,6 +174,15 @@ private func catalogEditProfileSaving() -> some View {
 enum MoreFeatureScreenSnapshotCatalog {
     static var samples: [ScreenSnapshotSample] {
         [
+            .init(id: "product-contact.feedback", size: CGSize(width: 402, height: 874)) {
+                catalogProductContact(kind: .productFeedback)
+            },
+            .init(id: "product-contact.bug-report", size: CGSize(width: 402, height: 874)) {
+                catalogProductContact(kind: .bugReport)
+            },
+            .init(id: "product-contact.retry", size: CGSize(width: 402, height: 874)) {
+                catalogProductContact(kind: .bugReport, retry: true)
+            },
             .init(id: "settings.manager", size: CGSize(width: 402, height: 874)) {
                 catalogSettingsManager()
             },

@@ -48,6 +48,17 @@ public enum Emoji: String, Equatable, Sendable, Codable {
     case veryHappy = "veryHappy"
 }
 
+public extension Emoji {
+    var localized: String {
+        switch self {
+        case .verySad: String(appStrings: .feedbackEmojiVerySad)
+        case .sad: String(appStrings: .feedbackEmojiSad)
+        case .happy: String(appStrings: .feedbackEmojiHappy)
+        case .veryHappy: String(appStrings: .feedbackEmojiVeryHappy)
+        }
+    }
+}
+
 public enum ThumbsUpThumpsDown: String, Equatable, Sendable, Codable {
     case up = "up"
     case down = "down"

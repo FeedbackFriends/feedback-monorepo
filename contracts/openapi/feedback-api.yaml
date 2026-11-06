@@ -529,6 +529,61 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /support/submissions:
+    post:
+      tags:
+      - Support
+      summary: Save product feedback or a bug report without affecting meeting feedback.
+      operationId: submitSupportSubmission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupportSubmissionInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupportSubmissionReceipt"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /feedback/submit:
     post:
       tags:
@@ -1625,6 +1680,74 @@ components:
           description: Firebase Cloud Messaging token for push notifications.
       required:
       - fcmToken
+    SupportClientMetadataInput:
+      type: object
+      properties:
+        appVersion:
+          type: string
+          maxLength: 100
+          minLength: 0
+        appBuild:
+          type: string
+          maxLength: 100
+          minLength: 0
+        osVersion:
+          type: string
+          maxLength: 100
+          minLength: 0
+      required:
+      - appBuild
+      - appVersion
+      - osVersion
+    SupportSubmissionInput:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+          enum:
+          - ProductFeedback
+          - BugReport
+        rating:
+          type: string
+          enum:
+          - VerySad
+          - Sad
+          - Happy
+          - VeryHappy
+        message:
+          type: string
+          maxLength: 5000
+          minLength: 0
+        expectedBehavior:
+          type: string
+          maxLength: 5000
+          minLength: 0
+        contactEmail:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 0
+        metadata:
+          $ref: "#/components/schemas/SupportClientMetadataInput"
+      required:
+      - id
+      - kind
+      - metadata
+    SupportSubmissionReceipt:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        receivedAt:
+          type: string
+          format: date-time
+      required:
+      - id
+      - receivedAt
     FeedbackInput:
       type: object
       description: Single feedback answer submitted for one question in a event.

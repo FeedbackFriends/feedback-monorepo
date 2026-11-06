@@ -1,6 +1,12 @@
 import OpenAPI
 
 struct MockAPI: APIProtocol {
+    var submitSupportSubmissionHandler: @Sendable (Operations.SubmitSupportSubmission.Input) async throws -> Operations.SubmitSupportSubmission.Output = { _ in
+        fatalError("MockAPI: submitSupportSubmission unimplemented")
+    }
+    func submitSupportSubmission(_ input: Operations.SubmitSupportSubmission.Input) async throws -> Operations.SubmitSupportSubmission.Output {
+        try await submitSupportSubmissionHandler(input)
+    }
     var updateEventHandler: @Sendable (Operations.UpdateEvent.Input) async throws -> Operations.UpdateEvent.Output = { _ in
         fatalError("MockAPI: updateEvent unimplemented")
     }

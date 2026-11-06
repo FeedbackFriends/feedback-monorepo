@@ -2,6 +2,9 @@ import Foundation
 #if canImport(UIKit)
 import UIKit
 #endif
+#if canImport(MessageUI)
+import MessageUI
+#endif
 import Domain
 import Utility
 
@@ -37,6 +40,28 @@ public extension SystemClient {
             },
             webBaseUrl: {
                 return webBaseUrl
+            },
+            supportEmail: { supportEmail },
+            canComposeMail: {
+                #if canImport(MessageUI)
+                return await MainActor.run { MFMailComposeViewController.canSendMail() }
+                #else
+                return false
+                #endif
+            },
+            copyText: { text in
+                #if canImport(UIKit)
+                await MainActor.run { UIPasteboard.general.string = text }
+                #endif
+            },
+            supportMetadata: {
+                await MainActor.run {
+                    let device = DeviceInfo()
+                    return SupportClientMetadata(
+                        appVersion: device.version(), appBuild: device.build(),
+                        osVersion: device.operatingSystemVersion()
+                    )
+                }
             }
         )
     }

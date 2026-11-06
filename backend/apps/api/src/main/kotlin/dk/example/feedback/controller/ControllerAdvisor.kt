@@ -25,6 +25,8 @@ class ControllerAdvisor() {
         val status = when (exception) {
             is AccessDeniedException -> HttpStatus.FORBIDDEN
             is AuthenticationException -> HttpStatus.UNAUTHORIZED
+            is dk.example.feedback.model.exceptions.InvalidSupportSubmissionException -> HttpStatus.BAD_REQUEST
+            is dk.example.feedback.model.exceptions.SupportSubmissionConflictException -> HttpStatus.CONFLICT
             is ConstraintViolationException -> HttpStatus.BAD_REQUEST
             is org.springframework.beans.TypeMismatchException -> HttpStatus.BAD_REQUEST
             is org.springframework.http.converter.HttpMessageNotReadableException -> HttpStatus.BAD_REQUEST

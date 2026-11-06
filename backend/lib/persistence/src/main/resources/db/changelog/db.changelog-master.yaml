@@ -97,3 +97,6 @@ databaseChangeLog:
   - include:
       file: 0025-reset-prelaunch-data.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0026-add-support-submissions.yaml
+      relativeToChangelogFile: true

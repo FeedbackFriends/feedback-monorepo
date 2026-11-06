@@ -8,6 +8,7 @@ public enum AppFailure: Error, Sendable, Equatable {
     case sessionUnavailable
     case authenticationFailed
     case rateLimited
+    case supportReceiptUnavailable
 }
 
 /// Lets adapters classify a local failure without exposing SDK types to Domain.

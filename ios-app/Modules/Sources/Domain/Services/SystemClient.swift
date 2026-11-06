@@ -20,4 +20,8 @@ public struct SystemClient: Sendable {
     public var privacyPolicyUrl: @Sendable () -> URL = { return URL(string: "")! }
     public var appStoreReviewUrl: @Sendable () -> URL = { return URL(string: "")! }
     public var webBaseUrl: @Sendable () -> URL = { return URL(string: "")! }
+    public var supportEmail: @Sendable () -> String = { "" }
+    public var canComposeMail: @Sendable () async -> Bool = { false }
+    public var copyText: @Sendable (String) async -> Void
+    public var supportMetadata: @Sendable () async throws -> SupportClientMetadata
 }

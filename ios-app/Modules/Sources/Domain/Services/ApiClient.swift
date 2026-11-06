@@ -41,4 +41,5 @@ public struct APIClient: Sendable {
     @DependencyEndpoint
     public var getBootstrapUpdate: @Sendable () async throws -> Bootstrap?
     public var markNotificationHistoryAsSeen: @Sendable () async throws -> Void
+    public var submitProductContact: @Sendable (ProductContactInput) async throws -> ProductContactReceipt
 }

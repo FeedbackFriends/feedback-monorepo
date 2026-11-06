@@ -5273,6 +5273,474 @@
         }
       }
     },
+    "feedback.emoji.verySad": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meget utilfreds"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very dissatisfied"
+          }
+        }
+      }
+    },
+    "feedback.emoji.sad": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilfreds"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dissatisfied"
+          }
+        }
+      }
+    },
+    "feedback.emoji.happy": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tilfreds"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Satisfied"
+          }
+        }
+      }
+    },
+    "feedback.emoji.veryHappy": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meget tilfreds"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very satisfied"
+          }
+        }
+      }
+    },
+    "productContact.feedbackQuestion": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvordan oplever du LetsGrow?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How is your experience with LetsGrow?"
+          }
+        }
+      }
+    },
+    "productContact.feedbackHelp": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg en vurdering, skriv en kommentar, eller gør begge dele."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a rating, write a comment, or do both."
+          }
+        }
+      }
+    },
+    "productContact.comment": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvad kan vi gøre bedre?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What could we improve?"
+          }
+        }
+      }
+    },
+    "productContact.commentPrompt": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skriv gerne, hvad der virker, og hvad du savner."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tell us what works and what is missing."
+          }
+        }
+      }
+    },
+    "productContact.bugDescription": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beskriv fejlen (påkrævet)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Describe the bug (required)"
+          }
+        }
+      }
+    },
+    "productContact.bugPrompt": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvad skete der, og hvordan kan vi gentage det?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What happened, and how can we reproduce it?"
+          }
+        }
+      }
+    },
+    "productContact.expectedBehavior": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvad forventede du der skulle ske? (valgfrit)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What did you expect to happen? (optional)"
+          }
+        }
+      }
+    },
+    "productContact.expectedPrompt": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beskriv den forventede adfærd."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Describe the expected behavior."
+          }
+        }
+      }
+    },
+    "productContact.email": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontaktmail (valgfrit)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact email (optional)"
+          }
+        }
+      }
+    },
+    "productContact.emailHelp": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skriv din mailadresse, hvis vi må kontakte dig om fejlen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter your email address if we may contact you about the bug."
+          }
+        }
+      }
+    },
+    "productContact.emailInvalid": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skriv en gyldig mailadresse, eller lad feltet være tomt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a valid email address or leave the field empty."
+          }
+        }
+      }
+    },
+    "productContact.textLimit": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Højst 5000 tegn i hvert tekstfelt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At most 5000 characters in each text field."
+          }
+        }
+      }
+    },
+    "productContact.mailInstead": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skriv en mail i stedet"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write an email instead"
+          }
+        }
+      }
+    },
+    "productContact.mailUnavailableTitle": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mail er ikke sat op"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mail is not configured"
+          }
+        }
+      }
+    },
+    "productContact.mailUnavailableMessage": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopiér %1$@, og skriv til os, når det passer dig."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy %1$@ and email us when convenient."
+          }
+        }
+      }
+    },
+    "productContact.mailBody": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@\n\nForventet adfærd:\n%2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@\n\nExpected behavior:\n%2$@"
+          }
+        }
+      }
+    },
+    "productContact.feedbackMailBody": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vurdering: %1$@\n\nKommentar:\n%2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rating: %1$@\n\nComment:\n%2$@"
+          }
+        }
+      }
+    },
+    "productContact.noRating": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ikke valgt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not selected"
+          }
+        }
+      }
+    },
+    "productContact.mailFailed": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mailen kunne ikke sendes. Prøv igen, eller kopiér vores mailadresse."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The email could not be sent. Try again or copy our email address."
+          }
+        }
+      }
+    },
+    "productContact.thankYou": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tak for din hjælp!"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thank you for your help!"
+          }
+        }
+      }
+    },
+    "productContact.received": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din henvendelse er modtaget. Du kan nu lukke vinduet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your message has been received. You can close this window now."
+          }
+        }
+      }
+    },
+    "productContact.send": {
+      "comment": "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState": "manual",
+      "localizations": {
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send"
+          }
+        }
+      }
+    },
     "support.appDetails" : {
       "comment" : "Support email app section. Arguments: name, version, build, bundle ID.",
       "extractionState" : "manual",

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PresentableError: Equatable {
+public struct PresentableError: Equatable, Sendable {
     public let title: String
     public let message: String
     public init(title: String, message: String) {

@@ -95,6 +95,7 @@ private extension AppFailure {
             title = String(appStrings: .errorsAuthenticationTitle)
             message = String(appStrings: .errorsAuthenticationMessage)
         case .rateLimited: message = String(appStrings: .errorsRateLimitedMessage)
+        case .supportReceiptUnavailable: message = String(appStrings: .errorsGenericMessage)
         }
         return .init(title: title, message: message)
     }

@@ -100,6 +100,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/support/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Save product feedback or a bug report without affecting meeting feedback. */
+        post: operations["submitSupportSubmission"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/feedback/submit": {
         parameters: {
             query?: never;
@@ -582,6 +599,30 @@ export interface components {
         LinkFCMTokenToAccountInput: {
             /** @description Firebase Cloud Messaging token for push notifications. */
             fcmToken: string;
+        };
+        SupportClientMetadataInput: {
+            appVersion: string;
+            appBuild: string;
+            osVersion: string;
+        };
+        SupportSubmissionInput: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            kind: "ProductFeedback" | "BugReport";
+            /** @enum {string} */
+            rating?: "VerySad" | "Sad" | "Happy" | "VeryHappy";
+            message?: string;
+            expectedBehavior?: string;
+            /** Format: email */
+            contactEmail?: string;
+            metadata: components["schemas"]["SupportClientMetadataInput"];
+        };
+        SupportSubmissionReceipt: {
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            receivedAt: string;
         };
         /** @description Single feedback answer submitted for one question in a event. */
         FeedbackInput: {
@@ -1510,6 +1551,84 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    submitSupportSubmission: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SupportSubmissionInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SupportSubmissionReceipt"];
+                };
             };
             /** @description Bad Request */
             400: {

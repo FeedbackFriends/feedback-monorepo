@@ -22,6 +22,7 @@ extension APIClient: TestDependencyKey {
         markEventAsSeen: { _ in },
         sendNotification: { _ in },
         getBootstrapUpdate: { .mock() },
-        markNotificationHistoryAsSeen: { }
+        markNotificationHistoryAsSeen: { },
+        submitProductContact: { _ in throw AppFailure.supportReceiptUnavailable }
     )
 }

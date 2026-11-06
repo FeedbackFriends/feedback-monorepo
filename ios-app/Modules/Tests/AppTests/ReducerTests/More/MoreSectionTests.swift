@@ -28,56 +28,24 @@ struct MoreSectionTests {
     }
     
     @Test
-    func `Feedback button opens email composer with prefilled details`() async {
-        let mockEmail = "mock@mock.dk"
-        let openedUrl = LockIsolated<URL?>(nil)
-        let store = TestStore(initialState: MoreSection.State()) {
-            MoreSection()
-        } withDependencies: {
-            $0.openURL = .init(handler: { url in
-                openedUrl.setValue(url)
-                return true
-            })
-            $0.systemClient.openEmail = { _, _ in
-                var components = URLComponents(string: "mailto:mock@mock.dk")!
-                components.queryItems = [
-                    URLQueryItem(name: "subject", value: "mock"),
-                    URLQueryItem(name: "body", value: "mock")
-                ]
-                return components.url!
-            }
+    func feedbackAndBugButtonsOpenIndependentInAppForms() async {
+        let id = UUID(uuidString: "00000000-0000-0000-0000-000000000123")!
+        let feedback = TestStore(initialState: MoreSection.State()) { MoreSection() } withDependencies: {
+            $0.uuid = .constant(id)
         }
-        await store.send(.onFeedbackButtonTap)
-        #expect(openedUrl.value?.absoluteString.contains("mailto:\(mockEmail)") == true)
-        #expect(openedUrl.value?.absoluteString.contains("mailto:mock@mock.dk") == true)
-    }
-    
-    @Test
-    func `Report bug button opens email composer with bug details`() async {
-        let mockEmail = "mock@mock.dk"
-        let openedUrl = LockIsolated<URL?>(nil)
-        let store = TestStore(initialState: MoreSection.State()) {
-            MoreSection()
-        } withDependencies: {
-            $0.openURL = .init(handler: { @MainActor url in
-                openedUrl.setValue(url)
-                return true
-            })
-            $0.systemClient.openEmail = { _, _ in
-                var components = URLComponents(string: "mailto:mock@mock.dk")!
-                components.queryItems = [
-                    URLQueryItem(name: "subject", value: "mock"),
-                    URLQueryItem(name: "body", value: "mock")
-                ]
-                return components.url!
-            }
+        await feedback.send(.onFeedbackButtonTap) {
+            $0.productContact = .init(kind: .productFeedback, submissionID: id)
         }
-        await store.send(.onReportBugButtonTap)
-        #expect(openedUrl.value?.absoluteString.contains("mailto:\(mockEmail)") == true)
-        #expect(openedUrl.value?.absoluteString.contains("subject=mock") == true)
-        #expect(openedUrl.value?.absoluteString.contains("body=mock") == true)
+        await feedback.send(.onFeedbackButtonTap)
+        await feedback.send(.onReportBugButtonTap)
+        let bug = TestStore(initialState: MoreSection.State()) { MoreSection() } withDependencies: {
+            $0.uuid = .constant(id)
+        }
+        await bug.send(.onReportBugButtonTap) {
+            $0.productContact = .init(kind: .bugReport, submissionID: id)
+        }
     }
-    
+
     @Test
     func `Support us button opens App Store review page`() async {
         let openedUrl = LockIsolated<URL?>(nil)

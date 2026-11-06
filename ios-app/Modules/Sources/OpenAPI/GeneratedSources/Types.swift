@@ -41,6 +41,11 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `PUT /account/fcm-token`.
     /// - Remark: Generated from `#/paths//account/fcm-token/put(linkFCMTokenToAccount)`.
     func linkFCMTokenToAccount(_ input: Operations.LinkFCMTokenToAccount.Input) async throws -> Operations.LinkFCMTokenToAccount.Output
+    /// Save product feedback or a bug report without affecting meeting feedback.
+    ///
+    /// - Remark: HTTP `POST /support/submissions`.
+    /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)`.
+    func submitSupportSubmission(_ input: Operations.SubmitSupportSubmission.Input) async throws -> Operations.SubmitSupportSubmission.Output
     /// - Remark: HTTP `POST /feedback/submit`.
     /// - Remark: Generated from `#/paths//feedback/submit/post(submitFeedback)`.
     func submitFeedback(_ input: Operations.SubmitFeedback.Input) async throws -> Operations.SubmitFeedback.Output
@@ -180,6 +185,19 @@ extension APIProtocol {
         body: Operations.LinkFCMTokenToAccount.Input.Body
     ) async throws -> Operations.LinkFCMTokenToAccount.Output {
         try await linkFCMTokenToAccount(Operations.LinkFCMTokenToAccount.Input(
+            headers: headers,
+            body: body
+        ))
+    }
+    /// Save product feedback or a bug report without affecting meeting feedback.
+    ///
+    /// - Remark: HTTP `POST /support/submissions`.
+    /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)`.
+    public func submitSupportSubmission(
+        headers: Operations.SubmitSupportSubmission.Input.Headers = .init(),
+        body: Operations.SubmitSupportSubmission.Input.Body
+    ) async throws -> Operations.SubmitSupportSubmission.Output {
+        try await submitSupportSubmission(Operations.SubmitSupportSubmission.Input(
             headers: headers,
             body: body
         ))
@@ -1457,6 +1475,123 @@ public enum Components {
             }
             public enum CodingKeys: String, CodingKey {
                 case fcmToken
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/SupportClientMetadataInput`.
+        public struct SupportClientMetadataInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SupportClientMetadataInput/appVersion`.
+            public var appVersion: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SupportClientMetadataInput/appBuild`.
+            public var appBuild: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SupportClientMetadataInput/osVersion`.
+            public var osVersion: Swift.String
+            /// Creates a new `SupportClientMetadataInput`.
+            ///
+            /// - Parameters:
+            ///   - appVersion:
+            ///   - appBuild:
+            ///   - osVersion:
+            public init(
+                appVersion: Swift.String,
+                appBuild: Swift.String,
+                osVersion: Swift.String
+            ) {
+                self.appVersion = appVersion
+                self.appBuild = appBuild
+                self.osVersion = osVersion
+            }
+            public enum CodingKeys: String, CodingKey {
+                case appVersion
+                case appBuild
+                case osVersion
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput`.
+        public struct SupportSubmissionInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/kind`.
+            @frozen public enum KindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case productFeedback = "ProductFeedback"
+                case bugReport = "BugReport"
+            }
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/kind`.
+            public var kind: Components.Schemas.SupportSubmissionInput.KindPayload
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/rating`.
+            @frozen public enum RatingPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case verySad = "VerySad"
+                case sad = "Sad"
+                case happy = "Happy"
+                case veryHappy = "VeryHappy"
+            }
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/rating`.
+            public var rating: Components.Schemas.SupportSubmissionInput.RatingPayload?
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/message`.
+            public var message: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/expectedBehavior`.
+            public var expectedBehavior: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/contactEmail`.
+            public var contactEmail: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionInput/metadata`.
+            public var metadata: Components.Schemas.SupportClientMetadataInput
+            /// Creates a new `SupportSubmissionInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - kind:
+            ///   - rating:
+            ///   - message:
+            ///   - expectedBehavior:
+            ///   - contactEmail:
+            ///   - metadata:
+            public init(
+                id: Swift.String,
+                kind: Components.Schemas.SupportSubmissionInput.KindPayload,
+                rating: Components.Schemas.SupportSubmissionInput.RatingPayload? = nil,
+                message: Swift.String? = nil,
+                expectedBehavior: Swift.String? = nil,
+                contactEmail: Swift.String? = nil,
+                metadata: Components.Schemas.SupportClientMetadataInput
+            ) {
+                self.id = id
+                self.kind = kind
+                self.rating = rating
+                self.message = message
+                self.expectedBehavior = expectedBehavior
+                self.contactEmail = contactEmail
+                self.metadata = metadata
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case kind
+                case rating
+                case message
+                case expectedBehavior
+                case contactEmail
+                case metadata
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/SupportSubmissionReceipt`.
+        public struct SupportSubmissionReceipt: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionReceipt/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SupportSubmissionReceipt/receivedAt`.
+            public var receivedAt: Foundation.Date
+            /// Creates a new `SupportSubmissionReceipt`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - receivedAt:
+            public init(
+                id: Swift.String,
+                receivedAt: Foundation.Date
+            ) {
+                self.id = id
+                self.receivedAt = receivedAt
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case receivedAt
             }
         }
         /// Single feedback answer submitted for one question in a event.
@@ -6386,6 +6521,433 @@ public enum Operations {
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
             public var internalServerError: Operations.LinkFCMTokenToAccount.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// Save product feedback or a bug report without affecting meeting feedback.
+    ///
+    /// - Remark: HTTP `POST /support/submissions`.
+    /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)`.
+    public enum SubmitSupportSubmission {
+        public static let id: Swift.String = "submitSupportSubmission"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/support/submissions/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.SubmitSupportSubmission.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.SubmitSupportSubmission.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.SubmitSupportSubmission.Input.Headers
+            /// - Remark: Generated from `#/paths/support/submissions/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/support/submissions/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.SupportSubmissionInput)
+            }
+            public var body: Operations.SubmitSupportSubmission.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            ///   - body:
+            public init(
+                headers: Operations.SubmitSupportSubmission.Input.Headers = .init(),
+                body: Operations.SubmitSupportSubmission.Input.Body
+            ) {
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/support/submissions/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/support/submissions/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.SupportSubmissionReceipt)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.SupportSubmissionReceipt {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.SubmitSupportSubmission.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.SubmitSupportSubmission.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.SubmitSupportSubmission.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.SubmitSupportSubmission.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/support/submissions/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/support/submissions/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.SubmitSupportSubmission.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.SubmitSupportSubmission.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.SubmitSupportSubmission.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.SubmitSupportSubmission.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/support/submissions/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/support/submissions/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.SubmitSupportSubmission.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.SubmitSupportSubmission.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.SubmitSupportSubmission.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.SubmitSupportSubmission.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/support/submissions/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/support/submissions/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.SubmitSupportSubmission.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.SubmitSupportSubmission.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.SubmitSupportSubmission.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.SubmitSupportSubmission.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/support/submissions/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/support/submissions/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.SubmitSupportSubmission.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.SubmitSupportSubmission.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.SubmitSupportSubmission.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.SubmitSupportSubmission.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/support/submissions/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/support/submissions/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.SubmitSupportSubmission.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.SubmitSupportSubmission.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.SubmitSupportSubmission.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.SubmitSupportSubmission.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/support/submissions/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/support/submissions/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.SubmitSupportSubmission.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.SubmitSupportSubmission.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//support/submissions/post(submitSupportSubmission)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.SubmitSupportSubmission.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.SubmitSupportSubmission.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):

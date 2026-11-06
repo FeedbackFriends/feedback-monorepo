@@ -1,5 +1,5 @@
 ---
-status: ready
+status: in-progress
 areas: [ios, backend]
 created: 2026-11-06
 updated: 2026-11-06
@@ -34,17 +34,20 @@ iOS-ejer og anonym bruger; genbrug af eksisterende feedback-UI; backendkontrakt 
 - Genbrug Firebase-anonym auth for anonym bruger; intet krav om oprettelse af ejerkonto. Server udleder account fra token og ejer modtagelsen; klient vælger ikke vilkårlig manager/modtager.
 - Registrer type, svar/tekst, server-tid, eventuel kontaktmail og en lille dokumenteret mængde metadata (appversion/build, OS-version). Ingen automatisk upload af logs, tokens eller mødesvar. Afklar kontoens slettepolitik og dokumentér den valgte relation i migrationen.
 - Klient-genereret submission-id og serverunikhed sikrer genforsøg efter mistet svar uden dobbeltlagring. Lås send under afsendelse; behold input ved fejl; vis først kvittering efter serverbekræftelse.
+- Implementation decisions 2026-11-06: support_submission uses account FK ON DELETE CASCADE; account deletion removes contact text/metadata too. UUID is globally unique, actor is always token subject. Identical retries return the original receipt; a reused UUID with different content returns 409, and another account cannot access that UUID.
+- Client retains the exact submitted payload for unchanged retries; editing after an error creates a new submission identity. Metadata is app version/build and OS version only. No device name/identifier, logs or meeting data.
+- Existing emoji controls are extracted into a shared DesignSystem value/action view, reused by meeting feedback and the new form without a fake Event/session.
 - Unresolved: None
-- Execution constraints: Kun refinement er bestilt. Ingen implementering, commits, deployment, produktionsdata eller nulstilling af lokale data er udført eller autoriseret af denne taskplan.
+- Execution authorization: brugeren bestilte hele tasks-backloggen implementeret med separate taskcommits. Seneste instruktion: stop sessionen efter denne email/feedback-feature; det samlede mål sættes på pause efter commit. Ingen push, deployment, produktionsændring eller lokal reset/testindsendelse er autoriseret. Det tidligere spørgsmål om lokal testdata/reset er ubesvaret.
 
 ## Acceptance criteria
 
 - [ ] AC-1: Begge indgange åbner deres respektive flow i appen for ejer og anonym uden mailapp eller PIN.
-- [ ] AC-2: Produktfeedback bruger eksisterende svarkomponenter; fejlformular validerer beskrivelse, tekstgrænser og valgfri mail.
-- [ ] AC-3: Gyldig indsendelse persisteres præcis én gang med korrekt type; kvittering vises efter succes, og mødestatistik, deltagelse og notifikationer påvirkes ikke.
-- [ ] AC-4: Netværks-/serverfejl bevarer teksten, giver en forståelig fejl og tillader sikkert retry; dobbelttryk og mistet serversvar giver ingen dublet.
+- [x] AC-2: Produktfeedback bruger eksisterende svarkomponenter; fejlformular validerer beskrivelse, tekstgrænser og valgfri mail.
+- [x] AC-3: Gyldig indsendelse persisteres præcis én gang med korrekt type; kvittering vises efter succes, og mødestatistik, deltagelse og notifikationer påvirkes ikke.
+- [x] AC-4: Netværks-/serverfejl bevarer teksten, giver en forståelig fejl og tillader sikkert retry; dobbelttryk og mistet serversvar giver ingen dublet.
 - [ ] AC-5: Mailalternativ kræver et særskilt tryk og bliver i appen; manglende mailopsætning giver mulighed for at kopiere adressen.
-- [ ] AC-6: Backend validerer og kræver gyldigt token for både anonym/ejer; metadata og kontaktmail håndteres efter dokumenteret model/slettepolitik.
+- [x] AC-6: Backend validerer og kræver gyldigt token for både anonym/ejer; metadata og kontaktmail håndteres efter dokumenteret model/slettepolitik.
 
 ## Implementation plan
 
@@ -52,33 +55,33 @@ iOS-ejer og anonym bruger; genbrug af eksisterende feedback-UI; backendkontrakt 
 
 Outcome: Et valideret, selvstændigt produkthenvendelsesflow. Dependencies: eksisterende Firebase-auth og persistence patterns.
 
-- [ ] Tilføj tynd controller, service, input/output og separat model/table/repo med inkrementel Liquibase-migration; definer idempotent retry og kontosletningsrelation.
-- [ ] Dæk begge henvendelsestyper, anonym/ejer/uden token, validering, metadata og dublet/retry med API- og persistenschecks. Verificer at mødesvar og notifikationer ikke ændres.
+- [x] Tilføj tynd controller, service, input/output og separat model/table/repo med inkrementel Liquibase-migration; definer idempotent retry og kontosletningsrelation.
+- [x] Dæk begge henvendelsestyper, anonym/ejer/uden token, validering, metadata og dublet/retry med API- og persistenschecks. Verificer at mødesvar og notifikationer ikke ændres.
 
 ### Phase 2 — Kontrakt og adapter
 
 Outcome: Native domain-service med genereret transport. Depends on phase 1.
 
-- [ ] Kør `./scripts/generate-api-artifacts.sh` fra roden; gennemgå Swift/TypeScript/kontrakt-diff uden håndredigering.
-- [ ] Tilføj Domain-service og live adapter med submission-id samt typed result/error; ingen genererede typer i feature-state.
-- [ ] Verificer serialisering og retries i adaptertests.
+- [x] Kør `./scripts/generate-api-artifacts.sh` fra roden; gennemgå Swift/TypeScript/kontrakt-diff uden håndredigering.
+- [x] Tilføj Domain-service og live adapter med submission-id samt typed result/error; ingen genererede typer i feature-state.
+- [x] Verificer serialisering og retries i adaptertests.
 
 ### Phase 3 — iOS-flows
 
 Outcome: Feedback og fejlrapport sendes fra appen. Depends on phase 2.
 
-- [ ] Tilføj destinations/reducere under passende featureejerskab; genbrug svarkontroller gennem en afkoblet UI-/stategrænse, ikke en opdigtet mødesession.
-- [ ] Implementer formularer, validering, loading, fejl med bevaret input, sikker retry og serverbekræftet kvittering; luk/annuller uden utilsigtet indsendelse.
-- [ ] Tilføj eksplicit in-app mailcomposer via systemadapter og kopi-fallback; opdater dansk/engelsk lokalisering og inventory.
-- [ ] Dæk indsendelse/succes/fejl/dobbelttryk/annullering med reducerchecks og katalogfixtures.
+- [x] Tilføj destinations/reducere under passende featureejerskab; genbrug svarkontroller gennem en afkoblet UI-/stategrænse, ikke en opdigtet mødesession.
+- [x] Implementer formularer, validering, loading, fejl med bevaret input, sikker retry og serverbekræftet kvittering; luk/annuller uden utilsigtet indsendelse.
+- [x] Tilføj eksplicit in-app mailcomposer via systemadapter og kopi-fallback; opdater dansk/engelsk lokalisering og inventory.
+- [x] Dæk indsendelse/succes/fejl/dobbelttryk/annullering med reducerchecks og katalogfixtures.
 
 ### Phase 4 — Samlet verifikation
 
 Outcome: Dokumenteret klient/server-rejse uden mødedata-sideeffekter. Depends on phase 3.
 
-- [ ] Kør relevante API-/persistens-/adapter-/reducertests og kontraktchecks.
+- [x] Kør relevante API-/persistens-/adapter-/reducertests og kontraktchecks.
 - [ ] Verificer begge indgange på localhost som ejer og anonym samt mailalternativet; kun efter særskilt autorisation til nødvendige lokale testindsendelser.
-- [ ] Gennemfør iOS build/lint og fuldt katalogreview; dokumentér dataejerskab, slettepolitik og eventuelle begrænsninger i human-review-handoff.
+- [x] Gennemfør iOS build/lint og fuldt katalogreview; dokumentér dataejerskab, slettepolitik og eventuelle begrænsninger i human-review-handoff.
 
 ## Verification
 
@@ -95,11 +98,17 @@ Backend: kør `./gradlew :api:test :persistence:test` fra backend/ for de berør
 
 ## Human review
 
-Not implemented yet. Implementeringen skal forklare flow, arkitekturbeslutninger, tradeoffs, læsesti og verifikationsgrænser efter docs/agents/human-review.md.
+MoreSection præsenterer ProductContact, som ejer lokal input-/request-/receipt-state. EmojiRatingView er trukket ud som en ren DesignSystem-værdi/action-komponent og genbruges i mødefeedback og produktfeedback; ingen opdigtet Event/PIN eller ny feedbackkoordinator bruges. Domain ProductContactInput/Receipt passerer APIClient; Adapters mapper til genereret transport uden at opdatere Bootstrap/cache. Uændrede retries beholder payload og UUID; redigering efter fejl tildeler nyt UUID til nyt indhold. Reducerens guards afviser invalid/dobbelt send og in-flight inputændringer. Kvittering kræver serverens matchende receipt.
+
+Backendcontroller validerer og udleder account fra JWT; service ejer betinget validering og idempotens-/ejerkontrol, repository ejer atomisk insert-or-get. Ny separat tabel med account-CASCADE følger kontodataejerskab og holder kontaktdata ude af mødesvar/statistik/notifikationer. Unikt globalt UUID giver samme receipt ved samtidige retries; andet indhold giver 409 og anden konto 403. Metadataadapteren leverer kun appversion/build og OS-version.
+
+Mail er en eksplicit sidevej: SystemClient afklarer capability/adresse/clipboard, DesignSystem wrapper MFMailComposeViewController, og reduceren præsenterer composer eller copy-alert. Den vej kalder aldrig databasen og viser ingen databasekvittering. Ingen nye SDK/runtime-dependencies eller genererede typer i feature-state. Beslutninger om særskilt lagring/genbrug var planlagte; CASCADE, præcis retry-model og fælles UI-udtræk er implementeringsvalgene.
+
+Læsesti: `ios-app/Modules/Sources/MoreFeature/MoreSection/MoreSection.swift` → `ios-app/Modules/Sources/MoreFeature/ProductContact/ProductContact.swift`/`ProductContactView.swift` → `ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+LiveProductContact.swift` → `backend/apps/api/src/main/kotlin/dk/example/feedback/service/SupportSubmissionService.kt` → `backend/lib/persistence/src/main/kotlin/dk/example/feedback/persistence/repo/SupportSubmissionRepo.kt` og migration 0026. Varig kontrakt/retention/mail-dokumentation: `docs/product-contact.md`. Testene ProductContactTests, ProductContactAdapterTests og SupportSubmissionTest viser de vigtige grænser.
 
 ## Handoff
 
-- Completed: Kodenære kilder undersøgt; scope, antagelser og plan gemt. Ingen produktændringer.
-- Verification results: Not run. Kun refinement.
-- Blockers: None
-- Next action: Fastlæg request/response og support submission-model med de dokumenterede antagelser; læs eksisterende auth/persistensmønstre før fase 1.
+- Completed: Implementeret end-to-end kode for in-app produktfeedback og fejlrapporter, separat persistens/migration, idempotent retry/ejerskab, genereret kontrakt/klienter, native Domain/adapter, formularer/validering og eksplicit in-app Mail/copy-fallback. Metadata og kontosletning dokumenteret i `docs/product-contact.md`. Ingen push/deploy/reset eller produktions-/lokale liveindsendelser udført.
+- Verification results: 2026-11-06: `./gradlew :api:test :persistence:test` bestået. API: 38 tests, 0 failures/errors/skipped; heraf 5 nye SupportSubmissionTest-integrationstests med virkelig repository, anvendt Liquibase-migration og isoleret H2, inklusive samtidighed/cascade/uforandrede mødedata. Persistence-tasken har 0 selvstændige tests; persistensadfærden er dækket i API-integrationerne, ikke påstået som separate persistens-unit-tests. Eksisterende Gradle/JVM/deprecation-warnings består. Root API-generator kørt igen efter DTO-/enum-placering; kontrakt og Swift/TypeScript inspiceret; eksisterende generator-resourcewarnings, ingen håndredigering. iOS Feedback Localhost / LetsGrow Manager iOS 27.2: buildForTesting bestået, UnitTests discovery 231 enabled fra AppTests/InsightsTests, RunAllTests 254 passed, 0 failed/skipped. SwiftLint --base HEAD: 0 violations i 26 filer. Lokaliseringscheck: 335 gyldige nøgler; direct-copy guard: 224 filer. ScreenSnapshots: 1 passed, 69 PNGer publiceret; alle gennemgået via 58 uændrede hashes og 11 friske ændrede/nye billeder. `screenshots/review/product-contact-findings.json` har IDs/hashes; `screenshots/index.html` galleri; baselines bevaret. RunProject byggede og lancerede appen succesfuldt (launch reference 7cdf46e700). Webs genererede klient: Node 20.19.0 npm lint og tsc --noEmit bestået. Incidental Package.resolved ændring fra generatoren er gendannet.
+- Blockers: AC-1/AC-5 og den krævede localhost-rejse som ejer/anonym med faktisk composer/copy/keyboard er endnu ikke live-afprøvet. Native DeviceInteractionStartWorkspaceSession returnerer nøgle, men Synthesize/EndSession kan ikke finde den, mens nyt Start siger simulatoren er optaget af samme nøgle; se `tasks/ios-text-input-full-surface-focus.md` for nøjagtig oprindelig fejl. Ingen fallbackværktøjer anvendt. Fysisk Mail/VoiceOver/tema/stor tekst og localhost-testdataautorisation afventer; opdateret i `tasks/ios-physical-device-verification.md`. Derfor beholdes taskfilen; alle required checks hævdes ikke afsluttet.
+- Next action: Efter brugerens genoptagelse: gendan native Xcode-interaktionssessionen, få konkret lokal testindsendelsesautorisation (reset er ikke nødvendigt for denne feature), og gennemfør begge indgange som ejer/anonym samt Mail configured/unconfigured, offline/retry og fysisk/tastatur/tilgængelighed. Luk først tasken efter den resterende verifikation. Backend + migration skal deployes før iOS-udgivelse, kun ved særskilt autorisation. Sessionen stopper efter denne features commit efter brugerens seneste instruktion; fortsæt ikke til Maestro/web/Not Found af dig selv.

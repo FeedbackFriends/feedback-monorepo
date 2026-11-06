@@ -1,10 +1,6 @@
-import Localization
 import Domain
 import Foundation
-import DesignSystem
 import ComposableArchitecture
-import Logger
-import Utility
 
 @Reducer
 public struct MoreSection: Sendable {
@@ -13,6 +9,7 @@ public struct MoreSection: Sendable {
     public struct State: Equatable, Sendable {
         var privacyPolicyUrl: URL?
         var appStoreReviewUrl: URL?
+        @Presents var productContact: ProductContact.State?
         public init() {}
     }
     
@@ -23,14 +20,14 @@ public struct MoreSection: Sendable {
         case onSupportUsButtonTap
         case binding(BindingAction<State>)
         case onAppear
+        case productContact(PresentationAction<ProductContact.Action>)
     }
     
     public init() {}
     
     @Dependency(\.openURL) var openURL
     @Dependency(\.systemClient) var systemClient
-    @Dependency(\.apiClient) var apiClient
-    @Dependency(\.authClient) var authClient
+    @Dependency(\.uuid) var uuid
     
     public var body: some ReducerOf<Self> {
         BindingReducer()
@@ -49,20 +46,14 @@ public struct MoreSection: Sendable {
                 }
                 
             case .onFeedbackButtonTap:
-                let subject = String(appStrings: .moreFeedbackSubject)
-                return .run { [openURL = self.openURL, systemClient = self.systemClient] _ in
-                    let deviceSummary = await MainActor.run { DeviceInfo().summary() }
-                    let body = String(appStrings: .moreEmailBody(deviceSummary))
-                    await openURL(systemClient.openEmail(subject: subject, body: body))
-                }
+                guard state.productContact == nil else { return .none }
+                state.productContact = .init(kind: .productFeedback, submissionID: uuid())
+                return .none
                 
             case .onReportBugButtonTap:
-                let subject = String(appStrings: .moreBugSubject)
-                return .run { [openURL = self.openURL, systemClient = self.systemClient] _ in
-                    let deviceSummary = await MainActor.run { DeviceInfo().summary() }
-                    let body = String(appStrings: .moreEmailBody(deviceSummary))
-                    await openURL(systemClient.openEmail(subject: subject, body: body))
-                }
+                guard state.productContact == nil else { return .none }
+                state.productContact = .init(kind: .bugReport, submissionID: uuid())
+                return .none
                 
             case .onSupportUsButtonTap:
                 return .run { [openURL = self.openURL] _ in
@@ -71,7 +62,10 @@ public struct MoreSection: Sendable {
                 
             case .binding:
                 return .none
+            case .productContact:
+                return .none
             }
         }
+        .ifLet(\.$productContact, action: \.productContact) { ProductContact() }
     }
 }

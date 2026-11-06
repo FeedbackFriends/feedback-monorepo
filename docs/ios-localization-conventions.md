@@ -77,7 +77,7 @@ Keep technical details in diagnostics and preserve existing cancellation/retry b
 | Google sign-in (`FirebaseService`) | Localize app-owned entry actions and errors. Current code configures client ID and presentation; check supported SDK language behavior during implementation without inventing an unsupported override. |
 | Notification authorization (`NotificationClientLive`) | Localize app-owned explanations; the native authorization dialog is system-owned. Check app/default-language configuration and app display name. |
 | Share sheet (`InviteView`, `ShareLink`) | Localize supplied messages and app labels. Native destinations/actions belong to the OS or receiving app. |
-| Mail app launched by `MoreSection` | Localize subjects, placeholder instructions, and device-info heading supplied by LetsGrow. Mail app chrome and raw device values are external/diagnostic. |
+| Product contact from `MoreSection` | Localize in-app form labels, validation, receipt and explicit mail-alternative copy. The native in-app Mail composer owns its chrome; the no-Mail fallback copies the configured address. Product contact never opens an external mail app automatically. |
 | DatePicker and native controls | Supply the app-selected locale and localized labels; verify Danish control/accessibility presentation during iOS QA. |
 | Settings, App Store, hosted privacy policy | Localize outgoing app-owned link labels. Destination UI/content is outside this iOS-only task. |
 

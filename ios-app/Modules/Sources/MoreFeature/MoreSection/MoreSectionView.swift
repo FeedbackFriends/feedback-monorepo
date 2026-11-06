@@ -27,6 +27,9 @@ public struct MoreSectionView: View {
             generalSection
         }
         .onAppear { store.send(.onAppear) }
+        .sheet(item: $store.scope(state: \.productContact, action: \.productContact)) { contactStore in
+            ProductContactView(store: contactStore)
+        }
     }
     
     var generalSection: some View {
