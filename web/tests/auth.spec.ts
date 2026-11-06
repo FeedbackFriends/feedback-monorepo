@@ -18,20 +18,20 @@ test.describe("login and logout", () => {
     await page.getByRole("button", { name: "Fortsæt med Google" }).click()
 
     await expect(page).toHaveURL(/\/dashboard$/)
-    await expect(page.getByText("Signed in")).toBeVisible()
+    await expect(page.getByText("Logget ind")).toBeVisible()
     await expect(
       page.getByRole("heading", { name: "Playwright Test User" })
     ).toBeVisible()
-    await expect(page.getByText("Authenticated as playwright@example.com.")).toBeVisible()
+    await expect(page.getByText("Autentificeret som playwright@example.com.")).toBeVisible()
 
     await page.goto("/login")
     await expect(page).toHaveURL(/\/dashboard$/)
 
     await page.reload()
     await expect(page).toHaveURL(/\/dashboard$/)
-    await expect(page.getByText("Authenticated as playwright@example.com.")).toBeVisible()
+    await expect(page.getByText("Autentificeret som playwright@example.com.")).toBeVisible()
 
-    await page.getByRole("button", { name: "Sign out" }).click()
+    await page.getByRole("button", { name: "Log ud" }).click()
 
     await expect(page).toHaveURL(/\/login$/)
     await expect(page.getByRole("heading", { name: "Log ind" })).toBeVisible()
