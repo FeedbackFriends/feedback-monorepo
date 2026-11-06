@@ -1,0 +1,19 @@
+ios-app/Feedback.xcodeproj/project.xcproj
+  s_d18a82bec502a0::t_93bfc82a0eb52d 354,385
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0cd0aa421c5b91070013b16a3c4eba4e37ff3d1a",
+  "prompts": {},
+  "sessions": {
+    "s_d18a82bec502a0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b0d3-84d9-71d3-a410-f447350bad1b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
