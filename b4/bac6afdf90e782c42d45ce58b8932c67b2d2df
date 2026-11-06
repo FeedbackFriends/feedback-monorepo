@@ -1,0 +1,165 @@
+.agents/skills/lg-architecture/SKILL.md
+  s_7dc6f4ce9b50dd::t_3898fbe77bfb92 2,19
+.agents/skills/lg-architecture/agents/agent.yaml
+  s_7dc6f4ce9b50dd::t_64be9873462571 4
+.agents/skills/lg-commit-and-push/SKILL.md
+  s_7dc6f4ce9b50dd::t_feb84ed428c43c 2
+.agents/skills/lg-commit-and-push/agents/agent.yaml
+  s_7dc6f4ce9b50dd::t_ca1e8bc8751c59 4
+.agents/skills/lg-coolify-operations/SKILL.md
+  s_7dc6f4ce9b50dd::t_ee39b7f83d4373 2
+.agents/skills/lg-create-task/SKILL.md
+  s_7dc6f4ce9b50dd::t_ea4a02ee70ec1b 1-36
+.agents/skills/lg-create-task/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_13c4f642050c90 1-4
+.agents/skills/lg-create-task/assets/task.md
+  s_7dc6f4ce9b50dd::t_d3a9e5c2817303 1-55
+.agents/skills/lg-domain/SKILL.md
+  s_7dc6f4ce9b50dd::t_c5363b144d719e 2,33-35
+.agents/skills/lg-domain/agents/agent.yaml
+  s_7dc6f4ce9b50dd::t_c050b53c01388c 4
+.agents/skills/lg-implement/SKILL.md
+  s_7dc6f4ce9b50dd::t_7e19f5135ec572 1-40
+.agents/skills/lg-implement/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_2d1a5c15e0ee70 1-4
+.agents/skills/lg-investigate/SKILL.md
+  s_7dc6f4ce9b50dd::t_afb3e2ccd3438a 1-18
+.agents/skills/lg-investigate/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_07b43209e7dabe 1-4
+.agents/skills/lg-ios-localhost/SKILL.md
+  s_7dc6f4ce9b50dd::t_01f70ec7b11e29 2,8,12,25-26,34-38,57
+.agents/skills/lg-ios-localhost/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_e36aa42bd4838d 4
+.agents/skills/lg-ios-production/SKILL.md
+  s_7dc6f4ce9b50dd::t_7a9f5c1dcd58a4 2,8,10
+.agents/skills/lg-ios-production/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_644f0de9be0242 4
+.agents/skills/lg-ios-screenshots
+  s_7dc6f4ce9b50dd::t_5cdfbfed3de3e6 1
+.agents/skills/lg-ios-swift/SKILL.md
+  s_7dc6f4ce9b50dd::t_e1d391b5946197 1-20
+.agents/skills/lg-ios-swift/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_d8a63169ad2255 1-4
+.agents/skills/lg-ios-test-notifications/SKILL.md
+  s_7dc6f4ce9b50dd::t_ee726cc2372434 2
+.agents/skills/lg-ios-test-notifications/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_250732519bc807 4
+.agents/skills/lg-refine/SKILL.md
+  s_7dc6f4ce9b50dd::t_77eedc51b00b8a 1-37
+.agents/skills/lg-refine/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_82595e0fdda9e1 1-4
+.agents/skills/lg-review/SKILL.md
+  s_7dc6f4ce9b50dd::t_a242f4c35d841a 1-18
+.agents/skills/lg-review/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_bbbb1e35ba8ad9 1-4
+.agents/skills/lg-verify/SKILL.md
+  s_7dc6f4ce9b50dd::t_eccff2dc299114 1-26
+.agents/skills/lg-verify/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_5971dcffa58ed4 1-4
+.agents/skills/lg-verify/references/ios.md
+  s_7dc6f4ce9b50dd::t_215a0f8015bf66 1-21
+AGENTS.md
+  s_7dc6f4ce9b50dd::t_78ddcf0d6e5dda 7-8,23,25
+backend/AGENTS.md
+  s_7dc6f4ce9b50dd::t_d754762a1ae3e3 18
+docs/agent-tooling.md
+  s_7dc6f4ce9b50dd::t_f03a34f1c966be 14-20
+docs/agents/human-review.md
+  s_7dc6f4ce9b50dd::t_f833df9b009eaa 1-18
+docs/agents/ios-workflows.md
+  s_7dc6f4ce9b50dd::t_4cb54b3b459f7e 5-10
+docs/agents/review.md
+  s_7dc6f4ce9b50dd::t_a7a3180fbbb1d0 1-19
+docs/agents/task-workflow.md
+  s_7dc6f4ce9b50dd::t_47b7b36d6c58cd 1-43
+docs/ios-localization-inventory.md
+  s_7dc6f4ce9b50dd::t_1d2e0ef0ab3556 25,124,132,136,143,148,153
+ios-app/.agents/skills/lg-architecture
+  s_7dc6f4ce9b50dd::t_984b4a8c7a2b6a 1
+ios-app/.agents/skills/lg-commit-and-push
+  s_7dc6f4ce9b50dd::t_1e479f16002945 1
+ios-app/.agents/skills/lg-domain
+  s_7dc6f4ce9b50dd::t_2e6b87c8369c66 1
+ios-app/.agents/skills/lg-ios-design-system/SKILL.md
+  s_7dc6f4ce9b50dd::t_84427306a5cd2a 2
+ios-app/.agents/skills/lg-ios-design-system/agents/agent.yaml
+  s_7dc6f4ce9b50dd::t_9cb7efee1bbc3c 4
+ios-app/.agents/skills/lg-ios-design-system/references/design-system.md
+  s_7dc6f4ce9b50dd::t_e0b7375e5e53b2 8
+ios-app/.agents/skills/lg-ios-login/SKILL.md
+  s_7dc6f4ce9b50dd::t_083214052a5766 2
+ios-app/.agents/skills/lg-ios-login/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_2235b84770c3c9 4
+ios-app/.agents/skills/lg-ios-run-simulator/SKILL.md
+  s_7dc6f4ce9b50dd::t_ea2a6f7c0c8093 2,8,25
+ios-app/.agents/skills/lg-ios-run-simulator/agents/openai.yaml
+  s_7dc6f4ce9b50dd::t_e3cd4f0c50bc1e 4
+ios-app/.agents/skills/lg-ios-screenshots/SKILL.md
+  s_7dc6f4ce9b50dd::t_a16f23f5f79eb8 2
+ios-app/.agents/skills/lg-ios-sync-openapi/SKILL.md
+  s_7dc6f4ce9b50dd::t_ae3fe37a9298f8 2,57
+ios-app/.maestro/README.md
+  s_7dc6f4ce9b50dd::t_eb7bd42bd17f7d 5
+ios-app/AGENTS.md
+  s_7dc6f4ce9b50dd::t_fc53901870e8fd 19-20
+ios-app/Docs/SETUP.md
+  s_7dc6f4ce9b50dd::t_b248574c11d8ef 7
+ios-app/Docs/agent-harness.md
+  s_7dc6f4ce9b50dd::t_224501dce716b3 3-9,15-22,38,70-71,109-116
+ios-app/Docs/agents/feature-workflow.md
+  s_7dc6f4ce9b50dd::t_882317a5b41ce1 1-70
+ios-app/Docs/agents/product-language.md
+  s_7dc6f4ce9b50dd::t_a6182c3204931e 14
+ios-app/Docs/agents/review.md
+  s_7dc6f4ce9b50dd::t_ad58d4b3490e3c 1-18
+ios-app/Docs/agents/simulator.md
+  s_7dc6f4ce9b50dd::t_5fc17d5aada9dc 7,10,13,24
+ios-app/Docs/agents/swift.md
+  s_7dc6f4ce9b50dd::t_4343d8d49bf16a 1-50
+ios-app/Docs/agents/testing.md
+  s_7dc6f4ce9b50dd::t_f30a107b387e78 6
+ios-app/Docs/agents/visual-review.md
+  s_7dc6f4ce9b50dd::t_e5ccc963edc156 8
+ios-app/Docs/local-testing.md
+  s_7dc6f4ce9b50dd::t_46bd9a48900a14 12,17,20
+ios-app/Docs/localization.md
+  s_7dc6f4ce9b50dd::t_bae692902a93cb 104
+ios-app/Feedback.xcodeproj/project.pbxproj
+  s_7dc6f4ce9b50dd::t_da4257335ad1ab 130-132,293,300,319,326,349-350,352-354
+ios-app/README.md
+  s_7dc6f4ce9b50dd::t_ec613006442cab 70-72,77
+ios-app/scripts/screenshots
+  s_7dc6f4ce9b50dd::t_9aa4901ead96cc 19
+tasks/README.md
+  s_7dc6f4ce9b50dd::t_3937e6b60ecbd9 1-21
+tasks/ios-localization.md
+  s_7dc6f4ce9b50dd::t_d5346584806b43 1-183,187,189,197,206,221,223,244,264,291,295,331,338,356,366,376,381-399
+tasks/ios-manager-events-sync-bar.md
+  s_7dc6f4ce9b50dd::t_370c753baece64 1-6,8-25,28,33,37,42,49,56,59,62-98
+tasks/ios-screen-catalog.md
+  s_7dc6f4ce9b50dd::t_12d1a8b6ba9e85 1-21,30,33-65
+tasks/shared-error-messages.md
+  s_7dc6f4ce9b50dd::t_db686046872ed9 1-154
+tasks/shared-ios-maestro-e2e.md
+  s_7dc6f4ce9b50dd::t_44d3d823e366a6 1-38,42,54,62,72,90,99,135-139,164-168,200-204,237-241,257-261,276-280,299,312,319-337
+tasks/tooling-implementation-human-review.md
+  s_7dc6f4ce9b50dd::t_250d2ed1637d73 1-70
+web/AGENTS.md
+  s_7dc6f4ce9b50dd::t_1d90266bcc89ae 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b4bac6afdf90e782c42d45ce58b8932c67b2d2df",
+  "prompts": {},
+  "sessions": {
+    "s_7dc6f4ce9b50dd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b058-96f9-7a31-865e-124fd8b27f37",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
