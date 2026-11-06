@@ -36,88 +36,2207 @@
     { "path": "<PRODUCTS>/SnapshotHost.app", "id": "AA2026102700000000000006", "type": "wrapper.application" },
     {
       "kind": "group",
-      "path": ".agents",
+      "name": "Repository guidance",
+      "path": "<PROJECT>/..",
       "children": [
         {
           "kind": "group",
-          "path": "hooks",
+          "path": ".agents",
           "children": [
-            { "path": "swiftlint-fix-changed.sh" },
-          ],
-        }, {
+            {
+              "path": "config.toml"
+            },
+            {
+              "kind": "group",
+              "path": "skills",
+              "children": [
+                {
+                  "kind": "group",
+                  "path": "lg-architecture",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "agent.yaml"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "references",
+                      "children": [
+                        {
+                          "path": "project-overview.md"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-commit-and-push",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "agent.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-coolify-operations",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-create-task",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "assets",
+                      "children": [
+                        {
+                          "path": "task.md"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-domain",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "agent.yaml"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "references",
+                      "children": [
+                        {
+                          "path": "audience-positioning.md"
+                        },
+                        {
+                          "path": "domain-language.md"
+                        },
+                        {
+                          "path": "messaging-commercial.md"
+                        },
+                        {
+                          "path": "product-ux-guidance.md"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-implement",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-investigate",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-ios-localhost",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-ios-production",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-ios-swift",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-ios-test-notifications",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-refine",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-review",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "lg-verify",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "openai.yaml"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "references",
+                      "children": [
+                        {
+                          "path": "ios.md"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "ux-designer",
+                  "children": [
+                    {
+                      "path": "AGENTS.md"
+                    },
+                    {
+                      "path": "SKILL.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "agents",
+                      "children": [
+                        {
+                          "path": "agent.yaml"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "references",
+                      "children": [
+                        {
+                          "path": "complete-guide.md"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "rules",
+                      "children": [
+                        {
+                          "path": "accessibility.md"
+                        },
+                        {
+                          "path": "information-architecture.md"
+                        },
+                        {
+                          "path": "interaction-design.md"
+                        },
+                        {
+                          "path": "research.md"
+                        },
+                        {
+                          "path": "visual-design.md"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
           "kind": "group",
-          "path": "scripts",
+          "path": ".codex",
           "children": [
-            { "path": "allow_xcode_mcp.js" },
-          ],
-        }, {
+            {
+              "path": "config.toml"
+            }
+          ]
+        },
+        {
+          "path": "AGENTS.md"
+        },
+        {
+          "path": "README.md"
+        },
+        {
           "kind": "group",
-          "path": "skills",
+          "path": "backend",
+          "children": [
+            {
+              "path": "AGENTS.md"
+            },
+            {
+              "path": "README.md"
+            },
+            {
+              "kind": "group",
+              "path": "docs",
+              "children": [
+                {
+                  "kind": "group",
+                  "path": "agents",
+                  "children": [
+                    {
+                      "path": "api-contract.md"
+                    },
+                    {
+                      "path": "architecture.md"
+                    },
+                    {
+                      "path": "persistence.md"
+                    },
+                    {
+                      "path": "runtime.md"
+                    },
+                    {
+                      "path": "validation.md"
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "diagrams",
+                  "children": [
+                    {
+                      "path": "not.puml"
+                    }
+                  ]
+                },
+                {
+                  "path": "overview.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "path": "docs",
+          "children": [
+            {
+              "path": "agent-tooling.md"
+            },
+            {
+              "kind": "group",
+              "path": "agents",
+              "children": [
+                {
+                  "path": "api-contract.md"
+                },
+                {
+                  "path": "browser-access.md"
+                },
+                {
+                  "path": "ci-cd.md"
+                },
+                {
+                  "path": "human-review.md"
+                },
+                {
+                  "path": "ios-workflows.md"
+                },
+                {
+                  "path": "refactor-review.md"
+                },
+                {
+                  "path": "repository-scope.md"
+                },
+                {
+                  "path": "review.md"
+                },
+                {
+                  "path": "runtime-and-deployment.md"
+                },
+                {
+                  "path": "task-workflow.md"
+                }
+              ]
+            },
+            {
+              "kind": "group",
+              "path": "deployment",
+              "children": [
+                {
+                  "path": "coolify.md"
+                }
+              ]
+            },
+            {
+              "path": "ios-localization-conventions.md"
+            },
+            {
+              "path": "ios-localization-inventory.md"
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "path": "ios-app",
           "children": [
             {
               "kind": "group",
-              "path": "lg-ios-design-system",
+              "path": ".agents",
               "children": [
                 {
-                  "kind": "group",
-                  "path": "agents",
-                  "children": [
-                    { "path": "agent.yaml" },
-                  ],
-                }, {
-                  "kind": "group",
-                  "path": "references",
-                  "children": [
-                    { "path": "design-system.md" },
-                  ],
+                  "path": "config.toml"
                 },
-                { "path": "SKILL.md" },
-              ],
-            }, {
-              "kind": "group",
-              "path": "lg-ios-sync-openapi",
-              "children": [
                 {
                   "kind": "group",
-                  "path": "agents",
+                  "path": "hooks",
                   "children": [
-                    { "path": "agent.yaml" },
-                  ],
-                }, {
-                  "kind": "group",
-                  "path": "scripts",
-                  "children": [
-                    { "path": "inventory_openapi_domain_sync.py" },
-                  ],
+                    {
+                      "path": "swiftlint-fix-changed.sh"
+                    }
+                  ]
                 },
-                { "path": "SKILL.md" },
-              ],
-            }, {
-              "kind": "group",
-              "path": "maestro-mobile-testing",
-              "children": [
+                {
+                  "path": "hooks.json"
+                },
                 {
                   "kind": "group",
-                  "path": "agents",
+                  "path": "skills",
                   "children": [
-                    { "path": "agent.yaml" },
-                  ],
-                },
-                { "path": "SKILL.md" },
-              ],
+                    {
+                      "kind": "group",
+                      "path": "lg-ios-design-system",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "references",
+                          "children": [
+                            {
+                              "path": "design-system.md"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "lg-ios-login",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "openai.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "scripts",
+                          "children": [
+                            {
+                              "path": "login_token.py"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "lg-ios-run-simulator",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "openai.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "lg-ios-screenshots",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "lg-ios-sync-openapi",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "scripts",
+                          "children": [
+                            {
+                              "path": "inventory_openapi_domain_sync.py"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "maestro-mobile-testing",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             },
-            { "path": "lg-architecture" },
-            { "path": "lg-commit-and-push" },
-            { "path": "lg-domain" },
-            { "path": "ux-designer" },
-          ],
+            {
+              "path": "AGENTS.md"
+            },
+            {
+              "kind": "group",
+              "path": "Docs",
+              "children": [
+                {
+                  "path": "ARCHITECTURE.md"
+                },
+                {
+                  "path": "CONFIGURATION.md"
+                },
+                {
+                  "path": "NOTIFICATIONS.md"
+                },
+                {
+                  "path": "SETUP.md"
+                },
+                {
+                  "path": "agent-harness.md"
+                },
+                {
+                  "kind": "group",
+                  "path": "agents",
+                  "children": [
+                    {
+                      "path": "api-contract.md"
+                    },
+                    {
+                      "path": "architecture.md"
+                    },
+                    {
+                      "path": "feature-workflow.md"
+                    },
+                    {
+                      "path": "product-language.md"
+                    },
+                    {
+                      "path": "review.md"
+                    },
+                    {
+                      "path": "simulator.md"
+                    },
+                    {
+                      "path": "swift.md"
+                    },
+                    {
+                      "path": "testing.md"
+                    },
+                    {
+                      "path": "ui.md"
+                    },
+                    {
+                      "path": "visual-review.md"
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "features",
+                  "children": [
+                    {
+                      "path": "create-activity.md"
+                    },
+                    {
+                      "path": "insights.md"
+                    },
+                    {
+                      "path": "overview.md"
+                    }
+                  ]
+                },
+                {
+                  "path": "local-testing.md"
+                },
+                {
+                  "path": "localization.md"
+                },
+                {
+                  "kind": "group",
+                  "path": "push_notifications",
+                  "children": [
+                    {
+                      "path": "README.md"
+                    },
+                    {
+                      "path": "new_feedback_received.apns"
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
+                  "path": "screenshots",
+                  "children": [
+                    {
+                      "path": "README.md"
+                    },
+                    {
+                      "kind": "group",
+                      "path": "catalog",
+                      "children": [
+                        {
+                          "path": "account-type.manager.png"
+                        },
+                        {
+                          "path": "account-type.participant.png"
+                        },
+                        {
+                          "path": "account-type.saving.png"
+                        },
+                        {
+                          "path": "account-type.unselected.png"
+                        },
+                        {
+                          "path": "activities.empty.png"
+                        },
+                        {
+                          "path": "activities.populated.png"
+                        },
+                        {
+                          "path": "activity-detail.no-feedback.png"
+                        },
+                        {
+                          "path": "activity-detail.no-sessions.png"
+                        },
+                        {
+                          "path": "activity-detail.populated.png"
+                        },
+                        {
+                          "path": "activity.all-sessions.png"
+                        },
+                        {
+                          "path": "activity.delete-confirmation-loading.png"
+                        },
+                        {
+                          "path": "activity.delete-confirmation.png"
+                        },
+                        {
+                          "path": "activity.how-it-works.png"
+                        },
+                        {
+                          "path": "create-activity.custom-empty.png"
+                        },
+                        {
+                          "path": "create-activity.details.png"
+                        },
+                        {
+                          "path": "create-activity.empty.png"
+                        },
+                        {
+                          "path": "create-activity.questions.png"
+                        },
+                        {
+                          "path": "create-activity.saving.png"
+                        },
+                        {
+                          "path": "create-activity.template-selected.png"
+                        },
+                        {
+                          "path": "create-activity.templates.full-content.png"
+                        },
+                        {
+                          "path": "create-activity.templates.png"
+                        },
+                        {
+                          "path": "create-session.all-day.png"
+                        },
+                        {
+                          "path": "create-session.custom-duration.full-content.png"
+                        },
+                        {
+                          "path": "create-session.custom-duration.png"
+                        },
+                        {
+                          "path": "create-session.saving.png"
+                        },
+                        {
+                          "path": "create-session.scheduled.png"
+                        },
+                        {
+                          "path": "create-session.start-now.png"
+                        },
+                        {
+                          "path": "create-session.success.png"
+                        },
+                        {
+                          "path": "edit-activity.full-content.png"
+                        },
+                        {
+                          "path": "edit-activity.populated.png"
+                        },
+                        {
+                          "path": "edit-activity.saving.png"
+                        },
+                        {
+                          "path": "edit-activity.templates.png"
+                        },
+                        {
+                          "path": "edit-profile.empty.png"
+                        },
+                        {
+                          "path": "edit-profile.populated.png"
+                        },
+                        {
+                          "path": "edit-profile.saving.png"
+                        },
+                        {
+                          "path": "edit-session.populated.png"
+                        },
+                        {
+                          "path": "feedback-code.anonymous.png"
+                        },
+                        {
+                          "path": "feedback-code.empty.png"
+                        },
+                        {
+                          "path": "feedback-code.loading.png"
+                        },
+                        {
+                          "path": "feedback-code.partial.png"
+                        },
+                        {
+                          "path": "feedback-code.ready.png"
+                        },
+                        {
+                          "path": "feedback.comment.empty.png"
+                        },
+                        {
+                          "path": "feedback.comment.populated.png"
+                        },
+                        {
+                          "path": "feedback.emoji.comment.png"
+                        },
+                        {
+                          "path": "feedback.emoji.happy.png"
+                        },
+                        {
+                          "path": "feedback.emoji.sad.png"
+                        },
+                        {
+                          "path": "feedback.emoji.unanswered.png"
+                        },
+                        {
+                          "path": "feedback.emoji.very-happy.png"
+                        },
+                        {
+                          "path": "feedback.emoji.very-sad.png"
+                        },
+                        {
+                          "path": "feedback.event-info.png"
+                        },
+                        {
+                          "path": "feedback.middle-question.png"
+                        },
+                        {
+                          "path": "feedback.opinion.agree.png"
+                        },
+                        {
+                          "path": "feedback.opinion.disagree.png"
+                        },
+                        {
+                          "path": "feedback.opinion.neutral.png"
+                        },
+                        {
+                          "path": "feedback.opinion.strongly-agree.png"
+                        },
+                        {
+                          "path": "feedback.opinion.strongly-disagree.png"
+                        },
+                        {
+                          "path": "feedback.opinion.unanswered.png"
+                        },
+                        {
+                          "path": "feedback.preview-mode.png"
+                        },
+                        {
+                          "path": "feedback.rating-prompt.png"
+                        },
+                        {
+                          "path": "feedback.rating.comment.png"
+                        },
+                        {
+                          "path": "feedback.rating.default.png"
+                        },
+                        {
+                          "path": "feedback.rating.high.png"
+                        },
+                        {
+                          "path": "feedback.rating.low.png"
+                        },
+                        {
+                          "path": "feedback.submitting.png"
+                        },
+                        {
+                          "path": "feedback.success.png"
+                        },
+                        {
+                          "path": "feedback.thumbs.comment.png"
+                        },
+                        {
+                          "path": "feedback.thumbs.down.png"
+                        },
+                        {
+                          "path": "feedback.thumbs.unanswered.png"
+                        },
+                        {
+                          "path": "feedback.thumbs.up.png"
+                        },
+                        {
+                          "path": "home.anonymous.png"
+                        },
+                        {
+                          "path": "home.empty.png"
+                        },
+                        {
+                          "path": "home.full-content.png"
+                        },
+                        {
+                          "path": "home.next-session-ready.png"
+                        },
+                        {
+                          "path": "home.offline.png"
+                        },
+                        {
+                          "path": "home.participant.png"
+                        },
+                        {
+                          "path": "home.populated.png"
+                        },
+                        {
+                          "path": "home.refresh-error.png"
+                        },
+                        {
+                          "path": "home.server-error.png"
+                        },
+                        {
+                          "path": "home.up-to-date.png"
+                        },
+                        {
+                          "path": "join-session.empty.png"
+                        },
+                        {
+                          "path": "join-session.loading.png"
+                        },
+                        {
+                          "path": "join-session.partial.png"
+                        },
+                        {
+                          "path": "join-session.ready.png"
+                        },
+                        {
+                          "path": "join-session.success.png"
+                        },
+                        {
+                          "path": "legacy.onboarding.first-activity.png"
+                        },
+                        {
+                          "path": "legacy.onboarding.intro.png"
+                        },
+                        {
+                          "path": "notifications.empty.png"
+                        },
+                        {
+                          "path": "notifications.permission.png"
+                        },
+                        {
+                          "path": "notifications.read.png"
+                        },
+                        {
+                          "path": "notifications.unread.png"
+                        },
+                        {
+                          "path": "participant-sessions.available.png"
+                        },
+                        {
+                          "path": "participant-sessions.empty.png"
+                        },
+                        {
+                          "path": "participant-sessions.expired.png"
+                        },
+                        {
+                          "path": "participant-sessions.loading.png"
+                        },
+                        {
+                          "path": "participant-sessions.submitted.png"
+                        },
+                        {
+                          "path": "participant.start-feedback-confirmation.png"
+                        },
+                        {
+                          "path": "profile.anonymous.png"
+                        },
+                        {
+                          "path": "profile.full-content.png"
+                        },
+                        {
+                          "path": "profile.manager.png"
+                        },
+                        {
+                          "path": "profile.participant.png"
+                        },
+                        {
+                          "path": "question-editor.comment.png"
+                        },
+                        {
+                          "path": "question-editor.edit.png"
+                        },
+                        {
+                          "path": "question-editor.empty.png"
+                        },
+                        {
+                          "path": "question-editor.long-text.png"
+                        },
+                        {
+                          "path": "question-editor.thumbs.png"
+                        },
+                        {
+                          "path": "questions.answer-type-help.full-content.png"
+                        },
+                        {
+                          "path": "questions.answer-type-help.png"
+                        },
+                        {
+                          "path": "questions.empty.png"
+                        },
+                        {
+                          "path": "questions.populated.png"
+                        },
+                        {
+                          "path": "session-detail.expired.png"
+                        },
+                        {
+                          "path": "session-detail.feedback.png"
+                        },
+                        {
+                          "path": "session-detail.full-content.png"
+                        },
+                        {
+                          "path": "session-detail.no-feedback.png"
+                        },
+                        {
+                          "path": "session-detail.unavailable.png"
+                        },
+                        {
+                          "path": "session-results.comment.answered.png"
+                        },
+                        {
+                          "path": "session-results.comment.empty.png"
+                        },
+                        {
+                          "path": "session-results.emoji.answered.png"
+                        },
+                        {
+                          "path": "session-results.emoji.empty.png"
+                        },
+                        {
+                          "path": "session-results.opinion.answered.png"
+                        },
+                        {
+                          "path": "session-results.opinion.empty.png"
+                        },
+                        {
+                          "path": "session-results.rating.answered.png"
+                        },
+                        {
+                          "path": "session-results.rating.empty.png"
+                        },
+                        {
+                          "path": "session-results.thumbs.answered.png"
+                        },
+                        {
+                          "path": "session-results.thumbs.empty.png"
+                        },
+                        {
+                          "path": "session.delete-confirmation-loading.png"
+                        },
+                        {
+                          "path": "session.delete-confirmation.png"
+                        },
+                        {
+                          "path": "session.feedback-comments.png"
+                        },
+                        {
+                          "path": "session.invite-unavailable.png"
+                        },
+                        {
+                          "path": "session.invite.png"
+                        },
+                        {
+                          "path": "settings.anonymous.png"
+                        },
+                        {
+                          "path": "settings.deleting-account.png"
+                        },
+                        {
+                          "path": "settings.full-content.png"
+                        },
+                        {
+                          "path": "settings.manager.png"
+                        },
+                        {
+                          "path": "settings.notifications-enabled.png"
+                        },
+                        {
+                          "path": "settings.participant.png"
+                        },
+                        {
+                          "path": "settings.saving.png"
+                        },
+                        {
+                          "path": "sign-in.apple-loading.png"
+                        },
+                        {
+                          "path": "sign-in.error.png"
+                        },
+                        {
+                          "path": "sign-in.google-loading.png"
+                        },
+                        {
+                          "path": "sign-in.ready.png"
+                        },
+                        {
+                          "path": "startup.error.png"
+                        },
+                        {
+                          "path": "startup.loading.png"
+                        },
+                        {
+                          "path": "startup.retrying.png"
+                        },
+                        {
+                          "path": "unread-feedback.empty.png"
+                        },
+                        {
+                          "path": "unread-feedback.populated.png"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "screenshot_1.jpg"
+                    },
+                    {
+                      "path": "screenshot_2.jpg"
+                    },
+                    {
+                      "path": "screenshot_3.jpg"
+                    },
+                    {
+                      "path": "screenshot_4.jpg"
+                    },
+                    {
+                      "path": "screenshot_5.jpg"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "README.md"
+            }
+          ]
         },
-        { "path": "config.toml" },
-        { "path": "hooks.json" },
-      ],
+        {
+          "kind": "group",
+          "path": "tasks",
+          "children": [
+            {
+              "path": "README.md"
+            },
+            {
+              "path": "ios-manager-events-sync-bar.md"
+            },
+            {
+              "path": "shared-error-messages.md"
+            },
+            {
+              "path": "shared-ios-maestro-e2e.md"
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "path": "web",
+          "children": [
+            {
+              "kind": "group",
+              "path": ".agents",
+              "children": [
+                {
+                  "path": "config.toml"
+                },
+                {
+                  "kind": "group",
+                  "path": "skills",
+                  "children": [
+                    {
+                      "kind": "group",
+                      "path": "agent-browser",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "references",
+                          "children": [
+                            {
+                              "path": "authentication.md"
+                            },
+                            {
+                              "path": "commands.md"
+                            },
+                            {
+                              "path": "proxy-support.md"
+                            },
+                            {
+                              "path": "session-management.md"
+                            },
+                            {
+                              "path": "snapshot-refs.md"
+                            },
+                            {
+                              "path": "video-recording.md"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "templates",
+                          "children": [
+                            {
+                              "path": "authenticated-session.sh"
+                            },
+                            {
+                              "path": "capture-workflow.sh"
+                            },
+                            {
+                              "path": "form-automation.sh"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "email-best-practices",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "resources",
+                          "children": [
+                            {
+                              "path": "compliance.md"
+                            },
+                            {
+                              "path": "deliverability.md"
+                            },
+                            {
+                              "path": "email-capture.md"
+                            },
+                            {
+                              "path": "email-types.md"
+                            },
+                            {
+                              "path": "list-management.md"
+                            },
+                            {
+                              "path": "marketing-emails.md"
+                            },
+                            {
+                              "path": "sending-reliability.md"
+                            },
+                            {
+                              "path": "transactional-email-catalog.md"
+                            },
+                            {
+                              "path": "transactional-emails.md"
+                            },
+                            {
+                              "path": "webhooks-events.md"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "tests",
+                          "children": [
+                            {
+                              "kind": "group",
+                              "path": "scenarios",
+                              "children": [
+                                {
+                                  "path": "01-spam-deliverability.md"
+                                },
+                                {
+                                  "path": "02-multi-region-compliance.md"
+                                },
+                                {
+                                  "path": "03-retry-idempotency.md"
+                                },
+                                {
+                                  "path": "04-webhook-bounce-handling.md"
+                                },
+                                {
+                                  "path": "05-new-saas-email-plan.md"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "find-skills",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "frontend-design",
+                      "children": [
+                        {
+                          "path": "LICENSE.txt"
+                        },
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "marketing-psychology",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "next-best-practices",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "async-patterns.md"
+                        },
+                        {
+                          "path": "bundling.md"
+                        },
+                        {
+                          "path": "data-patterns.md"
+                        },
+                        {
+                          "path": "debug-tricks.md"
+                        },
+                        {
+                          "path": "directives.md"
+                        },
+                        {
+                          "path": "error-handling.md"
+                        },
+                        {
+                          "path": "file-conventions.md"
+                        },
+                        {
+                          "path": "font.md"
+                        },
+                        {
+                          "path": "functions.md"
+                        },
+                        {
+                          "path": "hydration-error.md"
+                        },
+                        {
+                          "path": "image.md"
+                        },
+                        {
+                          "path": "metadata.md"
+                        },
+                        {
+                          "path": "parallel-routes.md"
+                        },
+                        {
+                          "path": "route-handlers.md"
+                        },
+                        {
+                          "path": "rsc-boundaries.md"
+                        },
+                        {
+                          "path": "runtime-selection.md"
+                        },
+                        {
+                          "path": "scripts.md"
+                        },
+                        {
+                          "path": "self-hosting.md"
+                        },
+                        {
+                          "path": "suspense-boundaries.md"
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "next-cache-components",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "next-upgrade",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "playwright-cli",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "references",
+                          "children": [
+                            {
+                              "path": "request-mocking.md"
+                            },
+                            {
+                              "path": "running-code.md"
+                            },
+                            {
+                              "path": "session-management.md"
+                            },
+                            {
+                              "path": "storage-state.md"
+                            },
+                            {
+                              "path": "test-generation.md"
+                            },
+                            {
+                              "path": "tracing.md"
+                            },
+                            {
+                              "path": "video-recording.md"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "seo-audit",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "references",
+                          "children": [
+                            {
+                              "path": "aeo-geo-patterns.md"
+                            },
+                            {
+                              "path": "ai-writing-detection.md"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "shadcn",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            },
+                            {
+                              "path": "openai.yml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "assets",
+                          "children": [
+                            {
+                              "path": "shadcn-small.png"
+                            },
+                            {
+                              "path": "shadcn.png"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "cli.md"
+                        },
+                        {
+                          "path": "customization.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "evals",
+                          "children": [
+                            {
+                              "path": "evals.json"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "mcp.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "rules",
+                          "children": [
+                            {
+                              "path": "base-vs-radix.md"
+                            },
+                            {
+                              "path": "composition.md"
+                            },
+                            {
+                              "path": "forms.md"
+                            },
+                            {
+                              "path": "icons.md"
+                            },
+                            {
+                              "path": "styling.md"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "tailwind-nextjs-expert",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "ui-ux-pro-max",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "data",
+                          "children": [
+                            {
+                              "path": "_sync_all.py"
+                            },
+                            {
+                              "path": "app-interface.csv"
+                            },
+                            {
+                              "path": "charts.csv"
+                            },
+                            {
+                              "path": "colors.csv"
+                            },
+                            {
+                              "path": "design.csv"
+                            },
+                            {
+                              "path": "draft.csv"
+                            },
+                            {
+                              "path": "google-fonts.csv"
+                            },
+                            {
+                              "path": "icons.csv"
+                            },
+                            {
+                              "path": "landing.csv"
+                            },
+                            {
+                              "path": "products.csv"
+                            },
+                            {
+                              "path": "react-performance.csv"
+                            },
+                            {
+                              "kind": "group",
+                              "path": "stacks",
+                              "children": [
+                                {
+                                  "path": "react-native.csv"
+                                }
+                              ]
+                            },
+                            {
+                              "path": "styles.csv"
+                            },
+                            {
+                              "path": "typography.csv"
+                            },
+                            {
+                              "path": "ui-reasoning.csv"
+                            },
+                            {
+                              "path": "ux-guidelines.csv"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "scripts",
+                          "children": [
+                            {
+                              "path": "core.py"
+                            },
+                            {
+                              "path": "design_system.py"
+                            },
+                            {
+                              "path": "search.py"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "vercel-composition-patterns",
+                      "children": [
+                        {
+                          "path": "AGENTS.md"
+                        },
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "references",
+                          "children": [
+                            {
+                              "path": "architecture.md"
+                            },
+                            {
+                              "path": "complete-guide.md"
+                            },
+                            {
+                              "path": "patterns.md"
+                            },
+                            {
+                              "path": "react19.md"
+                            },
+                            {
+                              "path": "state.md"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "rules",
+                          "children": [
+                            {
+                              "path": "architecture-avoid-boolean-props.md"
+                            },
+                            {
+                              "path": "architecture-compound-components.md"
+                            },
+                            {
+                              "path": "patterns-children-over-render-props.md"
+                            },
+                            {
+                              "path": "patterns-explicit-variants.md"
+                            },
+                            {
+                              "path": "react19-no-forwardref.md"
+                            },
+                            {
+                              "path": "state-context-interface.md"
+                            },
+                            {
+                              "path": "state-decouple-implementation.md"
+                            },
+                            {
+                              "path": "state-lift-state.md"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "vercel-react-best-practices",
+                      "children": [
+                        {
+                          "path": "AGENTS.md"
+                        },
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "references",
+                          "children": [
+                            {
+                              "path": "advanced.md"
+                            },
+                            {
+                              "path": "async.md"
+                            },
+                            {
+                              "path": "bundle.md"
+                            },
+                            {
+                              "path": "client.md"
+                            },
+                            {
+                              "path": "complete-guide.md"
+                            },
+                            {
+                              "path": "js.md"
+                            },
+                            {
+                              "path": "rendering.md"
+                            },
+                            {
+                              "path": "rerender.md"
+                            },
+                            {
+                              "path": "server.md"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "rules",
+                          "children": [
+                            {
+                              "path": "advanced-event-handler-refs.md"
+                            },
+                            {
+                              "path": "advanced-init-once.md"
+                            },
+                            {
+                              "path": "advanced-use-latest.md"
+                            },
+                            {
+                              "path": "async-api-routes.md"
+                            },
+                            {
+                              "path": "async-defer-await.md"
+                            },
+                            {
+                              "path": "async-dependencies.md"
+                            },
+                            {
+                              "path": "async-parallel.md"
+                            },
+                            {
+                              "path": "async-suspense-boundaries.md"
+                            },
+                            {
+                              "path": "bundle-barrel-imports.md"
+                            },
+                            {
+                              "path": "bundle-conditional.md"
+                            },
+                            {
+                              "path": "bundle-defer-third-party.md"
+                            },
+                            {
+                              "path": "bundle-dynamic-imports.md"
+                            },
+                            {
+                              "path": "bundle-preload.md"
+                            },
+                            {
+                              "path": "client-event-listeners.md"
+                            },
+                            {
+                              "path": "client-localstorage-schema.md"
+                            },
+                            {
+                              "path": "client-passive-event-listeners.md"
+                            },
+                            {
+                              "path": "client-swr-dedup.md"
+                            },
+                            {
+                              "path": "js-batch-dom-css.md"
+                            },
+                            {
+                              "path": "js-cache-function-results.md"
+                            },
+                            {
+                              "path": "js-cache-property-access.md"
+                            },
+                            {
+                              "path": "js-cache-storage.md"
+                            },
+                            {
+                              "path": "js-combine-iterations.md"
+                            },
+                            {
+                              "path": "js-early-exit.md"
+                            },
+                            {
+                              "path": "js-hoist-regexp.md"
+                            },
+                            {
+                              "path": "js-index-maps.md"
+                            },
+                            {
+                              "path": "js-length-check-first.md"
+                            },
+                            {
+                              "path": "js-min-max-loop.md"
+                            },
+                            {
+                              "path": "js-set-map-lookups.md"
+                            },
+                            {
+                              "path": "js-tosorted-immutable.md"
+                            },
+                            {
+                              "path": "rendering-activity.md"
+                            },
+                            {
+                              "path": "rendering-animate-svg-wrapper.md"
+                            },
+                            {
+                              "path": "rendering-conditional-render.md"
+                            },
+                            {
+                              "path": "rendering-content-visibility.md"
+                            },
+                            {
+                              "path": "rendering-hoist-jsx.md"
+                            },
+                            {
+                              "path": "rendering-hydration-no-flicker.md"
+                            },
+                            {
+                              "path": "rendering-hydration-suppress-warning.md"
+                            },
+                            {
+                              "path": "rendering-svg-precision.md"
+                            },
+                            {
+                              "path": "rendering-usetransition-loading.md"
+                            },
+                            {
+                              "path": "rerender-defer-reads.md"
+                            },
+                            {
+                              "path": "rerender-dependencies.md"
+                            },
+                            {
+                              "path": "rerender-derived-state-no-effect.md"
+                            },
+                            {
+                              "path": "rerender-derived-state.md"
+                            },
+                            {
+                              "path": "rerender-functional-setstate.md"
+                            },
+                            {
+                              "path": "rerender-lazy-state-init.md"
+                            },
+                            {
+                              "path": "rerender-memo-with-default-value.md"
+                            },
+                            {
+                              "path": "rerender-memo.md"
+                            },
+                            {
+                              "path": "rerender-move-effect-to-event.md"
+                            },
+                            {
+                              "path": "rerender-simple-expression-in-memo.md"
+                            },
+                            {
+                              "path": "rerender-transitions.md"
+                            },
+                            {
+                              "path": "rerender-use-ref-transient-values.md"
+                            },
+                            {
+                              "path": "server-after-nonblocking.md"
+                            },
+                            {
+                              "path": "server-auth-actions.md"
+                            },
+                            {
+                              "path": "server-cache-lru.md"
+                            },
+                            {
+                              "path": "server-cache-react.md"
+                            },
+                            {
+                              "path": "server-dedup-props.md"
+                            },
+                            {
+                              "path": "server-parallel-fetching.md"
+                            },
+                            {
+                              "path": "server-serialization.md"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "web-design-guidelines",
+                      "children": [
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "group",
+                      "path": "webapp-testing",
+                      "children": [
+                        {
+                          "path": "LICENSE.txt"
+                        },
+                        {
+                          "path": "SKILL.md"
+                        },
+                        {
+                          "kind": "group",
+                          "path": "agents",
+                          "children": [
+                            {
+                              "path": "agent.yaml"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "examples",
+                          "children": [
+                            {
+                              "path": "console_logging.py"
+                            },
+                            {
+                              "path": "element_discovery.py"
+                            },
+                            {
+                              "path": "static_html_automation.py"
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "group",
+                          "path": "scripts",
+                          "children": [
+                            {
+                              "path": "with_server.py"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "AGENTS.md"
+            },
+            {
+              "kind": "group",
+              "path": "docs",
+              "children": [
+                {
+                  "kind": "group",
+                  "path": "agents",
+                  "children": [
+                    {
+                      "path": "api-and-auth.md"
+                    },
+                    {
+                      "path": "architecture.md"
+                    },
+                    {
+                      "path": "ui.md"
+                    },
+                    {
+                      "path": "validation.md"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
-    { "path": "README.md" },
-    { "path": "AGENTS.md" },
     { "path": ".swiftlint.yml" },
     { "path": "UnitTests.xctestplan" },
     {

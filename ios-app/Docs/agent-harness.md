@@ -33,6 +33,35 @@ Keep a rule or procedure in its owning file and link to it elsewhere. This page 
 
 Apple documents the conversion and rollback in [Updating your Xcode project configuration file format](https://developer.apple.com/documentation/xcode/updating-your-xcode-project-configuration-file-format). Its [open source format library](https://github.com/apple/xcode-project-format) describes the schema.
 
+### Repository guidance in the navigator
+
+The **Repository guidance** group mirrors paths from the monorepo root:
+root/app `AGENTS.md` and READMEs, `docs/`, `tasks/`, `.agents/`, `.codex/`,
+and the iOS/backend/web documentation and agent directories. Skills appear at
+their canonical filesystem locations; aliases are omitted to avoid duplicate
+trees. Backend and web use `lg-*` aliases matching the root skill names.
+
+These are explicit navigator groups with no target membership. They expose
+checked-in documentation, approved screenshot baselines, skill metadata,
+templates, references, and helpers without adding Sources or Resources.
+Local secrets, untracked files, dependencies, build output, and generated
+screenshots outside those documentation roots are excluded.
+
+After adding guidance files to Git's index, moving files, or removing tasks, run
+from the monorepo root:
+
+```sh
+python3 ios-app/scripts/sync-guidance-navigator.py
+python3 ios-app/scripts/sync-guidance-navigator.py --check
+```
+
+The [refresh helper](../scripts/sync-guidance-navigator.py) reads `git ls-files`,
+skips deleted files and valid aliases, and rejects broken aliases. It only
+rewrites the Repository guidance group; target settings, other file groups,
+schemes, and packages are preserved. New untracked files intentionally remain
+invisible until staged and refreshed. This explicit inventory trades automatic
+folder discovery for control over which repository files Xcode exposes.
+
 GitHub Actions uses the `xcode-27` runner with `latest-stable` Xcode. GitHub's [runner announcement](https://github.blog/changelog/2026-10-15-xcode-27-runner-image-generally-available/) documents the supported label; the previous `macos-26` image provides Xcode 26. Xcode Cloud workflows must select Xcode 27 or later before building this project. Cloud toolchain selection is managed remotely and is not pinned by the checked-in manifest.
 
 ## Xcode MCP setup
