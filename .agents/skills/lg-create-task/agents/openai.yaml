@@ -1,4 +1,4 @@
 interface:
   display_name: "LetsGrow Create Task"
-  short_description: "Write prefixed task plans with phases and handoffs"
-  default_prompt: "Use $lg-create-task to create or update a prefixed task plan in tasks/ with acceptance criteria and verification."
+  short_description: "Capture nontechnical drafts before refinement"
+  default_prompt: "Use $lg-create-task to capture this need as a nontechnical draft in tasks/ for later refinement."

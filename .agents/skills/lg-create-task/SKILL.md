@@ -1,6 +1,6 @@
 ---
 name: lg-create-task
-description: Create or update a LetsGrow task as a self-contained Markdown plan in the root tasks/ directory. Use for capturing upcoming work, writing a refined plan, or preparing a handoff to another agent; large tasks have ordered phases in the same file.
+description: Capture a LetsGrow idea or need as a nontechnical draft in root tasks/. Use for creating tasks before refinement; refinement settles detailed feature requirements and architecture before implementation.
 ---
 
 # Create a LetsGrow task
@@ -15,23 +15,27 @@ Use [the task template](assets/task.md) as the canonical structure. `tasks/READM
 
 ## Fill the structure
 
+The workflow is **create task → refine → implement**. Creation captures the problem, users, desired outcome, and known scope in plain product language. The created task must not contain technical details: no architecture, modules/files, API schemas, data models, migrations, implementation prescriptions, or test commands. Capture enough context to begin refinement without interviewing the user about detailed requirements. Leave missing details explicitly open rather than inventing them. If the request includes technical proposals, link the original source when available and mark them for discussion in refinement without copying them into the draft.
+
+[Refinement](../lg-refine/SKILL.md) then challenges the user on specific feature requirements and technical choices, with most attention on overall architecture, and enriches the same file. The nontechnical restriction applies to creation, not to a refined task: preserve decisions already settled during refinement when updating an existing file. Implementation follows once material requirements and architectural choices are settled.
+
 Preserve the template's frontmatter keys and top-level sections. Replace placeholders with known facts; use `None` or explicit `Unresolved: ...` where appropriate. Do not invent decisions or mark unchecked work complete. Keep detail proportional to the work so a small fix remains a short task.
 
 - `status`: `draft`, `ready`, `in-progress`, or `blocked`. Completed tasks are removed rather than stored with a terminal status.
 - `areas`: one or more of `ios`, `backend`, `web`, `tooling`, `docs`.
 - `created` and `updated`: ISO dates (`YYYY-MM-DD`); preserve `created` on updates.
 - Problem/outcome and scope describe observable behavior and explicit exclusions.
-- Context includes repository-relative code/docs/test paths, current behavior, relevant architecture/API flow, and prerequisites. Another agent must be able to understand it without the originating chat.
-- Decisions distinguish confirmed choices, implementation assumptions, and unresolved material questions. Put dependencies and execution constraints here, including permitted environment/account/fixture actions when relevant. A proposed reset or production mutation in a plan is not authorization to execute it.
+- Context describes current behavior and relevant product context or prerequisites. Include known documentation links when useful; architecture exploration belongs to refinement and detailed code exploration to implementation. Another agent must be able to understand the need without the originating chat.
+- Decisions initially distinguish confirmed product choices, product assumptions, and unresolved scope questions. Refinement adds architectural decisions, rationale/tradeoffs, dependencies, and execution constraints, including permitted environment/account/fixture actions when relevant. A proposed reset or production mutation in a plan is not authorization to execute it.
 - Acceptance criteria use stable `AC-1`, `AC-2`, etc. identifiers and observable results.
-- Implementation plan names the affected modules/files and uses checkboxes for meaningful deliverables. For large work spanning independently verifiable steps, use ordered `### Phase 1 — ...` subsections, each with its outcome, dependencies, implementation items, and verification. Keep a coherent small task as one checklist; do not add ceremonial phases.
-- Verification maps acceptance IDs to preconditions, action/check, and expected result. Include important failure/role cases, test commands or native-tool checks, environment/data needs, and relevant visual review. Record actual results separately from planned checks.
+- Implementation plan is `Pending refinement` at creation. Refinement adds deliverables and architectural direction; implementation adds detailed technical steps after inspecting the code. For large work, use ordered `### Phase 1 — ...` subsections with observable outcomes and dependencies. Keep a small task as one checklist.
+- Verification is `Pending refinement` at creation. Refinement maps acceptance IDs to preconditions, action/check, and expected result. Describe important user-visible failure/role cases and relevant visual expectations. Implementation selects test commands, tools, and environment/data setup. Record actual results separately from planned checks.
 - Human review starts as `Not implemented yet`. Implementation fills it using the [human review guide](../../../docs/agents/human-review.md), with decisions, rationale/tradeoffs, source reading path, and verification limits. It explains the change for a human; it is not a review approval record.
 - Handoff records completed work, verification evidence/artifacts, remaining blockers, and the exact next action. Initial results should say `Not run`.
 
 ## Lifecycle and handoff
 
-Use `draft` for captured ideas or plans with material unknowns. Use `ready` when scope, decisions, acceptance, and verification are actionable. Implementation sets `in-progress`; use `blocked` when a dependency prevents further meaningful progress and record what unblocks it. When all acceptance criteria and required verification are satisfied, prepare the final human-review explanation and actual verification results, then delete the task file. `tasks/` contains unfinished work only: do not keep a `done` file or move it to a completed/archive directory. A completed phase does not finish a task with remaining scope; retain that file and its next action.
+Creation saves `draft` and hands off to refinement, even when the idea seems clear. Use `ready` after refinement has made feature requirements, scope, acceptance, verification, and consequential architectural decisions actionable. Routine implementation details may remain open; material feature or architectural questions keep the task in `draft`. Implementation sets `in-progress`; use `blocked` when a dependency prevents further meaningful progress and record what unblocks it. When all acceptance criteria and required verification are satisfied, prepare the final human-review explanation and actual verification results, then delete the task file. `tasks/` contains unfinished work only: do not keep a `done` file or move it to a completed/archive directory. A completed phase does not finish a task with remaining scope; retain that file and its next action.
 
 Before deletion, move any still-needed architectural or usage documentation into its existing documentation home and update live references to the task so they do not become broken links. Keep the final response self-contained with decisions, source reading links, evidence, and limits rather than linking to the removed file. Git history preserves previously committed task plans. Deletion is part of completing the task and does not require another confirmation; it does not authorize a Git commit or push.
 

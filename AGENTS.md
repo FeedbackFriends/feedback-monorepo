@@ -5,7 +5,7 @@ LetsGrow is a feedback-after-meetings product with a Next.js web app, Kotlin bac
 - Read the nearest app `AGENTS.md` before editing its subtree.
 - Do not commit or push unless the user explicitly asks.
 - Follow existing coding standards and patterns by default. Implementation handoffs should make architectural decisions easy for a human to review; use the [human review guide](docs/agents/human-review.md).
-- Use root `tasks/` for unfinished task management; delete a task file when its acceptance and required verification are complete, after preparing the final human-review handoff; never use GitHub Issues or GitHub Projects for LetsGrow tasks. Refine → save a Markdown task plan → implement. Use the create-task skill for the required structure, including phases for large tasks. Generic issue-refinement workflows must write local task files instead of GitHub issues.
+- Use root `tasks/` for unfinished task management; delete a task file when its acceptance and required verification are complete, after preparing the final human-review handoff; never use GitHub Issues or GitHub Projects for LetsGrow tasks. Create a nontechnical draft task → refine feature requirements and overall architecture with the user → implement. Use the create-task skill for the required structure, including phases for large tasks. Generic issue-refinement workflows must write local task files instead of GitHub issues.
 
 ## Repository commands
 

@@ -11,6 +11,8 @@ Read [root policy](../../../AGENTS.md), the [task workflow](../../../docs/agents
 
 Check readiness, dependencies, acceptance, verification, and handoff. Recheck code references against this checkout. Inspect Git status and preserve unrelated work. Do not create or switch branches without the user's instruction. Read the owning app's `AGENTS.md` before editing each subtree.
 
+Implement the feature requirements and architectural direction settled in refinement. Inspect affected code, callers, and tests, validate the plan against the checkout, and resolve routine details such as affected files, exact API/data changes, migrations, and verification commands. Add technical steps and reading paths to the task. If material feature or architectural choices remain unresolved, return to refinement with the user before dependent implementation. Do not silently replace a refined architectural decision; explain new evidence and settle consequential departures with the user.
+
 Set `in-progress` when starting. Follow phase dependency order; complete each phase's deliverables and checks before marking it complete. Continue through the authorized task without approval gates at phase boundaries. If only one phase is requested, stop there and record the next action.
 
 ## Implement in the owning surface

@@ -18,16 +18,16 @@ updated: YYYY-MM-DD
 
 ## Context
 
-- Current behavior: <code-grounded facts>.
-- Reading path: <repository-relative source, docs, and test paths>.
-- State/API flow and prerequisites: <relevant ownership and dependencies, or None>.
+- Current behavior: <known observable behavior>.
+- Background: <relevant product context or documentation links, or None>.
+- Prerequisites: <product dependencies, or None>.
 
 ## Decisions and open questions
 
-- Confirmed: <settled product/technical choices, or None>.
-- Assumptions: <reasonable implementation assumptions, or None>.
+- Confirmed: <settled product choices or explicit user constraints, or None>.
+- Assumptions: <product assumptions, or None>.
 - Unresolved: <material questions/dependencies, or None>.
-- Execution constraints: <environment, accounts, fixture operations and authorization context, or None>.
+- Refinement: Pending; clarify detailed feature requirements and overall architecture with the user.
 
 ## Acceptance criteria
 
@@ -35,13 +35,11 @@ updated: YYYY-MM-DD
 
 ## Implementation plan
 
-- [ ] <Deliverable, affected modules/files, and dependency order>.
+Pending refinement.
 
 ## Verification
 
-| Acceptance | Preconditions | Action / check | Expected result |
-| --- | --- | --- | --- |
-| AC-1 | <environment, accounts, and data> | <test command or runtime steps> | <observable success> |
+Pending refinement.
 
 ## Human review
 
@@ -52,4 +50,4 @@ Not implemented yet. Implementation will record the change/flow, architectural d
 - Completed: None.
 - Verification results: Not run.
 - Blockers: None.
-- Next action: <precise starting point for the next agent>.
+- Next action: Refine this task with the user: challenge specific feature requirements and settle overall architecture.

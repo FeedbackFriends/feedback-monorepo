@@ -1,11 +1,11 @@
 # Task workflow
 
-Upcoming LetsGrow work lives in root [tasks/](../../tasks/README.md), one Markdown file per task. The flow is **refine → save task plan → implement**. GitHub Issues and Projects are not task-management tools for this repository.
+Upcoming LetsGrow work lives in root [tasks/](../../tasks/README.md), one Markdown file per task. The flow is **create a nontechnical draft task → refine feature requirements and architecture → implement**. GitHub Issues and Projects are not task-management tools for this repository.
 
 | Work | Skill | Saved result |
 | --- | --- | --- |
-| Capture or format a task | [$lg-create-task](../../.agents/skills/lg-create-task/SKILL.md) | Prefixed task file using the canonical template |
-| Resolve scope and decisions | [$lg-refine](../../.agents/skills/lg-refine/SKILL.md) | Code-grounded task with acceptance, verification, and phases when large |
+| Capture or format a task | [$lg-create-task](../../.agents/skills/lg-create-task/SKILL.md) | Nontechnical draft using the canonical template |
+| Resolve scope and decisions | [$lg-refine](../../.agents/skills/lg-refine/SKILL.md) | Task with detailed feature requirements, architectural decisions, acceptance, observable checks, and phases when large |
 | Execute the plan | [$lg-implement](../../.agents/skills/lg-implement/SKILL.md) | Same file tracks progress/evidence while unfinished; removed on full completion |
 | Verify outcomes | [$lg-verify](../../.agents/skills/lg-verify/SKILL.md) | Acceptance evidence and remaining checks |
 | Review changes | [$lg-review](../../.agents/skills/lg-review/SKILL.md) | Concrete findings; task capture only when requested |
@@ -30,11 +30,12 @@ Tests should detect the behavior that can regress. Distinguish a compilation pas
 
 ## Agent handoff
 
-A ready task includes repository-relative reading paths, current behavior, scope, decisions, dependencies, acceptance criteria, implementation steps/phases, and checks. The next agent reads that file first and rechecks its references against the current checkout. Implementation updates the same file with actual results, the exact next action, and a [human review section](human-review.md) that explains architectural decisions, tradeoffs, a source reading path, and verification limits. A concise version appears in the implementation output. Existing coding standards are the default; the agent handles routine convention and correctness checks. A phase boundary is a checkpoint, not an extra approval gate; honor an explicitly requested phase-only scope. Once the whole task meets acceptance and required verification, follow the create-task completion procedure: include a self-contained human review and results in the final response, preserve enduring documentation/update references, and delete the task file. Keep partially completed or blocked tasks; do not retain or archive completed ones.
+Creation saves a nontechnical `draft` describing the need and desired outcome. Refinement grills the user on specific feature requirements and technical choices, focusing on overall architecture, and updates the same file. A ready task includes scope, product and consequential architectural decisions with tradeoffs, dependencies, acceptance criteria, and observable checks. Material feature or architectural questions block readiness; routine coding details do not. The implementing agent validates the refined direction against the checkout and adds detailed implementation steps, source reading paths, and test commands. Implementation updates the same file with actual results, the exact next action, and a [human review section](human-review.md) that explains architectural decisions, tradeoffs, a source reading path, and verification limits. A concise version appears in the implementation output. Existing coding standards are the default; the agent handles routine convention and correctness checks. A phase boundary is a checkpoint, not an extra approval gate; honor an explicitly requested phase-only scope. Once the whole task meets acceptance and required verification, follow the create-task completion procedure: include a self-contained human review and results in the final response, preserve enduring documentation/update references, and delete the task file. Keep partially completed or blocked tasks; do not retain or archive completed ones.
 
 ```text
-$lg-refine Add validation to the session API.
-# Saves tasks/backend-session-validation.md.
+$lg-create-task Add validation to the session API.
+# Saves a nontechnical draft in tasks/backend-session-validation.md.
+$lg-refine tasks/backend-session-validation.md
 $lg-implement tasks/backend-session-validation.md
 
 $lg-refine Let owners duplicate an activity's question setup in iOS.

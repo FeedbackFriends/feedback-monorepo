@@ -2,7 +2,7 @@
 
 All upcoming LetsGrow work lives here, with one Markdown file per task. GitHub Issues and GitHub Projects are not used for task management.
 
-The flow is **refine task → save the task plan here → implement the task**. The saved file is the handoff between sessions or agents.
+The flow is **create a nontechnical draft task → refine feature requirements and overall architecture with the user → implement the task**. The saved file is the handoff between sessions or agents.
 
 Use [$lg-create-task](../.agents/skills/lg-create-task/SKILL.md) to capture or update a task. That skill defines the required structure, status lifecycle, filenames, and when a large task needs phases. Its [template](../.agents/skills/lg-create-task/assets/task.md) is the single source for task structure.
 
@@ -11,8 +11,9 @@ Task filenames start with `ios-`, `backend-`, `web-`, `tooling-`, or `docs-`; us
 For example:
 
 ```text
-$lg-refine Let owners duplicate an activity's question setup.
-# Produces tasks/ios-duplicate-activity.md.
+$lg-create-task Let owners duplicate an activity's question setup.
+# Captures tasks/ios-duplicate-activity.md as a nontechnical draft.
+$lg-refine tasks/ios-duplicate-activity.md
 $lg-implement tasks/ios-duplicate-activity.md
 ```
 
