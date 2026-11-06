@@ -1,0 +1,19 @@
+web/tests/auth.spec.ts
+  s_06c72a043dcc80::t_c838b1943acbb6 21,25,32,34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6fb8a72b435b707495272746f59acb451adeb048",
+  "prompts": {},
+  "sessions": {
+    "s_06c72a043dcc80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b23b-4cf5-7cd3-ad9d-0c0765cb5349",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
