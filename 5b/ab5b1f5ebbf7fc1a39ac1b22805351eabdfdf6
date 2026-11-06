@@ -1,0 +1,21 @@
+tasks/ios-xcode-json-project-format.md
+  s_7dc6f4ce9b50dd::t_99bdb72ecfd2dd 1-86
+tasks/ios-xcode-navigator-docs-and-agents.md
+  s_7dc6f4ce9b50dd::t_47eb94aca0d8de 1-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5bab5b1f5ebbf7fc1a39ac1b22805351eabdfdf6",
+  "prompts": {},
+  "sessions": {
+    "s_7dc6f4ce9b50dd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b058-96f9-7a31-865e-124fd8b27f37",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
