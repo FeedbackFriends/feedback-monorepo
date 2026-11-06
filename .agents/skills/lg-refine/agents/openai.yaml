@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow Refine"
+  short_description: "Refine work into a saved task plan for agent handoff"
+  default_prompt: "Use $lg-refine to refine this task across the affected platforms and save its plan in tasks/."

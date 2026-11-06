@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow Implement"
+  short_description: "Implement task files across iOS, backend, and web"
+  default_prompt: "Use $lg-implement to implement tasks/<prefix>-<task-name>.md and update its progress and verification evidence, and prepare the architectural review guide for the human."

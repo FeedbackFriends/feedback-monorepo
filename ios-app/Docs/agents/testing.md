@@ -3,7 +3,7 @@
 Paths are relative to `ios-app/` unless stated otherwise.
 
 - Use Swift Testing, TCA `TestStore`, and snapshot tests for module behavior.
-- Put tests under `Modules/Tests/`, mirroring source module names.
+- Put tests in the existing owning target under `Modules/Tests/`. Current unit/reducer suites are grouped in `AppTests` and `InsightsTests`; do not create one test target per screen by default. For a new test target, update the package/project and selected test plan and confirm discovery through native Xcode MCP.
 - Use Maestro for user-facing mobile journeys when appropriate.
 - When changing Swift code, run `python3 ios-app/scripts/lint-swift-changes.py --base <merge-base>` from the monorepo root before finishing. Use the merge base with the task's target branch (normally `origin/main`); use `HEAD` for a check of uncommitted changes only.
 - Fix lint violations on added or modified lines. Existing violations on untouched lines are not a gate; do not expand the task to clean them up. The script honors `.swiftlint.yml` exclusions and never modifies files. Do not run auto-fix commands unless the user explicitly asks.

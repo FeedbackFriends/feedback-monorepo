@@ -1,14 +1,25 @@
 # iOS agent harness
 
-Start agent sessions at the monorepo root. [Root guidance](../../AGENTS.md) routes iOS work to [iOS policy](../AGENTS.md) and the [simulator workflow](../.agents/skills/letsgrow-ios-run-simulator/SKILL.md), so an iOS task does not depend on nested skills appearing in the initial skill picker.
+Start agent sessions at the monorepo root. [Root guidance](../../AGENTS.md) routes iOS work to [iOS policy](../AGENTS.md) and the [simulator workflow](../.agents/skills/lg-ios-run-simulator/SKILL.md), so an iOS task does not depend on nested skills appearing in the initial skill picker.
+
+## Feature development entry points
+
+Use the [shared task workflow](../../docs/agents/task-workflow.md) for lifecycle skills across platforms and [iOS feature development](agents/feature-workflow.md) for the iOS skill map, task-file handoff, verification matrix, and localhost/production examples. Use [create-task](../../.agents/skills/lg-create-task/SKILL.md) for the canonical `tasks/` format; refinement saves the plan there and implementation maintains the same file. The feature skills live under root `.agents/skills/`, so sessions started at the monorepo root can discover them. Existing nested iOS skills remain the owners of specialized execution procedures and are linked explicitly from those entry points.
+
+Natural-language equivalents work. Task creation/refinement writes local task files. Implementation that is already authorized proceeds without another planning approval; branch changes, commits, and PRs still require the applicable user authorization. GitHub Issues and Projects are never used for LetsGrow task management.
 
 ## Ownership
 
 | Location | Owns |
 | --- | --- |
-| `ios-app/AGENTS.md` | iOS architecture, tool boundaries, and verification policy |
-| `ios-app/.agents/skills/letsgrow-ios-run-simulator/SKILL.md` | Build, test, launch, and UI verification procedure and report |
-| `ios-app/.agents/skills/letsgrow-ios-login/SKILL.md` | Local test-account login and credential handling |
+| `ios-app/AGENTS.md` | iOS instruction routing, tool boundaries, and verification policy |
+| `.agents/skills/lg-create-task/SKILL.md` and its task template | Canonical task structure, phases, and status lifecycle |
+| `tasks/` | Upcoming task plans and implementation/verification handoffs |
+| Root `.agents/skills/lg-{refine,implement,verify,review,investigate}/` | Shared feature lifecycle entry points across iOS, backend, web, and tooling |
+| `ios-app/Docs/agents/feature-workflow.md` | Task-file workflow, verification matrix, environment selection, and example prompts |
+| `ios-app/Docs/agents/architecture.md`, `swift.md`, `review.md` | Architecture/state invariants, Swift implementation guidance, and review lens respectively |
+| `ios-app/.agents/skills/lg-ios-run-simulator/SKILL.md` | Build, test, launch, and UI verification procedure and report |
+| `ios-app/.agents/skills/lg-ios-login/SKILL.md` | Local test-account login and credential handling |
 | `.codex/config.toml` | Codex project MCP connections |
 | `.agents/config.toml` | Compatibility MCP definitions for other harnesses |
 | `ios-app/scripts/lint-swift-changes.py` | Non-mutating changed-line lint gate used locally and in CI |
@@ -24,7 +35,7 @@ The checked-in project configuration starts Apple's native server using `xcrun m
 
 Verify the connection with `XcodeListWorkspaces`. Match this checkout's absolute `ios-app/Feedback.xcodeproj` path; use `XcodeOpenWorkspace` if absent. Follow Xcode's authorization prompts yourself if required. A missing connection or denied operation is a blocker to report, not a reason to switch local automation tools.
 
-Apple's built-in guidance is discovered from the current client and native Xcode MCP responses. Its names and availability may change between Xcode and client versions, so this repository does not pin or vendor those skills. Follow the [simulator workflow](../.agents/skills/letsgrow-ios-run-simulator/SKILL.md) for discovery and direct native operation when a referenced instruction resource is not exposed. Repository workflows retain LetsGrow-specific scheme, test, login, and verification rules.
+Apple's built-in guidance is discovered from the current client and native Xcode MCP responses. Its names and availability may change between Xcode and client versions, so this repository does not pin or vendor those skills. Follow the [simulator workflow](../.agents/skills/lg-ios-run-simulator/SKILL.md) for discovery and direct native operation when a referenced instruction resource is not exposed. Repository workflows retain LetsGrow-specific scheme, test, login, and verification rules.
 
 ## Tests and local services
 
@@ -56,8 +67,8 @@ Invoke either root skill from an agent session started at the monorepo root:
 
 | Skill | Backend preparation | Simulator scheme |
 | --- | --- | --- |
-| `$letsgrow-ios-localhost` | Build local API image, start API/Postgres, wait for health; optional explicit fixture preparation/reset | `Feedback Localhost`, or Manager/Anonymous schemes with `manager`, `anonymous`, or `both` |
-| `$letsgrow-ios-production` | Check the existing Coolify API's health | `Feedback Production` / `Release` |
+| `$lg-ios-localhost` | Build local API image, start API/Postgres, wait for health; optional explicit fixture preparation/reset | `Feedback Localhost`, or Manager/Anonymous schemes with `manager`, `anonymous`, or `both` |
+| `$lg-ios-production` | Check the existing Coolify API's health | `Feedback Production` / `Release` |
 
 The skills own the complete backend-to-simulator sequence. Both use native Xcode MCP for app build/install/launch and keep the current eligible simulator. They leave the app running for manual testing. Production mode targets the already deployed backend; it does not deploy services or publish an iOS build.
 
@@ -95,3 +106,11 @@ The `iOS` workflow runs for pull requests and pushes to `main` touching `ios-app
 CI uses the same changed-line lint gate against the merge base and builds/tests `Feedback Localhost` with the `UnitTests` plan on an available iPhone simulator with iOS 26 or newer. It disables signing, validates macros non-interactively, and retains `.xcresult` artifacts for seven days. GitHub-hosted CI uses command-line Xcode tools; local agents use native Xcode MCP. No deployment, image, domain, port, or secret changes are required.
 
 The existing `CI` workflow separately checks generated API artifacts; it is not the app's build/test gate. Xcode Cloud's existing `CI_scripts/` release hooks are separate from GitHub Actions and are not invoked by this workflow.
+
+## Harness design and maintenance
+
+This feature workflow adapts the local Dinero `mobile-app-3` harness inspected on 2026-11-06: separate refine/implement/verify/review/investigate entry points, code-grounded decisions, explicit failure timelines, confirmed test discovery, and one maintained home for each procedure. The source was `.claude/skills/ios-{refine,implement,verify,review,bug-investigation}`, `.claude/agents/ios-reviewer.md`, and `iosApp/CLAUDE.md` in that checkout. These are provenance notes; LetsGrow has no runtime dependency on that repository.
+
+LetsGrow-specific adaptations retain SwiftUI/TCA, Domain/Adapters and shared Bootstrap, typed Danish/English localization, manager/anonymous localhost accounts, explicit fixture replacement/reset, and the existing production Release workflow. Dinero's KMP/Resolver architecture, Linear/Datadog integrations, staging-only rule, automatic branching, build scripts, and mandatory subagents were not imported. Local Xcode operations and screenshot baseline acceptance remain governed by LetsGrow's existing policies.
+
+When changing the harness, validate skill frontmatter/UI metadata and local Markdown targets, then walk representative requests through the routing: planning only with a saved task, another agent implementing that file, a phased task resumed from handoff, already authorized direct implementation, seeded two-role localhost setup, production launch, and read-only review. Check that no route introduces an extra approval gate, a GitHub issue/project dependency, fixture reset, external post, or tool fallback. Documentation-only harness edits do not require an app build or launch. Actual changes to executable helpers still need their relevant regression tests.

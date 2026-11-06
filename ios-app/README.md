@@ -67,12 +67,14 @@ This ensures the client stays in sync with the backend contract.
 
 ## 🧪 Testing
 
-For a complete backend and simulator run, use `$letsgrow-ios-localhost`. To build a Release simulator app against the existing Coolify deployment, use `$letsgrow-ios-production`. See [build/run workflows](Docs/agent-harness.md#build-and-run-workflows).
+For the feature-development harness, see [refinement, implementation, Swift, verification, review, and investigation workflows](Docs/agents/feature-workflow.md). These skills are available from agent sessions started at the monorepo root.
+
+For a complete backend and simulator run, use `$lg-ios-localhost`. To build a Release simulator app against the existing Coolify deployment, use `$lg-ios-production`. See [build/run workflows](Docs/agent-harness.md#build-and-run-workflows).
 
 - Unit and reducer tests: `ios-app/Modules/Tests/`
 - Snapshot tests via `swift-snapshot-testing`
 - The `Feedback Localhost` scheme uses the shared `UnitTests` plan with `AppTests` and `InsightsTests`.
-- Agent build, test, launch, and UI verification use the [simulator workflow](.agents/skills/letsgrow-ios-run-simulator/SKILL.md). See the [harness overview](Docs/agent-harness.md) for Xcode MCP setup and lint commands.
+- Agent build, test, launch, and UI verification use the [simulator workflow](.agents/skills/lg-ios-run-simulator/SKILL.md). See the [harness overview](Docs/agent-harness.md) for Xcode MCP setup and lint commands.
 
 
 ---

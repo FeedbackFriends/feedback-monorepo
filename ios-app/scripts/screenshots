@@ -16,7 +16,7 @@ class Xcode:
         self.sequence = 0
         self.request('initialize', {
             'protocolVersion': '2024-11-05', 'capabilities': {},
-            'clientInfo': {'name': 'letsgrow-screenshots', 'version': '1'}})
+            'clientInfo': {'name': 'lg-ios-screenshots', 'version': '1'}})
         self.send({'jsonrpc': '2.0', 'method': 'notifications/initialized'})
         return self
 

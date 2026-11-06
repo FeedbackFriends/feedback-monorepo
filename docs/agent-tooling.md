@@ -11,10 +11,13 @@ version control. Credentials and user-level MCP connections stay outside Git.
   [`backend/AGENTS.md`](../backend/AGENTS.md), and
   [`ios-app/AGENTS.md`](../ios-app/AGENTS.md).
 - For iOS setup and verification, read the [iOS harness overview](../ios-app/Docs/agent-harness.md). The root instructions explicitly route to its nested simulator skill even when that skill is not in the initial skill picker.
-- Project skills are stored under [`.agents/skills/`](../.agents/skills/):
-  `coolify-operations`, `letsgrow-architecture`, `letsgrow-commit-and-push`,
-  `letsgrow-domain`, and `ux-designer`.
-- The root `letsgrow-ios-localhost` and `letsgrow-ios-production` skills prepare the chosen backend and build/launch the matching simulator scheme through Xcode MCP. See [build/run workflows](../ios-app/Docs/agent-harness.md#build-and-run-workflows).
+- Project skills are stored under [`.agents/skills/`](../.agents/skills):
+  `lg-coolify-operations`, `lg-architecture`, `lg-commit-and-push`,
+  `lg-domain`, `lg-create-task`, `lg-refine`, `lg-implement`, `lg-review`,
+  `lg-investigate`, `lg-verify`, platform-specific `lg-ios-*` skills, and `ux-designer`.
+  Shared lifecycle skills route through the [task workflow](agents/task-workflow.md);
+  they apply to backend, iOS, web, and tooling tasks.
+- The root `lg-ios-localhost` and `lg-ios-production` skills prepare the chosen backend and build/launch the matching simulator scheme through Xcode MCP. See [build/run workflows](../ios-app/Docs/agent-harness.md#build-and-run-workflows).
 - The `skills-lock.json` files are local installer state and are ignored by
   Git. The skill instructions themselves are committed in the repository.
 

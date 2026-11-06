@@ -4,7 +4,7 @@ Open `ios-app/Feedback.xcodeproj` from the LetsGrow monorepo. The Swift package 
 
 Use Xcode 27 with Swift 6.2 or newer and the installed iOS 27 simulator runtime. SwiftLint is required for verification (`brew install swiftlint`); the lint helper also requires Python 3.
 
-For agent setup, Xcode MCP connection checks, test configuration, local authentication, and CI, follow the [iOS harness overview](agent-harness.md). The [simulator skill](../.agents/skills/letsgrow-ios-run-simulator/SKILL.md) owns the execution procedure.
+For agent setup, Xcode MCP connection checks, test configuration, local authentication, and CI, follow the [iOS harness overview](agent-harness.md). The [simulator skill](../.agents/skills/lg-ios-run-simulator/SKILL.md) owns the execution procedure.
 
 For manual development, select the `Feedback Localhost` scheme and an iOS simulator in Xcode, then Build & Run. Run the shared `UnitTests` plan from the same scheme. Other schemes target different configurations; `Feedback Production` is the production scheme.
 

@@ -16,6 +16,8 @@ For Swift changes, run `python3 ios-app/scripts/lint-swift-changes.py --base <me
 
 | Task | Guidance |
 | --- | --- |
+| Refining, implementing, verifying, reviewing, or investigating a feature | [Feature development](Docs/agents/feature-workflow.md) |
+| Writing or refactoring Swift | [Swift implementation](Docs/agents/swift.md) |
 | Features, dependencies, shared state, or module ownership | [Architecture and state](Docs/agents/architecture.md) |
 | API adapters, mappers, or generated clients | [API integration](Docs/agents/api-contract.md) |
 | SwiftUI/reducer naming or form validation | [UI conventions](Docs/agents/ui.md) |

@@ -127,9 +127,9 @@
 		28AC8EF32FCA1A500032438D /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
 		28AC8EF52FCA1A500032438D /* agent.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = agent.yaml; sourceTree = "<group>"; };
 		28AC8EF72FCA1A500032438D /* SKILL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SKILL.md; sourceTree = "<group>"; };
-		28AC8EF92FCA1A500032438D /* letsgrow-architecture */ = {isa = PBXFileReference; lastKnownFileType = text; path = "letsgrow-architecture"; sourceTree = "<group>"; };
-		28AC8EFA2FCA1A500032438D /* letsgrow-commit-and-push */ = {isa = PBXFileReference; lastKnownFileType = text; path = "letsgrow-commit-and-push"; sourceTree = "<group>"; };
-		28AC8EFB2FCA1A500032438D /* letsgrow-domain */ = {isa = PBXFileReference; lastKnownFileType = text; path = "letsgrow-domain"; sourceTree = "<group>"; };
+		28AC8EF92FCA1A500032438D /* lg-architecture */ = {isa = PBXFileReference; lastKnownFileType = text; path = "lg-architecture"; sourceTree = "<group>"; };
+		28AC8EFA2FCA1A500032438D /* lg-commit-and-push */ = {isa = PBXFileReference; lastKnownFileType = text; path = "lg-commit-and-push"; sourceTree = "<group>"; };
+		28AC8EFB2FCA1A500032438D /* lg-domain */ = {isa = PBXFileReference; lastKnownFileType = text; path = "lg-domain"; sourceTree = "<group>"; };
 		28AC8EFC2FCA1A500032438D /* ux-designer */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ux-designer"; sourceTree = "<group>"; };
 		28AC8EFE2FCA1A500032438D /* config.toml */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.toml; sourceTree = "<group>"; };
 		28AC8EFF2FCA1A500032438D /* hooks.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = hooks.json; sourceTree = "<group>"; };
@@ -290,14 +290,14 @@
 			path = references;
 			sourceTree = "<group>";
 		};
-		28AC8EEE2FCA1A500032438D /* letsgrow-ios-design-system */ = {
+		28AC8EEE2FCA1A500032438D /* lg-ios-design-system */ = {
 			isa = PBXGroup;
 			children = (
 				28AC8EEA2FCA1A500032438D /* agents */,
 				28AC8EEC2FCA1A500032438D /* references */,
 				28AC8EED2FCA1A500032438D /* SKILL.md */,
 			);
-			path = "letsgrow-ios-design-system";
+			path = "lg-ios-design-system";
 			sourceTree = "<group>";
 		};
 		28AC8EF02FCA1A500032438D /* agents */ = {
@@ -316,14 +316,14 @@
 			path = scripts;
 			sourceTree = "<group>";
 		};
-		28AC8EF42FCA1A500032438D /* letsgrow-ios-sync-openapi */ = {
+		28AC8EF42FCA1A500032438D /* lg-ios-sync-openapi */ = {
 			isa = PBXGroup;
 			children = (
 				28AC8EF02FCA1A500032438D /* agents */,
 				28AC8EF22FCA1A500032438D /* scripts */,
 				28AC8EF32FCA1A500032438D /* SKILL.md */,
 			);
-			path = "letsgrow-ios-sync-openapi";
+			path = "lg-ios-sync-openapi";
 			sourceTree = "<group>";
 		};
 		28AC8EF62FCA1A500032438D /* agents */ = {
@@ -346,12 +346,12 @@
 		28AC8EFD2FCA1A500032438D /* skills */ = {
 			isa = PBXGroup;
 			children = (
-				28AC8EEE2FCA1A500032438D /* letsgrow-ios-design-system */,
-				28AC8EF42FCA1A500032438D /* letsgrow-ios-sync-openapi */,
+				28AC8EEE2FCA1A500032438D /* lg-ios-design-system */,
+				28AC8EF42FCA1A500032438D /* lg-ios-sync-openapi */,
 				28AC8EF82FCA1A500032438D /* maestro-mobile-testing */,
-				28AC8EF92FCA1A500032438D /* letsgrow-architecture */,
-				28AC8EFA2FCA1A500032438D /* letsgrow-commit-and-push */,
-				28AC8EFB2FCA1A500032438D /* letsgrow-domain */,
+				28AC8EF92FCA1A500032438D /* lg-architecture */,
+				28AC8EFA2FCA1A500032438D /* lg-commit-and-push */,
+				28AC8EFB2FCA1A500032438D /* lg-domain */,
 				28AC8EFC2FCA1A500032438D /* ux-designer */,
 			);
 			path = skills;

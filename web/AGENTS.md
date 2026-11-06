@@ -8,6 +8,7 @@ Use npm with Node.js `20.19.0`; run web commands from `web/`. The `dev`, `build`
 
 | Task | Guidance |
 | --- | --- |
+| Task refinement, implementation, review, or handoff | [Shared task workflow](../docs/agents/task-workflow.md) |
 | Routes, components, or code organization | [Architecture and coding conventions](docs/agents/architecture.md) |
 | Layout, styling, or responsive behavior | [UI guidelines](docs/agents/ui.md) |
 | API types, authentication, or environment | [API and auth](docs/agents/api-and-auth.md) |

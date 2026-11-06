@@ -11,4 +11,4 @@ Paths are relative to `ios-app/` unless stated otherwise.
 
 ## Localization migration
 
-For the iOS localization migration, follow the [localization conventions](../../../docs/ios-localization-conventions.md) and update the [source inventory](../../../docs/ios-localization-inventory.md). They define the dedicated Localization module, Danish terminology, semantic keys, typed parameters, plural/formatting policy, and app-owned versus external text boundaries. Implementation progress lives in the [phase checklist](../../../docs/localization-phases.md).
+For the iOS localization migration, follow the [localization conventions](../../../docs/ios-localization-conventions.md) and update the [source inventory](../../../docs/ios-localization-inventory.md). They define the dedicated Localization module, Danish terminology, semantic keys, typed parameters, plural/formatting policy, and app-owned versus external text boundaries. Implementation progress lives in the [phase checklist](../../../tasks/ios-localization.md).

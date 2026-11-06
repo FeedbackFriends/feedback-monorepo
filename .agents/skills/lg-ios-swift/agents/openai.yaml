@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow iOS Swift"
+  short_description: "Write Swift with LetsGrow TCA and UI conventions"
+  default_prompt: "Use $lg-ios-swift to implement this Swift change using the existing LetsGrow patterns."

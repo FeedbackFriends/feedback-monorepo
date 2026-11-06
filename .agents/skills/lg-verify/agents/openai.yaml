@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow Verify"
+  short_description: "Verify behavior across iOS, backend, web, and tooling"
+  default_prompt: "Use $lg-verify to verify the task using the affected platforms and record observed results."

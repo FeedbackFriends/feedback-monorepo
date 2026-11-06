@@ -2,7 +2,7 @@
 
 Localhost Maestro setup for seeded iOS simulator E2E.
 
-Long-term plan: `../Docs/plans/2026-06-07-ios-maestro-e2e-plan.md`.
+Long-term plan: [local task](../../tasks/shared-ios-maestro-e2e.md).
 
 Notification localization and tap checks have a separate [notification guide](notifications/README.md).
 Run `python3 ios-app/scripts/test-notifications.py` for notification injection and

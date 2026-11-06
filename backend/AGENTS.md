@@ -15,6 +15,7 @@ Use the Gradle wrapper from `backend/`; warnings fail the build.
 
 | Task | Guidance |
 | --- | --- |
+| Task refinement, implementation, review, or handoff | [Shared task workflow](../docs/agents/task-workflow.md) |
 | Kotlin implementation or module ownership | [Architecture and conventions](docs/agents/architecture.md) |
 | Endpoints, DTOs, or generated contracts | [API contract](docs/agents/api-contract.md) |
 | Database, DAO, or migration changes | [Persistence](docs/agents/persistence.md) |
