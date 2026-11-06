@@ -6,19 +6,26 @@ import SwiftUI
 
 public struct ActivityListView: View {
     private let onProfileButtonTap: (() -> Void)?
+    private let syncPhase: SyncIndicatorPhase
     @Bindable var store: StoreOf<ActivityList>
 
     public init(
         store: StoreOf<ActivityList>,
-        onProfileButtonTap: (() -> Void)? = nil
+        onProfileButtonTap: (() -> Void)? = nil,
+        syncPhase: SyncIndicatorPhase = .idle
     ) {
         self.store = store
         self.onProfileButtonTap = onProfileButtonTap
+        self.syncPhase = syncPhase
     }
 
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             HomeActivitiesView(store: store)
+                .safeAreaInset(edge: .top, spacing: 0) {
+                    SyncIndicatorView(phase: syncPhase)
+                        .padding(.horizontal, Theme.padding)
+                }
                 .background(LetsGrowLandingGradient().ignoresSafeArea())
                 .navigationTitle(String(appStrings: .commonActivities))
                 .successConfirmation(store.scope(state: \.confirmation, action: \.confirmation))

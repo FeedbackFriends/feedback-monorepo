@@ -42,6 +42,20 @@ private struct ScreenCatalogPreviewView: View {
     ScreenCatalogPreviewView(tab: .activities, empty: true)
 }
 
+@MainActor
+private func catalogActivitiesSyncing() -> some View {
+    var state = catalogTabbarState()
+    state.tabbarLifecyle.syncPhase = .syncing
+    return ScreenCatalogContainerView {
+        TabbarView(store: Store(initialState: state) { EmptyReducer() })
+    }
+}
+
+// Screenshot: Active sync bar above the owner activity list, using static reduced motion.
+#Preview("activities.syncing") {
+    catalogActivitiesSyncing()
+}
+
 #Preview("activities.deleted") {
     ScreenCatalogPreviewView(tab: .activities, empty: true, deletionSuccess: true)
 }
@@ -226,6 +240,9 @@ enum TabbarFeatureScreenSnapshotCatalog {
             },
             .init(id: "activities.empty", size: CGSize(width: 402, height: 874)) {
                 ScreenCatalogPreviewView(tab: .activities, empty: true)
+            },
+            .init(id: "activities.syncing", size: CGSize(width: 402, height: 874)) {
+                catalogActivitiesSyncing()
             },
             .init(id: "profile.anonymous", size: CGSize(width: 402, height: 874)) {
                 catalogProfile(role: nil)

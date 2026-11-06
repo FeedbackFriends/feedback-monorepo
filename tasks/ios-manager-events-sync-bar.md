@@ -1,5 +1,5 @@
 ---
-status: draft
+status: in-progress
 areas: [ios]
 created: 2026-01-13
 updated: 2026-11-06
@@ -18,7 +18,7 @@ Provide a clear syncing bar and a one-time success indication without changing s
 
 ## Context
 
-Historical design retained below. Its symbol names and proposed styling must be checked against current architecture and DesignSystem before implementation.
+Current-code audit 2026-11-06: ManagerEventsView and SyncStatus no longer exist. ActivityListView is the owner list; TabbarLifecycle polls getBootstrapUpdate every 10 seconds and receives cache updates separately through sessionChangedListener. TabbarView already forwards foreground/background actions, which are currently no-ops. The historical design below describes intent only; the current implementation decisions supersede its symbol names.
 
 ### Manager Events Sync Bar Design
 
@@ -64,7 +64,10 @@ No behavioral changes to error handling. If syncing fails, the bar simply stops 
 
 - Confirmed: original desired syncing/first-success/idle behavior is preserved.
 - Assumptions: no completion evidence was present in the original design.
-- Unresolved: current equivalents of the historical view/lifecycle symbols and whether this design remains applicable.
+- Confirmed implementation mapping: ActivityListView renders a shared 4pt SyncIndicatorView; TabbarLifecycle owns transient presentation phase, foreground state, active request ID and first-success latch. TabbarView passes presentation values, without copying Bootstrap data.
+- Assumption: the first successful existing 10-second poll (including an unchanged/204 response) counts as the first confirmation; no extra startup/foreground request is added. Listener updates from unrelated mutations do not fake a successful poll.
+- Background clears the active presentation/request ID and success latch, cancels only the presentation timer, and ignores late results. Existing polling/network scheduling remains unchanged. Success display lasts 800ms; Reduce Motion uses a static blue bar.
+- Unresolved: None.
 - Execution constraints: use current iOS/native Xcode, design tokens, localization, and visual review guidance.
 
 ## Acceptance criteria
@@ -75,8 +78,8 @@ No behavioral changes to error handling. If syncing fails, the bar simply stops 
 
 ## Implementation plan
 
-- [ ] Confirm current source ownership and existing implementation before changing code.
-- [ ] Implement reducer/lifecycle and presentation changes using current APIs/tokens.
+- [x] Confirm current source ownership and existing implementation before changing code.
+- [x] Implement reducer/lifecycle and presentation changes using current APIs/tokens.
 - [ ] Verify lifecycle/state tests, the live transition, Swift lint, and full visual review.
 
 ## Verification
@@ -88,11 +91,15 @@ No behavioral changes to error handling. If syncing fails, the bar simply stops 
 
 ## Human review
 
-Not implemented or reverified under this task workflow. Prepare the architectural decisions, source reading path, and verification limits here when implementation proceeds; historical notes alone are not a completed review guide.
+TabbarLifecycle owns transient sync presentation around the existing sequential 10-second polling effect; cache listener updates still update the same Bootstrap. Each poll gets an ID so background/foreground transitions discard stale presentation completions. Background resets only presentation/latch and cancels its 800ms timer; network scheduling is unchanged. An unchanged/204 response is a successful poll, so success does not depend on new data or unrelated cache mutations.
+
+TabbarView passes a phase to ActivityListView, which composes a 4pt SyncIndicatorView from DesignSystem. Idle reserves the same 4pt to avoid list jumps. Animated blue block uses TimelineView; Reduce Motion and debug snapshot fixtures use a static blue bar. No API, persistence or localization changes.
+
+Reading path: `ios-app/Modules/Sources/TabbarFeature/TabbarLifecycle.swift` → `ios-app/Modules/Tests/AppTests/ReducerTests/Tabbar/TabbarLifecycleTests.swift` → `ios-app/Modules/Sources/TabbarFeature/TabbarView.swift` → `ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/ActivityListView.swift` → `ios-app/Modules/Sources/DesignSystem/ReusableViews/SyncIndicatorView.swift`. Existing TCA/shared Bootstrap boundaries are retained; moving historical ManagerEventsView intent to ActivityListView and counting the first successful existing poll are implementation decisions.
 
 ## Handoff
 
-- Completed: original design preserved; implementation status unverified.
-- Verification results: Not run during migration.
-- Blockers: historical source ownership needs revalidation.
-- Next action: inspect current sync/lifecycle code and refine this task before marking ready.
+- Completed: Historical symbols reconciled; lifecycle-owned sync phase, request correlation, one-time foreground success and reset implemented. Existing polling interval and network call order retained. Shared indicator supports Reduce Motion; activity-list active-sync snapshot added.
+- Verification results: 2026-11-06 Feedback Localhost / LetsGrow Manager iOS 27.2: buildForTesting passed; UnitTests discovery includes 218 enabled tests across AppTests/InsightsTests. TabbarLifecycleTests: 3 passed, 0 failed, testing failure before success, repeated success, 800ms timeout, timer cancellation on background, late response rejection after foreground and anonymous suppression. SwiftLint --base HEAD: 0 violations in 6 files. ScreenSnapshots capture: 1 passed; 59 PNGs published; 47 hashes retained from reviewed profile capture and 12 changed/new images reviewed. Findings/hashes `screenshots/review/sync-findings.json`, gallery `screenshots/index.html`; baselines preserved.
+- Blockers: Native live animation/foreground journey remains blocked by the Xcode session-state inconsistency recorded in `tasks/ios-text-input-full-surface-focus.md`. Snapshots prove fixture layout, not movement; manual check added to `tasks/ios-physical-device-verification.md`.
+- Next action: Restore native DeviceInteraction, launch the new build, wait for existing polls, verify blue motion/first green success/idle and background reset plus Reduce Motion; complete remaining required verification before deleting this task.

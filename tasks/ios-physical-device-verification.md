@@ -33,6 +33,7 @@ Fysiske kontroller fra implementeringsopgaverne. Listen udvides løbende før re
 - [ ] AC-1: Success-toast giver kun én success-haptik ved visning; automatisk fjernelse og navigation giver ingen; en senere ny toast giver haptik igen.
 - [ ] AC-3: Kopiér aktivitetsmail i dansk og engelsk: alerten identificerer adressen og kalenderdeltager-handlingen; indsæt i et tekstfelt og bekræft uændret adresse; luk med OK.
 - [ ] AC-4: Kontrollér profilavataren og aktivitetstabets sparkle i lys/mørk og stor tekst/VoiceOver; anonym ser personikon og ingen Log ud; ejer ser korrekte initialer og kan fortsat åbne indstillinger/logge ud. Navneændring opdaterer avatar på begge tabs og i indstillinger. Kommunikation er væk, OS-notifikationslinket består.
+- [ ] AC-5: Som ejer på Aktiviteter: afvent næste 10-sekunders poll, se blå bevægelse og første grønne signal (800ms), derefter usynlig bjælke. Senere polls giver ikke gentaget grønt signal før baggrund/forgrund. Reduce Motion giver statisk blå visning. Fejlet poll giver intet grønt signal.
 - [ ] AC-2: Alle efterfølgende tilføjede fysiske kontroller er udført og deres build/enhed/resultat registreret.
 
 ## Implementation plan

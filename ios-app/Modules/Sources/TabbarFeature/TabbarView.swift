@@ -93,7 +93,8 @@ private extension TabbarView {
                 if isManager {
                     ActivityListView(
                         store: store.scope(state: \.activities, action: \.activities),
-                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
+                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) },
+                        syncPhase: store.tabbarLifecyle.syncPhase
                     )
                 } else {
                     SignUpView(
