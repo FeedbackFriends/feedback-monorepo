@@ -1,0 +1,25 @@
+.github/workflows/ios.yml
+  s_210d35b8060d14::t_eb1ba9cd6d3f4f 28
+ios-app/.gitignore
+  s_210d35b8060d14::t_a4ff461163e766 11
+ios-app/Docs/agent-harness.md
+  s_210d35b8060d14::t_e247924471d2bc 30-37
+tasks/ios-xcode-navigator-docs-and-agents.md
+  s_210d35b8060d14::t_278316858bb7bf 21,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7ffaae5b8af195bb4d22f71ad12f8c3a0b2f535b",
+  "prompts": {},
+  "sessions": {
+    "s_210d35b8060d14": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b0a2-09ec-7033-8f70-4e264fa88ce7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
