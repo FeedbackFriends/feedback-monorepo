@@ -1,0 +1,29 @@
+backend/.agents/skills/lg-architecture
+  s_af28fb44dd777f::t_ef278929162ae8 1
+backend/.agents/skills/lg-commit-and-push
+  s_af28fb44dd777f::t_73a3712981498f 1
+backend/.agents/skills/lg-domain
+  s_af28fb44dd777f::t_24097a8c8d390d 1
+web/.agents/skills/lg-architecture
+  s_af28fb44dd777f::t_558aad93751b65 1
+web/.agents/skills/lg-commit-and-push
+  s_af28fb44dd777f::t_314d176370186b 1
+web/.agents/skills/lg-domain
+  s_af28fb44dd777f::t_defbd6ba34c53b 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "86c54e1d0a94291f4429eab3ebb08e5bf9401f96",
+  "prompts": {},
+  "sessions": {
+    "s_af28fb44dd777f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b0de-8a23-7181-ad3b-76c11ec92e2c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
