@@ -1,0 +1,31 @@
+tasks/ios-answer-type-picker-and-icons.md
+  s_940b83304c2705::t_a7939748305a59 1-124
+tasks/ios-confirmation-polish.md
+  s_940b83304c2705::t_9fce603eefc513 1-110
+tasks/ios-missing-text-not-found.md
+  s_940b83304c2705::t_42bb6c2c7f8ae9 1-59
+tasks/ios-profile-and-navigation-polish.md
+  s_940b83304c2705::t_41ccc83257db3a 1-185
+tasks/ios-text-input-full-surface-focus.md
+  s_940b83304c2705::t_eb570c814a86de 1-59
+tasks/shared-in-app-product-feedback-and-bug-reports.md
+  s_940b83304c2705::t_4486f8e8c53519 1-105
+tasks/web-mobile-navigation.md
+  s_940b83304c2705::t_fb19c30977c0df 1-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7b8dbacc0da7b284942bd70435da63605d1f0222",
+  "prompts": {},
+  "sessions": {
+    "s_940b83304c2705": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b0f0-3085-73e0-80d5-798218670235",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
