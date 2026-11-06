@@ -1,0 +1,23 @@
+tasks/shared-in-app-product-feedback-and-bug-reports.md
+  s_e54cede2452c3f::t_cf60a762fe99c4 111-123
+ios-app/Modules/Sources/MoreFeature/MoreSection/MoreSectionView.swift
+  s_e54cede2452c3f::t_f4ce27616b1b9c 113-129,131-132,134-137
+ios-app/Modules/Sources/TabbarFeature/TabbarView.swift
+  s_e54cede2452c3f::t_19eb27b9ebd840 122-124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b02a8bbd6938204ac3e141ba3157870740ccc207",
+  "prompts": {},
+  "sessions": {
+    "s_e54cede2452c3f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b1ac-7834-7570-bc80-8af3f58481db",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
