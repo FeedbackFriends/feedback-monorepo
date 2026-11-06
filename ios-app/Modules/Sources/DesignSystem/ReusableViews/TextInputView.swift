@@ -49,5 +49,10 @@ public struct TextInputView: View {
             .accessibilityIdentifier(accessibilityIdentifier)
         }
         .surfaceCard(padding: 15)
+        .simultaneousGesture(
+            TapGesture().onEnded {
+                isFocused = true
+            }
+        )
     }
 }

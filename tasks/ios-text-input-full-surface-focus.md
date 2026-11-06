@@ -1,5 +1,5 @@
 ---
-status: ready
+status: in-progress
 areas: [ios]
 created: 2026-11-06
 updated: 2026-11-06
@@ -35,7 +35,7 @@ Fælles TextInputView og alle dens kaldere; gennemgå tilsvarende indrammede enk
 
 ## Implementation plan
 
-- [ ] Udvid contentShape/hit-testing og fokusadfærd i TextInputView uden at overtage TextFields egne gestures.
+- [x] Udvid contentShape/hit-testing og fokusadfærd i TextInputView uden at overtage TextFields egne gestures.
 - [ ] Kontroller alle kaldere og afprøv tom/udfyldt samt en- og flerlinjet tilstand; dokumenter eventuelle kompatible migrationer.
 
 ## Verification
@@ -49,11 +49,13 @@ Ved implementering: følg ios-app/AGENTS.md og Docs/agents/simulator.md; brug na
 
 ## Human review
 
-Not implemented yet. Implementeringen skal forklare flow, arkitekturbeslutninger, tradeoffs, læsesti og verifikationsgrænser efter docs/agents/human-review.md.
+Den eksisterende DesignSystem-/FocusState-arkitektur bevares. `TextInputView` tilføjer en samtidig tap-gesture efter `surfaceCard`, hvis eksisterende contentShape omfatter kortets indvendige padding. Gesturen sætter kun den eksisterende fokusbinding; TextField beholder sine egne gestures, indhold, accessibility-ID og multiline-egenskaber. Begge kaldere (ManageActivityView og QuestionPickerView) får rettelsen uden skærmspecifik kode. Ingen API-/persistensændring.
+
+Læsesti: `ios-app/Modules/Sources/DesignSystem/ReusableViews/TextInputView.swift` → `ios-app/Modules/Sources/DesignSystem/ViewModifiers/SurfaceCard.swift` → de to kaldere nævnt i Context. Build og lint er bestået; touch-/tekstmarkeringsadfærd er endnu ikke bevist.
 
 ## Handoff
 
-- Completed: Kodenære kilder undersøgt; scope, antagelser og plan gemt. Ingen produktændringer.
-- Verification results: Not run. Kun refinement.
-- Blockers: None
-- Next action: Udvid contentShape/hit-testing og fokusadfærd i TextInputView uden at overtage TextFields egne gestures.
+- Completed: Fælles fokusgesture implementeret; alle to kaldere kontrolleret. Ingen skærmspecifikke gestures tilføjet.
+- Verification results: 2026-11-06 native Xcode BuildProject bestået på Feedback Localhost / LetsGrow Manager (iOS 27.2), normal build og buildForTesting. SwiftLint `python3 ios-app/scripts/lint-swift-changes.py --base HEAD`: 0 violations i 1 fil. Catalog --check bestået. ScreenSnapshotTests/testCaptureCatalog(): 1 passed, 0 failed; 56 billeder publiceret og gennemgået. Rapport `screenshots/index.html`; hashes/findings `screenshots/review/input-focus-findings.json`. Baselines bevaret. App installeret/startet gennem native MCP.
+- Blockers: Native DeviceInteractionSynthesize melder “Session not found” for nøglen fra StartWorkspaceSession. EndSession melder “Session doesn't exist anymore”, mens nyt StartWorkspaceSession melder at simulatoren er optaget af den oprindelige nøgle “Verify Text Input Focus”. Ingen alternative simulatorværktøjer brugt. AC-1–3 har derfor stadig manglende interaktionsevidens.
+- Next action: Når native sessions virker igen, kontrollér titel/padding/tom side/tekst i aktivitet og spørgsmål samt markering, multiline-scroll, naboknap og VoiceOver. Luk tasken først efter disse checks.
