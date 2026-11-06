@@ -1,0 +1,81 @@
+backend/apps/api/src/main/kotlin/dk/example/feedback/config/ErrorResponseConfig.kt
+  s_be498140a93efb::t_8cf5bf9c7df6db 17
+backend/apps/api/src/main/kotlin/dk/example/feedback/config/LocalizedApiErrors.kt
+  s_be498140a93efb::t_e499348ffef611 1-62
+backend/apps/api/src/main/kotlin/dk/example/feedback/config/OpenApiConfig.kt
+  s_be498140a93efb::t_f8f66b498e87a1 62-63
+backend/apps/api/src/main/kotlin/dk/example/feedback/config/SecurityConfig.kt
+  s_be498140a93efb::t_7db3001aef8b66 3-6,19-22,34,52-59,63-66,81-82,91-99
+backend/apps/api/src/main/kotlin/dk/example/feedback/controller/ControllerAdvisor.kt
+  s_be498140a93efb::t_4f2dbbeb435c40 5,9,12,25-35
+backend/apps/api/src/main/resources/errors_da.properties
+  s_be498140a93efb::t_14472f9620c15a 1-27
+backend/apps/api/src/main/resources/errors_en.properties
+  s_be498140a93efb::t_7dc38a273d7e38 1-27
+backend/apps/api/src/test/kotlin/dk/example/feedback/config/LocalizedApiErrorsTest.kt
+  s_be498140a93efb::t_fa31622471939f 1-80
+backend/apps/api/src/test/kotlin/dk/example/feedback/tests/AdminSecurityAccessTest.kt
+  s_be498140a93efb::t_db49bc7f410298 22-23,52-56,67-68
+backend/lib/model/src/main/kotlin/dk/example/feedback/model/error/ApiError.kt
+  s_be498140a93efb::t_37bbc2995317db 11-12
+contracts/openapi/feedback-api.yaml
+  s_be498140a93efb::t_bd48dbf270dfb3 37-48,87-98,138-149,189-200,250-261,300-311,350-361,403-414,446-457,496-507,550-561,604-615,658-669,712-723,766-777,816-827,860-871,908-919,968-979,2000-2006
+docs/api-error-copy.md
+  s_be498140a93efb::t_bc4a0222ce2d5b 1-68
+docs/ios-localization-conventions.md
+  s_be498140a93efb::t_cf8a8b6615ab6a 68,70
+docs/ios-localization-inventory.md
+  s_be498140a93efb::t_fe35a21fc1ca00 87
+ios-app/Docs/localization.md
+  s_be498140a93efb::t_bf05b15af74fad 79
+ios-app/Modules/Sources/Adapters/APIClient/APIErrorMiddleware.swift
+  s_be498140a93efb::t_022d306b4f7c86 4,8,10-14,23-24,40,42-52,55,60-70
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+LiveEvents.swift
+  s_be498140a93efb::t_a2c9d660d9f635 87-90
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+LiveFeedback.swift
+  s_be498140a93efb::t_2c337487697f81 13-16
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+LiveSession.swift
+  s_be498140a93efb::t_871b921d17ac98 40-43
+ios-app/Modules/Sources/Adapters/APIClient/Mappers/Responses/ApiError+Mapping.swift
+  s_be498140a93efb::t_2cfae56dde60ff 12-14
+ios-app/Modules/Sources/Adapters/APIClient/Mappers/Responses/ApiErrorDto+Mapping.swift
+  s_be498140a93efb::t_e6f71bab3437b5 30-32
+ios-app/Modules/Sources/Domain/Error+Extension.swift
+  s_be498140a93efb::t_f07f476285bff9 9-13
+ios-app/Modules/Sources/Domain/Errors/ApiError.swift
+  s_be498140a93efb::t_df70147572abcb 10-12,19-22,30-32,36-42
+ios-app/Modules/Sources/OpenAPI/GeneratedSources/Client.swift
+  s_be498140a93efb::t_d39724319e595a 98-141,270-313,442-485,621-664,822-865,994-1037,1193,1195,1214-1215,1217,1236-1237,1239,1258-1259,1261,1280-1335,1372-1415,1542-1585,1721-1764,1920-1963,2119-2162,2318-2361,2510-2553,2709-2752,2888-2931,3058-3101,3248-3291,3446-3489
+ios-app/Modules/Sources/OpenAPI/GeneratedSources/Types.swift
+  s_be498140a93efb::t_091b34db2c0376 2194-2201,2210-2211,2217-2219,2226-2227,2235-2236,2356-2457,2772-2873,3188-3289,3597-3598,3600,3616-3617,3621,3625,3627,3629-3631,3633-3635,3638,3642,3648-3649,3651,3667-3668,3672,3676,3678,3680-3682,3684-3686,3689,3693,3699-3700,3702,3718-3719,3723-3825,4038-4139,4454-4555,4816-4928,4930-4931,4933-4934,4939,4949-4950,4954,4958,4960,4962-4964,4966-4968,4971,4975,5288-5389,5686-5787,6064-6174,6176,6178-6180,6182-6184,6187,6191,6520-6621,6945-7046,7293-7395,7398,7400-7419,7421-7422,7424-7425,7430,7440-7441,7445,7449,7451,7453-7455,7457-7459,7462,7466,7802-7903,8227-8328,8609-8666,8668-8670,8672-8685,8687-8715,8717-8725,8728,8732,9034-9135,9448-9549,9919-10020
+ios-app/Modules/Tests/AppTests/UnitTests/ErrorAdapterTests.swift
+  s_be498140a93efb::t_d0a8f5a5fe4c1d 12-54
+ios-app/Modules/Tests/AppTests/UnitTests/PresentableErrorTests.swift
+  s_be498140a93efb::t_c6544736c1c925 9-18
+tasks/ios-physical-device-verification.md
+  s_be498140a93efb::t_bf775406141455 38,43,60,63
+tasks/shared-error-messages.md
+  s_be498140a93efb::t_5023994394edde 2,97-100,105-106,108,116-117,123-124,130-131,137,150-156,160-163
+web/src/lib/api/client.ts
+  s_be498140a93efb::t_3b14957e6b5898 1-106
+web/src/lib/api/generated/openapi.ts
+  s_be498140a93efb::t_128eecc73e8755 796-799,834-851,908-925,982-999,1058-1075,1138-1155,1212-1229,1288-1305,1366-1383,1438-1455,1514-1531,1592-1609,1670-1687,1748-1765,1824-1841,1902-1919,1978-1995,2050-2067,2124-2141,2207-2224
+web/tests/api-client.spec.ts
+  s_be498140a93efb::t_d48811afb43ffd 1-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "632362e4c49ab896a968f9e0906e6d0871f5a0a8",
+  "prompts": {},
+  "sessions": {
+    "s_be498140a93efb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b119-06b5-7852-92ee-2530b160acd2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
