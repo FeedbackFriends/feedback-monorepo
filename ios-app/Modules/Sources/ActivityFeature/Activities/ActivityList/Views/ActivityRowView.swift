@@ -1,3 +1,4 @@
+import Localization
 import DesignSystem
 import Domain
 import SwiftUI
@@ -14,27 +15,27 @@ struct ActivityCardView: View {
                 Spacer()
             }
 
-            PillTagView(activity.events.count == 1 ? "1 session" : "\(activity.events.count) sessioner")
+            PillTagView(String(appStrings: .activitySessionCount(activity.events.count)))
 
             if let nextEvent = activity.events.filter({ $0.date > now }).min(by: { $0.date < $1.date }) {
                 Label {
-                    Text("Næste session: \(nextEvent.date.formatted(date: .abbreviated, time: .shortened))")
+                    Text(String(appStrings: .activityNextSession(L10n.Format.date(nextEvent.date, time: .shortened))))
                 } icon: {
                     Image(systemName: "calendar")
                 }
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
             } else {
-                Text("Ingen kommende sessioner").supportingTextStyle().foregroundStyle(Color.themeTextSecondary)
+                Text(String(appStrings: .activityNoUpcoming)).supportingTextStyle().foregroundStyle(Color.themeTextSecondary)
             }
 
             let data = ActivityInsightData(activity: activity)
             if data.feedbackEvents.isEmpty {
-                Text("Afventer første feedback").captionTextStyle().foregroundStyle(Color.themeTextSecondary)
+                Text(String(appStrings: .activityAwaitingFeedback)).captionTextStyle().foregroundStyle(Color.themeTextSecondary)
             } else {
                 Label(activity.trend.insightTitle, systemImage: activity.trend.insightSymbol)
                     .supportingTextStyle()
-                Text("\(data.responseCount) svar i alt").captionTextStyle().foregroundStyle(Color.themeTextSecondary)
+                Text(String(appStrings: .feedbackTotalResponses(data.responseCount))).captionTextStyle().foregroundStyle(Color.themeTextSecondary)
             }
         }
         .surfaceCard(padding: 16)

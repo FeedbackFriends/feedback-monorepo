@@ -1,3 +1,4 @@
+import Localization
 import Foundation
 #if canImport(UIKit)
 import UIKit
@@ -36,9 +37,9 @@ public struct DeviceInfo {
         #endif
         
         let bundle = Bundle.main
-        self.appName = bundle.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Unknown"
-        self.appVersion = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown"
-        self.appBuild = bundle.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown"
+        self.appName = bundle.object(forInfoDictionaryKey: "CFBundleName") as? String ?? String(appStrings: .commonUnknown)
+        self.appVersion = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? String(appStrings: .commonUnknown)
+        self.appBuild = bundle.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? String(appStrings: .commonUnknown)
         self.internalBundleIdentifier = bundle.bundleIdentifier ?? "Unknown"
     }
     
@@ -63,18 +64,6 @@ public struct DeviceInfo {
     }
     
     public func summary() -> String {
-        """
-        Device Info:
-        Device Name: \(deviceName)
-        Model: \(deviceModel)
-        System: \(systemName) \(systemVersion)
-        Vendor Identifier: \(identifierForVendor)
-        
-        App Info:
-        App Name: \(appName)
-        Version: \(appVersion)
-        Build: \(appBuild)
-        Bundle Identifier: \(internalBundleIdentifier)
-        """
+        String(appStrings: .supportDeviceDetails(deviceName, deviceModel, systemName, systemVersion, identifierForVendor)) + "\n\n" + String(appStrings: .supportAppDetails(appName, appVersion, appBuild, internalBundleIdentifier))
     }
 }

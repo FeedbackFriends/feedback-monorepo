@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import DesignSystem
 import Domain
@@ -49,12 +50,12 @@ public struct EventDetailFeature: Sendable {
         }
 
         var navigationTitle: String {
-            activity?.title ?? "Session"
+            activity?.title ?? String(appStrings: .commonSession)
         }
 
         var navigationSubTitle: String {
             let responses = event?.overallFeedbackSummary?.responses ?? 0
-            return responses == 1 ? "1 svar" : "\(responses) svar"
+            return String(appStrings: .feedbackResponseCount(responses))
         }
 
         var shareText: String? {
@@ -62,13 +63,7 @@ public struct EventDetailFeature: Sendable {
                 return nil
             }
 
-            return """
-            Du er inviteret til at give feedback på \(navigationTitle).
-            Brug PIN-kode \(pinCode) for at svare.
-
-            Åbn linket for at svare:
-            \(inviteUrl)
-            """
+            return String(appStrings: .sessionInviteMessage(navigationTitle, pinCode, inviteUrl))
         }
 
         public init(
@@ -127,7 +122,7 @@ public struct EventDetailFeature: Sendable {
                 switch delegate {
                 case .dismissAndUpdateEvent, .dismissAndNavigateToEvent:
                     state.destination = nil
-                    state.confirmation.queue("Session gemt")
+                    state.confirmation.queue(String(appStrings: .sessionSaved))
                     return .none
 
                 case .editActivity:
@@ -195,7 +190,7 @@ public struct EventDetailFeature: Sendable {
             case .inviteButtonTapped:
                 guard let event = state.event else { return .none }
                 guard state.inviteUrl != nil, state.shareText != nil else {
-                    state.alert = .init(error: MissingInviteLinkError())
+                    state.alert = .init(error: AppFailure.inviteUnavailable)
                     return .none
                 }
                 state.destination = .invite(event)
@@ -231,9 +226,3 @@ public struct EventDetailFeature: Sendable {
 }
 
 extension EventDetailFeature.Destination.State: Equatable, Sendable {}
-
-private struct MissingInviteLinkError: LocalizedError {
-    var errorDescription: String? {
-        "Could not create invite link."
-    }
-}

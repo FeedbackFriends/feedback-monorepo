@@ -11,15 +11,15 @@ extension APIClient {
                 case .ok(let output):
                     return .init(try output.body.json, pinCode: pinCode)
                 case .forbidden(let forbidden):
-                    throw ApiError(try forbidden.body.json)
+                    throw ApiError(try forbidden.body.json, statusCode: 403)
                 case .notFound(let notFound):
-                    throw ApiError(try notFound.body.json)
+                    throw ApiError(try notFound.body.json, statusCode: 404)
                 case .conflict(let conflict):
-                    throw ApiError(try conflict.body.json)
+                    throw ApiError(try conflict.body.json, statusCode: 409)
                 case .internalServerError(let internalError):
-                    throw ApiError(try internalError.body.json)
-                case .undocumented:
-                    throw URLError(.unknown)
+                    throw ApiError(try internalError.body.json, statusCode: 500)
+                case .undocumented(let statusCode, _):
+                    throw AppFailure.http(statusCode: statusCode)
                 }
             }
         }

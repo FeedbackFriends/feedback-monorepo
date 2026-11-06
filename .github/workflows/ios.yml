@@ -52,6 +52,12 @@ jobs:
       - name: Check lint script behavior
         run: python3 -m unittest discover -s ios-app/scripts/tests -v
 
+      - name: Validate localization catalogs and notification payload contract
+        run: python3 ios-app/scripts/validate-localization.py
+
+      - name: Check direct user-visible literals
+        run: python3 ios-app/scripts/check-localized-copy.py
+
       - name: Check iOS backend workflow behavior
         run: python3 -m unittest discover -s scripts/tests -v
 
@@ -96,9 +102,16 @@ jobs:
             -configuration DebugLocalhost \
             -testPlan UnitTests \
             -destination "platform=iOS Simulator,id=$IOS_SIMULATOR_UDID" \
+            -derivedDataPath ios-app/.build/ci/DerivedData \
             -resultBundlePath ios-app/.build/ci/UnitTests.xcresult \
             -skipMacroValidation \
             CODE_SIGNING_ALLOWED=NO
+
+      - name: Validate notification strings in the built app
+        if: ${{ !cancelled() }}
+        run: >-
+          python3 ios-app/scripts/validate-localization.py
+          --app-bundle ios-app/.build/ci/DerivedData/Build/Products/DebugLocalhost-iphonesimulator/App.app
 
       - name: Upload test results
         if: always()

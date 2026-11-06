@@ -1,3 +1,4 @@
+import Localization
 import DesignSystem
 import SwiftUI
 import Domain
@@ -130,15 +131,15 @@ struct QuestionZeroToTenSummaryView: View {
 struct QuestionOpinionSummaryView: View {
     let opinionSummary: OpinionQuestionFeedbackSummary
     var body: some View {
-        let barHeight: CGFloat = 25
-        let barWidth: CGFloat = 45
+        let barHeight: CGFloat = 34
+        let barWidth: CGFloat = 66
         return VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 PercentageBar(
                     percentageValue: opinionSummary.percentageStronglyAgree,
                     countValue: opinionSummary.countStronglyAgree
                 ) {
-                    Text("Helt enig")
+                    Text(String(appStrings: .feedbackStronglyAgree))
                         .multilineTextAlignment(.center)
                         .frame(width: barWidth)
                         .frame(height: barHeight)
@@ -147,7 +148,7 @@ struct QuestionOpinionSummaryView: View {
                     percentageValue: opinionSummary.percentageAgree,
                     countValue: opinionSummary.countAgree
                 ) {
-                    Text("Enig")
+                    Text(String(appStrings: .feedbackAgree))
                         .multilineTextAlignment(.center)
                         .frame(width: barWidth)
                         .frame(height: barHeight)
@@ -156,7 +157,7 @@ struct QuestionOpinionSummaryView: View {
                     percentageValue: opinionSummary.percentageDisagree,
                     countValue: opinionSummary.countDisagree
                 ) {
-                    Text("Uenig")
+                    Text(String(appStrings: .feedbackDisagree))
                         .multilineTextAlignment(.center)
                         .frame(width: barWidth)
                         .frame(height: barHeight)
@@ -165,13 +166,14 @@ struct QuestionOpinionSummaryView: View {
                     percentageValue: opinionSummary.percentageStronglyDisagree,
                     countValue: opinionSummary.countStronglyDisagree
                 ) {
-                    Text("Helt uenig")
+                    Text(String(appStrings: .feedbackStronglyDisagree))
                         .multilineTextAlignment(.center)
                         .frame(width: barWidth)
                         .frame(height: barHeight)
                 }
             }
         }
+        .fixedSize(horizontal: true, vertical: true)
     }
 }
 
@@ -228,8 +230,9 @@ struct PercentageBar<TopView: View>: View {
                             .frame(height: height)
                     }
             }
-            Text("\(String(format: "%.0f", percentageValue))%")
+            Text(L10n.Format.percent(percentageValue / 100))
                 .captionTextStyle()
+                .fixedSize(horizontal: true, vertical: false)
         }
     }
 }

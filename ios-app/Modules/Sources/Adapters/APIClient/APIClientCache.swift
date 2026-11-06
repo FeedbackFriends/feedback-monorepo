@@ -3,10 +3,12 @@ import Domain
 import Logger
 
 public actor APIClientCache {
-    public enum CacheMutationError: Error, LocalizedError, Equatable {
+    public enum CacheMutationError: Error, LocalizedError, Equatable, AppFailureProviding {
         case managerDataUnavailable
         case activityNotFound(UUID)
         case eventNotFound(UUID)
+
+        public var appFailure: AppFailure { .cacheUpdate }
 
         public var errorDescription: String? {
             switch self {

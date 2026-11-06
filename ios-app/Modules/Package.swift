@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Modules",
+    defaultLocalization: "da",
     platforms: [
         .macOS(.v14),
         .iOS("26")
@@ -65,6 +66,7 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/liamnichols/xcstrings-tool-plugin.git", exact: "1.2.0"),
         .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", exact: "1.9.0"),
         .package(
             url: "https://github.com/firebase/firebase-ios-sdk.git",
@@ -103,6 +105,7 @@ let package = Package(
         .target(
             name: "Adapters",
             dependencies: [
+                "Localization",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
@@ -133,6 +136,7 @@ let package = Package(
         .target(
             name: "RootFeature",
             dependencies: [
+                "Localization",
                 "DesignSystem",
                 "TabbarFeature",
                 "Domain",
@@ -145,6 +149,7 @@ let package = Package(
         .target(
             name: "DesignSystem",
             dependencies: [
+                "Localization",
                 "Domain",
                 "Utility",
                 .product(name: "Lottie", package: "lottie-ios")
@@ -158,6 +163,7 @@ let package = Package(
         .target(
             name: "EnterCodeFeature",
             dependencies: [
+                "Localization",
                 "DesignSystem",
                 "FeedbackFlowFeature",
                 "Domain",
@@ -168,6 +174,7 @@ let package = Package(
         .target(
             name: "FeedbackFlowFeature",
             dependencies: [
+                "Localization",
                 "DesignSystem",
                 "Domain",
                 "Utility",
@@ -177,6 +184,7 @@ let package = Package(
         .target(
             name: "MoreFeature",
             dependencies: [
+                "Localization",
                 "DesignSystem",
                 "Domain",
                 "Utility",
@@ -186,6 +194,7 @@ let package = Package(
         .target(
             name: "ActivityFeature",
             dependencies: [
+                "Localization",
                 "DesignSystem",
                 "Domain",
                 "Utility",
@@ -196,6 +205,7 @@ let package = Package(
         .target(
             name: "TabbarFeature",
             dependencies: [
+                "Localization",
                 "DesignSystem",
                 "EnterCodeFeature",
                 "ActivityFeature",
@@ -209,6 +219,7 @@ let package = Package(
         .target(
             name: "Domain",
             dependencies: [
+                "Localization",
                 "Utility",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture")
             ]
@@ -216,6 +227,7 @@ let package = Package(
         .target(
             name: "Utility",
             dependencies: [
+                "Localization",
                 "Logger",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture")
             ]
@@ -224,7 +236,10 @@ let package = Package(
             name: "Logger"
         ),
         .target(
-            name: "Localization"
+            name: "Localization",
+            exclude: ["AppBundleResources"],
+            resources: [.process("Resources")],
+            plugins: [.plugin(name: "XCStringsToolPlugin", package: "xcstrings-tool-plugin")]
         ),
         .target(
             name: "InfoPlist",
@@ -236,6 +251,7 @@ let package = Package(
         .target(
             name: "SignUpFeature",
             dependencies: [
+                "Localization",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 "DesignSystem",
                 "Domain",
@@ -248,11 +264,13 @@ let package = Package(
             dependencies: [
                 "ActivityFeature", "TabbarFeature", "RootFeature", "Adapters", "Domain", "OpenAPI",
                 .product(name: "IssueReportingTestSupport", package: "xctest-dynamic-overlay")
-            ]
+            ],
+            resources: [.copy("Fixtures")]
         ),
         .testTarget(
             name: "AppTests",
             dependencies: [
+                "Localization",
                 .product(name: "IssueReportingTestSupport", package: "xctest-dynamic-overlay"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 "RootFeature",

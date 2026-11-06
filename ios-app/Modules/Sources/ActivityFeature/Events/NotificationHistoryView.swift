@@ -1,9 +1,9 @@
+import Localization
 import Domain
 import SwiftUI
 import DesignSystem
 
 public struct NotificationHistoryView: View {
-    @Environment(\.locale) private var locale
     @Environment(\.referenceDate) private var referenceDate
     let notificationHistoryItems: [NotificationHistoryItem]
     let activityManagerEventButtonTap: (NotificationHistoryItem) -> Void
@@ -23,8 +23,8 @@ public struct NotificationHistoryView: View {
                 if notificationHistoryItems.isEmpty {
                     ScrollView {
                         EmptyStateView(
-                            title: "Intet at vise endnu.",
-                            message: "Når der er nyt om sessionerne, ser du det her."
+                            title: String(appStrings: .notificationsEmptyTitle),
+                            message: String(appStrings: .notificationsEmptyMessage)
                         )
                     }
                     .scrollContentBackground(.hidden)
@@ -41,18 +41,18 @@ public struct NotificationHistoryView: View {
                                         Text("\(item.eventTitle)")
                                             .rowTitleTextStyle()
                                             .foregroundStyle(Color.themeText)
-                                        Text("Du har modtaget \(item.newFeedbackCount) nye feedbacksvar på ‘\(item.eventTitle)’.")
+                                        Text(String(appStrings: .notificationsReceivedFeedback(item.newFeedbackCount, item.eventTitle)))
                                             .supportingTextStyle()
                                         HStack {
                                             if !item.seenByManager {
                                                 PillTagView(
-                                                    "Ny",
+                                                    String(appStrings: .commonNewBadge),
                                                     style: .compactBadge,
                                                     foregroundColor: .themeOnPrimaryAction,
                                                     backgroundColor: .themeBlue
                                                 )
                                             }
-                                            Text(item.date.timeAgo(locale, relativeTo: referenceDate ?? .now))
+                                            Text(L10n.Format.relativeTime(item.date, relativeTo: referenceDate ?? .now))
                                                 .captionTextStyle()
                                             Spacer()
                                             
@@ -67,7 +67,7 @@ public struct NotificationHistoryView: View {
                 }
             }
             .foregroundStyle(Color.themeText)
-            .navigationTitle("Aktiviteter")
+            .navigationTitle(String(appStrings: .commonActivities))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

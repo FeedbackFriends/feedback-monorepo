@@ -1,3 +1,4 @@
+import Localization
 import Foundation
 import SwiftUI
 import DesignSystem
@@ -34,11 +35,11 @@ public struct MoreSectionView: View {
                 Button {
                     store.send(.onNotificationsButtonTap)
                 } label: {
-                    listElementView(image: .moreSectionBell, label: "Notifikationer")
+                    listElementView(image: .moreSectionBell, label: String(appStrings: .notificationsTitle))
                 }
                 if let privacyPolicyUrl = store.privacyPolicyUrl {
                     Link(destination: privacyPolicyUrl) {
-                        listElementView(image: .moreSectiondocPlaintext, label: "Privatlivspolitik")
+                        listElementView(image: .moreSectiondocPlaintext, label: String(appStrings: .morePrivacy))
                     }
                 }
                 Button {
@@ -48,14 +49,14 @@ public struct MoreSectionView: View {
                         Image.heartFill
                             .frame(width: 24, height: 24)
                             .foregroundStyle(Color.themePrimaryAction.gradient)
-                        Text("Støt os")
+                        Text(String(appStrings: .moreSupport))
                     }
                     .bodyTextStyle()
                     .foregroundColor(.themeText)
                 }
                 
             } header: {
-                SectionHeaderView("Generelt", horizontalPadding: 0)
+                SectionHeaderView(String(appStrings: .moreGeneral), horizontalPadding: 0)
             } footer: {
                 Text(appVersionFooterText)
                     .frame(maxWidth: .infinity)
@@ -73,15 +74,15 @@ public struct MoreSectionView: View {
             Button {
                 store.send(.onFeedbackButtonTap)
             } label: {
-                listElementView(image: .moreSectionElipsisBubble, label: "Send feedback til os")
+                listElementView(image: .moreSectionElipsisBubble, label: String(appStrings: .moreSendFeedback))
             }
             Button {
                 store.send(.onReportBugButtonTap)
             } label: {
-                listElementView(image: .moreSectionExlamaionmarkSquare, label: "Rapportér en fejl")
+                listElementView(image: .moreSectionExlamaionmarkSquare, label: String(appStrings: .moreReportBug))
             }
         } header: {
-            SectionHeaderView("Kontakt os", horizontalPadding: 0)
+            SectionHeaderView(String(appStrings: .moreContact), horizontalPadding: 0)
         }
     }
     
@@ -89,10 +90,10 @@ public struct MoreSectionView: View {
         Section {
             ShareLink(item: appStoreReviewUrl) {
                 VStack(spacing: 10) {
-                    Text("Del LetsGrow med andre")
+                    Text(String(appStrings: .moreShareTitle))
                         .foregroundStyle(Color.themeOnPrimaryAction)
                         .titleTextStyle()
-                    Text("Hjælp andre med at få ærlig feedback og forbedre deres aktiviteter.")
+                    Text(String(appStrings: .moreShareMessage))
                         .foregroundStyle(Color.themeOnPrimaryAction)
                         .bodyTextStyle()
                 }

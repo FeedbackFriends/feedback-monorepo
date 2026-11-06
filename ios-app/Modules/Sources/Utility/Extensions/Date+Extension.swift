@@ -1,11 +1,12 @@
 import Foundation
+import Localization
 
 public extension Date {
     func timeFormatted() -> String {
-        return self.formatted(date: .omitted, time: .shortened)
+        return L10n.Format.date(self, date: .omitted, time: .shortened)
     }
     func dateAndYear() -> String {
-        return self.formatted(date: .abbreviated, time: .omitted)
+        return L10n.Format.date(self)
     }
     func roundedUpcoming5Min() -> Self {
         Date(
@@ -38,9 +39,9 @@ public extension Date {
 }
 
 public extension Date {
-    func timeAgo(_ locale: Locale = .autoupdatingCurrent, relativeTo referenceDate: Date = .now) -> String {
+    func timeAgo(_ locale: Locale = L10n.locale, relativeTo referenceDate: Date = .now) -> String {
         let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .spellOut
+        formatter.unitsStyle = .full
         formatter.locale = locale
         return formatter.localizedString(for: self, relativeTo: referenceDate)
     }

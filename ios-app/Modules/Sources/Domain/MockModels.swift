@@ -17,32 +17,32 @@ public func generateRandomQuestions() -> [ParticipantQuestion] {
     [
         .init(
             id: UUID(),
-            questionText: "Was the agenda clear and easy to follow?",
+            questionText: "Var dagsordenen tydelig og nem at følge?",
             feedbackType: .thumpsUpThumpsDown
         ),
         .init(
             id: UUID(),
-            questionText: "On a scale of 1-10, how satisfied are you with the meeting outcome?",
+            questionText: "Hvor tilfreds er du med mødets resultat på en skala fra 0 til 10?",
             feedbackType: .zeroToTen
         ),
         .init(
             id: UUID(),
-            questionText: "This month I had work related stress symptoms.",
+            questionText: "Vi fik afklaret de vigtigste spørgsmål på mødet.",
             feedbackType: .opinion
         ),
         .init(
             id: UUID(),
-            questionText: "What went well, and what should we change next time?",
+            questionText: "Hvad gik godt, og hvad skal vi ændre næste gang?",
             feedbackType: .comment
         ),
         .init(
             id: UUID(),
-            questionText: "How do you feel about the meeting overall?",
+            questionText: "Hvordan var mødet samlet set?",
             feedbackType: .emoji
         ),
         .init(
             id: UUID(),
-            questionText: "How do you feel about the meeting overall?",
+            questionText: "Hvordan var mødet samlet set?",
             feedbackType: .emoji
         )
     ]
@@ -155,7 +155,7 @@ public extension ParticipantEvent {
             questions: [
                 ParticipantQuestion.init(
                     id: UUID(),
-                    questionText: "How do you feel about the meeting duration?",
+                    questionText: "Hvordan passede mødets varighed?",
                     feedbackType: .emoji
                 )
             ],
@@ -170,7 +170,7 @@ public extension ManagerQuestionAnalytics {
     static func mock() -> Self {
         .init(
             questionId: UUID(),
-            questionText: "How do you feel about the meeting duration?",
+            questionText: "Hvordan passede mødets varighed?",
             feedbackType: .emoji,
             eventCount: 1,
             responseCount: 1,
@@ -254,7 +254,7 @@ func generateRandomDate() -> Date {
 func generateRandomLocation() -> String {
     let possibleLocations = [
         "Roskilde",
-        "Copenhagen",
+        "København",
         "Aarhus",
         "Odense",
         "Stockholm",
@@ -269,13 +269,13 @@ func generateRandomLocation() -> String {
         "Tokyo",
         "Sydney",
         "Barcelona",
-        "Munich",
+        "München",
         "Dublin",
         "Toronto",
         "Singapore"
     ]
     
-    return possibleLocations.randomElement() ?? "Unknown Location"
+    return possibleLocations.randomElement() ?? "Ukendt sted"
 }
 
 func generateRandomPin() -> PinCode {
@@ -285,29 +285,29 @@ func generateRandomPin() -> PinCode {
 
 func generateFeedbackEventTitle() -> String {
     let possibleTitles = [
-        "Standup Meeting",
-        "Team Retrospective",
-        "Project Kickoff",
-        "Weekly Sync-Up",
-        "Brainstorming Session",
-        "Quarterly Planning",
-        "All-Hands Meeting",
-        "Leadership Roundtable",
-        "Product Demo Day",
-        "Design Review",
-        "Code Review Session",
-        "Customer Feedback Workshop",
-        "Stakeholder Alignment Meeting",
-        "Sprint Planning",
-        "Daily Standup",
-        "Town Hall Meeting",
-        "End-of-Year Review",
-        "Problem-Solving Workshop",
-        "Company Update",
-        "Strategy Session"
+        "Dagligt teammøde",
+        "Teamets retrospektiv",
+        "Projektopstart",
+        "Ugentlig opfølgning",
+        "Idémøde",
+        "Kvartalsplanlægning",
+        "Fællesmøde",
+        "Ledermøde",
+        "Produktdemonstration",
+        "Designgennemgang",
+        "Kodegennemgang",
+        "Workshop om kundefeedback",
+        "Afstemning med interessenter",
+        "Sprintplanlægning",
+        "Daglig status",
+        "Fælles orientering",
+        "Årsopsamling",
+        "Workshop om problemløsning",
+        "Nyt fra virksomheden",
+        "Strategimøde"
     ]
     
-    return possibleTitles.randomElement() ?? "Meeting"
+    return possibleTitles.randomElement() ?? "Møde"
 }
 
 private func generateFeedbackSummary(total: Int) -> OverallFeedbackSummary {
@@ -350,7 +350,7 @@ private func generateFeedbackSummary(total: Int) -> OverallFeedbackSummary {
 public extension Activity {
     static let mockEmpty = Self.init(
         id: nextDeterministicUUID(),
-        title: "Standup Meeting",
+        title: "Dagligt teammøde",
         activityEmail: "1234@letsgrow.dk",
         date: .init(timeIntervalSince1970: 0),
         pinCode: PinCode(value: "1234"),
@@ -361,14 +361,14 @@ public extension Activity {
         questions: [
             .init(
                 id: nextDeterministicUUID(),
-                questionText: "What do you think about this aspect of the experience?",
+                questionText: "Hvordan var denne del af mødet?",
                 feedbackType: .emoji,
                 feedback: [],
                 feedbackSummary: nil
             ),
             .init(
                 id: nextDeterministicUUID(),
-                questionText: "What do you think about this aspect of the experience?",
+                questionText: "Hvordan var denne del af mødet?",
                 feedbackType: .emoji,
                 feedback: [],
                 feedbackSummary: nil
@@ -386,25 +386,25 @@ public func generateQuestionWithType(feedbackType: FeedbackType) -> ManagerQuest
     case .emoji:
         let feedback: [Feedback] = [
             .mock(
-                type: FeedbackTypeWithData.emoji(emoji: Emoji.happy, comment: "Great session")
+                type: FeedbackTypeWithData.emoji(emoji: Emoji.happy, comment: "God session")
             ),
             .mock(
-                type: FeedbackTypeWithData.emoji(emoji: Emoji.sad, comment: "Could be better")
+                type: FeedbackTypeWithData.emoji(emoji: Emoji.sad, comment: "Der er plads til forbedring")
             ),
             .mock(
-                type: FeedbackTypeWithData.emoji(emoji: Emoji.sad, comment: "Not my favorite meeting")
+                type: FeedbackTypeWithData.emoji(emoji: Emoji.sad, comment: "Mødet kunne være mere relevant")
             ),
             .mock(
-                type: FeedbackTypeWithData.emoji(emoji: Emoji.verySad, comment: "Disappointed in the outcome")
+                type: FeedbackTypeWithData.emoji(emoji: Emoji.verySad, comment: "Resultatet levede ikke op til forventningerne")
             ),
             .mock(
-                type: FeedbackTypeWithData.emoji(emoji: Emoji.veryHappy, comment: "Loved it")
+                type: FeedbackTypeWithData.emoji(emoji: Emoji.veryHappy, comment: "Det var rigtig godt")
             ),
             .mock(
-                type: FeedbackTypeWithData.emoji(emoji: Emoji.verySad, comment: "The meeting ran too long")
+                type: FeedbackTypeWithData.emoji(emoji: Emoji.verySad, comment: "Mødet varede for længe")
             ),
             .mock(
-                type: FeedbackTypeWithData.emoji(emoji: Emoji.happy, comment: "Felt productive and well-organized")
+                type: FeedbackTypeWithData.emoji(emoji: Emoji.happy, comment: "Mødet var produktivt og godt organiseret")
             ),
             .mock(
                 type: FeedbackTypeWithData.emoji(emoji: Emoji.sad, comment: nil)
@@ -412,7 +412,7 @@ public func generateQuestionWithType(feedbackType: FeedbackType) -> ManagerQuest
         ]
         return ManagerQuestion(
             id: nextDeterministicUUID(),
-            questionText: "How do you feel about the meeting?",
+            questionText: "Hvordan var mødet?",
             feedbackType: .emoji,
             feedback: feedback,
             feedbackSummary: QuestionFeedbackSummary(
@@ -431,12 +431,12 @@ public func generateQuestionWithType(feedbackType: FeedbackType) -> ManagerQuest
     case .comment:
         let feedback: [Feedback] = [
             .mock(
-                type: FeedbackTypeWithData.comment(comment: "I was good")
+                type: FeedbackTypeWithData.comment(comment: "Det gik godt")
             )
         ]
         return ManagerQuestion(
             id: nextDeterministicUUID(),
-            questionText: "How do you feel about this aspect of the experience?",
+            questionText: "Hvordan var denne del af mødet?",
             feedbackType: .comment,
             feedback: feedback,
             feedbackSummary: nil
@@ -444,15 +444,15 @@ public func generateQuestionWithType(feedbackType: FeedbackType) -> ManagerQuest
     case .thumpsUpThumpsDown:
         let feedback: [Feedback] = [
             .mock(
-                type: FeedbackTypeWithData.thumpsUpThumpsDown(thumbsUpThumpsDown: ThumbsUpThumpsDown.down, comment: "Not good")
+                type: FeedbackTypeWithData.thumpsUpThumpsDown(thumbsUpThumpsDown: ThumbsUpThumpsDown.down, comment: "Ikke godt")
             ),
             .mock(
-                type: FeedbackTypeWithData.thumpsUpThumpsDown(thumbsUpThumpsDown: ThumbsUpThumpsDown.up, comment: "GOOD!")
+                type: FeedbackTypeWithData.thumpsUpThumpsDown(thumbsUpThumpsDown: ThumbsUpThumpsDown.up, comment: "Godt!")
             )
         ]
         return ManagerQuestion(
             id: nextDeterministicUUID(),
-            questionText: "Have you enjoyed this feedback session?",
+            questionText: "Var denne session nyttig for dig?",
             feedbackType: .thumpsUpThumpsDown,
             feedback: feedback,
             feedbackSummary: QuestionFeedbackSummary(
@@ -466,12 +466,12 @@ public func generateQuestionWithType(feedbackType: FeedbackType) -> ManagerQuest
         )
     case .opinion:
         let feedback: [Feedback] = [
-            .mock(type: .opinion(opinion: .stronglyAgree, comment: "Not much to say. I get the feedback i need.")),
+            .mock(type: .opinion(opinion: .stronglyAgree, comment: "Jeg får den feedback, jeg har brug for.")),
             .mock(type: .opinion(opinion: .disagree, comment: nil))
         ]
         return ManagerQuestion(
             id: nextDeterministicUUID(),
-            questionText: "I feel i get the feedback i need from my boss.",
+            questionText: "Jeg får den feedback, jeg har brug for på mødet.",
             feedbackType: .opinion,
             feedback: feedback,
             feedbackSummary: .init(
@@ -489,12 +489,12 @@ public func generateQuestionWithType(feedbackType: FeedbackType) -> ManagerQuest
         )
     case .zeroToTen:
         let feedback: [Feedback] = [
-            .mock(type: .zeroToTen(zeroToTen: 10, comment: "I FEEL good")),
+            .mock(type: .zeroToTen(zeroToTen: 10, comment: "Det gik godt")),
             .mock(type: .zeroToTen(zeroToTen: 2, comment: nil))
         ]
         return ManagerQuestion(
             id: nextDeterministicUUID(),
-            questionText: "How are you feeling today?",
+            questionText: "Hvordan var mødet i dag?",
             feedbackType: .zeroToTen,
             feedback: feedback,
             feedbackSummary: .init(
@@ -530,11 +530,11 @@ public func generateQuestionWithType(feedbackType: FeedbackType) -> ManagerQuest
 public func generateFeedback(amount: Int) -> [Feedback] {
     let possibleEmojis: [Emoji] = [.veryHappy, .happy, .sad, .verySad]
     let possibleComments = [
-        "Wow it was amazing",
-        "Absolutely fantastic!",
-        "Quite good, had a great time.",
-        "Could have been better.",
-        "Really disappointing.",
+        "Det var virkelig godt",
+        "Rigtig god session!",
+        "Et godt møde med god dialog.",
+        "Der er plads til forbedring.",
+        "Mødet levede ikke op til forventningerne.",
         nil
     ]
     

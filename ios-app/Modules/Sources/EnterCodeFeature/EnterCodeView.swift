@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import DesignSystem
 import SwiftUI
@@ -29,7 +30,7 @@ private extension EnterCodeView {
                     LetsGrowFeedbackLogoView()
                     
                     Spacer()
-                    Text("Indtast PIN-kode")
+                    Text(String(appStrings: .feedbackEnterPin))
                         .foregroundStyle(Color.themeTextSecondary)
                         .rowTitleTextStyle()
                     PinCodeTextFieldView(
@@ -40,7 +41,7 @@ private extension EnterCodeView {
                             new == true
                         }
                         .frame(maxWidth: Constants.maxWidthForLargeDevices)
-                    Button("Start") {
+                    Button(String(appStrings: .commonStart)) {
                         store.send(.startFeedbackButtonTap)
                     }
                     .disabled(store.disableStartFeedbackButton)

@@ -1,17 +1,16 @@
 import ComposableArchitecture
 import Foundation
+import Localization
 
 public extension AlertState {
     init(error: Error) {
-        
-        let alert: AlertState<Action>
-        
-        var defaultErrorAlert: AlertState<Action> = AlertState(
-            title: { TextState(error.localized.title) },
-            message: { TextState(error.localized.message) }
+        let presentation = error.localized
+        self.init(
+            title: { TextState(presentation.title) },
+            actions: {
+                ButtonState(role: .cancel, action: .send(.none)) { TextState(String(appStrings: .commonOk)) }
+            },
+            message: { TextState(presentation.message) }
         )
-        defaultErrorAlert.buttons.append(ButtonState(role: .cancel, action: .send(.none), label: { TextState("Ok") }))
-        alert = defaultErrorAlert
-        self = alert
     }
 }

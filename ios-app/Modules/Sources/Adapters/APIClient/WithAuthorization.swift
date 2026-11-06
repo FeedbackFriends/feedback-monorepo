@@ -13,7 +13,11 @@ func withAuthorization<T>(
 ) async throws -> T {
     try await Request.$needsAuthorization.withValue(true) {
         try await Request.$forceRefreshAfter.withValue(forceRefreshAfter) {
-            try await task()
+            do {
+                return try await task()
+            } catch {
+                throw normalizedAPIError(error)
+            }
         }
     }
 }

@@ -1,0 +1,75 @@
+# Run via scripts/test-notifications.py, which prepares an offline owner/session
+# and injects the actual localized APNs payload. Deliberately no launchApp: tapping the
+# notification must launch/resume the app, including the terminated-app case.
+appId: dk.nicolaidam.letsgrow
+name: English feedback notification and session navigation
+tags:
+  - notifications
+  - simulator-push
+---
+- assertTrue:
+    condition: ${typeof SESSION_TITLE !== 'undefined' && SESSION_TITLE.length > 0 && typeof FEEDBACK_COUNT !== 'undefined' && /^[0-9]+$/.test(FEEDBACK_COUNT)}
+    label: Require the delivered notification's session title and count
+# Delivery has already happened in the requested app state. Switch to the system
+# surface before reading Notification Center; otherwise iOS can return the
+# underlying foreground app's hierarchy instead of the visible notification.
+- pressKey: Home
+- repeat:
+    times: 3
+    while:
+      notVisible:
+        id: NotificationShortLookView
+        text: ${NOTIFICATION_BODY_REGEX}
+    commands:
+      - swipe:
+          start: "10%, 1%"
+          end: "10%, 85%"
+          duration: 600
+      - waitForAnimationToEnd
+- assertNotVisible:
+    text: "(?s).*notification_feedback_received_(title|body).*"
+- extendedWaitUntil:
+    visible:
+      text: "(?s).*New feedback 🔥.*"
+    timeout: 15000
+- assertVisible:
+    text: ${NOTIFICATION_BODY_REGEX}
+- takeScreenshot: ${ARTIFACTS + '/notification-english'}
+# Notification Center exposes the same text on nested nodes. Use its explicit
+# Open action when a stacked card remains after tapping.
+- repeat:
+    times: 3
+    commands:
+      - runFlow:
+          when:
+            visible:
+              text: ${NOTIFICATION_BODY_REGEX}
+          commands:
+            - tapOn:
+                id: NotificationTitle
+                text: "New feedback 🔥"
+                retryTapIfNoChange: true
+            - waitForAnimationToEnd
+            - runFlow:
+                when:
+                  visible:
+                    text: ${NOTIFICATION_BODY_REGEX}
+                commands:
+                  - swipe:
+                      from:
+                        id: NotificationShortLookView
+                        text: ${NOTIFICATION_BODY_REGEX}
+                      direction: RIGHT
+                      duration: 300
+                  - runFlow:
+                      when:
+                        visible: "Open|Åbn"
+                      commands:
+                        - tapOn: "Open|Åbn"
+- extendedWaitUntil:
+    visible:
+      id: session_detail_invite_button
+    timeout: 30000
+- assertVisible:
+    text: ${SESSION_TITLE_REGEX}
+- takeScreenshot: ${ARTIFACTS + '/notification-session'}

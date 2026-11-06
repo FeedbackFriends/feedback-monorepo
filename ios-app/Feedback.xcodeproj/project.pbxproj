@@ -116,6 +116,7 @@
 		28A050122E786F9E00CC7316 /* Preview App Question Picker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Preview App Question Picker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		28A050142E786FCA00CC7316 /* QuestionPickerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionPickerApp.swift; sourceTree = "<group>"; };
 		28A0501E2E78910A00CC7316 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		28A09D48309BCF9E00C4CD59 /* SnapshotHost-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SnapshotHost-Info.plist"; sourceTree = "<group>"; };
 		28AC8EE52FCA1A500032438D /* swiftlint-fix-changed.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "swiftlint-fix-changed.sh"; sourceTree = "<group>"; };
 		28AC8EE72FCA1A500032438D /* allow_xcode_mcp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = allow_xcode_mcp.js; sourceTree = "<group>"; };
 		28AC8EE92FCA1A500032438D /* agent.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = agent.yaml; sourceTree = "<group>"; };
@@ -409,6 +410,7 @@
 		B1057F2B2843FD8600B9EE2F = {
 			isa = PBXGroup;
 			children = (
+				28A09D48309BCF9E00C4CD59 /* SnapshotHost-Info.plist */,
 				AA202610270000000000003C /* ScreenSnapshots.xctestplan */,
 				AA2026102700000000000001 /* Modules/Tests/ScreenSnapshotTests/ScreenSnapshotTests.swift */,
 				AA2026102700000000000002 /* Modules/Tests/ScreenSnapshotTests/SnapshotHost.swift */,
@@ -681,9 +683,10 @@
 			};
 			buildConfigurationList = B1057F2F2843FD8600B9EE2F /* Build configuration list for PBXProject "Feedback" */;
 			compatibilityVersion = "Xcode 13.0";
-			developmentRegion = en;
+			developmentRegion = da;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				da,
 				en,
 				Base,
 			);
@@ -1771,6 +1774,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8B9KRX6NBR;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SnapshotHost-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -1789,6 +1793,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8B9KRX6NBR;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SnapshotHost-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -1807,6 +1812,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8B9KRX6NBR;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SnapshotHost-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;

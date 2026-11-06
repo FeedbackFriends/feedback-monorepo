@@ -1,3 +1,4 @@
+import Localization
 import DesignSystem
 import SwiftUI
 
@@ -8,7 +9,7 @@ struct FeedbackElaborationTextField: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Uddyb gerne hvorfor")
+            Text(String(appStrings: .feedbackElaboration))
                 .bodyTextStyle()
                 .foregroundColor(.themeText)
             TextEditor(text: $commentTextField)

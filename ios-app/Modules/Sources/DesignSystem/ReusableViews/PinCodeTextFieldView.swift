@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import SwiftUI
 
@@ -21,7 +22,7 @@ public struct PinCodeTextFieldView<Background: ShapeStyle>: View {
 
     public var body: some View {
         TextField("", text: $input.value)
-            .accessibilityLabel("PIN-kode")
+            .accessibilityLabel(String(appStrings: .commonPinCode))
             .font(.montserratSemiBold, 15)
             .textInputForegroundStyle()
             .padding()

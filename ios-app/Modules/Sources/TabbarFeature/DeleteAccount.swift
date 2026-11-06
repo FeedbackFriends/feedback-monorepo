@@ -1,3 +1,4 @@
+import Localization
 import Foundation
 import Domain
 import ComposableArchitecture
@@ -52,19 +53,19 @@ public struct DeleteAccount: Sendable {
             case .deleteAccountButtonTapped:
                 state.destination = .alert(
                     AlertState<Destination.AlertAction>(
-                        title: { TextState("Are you sure?") },
+                        title: { TextState(String(appStrings: .accountDeleteTitle)) },
                         actions: {
                             ButtonState(
                                 role: .destructive,
                                 action: .confirmedToDeleteAccount,
-                                label: { TextState("Delete account") }
+                                label: { TextState(String(appStrings: .accountDeleteAction)) }
                             )
                             ButtonState(
                                 role: .cancel,
-                                label: { TextState("Cancel") }
+                                label: { TextState(String(appStrings: .commonCancel)) }
                             )
                         },
-                        message: { TextState("All data related to your account will be deleted and cannot be restored. ⚠️") }
+                        message: { TextState(String(appStrings: .accountDeleteMessage)) }
                     )
                 )
                 return .none
@@ -73,15 +74,15 @@ public struct DeleteAccount: Sendable {
                 state.deleteAccountInFlight = false
                 state.destination = .alert(
                     AlertState<Destination.AlertAction>(
-                        title: { TextState("Account deleted.") },
+                        title: { TextState(String(appStrings: .accountDeletedTitle)) },
                         actions: {
                             ButtonState(
                                 role: .cancel,
                                 action: .send(.closeSessionButtonTap),
-                                label: { TextState("Close") }
+                                label: { TextState(String(appStrings: .commonClose)) }
                             )
                         },
-                        message: { TextState("Thank you for using Lets Grow.") }
+                        message: { TextState(String(appStrings: .accountDeletedMessage)) }
                     )
                 )
                 return .none
@@ -123,14 +124,14 @@ public struct DeleteAccount: Sendable {
             case .logoutFailed:
                 state.destination = .alert(
                     AlertState<Destination.AlertAction>(
-                        title: { TextState("Logout failed.") },
+                        title: { TextState(String(appStrings: .errorsLogoutTitle)) },
                         actions: {
                             ButtonState(
                                 action: .send(.logout),
-                                label: { TextState("Log out") }
+                                label: { TextState(String(appStrings: .commonLogout)) }
                             )
                         },
-                        message: { TextState("Please try again.") }
+                        message: { TextState(String(appStrings: .commonTryAgain)) }
                     )
                 )
                 return .none

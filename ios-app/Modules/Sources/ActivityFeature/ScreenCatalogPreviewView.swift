@@ -1,3 +1,4 @@
+import Localization
 #if DEBUG
 import ComposableArchitecture
 import DesignSystem
@@ -15,7 +16,7 @@ extension JoinEvent.State {
 extension ActivityList.State {
     public static func screenCatalogDeletionSuccess(bootstrap: Shared<Bootstrap>) -> Self {
         var state = Self(bootstrap: bootstrap, referenceDate: PreviewCatalogFixtures.now)
-        state.confirmation.message = "Aktivitet slettet"
+        state.confirmation.message = String(appStrings: .activityDeleted)
         state.confirmation.isPresented = true
         return state
     }
@@ -36,7 +37,7 @@ private enum CatalogActivity {
         var state = ActivityDetail.State(
             activityId: activity.id, bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity)
         )
-        state.confirmation.message = "Session slettet"
+        state.confirmation.message = String(appStrings: .sessionDeleted)
         state.confirmation.isPresented = sessionDeleted
         return NavigationStack {
             ActivityDetailView(store: Store(initialState: state) { EmptyReducer() })
@@ -390,7 +391,7 @@ private func catalogCreateSessionSuccess() -> some View {
             activityId: activity.id, eventId: event.id,
             bootstrap: PreviewCatalogFixtures.bootstrap(activity: activity)
         )
-        state.confirmation.message = "Session oprettet"
+        state.confirmation.message = String(appStrings: .sessionCreated)
         state.confirmation.isPresented = true
         return NavigationStack {
             EventDetailFeatureView(store: Store(initialState: state) { EmptyReducer() })
@@ -795,7 +796,7 @@ private func catalogActivityAllSessions() -> some View {
     ScreenCatalogContainerView {
         NavigationStack {
             ActivityDetailSessionListView(store: Store(initialState: ActivityDetailSessionList.State(
-                title: "Alle sessioner", eventTitle: "Ugentligt teammøde",
+                title: String(appStrings: .activityAllSessions), eventTitle: "Ugentligt teammøde",
                 sections: ActivityDetailSessionGrouping(
                     events: [PreviewCatalogFixtures.previousEvent, PreviewCatalogFixtures.upcomingEvent],
                     now: PreviewCatalogFixtures.now

@@ -3,6 +3,7 @@ import ComposableArchitecture
 import SwiftUI
 import DesignSystem
 import SignUpFeature
+import Localization
 
 public struct RootFeatureView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -36,6 +37,7 @@ public struct RootFeatureView: View {
 		.tint(Color.themePrimaryAction)
         .animation(.easeInOut(duration: reduceMotion ? 0 : 0.55), value: store.destination)
         .alert($store.scope(state: \.logout.destination?.alert, action: \.logout.destination.alert))
+        .environment(\.locale, L10n.locale)
     }
     
     @ViewBuilder
@@ -59,7 +61,7 @@ public struct RootFeatureView: View {
             ErrorView(error: errorType.error, isLoading: $store.isLoading) {
                 store.send(.tryAgainButtonTap(errorType))
             }
-            Button("Log out") {
+            Button(String(appStrings: .commonLogout)) {
                 store.send(.logout(.logoutButtonTap))
             }
             .buttonStyle(SecondaryTextButtonStyle())

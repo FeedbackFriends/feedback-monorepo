@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 import StoreKit
 import Domain
@@ -12,8 +13,8 @@ public struct RatingAlertView: View {
     @Environment(\.requestReview) var requestReview
     
     public init(
-        title: String = "Er LetsGrow nyttig indtil videre?",
-        message: String = "En vurdering i App Store kan hjælpe andre mødeejere med at finde LetsGrow."
+        title: String = String(appStrings: .feedbackRatingPromptTitle),
+        message: String = String(appStrings: .feedbackRatingPromptMessage)
     ) {
         self.title = title
         self.message = message
@@ -36,7 +37,7 @@ public struct RatingAlertView: View {
 						}
 					}
 					ToolbarItem(placement: .bottomBar) {
-						Button("Ikke nu") {
+						Button(String(appStrings: .commonNotNow)) {
 							self.dismiss()
 						}
 						.buttonStyle(SecondaryTextButtonStyle())
@@ -44,7 +45,7 @@ public struct RatingAlertView: View {
 					.sharedBackgroundVisibility(.hidden)
 					ToolbarSpacer(.flexible, placement: .bottomBar)
 					ToolbarItem(placement: .bottomBar) {
-						Button("Vurder appen") {
+						Button(String(appStrings: .feedbackRateApp)) {
 							Task { @MainActor in
 								self.dismiss()
 								// Delay the task by 0.5 second
@@ -86,5 +87,5 @@ private extension RatingAlertView {
 }
 
 #Preview {
-	RatingAlertView(title: "Title", message: "Message")
+	RatingAlertView(title: "Titel", message: "Besked")
 }

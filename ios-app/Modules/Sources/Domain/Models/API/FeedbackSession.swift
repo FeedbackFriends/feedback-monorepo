@@ -1,3 +1,4 @@
+import Localization
 import Foundation
 
 public struct FeedbackEventDto: Equatable, Sendable {
@@ -5,7 +6,7 @@ public struct FeedbackEventDto: Equatable, Sendable {
     public let ownerInfo: OwnerInfo
     public let pinCode: PinCode
     public let date: Date
-    public var title: String { "Event" }
+    public var title: String { String(appStrings: .commonSession) }
     public init(
         questions: [ParticipantQuestion],
         ownerInfo: OwnerInfo,

@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 import ComposableArchitecture
 import DesignSystem
@@ -15,9 +16,9 @@ public struct JoinEventView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 12) {
                 
-                Text("Svar på feedback")
+                Text(String(appStrings: .feedbackJoinTitle))
                     .titleTextStyle()
-                Text("PIN-kode")
+                Text(String(appStrings: .commonPinCode))
                     .padding(.top, 4)
                     .titleTextStyle()
                     .foregroundStyle(Color.themeText)
@@ -28,7 +29,7 @@ public struct JoinEventView: View {
                     background: Color.themeText.opacity(0.15).gradient
                 )
                 .padding(.top, 5)
-                Button("Fortsæt") {
+                Button(String(appStrings: .commonContinueAction)) {
                     store.send(.joinButtonTap)
                 }
                 .buttonStyle(LargeButtonStyle())
@@ -58,7 +59,7 @@ public struct JoinEventView: View {
                 }
             }
         }
-        .successMessage("Session fundet", isPresented: store.isSuccessMessagePresented)
+        .successMessage(String(appStrings: .feedbackSessionFound), isPresented: store.isSuccessMessagePresented)
         .presentationBackground(Color.themeSurface)
     }
 }
@@ -76,7 +77,7 @@ public struct JoinEventView: View {
 
 #Preview {
     @Previewable @State var showDeleteConfirmation: Bool = false
-    Button("Fortsæt") {
+    Button(String(appStrings: .commonContinueAction)) {
         showDeleteConfirmation = true
     }
     .sheet(isPresented: $showDeleteConfirmation) {

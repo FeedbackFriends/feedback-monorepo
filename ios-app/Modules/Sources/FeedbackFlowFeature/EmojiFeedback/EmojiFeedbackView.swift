@@ -71,7 +71,7 @@ private struct EmojiFaceButtonView: View {
         store: StoreOf<EmojiFeedback>(
             initialState: EmojiFeedback.State(
                 questionId: UUID(),
-                questionText: "Hello world"
+                questionText: "Hvordan var mødet?"
             ),
             reducer: { EmojiFeedback() }
         ),

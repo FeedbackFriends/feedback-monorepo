@@ -1,3 +1,4 @@
+import Localization
 #if DEBUG
 import ComposableArchitecture
 import DesignSystem
@@ -41,11 +42,11 @@ private func catalogSignInGoogleLoading() -> some View {
 func catalogSignInErrorState() -> SignUp.State {
     var state = SignUp.State()
     state.destination = .alert(AlertState<Never> {
-        TextState("Login mislykkedes")
+        TextState(String(appStrings: .errorsAuthenticationTitle))
     } actions: {
-        ButtonState(role: .cancel) { TextState("OK") }
+        ButtonState(role: .cancel) { TextState(String(appStrings: .commonOk)) }
     } message: {
-        TextState("Prøv at logge ind igen.")
+        TextState(String(appStrings: .errorsAuthenticationMessage))
     })
     return state
 }

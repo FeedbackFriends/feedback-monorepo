@@ -1,3 +1,4 @@
+import Localization
 import Foundation
 import ComposableArchitecture
 import Utility
@@ -125,7 +126,7 @@ public struct ParticipantEvent: Equatable, Identifiable, Sendable {
     public let feedbackSubmited: Bool
     public let ownerInfo: OwnerInfo
     public let recentlyJoined: Bool
-    public var title: String { "Event" }
+    public var title: String { String(appStrings: .commonSession) }
     
     public init(
         id: UUID,
@@ -357,32 +358,11 @@ public struct Event: Equatable, Identifiable, Sendable {
     }
 
     public var formattedDate: String {
-        if Calendar.current.dateComponents([.minute], from: date, to: end).minute == 1440 {
-            return "\(date.dateAndYear()) - All day"
-        } else if Calendar.current.isDate(date, inSameDayAs: end) {
-            return "\(date.dateAndYear()) at \(date.timeFormatted())-\(end.timeFormatted())"
-        } else {
-            return "\(date.dateAndYear()) \(end.timeFormatted()) to \(end.formatted(.dateTime.day())) \(end.formatted(.dateTime.month())) \(end.timeFormatted())"
-        }
+        L10n.Format.sessionDate(start: date, durationMinutes: durationInMinutes)
     }
 
     public var durationText: String {
-        if durationInMinutes == 60 * 24 {
-            return "All day"
-        }
-
-        let hours = durationInMinutes / 60
-        let minutes = durationInMinutes % 60
-
-        switch (hours, minutes) {
-        case (0, let minutes):
-            return "\(minutes) min"
-        case (let hours, 0):
-            return hours == 1 ? "1 hour" : "\(hours) hours"
-        default:
-            let hourText = hours == 1 ? "1 hour" : "\(hours) hours"
-            return "\(hourText) \(minutes) min"
-        }
+        durationInMinutes == 1440 ? String(appStrings: .sessionAllDay) : L10n.Format.duration(minutes: max(0, durationInMinutes))
     }
 
     public var calendarProviderName: String? {
@@ -427,31 +407,10 @@ public struct Activity: Equatable, Identifiable, Sendable {
         date + TimeInterval(durationInMinutes * 60)
     }
     public var formattedDate: String {
-        if Calendar.current.dateComponents([.minute], from: date, to: end).minute == 1440 {
-            return "\(date.dateAndYear()) - All day"
-        } else if Calendar.current.isDate(date, inSameDayAs: end) {
-            return "\(date.dateAndYear()) at \(date.timeFormatted())-\(end.timeFormatted())"
-        } else {
-            return "\(date.dateAndYear()) \(end.timeFormatted()) to \(end.formatted(.dateTime.day())) \(end.formatted(.dateTime.month())) \(end.timeFormatted())"
-        }
+        L10n.Format.sessionDate(start: date, durationMinutes: durationInMinutes)
     }
     public var durationText: String {
-        if durationInMinutes == 60 * 24 {
-            return "All day"
-        }
-
-        let hours = durationInMinutes / 60
-        let minutes = durationInMinutes % 60
-
-        switch (hours, minutes) {
-        case (0, let minutes):
-            return "\(minutes) min"
-        case (let hours, 0):
-            return hours == 1 ? "1 hour" : "\(hours) hours"
-        default:
-            let hourText = hours == 1 ? "1 hour" : "\(hours) hours"
-            return "\(hourText) \(minutes) min"
-        }
+        durationInMinutes == 1440 ? String(appStrings: .sessionAllDay) : L10n.Format.duration(minutes: max(0, durationInMinutes))
     }
     public var calendarProviderName: String? {
         guard let calendarProvider else { return nil }

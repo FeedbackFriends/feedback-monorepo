@@ -1,3 +1,4 @@
+import Localization
 import DesignSystem
 import SwiftUI
 import Foundation
@@ -91,12 +92,12 @@ public struct SignUp: Sendable {
                 return .run { send in
                     do {
                         guard let token = E2EAuthenticationConfig.tokenFromLaunchArguments() else {
-                            await send(.e2eAuthenticationStatusResponse("No injected E2E token found"))
+                            await send(.e2eAuthenticationStatusResponse(String(appStrings: .debugNoToken)))
                             return
                         }
 
                         try await authClient.signInWithCustomToken(token)
-                        await send(.e2eAuthenticationStatusResponse("E2E injected token login succeeded"))
+                        await send(.e2eAuthenticationStatusResponse(String(appStrings: .debugLoginSucceeded)))
                     } catch {
                         await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
                     }

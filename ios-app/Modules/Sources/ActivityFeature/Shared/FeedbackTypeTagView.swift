@@ -42,7 +42,7 @@ struct FeedbackTypeTagView: View {
                         .frame(minWidth: 16)
                         .accessibilityHidden(true)
                     Text(feedbackType.title)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .fixedSize(horizontal: true, vertical: true)
                 }
             }
                 .accessibilityElement(children: .ignore)

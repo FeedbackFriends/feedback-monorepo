@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import DesignSystem
 import SwiftUI
@@ -29,32 +30,32 @@ private extension DetailSectionView {
     
     var detailSectionView: some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("Detaljer")
+            SectionHeaderView(String(appStrings: .commonDetails))
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
-                        Text("Dato")
+                        Text(String(appStrings: .commonDate))
                         .rowTitleTextStyle()
                     Text(detail.formattedDate)
                         .supportingTextStyle()
-                    Text("Varighed")
+                    Text(String(appStrings: .commonDuration))
                         .rowTitleTextStyle()
                     Text(detail.durationText)
                         .supportingTextStyle()
                     if let location = detail.location, !location.isEmpty {
-                        Text("Lokation")
+                        Text(String(appStrings: .commonLocation))
                             .rowTitleTextStyle()
                         Text(location)
                             .supportingTextStyle()
                     }
                     if let calendarProviderName = detail.calendarProviderName {
-                        Text("Kalender")
+                        Text(String(appStrings: .commonCalendar))
                             .rowTitleTextStyle()
                         Text(calendarProviderName)
                             .supportingTextStyle()
                     }
                     if let totalFeedback = detail.overallFeedbackSummary {
                         HStack {
-                            Text(totalFeedback.responses == 1 ? "1 svar" : "\(totalFeedback.responses) svar")
+                            Text(String(appStrings: .feedbackResponseCount(totalFeedback.responses)))
                                 .captionTextStyle()
                         }
                         .padding(.horizontal, 10)
@@ -80,7 +81,7 @@ private extension DetailSectionView {
     @ViewBuilder
     var eventPinSectionView: some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("PIN-kode")
+            SectionHeaderView(String(appStrings: .commonPinCode))
             VStack(alignment: .trailing, spacing: 12) {
                 if let pinCode = detail.pinCode?.value {
                     Text("\(pinCode)")
@@ -97,6 +98,7 @@ private extension DetailSectionView {
                                     }
                                     .padding(.trailing, 12)
                                 }
+                                .accessibilityLabel(String(appStrings: .sessionSharePin))
                                 .buttonStyle(PrimaryTextButtonStyle())
                                 .frame(maxHeight: .infinity)
                             }
@@ -109,7 +111,7 @@ private extension DetailSectionView {
                             .foregroundColor(Color.themeVerySad)
                             .fontWeight(.semibold)
                         
-                        Text("Udløbet")
+                        Text(String(appStrings: .feedbackExpired))
                             .supportingTextStyle()
                             .foregroundColor(Color.themeVerySad)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -129,7 +131,7 @@ private extension DetailSectionView {
     @ViewBuilder
     var questionsSectionView: some View {
         VStack(alignment: .leading) {
-            SectionHeaderView("Spørgsmål")
+            SectionHeaderView(String(appStrings: .commonQuestions))
             ForEach(Array(zip(detail.questionsSnapshot.indices, detail.questionsSnapshot)), id: \.0) { index, question in
                 QuestionView(question: question, index: index)
                     .disabled(detail.overallFeedbackSummary == nil)
@@ -149,11 +151,11 @@ struct QuestionView: View {
                 isExpanded: $isExpanded,
                 content: {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("Kommentarer")
+                        Text(String(appStrings: .commonComments))
                             .rowTitleTextStyle()
                             .frame(maxWidth: .infinity, alignment: .leading)
                         if question.feedback.isEmpty {
-                            Text("Ingen kommentarer endnu")
+                            Text(String(appStrings: .feedbackNoComments))
                                 .bodyTextStyle()
                                 .padding(.vertical, 8)
                         } else {
@@ -173,8 +175,9 @@ struct QuestionView: View {
                         HStack(alignment: .top) {
                             VStack(alignment: .leading, spacing: 14) {
                                 HStack(spacing: 8) {
-                                    Text("Spørgsmål \(index + 1)")
+                                    Text(String(appStrings: .feedbackQuestionNumber(index + 1)))
                                         .supportingTextStyle()
+                                        .fixedSize(horizontal: true, vertical: true)
                                     FeedbackTypeTagView(question.feedbackType)
                                 }
                                 Text(question.questionText)
@@ -194,6 +197,7 @@ struct QuestionView: View {
                         .padding(.top, 16)
                         .padding(.trailing, 16)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             )
             .padding(.horizontal, 16)
@@ -209,7 +213,7 @@ struct QuestionView: View {
         DetailSectionView(
             detail: Event.mock()
         )
-        .navigationTitle("Session with feedback")
+        .navigationTitle("Session med feedback")
     }
 }
 
@@ -218,6 +222,6 @@ struct QuestionView: View {
         DetailSectionView(
             detail: Event.mock()
         )
-        .navigationTitle("Session empty feedback")
+        .navigationTitle("Session uden feedback")
     }
 }

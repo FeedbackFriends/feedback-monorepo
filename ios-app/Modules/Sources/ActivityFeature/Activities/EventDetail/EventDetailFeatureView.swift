@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import DesignSystem
 import Domain
@@ -20,8 +21,8 @@ public struct EventDetailFeatureView: View {
                 Color.themeBackground.ignoresSafeArea()
             } else {
                 EmptyStateView(
-                    title: "Sessionen er ikke tilgængelig",
-                    message: "Denne session kan ikke længere åbnes."
+                    title: String(appStrings: .sessionUnavailableTitle),
+                    message: String(appStrings: .sessionUnavailableMessage)
                 )
                 .padding(.horizontal, Theme.padding)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -42,7 +43,7 @@ public struct EventDetailFeatureView: View {
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                     .disabled(store.event?.pinCode == nil)
-                    .accessibilityLabel("Inviter")
+                    .accessibilityLabel(String(appStrings: .commonInvite))
                     .accessibilityIdentifier("session_detail_invite_button")
 
                     Button {
@@ -52,7 +53,7 @@ public struct EventDetailFeatureView: View {
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                     .disabled(store.event == nil)
-                    .accessibilityLabel("Rediger session")
+                    .accessibilityLabel(String(appStrings: .sessionEdit))
                     .accessibilityIdentifier("session_detail_edit_button")
 
                     Button(role: .destructive) {
@@ -62,7 +63,7 @@ public struct EventDetailFeatureView: View {
                     }
                     .buttonStyle(PrimaryTextButtonStyle())
                     .disabled(store.event == nil)
-                    .accessibilityLabel("Slet session")
+                    .accessibilityLabel(String(appStrings: .sessionDeleteTitle))
                     .accessibilityIdentifier("session_detail_delete_button")
                 }
             }
@@ -72,10 +73,10 @@ public struct EventDetailFeatureView: View {
             onDismiss: { store.send(.deleteConfirmationDismissed) },
             content: {
                 DeleteConfirmationViewSheet(
-                    title: "Slet session",
-                    message: "Slet denne session og dens feedback?",
+                    title: String(appStrings: .sessionDeleteTitle),
+                    message: String(appStrings: .sessionDeleteMessage),
                     actionButton: {
-                        Button("Slet") {
+                        Button(String(appStrings: .commonDelete)) {
                             store.send(.deleteEventConfirmButtonTapped)
                         }
                         .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
@@ -99,8 +100,8 @@ public struct EventDetailFeatureView: View {
                 .presentationDetents([.height(350)])
             } else {
                 EmptyStateView(
-                    title: "Invitation ikke tilgængelig",
-                    message: "Invitationer er ikke tilgængelige for denne session lige nu."
+                    title: String(appStrings: .sessionInviteUnavailableTitle),
+                    message: String(appStrings: .sessionInviteUnavailableMessage)
                 )
                 .padding(.horizontal, Theme.padding)
                 .presentationDetents([.height(350)])

@@ -19,12 +19,12 @@ struct DeleteAccountTests {
         await store.send(.deleteAccountButtonTapped) {
             $0.destination = .alert(
                 AlertState(
-                    title: { TextState("Are you sure?") },
+                    title: { TextState("Vil du slette din konto?") },
                     actions: {
-                        ButtonState(role: .destructive, action: .confirmedToDeleteAccount, label: { TextState("Delete account") })
-                        ButtonState(role: .cancel, label: { TextState("Cancel") })
+                        ButtonState(role: .destructive, action: .confirmedToDeleteAccount, label: { TextState("Slet konto") })
+                        ButtonState(role: .cancel, label: { TextState("Annuller") })
                     },
-                    message: { TextState("All data related to your account will be deleted and cannot be restored. ⚠️") }
+                    message: { TextState("Alle data på din konto bliver slettet og kan ikke gendannes.") }
                 )
             )
         }
@@ -38,11 +38,11 @@ struct DeleteAccountTests {
             $0.deleteAccountInFlight = false
             $0.destination = .alert(
                 AlertState(
-                    title: { TextState("Account deleted.") },
+                    title: { TextState("Kontoen er slettet") },
                     actions: {
-                        ButtonState(role: .cancel, action: .send(.closeSessionButtonTap), label: { TextState("Close") })
+                        ButtonState(role: .cancel, action: .send(.closeSessionButtonTap), label: { TextState("Luk") })
                     },
-                    message: { TextState("Thank you for using Lets Grow.") }
+                    message: { TextState("Tak, fordi du brugte LetsGrow.") }
                 )
             )
         }
@@ -61,19 +61,19 @@ struct DeleteAccountTests {
         await store.send(.deleteAccountButtonTapped) {
             $0.destination = .alert(
                 .init(
-                    title: { TextState("Are you sure?") },
+                    title: { TextState("Vil du slette din konto?") },
                     actions: {
                         ButtonState(
                             role: .destructive,
                             action: .confirmedToDeleteAccount,
-                            label: { TextState("Delete account") }
+                            label: { TextState("Slet konto") }
                         )
                         ButtonState(
                             role: .cancel,
-                            label: { TextState("Cancel") }
+                            label: { TextState("Annuller") }
                         )
                     },
-                    message: { TextState("All data related to your account will be deleted and cannot be restored. ⚠️") }
+                    message: { TextState("Alle data på din konto bliver slettet og kan ikke gendannes.") }
                 )
             )
         }
@@ -91,7 +91,7 @@ struct DeleteAccountTests {
     @Test
     func `Logout failure shows retry alert`() async {
         let store = TestStore(initialState: .init(
-            destination: .alert(AlertState(title: { TextState("Account deleted.") }))
+            destination: .alert(AlertState(title: { TextState("Kontoen er slettet") }))
         )) {
             DeleteAccount()
         } withDependencies: {
@@ -104,11 +104,11 @@ struct DeleteAccountTests {
         await store.receive(\.logoutFailed) {
             $0.destination = .alert(
                 AlertState(
-                    title: { TextState("Logout failed.") },
+                    title: { TextState("Kunne ikke logge ud") },
                     actions: {
-                        ButtonState(action: .send(.logout), label: { TextState("Log out") })
+                        ButtonState(action: .send(.logout), label: { TextState("Log ud") })
                     },
-                    message: { TextState("Please try again.") }
+                    message: { TextState("Prøv igen.") }
                 )
             )
         }
@@ -117,7 +117,7 @@ struct DeleteAccountTests {
     @Test
     func `Logout retry succeeds and closes session`() async {
         let store = TestStore(initialState: .init(
-            destination: .alert(AlertState(title: { TextState("Logout failed.") }))
+            destination: .alert(AlertState(title: { TextState("Kunne ikke logge ud") }))
         )) {
             DeleteAccount()
         } withDependencies: {

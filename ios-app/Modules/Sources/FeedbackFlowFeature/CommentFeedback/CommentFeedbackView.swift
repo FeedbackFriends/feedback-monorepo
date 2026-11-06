@@ -33,7 +33,7 @@ public struct CommentFeedbackView: View {
         store: StoreOf<CommentFeedback>(
             initialState: CommentFeedback.State(
                 questionId: UUID(),
-                questionText: "Hello world"
+                questionText: "Hvordan var mødet?"
             ),
             reducer: { CommentFeedback() }
         ),

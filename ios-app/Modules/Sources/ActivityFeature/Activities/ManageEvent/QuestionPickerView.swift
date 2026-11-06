@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 import Domain
 import DesignSystem
@@ -9,16 +10,16 @@ struct QuestionPickerView: View {
     let questionSelected: (_ input: EventInput.QuestionInput) -> Void
     var text: String {
         if existingQuestionID != nil {
-            "Gem ændring"
+            String(appStrings: .questionsSaveChange)
         } else {
-            "Tilføj spørgsmål"
+            String(appStrings: .questionsAdd)
         }
     }
     var navigationTitle: String {
         if existingQuestionID != nil {
-            "Rediger spørgsmål"
+            String(appStrings: .questionsEdit)
         } else {
-            "Nyt spørgsmål"
+            String(appStrings: .questionsNewTitle)
         }
     }
     @State private var feedbackTypeSelected: FeedbackType?
@@ -73,10 +74,10 @@ struct QuestionPickerView: View {
                     answerTypeSection
                     if let feedbackTypeSelected {
                         VStack(alignment: .leading, spacing: 12) {
-                            SectionHeaderView("Sådan ser deltagerne det")
+                            SectionHeaderView(String(appStrings: .questionsPreviewTitle))
                             FeedbackQuestionIllustrationView(
                                 questionText: questionTextField.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                                    ? "Dit spørgsmål vises her" : questionTextField,
+                                    ? String(appStrings: .questionsPreviewPlaceholder) : questionTextField,
                                 feedbackType: feedbackTypeSelected
                             )
                             .id(feedbackTypeSelected)
@@ -125,16 +126,16 @@ struct QuestionPickerView: View {
 
     private var questionSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionHeaderView("Spørgsmål")
+            SectionHeaderView(String(appStrings: .commonQuestions))
 
             TextInputView(
-                title: "Hvad vil du gerne vide?",
-                prompt: "Fx hvor nyttigt var mødet for dig?",
+                title: String(appStrings: .questionsInputTitle),
+                prompt: String(appStrings: .questionsInputPrompt),
                 text: $questionTextField,
                 isFocused: $isQuestionFocused,
                 axis: .vertical,
                 lineLimit: 2...6,
-                accessibilityLabel: "Spørgsmål",
+                accessibilityLabel: String(appStrings: .commonQuestions),
                 accessibilityIdentifier: "question_editor_input"
             )
         }
@@ -142,7 +143,7 @@ struct QuestionPickerView: View {
 
     private var answerTypeSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionHeaderView("Svartype")
+            SectionHeaderView(String(appStrings: .questionsAnswerType))
 
             VStack(alignment: .leading, spacing: 12) {
                 if let feedbackTypeSelected {
@@ -161,7 +162,7 @@ struct QuestionPickerView: View {
                                     .foregroundStyle(Color.themeTextSecondary)
                             }
                             Spacer()
-                            Text(isChoosingFeedbackType ? "Luk" : "Skift")
+                            Text(isChoosingFeedbackType ? String(appStrings: .commonClose) : String(appStrings: .commonChange))
                                 .foregroundStyle(Color.themePrimaryAction)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -171,7 +172,7 @@ struct QuestionPickerView: View {
                     .buttonStyle(.plain)
                     .accessibilityIdentifier("question_editor_change_type")
                 } else {
-                    Text("Vælg hvordan deltagerne skal svare.")
+                    Text(String(appStrings: .questionsAnswerHelp))
                         .rowTitleTextStyle()
                         .padding(15)
                 }

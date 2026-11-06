@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import Domain
 import Foundation
@@ -30,19 +31,19 @@ public struct ManageEvent: Sendable {
             var localization: String {
                 switch self {
                 case .minutes15:
-                    "15 min"
+                    L10n.Format.duration(minutes: 15)
                 case .minutes30:
-                    "30 min"
+                    L10n.Format.duration(minutes: 30)
                 case .minutes45:
-                    "45 min"
+                    L10n.Format.duration(minutes: 45)
                 case .minutes60:
-                    "1 time"
+                    L10n.Format.duration(minutes: 60)
                 case .minutes90:
-                    "1,5 time"
+                    L10n.Format.duration(minutes: 90)
                 case .minutes120:
-                    "2 timer"
+                    L10n.Format.duration(minutes: 120)
                 case .other:
-                    "Anden"
+                    String(appStrings: .sessionOtherDuration)
                 }
             }
         }
@@ -118,14 +119,14 @@ public struct ManageEvent: Sendable {
         var navigationTitle: String {
             switch mode {
             case .create:
-                "Ny session"
+                String(appStrings: .sessionNewTitle)
             case .edit:
-                "Rediger session"
+                String(appStrings: .sessionEdit)
             }
         }
 
         var actionButtonTitle: String {
-            "Gem"
+            String(appStrings: .commonSave)
         }
     }
 
@@ -240,7 +241,7 @@ public struct ManageEvent: Sendable {
                 case .edit:
                     guard let eventId = state.eventId else {
                         state.manageEventInFlight = false
-                        state.alert = .init(error: MissingEventIdentifierError())
+                        state.alert = .init(error: AppFailure.sessionUnavailable)
                         return .none
                     }
 
@@ -273,11 +274,5 @@ public struct ManageEvent: Sendable {
             }
         }
         .ifLet(\.$alert, action: \.alert)
-    }
-}
-
-private struct MissingEventIdentifierError: LocalizedError {
-    var errorDescription: String? {
-        "Missing event identifier."
     }
 }

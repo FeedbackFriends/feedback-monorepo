@@ -1,3 +1,4 @@
+import Localization
 import DesignSystem
 import Domain
 import SwiftUI
@@ -11,7 +12,7 @@ struct ActivityQuestionHistoriesView: View {
         if !data.questions.isEmpty {
             DisclosureGroup {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Hele historikken · Resultater vises på spørgsmålets egen svarskala.")
+                    Text(String(appStrings: .insightsHistoryHelp))
                         .captionTextStyle().foregroundStyle(Color.themeTextSecondary)
                     ForEach(data.questions) { history in
                         InsightQuestionHistoryView(history: history, onEventTap: onEventTap)
@@ -19,7 +20,7 @@ struct ActivityQuestionHistoriesView: View {
                 }
                 .padding(.top, 12)
             } label: {
-                Text("Spørgsmål og feedback").rowTitleTextStyle()
+                Text(String(appStrings: .insightsQuestions)).rowTitleTextStyle()
             }
             .tint(Color.themePrimaryAction)
             .accessibilityIdentifier("activity_question_histories")
@@ -35,13 +36,13 @@ struct ActivityTrendSectionView: View {
         let data = ActivityInsightData(activity: activity)
         if !data.feedbackEvents.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
-                SectionHeaderView("Udvikling over tid")
+                SectionHeaderView(String(appStrings: .insightsTrend))
                 InsightTrendView(data: data)
                 if data.feedbackEvents.count == 1 {
-                    Text("Se udviklingen, når flere sessioner har fået feedback.").supportingTextStyle()
+                    Text(String(appStrings: .insightsTrendHelp)).supportingTextStyle()
                 }
                 if activity.events.contains(where: { $0.averageRating != nil }) {
-                    Text("Feedbackscore fra 0 til 5, baseret på sessionernes 0–10-svar.")
+                    Text(String(appStrings: .insightsScoreHelp))
                         .captionTextStyle().foregroundStyle(Color.themeTextSecondary)
                     MeetingQualityCardView(activity: activity, onEventTap: onEventTap)
                 }
@@ -61,9 +62,9 @@ private struct InsightQuestionHistoryView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Button { onEventTap(session.event) } label: {
                             HStack {
-                                Text(session.event.date.formatted(date: .abbreviated, time: .omitted))
+                                Text(L10n.Format.date(session.event.date))
                                 Spacer()
-                                Text("\(session.question.feedback.count) svar")
+                                Text(String(appStrings: .feedbackResponseCount(session.question.feedback.count)))
                                 Image(systemName: "chevron.right").accessibilityHidden(true)
                             }
                             .captionTextStyle()
@@ -79,7 +80,7 @@ private struct InsightQuestionHistoryView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(history.id.text).rowTitleTextStyle()
                 FeedbackTypeTagView(history.id.type)
-                Text("\(history.sessions.count) sessioner").captionTextStyle()
+                Text(String(appStrings: .activitySessionCount(history.sessions.count))).captionTextStyle()
             }
         }
         .tint(Color.themePrimaryAction)
@@ -101,9 +102,9 @@ private struct InsightQuestionSummaryView: View {
             } else if let summary = question.feedbackSummary?.zeroToTenQuestionFeedbackSummary {
                 QuestionZeroToTenSummaryView(zeroToTenSummary: summary)
             } else if question.feedbackType == .comment, !question.feedback.isEmpty {
-                Text("Åbn sessionen for at læse kommentarerne.")
+                Text(String(appStrings: .insightsOpenComments))
             } else {
-                Text("Ingen svar på spørgsmålet i denne session.")
+                Text(String(appStrings: .insightsNoAnswers))
             }
         }
         .supportingTextStyle().foregroundStyle(Color.themeTextSecondary)
@@ -129,7 +130,7 @@ private struct InsightOpinionSummaryView: View {
                         Text(opinion.localized).frame(width: 64, height: 42).multilineTextAlignment(.center)
                     }
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(opinion.localized), \(count) af \(feedback.count) svar")
+                    .accessibilityLabel(String(appStrings: .insightsOpinionResponses(opinion.localized, count, feedback.count)))
                 }
             }
         }

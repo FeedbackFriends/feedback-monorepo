@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import DesignSystem
 import Foundation
@@ -130,7 +131,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
                     if store.isPreview {
                         CloseButtonView { self.store.send(.dismissButtonTap) }
                     } else {
-                        Button("Afslut") {
+                        Button(String(appStrings: .commonFinish)) {
                             self.store.send(.dismissButtonTap)
                         }
                         .buttonStyle(SecondaryTextButtonStyle())
@@ -170,12 +171,12 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
                 .ignoresSafeArea()
             )
             .navigationBarBackButtonHidden(true)
-            .successMessage("Tak for din feedback", isPresented: store.isSuccessMessagePresented)
+            .successMessage(String(appStrings: .feedbackThankYou), isPresented: store.isSuccessMessagePresented)
     }
 
     var questionView: some View {
         VStack {
-            Text("\(store.questionIndex + 1) af \(store.questions.count)")
+            Text(String(appStrings: .feedbackQuestionProgress(store.questionIndex + 1, store.questions.count)))
                 .captionTextStyle()
                 .foregroundColor(Color.themeTextSecondary)
                 .padding(.top, 8)
@@ -207,7 +208,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
                 .buttonStyle(OpacityButtonStyle())
             }
             if showSubmitButton {
-                Button("Send svar") {
+                Button(String(appStrings: .feedbackSubmit)) {
                     store.send(.submitButtonTap)
                 }
                 .buttonStyle(LargeButtonStyle())
@@ -215,7 +216,7 @@ public struct FeedbackFlowCoordinatorView<PrincipalToolbarItem: View>: View {
                 .isLoading(store.submitFeedbackInFlight)
                 .transition(.blurReplace)
             } else {
-                Button("Næste") {
+                Button(String(appStrings: .commonNext)) {
                     store.send(.nextQuestionButtonTap)
                 }
                 .buttonStyle(LargeButtonStyle())

@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import Foundation
 import Domain
@@ -107,7 +108,7 @@ public struct ActivityList: Sendable {
             case .destination(.presented(.manageActivity(.delegate(.activityUpdated)))):
                 state.destination = nil
                 if let id = state.path.ids.last, var detail = state.path[id: id]?.eventDetail {
-                    detail.confirmation.queue("Aktivitet gemt")
+                    detail.confirmation.queue(String(appStrings: .activitySaved))
                     state.path[id: id] = .eventDetail(detail)
                 }
                 return .none
@@ -118,7 +119,7 @@ public struct ActivityList: Sendable {
                     $0.managerData!.activities.updateOrAppend(activity)
                 }
                 var detail = ActivityDetail.State(activityId: activity.id, bootstrap: state.$bootstrap)
-                detail.confirmation.queue("Aktivitet oprettet")
+                detail.confirmation.queue(String(appStrings: .activityCreated))
                 state.path.append(.activityDetail(detail))
                 return .none
 
@@ -143,12 +144,12 @@ public struct ActivityList: Sendable {
 
             case .path(.element(_, action: .activityDetail(.delegate(.activityDeleted)))):
                 state.path.removeAll()
-                state.confirmation.queue("Aktivitet slettet")
+                state.confirmation.queue(String(appStrings: .activityDeleted))
                 return .none
 
             case .path(.element(let id, action: .eventDetail(.delegate(.eventDeleted)))):
                 state.path.pop(from: id)
-                state.confirmation.queue("Session slettet")
+                state.confirmation.queue(String(appStrings: .sessionDeleted))
                 return .none
 
             case .confirmation:
@@ -199,12 +200,12 @@ extension ActivityList.Path.State: Equatable, Sendable {}
 extension AlertState where Action == ActivityList.Destination.AlertAction {
     static var refreshFailure: Self {
         Self {
-            TextState("Kunne ikke opdatere")
+            TextState(String(appStrings: .errorsRefreshTitle))
         } actions: {
-            ButtonState(role: .cancel) { TextState("Annuller") }
-            ButtonState(action: .retryRefresh) { TextState("Prøv igen") }
+            ButtonState(role: .cancel) { TextState(String(appStrings: .commonCancel)) }
+            ButtonState(action: .retryRefresh) { TextState(String(appStrings: .commonRetry)) }
         } message: {
-            TextState("Dine aktiviteter kunne ikke opdateres. Prøv igen.")
+            TextState(String(appStrings: .errorsRefreshMessage))
         }
     }
 }

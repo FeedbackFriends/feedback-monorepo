@@ -1,3 +1,4 @@
+import Localization
 import ComposableArchitecture
 import DesignSystem
 import Domain
@@ -61,11 +62,11 @@ struct ActivityDetailContentView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button("Opret", systemImage: "plus") {
+            Button(String(appStrings: .commonCreate), systemImage: "plus") {
                 store.send(.createEventButtonTapped)
             }
             .labelStyle(.titleAndIcon)
-            .accessibilityLabel("Opret session")
+            .accessibilityLabel(String(appStrings: .sessionCreate))
             .accessibilityIdentifier("activity_detail_create_session_button")
         }
         ToolbarItem(placement: .topBarTrailing) {
@@ -74,27 +75,27 @@ struct ActivityDetailContentView: View {
                     Button {
                         store.send(.showHowItWorksButtonTap)
                     } label: {
-                        Label("Fra kalender til feedback", systemImage: "questionmark.circle")
+                        Label(String(appStrings: .activityCalendarSetupTitle), systemImage: "questionmark.circle")
                     }
                 }
 
                 Button {
                     store.send(.editActivityButtonTapped)
                 } label: {
-                    Label("Rediger aktivitet", systemImage: "pencil")
+                    Label(String(appStrings: .activityEdit), systemImage: "pencil")
                 }
                 .accessibilityIdentifier("activity_detail_edit_button")
 
                 Button(role: .destructive) {
                     store.send(.deleteActivityButtonTap)
                 } label: {
-                    Label("Slet aktivitet", systemImage: "trash")
+                    Label(String(appStrings: .activityDeleteTitle), systemImage: "trash")
                 }
             } label: {
                 Image(systemName: "ellipsis")
             }
             .buttonStyle(PrimaryTextButtonStyle())
-            .accessibilityLabel("Flere handlinger for aktivitet")
+            .accessibilityLabel(String(appStrings: .activityMoreActions))
             .accessibilityIdentifier("activity_detail_actions_menu_button")
         }
     }
@@ -110,7 +111,7 @@ struct ActivityDetailContentView: View {
                 eventTitle: eventTitle,
                 onEventTap: { store.send(.eventTapped($0)) },
                 sectionTrailingContent: { section in
-                    guard showsAllSessionsButton, section.title == "Aktuelt" else {
+                    guard showsAllSessionsButton, section.id == .current else {
                         return nil
                     }
 
@@ -124,7 +125,7 @@ struct ActivityDetailContentView: View {
         Button {
             store.send(.showAllSessionsButtonTapped)
         } label: {
-            Text("Se alle")
+            Text(String(appStrings: .activitySeeAll))
                 .captionTextStyle()
                 .foregroundStyle(Color.themePrimaryAction)
         }

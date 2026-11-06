@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 
 public struct PillTagView<Content: View>: View {
@@ -61,7 +62,7 @@ public extension PillTagView where Content == Text {
         PillTagView("3 sessioner")
         PillTagView("2 nye", style: .badge, foregroundColor: .themeOnPrimaryAction, backgroundColor: .themeBlue)
         PillTagView {
-            Label("Spørgsmål", systemImage: "questionmark.circle")
+            Label(String(appStrings: .commonQuestions), systemImage: "questionmark.circle")
         }
     }
 }

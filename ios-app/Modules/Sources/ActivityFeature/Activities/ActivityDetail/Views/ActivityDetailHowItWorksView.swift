@@ -1,3 +1,4 @@
+import Localization
 import DesignSystem
 import SwiftUI
 
@@ -9,15 +10,12 @@ struct ActivityDetailHowItWorksView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Fra kalender til feedback")
+                Text(String(appStrings: .activityCalendarSetupTitle))
                     .titleTextStyle()
                     .foregroundStyle(Color.themeText)
 
                 Text(
-                    """
-                    Brug det kalenderværktøj, du allerede \
-                    planlægger i, og inviter blot 'Lets Grow'-mailen. Så oprettes sessionen automatisk her i appen.
-                    """
+                    String(appStrings: .activityCalendarSetupMessage)
                 )
                     .bodyTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
@@ -26,10 +24,7 @@ struct ActivityDetailHowItWorksView: View {
 
             VStack(alignment: .leading, spacing: 14) {
                 Text(
-                    """
-                    Invitationen skal sendes fra mailadressen på din \
-                    LetsGrow-konto, navn@firma.dk. Du kan ændre den under Profil.
-                    """
+                    String(appStrings: .activityCalendarAccountHelp)
                 )
                     .bodyTextStyle()
                     .foregroundStyle(Color.themeTextSecondary)
@@ -46,7 +41,7 @@ struct ActivityDetailHowItWorksView: View {
 
                     Spacer(minLength: 0)
 
-                    Button("Kopiér") {
+                    Button(String(appStrings: .commonCopy)) {
                         onCopyEmail()
                         showCopiedAlert = true
                     }
@@ -58,16 +53,16 @@ struct ActivityDetailHowItWorksView: View {
 
             Divider()
 
-            Text("Du kan også oprette en session manuelt med Opret øverst til højre.")
+            Text(String(appStrings: .activityManualSessionHelp))
                 .supportingTextStyle()
                 .foregroundStyle(Color.themeTextSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .surfaceCard(padding: Theme.padding)
-        .alert("Mailen er kopieret", isPresented: $showCopiedAlert) {
-            Button("OK", role: .cancel) {}
+        .alert(String(appStrings: .activityCopyEmailTitle), isPresented: $showCopiedAlert) {
+            Button(String(appStrings: .commonOk), role: .cancel) {}
         } message: {
-            Text("Sæt den ind i den kalenderaftale, du allerede bruger.")
+            Text(String(appStrings: .activityCopyEmailMessage))
         }
     }
 }

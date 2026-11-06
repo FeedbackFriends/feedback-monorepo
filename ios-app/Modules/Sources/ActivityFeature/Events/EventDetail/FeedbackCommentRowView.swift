@@ -1,9 +1,9 @@
+import Localization
 import Domain
 import SwiftUI
 import DesignSystem
 
 struct FeedbackCommentRowView: View {
-    @Environment(\.locale) private var locale
     @Environment(\.referenceDate) private var referenceDate
     
     let feedback: Feedback
@@ -65,7 +65,7 @@ struct FeedbackCommentRowView: View {
         if let comment = optionalComment {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .center, spacing: 8) {
-                    Text("\(zeroToTen)")
+                    Text(L10n.Format.integer(zeroToTen))
                         .rowTitleTextStyle()
                         .padding(2)
                         .padding(.horizontal, 4)
@@ -138,13 +138,13 @@ struct FeedbackCommentRowView: View {
         HStack {
             if !feedback.seenByManager {
                 PillTagView(
-                    "New",
+                    String(appStrings: .commonNewBadge),
                     style: .compactBadge,
                     foregroundColor: .themeOnPrimaryAction,
                     backgroundColor: .themeBlue
                 )
             }
-            Text(feedback.createdAt.timeAgo(locale, relativeTo: referenceDate ?? .now))
+            Text(L10n.Format.relativeTime(feedback.createdAt, relativeTo: referenceDate ?? .now))
                 .captionTextStyle()
             Spacer()
             
@@ -184,7 +184,7 @@ extension ThumbsUpThumpsDown {
             VStack(alignment: .leading, spacing: 0) {
                 FeedbackCommentRowView(
                     feedback: .init(
-                        type: FeedbackTypeWithData.emoji(emoji: .happy, comment: "Dope shit"),
+                        type: FeedbackTypeWithData.emoji(emoji: .happy, comment: "God dialog og tydelige aftaler."),
                         questionId: UUID(),
                         seenByManager: false,
                         createdAt: Date()
@@ -204,7 +204,7 @@ extension ThumbsUpThumpsDown {
             VStack(alignment: .leading, spacing: 0) {
                 FeedbackCommentRowView(
                     feedback: .init(
-                        type: FeedbackTypeWithData.comment(comment: "This is my dope comment"),
+                        type: FeedbackTypeWithData.comment(comment: "Giv gerne mere tid til spørgsmål."),
                         questionId: UUID(),
                         seenByManager: false,
                         createdAt: Date()
@@ -224,7 +224,7 @@ extension ThumbsUpThumpsDown {
             VStack(alignment: .leading, spacing: 0) {
                 FeedbackCommentRowView(
                     feedback: .init(
-                        type: FeedbackTypeWithData.zeroToTen(zeroToTen: 5, comment: "cool comment"),
+                        type: FeedbackTypeWithData.zeroToTen(zeroToTen: 5, comment: "Tak for et godt møde."),
                         questionId: UUID(),
                         seenByManager: false,
                         createdAt: Date()
@@ -244,7 +244,7 @@ extension ThumbsUpThumpsDown {
             VStack(alignment: .leading, spacing: 0) {
                 FeedbackCommentRowView(
                     feedback: .init(
-                        type: FeedbackTypeWithData.opinion(opinion: Opinion.stronglyAgree, comment: "Dope shit"),
+                        type: FeedbackTypeWithData.opinion(opinion: Opinion.stronglyAgree, comment: "God dialog og tydelige aftaler."),
                         questionId: UUID(),
                         seenByManager: false,
                         createdAt: Date()
@@ -263,7 +263,7 @@ extension ThumbsUpThumpsDown {
             VStack(alignment: .leading, spacing: 0) {
                 FeedbackCommentRowView(
                     feedback: .init(
-                        type: FeedbackTypeWithData.thumpsUpThumpsDown(thumbsUpThumpsDown: .up, comment: "Cool comment"),
+                        type: FeedbackTypeWithData.thumpsUpThumpsDown(thumbsUpThumpsDown: .up, comment: "Tak for et godt møde."),
                         questionId: UUID(),
                         seenByManager: false,
                         createdAt: Date()

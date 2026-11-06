@@ -1,3 +1,4 @@
+import Localization
 import Domain
 import Foundation
 
@@ -29,21 +30,21 @@ struct ActivityDetailSessionGrouping: Equatable {
             .sorted { $0.date > $1.date }
 
         self.sections = [
-            EventListSection(title: "Aktuelt", events: active),
-            EventListSection(title: "Kommende", events: comingUp),
-            EventListSection(title: "Tidligere", events: previous)
+            EventListSection(id: .current, title: String(appStrings: .activityCurrent), events: active),
+            EventListSection(id: .upcoming, title: String(appStrings: .activityUpcoming), events: comingUp),
+            EventListSection(id: .previous, title: String(appStrings: .activityPrevious), events: previous)
         ]
         .filter { !$0.events.isEmpty }
         self.activeSections = [
-            EventListSection(title: "Aktuelt", events: active)
+            EventListSection(id: .current, title: String(appStrings: .activityCurrent), events: active)
         ]
         .filter { !$0.events.isEmpty }
         self.comingUpSections = [
-            EventListSection(title: "Kommende", events: comingUp)
+            EventListSection(id: .upcoming, title: String(appStrings: .activityUpcoming), events: comingUp)
         ]
         .filter { !$0.events.isEmpty }
         self.previousSections = [
-            EventListSection(title: "Tidligere", events: previous)
+            EventListSection(id: .previous, title: String(appStrings: .activityPrevious), events: previous)
         ]
         .filter { !$0.events.isEmpty }
     }

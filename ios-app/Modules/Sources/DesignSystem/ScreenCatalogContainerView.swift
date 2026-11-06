@@ -1,5 +1,6 @@
 #if DEBUG
 import Domain
+import Localization
 import SwiftUI
 
 extension EnvironmentValues {
@@ -34,7 +35,7 @@ public struct ScreenCatalogContainerView<Content: View>: View {
             .tint(Color.themePrimaryAction)
             .environment(\.isScreenSnapshot, true)
             .environment(\.referenceDate, PreviewCatalogFixtures.now)
-            .environment(\.locale, Locale(identifier: "da_DK"))
+            .environment(\.locale, L10n.locale)
             .environment(\.calendar, Calendar(identifier: .gregorian))
             .environment(\.timeZone, TimeZone(identifier: "Europe/Copenhagen")!)
             .environment(\.dynamicTypeSize, .large)

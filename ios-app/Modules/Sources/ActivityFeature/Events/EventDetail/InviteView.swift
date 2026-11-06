@@ -1,3 +1,4 @@
+import Localization
 import SwiftUI
 import DesignSystem
 #if canImport(UIKit)
@@ -19,7 +20,7 @@ struct InviteView: View {
                     shareButton
                 }
                 .padding(.horizontal, 18)
-                .navigationTitle("Inviter")
+                .navigationTitle(String(appStrings: .commonInvite))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
@@ -38,7 +39,7 @@ struct InviteView: View {
     
     private var infoSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Del linket med de deltagere, du gerne vil have feedback fra.")
+            Text(String(appStrings: .sessionInviteHelp))
                 .bodyTextStyle()
         }
     }
@@ -65,6 +66,7 @@ struct InviteView: View {
 			}
 			.padding(.trailing, 12)
 		}
+        .accessibilityLabel(String(appStrings: .sessionShareLink))
         .accessibilityIdentifier("invite_copy_link")
         .buttonStyle(SecondaryTextButtonStyle())
         .frame(maxHeight: .infinity)
@@ -77,7 +79,7 @@ struct InviteView: View {
 			HStack {
                 Image.shareActionIcon
 					.fontWeight(.semibold)
-				Text("Inviter")
+				Text(String(appStrings: .commonInvite))
 			}
 		}
         .buttonStyle(LargeButtonStyle())
@@ -111,6 +113,6 @@ struct ShareSheet: View {
 #Preview {
     InviteView(
         inviteLink: "https://example.com",
-        shareText: "ShareText"
+        shareText: "Giv gerne feedback på sessionen."
     )
 }
