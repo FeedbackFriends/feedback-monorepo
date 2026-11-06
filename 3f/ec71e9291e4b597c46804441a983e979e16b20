@@ -1,0 +1,107 @@
+backend/apps/api/src/main/kotlin/dk/example/feedback/controller/ControllerAdvisor.kt
+  s_be498140a93efb::t_e328b0b3a77ecc 28-29
+backend/apps/api/src/main/kotlin/dk/example/feedback/controller/SupportSubmissionController.kt
+  s_be498140a93efb::t_2ca3195f648474 1-28
+backend/apps/api/src/main/kotlin/dk/example/feedback/dto/SupportSubmissionReceipt.kt
+  s_be498140a93efb::t_5e3abf7629e455 1-6
+backend/apps/api/src/main/kotlin/dk/example/feedback/payloads/SupportSubmissionInput.kt
+  s_be498140a93efb::t_f54b27f66357e4 1-25
+backend/apps/api/src/main/kotlin/dk/example/feedback/service/SupportSubmissionService.kt
+  s_be498140a93efb::t_6d8a0a057ce0cf 1-42
+backend/apps/api/src/test/kotlin/dk/example/feedback/tests/SupportSubmissionTest.kt
+  s_be498140a93efb::t_a4d86e1c5ff7d9 1-148
+backend/lib/model/src/main/kotlin/dk/example/feedback/model/database/SupportSubmissionEntity.kt
+  s_be498140a93efb::t_ef84cf043d30b3 1-20
+backend/lib/model/src/main/kotlin/dk/example/feedback/model/enumerations/SupportSubmissionKind.kt
+  s_be498140a93efb::t_55a2f680578275 1-3
+backend/lib/model/src/main/kotlin/dk/example/feedback/model/exceptions/SupportSubmissionExceptions.kt
+  s_be498140a93efb::t_be5052defd78c6 1-4
+backend/lib/persistence/src/main/kotlin/dk/example/feedback/persistence/repo/SupportSubmissionRepo.kt
+  s_be498140a93efb::t_eea039efe9517e 1-44
+backend/lib/persistence/src/main/kotlin/dk/example/feedback/persistence/table/SupportSubmissionTable.kt
+  s_be498140a93efb::t_961adbb4e60b9d 1-21
+backend/lib/persistence/src/main/resources/db/changelog/0026-add-support-submissions.yaml
+  s_be498140a93efb::t_898ee3d23a6671 1-61
+backend/lib/persistence/src/main/resources/db/changelog/db.changelog-master.yaml
+  s_be498140a93efb::t_1493564b3b180e 100-102
+contracts/openapi/feedback-api.yaml
+  s_be498140a93efb::t_dca62c96b3711d 532-586,1683-1750
+docs/ios-localization-conventions.md
+  s_be498140a93efb::t_82c9ddf161f1a2 80
+docs/ios-localization-inventory.md
+  s_be498140a93efb::t_82a99a21856b88 44,131-132
+docs/product-contact.md
+  s_be498140a93efb::t_10f41d9fdbdcca 1-74
+ios-app/Modules/Sources/Adapters/SystemClient/SystemClientLive.swift
+  s_be498140a93efb::t_dbd1456470910d 5-7,43-64
+ios-app/Modules/Sources/DesignSystem/ReusableViews/EmojiRatingView.swift
+  s_be498140a93efb::t_6c89e38b762f21 1-37
+ios-app/Modules/Sources/DesignSystem/ReusableViews/MailComposerView.swift
+  s_be498140a93efb::t_b4b0057dc2e510 1-53
+ios-app/Modules/Sources/Domain/Models/ProductContact.swift
+  s_be498140a93efb::t_e8912ebdb87730 1-50
+ios-app/Modules/Sources/Domain/Services/ApiClient.swift
+  s_be498140a93efb::t_0c960640bb0462 44
+ios-app/Modules/Sources/Domain/Services/SystemClient.swift
+  s_be498140a93efb::t_407625c5193e1c 23-26
+ios-app/Modules/Sources/FeedbackFlowFeature/EmojiFeedback/EmojiFeedbackView.swift
+  s_be498140a93efb::t_11018fc4fa075e 17-18
+ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings
+  s_be498140a93efb::t_0f8ded81cc60f2 5276-5743
+ios-app/Modules/Sources/MoreFeature/ProductContact/ProductContact.swift
+  s_be498140a93efb::t_b385f97e03e33a 1-236
+ios-app/Modules/Sources/MoreFeature/ScreenCatalogPreviewView.swift
+  s_be498140a93efb::t_0f0ff668648c92 16-51,177-185
+ios-app/Modules/Sources/OpenAPI/GeneratedSources/Client.swift
+  s_be498140a93efb::t_9cf6c0c9cca0b2 1846-2046
+ios-app/Modules/Sources/OpenAPI/GeneratedSources/Types.swift
+  s_be498140a93efb::t_2b36ed2aa370cf 44-48,192-204,1480-1596,6528-6954
+ios-app/Modules/Sources/Utility/DeviceInfo.swift
+  s_be498140a93efb::t_26086dd488b35c 61-64
+ios-app/Modules/Tests/AppTests/APIClientLiveTests/MockAPI.swift
+  s_be498140a93efb::t_80ec0c30613c21 4-9
+ios-app/Modules/Tests/AppTests/ReducerTests/More/MoreSectionTests.swift
+  s_be498140a93efb::t_35b522e3b9e3a4 31-34,36-45,48
+tasks/ios-physical-device-verification.md
+  s_be498140a93efb::t_e850ca24a6507a 39,61
+tasks/shared-in-app-product-feedback-and-bug-reports.md
+  s_be498140a93efb::t_87eef2f3ddea20 2,37-39,41,46-48,50,58-59,65-67,73-76,82,84,101-107,111-114
+web/src/lib/api/generated/openapi.ts
+  s_be498140a93efb::t_bf9bde48437305 103-119,603-626,1568-1645
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+Live.swift
+  s_be498140a93efb::t_9710f00fbd9c85 30-31
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+LiveProductContact.swift
+  s_be498140a93efb::t_50577fb8324218 1-43
+ios-app/Modules/Sources/Domain/Error+Extension.swift
+  s_be498140a93efb::t_27bd7e3bd2bef2 98
+ios-app/Modules/Sources/Domain/Errors/AppFailure.swift
+  s_be498140a93efb::t_151a2ed94d31d2 11
+ios-app/Modules/Sources/Domain/Errors/PresentableError.swift
+  s_be498140a93efb::t_4d41b220200d4b 3
+ios-app/Modules/Sources/Domain/Models/Feedback.swift
+  s_be498140a93efb::t_a7e595f4a25fa0 51-61
+ios-app/Modules/Sources/Domain/TestDependencyKeys/APIClientTestDependencyKey.swift
+  s_be498140a93efb::t_646302106d6ebd 25-26
+ios-app/Modules/Sources/MoreFeature/MoreSection/MoreSection.swift
+  s_be498140a93efb::t_d59c43aaaeb072 12,23,30,49-51,54-56,65-66,69
+ios-app/Modules/Sources/MoreFeature/MoreSection/MoreSectionView.swift
+  s_be498140a93efb::t_8eed25b8fdca79 30-32
+ios-app/Modules/Sources/MoreFeature/ProductContact/ProductContactView.swift
+  s_be498140a93efb::t_c3654eea18e16d 1-157
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3fec71e9291e4b597c46804441a983e979e16b20",
+  "prompts": {},
+  "sessions": {
+    "s_be498140a93efb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b119-06b5-7852-92ee-2530b160acd2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
