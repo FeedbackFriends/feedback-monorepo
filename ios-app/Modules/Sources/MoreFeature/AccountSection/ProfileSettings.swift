@@ -16,8 +16,6 @@ public struct ProfileSettings: Sendable {
         @Presents var destination: Destination.State?
         var accountInfo: AccountInfo
         var isLoading = false
-        var isInAppNotificationsEnabled = false
-        var isEmailEventsEnabled = false
 
         public init(accountInfo: AccountInfo) {
             self.accountInfo = accountInfo
@@ -27,8 +25,6 @@ public struct ProfileSettings: Sendable {
     public enum Action {
         case destination(PresentationAction<Destination.Action>)
         case updateProfileButtonTap
-        case inAppNotificationsToggleChanged(Bool)
-        case emailEventsToggleChanged(Bool)
         case presentError(Error)
     }
 
@@ -48,14 +44,6 @@ public struct ProfileSettings: Sendable {
                         phoneNumberInput: state.accountInfo.phoneNumber ?? ""
                     )
                 )
-                return .none
-
-            case .emailEventsToggleChanged(let isEnabled):
-                state.isEmailEventsEnabled = isEnabled
-                return .none
-
-            case .inAppNotificationsToggleChanged(let isEnabled):
-                state.isInAppNotificationsEnabled = isEnabled
                 return .none
 
             case .presentError(let error):

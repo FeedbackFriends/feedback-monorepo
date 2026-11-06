@@ -18,13 +18,7 @@ struct ProfileSectionView: View {
                     Text(name ?? String(appStrings: .profileMissingValue))
                         .bodyTextStyle()
                     HStack {
-                        Image.personCircleFill
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40)
-                            .foregroundStyle(Color.themeTextSecondary)
-                            .background(Color.themeSurfaceSecondary)
-                            .clipShape(Circle())
+                        ProfileAvatarView(name: name, size: 40)
                         VStack(alignment: .leading, spacing: 4) {
                             Text(email ?? String(appStrings: .profileMissingValue))
                             Text(phoneNumber ?? String(appStrings: .profileMissingValue))
@@ -74,46 +68,6 @@ public struct ProfileSettingsView: View {
                     store.send(.updateProfileButtonTap)
                 }
             )
-
-            Section {
-                Toggle(
-                    isOn: Binding(
-                        get: { store.isInAppNotificationsEnabled },
-                        set: { store.send(.inAppNotificationsToggleChanged($0)) }
-                    )
-                ) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(String(appStrings: .profileAppNotifications))
-                            .rowTitleTextStyle()
-                            .foregroundStyle(Color.themeText)
-                        Text(String(appStrings: .profileAppNotificationsHelp))
-                            .supportingTextStyle()
-                            .foregroundStyle(Color.themeTextSecondary)
-                    }
-                }
-                .tint(Color.themePrimaryAction)
-                .disabled(store.isLoading)
-
-                Toggle(
-                    isOn: Binding(
-                        get: { store.isEmailEventsEnabled },
-                        set: { store.send(.emailEventsToggleChanged($0)) }
-                    )
-                ) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(String(appStrings: .profileEmailUpdates))
-                            .rowTitleTextStyle()
-                            .foregroundStyle(Color.themeText)
-                        Text(String(appStrings: .profileEmailUpdatesHelp))
-                            .supportingTextStyle()
-                            .foregroundStyle(Color.themeTextSecondary)
-                    }
-                }
-                .tint(Color.themePrimaryAction)
-                .disabled(store.isLoading)
-            } header: {
-                SectionHeaderView(String(appStrings: .profileCommunication), horizontalPadding: 0)
-            }
 
             if let logoutButtonTap {
                 Section {

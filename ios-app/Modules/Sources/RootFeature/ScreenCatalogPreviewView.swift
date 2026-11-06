@@ -33,6 +33,20 @@ private func catalogStartupError() -> some View {
 }
 
 @MainActor
+private func catalogStartupOwnerError() -> some View {
+    var state = catalogStartupError(retrying: false)
+    state.authenticationState = .authenticated
+    return ScreenCatalogContainerView {
+        RootFeatureView(store: Store(initialState: state) { EmptyReducer() })
+    }
+}
+
+// Screenshot: Authenticated owner retains logout recovery when bootstrap fails.
+#Preview("startup.owner-error") {
+    catalogStartupOwnerError()
+}
+
+@MainActor
 private func catalogStartupRetrying() -> some View {
     ScreenCatalogContainerView {
         RootFeatureView(store: Store(initialState: catalogStartupError(retrying: true)) { EmptyReducer() })
@@ -54,6 +68,9 @@ enum RootFeatureScreenSnapshotCatalog {
             },
             .init(id: "startup.error", size: CGSize(width: 402, height: 874)) {
                 catalogStartupError()
+            },
+            .init(id: "startup.owner-error", size: CGSize(width: 402, height: 874)) {
+                catalogStartupOwnerError()
             }
         ]
     }

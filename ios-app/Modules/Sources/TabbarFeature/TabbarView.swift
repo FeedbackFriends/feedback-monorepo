@@ -89,7 +89,7 @@ private extension TabbarView {
                 Text(String(appStrings: .commonGiveFeedback))
             }
 
-            SwiftUI.Tab(String(appStrings: .commonActivities), systemImage: "rectangle.stack", value: Tab.activities) {
+            SwiftUI.Tab(String(appStrings: .commonActivities), systemImage: "sparkle", value: Tab.activities) {
                 if isManager {
                     ActivityListView(
                         store: store.scope(state: \.activities, action: \.activities),
@@ -140,9 +140,12 @@ private extension TabbarView {
 
     var profileToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            Button(String(appStrings: .commonProfile), systemImage: "person.crop.circle") {
+            Button {
                 store.send(.toolbar(.profileButtonTap))
+            } label: {
+                ProfileAvatarView(name: isManager ? store.bootstrap.accountInfo.name : nil)
             }
+            .accessibilityLabel(String(appStrings: .commonProfile))
             .accessibilityIdentifier("profile_button")
         }
     }

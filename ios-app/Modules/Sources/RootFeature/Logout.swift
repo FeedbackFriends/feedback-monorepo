@@ -15,6 +15,7 @@ public struct Logout: Sendable {
     public struct State {
         @Presents var destination: Destination.State?
         public var logoutInFlight: Bool
+        var canSignOut = false
         public init(logoutInFlight: Bool = false) {
             self.logoutInFlight = logoutInFlight
         }
@@ -38,6 +39,7 @@ public struct Logout: Sendable {
                 return .none
                 
             case .logoutButtonTap:
+                guard state.canSignOut, !state.logoutInFlight else { return .none }
                 state.logoutInFlight = true
                 state.destination = nil
                 return .run { send in

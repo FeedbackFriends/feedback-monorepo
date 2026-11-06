@@ -68,6 +68,13 @@ public struct AccountSection: Sendable {
             case .delegate:
                 return .none
                 
+            case .destination(.presented(.profileSettings(.destination(.presented(.modifyAccount(.updateAccountResponse)))))):
+                if case var .profileSettings(settings) = state.destination {
+                    settings.accountInfo = state.bootstrap.accountInfo
+                    state.destination = .profileSettings(settings)
+                }
+                return .none
+
             case .destination:
                 return .none
             }

@@ -4119,42 +4119,6 @@
         }
       }
     },
-    "profile.appNotifications" : {
-      "comment" : "Profile: appNotifications. App-owned Danish interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifikationer i appen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App notifications"
-          }
-        }
-      }
-    },
-    "profile.appNotificationsHelp" : {
-      "comment" : "Profile: appNotificationsHelp. App-owned Danish interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Få påmindelser og opdateringer om dine møder."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Get reminders and updates about your meetings."
-          }
-        }
-      }
-    },
     "profile.calendarEmailHelp" : {
       "comment" : "Profile: calendarEmailHelp. App-owned Danish interface copy.",
       "extractionState" : "manual",
@@ -4169,24 +4133,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use the same email address as your calendar account (Google, Outlook, etc.)."
-          }
-        }
-      }
-    },
-    "profile.communication" : {
-      "comment" : "Profile: communication. App-owned Danish interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kommunikation"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Communication"
           }
         }
       }
@@ -4223,42 +4169,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Email"
-          }
-        }
-      }
-    },
-    "profile.emailUpdates" : {
-      "comment" : "Profile: emailUpdates. App-owned Danish interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Møder på mail"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Meeting emails"
-          }
-        }
-      }
-    },
-    "profile.emailUpdatesHelp" : {
-      "comment" : "Profile: emailUpdatesHelp. App-owned Danish interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modtag mødeopdateringer i din indbakke."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Receive meeting updates in your inbox."
           }
         }
       }

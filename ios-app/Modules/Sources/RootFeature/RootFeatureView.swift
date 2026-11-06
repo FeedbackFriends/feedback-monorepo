@@ -61,12 +61,14 @@ public struct RootFeatureView: View {
             ErrorView(error: errorType.error, isLoading: $store.isLoading) {
                 store.send(.tryAgainButtonTap(errorType))
             }
-            Button(String(appStrings: .commonLogout)) {
-                store.send(.logout(.logoutButtonTap))
+            if store.canSignOut {
+                Button(String(appStrings: .commonLogout)) {
+                    store.send(.logout(.logoutButtonTap))
+                }
+                .buttonStyle(SecondaryTextButtonStyle())
+                .isLoading(store.logout.logoutInFlight)
+                .padding(.bottom, 20)
             }
-            .buttonStyle(SecondaryTextButtonStyle())
-            .isLoading(store.logout.logoutInFlight)
-            .padding(.bottom, 20)
         }
         .background(Color.themeBackground.ignoresSafeArea())
     }

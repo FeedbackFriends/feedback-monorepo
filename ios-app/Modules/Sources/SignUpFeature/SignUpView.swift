@@ -41,7 +41,10 @@ public struct SignUpView: View {
             .toolbar {
                 if let onProfileButtonTap {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button(String(appStrings: .commonProfile), systemImage: "person.crop.circle", action: onProfileButtonTap)
+                        Button(action: onProfileButtonTap) {
+                            ProfileAvatarView(name: nil)
+                        }
+                            .accessibilityLabel(String(appStrings: .commonProfile))
                             .accessibilityIdentifier("profile_button")
                     }
                 }

@@ -1,5 +1,5 @@
 ---
-status: ready
+status: in-progress
 areas: [ios]
 created: 2026-11-06
 updated: 2026-11-06
@@ -116,24 +116,24 @@ Kun aktivitetstabens ikon; tabtitel, badges, rækkefølge og adgangsregler bevar
 
 ### Log ud og adgang
 
-- [ ] Spor alle logout-indgange og tilgængelig auth-tilstand på rodens fejlskærm.
-- [ ] Genbrug en konsistent adgangsregel i UI og action-håndtering; bevar ejerens fejl-recovery.
-- [ ] Dæk anonym/ejer samt bootstrap-fejl med målrettede reducerchecks og visuelle fixtures.
+- [x] Spor alle logout-indgange og tilgængelig auth-tilstand på rodens fejlskærm.
+- [x] Genbrug en konsistent adgangsregel i UI og action-håndtering; bevar ejerens fejl-recovery.
+- [x] Dæk anonym/ejer samt bootstrap-fejl med målrettede reducerchecks og visuelle fixtures.
 
 ### Indstillinger
 
-- [ ] Fjern sektionen og reducer-state/actions uden andre brugere; kontroller alle referencer før oprydning.
-- [ ] Opdater katalogfixtures samt lokalisering/inventory, hvis nøgler bliver ubrugte.
+- [x] Fjern sektionen og reducer-state/actions uden andre brugere; kontroller alle referencer før oprydning.
+- [x] Opdater katalogfixtures samt lokalisering/inventory, hvis nøgler bliver ubrugte.
 
 ### Profilavatar
 
-- [ ] Indfør fælles initialberegning og avatar uden at give viewet API/auth-afhængigheder.
-- [ ] Tilslut alle profilknapper og profilvisning til samme kilde; gennemgå bootstrap-opdatering efter navneskift.
-- [ ] Dæk initialregler med små enhedstests og tilføj relevante visuelle fixtures.
+- [x] Indfør fælles initialberegning og avatar uden at give viewet API/auth-afhængigheder.
+- [x] Tilslut alle profilknapper og profilvisning til samme kilde; gennemgå bootstrap-opdatering efter navneskift.
+- [x] Dæk initialregler med små enhedstests og tilføj relevante visuelle fixtures.
 
 ### Aktivitetstab
 
-- [ ] Udskift symbol på aktivitetstabet og opdater relevante katalogfixtures.
+- [x] Udskift symbol på aktivitetstabet og opdater relevante katalogfixtures.
 
 
 ## Verification
@@ -175,11 +175,15 @@ Gennemfør fælles build/lint og fuldt katalogreview én gang efter alle delænd
 
 ## Human review
 
-Not implemented yet. Forklar flow, arkitekturbeslutninger, tradeoffs, læsesti og verifikationsgrænser efter docs/agents/human-review.md.
+RootFeature gemmer den senest kendte auth-tilstand fra AuthClient/gyldigt Bootstrap. Ved startup-fejl kan ejeren dermed logge ud uden at gætte en rolle, mens ukendt/anonym identitet ikke får knappen. Root afleder canSignOut fra aktiv Bootstrap, ellers den kendte auth-tilstand, og sætter Logout-reducerens guard før dens håndtering; anonyme direkte logout-actions udfører ingen effekt. Eksplicit anonym navigation til signup viser signup uden at nulstille identiteten.
+
+ProfileAvatarView i DesignSystem beregner grafemer fra første/sidste navneord, uden auth-/Domain-afhængigheder. Features leverer kun ejernavn fra deres fælles Bootstrap; tomme/anonyme navne bruger personikon. Profilindstillingernes eksisterende snapshot opdateres fra Bootstrap ved ModifyAccount-succes, så profilavataren ikke viser gammelt navn. Kommunikation-state/actions, controls, fixture og fem ubrugte oversættelsesnøgler er fjernet; det eksisterende link til OS-notifikationer bevares. Aktivitetstabet bruger sparkle og uændret badge.
+
+Læsesti: `ios-app/Modules/Sources/RootFeature/RootFeature.swift` → `RootFeatureView.swift`/`Logout.swift` → `ios-app/Modules/Tests/InsightsTests/RootNavigationTests.swift` → `ios-app/Modules/Sources/DesignSystem/ReusableViews/ProfileAvatarView.swift`/`ios-app/Modules/Tests/AppTests/ProfileAvatarTests.swift` → `ios-app/Modules/Sources/MoreFeature/AccountSection/AccountSection.swift` og `ProfileSettingsView.swift`. De etablerede TCA-/Bootstrap-/DesignSystem-grænser bevares; auth-state-retention er implementeringsvalget til bootstrap-fejl.
 
 ## Handoff
 
-- Completed: Relaterede taskplaner samlet med alle acceptkriterier, beslutninger og verifikationsscenarier bevaret. Ingen produktændringer.
-- Verification results: Not run. Kun refinement og kontrol af taskstruktur/referencer.
-- Blockers: None.
-- Next action: Læs konteksten for delopgaverne, gennemfør implementeringsplanen og afslut med én samlet iOS-verifikation.
+- Completed: Logout UI/reducer-guard, fjernet Kommunikation og døde oversættelser/state, fælles initialavatar på alle tre profilknapper og profilindstillinger, profilnavn synkroniseret ved save, sparkle-tab. Katalogtilstande for ejerindstillinger og ejerens startup-fejl tilføjet; anonym startup-fejl skjuler logout.
+- Verification results: 2026-11-06 Feedback Localhost / LetsGrow Manager iOS 27.2: buildForTesting bestået. UnitTests discovery: 215 enabled fra både AppTests og InsightsTests. RunAllTests: 235 passed, 0 failed/skipped (inkl. parameteriserede navnetests). SwiftLint --base HEAD: 0 violations i 13 filer. validate-localization.py: 308 gyldige nøgler; localized-copy guard: 216 filer. ScreenSnapshots: 1 passed; 58 billeder publiceret og alle gennemgået. `screenshots/review/profile-findings.json` har IDs/hashes; `screenshots/index.html` har galleri. Ingen baselines accepteret.
+- Blockers: Live rolle-/navigation-/navneændringsrejse, mørk tilstand, Dynamic Type og VoiceOver er endnu ikke kørt pga. native Xcode DeviceInteraction-sessionfejlen, dokumenteret i `tasks/ios-text-input-full-surface-focus.md`. Katalog og reducerchecks er ikke fuld runtime-evidens. Fysisk kontrol er føjet til `tasks/ios-physical-device-verification.md`.
+- Next action: Når native session virker, åbn profil/indstillinger som ejer og anonym, gem et navn og kontrollér begge tabs/profilavatar, kontroller logout-adgang og badge i begge temaer samt stor tekst/VoiceOver. Behold tasken indtil required verification er dækket.

@@ -78,4 +78,28 @@ struct RootNavigationTests {
         #expect(store.destination.loggedIn?.selectedTab == .feedback)
     }
 
+    @Test
+    func anonymousStartupErrorsRejectLogoutWithoutResettingIdentity() async {
+        let store = Store(initialState: RootFeature.State()) { RootFeature() }
+        store.send(.presentError(.getSessionError(error: PreviewCatalogFixtures.error)))
+        #expect(!store.state.canSignOut)
+        await store.send(.logout(.logoutButtonTap)).finish()
+        #expect(!store.state.logout.logoutInFlight)
+        #expect(!store.state.userRequestedSignUp)
+    }
+
+    @Test
+    func ownerStartupErrorsRetainLogoutRecovery() async {
+        let logoutCalls = LockIsolated(0)
+        let store = Store(initialState: RootFeature.State()) { RootFeature() } withDependencies: {
+            $0.apiClient.createAccount = { _ in throw URLError(.notConnectedToInternet) }
+            $0.apiClient.logout = { logoutCalls.withValue { $0 += 1 } }
+            $0.authClient.logout = { logoutCalls.withValue { $0 += 1 } }
+        }
+        await store.send(.authenticationStateChanged(.authenticated)).finish()
+        #expect(store.state.canSignOut)
+        await store.send(.logout(.logoutButtonTap)).finish()
+        #expect(logoutCalls.value == 2)
+    }
+
 }

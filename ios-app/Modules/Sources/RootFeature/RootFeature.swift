@@ -42,6 +42,14 @@ public struct RootFeature: Sendable {
     
     @ObservableState
     public struct State {
+        var authenticationState: UserState = .loggedOut
+        var canSignOut: Bool {
+            if case let .loggedIn(tabs) = destination {
+                return tabs.bootstrap.role != nil
+            }
+            if case .authenticated = authenticationState { return true }
+            return false
+        }
         var notificationDeeplinkInFlight = false
         /// Set when the user explicitly asks to sign up / sign out, so that the
         /// resulting `.loggedOut` state shows the SignUp screen instead of
@@ -56,6 +64,9 @@ public struct RootFeature: Sendable {
             logout: Logout.State = .init(),
         ) {
             self.destination = destination
+            if case let .loggedIn(tabs) = destination {
+                self.authenticationState = tabs.bootstrap.role == .manager ? .authenticated : .anonymous
+            }
             self.isLoading = isLoading
             self.logout = logout
         }
@@ -84,6 +95,10 @@ public struct RootFeature: Sendable {
     @Dependency(\.continuousClock) var clock
     
     public var body: some ReducerOf<Self> {
+        Reduce { state, _ in
+            state.logout.canSignOut = state.canSignOut
+            return .none
+        }
         Scope(state: \.logout, action: \.logout) {
             Logout()
         }
@@ -94,6 +109,10 @@ public struct RootFeature: Sendable {
             switch action {
                 
             case .destination(.loggedIn(.delegate(.navigateToSignUp))):
+                guard state.canSignOut else {
+                    state.destination = .signUp(.init())
+                    return .none
+                }
                 state.userRequestedSignUp = true
                 return .send(.logout(.logoutButtonTap))
                 
@@ -115,6 +134,7 @@ public struct RootFeature: Sendable {
                 }
                 
             case .authenticationStateChanged(let authState):
+                state.authenticationState = authState
                 Logger.debug("Auth state changed: \(authState)")
                 if state.notificationDeeplinkInFlight {
                     return .none
@@ -147,6 +167,7 @@ public struct RootFeature: Sendable {
                 return .none
                 
             case .getSessionResponse(let bootstrap, let deeplink):
+                state.authenticationState = bootstrap.role == .manager ? .authenticated : .anonymous
                 state.isLoading = false
                 let sharedBootstrap = Shared(value: bootstrap)
                 state.notificationDeeplinkInFlight = false
@@ -172,6 +193,7 @@ public struct RootFeature: Sendable {
                 return .none
                 
             case .createAccountResponse(let bootstrap, _):
+                state.authenticationState = bootstrap.role == .manager ? .authenticated : .anonymous
                 state.isLoading = false
                 state.destination = Destination.State.loggedIn(
                     Tabbar.State(

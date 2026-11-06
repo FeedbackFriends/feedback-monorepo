@@ -26,7 +26,10 @@ public struct ActivityListView: View {
                 .toolbar {
                     if let onProfileButtonTap {
                         ToolbarItem(placement: .topBarLeading) {
-                            Button(String(appStrings: .commonProfile), systemImage: "person.crop.circle", action: onProfileButtonTap)
+                            Button(action: onProfileButtonTap) {
+                                ProfileAvatarView(name: store.bootstrap.role == .manager ? store.bootstrap.accountInfo.name : nil)
+                            }
+                                .accessibilityLabel(String(appStrings: .commonProfile))
                                 .accessibilityIdentifier("profile_button")
                         }
                     }

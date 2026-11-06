@@ -19,8 +19,6 @@ private func catalogSettingsManager() -> some View {
         let state = {
             var state = ProfileSettings.State(accountInfo: PreviewCatalogFixtures.account)
             state.isLoading = false
-            state.isInAppNotificationsEnabled = false
-            state.isEmailEventsEnabled = false
             return state
         }()
         NavigationStack {
@@ -32,31 +30,9 @@ private func catalogSettingsManager() -> some View {
     }
 }
 
+// Screenshot: Owner settings after removing unused communication controls.
 #Preview("settings.manager") {
     catalogSettingsManager()
-}
-
-@MainActor
-private func catalogSettingsNotificationsEnabled() -> some View {
-    ScreenCatalogContainerView {
-        let state = {
-            var state = ProfileSettings.State(accountInfo: PreviewCatalogFixtures.account)
-            state.isLoading = false
-            state.isInAppNotificationsEnabled = true
-            state.isEmailEventsEnabled = true
-            return state
-        }()
-        NavigationStack {
-            ProfileSettingsView(
-                store: Store(initialState: state) { EmptyReducer() },
-                logoutButtonTap: {}, deleteAccountButtonTap: {}, isDeleteAccountLoading: false
-            )
-        }
-    }
-}
-
-#Preview("settings.notifications-enabled") {
-    catalogSettingsNotificationsEnabled()
 }
 
 @MainActor
@@ -65,8 +41,6 @@ private func catalogSettingsSaving() -> some View {
         let state = {
             var state = ProfileSettings.State(accountInfo: PreviewCatalogFixtures.account)
             state.isLoading = true
-            state.isInAppNotificationsEnabled = true
-            state.isEmailEventsEnabled = true
             return state
         }()
         NavigationStack {
@@ -88,8 +62,6 @@ private func catalogSettingsDeletingAccount() -> some View {
         let state = {
             var state = ProfileSettings.State(accountInfo: PreviewCatalogFixtures.account)
             state.isLoading = false
-            state.isInAppNotificationsEnabled = false
-            state.isEmailEventsEnabled = false
             return state
         }()
         NavigationStack {
@@ -166,6 +138,9 @@ private func catalogEditProfileSaving() -> some View {
 enum MoreFeatureScreenSnapshotCatalog {
     static var samples: [ScreenSnapshotSample] {
         [
+            .init(id: "settings.manager", size: CGSize(width: 402, height: 874)) {
+                catalogSettingsManager()
+            },
             .init(id: "edit-profile.populated", size: CGSize(width: 402, height: 874)) {
                 catalogEditProfilePopulated()
             }
