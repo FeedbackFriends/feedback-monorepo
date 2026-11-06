@@ -18,11 +18,11 @@ Make repository documentation, task plans, and agent instructions/configuration 
 
 ## Context
 
-- [Project metadata](../ios-app/Feedback.xcodeproj/project.pbxproj) currently contains explicit `.agents` groups and an `allow_xcode_mcp.js` file reference under a scripts group. Repository file discovery finds no corresponding script.
+- [Project metadata](../ios-app/Feedback.xcodeproj/project.xcproj) currently contains explicit `.agents` groups and an `allow_xcode_mcp.js` file reference under a scripts group. Repository file discovery finds no corresponding script.
 - Current project groups expose only a selection of skills and agent metadata; root lifecycle skills and task/doc additions need to be included.
 - Inspect root `AGENTS.md`, `docs/`, `tasks/`, `.agents/`, and checked-in `.codex/` guidance/configuration, plus `ios-app/AGENTS.md`, `ios-app/Docs/`, `ios-app/.agents/`, and the repository-owned docs/agent files under backend/web. Include supporting skill references, templates, metadata, and helper scripts where applicable.
 - Read [iOS policy](../ios-app/AGENTS.md), [harness ownership](../ios-app/Docs/agent-harness.md), [agent-tooling overview](../docs/agent-tooling.md), and [native simulator workflow](../ios-app/.agents/skills/lg-ios-run-simulator/SKILL.md).
-- Coordinate with [project-format migration](ios-xcode-json-project-format.md): choose navigator mechanisms supported by the actual format/toolchain. This task can proceed on the current format if migration is not yet available.
+- The project now uses Xcode’s native JSON `project.xcproj` format (Xcode 27+). Choose navigator mechanisms supported by that format; see [project configuration guidance](../ios-app/Docs/agent-harness.md#project-configuration-format).
 
 ## Decisions and open questions
 

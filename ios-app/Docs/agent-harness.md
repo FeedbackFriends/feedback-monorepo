@@ -27,6 +27,14 @@ Natural-language equivalents work. Task creation/refinement writes local task fi
 
 Keep a rule or procedure in its owning file and link to it elsewhere. This page describes setup; it does not replace those instructions. No edit hook runs SwiftLint or changes Swift files. The old `swiftlint-fix-changed.sh` path remains a non-mutating compatibility entry point and requires the same `--base` argument as the lint script.
 
+## Project configuration format
+
+`Feedback.xcodeproj/project.xcproj` is Xcode's native JSON project configuration. Xcode 27 or later is required to open it; Xcode 27.2 performed the migration from `project.pbxproj`. The `.xcodeproj` bundle, shared schemes, test plans, and command entry points retain their existing paths. The format permits trailing commas; use Xcode or format-aware tools when editing it.
+
+Apple documents the conversion and rollback in [Updating your Xcode project configuration file format](https://developer.apple.com/documentation/xcode/updating-your-xcode-project-configuration-file-format). Its [open source format library](https://github.com/apple/xcode-project-format) describes the schema.
+
+GitHub Actions uses the `xcode-27` runner with `latest-stable` Xcode. GitHub's [runner announcement](https://github.blog/changelog/2026-10-15-xcode-27-runner-image-generally-available/) documents the supported label; the previous `macos-26` image provides Xcode 26. Xcode Cloud workflows must select Xcode 27 or later before building this project. Cloud toolchain selection is managed remotely and is not pinned by the checked-in manifest.
+
 ## Xcode MCP setup
 
 Use Xcode 27 with the installed iOS 27 simulator runtime, complete Xcode's first-launch setup, and select the intended Xcode installation in its command-line tools settings. Install SwiftLint (`brew install swiftlint`) and Python 3. Open this repository as a trusted Codex project.
