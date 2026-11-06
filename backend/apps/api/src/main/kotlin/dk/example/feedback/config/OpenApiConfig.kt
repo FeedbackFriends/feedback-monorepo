@@ -59,6 +59,8 @@ class OpenApiConfig {
                 .addProperty("domainCode", domainCodeSchema)
                 .addProperty("exceptionType", StringSchema())
                 .addProperty("path", StringSchema())
+                .addProperty("userTitle", StringSchema().description("Optional safe, localized customer-facing title."))
+                .addProperty("userMessage", StringSchema().description("Optional safe, localized customer-facing message. Never diagnostic exception text."))
 
             )
 

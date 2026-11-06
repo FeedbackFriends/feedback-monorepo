@@ -8,6 +8,8 @@ data class ApiError(
     val domainCode: DomainCode?,
     val exceptionType: String,
     val path: String,
+    val userTitle: String? = null,
+    val userMessage: String? = null,
 )
 
 enum class DomainCode {

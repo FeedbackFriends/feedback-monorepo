@@ -65,9 +65,9 @@ Use `LocalizedStringResource(appStrings:)` or `Text(appStrings:)` when appropria
 
 ## Error mapping
 
-Map the six existing domain codes, available HTTP failures, transport failures, authentication SDK codes, and known local errors to app-owned localized messages. Unknown or malformed errors use the generic message in the selected app language. Never display arbitrary API message fields, `localizedDescription`, or NSError description text as production copy.
+Prefer a complete, nonblank pair of backend `userTitle`/`userMessage` fields for API failures, rendered as plain text. The [API error-copy contract](api-error-copy.md) owns language negotiation, backend translations and compatibility. Retain app-owned mappings for the six existing domain codes, HTTP failures and older/incomplete API responses. Transport failures, authentication SDK codes and known local errors remain client-localized. Never display diagnostic API `message`, `localizedDescription`, or NSError description text as production copy.
 
-Suggested baseline wording: `Der opstod en fejl`, `Der opstod en uventet fejl. Prøv igen.`, `Du er offline. Tjek din internetforbindelse.`, and `PIN-koden passer ikke til en aktiv session.` Keep technical details in diagnostics and preserve existing cancellation/retry behavior. No backend or API schema changes are required.
+Keep technical details in diagnostics and preserve existing cancellation/retry behavior. New business-error wording belongs in backend Danish/English catalogs; local recovery and compatibility strings remain in the existing Localization module.
 
 ## External UI and documented exceptions
 

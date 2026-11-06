@@ -9,6 +9,49 @@ import OpenAPIRuntime
 import Testing
 
 struct ErrorAdapterTests {
+    @Test(arguments: ["PINCODE_NOT_FOUND", "FUTURE_CODE"])
+    func backendCopySurvivesKnownAndUnknownCodes(_ code: String) async throws {
+        let payload = """
+        {"message":"sensitive diagnostic","domainCode":"\(code)","userTitle":"Server title","userMessage":"Server message"}
+        """
+        do {
+            _ = try await APIErrorMiddleware().intercept(
+                HTTPRequest(method: .get, scheme: "https", authority: "example.com", path: "/"),
+                body: nil, baseURL: URL(string: "https://example.com")!, operationID: "test"
+            ) { _, _, _ in
+                (HTTPResponse(status: .notFound), HTTPBody(payload))
+            }
+            Issue.record("Expected API failure")
+        } catch {
+            #expect((error as? ApiError)?.rawDomainCode == code)
+            #expect(error.localized == PresentableError(title: "Server title", message: "Server message"))
+        }
+    }
+
+    @Test
+    func middlewareSendsSelectedAppLanguage() async throws {
+        _ = try await APIErrorMiddleware(language: { "en-GB" }).intercept(
+            HTTPRequest(method: .get, scheme: "https", authority: "example.com", path: "/"),
+            body: nil, baseURL: URL(string: "https://example.com")!, operationID: "test"
+        ) { request, _, _ in
+            #expect(request.headerFields[.acceptLanguage] == "en-GB")
+            return (HTTPResponse(status: .ok), nil)
+        }
+    }
+
+    @Test
+    func cancellationRemainsCancellation() async {
+        do {
+            _ = try await APIErrorMiddleware().intercept(
+                HTTPRequest(method: .get, scheme: "https", authority: "example.com", path: "/"),
+                body: nil, baseURL: URL(string: "https://example.com")!, operationID: "test"
+            ) { _, _, _ in throw CancellationError() }
+            Issue.record("Expected cancellation")
+        } catch {
+            #expect(error is CancellationError)
+        }
+    }
+
     @Test func wrappedTransportErrorsKeepNetworkClassification() {
         let wrapped = ClientError(
             operationID: "test", operationInput: "", causeDescription: "English diagnostic",

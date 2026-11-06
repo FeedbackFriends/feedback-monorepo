@@ -35,11 +35,12 @@ Fysiske kontroller fra implementeringsopgaverne. Listen udvides løbende før re
 - [ ] AC-4: Kontrollér profilavataren og aktivitetstabets sparkle i lys/mørk og stor tekst/VoiceOver; anonym ser personikon og ingen Log ud; ejer ser korrekte initialer og kan fortsat åbne indstillinger/logge ud. Navneændring opdaterer avatar på begge tabs og i indstillinger. Kommunikation er væk, OS-notifikationslinket består.
 - [ ] AC-5: Som ejer på Aktiviteter: afvent næste 10-sekunders poll, se blå bevægelse og første grønne signal (800ms), derefter usynlig bjælke. Senere polls giver ikke gentaget grønt signal før baggrund/forgrund. Reduce Motion giver statisk blå visning. Fejlet poll giver intet grønt signal.
 - [ ] AC-6: Nyt/redigeret spørgsmål: åbn svartypesheet, skift mellem alle fem typer uden lukning, rul til hele previewet, annullér/swipe og bekræft at tidligere værdi bevares; bekræft med Vælg og gem spørgsmålet. Kontrollér bevaret tekst/ID og stor tekst/VoiceOver samt de fem monokrome ikoner i begge temaer.
+- [ ] AC-7: Mod en backend med den nye fejlkontrakt: prøv ugyldig PIN i dansk/engelsk og kontrollér forståelig title/message uden tekniske detaljer. Offline og ældre server uden displayfelter skal stadig give lokal, forståelig fejl. Ingen produktionsindsendelse er nødvendig.
 - [ ] AC-2: Alle efterfølgende tilføjede fysiske kontroller er udført og deres build/enhed/resultat registreret.
 
 ## Implementation plan
 
-- [x] Implementér haptikrettelsen i `ios-confirmation-polish.md`, og tilføj commitreference her før levering.
+- [x] Implementér haptikrettelsen i `ios-confirmation-polish.md` (`d9b56d4`).
 - [ ] Tilføj relevante fysiske kontroller løbende med reproduktionstrin og forventning.
 - [ ] Nicolai gennemfører og registrerer resultater; fejl følges op i særskilt task ved behov.
 
@@ -56,7 +57,7 @@ Eksisterende ansvarsdeling bevares: DesignSystem ejer haptik, features ejer timi
 
 ## Handoff
 
-- Completed: Samlet fysisk tjekliste oprettet efter brugerens ønske.
+- Completed: Samlet fysisk tjekliste oprettet og udvidet. Leverede kodecommits: `4b65640` (inputfokus), `d9b56d4` (haptik/mailalert), `2bef131` (profil/navigation), `8c78b5e` (sync), `85f0cad` (svartypesheet/SVG). Fælles fejltekster tilføjes i separat efterfølgende commit. Ingen push udført.
 - Verification results: Not run. Haptikrettelsen er implementeret i confirmation-polish; build/lint, success-flow-test og katalogcapture består. Fysisk vibration og live clipboard er ikke testet.
 - Blockers: Kræver Nicolais fysiske iPhone og testresultater.
-- Next action: Ved implementering af confirmation-polish tilføjes commitreference og faktisk automatisk evidens; Nicolai tester derefter AC-1.
+- Next action: Nicolai installerer en build med de relevante commits, udfører AC-1 og efterfølgende punkter og noterer commit/build, enhed, iOS-version og resultat. Agenten tilføjer løbende nye kontroller før levering/push.

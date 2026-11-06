@@ -19,6 +19,8 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,8 +49,11 @@ class AdminSecurityAccessTest(
 
     @Test
     fun `admin endpoint denies unauthenticated request when test admin endpoints are disabled`() {
-        mockMvc.perform(post("/admin/seed-manager-empty"))
-            .andExpect(status().is4xxClientError)
+        mockMvc.perform(post("/admin/seed-manager-empty").header("Accept-Language", "en-GB"))
+            .andExpect(status().isUnauthorized)
+            .andExpect(header().string("Content-Language", "en"))
+            .andExpect(jsonPath("$.userTitle").exists())
+            .andExpect(jsonPath("$.userMessage").exists())
 
         verify(adminService, never()).seedManagerEmpty()
     }
@@ -59,6 +64,8 @@ class AdminSecurityAccessTest(
             post("/admin/seed-manager-empty")
                 .with(jwt().jwt { it.claim("email", "not-admin@example.com") }),
         ).andExpect(status().isForbidden)
+            .andExpect(header().string("Content-Language", "da"))
+            .andExpect(jsonPath("$.userTitle").value("Ingen adgang"))
 
         verify(adminService, never()).seedManagerEmpty()
     }

@@ -34,6 +34,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EventDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -72,6 +84,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -111,6 +135,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -150,6 +186,18 @@ paths:
         "200":
           description: OK
           content: {}
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -199,6 +247,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActivityDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -237,6 +297,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -275,6 +347,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -316,6 +400,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BootstrapDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -347,6 +443,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -385,6 +493,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -427,6 +547,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubmitFeedbackResponseDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -469,6 +601,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FeedbackEventDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -511,6 +655,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EventDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -553,6 +709,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ParticipantEventDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -595,6 +763,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActivityDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -633,6 +813,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -665,6 +857,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -701,6 +905,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BootstrapDto"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -749,6 +965,18 @@ paths:
                 $ref: "#/components/schemas/BootstrapDto"
         "204":
           description: Bootstrap hash unchanged; no response body.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "403":
           description: Forbidden
           content:
@@ -1769,6 +1997,13 @@ components:
           type: string
         path:
           type: string
+        userTitle:
+          type: string
+          description: "Optional safe, localized customer-facing title."
+        userMessage:
+          type: string
+          description: "Optional safe, localized customer-facing message. Never diagnostic\
+            \ exception text."
   securitySchemes:
     bearerAuth:
       type: http

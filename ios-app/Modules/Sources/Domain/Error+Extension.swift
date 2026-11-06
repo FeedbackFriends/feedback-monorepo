@@ -6,6 +6,11 @@ public extension Error {
     var localized: PresentableError {
         Logger.debug("Error of type: \(type(of: self)); localizedDescription: \(localizedDescription)")
         if let apiError = self as? ApiError {
+            if let title = apiError.userTitle?.trimmingCharacters(in: .whitespacesAndNewlines),
+               let message = apiError.userMessage?.trimmingCharacters(in: .whitespacesAndNewlines),
+               !title.isEmpty, !message.isEmpty {
+                return .init(title: title, message: message)
+            }
             if let code = apiError.domainCode {
                 return code.presentation
             }

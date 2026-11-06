@@ -14,7 +14,7 @@ object ErrorResponseConfig {
     )
 
     val globalDocumentedStatuses: List<HttpStatus> = (
-        domainStatusMap.values.toSet() + setOf(HttpStatus.INTERNAL_SERVER_ERROR)
+        domainStatusMap.values.toSet() + setOf(HttpStatus.BAD_REQUEST, HttpStatus.UNAUTHORIZED, HttpStatus.INTERNAL_SERVER_ERROR)
         ).sortedBy { it.value() }
 
     fun resolve(domainCode: DomainCode?): HttpStatus {

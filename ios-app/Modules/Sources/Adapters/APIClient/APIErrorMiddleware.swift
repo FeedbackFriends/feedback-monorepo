@@ -1,13 +1,17 @@
 import Domain
 import Foundation
 import HTTPTypes
-import OpenAPI
+import Localization
 import OpenAPIRuntime
 import Logger
 
-/// Preserves HTTP status and known domain codes before generated success accessors discard them.
+/// Negotiates error language and preserves safe copy, status and codes before generated accessors discard them.
 public struct APIErrorMiddleware: ClientMiddleware {
-    public init() {}
+    private let language: @Sendable () -> String
+
+    public init(language: @escaping @Sendable () -> String = { L10n.locale.identifier }) {
+        self.language = language
+    }
 
     public func intercept(
         _ request: HTTPRequest,
@@ -16,6 +20,8 @@ public struct APIErrorMiddleware: ClientMiddleware {
         operationID: String,
         next: @Sendable (HTTPRequest, HTTPBody?, URL) async throws -> (HTTPResponse, HTTPBody?)
     ) async throws -> (HTTPResponse, HTTPBody?) {
+        var request = request
+        request.headerFields[.acceptLanguage] = language()
         let (response, responseBody) = try await next(request, body, baseURL)
         let status = response.status.code
         guard status >= 400 else { return (response, responseBody) }
@@ -31,14 +37,35 @@ public struct APIErrorMiddleware: ClientMiddleware {
             } catch {
                 throw AppFailure.http(statusCode: status)
             }
-            if let payload = try? JSONDecoder().decode(Components.Schemas.ApiError.self, from: data) {
+            if let payload = try? JSONDecoder().decode(APIErrorEnvelope.self, from: data) {
                 Logger.debug("API failure message: \(payload.message ?? "")")
-                throw ApiError(payload, statusCode: status)
+                throw ApiError(
+                    timestamp: payload.timestamp,
+                    message: payload.message,
+                    domainCode: payload.domainCode.flatMap(DomainCode.init(rawValue:)),
+                    exceptionType: payload.exceptionType,
+                    path: payload.path,
+                    statusCode: status,
+                    rawDomainCode: payload.domainCode,
+                    userTitle: payload.userTitle,
+                    userMessage: payload.userMessage
+                )
             }
         }
-        // Unknown domain codes, malformed responses and HTML error pages never become UI copy.
+        // Malformed responses and HTML error pages never become UI copy.
         throw AppFailure.http(statusCode: status)
     }
+}
+
+/// Error responses must remain readable when a server introduces a code unknown to this client.
+private struct APIErrorEnvelope: Decodable {
+    let timestamp: String?
+    let message: String?
+    let domainCode: String?
+    let exceptionType: String?
+    let path: String?
+    let userTitle: String?
+    let userMessage: String?
 }
 
 /// The generated client wraps transport and middleware failures. Keep SDK types in Adapters.

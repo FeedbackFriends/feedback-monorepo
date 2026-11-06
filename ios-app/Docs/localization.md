@@ -76,7 +76,7 @@ The runner validates the built bundle before injection. It tests foreground/back
 
 ## Error presentation
 
-Use `AlertState(error:)` or `error.localized`. [Domain/Error+Extension.swift](../Modules/Sources/Domain/Error+Extension.swift) maps known domain/network/local failures to generated resource accessors. Arbitrary NSError/API descriptions remain diagnostics. Add a resource and explicit mapping for a new customer-facing failure; keep SDK-specific normalization in Adapters and preserve silent user-cancelled sign-in behavior.
+Use `AlertState(error:)` or `error.localized`. [Domain/Error+Extension.swift](../Modules/Sources/Domain/Error+Extension.swift) prefers complete backend `userTitle`/`userMessage` pairs for API failures, then maps known domain/network/local failures to generated resource accessors. The [API error-copy contract](../../docs/api-error-copy.md) defines backend business-copy ownership and compatibility. Arbitrary NSError/API diagnostic descriptions remain diagnostics. Add local resources for client-owned failures and compatibility mappings; keep SDK-specific normalization in Adapters and preserve silent user-cancelled sign-in behavior.
 
 `APIErrorMiddleware` preserves HTTP failures before generated success accessors discard status. It reads at most 1 MiB of an error body, decodes existing DTOs for known domain codes, and uses safe HTTP presentation for malformed/unknown payloads. Successful responses pass through unchanged. `withAuthorization` unwraps generated ClientError values. Generated transport sources are not edited for localization.
 

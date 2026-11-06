@@ -27,7 +27,9 @@ public extension ApiError {
             message: apiErrorDto.message,
             domainCode: apiErrorDto.domainCode.flatMap { .init(domainCodeDto: $0) },
             exceptionType: apiErrorDto.exceptionType,
-            path: apiErrorDto.path
+            path: apiErrorDto.path,
+            userTitle: apiErrorDto.userTitle,
+            userMessage: apiErrorDto.userMessage
         )
     }
 }

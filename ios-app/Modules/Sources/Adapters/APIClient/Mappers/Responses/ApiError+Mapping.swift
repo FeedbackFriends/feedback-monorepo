@@ -9,7 +9,9 @@ public extension ApiError {
             domainCode: dto.domainCode.map { DomainCode($0) },
             exceptionType: dto.exceptionType,
             path: dto.path,
-            statusCode: statusCode
+            statusCode: statusCode,
+            userTitle: dto.userTitle,
+            userMessage: dto.userMessage
         )
     }
 }

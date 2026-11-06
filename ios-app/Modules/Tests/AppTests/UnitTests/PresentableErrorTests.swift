@@ -6,6 +6,16 @@ import Testing
 
 @MainActor
 struct PresentableErrorTests {
+    @Test(arguments: [("", "Message"), ("Title", " \n "), ("Title", "")])
+    func incompleteBackendCopyKeepsTheLegacyDomainFallback(title: String, message: String) {
+        let error = ApiError(
+            timestamp: nil, message: "sensitive diagnostic", domainCode: .pincodeNotFound,
+            exceptionType: nil, path: nil, statusCode: 404,
+            userTitle: title, userMessage: message
+        )
+        #expect(error.localized.title == "Ugyldig PIN-kode")
+    }
+
     @Test func domainCodesUseDanishAndIgnoreServerMessages() {
         let cases: [(DomainCode, String, String)] = [
             (.feedbackAlreadySubmitted, "Feedback allerede sendt", "Du har allerede givet feedback på denne session."),
