@@ -1,0 +1,43 @@
+tasks/01-rebrand-landing-coming-soon.md
+  s_b4e249de58c72d::t_09ea1ebed8f291 1-133
+tasks/02-rebrand-teams-and-roles.md
+  s_b4e249de58c72d::t_5a6de29e0aca8f 1-173
+tasks/03-rebrand-suggestions-and-votes.md
+  s_b4e249de58c72d::t_d0d94777218320 1-134
+tasks/04-rebrand-decisions-and-status.md
+  s_b4e249de58c72d::t_5c6a6131a18c82 1-111
+tasks/05-rebrand-trials-and-evaluation.md
+  s_b4e249de58c72d::t_8f3cfcbde851f6 1-113
+tasks/06-rebrand-web-leader-dashboard.md
+  s_b4e249de58c72d::t_623dd6c9a4cfe8 1-111
+tasks/07-rebrand-ios-employee-app.md
+  s_b4e249de58c72d::t_d9c289e0648adb 1-120
+tasks/08-rebrand-landing-page-finish-and-brand-identity.md
+  s_b4e249de58c72d::t_bfac16d3e6ce14 1-136
+tasks/09-rebrand-legacy-retirement.md
+  s_b4e249de58c72d::t_542e47d0fdd227 1-101
+tasks/10-rebrand-android-app.md
+  s_b4e249de58c72d::t_f796aa9e55589c 1-89
+tasks/11-rebrand-hr-overview.md
+  s_b4e249de58c72d::t_d4aad7b61814ef 1-74
+tasks/12-rebrand-web-language-switch.md
+  s_b4e249de58c72d::t_b35c6b0cbcfad8 1-76
+tasks/13-rebrand-wellbeing-check.md
+  s_b4e249de58c72d::t_20ea7a08c65eb3 1-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "96ebbe338befdde3c7d8d4fdf78c3d818db7b03c",
+  "prompts": {},
+  "sessions": {
+    "s_b4e249de58c72d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "70459b0b-1392-412d-a084-b406c2eb116f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
