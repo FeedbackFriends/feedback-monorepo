@@ -1,0 +1,35 @@
+.agents/skills/lg-create-task/SKILL.md
+  s_06c72a043dcc80::t_9157227dcaa120 3,18-21,28-29,31-32,38
+.agents/skills/lg-create-task/agents/openai.yaml
+  s_06c72a043dcc80::t_bf4305f4f3098b 3-4
+.agents/skills/lg-create-task/assets/task.md
+  s_06c72a043dcc80::t_6eb298f6f3df9b 21-23,27-28,30,38,42,53
+.agents/skills/lg-implement/SKILL.md
+  s_06c72a043dcc80::t_40ebd7ebc9cefc 14-15
+.agents/skills/lg-refine/SKILL.md
+  s_06c72a043dcc80::t_0b4b3e5e76c829 3,10,12,14,16,18,20,22,26,28
+.agents/skills/lg-refine/agents/openai.yaml
+  s_06c72a043dcc80::t_fd678281d00e02 3-4
+AGENTS.md
+  s_06c72a043dcc80::t_94ea1a854cead2 8
+docs/agents/task-workflow.md
+  s_06c72a043dcc80::t_c5d420833022f1 3,7-8,33,36-38
+tasks/README.md
+  s_06c72a043dcc80::t_2de7aff4939793 5,14-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ad2cc978145a2eae523439ed735e6f38e00310f6",
+  "prompts": {},
+  "sessions": {
+    "s_06c72a043dcc80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b23b-4cf5-7cd3-ad9d-0c0765cb5349",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
