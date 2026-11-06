@@ -1,0 +1,69 @@
+tasks/02-rebrand-teams-and-roles.md
+  s_06c72a043dcc80::t_5a441f2a262e1b 28
+tasks/03-rebrand-suggestions-and-votes.md
+  s_06c72a043dcc80::t_d5a424c57e1566 23
+tasks/04-rebrand-decisions-and-status.md
+  s_06c72a043dcc80::t_15691c7a2d5d92 21
+tasks/05-rebrand-trials-and-evaluation.md
+  s_06c72a043dcc80::t_b54bf6fafd4c1b 28
+tasks/06-rebrand-web-leader-dashboard.md
+  s_06c72a043dcc80::t_4381c021dd77b6 25
+tasks/07-rebrand-ios-employee-app.md
+  s_06c72a043dcc80::t_f20ca5d512939e 30
+tasks/08-rebrand-landing-page-finish-and-brand-identity.md
+  s_06c72a043dcc80::t_a469ac32e8d30e 39
+tasks/09-rebrand-legacy-retirement.md
+  s_06c72a043dcc80::t_d02d360a99761e 18
+tasks/10-rebrand-android-app.md
+  s_06c72a043dcc80::t_60ca2010a8b14d 26
+tasks/11-rebrand-hr-overview.md
+  s_06c72a043dcc80::t_4235437f307ae9 20
+tasks/12-rebrand-web-language-switch.md
+  s_06c72a043dcc80::t_bf6a4c211defe0 20
+tasks/13-rebrand-wellbeing-check.md
+  s_06c72a043dcc80::t_ab6fa3dcd5bc0b 25
+web/next-env.d.ts
+  s_06c72a043dcc80::t_909c138c68ca53 3
+web/src/app/layout.tsx
+  s_06c72a043dcc80::t_9d2c2e7782d6bd 14,16,25
+web/src/app/page.tsx
+  s_06c72a043dcc80::t_6573580c391156 3,11-12
+web/src/components/landing/LandingPage.tsx
+  s_06c72a043dcc80::t_400d827ecc7ae0 4,103
+web/src/components/landing/content.ts
+  s_06c72a043dcc80::t_2eba2a25b31474 29-30
+web/src/components/landing/sections/AppStoreCtaSection.tsx
+  s_06c72a043dcc80::t_938c10ea59e149 5,21,24-26,35-36
+web/src/components/landing/sections/HeroSection.tsx
+  s_06c72a043dcc80::t_19c611c50b833d 5,7,25,42,45,47,69,78-79,88,98,101-109,111,113
+web/src/components/landing/sections/HowItWorksSection.tsx
+  s_06c72a043dcc80::t_f2b4ba28c87878 8-9,13-14,18-19,23-24,44
+web/src/components/landing/sections/MobileStickyCta.tsx
+  s_06c72a043dcc80::t_f71adc19ef5aad 21,23,29
+web/src/components/landing/sections/OutcomesSection.tsx
+  s_06c72a043dcc80::t_537e00ce694622 7-10,25
+web/src/components/landing/sections/ProblemSection.tsx
+  s_06c72a043dcc80::t_d9e9649b04cf47 55,57,64,66,87-89,96
+web/src/components/layout/Footer.tsx
+  s_06c72a043dcc80::t_e3b9e3c1a94018 23,26
+web/src/components/layout/Navbar.tsx
+  s_06c72a043dcc80::t_49bfd4a24c6c58 26-27
+web/tests/routes.spec.ts
+  s_06c72a043dcc80::t_201e69ada263e2 9,12-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "976a099ef34746f63bf3f4574b1a59254dc8f9f3",
+  "prompts": {},
+  "sessions": {
+    "s_06c72a043dcc80": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b23b-4cf5-7cd3-ad9d-0c0765cb5349",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
