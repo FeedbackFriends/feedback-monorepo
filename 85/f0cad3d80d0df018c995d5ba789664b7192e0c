@@ -1,0 +1,65 @@
+docs/ios-answer-type-icons.md
+  s_be498140a93efb::t_4b1104c4898b9b 1-29
+docs/ios-localization-inventory.md
+  s_be498140a93efb::t_39b1b49150234a 129-130
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionAnswerTypePickerView.swift
+  s_5e3efdc7d56c08::t_2e92994483389a 1-72
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionPickerView.swift
+  s_be498140a93efb::t_9c3b168ddb9c8c 41,53-55,57-58,128-141,143-144,146-147,149,151,153-160
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_be498140a93efb::t_ba6cb36b9e0288 455-510,1088-1108
+ios-app/Modules/Sources/ActivityFeature/Shared/FeedbackTypeTagView.swift
+  s_5e3efdc7d56c08::t_55f0f328b7b597 39-41
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.swift
+  s_be498140a93efb::t_b102d1644b42e6 32-36
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-comment.imageset/Contents.json
+  s_be498140a93efb::t_d2d119cc7bd183 1-16
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-comment.imageset/answer-type-comment.svg
+  s_be498140a93efb::t_8bb37c9c4c4fc3 1
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-emoji.imageset/Contents.json
+  s_be498140a93efb::t_334333e988493b 1-16
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-emoji.imageset/answer-type-emoji.svg
+  s_be498140a93efb::t_91b644ef3c0a01 1
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-opinion.imageset/Contents.json
+  s_be498140a93efb::t_043686d233f140 1-16
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-opinion.imageset/answer-type-opinion.svg
+  s_be498140a93efb::t_688aba1d624195 1
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-rating.imageset/Contents.json
+  s_be498140a93efb::t_93328bf78f5bb8 1-16
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-rating.imageset/answer-type-rating.svg
+  s_be498140a93efb::t_e18d31a89cdf92 1
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-thumbs.imageset/Contents.json
+  s_be498140a93efb::t_4d5f543a7cec7d 1-16
+ios-app/Modules/Sources/DesignSystem/Resources/Images/Images.xcassets/answer-type-thumbs.imageset/answer-type-thumbs.svg
+  s_be498140a93efb::t_54864e0f8b545a 1
+ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings
+  s_be498140a93efb::t_288fa57c9ecda2 1222-1229
+tasks/ios-answer-type-picker-and-icons.md
+  s_be498140a93efb::t_17f3650354bb9e 2,65,82-84,88-90,117-121,125-128
+tasks/ios-physical-device-verification.md
+  s_be498140a93efb::t_bc936f245d9fc6 37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "85f0cad3d80d0df018c995d5ba789664b7192e0c",
+  "prompts": {},
+  "sessions": {
+    "s_5e3efdc7d56c08": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9dfb9922-05b3-4634-9b8c-1472d74a4638",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_be498140a93efb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b119-06b5-7852-92ee-2530b160acd2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
