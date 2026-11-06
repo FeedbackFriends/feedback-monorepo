@@ -1,0 +1,45 @@
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/ActivityDetailView.swift
+  s_d18a82bec502a0::t_6ed043a61ac62d 22-32,34-37
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailContentView.swift
+  s_d18a82bec502a0::t_8c802f4266217a 147-151,157-161,163
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/ActivityList.swift
+  s_d18a82bec502a0::t_a5033ee5e31a30 118
+ios-app/Modules/Sources/ActivityFeature/Activities/EventDetail/EventDetailFeatureView.swift
+  s_d18a82bec502a0::t_848882f3494270 115-119,121
+ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionPickerView.swift
+  s_d18a82bec502a0::t_db353565857f26 58-62
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_d18a82bec502a0::t_b896fc6476f31e 261,303,636,650,664
+ios-app/Modules/Sources/RootFeature/RootFeature.swift
+  s_d18a82bec502a0::t_0a21dc37a0e578 174
+ios-app/Modules/Sources/RootFeature/RootFeatureView.swift
+  s_d18a82bec502a0::t_bec7cdc7f0acc0 45,53
+ios-app/Modules/Sources/TabbarFeature/TabbarView.swift
+  s_d18a82bec502a0::t_40f88b9f23f723 63-65
+ios-app/Modules/Tests/AppTests/APIClientLiveTests/APIClientTests.swift
+  s_d18a82bec502a0::t_d175d39106c19f 312
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ActivityDetailTests.swift
+  s_d18a82bec502a0::t_0cdf13eb22f3cb 63,103,137
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ManageActivityTests.swift
+  s_d18a82bec502a0::t_71f000dd0653d8 199,206,220
+ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/ManagerEventsTests.swift
+  s_d18a82bec502a0::t_6c7b473368f5ac 147
+ios-app/Modules/Tests/InsightsTests/InsightsTests.swift
+  s_d18a82bec502a0::t_115da3be4b6df8 126,137
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bc26ca2f11d0fc6123ea6345916d5b0ae39c4bec",
+  "prompts": {},
+  "sessions": {
+    "s_d18a82bec502a0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b0d3-84d9-71d3-a410-f447350bad1b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
