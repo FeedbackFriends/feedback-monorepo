@@ -56,7 +56,7 @@ public struct ModifyAccount: Sendable {
                         _ = try await self.apiClient.modifyAccount(
                             name: state.nameInput,
                             email: state.emailInput,
-                            phoneNumber: state.phoneNumberInput
+                            phoneNumber: Self.e164PhoneNumber(from: state.phoneNumberInput)
                         )
                         await send(.updateAccountResponse)
                     } catch {
@@ -72,6 +72,17 @@ public struct ModifyAccount: Sendable {
             }
         }
         .ifLet(\.$destination, action: \.destination)
+    }
+
+    static func e164PhoneNumber(from input: String) -> String? {
+        let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        let digits = trimmed.filter(\.isNumber)
+        if trimmed.hasPrefix("+") {
+            return "+" + digits
+        }
+        let nationalNumber = digits.hasPrefix("0") ? String(digits.dropFirst()) : digits
+        return nationalNumber.isEmpty ? nil : "+45" + nationalNumber
     }
 }
 
