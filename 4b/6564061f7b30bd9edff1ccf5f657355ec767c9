@@ -1,0 +1,21 @@
+tasks/ios-text-input-full-surface-focus.md
+  s_be498140a93efb::t_7bb104ad2714ca 2,38,52-54,58-61
+ios-app/Modules/Sources/DesignSystem/ReusableViews/TextInputView.swift
+  s_be498140a93efb::t_edd3df1bf2f966 52-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4b6564061f7b30bd9edff1ccf5f657355ec767c9",
+  "prompts": {},
+  "sessions": {
+    "s_be498140a93efb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b119-06b5-7852-92ee-2530b160acd2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
