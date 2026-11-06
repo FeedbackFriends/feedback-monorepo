@@ -1,0 +1,25 @@
+docs/ios-localization-conventions.md
+  s_7dc6f4ce9b50dd::t_9c877c94188aa9 3,10,33,68,88
+docs/ios-localization-inventory.md
+  s_7dc6f4ce9b50dd::t_9bf8c9ff5336b6 3,25,27,40,94-95,99,102,108-109,112,118,120,122,124,126,128
+ios-app/Docs/agents/product-language.md
+  s_7dc6f4ce9b50dd::t_e35b5466e3a18a 14
+ios-app/Docs/localization.md
+  s_7dc6f4ce9b50dd::t_069b10cca9a3a1 3,5,7,9,11,15-17,19,31,35-41,43,45-48,50,54,58,60,62,64,67,71,73,75,77,79,81,83,85,87,89,91,93,95,97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6938a29614e53baae6d338ad1c80cdc3c4ee3af9",
+  "prompts": {},
+  "sessions": {
+    "s_7dc6f4ce9b50dd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b058-96f9-7a31-865e-124fd8b27f37",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
