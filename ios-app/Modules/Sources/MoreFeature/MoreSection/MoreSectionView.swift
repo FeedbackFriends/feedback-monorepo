@@ -27,9 +27,6 @@ public struct MoreSectionView: View {
             generalSection
         }
         .onAppear { store.send(.onAppear) }
-        .sheet(item: $store.scope(state: \.productContact, action: \.productContact)) { contactStore in
-            ProductContactView(store: contactStore)
-        }
     }
     
     var generalSection: some View {
@@ -113,15 +110,30 @@ public struct MoreSectionView: View {
     }
 }
 
+private struct MoreSectionDestinationsModifier: ViewModifier {
+    @Bindable var store: StoreOf<MoreSection>
+
+    func body(content: Content) -> some View {
+        content.sheet(item: $store.scope(state: \.productContact, action: \.productContact)) { contactStore in
+            ProductContactView(store: contactStore)
+        }
+    }
+}
+
+public extension View {
+    /// Attach to a single container, rather than the individual rows of MoreSectionView.
+    func moreSectionDestinations(store: StoreOf<MoreSection>) -> some View {
+        modifier(MoreSectionDestinationsModifier(store: store))
+    }
+}
+
 #Preview {
+    @Previewable @State var store = Store(initialState: MoreSection.State()) { MoreSection() }
+
     NavigationStack {
-        MoreSectionView(
-            store: StoreOf<MoreSection>(
-                initialState: MoreSection.State(),
-                reducer: {
-                    MoreSection()
-                }
-            )
-        )
+        List {
+            MoreSectionView(store: store)
+        }
+        .moreSectionDestinations(store: store)
     }
 }

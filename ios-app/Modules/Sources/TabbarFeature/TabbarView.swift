@@ -119,6 +119,9 @@ private extension TabbarView {
             .scrollContentBackground(.hidden)
             .background(LetsGrowLandingGradient())
             .tint(Color.themeText)
+            .moreSectionDestinations(
+                store: store.scope(state: \.moreSection, action: \.moreSection)
+            )
             .accountSectionDestinations(
                 store: store.scope(state: \.accountSection, action: \.accountSection),
                 isDeleteAccountLoading: store.deleteAccount.deleteAccountInFlight
