@@ -1,0 +1,19 @@
+ios-app/Modules/Sources/MoreFeature/AccountSection/ProfileSettings/ModifyAccount.swift
+  s_e54cede2452c3f::t_23308577f4167c 59,76-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "207835f0831ca5e568be1faca39e462009a855ef",
+  "prompts": {},
+  "sessions": {
+    "s_e54cede2452c3f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b1ac-7834-7570-bc80-8af3f58481db",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
