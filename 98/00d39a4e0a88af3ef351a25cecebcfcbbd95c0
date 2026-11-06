@@ -1,0 +1,19 @@
+tasks/ios-physical-device-verification.md
+  s_be498140a93efb::t_504c70c951f900 1-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9800d39a4e0a88af3ef351a25cecebcfcbbd95c0",
+  "prompts": {},
+  "sessions": {
+    "s_be498140a93efb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b119-06b5-7852-92ee-2530b160acd2",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
