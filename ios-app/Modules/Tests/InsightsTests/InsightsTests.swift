@@ -123,7 +123,7 @@ struct InsightFeatureTests {
         let store = TestStore(initialState: Tabbar.State(bootstrap: Shared(value: makeBootstrap(activities: [])), selectedTab: .activities)) {
             Tabbar()
         }
-        await store.withExhaustivity(.off) {
+        _ = await store.withExhaustivity(.off) {
             await store.send(.activities(.createActivityButtonTap))
         }
         #expect(store.state.activities.destination?.manageActivity != nil)
@@ -134,7 +134,7 @@ struct InsightFeatureTests {
         let shared = Shared(value: makeBootstrap(activities: []))
         let store = TestStore(initialState: ActivityList.State(bootstrap: shared)) { ActivityList() }
         await store.send(.navigateToCreatedActivity(activity)) {
-            $0.$bootstrap.withLock { $0.managerData!.activities.updateOrAppend(activity) }
+            $0.$bootstrap.withLock { _ = $0.managerData!.activities.updateOrAppend(activity) }
             var detail = ActivityDetail.State(activityId: activity.id, bootstrap: shared)
             detail.confirmation.queue("Aktivitet oprettet")
             $0.path.append(.activityDetail(detail))

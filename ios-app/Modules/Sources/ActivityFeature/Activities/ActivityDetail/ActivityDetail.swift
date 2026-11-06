@@ -87,7 +87,6 @@ public struct ActivityDetail: Sendable {
     @Dependency(\.apiClient) var apiClient
     @Dependency(\.systemClient) var systemClient
 
-    
     public var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.confirmation, action: \.confirmation) { SuccessConfirmation() }

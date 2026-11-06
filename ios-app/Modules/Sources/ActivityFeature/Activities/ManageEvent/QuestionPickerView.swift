@@ -55,7 +55,11 @@ struct QuestionPickerView: View {
             withAnimation {
                 dismiss()
             }
-            try await Task.sleep(for: .seconds(0.3))
+            do {
+                try await Task.sleep(for: .seconds(0.3))
+            } catch {
+                return
+            }
             var input = EventInput.QuestionInput(questionText: trimmed, feedbackType: feedbackTypeSelected)
             if let existingQuestionID {
                 input.id = existingQuestionID

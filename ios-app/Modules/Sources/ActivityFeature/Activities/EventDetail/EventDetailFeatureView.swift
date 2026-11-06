@@ -112,12 +112,13 @@ public struct EventDetailFeatureView: View {
                 state: \.destination?.manageEvent,
                 action: \.destination.manageEvent
             ),
-            onDismiss: { store.send(.confirmation(.transitionCompleted)) }
-        ) { manageEventStore in
-            NavigationStack {
-                ManageEventView(store: manageEventStore)
+            onDismiss: { store.send(.confirmation(.transitionCompleted)) },
+            content: { manageEventStore in
+                NavigationStack {
+                    ManageEventView(store: manageEventStore)
+                }
             }
-        }
+        )
         .alert($store.scope(state: \.alert, action: \.alert))
         .navigationTitle(store.navigationTitle)
         .navigationSubtitle(store.navigationSubTitle)

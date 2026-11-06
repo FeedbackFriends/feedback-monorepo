@@ -144,21 +144,23 @@ private struct ActivityDetailSheetsModifier: ViewModifier {
                     state: \.destination?.editActivity,
                     action: \.destination.editActivity
                 ),
-                onDismiss: { store.send(.editorDismissed) }
-            ) { editStore in
-                ManageActivityView(store: editStore)
-            }
+                onDismiss: { store.send(.editorDismissed) },
+                content: { editStore in
+                    ManageActivityView(store: editStore)
+                }
+            )
             .sheet(
                 item: $store.scope(
                     state: \.destination?.manageEvent,
                     action: \.destination.manageEvent
                 ),
-                onDismiss: { store.send(.editorDismissed) }
-            ) { manageStore in
-                NavigationStack {
-                    ManageEventView(store: manageStore)
+                onDismiss: { store.send(.editorDismissed) },
+                content: { manageStore in
+                    NavigationStack {
+                        ManageEventView(store: manageStore)
+                    }
                 }
-            }
+            )
     }
 }
 

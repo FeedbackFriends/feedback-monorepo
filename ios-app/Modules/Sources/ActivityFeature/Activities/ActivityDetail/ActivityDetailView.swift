@@ -19,21 +19,22 @@ struct ActivityDetailView: View {
                 state: \.destination?.showDeleteConfirmation,
                 action: \.destination.showDeleteConfirmation
             ),
-            onDismiss: { store.send(.deleteConfirmationDismissed) }
-        ) { _ in
-            DeleteConfirmationViewSheet(
-                title: String(appStrings: .activityDeleteTitle),
-                message: String(appStrings: .activityDeleteMessage),
-                actionButton: {
-                    Button(String(appStrings: .commonDelete)) {
-                        store.send(.deleteActivityConfirmButtonTap)
+            onDismiss: { store.send(.deleteConfirmationDismissed) },
+            content: { _ in
+                DeleteConfirmationViewSheet(
+                    title: String(appStrings: .activityDeleteTitle),
+                    message: String(appStrings: .activityDeleteMessage),
+                    actionButton: {
+                        Button(String(appStrings: .commonDelete)) {
+                            store.send(.deleteActivityConfirmButtonTap)
+                        }
+                        .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
+                        .isLoading(store.deleteActivityInFlight)
                     }
-                    .buttonStyle(LargeBoxButtonStyle(color: Color.themeVerySad))
-                    .isLoading(store.deleteActivityInFlight)
-                }
-            )
-            .presentationDetents([.height(340)])
-        }
+                )
+                .presentationDetents([.height(340)])
+            }
+        )
         .sheet(
             item: $store.scope(
                 state: \.destination?.showHowItWorks,

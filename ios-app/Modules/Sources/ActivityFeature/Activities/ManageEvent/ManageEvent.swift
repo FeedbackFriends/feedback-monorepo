@@ -171,7 +171,6 @@ public struct ManageEvent: Sendable {
                 state.date = now
                 return .none
 
-
             case .binding:
                 return .none
 

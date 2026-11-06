@@ -60,11 +60,9 @@ public struct TabbarView: View {
                 FeedbackFlowCoordinatorView(
                     store: store,
                     principalToolbarItem: {
-                        store.withState { state in
-                            Text(state.title)
-                                .captionTextStyle()
-                                .foregroundStyle(Color.themeText)
-                        }
+                        Text(store.title)
+                            .captionTextStyle()
+                            .foregroundStyle(Color.themeText)
                     }
                 )
             }

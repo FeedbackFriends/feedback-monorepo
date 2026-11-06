@@ -78,7 +78,6 @@ public struct ActivityList: Sendable {
     
     @Dependency(\.apiClient) var apiClient
 
-    
     public var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.confirmation, action: \.confirmation) { SuccessConfirmation() }
@@ -116,7 +115,7 @@ public struct ActivityList: Sendable {
             case .navigateToCreatedActivity(let activity):
                 guard state.bootstrap.role == .manager else { return .none }
                 state.$bootstrap.withLock {
-                    $0.managerData!.activities.updateOrAppend(activity)
+                    _ = $0.managerData!.activities.updateOrAppend(activity)
                 }
                 var detail = ActivityDetail.State(activityId: activity.id, bootstrap: state.$bootstrap)
                 detail.confirmation.queue(String(appStrings: .activityCreated))

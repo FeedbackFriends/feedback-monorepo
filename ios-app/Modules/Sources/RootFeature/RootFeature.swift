@@ -171,7 +171,7 @@ public struct RootFeature: Sendable {
                 state.destination = .error(errorType)
                 return .none
                 
-            case .createAccountResponse(let bootstrap, let role):
+            case .createAccountResponse(let bootstrap, _):
                 state.isLoading = false
                 state.destination = Destination.State.loggedIn(
                     Tabbar.State(

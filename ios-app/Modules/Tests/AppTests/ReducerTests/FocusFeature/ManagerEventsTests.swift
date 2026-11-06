@@ -144,7 +144,7 @@ struct ManagerEventsTests {
         #expect(store.state.path.isEmpty)
         await store.send(.activityEditorDismissed) {
             $0.pendingCreatedActivity = nil
-            $0.$bootstrap.withLock { $0.managerData!.activities.updateOrAppend(createdActivity) }
+            $0.$bootstrap.withLock { _ = $0.managerData!.activities.updateOrAppend(createdActivity) }
         }
         await store.withExhaustivity(.off) {
             await store.receive(\.navigateToCreatedActivity, createdActivity)

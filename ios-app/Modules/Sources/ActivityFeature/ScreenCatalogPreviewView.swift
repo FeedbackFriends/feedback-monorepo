@@ -258,7 +258,7 @@ private func catalogCreateActivityTemplateSelected() -> some View {
 private func catalogEditActivityPopulated() -> some View {
     ScreenCatalogContainerView {
         let state = {
-            var state = ManageActivity.State.edit(activity: PreviewCatalogFixtures.activity)
+            let state = ManageActivity.State.edit(activity: PreviewCatalogFixtures.activity)
 
             return state
         }()
@@ -300,7 +300,7 @@ private func catalogEditActivitySaving() -> some View {
 private func catalogCreateSessionScheduled() -> some View {
     ScreenCatalogContainerView {
         let state = {
-            var state = CatalogActivity.eventForm()
+            let state = CatalogActivity.eventForm()
 
             return state
         }()
@@ -633,7 +633,7 @@ private func catalogNotificationsRead() -> some View {
 func catalogJoinSessionEmpty() -> some View {
     ScreenCatalogContainerView {
         let state = {
-            var state = JoinEvent.State(pinCodeInput: .init(value: ""))
+            let state = JoinEvent.State(pinCodeInput: .init(value: ""))
 
             return state
         }()
@@ -647,7 +647,7 @@ func catalogJoinSessionEmpty() -> some View {
 func catalogJoinSessionPartial() -> some View {
     ScreenCatalogContainerView {
         let state = {
-            var state = JoinEvent.State(pinCodeInput: .init(value: "12"))
+            let state = JoinEvent.State(pinCodeInput: .init(value: "12"))
 
             return state
         }()
@@ -661,7 +661,7 @@ func catalogJoinSessionPartial() -> some View {
 func catalogJoinSessionReady() -> some View {
     ScreenCatalogContainerView {
         let state = {
-            var state = JoinEvent.State(pinCodeInput: .init(value: "1234"))
+            let state = JoinEvent.State(pinCodeInput: .init(value: "1234"))
 
             return state
         }()

@@ -66,7 +66,6 @@ private func catalogProfile(role: Role?) -> some View {
     catalogProfile(role: .manager)
 }
 
-
 // Screenshot: Distinct role or content layout.
 #Preview("profile.anonymous") {
     catalogProfile(role: nil)
@@ -78,7 +77,6 @@ private func catalogProfile(role: Role?) -> some View {
         TabbarView(store: Store(initialState: catalogTabbarState(role: nil, tab: .activities)) { EmptyReducer() })
     }
 }
-
 
 // Screenshot: Distinct role or content layout.
 #Preview("feedback-code.anonymous") {

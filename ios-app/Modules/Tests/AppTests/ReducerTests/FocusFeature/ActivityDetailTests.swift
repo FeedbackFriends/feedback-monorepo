@@ -60,7 +60,7 @@ struct ActivityDetailTests {
         let activity = bootstrap.wrappedValue.managerData!.activities[0]
         let deletedActivityId = LockIsolated<UUID?>(nil)
 
-        let store = await TestStore(
+        let store = TestStore(
             initialState: ActivityDetail.State(
                 activityId: activity.id,
                 bootstrap: bootstrap
@@ -100,7 +100,7 @@ struct ActivityDetailTests {
         let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
         let activity = bootstrap.wrappedValue.managerData!.activities[0]
 
-        let store = await TestStore(
+        let store = TestStore(
             initialState: ActivityDetail.State(
                 activityId: activity.id,
                 bootstrap: bootstrap
@@ -134,7 +134,7 @@ struct ActivityDetailTests {
         let bootstrap: Shared<Bootstrap> = .init(value: .mock(numberOfManagerEvents: 1))
         let activity = bootstrap.wrappedValue.managerData!.activities[0]
 
-        let store = await TestStore(
+        let store = TestStore(
             initialState: ActivityDetail.State(
                 activityId: activity.id,
                 bootstrap: bootstrap

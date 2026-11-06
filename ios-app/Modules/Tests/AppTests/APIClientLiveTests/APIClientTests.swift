@@ -309,7 +309,7 @@ struct APIClientLiveTests {
             cache: cache
         )
 
-        try await client.joinEvent(PinCode(value: "456789"))
+        _ = try await client.joinEvent(PinCode(value: "456789"))
 
         let snapshot = await cache.getBootstrap()
         #expect(input.value?.path.pinCode == "456789")

@@ -73,7 +73,6 @@ public extension Image {
         thumpsDown.sizedSymbol(34)
     }
 
-    
 }
 
 private extension Image {

@@ -196,14 +196,14 @@ struct ManageActivityTests {
         let originalQuestions = state.questions
         let store = TestStore(initialState: state) { ManageActivity() }
         await store.send(.changeTemplateTapped) { $0.isChoosingTemplate = true }
-        await store.withExhaustivity(.off) {
+        _ = await store.withExhaustivity(.off) {
             await store.send(.templateSelected(.workshop))
         }
         #expect(store.state.alert != nil)
         #expect(store.state.questions == originalQuestions)
         await store.send(.alert(.dismiss)) { $0.alert = nil }
         #expect(store.state.questions == originalQuestions)
-        await store.withExhaustivity(.off) {
+        _ = await store.withExhaustivity(.off) {
             await store.send(.templateSelected(.workshop))
             await store.send(.alert(.presented(.replaceTemplate(.workshop))))
         }
@@ -217,7 +217,7 @@ struct ManageActivityTests {
         var state = ManageActivity.State.create()
         state.selectTemplate(.standardMeeting)
         let store = TestStore(initialState: state) { ManageActivity() }
-        await store.withExhaustivity(.off) {
+        _ = await store.withExhaustivity(.off) {
             await store.send(.templateSelected(.workshop))
         }
         #expect(store.state.selectedTemplate == .workshop)

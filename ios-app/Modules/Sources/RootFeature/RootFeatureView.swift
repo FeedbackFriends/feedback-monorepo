@@ -42,7 +42,7 @@ public struct RootFeatureView: View {
     
     @ViewBuilder
     private var signUpView: some View {
-        IfLetStore(store.scope(state: \.destination.signUp, action: \.destination.signUp)) { store in
+        if let store = store.scope(state: \.destination.signUp, action: \.destination.signUp) {
             SignUpView(store: store)
                 .transition(.opacity)
         }
@@ -50,7 +50,7 @@ public struct RootFeatureView: View {
     
     @ViewBuilder
     private var loggedInView: some View {
-        IfLetStore(store.scope(state: \.destination.loggedIn, action: \.destination.loggedIn)) { store in
+        if let store = store.scope(state: \.destination.loggedIn, action: \.destination.loggedIn) {
             TabbarView(store: store)
                 .transition(.opacity)
         }
