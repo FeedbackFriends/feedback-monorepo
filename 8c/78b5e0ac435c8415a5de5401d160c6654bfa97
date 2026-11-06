@@ -1,0 +1,27 @@
+tasks/ios-manager-events-sync-bar.md
+  s_be498140a93efb::t_efe58bc34eb24c 2,21,67-70,81-82,94-98,102-105
+tasks/ios-physical-device-verification.md
+  s_be498140a93efb::t_cd082d60b790de 36
+ios-app/Modules/Sources/ActivityFeature/Activities/ActivityList/ActivityListView.swift
+  s_be498140a93efb::t_c43366aebf122a 9,14-15,19,25-28
+ios-app/Modules/Sources/TabbarFeature/TabbarLifecycle.swift
+  s_be498140a93efb::t_37196b0110df9b 19-22,37-39,50-52,87,89-90,93,95,109,113-141
+ios-app/Modules/Sources/TabbarFeature/TabbarView.swift
+  s_be498140a93efb::t_b7aeccbda3035c 96-97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8c78b5e0ac435c8415a5de5401d160c6654bfa97",
+  "prompts": {},
+  "sessions": {
+    "s_be498140a93efb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b119-06b5-7852-92ee-2530b160acd2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
