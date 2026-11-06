@@ -1,0 +1,27 @@
+tasks/ios-confirmation-polish.md
+  s_be498140a93efb::t_e18eda5a5cb9ef 2,73,78,103-105,109-112
+tasks/ios-physical-device-verification.md
+  s_be498140a93efb::t_89861025fabb52 34,39,57
+docs/ios-localization-inventory.md
+  s_be498140a93efb::t_ba6d07fa002ba6 60
+ios-app/Modules/Sources/DesignSystem/ViewModifiers/SuccessMessageModifier.swift
+  s_be498140a93efb::t_614c1085adeff7 18-20
+ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings
+  s_be498140a93efb::t_1b609f77b5ceb2 209,215,227
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d9b56d4c857eff252b3f92e53173f0b74ddf5b14",
+  "prompts": {},
+  "sessions": {
+    "s_be498140a93efb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b119-06b5-7852-92ee-2530b160acd2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
