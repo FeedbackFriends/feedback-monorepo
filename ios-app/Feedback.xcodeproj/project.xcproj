@@ -351,6 +351,7 @@
           "kind": "script",
           "name": "Upload Debug Symbols to Sentry",
           "log-environment-variables": true,
+          "run-on-every-build": true,
           "input-paths": [
             "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
           ],
@@ -381,6 +382,7 @@
           "kind": "script",
           "name": "Generate empty secrets.xcconfig",
           "log-environment-variables": true,
+          "run-on-every-build": true,
           "shell": "/bin/sh",
           "script": [
             "#!/bin/sh",
