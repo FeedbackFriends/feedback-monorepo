@@ -1,0 +1,25 @@
+.agents/skills/lg-ios-localhost/SKILL.md
+  s_78f47d0f61cc21::t_fad848d4df6ec0 51,53-55
+.agents/skills/lg-ios-login/SKILL.md
+  s_78f47d0f61cc21::t_2e788ee37f28bd 8,18-19,27,37-38
+.agents/skills/lg-ios-screenshots/SKILL.md
+  s_78f47d0f61cc21::t_9b6e2321aa2d81 8,17
+ios-app/Docs/agents/simulator.md
+  s_78f47d0f61cc21::t_1c48325280cbf4 7,13,16-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e26a1e8e6d8a885f17e38da763006dd18b34d8cc",
+  "prompts": {},
+  "sessions": {
+    "s_78f47d0f61cc21": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b76e-e564-7900-8e8d-ce3b486af088",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
