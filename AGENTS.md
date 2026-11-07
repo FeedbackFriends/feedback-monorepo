@@ -3,7 +3,7 @@
 LetsGrow is a feedback-after-meetings product with a Next.js web app, Kotlin backend, and SwiftUI/TCA iOS app in one monorepo.
 
 - Read the nearest app `AGENTS.md` before editing its subtree.
-- Do not commit or push unless the user explicitly asks.
+- Do not commit or push unless the user explicitly asks. After implementation, required verification, and the human-review handoff are complete, briefly explain what was implemented (before/after behavior when useful), list the files proposed for committing, then ask "Should I commit?" with explicit Yes/No choices unless the user already authorized or declined committing that work. When proposing a push, also identify the branch and commits/files it would include. Use a choice tool when available; otherwise show the choices in the final response. A Yes authorizes committing the completed work; pushing requires separate explicit authorization.
 - Follow existing coding standards and patterns by default. Implementation handoffs should make architectural decisions easy for a human to review; use the [human review guide](docs/agents/human-review.md).
 - Use root `tasks/` for unfinished task management; delete a task file when its acceptance and required verification are complete, after preparing the final human-review handoff; never use GitHub Issues or GitHub Projects for LetsGrow tasks. Create a nontechnical draft task → refine feature requirements and overall architecture with the user → implement. Use the create-task skill for the required structure, including phases for large tasks. Generic issue-refinement workflows must write local task files instead of GitHub issues.
 
