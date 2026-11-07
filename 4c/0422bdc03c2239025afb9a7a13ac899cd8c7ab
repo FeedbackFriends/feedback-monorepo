@@ -1,0 +1,31 @@
+.github/workflows/update-community-skills.yml
+  s_c27fa7d7602cff::t_9bd7c60a1d9b25 39,52
+docs/agent-tooling.md
+  s_c27fa7d7602cff::t_0632c54f585877 72
+docs/agents/ci-cd.md
+  s_c27fa7d7602cff::t_4302d3be7e8a96 7
+docs/skills.md
+  s_c27fa7d7602cff::t_23ef14a33123e9 59,61,63,66,69,71
+ios-app/Docs/SETUP.md
+  s_c27fa7d7602cff::t_80b6df1d601c86 25-26
+ios-app/scripts/sync-guidance-navigator.py
+  s_c27fa7d7602cff::t_a4d6c11e4459d2 19-21,38-42
+ios-app/scripts/tests/test_guidance_navigator.py
+  s_c27fa7d7602cff::t_74899839feb72a 32-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4c0422bdc03c2239025afb9a7a13ac899cd8c7ab",
+  "prompts": {},
+  "sessions": {
+    "s_c27fa7d7602cff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b6f6-6693-7951-a55e-ec78b7fdc4e5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
