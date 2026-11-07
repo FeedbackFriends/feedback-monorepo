@@ -1,0 +1,37 @@
+.agents/plugins/marketplace.json
+  s_27d4db1c6d4e37::t_f67a6c9c03e47d 1-12
+.agents/skills/lg-ios-run-simulator/SKILL.md
+  s_27d4db1c6d4e37::t_02f5f86c0651df 12
+.claude-plugin/marketplace.json
+  s_27d4db1c6d4e37::t_932af1b7ff036b 1-12
+docs/agent-tooling.md
+  s_27d4db1c6d4e37::t_2ceb86d70ca6d9 71
+ios-app/Docs/agent-harness.md
+  s_27d4db1c6d4e37::t_516dfa6750cd96 13-44
+ios-app/Feedback.xcodeproj/project.xcproj
+  s_27d4db1c6d4e37::t_50118e565deae6 49-57
+scripts/setup-xcode-plugin.py
+  s_27d4db1c6d4e37::t_0895b9f6d70c4a 1-49
+scripts/tests/test_setup_xcode_plugin.py
+  s_27d4db1c6d4e37::t_c7c0949780dbd2 1-57
+.codex/config.toml
+  s_27d4db1c6d4e37::t_a66f190ddb0d7e 1-3
+.gitignore
+  s_27d4db1c6d4e37::t_27324b887fb104 51,54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f0096d77771186bd4e312e9afcdd59139dc97c16",
+  "prompts": {},
+  "sessions": {
+    "s_27d4db1c6d4e37": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b759-0c0d-7312-9cea-845a857f26b2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
