@@ -1,0 +1,435 @@
+.agents/skills/email-best-practices/.github/workflows/sync-skills.yml
+  s_c27fa7d7602cff::t_34bee923efa885 1-30
+.agents/skills/email-best-practices/README.md
+  s_c27fa7d7602cff::t_76e9451dcb3523 1-11,13,15,17,19-21,23,25-27,29-32,34-37,39,41-54,57,59,61,63
+.agents/skills/email-best-practices/SKILL.md
+  s_c27fa7d7602cff::t_43322bcdf8fc95 3-13,46-56,61,64,67,70-73
+.agents/skills/email-best-practices/references/accessibility.md
+  s_c27fa7d7602cff::t_aa6dc2f9c52f9a 1-189
+.agents/skills/email-best-practices/references/deliverability.md
+  s_c27fa7d7602cff::t_666eda04cbd50d 31,44,47,50,100
+.agents/skills/email-best-practices/references/email-types.md
+  s_c27fa7d7602cff::t_58e17ee0b30f64 155
+.agents/skills/email-best-practices/references/sending-reliability.md
+  s_c27fa7d7602cff::t_e7558b3b701d54 62,64-66,68-72,78,102-104,113-114,140,142
+.agents/skills/email-best-practices/references/transactional-emails.md
+  s_c27fa7d7602cff::t_338bb7f394f096 58-59
+.agents/skills/email-best-practices/tests/README.md
+  s_c27fa7d7602cff::t_131111e1ab0afb 1-35
+.agents/skills/email-best-practices/tests/scenarios/01-spam-deliverability.md
+  s_c27fa7d7602cff::t_959bd7bb03c8bc 22,24,37
+.agents/skills/lg-commit-and-push/SKILL.md
+  s_952fc6f2367253::t_904e664eddacf1 3,6-8,10
+.agents/skills/lg-implement/SKILL.md
+  s_952fc6f2367253::t_741fe6efb844da 22
+.agents/skills/lg-ios-localhost/SKILL.md
+  s_952fc6f2367253::t_397935f49ce894 8,57
+.agents/skills/lg-ios-production/SKILL.md
+  s_c27fa7d7602cff::t_76c72eb3c9235c 8,16
+.agents/skills/lg-ios-run-simulator/SKILL.md
+  s_952fc6f2367253::t_8ef6cdd2d4e764 8
+.agents/skills/lg-ios-screenshots/SKILL.md
+  s_952fc6f2367253::t_2649ba77396e25 8
+.agents/skills/lg-ios-sync-openapi/SKILL.md
+  s_952fc6f2367253::t_3c92aac843f7b4 54,57
+.agents/skills/lg-maintain-docs/SKILL.md
+  s_952fc6f2367253::t_b40d3f16549f96 1-16
+.agents/skills/lg-maintain-docs/agents/openai.yaml
+  s_952fc6f2367253::t_8bf2a79195fb7b 2-4
+.agents/skills/lg-refine/SKILL.md
+  s_952fc6f2367253::t_aa17ab16451abe 12
+.agents/skills/lg-tailwind-nextjs-expert/SKILL.md
+  s_c27fa7d7602cff::t_90a5bc5322ece5 1-12
+.agents/skills/lg-update-skills/SKILL.md
+  s_c27fa7d7602cff::t_639d9898e6ec7a 1-15
+.agents/skills/lg-verify/references/ios.md
+  s_952fc6f2367253::t_d86132e36f8dc1 3,7,19
+.agents/skills/marketing-psychology/SKILL.md
+  s_c27fa7d7602cff::t_62019ef72ef81a 3-5,15,451,453-455
+.agents/skills/marketing-psychology/evals/evals.json
+  s_c27fa7d7602cff::t_61263685d2e17f 1-88
+.agents/skills/playwright-cli/SKILL.md
+  s_c27fa7d7602cff::t_f4cf821dae7ac3 3-4,38-39,41-43,50-56,59-61,94-95,97,106,116,153-167,183-184,186,189-266,276-281,288-297,303-304,309-320,334-357,359-382,402-406,408-412,415,449,462-481,484,489,492-493
+.agents/skills/playwright-cli/references/element-attributes.md
+  s_c27fa7d7602cff::t_a47e0883751180 1,3,5,8-12,14-15,17-19,21-23
+.agents/skills/playwright-cli/references/playwright-tests.md
+  s_c27fa7d7602cff::t_d8ec0aa11bba8a 1-39
+.agents/skills/playwright-cli/references/pr-attachments.md
+  s_c27fa7d7602cff::t_282dde3226e259 1-60
+.agents/skills/playwright-cli/references/running-code.md
+  s_c27fa7d7602cff::t_9478507c8f56ec 14-27,104,114,139-141,213,221-222,229-231
+.agents/skills/playwright-cli/references/session-management.md
+  s_c27fa7d7602cff::t_97cf39a685dec7 52-53,110-165
+.agents/skills/playwright-cli/references/storage-state.md
+  s_c27fa7d7602cff::t_676f7428364fe3 41,95,102-104
+.agents/skills/playwright-cli/references/test-generation.md
+  s_c27fa7d7602cff::t_c2484ce527a243 1,3,5-8,10,12-16,40,59,71,82-104,106-113,119-373,375-433
+.agents/skills/playwright-cli/references/tracing.md
+  s_c27fa7d7602cff::t_943ddf14f964aa 8-10,15,25,70,72,84,86,96,99,126,128
+.agents/skills/playwright-cli/references/video-recording.md
+  s_c27fa7d7602cff::t_0bc4f463f8f603 8-9,11-19,22-24,28-49,52-80,87-88,91-203
+.agents/skills/retro/SKILL.md
+  s_952fc6f2367253::t_1161ec3c6b0064 2-4,7,9,11,13,15,17-23,25,27,29,31,33,35,37,39,41-44
+.agents/skills/retro/agents/openai.yaml
+  s_952fc6f2367253::t_b2d224059dcd82 2-3,5
+.agents/skills/seo-audit/SKILL.md
+  s_c27fa7d7602cff::t_1a39454c1901df 3-5,15-17,40-52,60-61,162-235,240,242,396-405,413-414,451-455,465,469-470,491-492,494-497
+.agents/skills/seo-audit/evals/evals.json
+  s_c27fa7d7602cff::t_e23952677aba07 1-204
+.agents/skills/seo-audit/references/ai-writing-detection.md
+  s_c27fa7d7602cff::t_55eed8d2cd0e93 9-18
+.agents/skills/seo-audit/references/international-seo.md
+  s_c27fa7d7602cff::t_47c19dc58d4164 1-230
+.agents/skills/seo-audit/references/local-seo-pages-and-measurement.md
+  s_c27fa7d7602cff::t_8a49911a138b87 1-39
+.agents/skills/seo-audit/references/local-seo-profile-and-citations.md
+  s_c27fa7d7602cff::t_6ab1fa44661fe7 1-41
+.agents/skills/seo-audit/references/local-seo.md
+  s_c27fa7d7602cff::t_642d6474af0e71 1-86
+.agents/skills/seo-audit/references/rankings-push.md
+  s_c27fa7d7602cff::t_59f40100f7b382 1-62
+.agents/skills/seo-audit/references/title-tags.md
+  s_c27fa7d7602cff::t_300ce7896299eb 1-89
+.agents/skills/shadcn/SKILL.md
+  s_c27fa7d7602cff::t_d59517e965cd59 3,5,17,67-69,80-86,89-90,141,148,164,187-192,195-206,227-231,238-251,256,263,268-270,277,280,282,288,293,295-296
+.agents/skills/shadcn/assets/showcase/color-pair.tsx
+  s_c27fa7d7602cff::t_a10cc5a045ace1 1-126
+.agents/skills/shadcn/assets/showcase/preview-states.css
+  s_c27fa7d7602cff::t_87462fcb153487 1-14
+.agents/skills/shadcn/assets/showcase/state-matrix.tsx
+  s_c27fa7d7602cff::t_064b43fc4607e9 1-72
+.agents/skills/shadcn/cli.md
+  s_c27fa7d7602cff::t_9bbb73e3c8f538 11,45-62,71-72,109-111,133,136-139,141-148,156-158,246-248,275-276,280,284,286,290
+.agents/skills/shadcn/customization.md
+  s_c27fa7d7602cff::t_04d70740ca5dee 68,70-77,80,139-140,152-154,160
+.agents/skills/shadcn/design-system-page.md
+  s_c27fa7d7602cff::t_f7f514f9326e78 1-17,19-30,33,35-49,51,53,55,57,59,61,63-73,75,77,79,81,83,85-90,92,94,96,98,100,102,104,106,108,110,112,114,116-123,125,127,129-135,137,139,141-157,160,162,164-165,167-175,177-191,193,197,199,201-210,212,214-229,231,233,235,237,239,241,243,245,247-253,256-268
+.agents/skills/shadcn/design-system.md
+  s_c27fa7d7602cff::t_4cc6177caf1534 1,3,5,7,9-17,19,21,23-29,31,33,35-37,40,43,46,49,52-53,56,58,60,62-73,75,78-79,82,84,86-89,92-93,96-161,163-186,189,192,195,197,199,201-206,209-211,214,217-227,230,232,234,236-250,253-254,256-282,285-355,358-359,361-386
+.agents/skills/shadcn/evals/evals.json
+  s_c27fa7d7602cff::t_a3944ee08802b3 45-123
+.agents/skills/shadcn/mcp.md
+  s_c27fa7d7602cff::t_6814f8e6f609f3 3,16-22,38-41,43,47-50,52,58-59,63-64,66,84-87
+.agents/skills/shadcn/registry.md
+  s_c27fa7d7602cff::t_e81021e632a1b1 1,3-4,6,8,10-13,15-16,18-20,22,24-25,27-46,49,51-54,56,58,60-66,69,71-75,77-93,96-102,106-125,129,131-141,143,145-148,150-165,168,170-177,179,181,183-191,193-196,198,200-201,203-204,207-231,233,235-237,239,241,244-245,248,251-255,258,261-265,267-277
+.agents/skills/shadcn/rules/chat.md
+  s_c27fa7d7602cff::t_71c869cb8a2f95 1,3-4,6,8-9,11,13-21,23,25,27-29,31-34,36,38-46,49-71,74,76-99,102,104,106-107,109-110,112-114,116,118-121,124,126-132,135,137-163,165,167,169,171-172,174-176,178,180-186,188,190-193,198-288,291-304,307,309-315,318-355,358,360-365,368-400,403,405-432,435-448,453-493,495-497,501,503-507
+.agents/skills/shadcn/rules/composition.md
+  s_c27fa7d7602cff::t_339aa12bc1bbcd 8,54-59,91-103
+.agents/skills/shadcn/rules/styling.md
+  s_c27fa7d7602cff::t_6b870300eebb0c 16,154,164-185
+.agents/skills/shadcn/scripts/showcase-coverage.mjs
+  s_c27fa7d7602cff::t_2ec57f68e34ac4 1-53
+.agents/skills/ui-ux-pro-max/SKILL.md
+  s_c27fa7d7602cff::t_35ea91534cf42c 1-217
+.agents/skills/ui-ux-pro-max/data/app-interface.csv
+  s_c27fa7d7602cff::t_a2db453b04a50c 2,4-17,19-23,25-33
+.agents/skills/ui-ux-pro-max/data/catalog-summary.json
+  s_c27fa7d7602cff::t_532be0091fde00 1-78
+.agents/skills/ui-ux-pro-max/data/charts.csv
+  s_c27fa7d7602cff::t_5fe996bf083291 1-26
+.agents/skills/ui-ux-pro-max/data/colors.csv
+  s_c27fa7d7602cff::t_ad9b08053ace53 2-125,127-193
+.agents/skills/ui-ux-pro-max/data/data-provenance.json
+  s_c27fa7d7602cff::t_da70d7cd2656d1 1-1370
+.agents/skills/ui-ux-pro-max/data/google-font-licenses.json
+  s_c27fa7d7602cff::t_98887185ad9b40 1-20185
+.agents/skills/ui-ux-pro-max/data/google-fonts.csv
+  s_c27fa7d7602cff::t_898ce758d80bff 2-1935
+.agents/skills/ui-ux-pro-max/data/icons.csv
+  s_c27fa7d7602cff::t_402639aed5f1bc 1-106
+.agents/skills/ui-ux-pro-max/data/landing.csv
+  s_c27fa7d7602cff::t_9af387c511f153 1-35
+.agents/skills/ui-ux-pro-max/data/motion.csv
+  s_c27fa7d7602cff::t_c22e60d75e2d75 1-18
+.agents/skills/ui-ux-pro-max/data/phosphor-icons-upstream.json
+  s_c27fa7d7602cff::t_4a386aee6bd955 1-32582
+.agents/skills/ui-ux-pro-max/data/products.csv
+  s_c27fa7d7602cff::t_e19d8c09d7f6fb 1-193
+.agents/skills/ui-ux-pro-max/data/react-performance.csv
+  s_c27fa7d7602cff::t_e0e62a011975cb 2-3,5-16,19-20,22,24-41,44-45
+.agents/skills/ui-ux-pro-max/data/stacks/angular.csv
+  s_c27fa7d7602cff::t_5c0457bbac2801 1-51
+.agents/skills/ui-ux-pro-max/data/stacks/astro.csv
+  s_c27fa7d7602cff::t_b0dddd2cbe0b66 1-54
+.agents/skills/ui-ux-pro-max/data/stacks/avalonia.csv
+  s_c27fa7d7602cff::t_e55aeab23b9df5 1-57
+.agents/skills/ui-ux-pro-max/data/stacks/flutter.csv
+  s_c27fa7d7602cff::t_acd9308ce6ef6b 1-53
+.agents/skills/ui-ux-pro-max/data/stacks/html-tailwind.csv
+  s_c27fa7d7602cff::t_96aaf2c31ea4c1 1-60
+.agents/skills/ui-ux-pro-max/data/stacks/javafx.csv
+  s_c27fa7d7602cff::t_38bc401460aea4 1-76
+.agents/skills/ui-ux-pro-max/data/stacks/jetpack-compose.csv
+  s_c27fa7d7602cff::t_b91207909fd545 1-53
+.agents/skills/ui-ux-pro-max/data/stacks/laravel.csv
+  s_c27fa7d7602cff::t_ad168bc0abca4a 1-51
+.agents/skills/ui-ux-pro-max/data/stacks/nextjs.csv
+  s_c27fa7d7602cff::t_d55c598334b233 1-62
+.agents/skills/ui-ux-pro-max/data/stacks/nuxt-ui.csv
+  s_c27fa7d7602cff::t_75e0c87479c53f 1-84
+.agents/skills/ui-ux-pro-max/data/stacks/nuxtjs.csv
+  s_c27fa7d7602cff::t_bce94071a0a582 1-68
+.agents/skills/ui-ux-pro-max/data/stacks/react-native.csv
+  s_c27fa7d7602cff::t_e56240a0e8d873 1-52
+.agents/skills/ui-ux-pro-max/data/stacks/react.csv
+  s_c27fa7d7602cff::t_23d181df44e164 1-67
+.agents/skills/ui-ux-pro-max/data/stacks/shadcn.csv
+  s_c27fa7d7602cff::t_e386d7d58a2ade 1-69
+.agents/skills/ui-ux-pro-max/data/stacks/svelte.csv
+  s_c27fa7d7602cff::t_32413e264d49c1 1-56
+.agents/skills/ui-ux-pro-max/data/stacks/swiftui.csv
+  s_c27fa7d7602cff::t_cadcec16b20c7f 1-51
+.agents/skills/ui-ux-pro-max/data/stacks/threejs.csv
+  s_c27fa7d7602cff::t_952e2626688eba 1-54
+.agents/skills/ui-ux-pro-max/data/stacks/uno.csv
+  s_c27fa7d7602cff::t_6296a04eee9708 1-60
+.agents/skills/ui-ux-pro-max/data/stacks/uwp.csv
+  s_c27fa7d7602cff::t_d7a1bbe24a789f 1-56
+.agents/skills/ui-ux-pro-max/data/stacks/vue.csv
+  s_c27fa7d7602cff::t_9b3b7ecaddab82 1-50
+.agents/skills/ui-ux-pro-max/data/stacks/winui.csv
+  s_c27fa7d7602cff::t_7de9e51ba037d9 1-60
+.agents/skills/ui-ux-pro-max/data/stacks/wpf.csv
+  s_c27fa7d7602cff::t_90ab03b834b66b 1-57
+.agents/skills/ui-ux-pro-max/data/styles.csv
+  s_c27fa7d7602cff::t_b87d65db0c4c0c 1-90
+.agents/skills/ui-ux-pro-max/data/typography.csv
+  s_c27fa7d7602cff::t_4d62e2b8378d3e 2-75
+.agents/skills/ui-ux-pro-max/data/ui-reasoning.csv
+  s_c27fa7d7602cff::t_d24ab13d54ab70 1-193
+.agents/skills/ui-ux-pro-max/data/ux-guidelines.csv
+  s_c27fa7d7602cff::t_21ff006c580a39 9,15,20,23,29,42,56,79,97,100-120
+.agents/skills/ui-ux-pro-max/references/pro-rules.md
+  s_c27fa7d7602cff::t_7a6107f8603803 1-117
+.agents/skills/ui-ux-pro-max/references/quick-reference.md
+  s_c27fa7d7602cff::t_fd7b297241d25c 1,3,13,24-33,111-112,131-132,136,138,140,160,165,187-188
+.agents/skills/ui-ux-pro-max/scripts/core.py
+  s_c27fa7d7602cff::t_dd91f6c2140512 8,18-26,30-31,41,45-46,51,65-71,90-97,99-120,125-201,206-288,303,306-309,318,320,322,324-327,337,340,344,354-388,391-392,395-431,433-441,443-444,446-449,451-464,467-470,474-480,483-487,489-590,592-593,597-598,600-749,753-787,789-812,814-822,824-825,831-839,841-881,886,888-975,977-980,982-1011,1013-1014,1023-1036,1038,1044,1046-1053
+.agents/skills/ui-ux-pro-max/scripts/design_system.py
+  s_c27fa7d7602cff::t_1f9c8241f23ca4 10-11,13-15,21-24,28-34,43,48-280,288-290,300-345,348-354,357-377,384,386,390,403-406,410-416,419-420,426-429,441-443,445-447,455-458,460-461,463,474-485,494,497-502,504-505,514-519,521-538,557,564-566,569-589,600-602,604-628,635-664,666,674-675,678,681-684,698-701,703,710-724,727-728,730,732-733,735,738-742,744,746,748-758,760-761,764-765,767,769,771,773,777-790,794-796,799,810,812,826-827,833-843,859-861,870,872-877,905-921,944-947,958-962,965-967,970-972,974,976-982,986-1021,1024,1030-1033,1035-1036,1039-1044,1047-1049,1051,1055-1057,1059-1075,1078,1080-1092,1096,1110-1113,1115,1117,1130-1138,1152-1155,1178-1184,1187-1189,1192-1195,1222,1238,1337-1362,1668
+.agents/skills/ui-ux-pro-max/scripts/reasoning_contract.py
+  s_c27fa7d7602cff::t_d81e9a3b04d8a0 1-123
+.agents/skills/ui-ux-pro-max/scripts/search.py
+  s_c27fa7d7602cff::t_48f8a28151eb32 7-8,10-17,20-25,29-30,33-40,48,50-51,58,61-68,71-90,95-96,107-113,115,119,121-128,134-144,146-147,151-155,157-179,182-186,189,191,194-197,199,201
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-api.json
+  s_c27fa7d7602cff::t_e3bc521209a725 1-36
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-catalog.json
+  s_c27fa7d7602cff::t_7c151db3d0183f 1-33
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-existing.csv
+  s_c27fa7d7602cff::t_913a9c64205f6e 1-3
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-metadata.json
+  s_c27fa7d7602cff::t_68e2e96ef2a933 1-17
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/google-overrides.json
+  s_c27fa7d7602cff::t_b3fbbbfd6034d9 1-7
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/icons-curated.csv
+  s_c27fa7d7602cff::t_9bc3938f8a64a0 1-4
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-core.json
+  s_c27fa7d7602cff::t_c1ffedb19bfb45 1-23
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-package.json
+  s_c27fa7d7602cff::t_58b700014d9208 1-13
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-react-exports.json
+  s_c27fa7d7602cff::t_623b0565f5ca3a 1-4
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/catalogs/phosphor-react-package.json
+  s_c27fa7d7602cff::t_331377867b0b59 1-5
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-baseline.json
+  s_c27fa7d7602cff::t_a3e758e6bd3f84 1-3366
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-cases.json
+  s_c27fa7d7602cff::t_827e27b51d6379 1-111
+.agents/skills/ui-ux-pro-max/scripts/tests/fixtures/relevance-thresholds.json
+  s_c27fa7d7602cff::t_3f62855b9f50c2 1-100
+.agents/skills/ui-ux-pro-max/scripts/tests/test_catalog_refresh.py
+  s_c27fa7d7602cff::t_add3aa476d9a46 1-354
+.agents/skills/ui-ux-pro-max/scripts/tests/test_catalog_summary_line_endings.py
+  s_c27fa7d7602cff::t_b2216757369e8c 1-78
+.agents/skills/ui-ux-pro-max/scripts/tests/test_core.py
+  s_c27fa7d7602cff::t_182ea9ac87eecf 1-343
+.agents/skills/ui-ux-pro-max/scripts/tests/test_core_data_quality.py
+  s_c27fa7d7602cff::t_7a84ca29436184 1-198
+.agents/skills/ui-ux-pro-max/scripts/tests/test_data_contracts.py
+  s_c27fa7d7602cff::t_05838153ffe75a 1-421
+.agents/skills/ui-ux-pro-max/scripts/tests/test_design_system_mode.py
+  s_c27fa7d7602cff::t_23713d1131ae5e 1-233
+.agents/skills/ui-ux-pro-max/scripts/tests/test_design_system_stack.py
+  s_c27fa7d7602cff::t_05163a84f53e9b 1-61
+.agents/skills/ui-ux-pro-max/scripts/tests/test_native_desktop_stack_freshness.py
+  s_c27fa7d7602cff::t_910f03c77afdc0 1-179
+.agents/skills/ui-ux-pro-max/scripts/tests/test_relevance_evaluator.py
+  s_c27fa7d7602cff::t_e3e783114ba66f 1-182
+.agents/skills/ui-ux-pro-max/scripts/tests/test_rtl_support.py
+  s_c27fa7d7602cff::t_c384c22851e5d2 1-166
+.agents/skills/ui-ux-pro-max/scripts/tests/test_skill_script_paths.py
+  s_c27fa7d7602cff::t_f9c6ac00cacc68 1-82
+.agents/skills/ui-ux-pro-max/scripts/tests/test_style_taxonomy.py
+  s_c27fa7d7602cff::t_68fbd8816f3156 1-175
+.agents/skills/ui-ux-pro-max/scripts/tests/test_text_layout_resilience.py
+  s_c27fa7d7602cff::t_a21246156c56c6 1-120
+.agents/skills/ui-ux-pro-max/scripts/tests/test_web_stack_freshness.py
+  s_c27fa7d7602cff::t_f9ef706598f4c1 1-191
+.agents/skills/ui-ux-pro-max/scripts/validate_data.py
+  s_c27fa7d7602cff::t_4921775490e77b 1-1095
+.agents/skills/vercel-composition-patterns/README.md
+  s_952fc6f2367253::t_4a8336c476eb0f 3-5,7,9-60
+.agents/skills/vercel-composition-patterns/SKILL.md
+  s_952fc6f2367253::t_2dde0cf5c1065d 87,89
+.agents/skills/vercel-composition-patterns/metadata.json
+  s_952fc6f2367253::t_85eb512c4d753b 1-11
+.agents/skills/vercel-composition-patterns/rules/_sections.md
+  s_952fc6f2367253::t_0369e1842803b9 1-29
+.agents/skills/vercel-composition-patterns/rules/_template.md
+  s_952fc6f2367253::t_657b4e8d624ab5 1-24
+.agents/skills/vercel-react-best-practices/AGENTS.md
+  s_952fc6f2367253::t_02431d023ba50f 24-29,35-36,40-47,57-68,77-80,88-95,97-100,110-143,219-221,268,302,326,453,456-463,465,471,473,582-641,846-894,931-1081,1115,1194-1224,1290,1716-1796,1828,1868,1909,1950-2010,2035,2113,2167,2203-2260,2606-2653,2689-2780,3178-3283,3332,3378,3419-3476,3554,3574,3639-3691,3729,3765
+.agents/skills/vercel-react-best-practices/README.md
+  s_952fc6f2367253::t_8a9d22ddf6f393 1,3,5,7-14,16,18-21,23-26,28-31,33-36,38,40-52,54,56,58-64,66,68,70,72-73,76,78-79,82,84,86,88-92,94,96-101,103,105-108,110,112,114-119,121,123
+.agents/skills/vercel-react-best-practices/SKILL.md
+  s_952fc6f2367253::t_6587f59974e703 12,40,50,62-63,66,87,90,92,105-106,122-123,127,147,149
+.agents/skills/vercel-react-best-practices/metadata.json
+  s_952fc6f2367253::t_62e39629d25068 1-15
+.agents/skills/vercel-react-best-practices/rules/_sections.md
+  s_952fc6f2367253::t_13ad51693a3698 1-46
+.agents/skills/vercel-react-best-practices/rules/_template.md
+  s_952fc6f2367253::t_3affdc64769099 1-28
+.agents/skills/vercel-react-best-practices/rules/advanced-effect-event-deps.md
+  s_952fc6f2367253::t_8015676c1c2994 1-56
+.agents/skills/vercel-react-best-practices/rules/async-cheap-condition-before-await.md
+  s_952fc6f2367253::t_e7ba8a56535312 1-37
+.agents/skills/vercel-react-best-practices/rules/async-defer-await.md
+  s_952fc6f2367253::t_0699f0636bc9ae 81-82
+.agents/skills/vercel-react-best-practices/rules/bundle-analyzable-paths.md
+  s_952fc6f2367253::t_5bfd64d162f126 1-63
+.agents/skills/vercel-react-best-practices/rules/bundle-barrel-imports.md
+  s_952fc6f2367253::t_395f2a6c3f7b0b 27,30,36,38-39,41,44-56
+.agents/skills/vercel-react-best-practices/rules/js-flatmap-filter.md
+  s_952fc6f2367253::t_c88844bb62a2e2 1-60
+.agents/skills/vercel-react-best-practices/rules/js-request-idle-callback.md
+  s_952fc6f2367253::t_2f9860f079b828 1-6,8,10,12,14,16-19,21-24,28,30-33,35-38,40-42,44-47,50,52-57,60,62-64,66-71,73-77,79,83,85-86,88-90,93,95-99,101,103-105
+.agents/skills/vercel-react-best-practices/rules/rendering-resource-hints.md
+  s_952fc6f2367253::t_2a2ac801d37c4d 1-85
+.agents/skills/vercel-react-best-practices/rules/rendering-script-defer-async.md
+  s_952fc6f2367253::t_7c063ea0188107 1-68
+.agents/skills/vercel-react-best-practices/rules/rerender-no-inline-components.md
+  s_952fc6f2367253::t_386f81bc39bc29 1-82
+.agents/skills/vercel-react-best-practices/rules/rerender-split-combined-hooks.md
+  s_952fc6f2367253::t_4b080481722692 1-64
+.agents/skills/vercel-react-best-practices/rules/rerender-use-deferred-value.md
+  s_952fc6f2367253::t_965a4689ccfa3c 1-59
+.agents/skills/vercel-react-best-practices/rules/server-hoist-static-io.md
+  s_952fc6f2367253::t_445e75330cc0ba 1-149
+.agents/skills/vercel-react-best-practices/rules/server-no-shared-module-state.md
+  s_952fc6f2367253::t_a90ec940c4d9b8 1-50
+.agents/skills/vercel-react-best-practices/rules/server-parallel-nested-fetching.md
+  s_952fc6f2367253::t_2e93809d8a1fb4 1-34
+.agents/skills/wait-what/SKILL.md
+  s_952fc6f2367253::t_4b0f1aa3aad056 2-4,7
+.agents/skills/wait-what/agents/openai.yaml
+  s_952fc6f2367253::t_7eb6f1aefdf8ed 2-3,5
+.agents/skills/writing-for-agents/SKILL-MECHANICS.md
+  s_952fc6f2367253::t_9397b784a39cc1 1-22
+.agents/skills/writing-for-agents/SKILL.md
+  s_952fc6f2367253::t_ccca6867acbabe 1-81
+.agents/skills/writing-for-agents/agents/openai.yaml
+  s_952fc6f2367253::t_475d84878eee0f 2-3
+AGENTS.md
+  s_c27fa7d7602cff::t_d977503b92e2af 6,22-25
+README.md
+  s_c27fa7d7602cff::t_355cb8fbcb191b 1,3,5-12,14,16,18,20
+docs/README.md
+  s_c27fa7d7602cff::t_8d8f593d1109c8 1-26
+docs/agent-tooling.md
+  s_c27fa7d7602cff::t_206bb089023ca9 1-71
+docs/agents/ios-workflows.md
+  s_952fc6f2367253::t_31e4dbcb9cf64a 8
+docs/agents/task-workflow.md
+  s_c27fa7d7602cff::t_b93a09f38e895f 22,31,33
+docs/architecture.md
+  s_952fc6f2367253::t_ea7b86f15d089f 15-16,162,169-172
+docs/deployment/coolify.md
+  s_c27fa7d7602cff::t_23a9a601569e23 100-103
+docs/skills.md
+  s_c27fa7d7602cff::t_85f01a0a168fa7 1-55
+ios-app/AGENTS.md
+  s_952fc6f2367253::t_76d64ed2031ccf 23
+ios-app/Docs/NOTIFICATIONS.md
+  s_c27fa7d7602cff::t_c3038fc87fefce 3,5,7
+ios-app/Docs/SETUP.md
+  s_c27fa7d7602cff::t_873feb633d5848 7,14-47
+ios-app/Docs/agent-harness.md
+  s_c27fa7d7602cff::t_a11a921ed5568e 3,13,15,17-30
+ios-app/Docs/agents/design-system.md
+  s_c27fa7d7602cff::t_9ee0fdb921c1a1 5,7,9,11,19,27-36,38
+ios-app/Docs/agents/feature-workflow.md
+  s_c27fa7d7602cff::t_3b9e9f7dd33583 3,10,17,21
+ios-app/Docs/agents/product-language.md
+  s_c27fa7d7602cff::t_9866510ffe26cb 5,7,9,11-15
+ios-app/Docs/agents/simulator.md
+  s_952fc6f2367253::t_d23efc242c446e 7,10,13,24
+ios-app/Docs/agents/swift.md
+  s_952fc6f2367253::t_079edf634d7790 5-6,35
+ios-app/Docs/agents/visual-review.md
+  s_952fc6f2367253::t_b682fdb1e217d7 8
+ios-app/Docs/features/overview.md
+  s_c27fa7d7602cff::t_150d2c0ddf3dc1 232,240
+ios-app/Docs/localization.md
+  s_c27fa7d7602cff::t_fe7b141f3e751e 3,5,7-10,14-17,19,21,23,25,29,31,33,40,44,46,48,50-53,55,57,59
+ios-app/Feedback.xcodeproj/project.xcproj
+  s_c27fa7d7602cff::t_aad29794d64fc3 55,59-65,68,71-77,81-86,92-152,158-178,235,245,248-256,260,263,271,289,302-310,316,334,352-361,371-380,406,424,442,455-463,467,470,478,481-488,497,506,509-526,530,533,538,541,544,547,550,553,556-557,559-603,607,610,615-621,625,627-629,632,635,638,641-642,644,647,650-662,665-673,677,680,683-691,695,698,704,707,710,713-743,749,752-755,759,762-768,775,778,781,784,787-793,796,799,802-823,826-832,838,841,845,848,851,854,857,860,863,866,869,872,875,878,881,884,887-956,959,962,965,968-977,980-989,992,995,998,1001-1097,1100-1127,1130,1133,1136,1139,1142,1145,1148,1151,1154-1181,1184,1187,1190,1193,1196,1199,1202,1205,1208,1211,1214,1217,1220,1223,1226,1229,1232,1235,1238,1241,1244,1247,1250,1253,1256,1259,1262,1265,1268,1271,1274,1277,1280,1283,1286,1289,1292,1295,1298,1301,1304,1307,1310,1313,1316,1319,1322,1325,1328,1331,1334,1337,1340,1343,1346,1349,1352,1355,1358,1361,1364,1367,1370,1373,1376,1379,1382,1385,1388,1391,1394-1410,1412-1440,1442,1445,1448,1453-1466,1468,1471,1474-1480,1490,1493,1497-1502,1505-1634,1645-1747,1749-1751,1754,1757,1760,1763,1766-1767,1769,1772,1775,1778-1779,1781,1784-1785,1787,1790,1793-1794,1796,1799-1800,1802,1805,1808,1811,1814,1817,1820,1823,1826,1829,1832,1835,1838,1841,1844,1847,1850,1853,1856,1859,1862-1863,1865,1868-1869,1871,1874-1875,1877,1880,1883-1884,1886,1889,1892-1893,1895,1898,1901,1904,1907,1910,1913,1916-1917,1919,1922-1923,1925,1928,1931,1934-1935,1937,1940,1943,1946,1949-1950,1952,1955,1958,1961,1964-1965,1967,1970-1971,1973,1976,1979,1982,1985-2189,2192-2206,2212-2307
+ios-app/README.md
+  s_c27fa7d7602cff::t_31b88ba5582ae0 72,77,112,120
+skills-lock.json
+  s_c27fa7d7602cff::t_aede492f4e3245 4-29,31-32,34,37-56,58-70,73-74,79-80,85-122
+tasks/03-rebrand-suggestions-and-votes.md
+  s_952fc6f2367253::t_75fe9593e00ebc 25
+tasks/04-rebrand-decisions-and-status.md
+  s_952fc6f2367253::t_529133c8f14a78 21
+tasks/05-rebrand-trials-and-evaluation.md
+  s_952fc6f2367253::t_fef07cc8fc586f 28
+tasks/06-rebrand-web-leader-dashboard.md
+  s_952fc6f2367253::t_1c5c5b44d74d9f 25
+tasks/07-rebrand-ios-employee-app.md
+  s_952fc6f2367253::t_a17354091cb690 30
+tasks/08-rebrand-landing-page-finish-and-brand-identity.md
+  s_952fc6f2367253::t_a7c12c372ba456 39
+tasks/09-rebrand-legacy-retirement.md
+  s_952fc6f2367253::t_0903dfa21ccdee 18
+tasks/10-rebrand-android-app.md
+  s_952fc6f2367253::t_4cbfd966cecf93 26
+tasks/11-rebrand-hr-overview.md
+  s_952fc6f2367253::t_1dc510b67e33d1 20
+tasks/12-rebrand-web-language-switch.md
+  s_952fc6f2367253::t_8c8ac823b61cb0 20
+tasks/13-rebrand-wellbeing-check.md
+  s_952fc6f2367253::t_b90163943f9e7c 25
+tasks/ios-confirmation-polish.md
+  s_c27fa7d7602cff::t_d36ed6c7424bf5 43
+.agents/skills/find-skills/SKILL.md
+  s_952fc6f2367253::t_c934ff7cd062f0 27,43,45-53,56,65,67,69-71,73,78-80,85,87,90,92,95
+.agents/skills/frontend-design/SKILL.md
+  s_952fc6f2367253::t_ebac2e01547b0b 1-71
+.agents/skills/webapp-testing/LICENSE.txt
+  s_952fc6f2367253::t_06e4006dbd5fee 190
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0d4ac13216d888feaf3bb68109717bf3758ae26a",
+  "prompts": {},
+  "sessions": {
+    "s_952fc6f2367253": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b5b0-8b6d-7a81-a2de-a9b43b45fd58",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_c27fa7d7602cff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b6f6-6693-7951-a55e-ec78b7fdc4e5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
