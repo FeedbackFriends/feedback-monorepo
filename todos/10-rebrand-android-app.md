@@ -86,4 +86,4 @@ Not implemented yet.
 - Completed: None.
 - Verification results: Not run.
 - Blockers: Deferred until after the iOS and web rebrand ships.
-- Next action: None until prioritized. Then run `$lg-refine tasks/10-rebrand-android-app.md`.
+- Next action: None until prioritized. Then run `$lg-refine todos/10-rebrand-android-app.md`.

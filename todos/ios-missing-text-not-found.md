@@ -19,7 +19,7 @@ Afgrænset reproduktion og rettelse af det rapporterede sted. Ingen global under
 
 - ios-app/Modules/Sources/MoreFeature/AccountSection/ProfileSettingsView.swift bruger profileMissingValue til manglende navn, mail og telefon.
 - ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings: profile.missingValue er allerede “Ikke angivet” / “Not provided”, ikke “Not Found”.
-- tasks/shared-error-messages.md beskriver en separat, større ændring af API-fejltekster; denne opgave må ikke duplikere den.
+- todos/shared-error-messages.md beskriver en separat, større ændring af API-fejltekster; denne opgave må ikke duplikere den.
 
 ## Decisions and open questions
 

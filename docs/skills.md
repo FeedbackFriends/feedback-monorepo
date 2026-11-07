@@ -27,7 +27,6 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-refine](../.agents/skills/lg-refine/SKILL.md) | Settle requirements and architectural decisions. |
 | [lg-review](../.agents/skills/lg-review/SKILL.md) | Review changes for concrete regressions. |
 | [lg-tailwind-nextjs-expert](../.agents/skills/lg-tailwind-nextjs-expert/SKILL.md) | Implement web styling with existing tokens and components. |
-| [lg-verify](../.agents/skills/lg-verify/SKILL.md) | Verify acceptance criteria or reproduce behavior. |
 
 ## Community skills
 
@@ -61,7 +60,7 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | Public positioning and landing copy | `copywriting`, informed by research and the [product strategy](product/lets-grow-strategi-teamtrivsel.md); `seo-audit` checks public-page discoverability. |
 | First-use journeys | `onboarding` for the path to value; task requirements own account roles, invitations, and access checks. |
 | Web UI | `lg-tailwind-nextjs-expert` and `shadcn` implement existing tokens/components; `frontend-design` supports visual direction, `ui-ux-pro-max` targeted lookup, and `web-design-guidelines` interface review. |
-| Next.js implementation and verification | `next-best-practices` supports architecture alongside version-matched docs; `next-upgrade` handles migrations. `next-dev-loop` owns runtime checks through the [web validation guide](../web/docs/agents/validation.md); existing lint, build and Playwright checks remain required when relevant. |
+| Next.js implementation and verification | `next-best-practices` supports architecture alongside version-matched docs; `next-upgrade` handles migrations. For explicitly requested runtime checks, `next-dev-loop` provides the procedure through the [web validation guide](../web/docs/agents/validation.md); existing lint, build and Playwright checks remain required when relevant. |
 | React implementation | `vercel-composition-patterns` for component APIs; `vercel-react-best-practices` for relevant performance concerns. Use abstractions and dependencies only when the task warrants them. |
 | Browser exploration and repeatable tests | Follow [browser access and tool ownership](agents/browser-access.md); the TypeScript Playwright suite owns repeatable web tests. |
 | Native iOS and Maestro | Repository [iOS workflows](agents/ios-workflows.md), Apple guidance, and [existing Maestro flows](../ios-app/.maestro/README.md) own native verification. Use [official Maestro references](https://docs.maestro.dev/) for YAML commands; preserve deterministic fixtures and explicit auth state rather than substituting adaptive auth or mock responses for live acceptance. |

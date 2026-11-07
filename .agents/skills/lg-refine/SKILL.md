@@ -5,11 +5,11 @@ description: Refine a LetsGrow idea or existing task across iOS, backend, web, o
 
 # Refine a LetsGrow task
 
-Read [root policy](../../../AGENTS.md), [task workflow](../../../docs/agents/task-workflow.md), and [create-task](../lg-create-task/SKILL.md). Always save or update a prefixed Markdown task under root `tasks/`. Refinement alone does not authorize implementation.
+Read [root policy](../../../AGENTS.md), [task workflow](../../../docs/agents/task-workflow.md), and [create-task](../lg-create-task/SKILL.md). Always save or update a prefixed Markdown task under root `todos/`. Refinement alone does not authorize implementation.
 
 ## Understand the need
 
-Read the supplied task, or inspect `tasks/` for matching work before creating one. Establish the current problem, target users, desired behavior, affected product surfaces, and scope. Use available product documentation and [domain guidance](../../../docs/product/lets-grow-strategi-teamtrivsel.md) where relevant. Inspect relevant code and architecture documentation to ground questions in existing responsibilities, boundaries, data flows, and constraints. Read the owning app guidance before exploring its implementation.
+Read the supplied task, or inspect `todos/` for matching work before creating one. Establish the current problem, target users, desired behavior, affected product surfaces, and scope. Use available product documentation and [domain guidance](../../../docs/product/lets-grow-strategi-teamtrivsel.md) where relevant. Inspect relevant code and architecture documentation to ground questions in existing responsibilities, boundaries, data flows, and constraints. Read the owning app guidance before exploring its implementation.
 
 For customer interviews, public copy, or first-use journeys, use the relevant [community skill and product constraints](../../../docs/skills.md#choosing-complementary-skills). Research supplies evidence; refinement still owns the saved requirements and architecture.
 
@@ -25,7 +25,7 @@ Resolve technical details during refinement when they affect requirements, archi
 
 ## Save a usable handoff
 
-Use the create-task template and naming rules, for example `tasks/ios-duplicate-activity.md` or `tasks/backend-session-validation.md`; multi-platform tasks use `shared-`. Include the problem, current and desired behavior, scope, detailed feature requirements, product and architectural decisions with rationale/tradeoffs, acceptance criteria, and observable checks so another agent can understand the task without this chat. Large tasks use ordered phases with outcomes and dependencies in the same file. Include relevant architecture/code references from refinement; implementation adds detailed technical steps and verification commands.
+Use the create-task template and naming rules, for example `todos/ios-duplicate-activity.md` or `todos/backend-session-validation.md`; multi-platform tasks use `shared-`. Include the problem, current and desired behavior, scope, detailed feature requirements, product and architectural decisions with rationale/tradeoffs, acceptance criteria, and observable checks so another agent can understand the task without this chat. Large tasks use ordered phases with outcomes and dependencies in the same file. Include relevant architecture/code references from refinement; implementation adds detailed technical steps and verification commands.
 
 Persist decisions as they settle. Keep `draft` with explicit material open questions and a precise next action; set `ready` when feature requirements and consequential architectural choices are settled and the plan is actionable. Routine coding details do not block readiness. Save partial refinement before pausing for answers. Do not leave the only plan in chat or under a docs directory.
 

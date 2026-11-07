@@ -9,7 +9,7 @@ Use this index to find the maintained source rather than copying it.
 | Monorepo architecture and contract flow | [Architecture](architecture.md) |
 | Agent harness, skills, tools, hooks, and layout | [Harness architecture](agent-tooling.md) |
 | Available skills and community sources | [Skills overview](skills.md) |
-| Task lifecycle and implementation | [Task workflow](agents/task-workflow.md), [unfinished tasks](../tasks/README.md) |
+| Task lifecycle and implementation | [Task workflow](agents/task-workflow.md), [unfinished tasks](../todos/README.md) |
 | Architectural implementation handoff | [Human review](agents/human-review.md) |
 | Repository ownership and shared conventions | [Repository scope](agents/repository-scope.md) |
 | Shared API contract and generated clients | [API contract](agents/api-contract.md) |

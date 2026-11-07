@@ -85,4 +85,4 @@ Not implemented yet.
 - Completed: None.
 - Verification results: Not run.
 - Blockers: Deferred until the core loop has shipped and pilots ask for it.
-- Next action: None until prioritized. Then run `$lg-refine tasks/13-rebrand-wellbeing-check.md`.
+- Next action: None until prioritized. Then run `$lg-refine todos/13-rebrand-wellbeing-check.md`.

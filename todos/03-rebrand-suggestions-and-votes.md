@@ -56,7 +56,7 @@ Depends on **02** (teams and memberships). Feeds 04 (decisions), 06 (web dashboa
 - Reading path:
   - Strategy sections 6, 7, and 8.
   - Existing feedback persistence: `backend/lib/persistence/.../table/FeedbackTable.kt`.
-  - The previous client-generated-ID idempotency pattern: `support_submission` (changeset 0026) and `tasks/shared-in-app-product-feedback-and-bug-reports.md`.
+  - The previous client-generated-ID idempotency pattern: `support_submission` (changeset 0026) and `todos/shared-in-app-product-feedback-and-bug-reports.md`.
 - State/API flow and prerequisites:
   - Team membership from 02 authorizes every call.
   - The contract is regenerated through `./scripts/generate-api-artifacts.sh`.

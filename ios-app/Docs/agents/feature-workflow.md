@@ -5,10 +5,9 @@ Start at the monorepo root. The shared [task workflow](../../../docs/agents/task
 | Task | Entry point | Result |
 | --- | --- | --- |
 | Capture upcoming work or write a task plan | [$lg-create-task](../../../.agents/skills/lg-create-task/SKILL.md) | One task file with the canonical structure and status |
-| Shape an idea or stress-test a plan | [$lg-refine](../../../.agents/skills/lg-refine/SKILL.md) | Code-grounded plan saved to `tasks/ios-<slug>.md`, ready for another agent |
+| Shape an idea or stress-test a plan | [$lg-refine](../../../.agents/skills/lg-refine/SKILL.md) | Code-grounded plan saved to `todos/ios-<slug>.md`, ready for another agent |
 | Implement a feature or fix | [$lg-implement](../../../.agents/skills/lg-implement/SKILL.md) | Implemented slice; the same task file records progress, acceptance, verification, and handoff |
 | Write/refactor Swift | [Swift guidance](swift.md) | LetsGrow architecture, UI, localization, and testing conventions applied |
-| Check behavior or reproduce steps | [$lg-verify](../../../.agents/skills/lg-verify/SKILL.md) | Separate build, test, lint, login, UI, and visual evidence |
 | Review code or a diff | [$lg-review](../../../.agents/skills/lg-review/SKILL.md) | Ranked findings grounded in a concrete failure path |
 | Find an unknown bug cause | [$lg-investigate](../../../.agents/skills/lg-investigate/SKILL.md) | Evidence, reproduction, cause/confidence, and a regression scenario |
 
@@ -18,7 +17,7 @@ Task structure, readiness, phases, completion, and handoff are owned by [create-
 
 ## Choose verification by the change
 
-Use the smallest combination that can detect the actual regression. The [simulator guide](simulator.md) owns project-specific execution rules and result reporting; [testing](testing.md) owns lint and test policy. UI changes retain the [full-catalog visual review](visual-review.md) requirement.
+Use the smallest combination that can detect the actual regression. The [simulator guide](simulator.md) owns project-specific execution rules and result reporting; [testing](testing.md) owns lint and test policy. Implementation finishes with relevant automated tests, build and lint checks. Human manual testing and [visual review](visual-review.md) follow handoff; the runtime paths below are guidance for explicitly requested testing, not implementation completion gates.
 
 | Change | Behavioral evidence | Runtime/data needs |
 | --- | --- | --- |
@@ -51,11 +50,9 @@ The [localhost skill](../../../.agents/skills/lg-ios-localhost/SKILL.md) owns ex
 
 ```text
 $lg-refine Let owners duplicate an activity's question setup.
-# Refinement saves tasks/ios-duplicate-activity.md.
-$lg-implement tasks/ios-duplicate-activity.md
+# Refinement saves todos/ios-duplicate-activity.md.
+$lg-implement todos/ios-duplicate-activity.md
 $lg-ios-localhost both seed-manager
-$lg-verify On localhost, create a session as manager, submit feedback as anonymous,
-  and check that the manager sees the new response.
 $lg-ios-production
 $lg-review Review the current changes for shared-state and navigation regressions.
 $lg-investigate Why does opening a feedback notification show the wrong session?

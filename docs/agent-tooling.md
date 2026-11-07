@@ -7,7 +7,7 @@ flowchart TD
     Request[User request] --> Agent[Agent session]
     Policy[Root and app AGENTS.md] --> Agent
     Guides[Owning guides and skills] --> Agent
-    Agent <--> Tasks[Root tasks: unfinished work]
+    Agent <--> Tasks[Root todos: unfinished work]
     Agent --> Tools[MCP and explicit commands]
     Tools --> Apps[Web, backend, iOS, infrastructure]
     Apps --> Evidence[Tests and observable checks]
@@ -25,7 +25,7 @@ Reading guidance does not execute a hook or grant tool permission. The agent per
 | [Root AGENTS.md](../AGENTS.md) and app policies | Shared boundaries and routes to platform rules |
 | [Docs index](README.md), root `docs/`, and app docs | Shared knowledge and platform-specific invariants, with one maintained home per topic |
 | [Root .agents/skills](../.agents/skills/) | Reusable execution procedures |
-| [tasks/](../tasks/README.md) | Unfinished requirements, decisions, progress, evidence, and next action |
+| [todos/](../todos/README.md) | Unfinished requirements, decisions, progress, evidence, and next action |
 | [.codex/config.toml](../.codex/config.toml) | Project MCP startup and connection definitions |
 | [.mcp.json](../.mcp.json) and `.claude/skills/` aliases | Claude Code MCP connections and discovery of canonical skills |
 | Scripts, test suites, and [.github/workflows](../.github/workflows/) | Executable checks and automation |
@@ -45,9 +45,11 @@ Browse the [skills overview](skills.md) for every repository skill and its commu
 
 ## Task and verification flow
 
-The [task workflow](agents/task-workflow.md) owns draft → refinement → implementation → verification and the [human review handoff](agents/human-review.md). Root `tasks/` retains unfinished work only. Authorized direct implementation proceeds with a proportionate saved plan; phase boundaries do not add approval gates.
+The [task workflow](agents/task-workflow.md) owns draft → refinement → implementation → verification and the [human review handoff](agents/human-review.md). Root `todos/` retains unfinished work only. Authorized direct implementation proceeds with a proportionate saved plan; phase boundaries do not add approval gates.
 
 Use the owning platform's tools and validation: [iOS workflows](agents/ios-workflows.md), [backend validation](../backend/docs/agents/validation.md), [web validation](../web/docs/agents/validation.md), and [browser access](agents/browser-access.md). The [API guide](agents/api-contract.md) owns backend-to-generated-client flow. The [runtime guide](agents/runtime-and-deployment.md) owns service commands, including the volume reset performed by `scripts/run`.
+
+Implementation finishes with relevant automated tests and required lint/build checks. Human manual testing follows handoff and does not block task completion. Runtime and visual procedures apply when explicitly requested.
 
 Report actual evidence: build, tests, app launch, service health, and a live user journey establish different things. Documentation-only changes need link, metadata, source-claim, and routing checks; they do not require an app build. No separate subagent or reviewer process is required.
 

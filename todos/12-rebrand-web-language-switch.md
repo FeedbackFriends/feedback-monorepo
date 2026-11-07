@@ -73,4 +73,4 @@ Not implemented yet.
 - Completed: None.
 - Verification results: Not run.
 - Blockers: None. Low priority.
-- Next action: None until prioritized. Then run `$lg-refine tasks/12-rebrand-web-language-switch.md`.
+- Next action: None until prioritized. Then run `$lg-refine todos/12-rebrand-web-language-switch.md`.

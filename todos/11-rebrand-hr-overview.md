@@ -71,4 +71,4 @@ Not implemented yet.
 - Completed: None.
 - Verification results: Not run.
 - Blockers: Deferred until after the iOS and web rebrand ships.
-- Next action: None until prioritized. Then run `$lg-refine tasks/11-rebrand-hr-overview.md`.
+- Next action: None until prioritized. Then run `$lg-refine todos/11-rebrand-hr-overview.md`.

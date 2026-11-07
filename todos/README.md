@@ -1,4 +1,4 @@
-# LetsGrow tasks
+# LetsGrow todos
 
 All upcoming LetsGrow work lives here, with one Markdown file per task. GitHub Issues and GitHub Projects are not used for task management.
 
@@ -12,9 +12,9 @@ For example:
 
 ```text
 $lg-create-task Let owners duplicate an activity's question setup.
-# Captures tasks/ios-duplicate-activity.md as a nontechnical draft.
-$lg-refine tasks/ios-duplicate-activity.md
-$lg-implement tasks/ios-duplicate-activity.md
+# Captures todos/ios-duplicate-activity.md as a nontechnical draft.
+$lg-refine todos/ios-duplicate-activity.md
+$lg-implement todos/ios-duplicate-activity.md
 ```
 
 Refinement always saves a task file, including a draft when questions remain. Implementation reads and maintains that same file, including phase progress, acceptance checkboxes, verification evidence, a Human review section focused on architectural decisions and a linked reading path, and the next action. A `ready` task should be usable by an agent that has never seen the original conversation.
