@@ -1,0 +1,19 @@
+tasks/shared-auth-and-owner-onboarding.md
+  s_406d272c4e8f55::t_14a242cb5044f7 1-92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "02a1d7f94cd759492a6503737064072c5bdf911b",
+  "prompts": {},
+  "sessions": {
+    "s_406d272c4e8f55": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b5ab-0261-7793-b67e-aac83934c334",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
