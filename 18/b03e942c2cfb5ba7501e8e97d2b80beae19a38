@@ -1,0 +1,35 @@
+.agents/skills/lg-ios-localhost/SKILL.md
+  s_c93d6f5dc6b001::t_37c899e15a12f1 8
+.agents/skills/lg-ios-production/SKILL.md
+  s_c93d6f5dc6b001::t_64d0c4ac7a531a 8
+.agents/skills/lg-verify/references/ios.md
+  s_c93d6f5dc6b001::t_cfb4fe89b53f5b 3,21
+docs/agents/ios-workflows.md
+  s_c93d6f5dc6b001::t_637a25323a8317 8
+ios-app/Docs/SETUP.md
+  s_c93d6f5dc6b001::t_cc85e7661525bc 7
+ios-app/Docs/agent-harness.md
+  s_c93d6f5dc6b001::t_3cb33a6aca3149 43,51
+ios-app/Docs/agents/feature-workflow.md
+  s_c93d6f5dc6b001::t_28444f53646cf6 21
+ios-app/Docs/agents/simulator.md
+  s_c93d6f5dc6b001::t_6d950d886d0b4c 7,13-14,20-26
+ios-app/README.md
+  s_c93d6f5dc6b001::t_52329b3eeb6fec 77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "18b03e942c2cfb5ba7501e8e97d2b80beae19a38",
+  "prompts": {},
+  "sessions": {
+    "s_c93d6f5dc6b001": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b764-407b-7dd3-83a5-6e55cb6a0968",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
