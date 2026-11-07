@@ -55,7 +55,7 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 
 ## Local Apple skills
 
-Apple guidance lives in ignored `.agents/apple-skills/`, with generated discovery symlinks in both clients' skill directories. Run `python3 scripts/update-xcode-skills.py` on initial setup and after Xcode upgrades; see [Apple skills setup](../ios-app/Docs/agent-harness.md#apple-skills-setup). The native exporter owns this inventory independently of `skills-lock.json` and the community freshness timestamp. The community updater excludes these Apple aliases while retaining inventory checks for custom and community skills.
+Apple guidance lives directly in `.agents/skills/`, alongside tracked custom and community skills. Apple folders and Claude discovery aliases are ignored by generated `.gitignore` files; the ignored `.agents/skills/.apple-skills.json` records their inventory. Run `python3 scripts/update-xcode-skills.py` on initial setup and after Xcode upgrades; see [Apple skills setup](../ios-app/Docs/agent-harness.md#apple-skills-setup). The community updater excludes that inventory while keeping community provenance in `skills-lock.json` and maintaining its separate freshness timestamp.
 
 ## Update community skills
 

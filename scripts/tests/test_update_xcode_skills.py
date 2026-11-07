@@ -34,13 +34,13 @@ class AppleSkillUpdatesTests(unittest.TestCase):
         self.refresh()
         for client in ['.agents', '.claude']:
             alias = self.root / client / 'skills/device-interaction'
-            self.assertTrue(alias.is_symlink())
+            self.assertEqual(alias.is_symlink(), client == '.claude')
             self.assertEqual((alias / 'reference.md').read_text(), 'Supporting content')
         self.names = ['device-interaction']
         self.refresh()
         for client in ['.agents', '.claude']:
-            self.assertFalse((self.root / client / 'skills/swiftui-specialist').is_symlink())
-        self.assertEqual(json.loads((self.root / '.agents/apple-skills/.inventory.json').read_text()), self.names)
+            self.assertFalse((self.root / client / 'skills/swiftui-specialist').exists())
+        self.assertEqual(json.loads((self.root / '.agents/skills/.apple-skills.json').read_text()), self.names)
 
     def test_existing_directory_is_not_overwritten(self):
         self.refresh()
@@ -50,6 +50,16 @@ class AppleSkillUpdatesTests(unittest.TestCase):
         with self.assertRaises(FileExistsError):
             self.refresh()
         self.assertTrue(unrelated.is_dir())
+
+    def test_existing_shared_skill_is_not_claimed_or_deleted(self):
+        unrelated = self.root / '.agents/skills/device-interaction'
+        unrelated.mkdir(parents=True)
+        marker = unrelated / 'custom.txt'
+        marker.write_text('Keep me')
+        with self.assertRaises(OSError):
+            self.refresh()
+        self.assertEqual(marker.read_text(), 'Keep me')
+        self.assertEqual(json.loads((unrelated.parent / '.apple-skills.json').read_text()), [])
 
     def test_failed_export_preserves_previous_content(self):
         self.refresh()

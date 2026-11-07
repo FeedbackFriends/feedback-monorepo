@@ -12,13 +12,13 @@ Verify the connection with `XcodeListWorkspaces`. Match this checkout's absolute
 
 ## Apple skills setup
 
-Export guidance from the selected Xcode into one ignored local folder:
+Export guidance from the selected Xcode directly into the shared skills folder:
 
 ```sh
 python3 scripts/update-xcode-skills.py
 ```
 
-Run this on a fresh checkout and after switching or upgrading Xcode. The helper uses `xcrun agent skills export --output-dir`, validates the staged skills before replacing `.agents/apple-skills/`. It creates ignored per-skill symlinks in `.agents/skills/` and `.claude/skills/`, removes stale Apple aliases, and preserves unrelated skills. Generated `.gitignore` files in both discovery directories keep the aliases local. Apple exports and their inventory stay outside Git; community provenance remains in `skills-lock.json`.
+Run this on a fresh checkout and after switching or upgrading Xcode. The helper uses `xcrun agent skills export --output-dir` to stage and validate guidance before updating Apple-owned folders directly in `.agents/skills/`. It creates Claude discovery symlinks under `.claude/skills/` and removes stale Apple skills and aliases. Generated `.gitignore` files keep Apple content and aliases local; `.agents/skills/.apple-skills.json` records export ownership and is also ignored. Custom and community skills remain tracked in the same shared folder; `skills-lock.json` owns community provenance.
 
 The native export currently supplies 11 skills with Xcode 27.2. It does not include the plugin packages' translation and accessibility specialist skills. Export contents follow the selected Xcode. No plugin marketplace registration or client-specific package installation is needed. If migrating an existing installation, uninstall the old `xcode-integration@letsgrow-xcode` plugin in each client's plugin manager to prevent duplicate guidance; removing repository catalogs does not uninstall cached plugins.
 

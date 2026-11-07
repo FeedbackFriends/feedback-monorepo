@@ -59,15 +59,14 @@ class CommunitySkillUpdatesTests(unittest.TestCase):
         self.assertEqual(custom.read_bytes(), original)
         self.assertEqual(self.original.splitlines()[1:], self.catalog.read_text().splitlines()[1:])
 
-    def test_local_apple_alias_is_excluded_from_community_inventory(self):
-        apple = self.root / ".agents/apple-skills/device-interaction"
-        apple.mkdir(parents=True)
+    def test_local_apple_content_is_excluded_from_community_inventory(self):
+        apple = self.root / ".agents/skills/device-interaction"
+        apple.mkdir()
         (apple / "SKILL.md").write_text("Apple guidance")
-        alias = self.root / ".agents/skills/device-interaction"
-        alias.symlink_to("../apple-skills/device-interaction", target_is_directory=True)
+        (apple.parent / ".apple-skills.json").write_text('["device-interaction"]')
         with patch.object(updater.subprocess, "run", side_effect=self.install):
             updater.refresh(self.root)
-        self.assertEqual((alias / "SKILL.md").read_text(), "Apple guidance")
+        self.assertEqual((apple / "SKILL.md").read_text(), "Apple guidance")
 
     def test_skipped_install_does_not_advance_timestamp(self):
         result = subprocess.CompletedProcess([], 0, '[{"name":"first","status":"skipped"}]', "")

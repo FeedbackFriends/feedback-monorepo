@@ -22,11 +22,9 @@ def refresh(root=ROOT):
     catalog = catalog_path.read_text()
     listed = re.findall(r"^\| \[([^]]+)\]\(\.\./\.agents/skills/[^)]+\)", catalog, re.M)
     skills = root / ".agents/skills"
-    apple = (root / ".agents/apple-skills").resolve()
-    installed = {
-        path.parent.name for path in skills.glob("*/SKILL.md")
-        if not (path.parent.is_symlink() and path.parent.resolve() == apple / path.parent.name)
-    }
+    manifest = skills / ".apple-skills.json"
+    apple = set(json.loads(manifest.read_text())) if manifest.exists() else set()
+    installed = {path.parent.name for path in skills.glob("*/SKILL.md")} - apple
     if len(listed) != len(set(listed)) or set(listed) != installed:
         raise ValueError("Skills overview must list every installed skill exactly once")
     if installed - {name for name in installed if name.startswith("lg-")} != set(locked):
