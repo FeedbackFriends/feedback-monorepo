@@ -48,6 +48,15 @@
             },
             {
               "kind": "group",
+              "path": "plugins",
+              "children": [
+                {
+                  "path": "marketplace.json"
+                }
+              ]
+            },
+            {
+              "kind": "group",
               "path": "skills",
               "children": [
                 {

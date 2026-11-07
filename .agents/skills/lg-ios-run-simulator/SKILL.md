@@ -9,7 +9,7 @@ Follow [the iOS policy](../../../ios-app/AGENTS.md). Setup and configuration own
 
 ## Apple's current guidance
 
-Discover the native Xcode MCP capabilities available in the current session. Load relevant Apple-provided skills or instructions through the discovery/read mechanisms actually exposed by the client or referenced in tool responses. Do not assume a particular Apple skill name, filesystem location, or version, and do not install or copy skills merely because a tool mentions one.
+Discover the native Xcode MCP capabilities and load relevant `xcode-integration` skills from the current client's skill catalog. The [Apple plugin setup](../../../ios-app/Docs/agent-harness.md#apple-plugin-setup) owns preparation, installation, refresh, and verification for Codex and Claude Code. Use it when a referenced Apple skill is missing; a tool mentioning a skill does not prove it is loaded.
 
 Use Apple's available guidance for tool syntax and operation. Resolve tool names and arguments from the current tool descriptions; the names below describe the existing workflow rather than pinning an Xcode API version.
 

@@ -10,7 +10,38 @@ The checked-in project configurations, `.codex/config.toml` and root `.mcp.json`
 
 Verify the connection with `XcodeListWorkspaces`. Match this checkout's absolute `ios-app/Feedback.xcodeproj` path; use `XcodeOpenWorkspace` if absent. Follow Xcode's authorization prompts yourself if required. A missing connection or denied operation is a blocker to report, not a reason to switch local automation tools.
 
-Apple's built-in guidance is discovered from the current client and native Xcode MCP responses. Its names and availability may change between Xcode and client versions, so this repository does not pin or vendor those skills. Follow the [simulator workflow](../../.agents/skills/lg-ios-run-simulator/SKILL.md) for discovery and direct native operation when a referenced instruction resource is not exposed. Repository workflows retain LetsGrow-specific scheme, test, login, and verification rules.
+## Apple plugin setup
+
+Apple's `xcode-integration` plugin supplies skills such as `device-interaction` and translation guidance. The MCP connection supplies tools separately. This repository's client catalogs discover ignored copies of the official packages exported by the selected Xcode; Apple content and machine-specific paths stay outside Git.
+
+From the monorepo root, prepare both client packages:
+
+```sh
+python3 scripts/setup-xcode-plugin.py
+```
+
+The helper requires Xcode's `xcrun agent plugin path --plugin-format` support (verified with Xcode 27.2). It validates both exports before replacing local copies under `.agents/local-plugins/`. Run it before the first plugin-enabled session, and again after changing the selected Xcode or upgrading it. A fresh checkout needs this step before its catalog sources exist.
+
+For **Codex**, the tracked `.agents/plugins/marketplace.json` exposes `xcode-integration@letsgrow-xcode`; trusted project configuration enables it. Install or refresh its cached copy after preparation:
+
+```sh
+codex plugin marketplace add .
+codex plugin add xcode-integration@letsgrow-xcode
+```
+
+For **Claude Code**, register the tracked `.claude-plugin/marketplace.json` catalog and install for this checkout only:
+
+```sh
+claude plugin marketplace add . --scope local
+claude plugin install xcode-integration@letsgrow-xcode --scope local
+```
+
+On refresh, run preparation again, then `claude plugin update xcode-integration@letsgrow-xcode`. Local Claude settings remain ignored. Client versions must support local plugin marketplaces; consult their `plugin --help` if a command is unavailable. The catalogs contain skills only; the existing project MCP connection remains the owner of Xcode tools.
+
+Restart the client or open a fresh session after installation/refresh. Confirm `xcode-integration:device-interaction` is in the skill picker/catalog, then call `XcodeListWorkspaces` separately to verify MCP. A successful export or manifest check proves neither session activation nor a build or device interaction. If using another desktop/IDE client, select the local **LetsGrow Xcode** marketplace and confirm skill discovery there; CLI installation alone does not prove that surface loaded it.
+
+Use loaded Apple guidance for native operations and the [simulator workflow](../../.agents/skills/lg-ios-run-simulator/SKILL.md) for LetsGrow schemes, tests, login, and verification. Repository and higher-priority client instructions retain precedence, including delegation authorization. If Apple guidance requests a worker agent, delegate only when the current session permits it; otherwise execute directly with the exposed native tools. Tool names and arguments come from current MCP descriptions. If a required skill cannot be loaded, report that gap; optional missing guidance does not block operations whose tool descriptions are sufficient.
+
 
 ## Workflows
 

@@ -1,0 +1,12 @@
+{
+  "name": "letsgrow-xcode",
+  "description": "Apple's locally exported Xcode integration for LetsGrow development.",
+  "owner": { "name": "LetsGrow" },
+  "plugins": [
+    {
+      "name": "xcode-integration",
+      "source": "./.agents/local-plugins/claude",
+      "description": "Apple's Xcode-managed skills from the selected local Xcode installation."
+    }
+  ]
+}
