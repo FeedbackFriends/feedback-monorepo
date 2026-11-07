@@ -1,0 +1,219 @@
+.env.example
+  s_a89f6da234cc4a::t_a5b9c978fa911a 38-40
+backend/apps/api/src/main/kotlin/dk/example/feedback/config/LocalizedApiErrors.kt
+  s_a89f6da234cc4a::t_5917fbc00009a0 39
+backend/apps/api/src/main/kotlin/dk/example/feedback/controller/AccountController.kt
+  s_a89f6da234cc4a::t_785928bb4c1da3 6,54,61
+backend/apps/api/src/main/kotlin/dk/example/feedback/controller/ControllerAdvisor.kt
+  s_a89f6da234cc4a::t_a5fd96eb8fa917 30-32
+backend/apps/api/src/main/kotlin/dk/example/feedback/controller/TeamController.kt
+  s_a89f6da234cc4a::t_c6fbf44ddfb7d1 1-90
+backend/apps/api/src/main/kotlin/dk/example/feedback/payloads/CreateAccountInput.kt
+  s_a89f6da234cc4a::t_5114d8da4bb0dc 8-10
+backend/apps/api/src/main/kotlin/dk/example/feedback/service/AuthorizationService.kt
+  s_a89f6da234cc4a::t_6b067e45063de4 10,18,21-24
+backend/apps/api/src/main/kotlin/dk/example/feedback/service/TeamService.kt
+  s_a89f6da234cc4a::t_58f2366e5101fe 1-48
+backend/apps/api/src/main/resources/errors_da.properties
+  s_a89f6da234cc4a::t_f612e38d7f0e89 28-30
+backend/apps/api/src/main/resources/errors_en.properties
+  s_a89f6da234cc4a::t_1f05f6a55bcd84 28-30
+backend/apps/api/src/test/kotlin/dk/example/feedback/tests/E2ETest.kt
+  s_a89f6da234cc4a::t_7bbc4a0e9d530a 251,264-265
+backend/apps/api/src/test/kotlin/dk/example/feedback/tests/TeamTest.kt
+  s_a89f6da234cc4a::t_556c66630fc738 1-243
+backend/docs/agents/architecture.md
+  s_a89f6da234cc4a::t_eec537d6cbbccc 32-35
+backend/lib/model/src/main/kotlin/dk/example/feedback/model/exceptions/TeamConflictException.kt
+  s_a89f6da234cc4a::t_d123ff21d6c4f8 1-8
+backend/lib/model/src/main/kotlin/dk/example/feedback/model/team/TeamModels.kt
+  s_406d272c4e8f55::t_3f888b7257d4e0 1-28
+backend/lib/persistence/src/main/kotlin/dk/example/feedback/persistence/repo/TeamRepo.kt
+  s_a89f6da234cc4a::t_b5dfff9df75ac7 1-294
+backend/lib/persistence/src/main/kotlin/dk/example/feedback/persistence/table/TeamTables.kt
+  s_a89f6da234cc4a::t_21638f1a9019cb 1-49
+backend/lib/persistence/src/main/resources/db/changelog/0027-add-teams.yaml
+  s_a89f6da234cc4a::t_6ee9848ca00571 1-34
+backend/lib/persistence/src/main/resources/db/changelog/0028-add-team-leaders.yaml
+  s_a89f6da234cc4a::t_9ebcd98048a9c9 1-23
+backend/lib/persistence/src/main/resources/db/changelog/db.changelog-master.yaml
+  s_a89f6da234cc4a::t_440e237e910a4e 103-107
+docker-compose.yml
+  s_a89f6da234cc4a::t_3e83b6cce1bb52 66
+docs/deployment/coolify.md
+  s_a89f6da234cc4a::t_a367acb4af29cb 89-99
+docs/ios-localization-inventory.md
+  s_a89f6da234cc4a::t_9c6f35524acff5 133-134
+ios-app/Docs/agents/architecture.md
+  s_a89f6da234cc4a::t_c37ca0e7b2f462 32-33
+ios-app/Docs/screenshots/README.md
+  s_a89f6da234cc4a::t_c1fe62389fe777 3
+ios-app/Modules/Package.resolved
+  s_a89f6da234cc4a::t_08341c1b4f273f 2,355-363
+ios-app/Modules/Sources/Adapters/APIClient/Live/APIClient+Live.swift
+  s_a89f6da234cc4a::t_4b8b2be16d8117 11-26
+ios-app/Modules/Sources/Adapters/APIClient/Mappers/Responses/EmployeeTeamContext+Mapping.swift
+  s_a89f6da234cc4a::t_9ec2b2587f828a 1-21
+ios-app/Modules/Sources/Adapters/AuthClient/AuthClientLive.swift
+  s_a89f6da234cc4a::t_452b7fbb025c55 38,42,73-74
+ios-app/Modules/Sources/DesignSystem/ReusableViews/TextInputView.swift
+  s_a89f6da234cc4a::t_b1d3b19e3e2e16 8,20,29,48
+ios-app/Modules/Sources/Domain/Deeplink/Deeplink.swift
+  s_a89f6da234cc4a::t_2a46747dd296d5 5,18-22
+ios-app/Modules/Sources/Domain/Models/API/Bootstrap.swift
+  s_a89f6da234cc4a::t_6d8e1d23a2923a 34
+ios-app/Modules/Sources/Domain/Models/API/EmployeeTeamContext.swift
+  s_a89f6da234cc4a::t_401c12ab81ac3a 1-38
+ios-app/Modules/Sources/Domain/Services/ApiClient.swift
+  s_a89f6da234cc4a::t_36e9ea9d6cf475 6-12
+ios-app/Modules/Sources/Domain/TestDependencyKeys/APIClientTestDependencyKey.swift
+  s_a89f6da234cc4a::t_afc671884aa0cb 6-9
+ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings
+  s_a89f6da234cc4a::t_4cb7c23bddb390 5211,5217,6175-6498
+ios-app/Modules/Sources/MoreFeature/AccountSection/ProfileSettings/ModifyAccount.swift
+  s_a89f6da234cc4a::t_cacfe8ea08688e 59
+ios-app/Modules/Sources/RootFeature/RootFeature.swift
+  s_a89f6da234cc4a::t_80c1181e04b8c5 54,197-200,222,268-271,346
+ios-app/Modules/Sources/TabbarFeature/EmployeeTeamMembership.swift
+  s_a89f6da234cc4a::t_7e5fa3f2b27760 1-134
+ios-app/Modules/Sources/TabbarFeature/EmployeeTeamMembershipView.swift
+  s_a89f6da234cc4a::t_f722e9028c7a14 1-75
+ios-app/Modules/Sources/TabbarFeature/ScreenCatalogPreviewView.swift
+  s_a89f6da234cc4a::t_75a456101c26bc 67-70,236-259,320-325
+ios-app/Modules/Sources/TabbarFeature/Tabbar.swift
+  s_a89f6da234cc4a::t_cad45108822076 35,54,76-77,103,143-145,151-152,173-175
+ios-app/Modules/Sources/TabbarFeature/TabbarLifecycle.swift
+  s_a89f6da234cc4a::t_720a3eadb92776 87-88
+ios-app/Modules/Sources/TabbarFeature/TabbarView.swift
+  s_a89f6da234cc4a::t_58ed37600971ab 92,100-103,114-119,147-149
+ios-app/Modules/Tests/AppTests/APIClientLiveTests/APIClientTests.swift
+  s_a89f6da234cc4a::t_8a4b1363e166ef 2,868-904
+ios-app/Modules/Tests/AppTests/APIClientLiveTests/MockAPI.swift
+  s_a89f6da234cc4a::t_71e9801bf4bda3 147-272
+ios-app/Modules/Tests/AppTests/ReducerTests/Tabbar/EmployeeTeamMembershipTests.swift
+  s_a89f6da234cc4a::t_59613cbf2c63e3 1-123
+ios-app/Modules/Tests/AppTests/UnitTests/DeepLinkParserTests.swift
+  s_a89f6da234cc4a::t_24f8b720b10747 62
+ios-app/Modules/Tests/InsightsTests/RootNavigationTests.swift
+  s_a89f6da234cc4a::t_1894ad7a732f22 45-46,55,105-114
+web/AGENTS.md
+  s_a89f6da234cc4a::t_b4a62cea7103b2 18-31
+web/components.json
+  s_a89f6da234cc4a::t_79bc32fba0fb16 1-10
+web/docs/agents/api-and-auth.md
+  s_a89f6da234cc4a::t_2b80eaf308d72c 17-37
+web/docs/agents/ui.md
+  s_a89f6da234cc4a::t_b0570372b35809 11-37
+web/next-env.d.ts
+  s_406d272c4e8f55::t_56f57f16ade947 3-4
+web/src/app/dashboard/employees/page.tsx
+  s_a89f6da234cc4a::t_0be6d60366e0dc 1-8
+web/src/app/dashboard/page.tsx
+  s_a89f6da234cc4a::t_cf7ce15e42158f 5-6
+web/src/app/dashboard/teams/[teamId]/page.tsx
+  s_a89f6da234cc4a::t_be5e8abccc736f 1-13
+web/src/app/leader-invite/[code]/page.tsx
+  s_a89f6da234cc4a::t_bee472c7fa2119 1-17
+web/src/components/auth/DashboardScreen.tsx
+  s_a89f6da234cc4a::t_3e346cdf6b226d 3-40,43-87,89-135,137-211,213-253,255-285
+web/src/components/auth/DashboardShell.tsx
+  s_a89f6da234cc4a::t_37b5096da290fb 6-10,23-25,29-30,33-35,37-44,47-51,53-132,134-186
+web/src/components/auth/EmployeesScreen.tsx
+  s_a89f6da234cc4a::t_f27a1728632954 1-280
+web/src/components/auth/LeaderInviteScreen.tsx
+  s_a89f6da234cc4a::t_f0235320a97ec4 1-143
+web/src/components/auth/LoginScreen.tsx
+  s_a89f6da234cc4a::t_c7cb512736fe1f 6-15,61-62,64,67-70,72-111
+web/src/components/auth/TeamLeaders.tsx
+  s_a89f6da234cc4a::t_ffc8f47f251a57 1-288
+web/src/components/auth/TeamScreen.tsx
+  s_a89f6da234cc4a::t_09391875a1a481 1-375
+web/src/components/ui/dialog.tsx
+  s_a89f6da234cc4a::t_390e54bd06fd61 1-158
+web/src/lib/api/teams.ts
+  s_a89f6da234cc4a::t_58e094176a6e39 1-33
+web/src/lib/auth/e2e-auth-client.ts
+  s_a89f6da234cc4a::t_7bd1955621f20d 16-20
+web/src/lib/auth/firebase-auth-client.ts
+  s_a89f6da234cc4a::t_daa583d9ca9573 50-55
+web/src/lib/auth/types.ts
+  s_a89f6da234cc4a::t_b47d64ecb7c8b8 15
+web/src/proxy.ts
+  s_a89f6da234cc4a::t_e917ad6dee9ec4 1-23
+web/tests/auth.spec.ts
+  s_a89f6da234cc4a::t_594e9e85534954 21,27
+web/tests/teams.spec.ts
+  s_a89f6da234cc4a::t_ffd888de8265df 1-565
+contracts/openapi/feedback-api.yaml
+  s_a89f6da234cc4a::t_aa1af99b540e52 532,535-665,670,678,715,718-774,779,787,824,827-828,833-894,899-1641,1678-1679,1681-1682,1689,1726-1727,1729-1733,1735,1740,1743,1747-1749,1786-1787,1789-1793,1795-1797,1804,1841-1842,1844-1854,1856-1857,1861-1864,1901-1902,1904-1917,1921-1924,1961-1962,1964-1978,1985,2022-2023,2025-2026,2028,2036,2040,2701-2906,3156,3328-3337
+ios-app/Modules/Sources/OpenAPI/GeneratedSources/Client.swift
+  s_a89f6da234cc4a::t_5a5702319c0cd9 1865-1867,1870,1873-1877,1888,1894,1904,1916,1938,1960,1982,2004,2026,2058-2060,2063,2066-2070,2081,2087,2097,2109,2131,2153,2175,2197,2219,2251-2253,2256,2259-2262,2288,2298,2310,2332,2354,2376,2398,2420,2452-2454,2457,2460-2463,2474,2480,2490,2502,2524,2546,2568,2590,2612,2644-2646,2649,2652-2653,2664-2673,2679,2689,2701,2723,2745,2767,2789,2811,2843-2845,2848,2851,2878,2888,2900,2922,2944,2966,2988,3010,3042-3044,3047,3050-3053,3078-3098,3101,3123,3145,3167,3189,3211,3243-3245,3248,3251,3256,3263-3272,3277-3297,3300,3322,3344,3366,3388,3410,3442-3446,3449,3452,3457,3464-3473,3479,3489,3501,3523,3545,3567,3589-6850,6872,6904-6906,6909,6912,6914-6915,6920,6933,6943,6955,6977,6999,7021,7043,7065-7257
+ios-app/Modules/Sources/OpenAPI/GeneratedSources/Types.swift
+  s_a89f6da234cc4a::t_1c88a47b256678 44-67,91-105,119-133,246-337,417-465,491-545,1730-2140,2616,2625,2969-2996,7251-7254,7256-7276,7278,7283,7287,7291,7294-7295,7297,7303,7305-7306,7311,7321,7326,7332,7335,7340,7354,7356,7372,7377,7383,7386,7391,7405,7407,7423,7428,7434,7437,7442,7456,7458,7474,7479,7485,7488,7493,7507,7509,7525,7530,7536,7539,7544,7558,7560,7576,7581,7587,7590,7595,7609,7611,7627,7632,7638,7641,7646,7690-7693,7695-7715,7717,7722,7726,7730,7733-7734,7736,7742,7744-7745,7750,7760,7765,7771,7774,7779,7793,7795,7811,7816,7822,7825,7830,7844,7846,7862,7867,7873,7876,7881,7895,7897,7913,7918,7924,7927,7932,7946,7948,7964,7969,7975,7978,7983,7997,7999,8015,8020,8026,8029,8034,8048,8050,8066,8071,8077,8080,8085,8129-8132,8134-8147,8149,8154,8158-8159,8161-8162,8164,8168,8172-8174,8176,8183,8185-8186,8191,8201,8206,8212,8215,8220,8234,8236,8252,8257,8263,8266,8271,8285,8287,8303,8308,8314,8317,8322,8336,8338,8354,8359,8365,8368,8373,8387,8389,8405,8410,8416,8419,8424,8438,8440,8456,8461,8467,8470,8475,8489,8491,8507,8512,8518,8521,8526,8570-8573,8575-8588,8590,8595,8599,8603,8606-8607,8609,8615,8617-8618,8623,8633,8638,8644,8647,8652,8666,8668,8684,8689,8695,8698,8703,8717,8719,8735,8740,8746,8749,8754,8768,8770,8786,8791,8797,8800,8805,8819,8821,8837,8842,8848,8851,8856,8870,8872,8888,8893,8899,8902,8907,8921,8923,8939,8944,8950,8953,8958,9002-9005,9007,9009,9014,9018-9024,9029,9031-9032,9035,9040,9042-9043,9048,9058,9063,9069,9072,9077,9091,9093,9109,9114,9120,9123,9128,9142,9144,9160,9165,9171,9174,9179,9193,9195,9211,9216,9222,9225,9230,9244,9246,9262,9267,9273,9276,9281,9295,9297,9313,9318,9324,9327,9332,9346,9348,9364,9369,9375,9378,9383,9427-9430,9432,9434,9439,9443-9444,9446-9447,9449,9456-9457,9465,9467-9468,9473,9483,9488,9494,9497,9502,9516,9518,9534,9539,9545,9548,9553,9567,9569,9585,9590,9596,9599,9604,9618,9620,9636,9641,9647,9650,9655,9669,9671,9687,9692,9698,9701,9706,9720,9722,9738,9743,9749,9752,9757,9771,9773,9789,9794,9800,9803,9808,9852-9855,9857-9870,9872,9877,9881-9882,9884-9885,9887,9891,9895-9897,9899,9906-9924,9926-9931,9935,9938-9939,9941-15868,15876-17632,17646,17648,17664,17669,17675,17678,17683,17697,17699,17715,17720,17726,17729,17734,17748,17750,17766,17771,17777,17780,17785,17799,17801,17817,17822,17828,17831,17836,17850,17852,17868,17873,17879,17882,17887,17901,17903,17919,17924,17930,17933,17938,17982-17985,17987-18007,18009,18014,18018,18022,18024-18028,18034-18052,18054-18059,18063,18066,18071,18085,18087,18103,18108,18114,18117,18122,18136,18138,18154,18159,18165,18168,18173,18187,18189,18205,18210,18216,18219,18224,18238,18240,18256,18261,18267,18270,18275,18289,18291,18307,18312,18318,18321,18326,18340,18342,18358,18363,18369,18372,18377,18421-18424,18426-18446,18448,18453,18457,18461,18463-18467,18473,18475-18476,18481,18491,18496,18502,18505,18510,18524,18526,18542,18547,18553,18556,18561,18575,18577,18593,18598,18604,18607,18612,18626,18628,18644,18649,18655,18658,18663,18677,18679,18695,18700,18706,18709,18714,18728,18730,18746,18751,18757,18760,18765,18779,18781,18797,18802,18808,18811,18816,18860-18863,18865,18867-18868,18872-18874,18877-18878,18880,18885,18889,18896-18897,18905,18907-18908,18913,18923,18928,18932,18934,18937,18942,18956,18958,18974,18979,18985,18988,18993,19007,19009,19025,19030,19036,19039,19044,19058,19060,19076,19081,19087,19090,19095,19109,19111,19127,19132,19138,19141,19146,19160,19162,19178,19183,19189,19192,19197,19211,19213,19229,19234,19240,19243,19248
+web/package-lock.json
+  s_a89f6da234cc4a::t_a57a90b75993f0 15,20,860-897,1798-2731,2733-2755,2758-2775,2778-2780,2785-2787,2791-2794,2796-2807,2810-2812,2817-2819,2823-2847,2849,2866-2869,2872,2889-2924,2926-2928,2939-2942,2945-2950,2967-2970,2973-2980,2984-2986,2991-2993,2997-3000,3003-3014,3031-3034,3037-3039,3056-3059,3062-3068,3085-3088,3091-3097,3101-3139,3144-3146,3151-3153,3155-3157,3169-3171,3174-3176,3189-3191,3194,3207-3209,3212-3216,3218-3228,3240-3290,3292-3294,3305-3333,4369-4380,5864,5977-6053
+web/package.json
+  s_a89f6da234cc4a::t_4c5ebc161e0990 22,27
+web/src/app/api/leader/[...path]/route.ts
+  s_a89f6da234cc4a::t_a697ae82a4ecd3 1-47
+web/src/app/globals.css
+  s_a89f6da234cc4a::t_c2fdf69d2e4c98 244-282
+web/src/app/team-invite/[code]/page.tsx
+  s_a89f6da234cc4a::t_dae5db6830e84e 1-43
+web/src/components/ui/alert-dialog.tsx
+  s_a89f6da234cc4a::t_c85cb2594c86d7 1-196
+web/src/components/ui/alert.tsx
+  s_a89f6da234cc4a::t_c08ae4f2064453 1-65
+web/src/components/ui/badge.tsx
+  s_a89f6da234cc4a::t_c47b2fada1db1f 1-47
+web/src/components/ui/button.tsx
+  s_a89f6da234cc4a::t_90e010f0446c23 3-4,7,11,13,15,17-19,23-30,40-50,52-61,63
+web/src/components/ui/card.tsx
+  s_a89f6da234cc4a::t_09fdd1e8794b99 2-91
+web/src/components/ui/input.tsx
+  s_a89f6da234cc4a::t_9c308d86201b6f 2,4-5,8,10-12,18
+web/src/components/ui/label.tsx
+  s_a89f6da234cc4a::t_96d688d1157130 1-23
+web/src/components/ui/select.tsx
+  s_a89f6da234cc4a::t_60058756bf0d5b 1-189
+web/src/components/ui/separator.tsx
+  s_a89f6da234cc4a::t_8ada21babe138c 1-27
+web/src/components/ui/sheet.tsx
+  s_a89f6da234cc4a::t_9fada246b20a28 4-6,8-10,12-16,18-22,24-28,30-44,46-85,87-95,97-101,103-105,107,110-118,120,123-131,135,139,141
+web/src/components/ui/sidebar.tsx
+  s_a89f6da234cc4a::t_bc2e51d06206fe 1-2,5-7,9-50,52-54,57-61,63-157,159-207,210-215,217-251,256-292,294-299,305,307-315,319,321-336,338-340,344,346-347,350-351,355-369,371-372,374-375,377,380-387,389-390,394,396-406,408-409,415-438,440-444,447-448,452,454-455,458-459,463,465-466,469-470,474-495,498-526,529-533,535-542,544-546,548-574,578-699,706,710,713-714,717-720,722-725
+web/src/components/ui/skeleton.tsx
+  s_a89f6da234cc4a::t_ead1eac632e7d2 1-13
+web/src/components/ui/table.tsx
+  s_a89f6da234cc4a::t_e81ad788281c97 1-115
+web/src/components/ui/tooltip.tsx
+  s_a89f6da234cc4a::t_3de27c0db821e6 1-56
+web/src/hooks/use-mobile.ts
+  s_a89f6da234cc4a::t_efaf12d6957571 1-19
+web/src/lib/api/generated/openapi.ts
+  s_a89f6da234cc4a::t_6c0328e4531a96 103-230,344-423,476-555,891-977,1094,1201-1204,1218-2610,2614,2619,2629,2688,2692,2695-2699,2706-2708,2766,2770,2773-2777,2784-2786,2844,2853,2862-2864,2922,2927,2931,2939,2998,3002,3005-3009,3016-3018,3076,3085,3152,3156-3157,3159,3161,3169,3228,3232-3234,3244-3246,3304,3308-3309,3311,3313,3320-3322,3380,3384-3385,3387,3389,3397,3456,3463,3471,3530,3537,3544,3602,3609,3617,3676,3681,3687,3693-3699,3701,3759,3763-3764,3766,3768,3776,3835,3839-3841,3843,3845,3852-3854,3912,3916-3919,3929-3931,3989,3993-3996,4007,4066,4071,4077,4083
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f4ac81892a03ff3fbc76aeb272bebfb5a04d7bed",
+  "prompts": {},
+  "sessions": {
+    "s_406d272c4e8f55": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b5ab-0261-7793-b67e-aac83934c334",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_a89f6da234cc4a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b254-5829-7b21-8fa8-72c6256a4082",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
