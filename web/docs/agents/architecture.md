@@ -35,3 +35,9 @@ Paths are relative to `web/` unless stated otherwise.
 - Keep customer-facing copy plain and concrete. LetsGrow is Danish-first unless the task asks for English.
 - Do not introduce fallback behavior for missing required config; throw clear errors.
 - Treat `NEXT_PUBLIC_*` values as client-exposed and never put secrets in them.
+
+## Community guidance compatibility
+
+Use `next-best-practices` as a discovery aid alongside the version-matched Next.js documentation required by web policy. Its upstream `rsc-boundaries.md` incorrectly restricts props to JSON types: React supports `Date`, `Map`, and `Set` containing serializable values across the Server/Client boundary. Follow [React's supported types](https://react.dev/reference/rsc/use-client#serializable-types-returned-by-server-components), rather than converting those types solely to satisfy that reference. This boundary differs from the JSON HTTP API contract.
+
+Cache Components are not enabled in the current configuration. Adopt caching only for an agreed need and verify the installed version's APIs. For tag invalidation, follow [Next.js revalidateTag](https://nextjs.org/docs/app/api-reference/functions/revalidateTag): `revalidateTag(tag, 'max')` uses stale-while-revalidate; the deprecated single-argument call is not the background-revalidation pattern.

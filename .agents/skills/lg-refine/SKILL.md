@@ -11,6 +11,8 @@ Read [root policy](../../../AGENTS.md), [task workflow](../../../docs/agents/tas
 
 Read the supplied task, or inspect `tasks/` for matching work before creating one. Establish the current problem, target users, desired behavior, affected product surfaces, and scope. Use available product documentation and [domain guidance](../../../docs/product/lets-grow-strategi-teamtrivsel.md) where relevant. Inspect relevant code and architecture documentation to ground questions in existing responsibilities, boundaries, data flows, and constraints. Read the owning app guidance before exploring its implementation.
 
+For customer interviews, public copy, or first-use journeys, use the relevant [community skill and product constraints](../../../docs/skills.md#choosing-complementary-skills). Research supplies evidence; refinement still owns the saved requirements and architecture.
+
 ## Grill requirements and architecture
 
 Actively challenge ambiguous requirements and assumptions with the user. Look up repository facts before asking; do not ask the user to supply facts the code can answer. Ask focused questions in small rounds, following up on answers until consequential decisions are clear. Use the session's question tool when available and continue independent investigation while answers are pending. Do not silently settle material choices while waiting for the user's answer.
