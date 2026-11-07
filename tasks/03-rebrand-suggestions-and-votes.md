@@ -2,7 +2,7 @@
 status: draft
 areas: [backend, ios, web]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-07
 ---
 
 # Rebrand 03 — Anonymous suggestions and votes
@@ -19,6 +19,8 @@ Outcome:
 - Inappropriate or identifying content can be flagged. Sensitive matters have a confidential path that does not publish to the team.
 
 ## Rebrand series
+
+Scheduling: [Work-email login, owner onboarding, and Firebase replacement](shared-auth-and-owner-onboarding.md) is prioritized next after 02, before this task, by user decision on 2026-11-07.
 
 Depends on **02** (teams and memberships). Feeds 04 (decisions), 06 (web dashboard), and 07 (iOS employee app). The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
 
