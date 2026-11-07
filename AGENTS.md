@@ -3,7 +3,6 @@
 LetsGrow is a feedback-after-meetings product with a Next.js web app, Kotlin backend, and SwiftUI/TCA iOS app in one monorepo.
 
 - Read the nearest app `AGENTS.md` before editing its subtree.
-- Before starting a task, check the **skills.sh updated at** UTC timestamp in [the skills overview](docs/skills.md). If it is more than seven days old, missing, or invalid, refresh all community skills through [lg-update-skills](.agents/skills/lg-update-skills/SKILL.md) before task work. Report a failed refresh as a blocker; only a successful full refresh advances the timestamp.
 - Do not commit or push unless the user explicitly asks.
 - Follow existing coding standards and patterns by default. Implementation handoffs should make architectural decisions easy for a human to review; use the [human review guide](docs/agents/human-review.md).
 - Use root `tasks/` for unfinished task management; delete a task file when its acceptance and required verification are complete, after preparing the final human-review handoff; never use GitHub Issues or GitHub Projects for LetsGrow tasks. Create a nontechnical draft task → refine feature requirements and overall architecture with the user → implement. Use the create-task skill for the required structure, including phases for large tasks. Generic issue-refinement workflows must write local task files instead of GitHub issues.

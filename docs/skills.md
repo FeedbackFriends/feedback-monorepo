@@ -1,10 +1,10 @@
 # Skills overview
 
-**skills.sh updated at:** `2026-11-07T17:44:25Z`
+**skills.sh updated at:** `2026-11-07T17:50:38Z`
 
 Repository skills live in [root `.agents/skills/`](../.agents/skills/). Open a skill for its full procedure and invocation rules. This catalog excludes personal and plugin skills.
 
-Custom workflows use `lg-` names. Community provenance is recorded in [skills-lock.json](../skills-lock.json); use [lg-update-skills](../.agents/skills/lg-update-skills/SKILL.md) for updates. Keep this catalog aligned when skills are added, removed, or renamed.
+Custom workflows use `lg-` names. Community provenance is recorded in [skills-lock.json](../skills-lock.json); use [the community update procedure](#update-community-skills) for installer updates and [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) for repository-owned guidance improvements. Keep this catalog aligned when skills are added, removed, or renamed.
 
 ## LetsGrow workflows
 
@@ -14,6 +14,7 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-coolify-operations](../.agents/skills/lg-coolify-operations/SKILL.md) | Operate and troubleshoot Coolify production deployments. |
 | [lg-create-task](../.agents/skills/lg-create-task/SKILL.md) | Capture an idea as a local draft task. |
 | [lg-implement](../.agents/skills/lg-implement/SKILL.md) | Implement a saved task and prepare its handoff. |
+| [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) | Improve custom skills, AGENTS.md, rules, docs, and guidance routing. |
 | [lg-investigate](../.agents/skills/lg-investigate/SKILL.md) | Trace a bug and record its cause and follow-up. |
 | [lg-ios-localhost](../.agents/skills/lg-ios-localhost/SKILL.md) | Start the local backend and launch manager/anonymous apps. |
 | [lg-ios-login](../.agents/skills/lg-ios-login/SKILL.md) | Launch iOS with a local test-account login. |
@@ -26,7 +27,6 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-refine](../.agents/skills/lg-refine/SKILL.md) | Settle requirements and architectural decisions. |
 | [lg-review](../.agents/skills/lg-review/SKILL.md) | Review changes for concrete regressions. |
 | [lg-tailwind-nextjs-expert](../.agents/skills/lg-tailwind-nextjs-expert/SKILL.md) | Implement web styling with existing tokens and components. |
-| [lg-update-skills](../.agents/skills/lg-update-skills/SKILL.md) | Update community installations and custom workflows. |
 | [lg-verify](../.agents/skills/lg-verify/SKILL.md) | Verify acceptance criteria or reproduce behavior. |
 
 ## Community skills
@@ -53,3 +53,21 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [web-design-guidelines](../.agents/skills/web-design-guidelines/SKILL.md) | Review UI against web interface and accessibility guidance. | [vercel-labs/agent-skills](https://skills.sh/vercel-labs/agent-skills/web-design-guidelines) |
 | [webapp-testing](../.agents/skills/webapp-testing/SKILL.md) | Test web applications with Playwright. | [anthropics/skills](https://skills.sh/anthropics/skills/webapp-testing) |
 | [writing-for-agents](../.agents/skills/writing-for-agents/SKILL.md) | Write concise, effective agent instructions and skills. | [mattpocock/skills](https://skills.sh/mattpocock/skills/writing-for-agents) |
+
+## Update community skills
+
+This procedure updates third-party packages independently of harness improvements. From the monorepo root:
+
+```sh
+npx --yes skills@latest update --project --yes
+```
+
+Inspect local edits before reinstalling. Use `skills-lock.json` for provenance and keep it tracked. If the updater skips an installed skill, retry with its recorded source and name:
+
+```sh
+npx --yes skills@latest add <owner/repo> --skill <name> --agent codex --yes
+```
+
+Inspect the result and changed contents. Report unavailable sources rather than silently substituting another author. Keep community contents upstream-owned; repository-specific rules belong in our guides or custom workflows.
+
+After every community skill has successfully refreshed or been confirmed current, set **skills.sh updated at** above to the completion time in UTC ISO 8601 format (`YYYY-MM-DDTHH:MM:SSZ`). Partial, skipped, or failed refreshes leave it unchanged. Keep this inventory and source links aligned with the installed skills and lockfile. Check metadata, local references, and relevant helper behavior after updates; refresh the [guidance navigator](../ios-app/Docs/SETUP.md#repository-guidance-in-the-navigator) when files change. Report failures and preserve existing authorization boundaries for running workflows, committing, and pushing.

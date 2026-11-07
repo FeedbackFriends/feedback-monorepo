@@ -1,0 +1,66 @@
+name: Update community skills
+
+on:
+  schedule:
+    - cron: "23 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-community-skills
+  cancel-in-progress: false
+
+jobs:
+  update:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Test update helper
+        run: python3 -m unittest discover -s scripts/tests -p test_update_community_skills.py -v
+
+      - name: Refresh and validate community skills
+        run: python3 scripts/update-community-skills.py
+
+      - name: Stage community updates and refresh guidance navigator
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          import subprocess
+
+          names = json.loads(Path("skills-lock.json").read_text())["skills"]
+          subprocess.run([
+              "git", "add", "-A", "--", "skills-lock.json", "docs/skills.md",
+              *[f".agents/skills/{name}" for name in names],
+          ], check=True)
+          PY
+          python3 ios-app/scripts/sync-guidance-navigator.py
+          python3 ios-app/scripts/sync-guidance-navigator.py --check
+          git add ios-app/Feedback.xcodeproj/project.xcproj
+          git diff --cached --check -- docs/skills.md skills-lock.json ios-app/Feedback.xcodeproj/project.xcproj
+
+      - name: Commit and push to main
+        run: |
+          if git diff --cached --quiet; then
+            echo "No community skill updates to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: refresh community skills"
+          git push origin HEAD:main

@@ -250,6 +250,15 @@
                 },
                 {
                   "kind": "group",
+                  "path": "lg-improve-harness",
+                  "children": [
+                    {
+                      "path": "SKILL.md"
+                    }
+                  ]
+                },
+                {
+                  "kind": "group",
                   "path": "lg-investigate",
                   "children": [
                     {
@@ -470,15 +479,6 @@
                           "path": "agent.yaml"
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "kind": "group",
-                  "path": "lg-update-skills",
-                  "children": [
-                    {
-                      "path": "SKILL.md"
                     }
                   ]
                 },

@@ -4,6 +4,7 @@ GitHub Actions live in `.github/workflows/` and are root-owned infrastructure:
 
 - `ci.yml`: validates backend, web, and generated API artifacts.
 - `ios.yml`: path-filtered macOS job that builds iOS, runs both unit-test targets, and checks changed-line SwiftLint violations.
+- `update-community-skills.yml`: Monday/manual community skill refresh, validation, timestamp/navigator update, and direct `main` push using `GITHUB_TOKEN` with `contents: write`. No new secrets; see [update procedure](../skills.md#update-community-skills).
 - `release.yml`: runs release validation, builds and publishes Docker images, creates a GitHub release, and triggers Coolify deployment.
 
 When editing workflows:
