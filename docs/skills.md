@@ -19,7 +19,6 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-ios-localhost](../.agents/skills/lg-ios-localhost/SKILL.md) | Start the local backend and launch manager/anonymous apps. |
 | [lg-ios-login](../.agents/skills/lg-ios-login/SKILL.md) | Launch iOS with a local test-account login. |
 | [lg-ios-production](../.agents/skills/lg-ios-production/SKILL.md) | Launch a Release simulator app against deployed production. |
-| [lg-ios-run-simulator](../.agents/skills/lg-ios-run-simulator/SKILL.md) | Build, test, launch, and verify through native Xcode MCP. |
 | [lg-ios-screenshots](../.agents/skills/lg-ios-screenshots/SKILL.md) | Capture and compare the curated iOS screenshot catalog. |
 | [lg-ios-sync-openapi](../.agents/skills/lg-ios-sync-openapi/SKILL.md) | Sync handwritten iOS API boundaries with generated clients. |
 | [lg-ios-test-notifications](../.agents/skills/lg-ios-test-notifications/SKILL.md) | Run the iOS notification test command. |

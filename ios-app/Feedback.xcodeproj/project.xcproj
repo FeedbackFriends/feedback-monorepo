@@ -223,24 +223,6 @@
                 },
                 {
                   "kind": "group",
-                  "path": "lg-ios-run-simulator",
-                  "children": [
-                    {
-                      "path": "SKILL.md"
-                    },
-                    {
-                      "kind": "group",
-                      "path": "agents",
-                      "children": [
-                        {
-                          "path": "openai.yaml"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "kind": "group",
                   "path": "lg-ios-screenshots",
                   "children": [
                     {

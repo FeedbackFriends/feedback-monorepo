@@ -5,7 +5,7 @@ description: Start the local LetsGrow backend and launch iOS for manual testing,
 
 # Build and run LetsGrow locally
 
-Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md), the [native simulator workflow](../lg-ios-run-simulator/SKILL.md), and the [manual testing guide](../../../ios-app/Docs/local-testing.md). Use launch-only mode; this command does not require running the test suites or screenshot catalog.
+Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md), the [simulator guide](../../../ios-app/Docs/agents/simulator.md), and the [manual testing guide](../../../ios-app/Docs/local-testing.md). Use launch-only mode; this command does not require running the test suites or screenshot catalog.
 
 ## Invocation
 

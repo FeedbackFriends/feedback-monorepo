@@ -74,7 +74,7 @@ For a complete backend and simulator run, use `$lg-ios-localhost`. To build a Re
 - Unit and reducer tests: `ios-app/Modules/Tests/`
 - Snapshot tests via `swift-snapshot-testing`
 - The `Feedback Localhost` scheme uses the shared `UnitTests` plan with `AppTests` and `InsightsTests`.
-- Agent build, test, launch, and UI verification use the [simulator workflow](../.agents/skills/lg-ios-run-simulator/SKILL.md). See the [harness overview](Docs/agent-harness.md) for Xcode MCP setup and lint commands.
+- Agent build, test, launch, and UI verification use the [simulator guide](Docs/agents/simulator.md). See the [harness overview](Docs/agent-harness.md) for Xcode MCP setup and lint commands.
 
 
 ---

@@ -1,6 +1,6 @@
 # iOS verification
 
-Read [iOS policy](../../../../ios-app/AGENTS.md), the [verification matrix](../../../../ios-app/Docs/agents/feature-workflow.md#choose-verification-by-the-change), and the [native simulator workflow](../../lg-ios-run-simulator/SKILL.md). The native workflow owns tool discovery, workspace/destination selection, test discovery, launches, interaction cleanup, and its evidence report. Do not duplicate the tool sequence here.
+Read [iOS policy](../../../../ios-app/AGENTS.md), the [verification matrix](../../../../ios-app/Docs/agents/feature-workflow.md#choose-verification-by-the-change), and the [simulator guide](../../../../ios-app/Docs/agents/simulator.md). It owns LetsGrow-specific execution rules and result reporting; loaded Apple guidance owns native tool procedures.
 
 ## Environment and data
 
@@ -18,4 +18,4 @@ A manager/anonymous feedback journey generally needs two simulators and explicit
 
 UI changes follow [visual review](../../../../ios-app/Docs/agents/visual-review.md) and the [screenshots skill](../../lg-ios-screenshots/SKILL.md), including the full catalog and preservation of approved baselines until acceptance. A snapshot or preview proves fixture layout, not live authentication/navigation/API behavior.
 
-Report build, tests, Swift lint, launch, login, interaction, visual results, and blockers separately using the native workflow's report. Keep a successfully launched app available for manual testing and close interaction sessions as that workflow requires.
+Report build, tests, Swift lint, launch, login, interaction, visual results, and blockers separately using the simulator guide’s reporting rules. Keep a successfully launched app available for manual testing and close interaction sessions as the guide requires.

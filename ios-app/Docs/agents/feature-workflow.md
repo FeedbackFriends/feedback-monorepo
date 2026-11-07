@@ -18,7 +18,7 @@ Task structure, readiness, phases, completion, and handoff are owned by [create-
 
 ## Choose verification by the change
 
-Use the smallest combination that can detect the actual regression. The [simulator workflow](../../../.agents/skills/lg-ios-run-simulator/SKILL.md) owns execution and result reporting; [testing](testing.md) owns lint and test policy. UI changes retain the [full-catalog visual review](visual-review.md) requirement.
+Use the smallest combination that can detect the actual regression. The [simulator guide](simulator.md) owns project-specific execution rules and result reporting; [testing](testing.md) owns lint and test policy. UI changes retain the [full-catalog visual review](visual-review.md) requirement.
 
 | Change | Behavioral evidence | Runtime/data needs |
 | --- | --- | --- |

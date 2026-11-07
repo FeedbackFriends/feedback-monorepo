@@ -40,7 +40,7 @@ On refresh, run preparation again, then `claude plugin update xcode-integration@
 
 Restart the client or open a fresh session after installation/refresh. Confirm `xcode-integration:device-interaction` is in the skill picker/catalog, then call `XcodeListWorkspaces` separately to verify MCP. A successful export or manifest check proves neither session activation nor a build or device interaction. If using another desktop/IDE client, select the local **LetsGrow Xcode** marketplace and confirm skill discovery there; CLI installation alone does not prove that surface loaded it.
 
-Use loaded Apple guidance for native operations and the [simulator workflow](../../.agents/skills/lg-ios-run-simulator/SKILL.md) for LetsGrow schemes, tests, login, and verification. Repository and higher-priority client instructions retain precedence, including delegation authorization. If Apple guidance requests a worker agent, delegate only when the current session permits it; otherwise execute directly with the exposed native tools. Tool names and arguments come from current MCP descriptions. If a required skill cannot be loaded, report that gap; optional missing guidance does not block operations whose tool descriptions are sufficient.
+Use loaded Apple guidance for native operations and the [simulator guide](agents/simulator.md) for LetsGrow schemes, tests, login, and verification. Repository and higher-priority client instructions retain precedence, including delegation authorization. If Apple guidance requests a worker agent, delegate only when the current session permits it; otherwise execute directly with the exposed native tools. Tool names and arguments come from current MCP descriptions. If a required skill cannot be loaded, report that gap; optional missing guidance does not block operations whose tool descriptions are sufficient.
 
 
 ## Workflows
@@ -48,7 +48,7 @@ Use loaded Apple guidance for native operations and the [simulator workflow](../
 | Need | Owning procedure |
 | --- | --- |
 | Plan, implement, investigate, or review a feature | [Feature workflow](agents/feature-workflow.md) and [shared task lifecycle](../../docs/agents/task-workflow.md) |
-| Build, test, launch, or interact with a simulator | [Native Xcode workflow](../../.agents/skills/lg-ios-run-simulator/SKILL.md) and [simulator policy](agents/simulator.md) |
+| Build, test, launch, or interact with a simulator | Loaded Apple guidance and [simulator policy](agents/simulator.md) |
 | Local backend and manager/anonymous apps | [Localhost skill](../../.agents/skills/lg-ios-localhost/SKILL.md); [manual two-simulator setup](local-testing.md) |
 | Release simulator build against deployed production | [Production skill](../../.agents/skills/lg-ios-production/SKILL.md) |
 | Local test-account authentication | [Login skill](../../.agents/skills/lg-ios-login/SKILL.md) |
