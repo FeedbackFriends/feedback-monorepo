@@ -1,6 +1,6 @@
 # Skills overview
 
-**skills.sh updated at:** `2026-11-07T17:58:06Z`
+**skills.sh updated at:** `2026-11-07T19:26:02Z`
 
 Repository skills live in [root `.agents/skills/`](../.agents/skills/). Claude Code discovers the same content through per-skill symlinks under `.claude/skills/`. When adding, removing, or renaming a skill, maintain its alias as well as this catalog; edit canonical content only. Open a skill for its full procedure and invocation rules. This catalog excludes personal skills and local Apple exports.
 
