@@ -5,6 +5,7 @@ firebase_config.json
 .DS_Store
 .gradle
 .gradle-cache/
+.gradle-local/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/

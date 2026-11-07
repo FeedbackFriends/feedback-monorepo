@@ -1,6 +1,8 @@
 node_modules/
 playwright-report/
 test-results/
+.playwright-mcp/
+problem-requests.txt
 next-env.d.ts
 
 *.tsbuildinfo

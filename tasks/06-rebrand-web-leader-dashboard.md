@@ -2,7 +2,7 @@
 status: draft
 areas: [web, backend]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-07
 ---
 
 # Rebrand 06 — Web leader dashboard
@@ -28,7 +28,7 @@ Depends on **02–05**. It can be built incrementally as each lands. It must rea
 
 - In scope:
   - **Dashboard overview.** Four cards: new suggestions, most supported, awaiting a decision (with age), and trials due for follow-up.
-  - **Navigation.** Rebuild the dashboard navigation in `web/src/components/auth/dashboard-nav.ts` around Overblik, Forslag, Det arbejder vi på, Resultater/historik, and Team.
+  - **Navigation.** Rebuild the dashboard navigation in `web/src/components/auth/DashboardShell.tsx` around Overblik, Forslag, Det arbejder vi på, Resultater/historik, and Team.
   - **Process metrics.** The strategy's metrics from section 12:
     - share of suggestions with a decision and explanation
     - time to first meaningful response
