@@ -57,8 +57,7 @@ The checked-in configuration enables no agent lifecycle/edit hooks. CI and expli
 
 | Mechanism | Behavior and source |
 | --- | --- |
-| iOS agent hooks | [hooks.json](../ios-app/.agents/hooks.json) is empty; [local config](../ios-app/.agents/config.toml) disables hooks |
-| Local Swift lint | [Changed-line lint](../ios-app/scripts/lint-swift-changes.py) runs explicitly or in CI; the historical [hook entry point](../ios-app/.agents/hooks/swiftlint-fix-changed.sh) delegates to it without rewriting files |
+| Local Swift lint | [Changed-line lint](../ios-app/scripts/lint-swift-changes.py) runs explicitly or in CI |
 | GitHub Actions | [CI/CD](agents/ci-cd.md) owns builds, tests, artifact checks, and release automation; release workflows can publish images, deploy, and push tags |
 | Community skills | [Weekly/manual workflow](../.github/workflows/update-community-skills.yml) refreshes upstream skills and commits validated results directly to `main`; independent of task execution |
 | Xcode Cloud | [Post-clone](../ios-app/CI_scripts/ci_post_clone.sh) sets build preferences and can push a version tag when `GITHUB_WRITE_PAT` is configured; [pre-build](../ios-app/CI_scripts/ci_pre_xcodebuild.sh) writes local build secrets. Both skip work when `TEST_RUNNER_CI=TRUE` |
@@ -67,7 +66,7 @@ Local Git hooks, client settings, and remotely managed Xcode Cloud workflows can
 
 ## MCP and client boundary
 
-The [Codex configuration](../.codex/config.toml) and [Claude Code configuration](../.mcp.json) connect native Xcode (`xcrun mcpbridge`), Coolify, Maestro, shadcn, and GoDaddy. Keep their server commands, arguments, URLs, and authentication behavior aligned when changing a connection. These small native configurations are maintained explicitly rather than generated. The [compatibility configuration](../.agents/config.toml) repeats some connections for other clients; Claude Code uses `.mcp.json`, not this TOML file. App-local files may differ. Inspect tools actually exposed in the session rather than assuming every client merges these files or every configured server is connected.
+The [Codex configuration](../.codex/config.toml) and [Claude Code configuration](../.mcp.json) connect native Xcode (`xcrun mcpbridge`), Coolify, Maestro, shadcn, and GoDaddy. Keep their server commands, arguments, URLs, and authentication behavior aligned when changing a connection. These small native configurations are maintained explicitly rather than generated. The [compatibility configuration](../.agents/config.toml) repeats some connections for other clients; Claude Code uses `.mcp.json`, not this TOML file. App-local agent configuration folders are not maintained; shared skills and client connections live at the repository root. Inspect tools actually exposed in the session rather than assuming every client merges these files or every configured server is connected.
 
 Connections do not install CLIs, grant account access, or schedule work. The Coolify [auth helper](../scripts/coolify-mcp-auth-headers) reads `COOLIFY_MCP_TOKEN` from the ignored root `.env`; keep real credentials outside Git and restrict that file with `chmod 600 .env`. [iOS harness setup](../ios-app/Docs/agent-harness.md) owns Xcode connection details.
 

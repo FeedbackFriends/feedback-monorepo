@@ -12,13 +12,9 @@ PROJECT = ROOT / "ios-app/Feedback.xcodeproj/project.xcproj"
 GROUP_NAME = "Repository guidance"
 DIRECTORIES = (
     ".agents/", ".codex/", "docs/", "tasks/",
-    "ios-app/.agents/", "ios-app/Docs/",
-    "backend/.agents/", "backend/docs/",
-    "web/.agents/", "web/docs/",
+    "ios-app/Docs/", "backend/docs/", "web/docs/",
 )
-SKILL_DIRECTORIES = tuple(
-    f"{prefix}.agents/skills/" for prefix in ("", "ios-app/", "backend/", "web/")
-)
+SKILL_DIRECTORIES = (".agents/skills/",)
 FILES = {
     f"{prefix}{name}"
     for prefix in ("", "ios-app/", "backend/", "web/")

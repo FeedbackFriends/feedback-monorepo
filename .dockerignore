@@ -4,7 +4,6 @@
 .env
 firebase_config.json
 firebase-debug.log
-backend/.agents
 backend/skills-lock.json
 
 **/.DS_Store

@@ -536,27 +536,6 @@
           "path": "ios-app",
           "children": [
             {
-              "kind": "group",
-              "path": ".agents",
-              "children": [
-                {
-                  "path": "config.toml"
-                },
-                {
-                  "kind": "group",
-                  "path": "hooks",
-                  "children": [
-                    {
-                      "path": "swiftlint-fix-changed.sh"
-                    }
-                  ]
-                },
-                {
-                  "path": "hooks.json"
-                }
-              ]
-            },
-            {
               "path": "AGENTS.md"
             },
             {
@@ -1198,15 +1177,6 @@
           "kind": "group",
           "path": "web",
           "children": [
-            {
-              "kind": "group",
-              "path": ".agents",
-              "children": [
-                {
-                  "path": "config.toml"
-                }
-              ]
-            },
             {
               "path": "AGENTS.md"
             },

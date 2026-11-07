@@ -29,7 +29,7 @@ class GuidanceNavigatorTests(unittest.TestCase):
             ):
                 self.assertEqual(navigator.guidance_files(), ["docs/guide.md"])
 
-    def test_inventory_keeps_custom_skills_but_excludes_community_packages(self):
+    def test_inventory_keeps_root_custom_skills_but_excludes_app_and_community_skills(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             custom = []
@@ -51,7 +51,7 @@ class GuidanceNavigatorTests(unittest.TestCase):
                 navigator.subprocess, "check_output", return_value=tracked
             ):
                 self.assertEqual(
-                    navigator.guidance_files(), sorted(custom + ["docs/skills.md", ".agents/config.toml"])
+                    navigator.guidance_files(), sorted([custom[0], "docs/skills.md", ".agents/config.toml"])
                 )
 
     def test_broken_alias_is_an_error(self):
