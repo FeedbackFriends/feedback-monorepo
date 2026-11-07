@@ -46,6 +46,7 @@ out/
 .specify/
 
 .env
+.claude/settings.local.json
 firebase-debug.log
 scripts/tests/__pycache__/
 

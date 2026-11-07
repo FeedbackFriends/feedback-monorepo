@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "xcode": {
+      "type": "stdio",
+      "command": "xcrun",
+      "args": ["mcpbridge"]
+    },
+    "coolify": {
+      "type": "http",
+      "url": "https://coolify.letsgrow.dk/mcp",
+      "headersHelper": "./scripts/coolify-mcp-auth-headers"
+    },
+    "maestro": {
+      "type": "stdio",
+      "command": "maestro",
+      "args": ["mcp"]
+    },
+    "shadcn": {
+      "type": "stdio",
+      "command": "sh",
+      "args": ["-lc", "cd web && exec npx shadcn@latest mcp"]
+    },
+    "godaddy": {
+      "type": "http",
+      "url": "https://api.godaddy.com/v1/domains/mcp"
+    }
+  }
+}

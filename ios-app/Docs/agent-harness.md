@@ -4,9 +4,9 @@ Start at the monorepo root. [Repository harness architecture](../../docs/agent-t
 
 ## Xcode MCP setup
 
-Use Xcode 27 with the installed iOS 27 simulator runtime, complete Xcode's first-launch setup, and select the intended Xcode installation in its command-line tools settings. Install SwiftLint (`brew install swiftlint`) and Python 3. Open this repository as a trusted Codex project.
+Use Xcode 27 with the installed iOS 27 simulator runtime, complete Xcode's first-launch setup, and select the intended Xcode installation in its command-line tools settings. Install SwiftLint (`brew install swiftlint`) and Python 3. Open this repository as a trusted project in Codex or Claude Code.
 
-The checked-in project configuration starts Apple's native server using `xcrun mcpbridge`. After configuration changes, restart the MCP client. In Codex CLI, `/mcp` shows active connections and `codex mcp list` shows configured servers. See [official MCP configuration documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
+The checked-in project configurations, `.codex/config.toml` and root `.mcp.json`, start Apple's native server using `xcrun mcpbridge`. After configuration changes, restart the MCP client. In either client, `/mcp` shows connections; `codex mcp list` or `claude mcp list` shows configured servers. Claude project servers may await approval before connecting. See [shared client setup](../../docs/agent-tooling.md#claude-code-setup), [Codex MCP configuration](https://learn.chatgpt.com/docs/extend/mcp?surface=cli), and [Claude MCP configuration](https://code.claude.com/docs/en/mcp).
 
 Verify the connection with `XcodeListWorkspaces`. Match this checkout's absolute `ios-app/Feedback.xcodeproj` path; use `XcodeOpenWorkspace` if absent. Follow Xcode's authorization prompts yourself if required. A missing connection or denied operation is a blocker to report, not a reason to switch local automation tools.
 

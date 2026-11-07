@@ -2,7 +2,7 @@
 
 **skills.sh updated at:** `2026-11-07T17:58:06Z`
 
-Repository skills live in [root `.agents/skills/`](../.agents/skills/). Open a skill for its full procedure and invocation rules. This catalog excludes personal and plugin skills.
+Repository skills live in [root `.agents/skills/`](../.agents/skills/). Claude Code discovers the same content through per-skill symlinks under `.claude/skills/`. When adding, removing, or renaming a skill, maintain its alias as well as this catalog; edit canonical content only. Open a skill for its full procedure and invocation rules. This catalog excludes personal and plugin skills.
 
 Custom workflows use `lg-` names. Community provenance is recorded in [skills-lock.json](../skills-lock.json); use [the community update procedure](#update-community-skills) for installer updates and [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) for repository-owned guidance improvements. Keep this catalog aligned when skills are added, removed, or renamed.
 

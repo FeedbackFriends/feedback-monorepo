@@ -21,4 +21,4 @@ After implementing iOS app changes, run the app on the active simulator through 
 
 ## Simulator Login
 
-Use the repository skill [the login skill](../../../.agents/skills/lg-ios-login/SKILL.md) (relative to `ios-app/`) to start the Localhost app with an authenticated test account. Obtain a fresh custom token and pass it only as per-launch arguments through Xcode MCP. Never commit tokens to a shared scheme or log them. Login alone must not reset or reseed test data.
+Use the repository skill [the login skill](../../../.agents/skills/lg-ios-login/SKILL.md) (relative to `ios-app/`) to start the Localhost app with an authenticated test account. In either client, run the local token helper and pass the fresh token as per-launch arguments through native Xcode MCP. Local test tokens may appear in agent tool output and arguments. Keep them out of tracked files and shared schemes. Login alone must not reset or reseed test data.
