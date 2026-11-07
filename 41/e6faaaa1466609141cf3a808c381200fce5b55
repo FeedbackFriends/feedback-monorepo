@@ -1,0 +1,33 @@
+.agents/skills/lg-improve-harness/SKILL.md
+  s_c27fa7d7602cff::t_39f0d6ce2c2ca5 1-15
+.github/workflows/update-community-skills.yml
+  s_c27fa7d7602cff::t_e14ce80a27212a 1-66
+docs/agent-tooling.md
+  s_c27fa7d7602cff::t_4192aa2ed663e6 42,61
+docs/agents/ci-cd.md
+  s_c27fa7d7602cff::t_2f54820008cb40 7
+docs/skills.md
+  s_c27fa7d7602cff::t_c37a1b50e07065 3,7,17,56-73
+ios-app/Feedback.xcodeproj/project.xcproj
+  s_c27fa7d7602cff::t_cc90d30db93e2a 251-259
+scripts/tests/test_update_community_skills.py
+  s_c27fa7d7602cff::t_ed33ed69cd3f9a 1-100
+scripts/update-community-skills.py
+  s_c27fa7d7602cff::t_0410389c05599c 1-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "41e6faaaa1466609141cf3a808c381200fce5b55",
+  "prompts": {},
+  "sessions": {
+    "s_c27fa7d7602cff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b6f6-6693-7951-a55e-ec78b7fdc4e5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
