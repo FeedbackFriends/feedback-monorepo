@@ -1,0 +1,25 @@
+docs/agent-tooling.md
+  s_ea68d11840e5a3::t_ad5e19490a4606 60,69
+ios-app/Docs/SETUP.md
+  s_ea68d11840e5a3::t_9d6d0cacf1f670 25-26
+ios-app/scripts/sync-guidance-navigator.py
+  s_ea68d11840e5a3::t_a12a08aee1e282 15,17
+ios-app/scripts/tests/test_guidance_navigator.py
+  s_ea68d11840e5a3::t_f45bae16485c05 32,54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7e36cedc4e62dd5c473b8e6051f2cd43f8daca7c",
+  "prompts": {},
+  "sessions": {
+    "s_ea68d11840e5a3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b74e-2a7e-7b33-b7e9-6191cdd3184c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
