@@ -1,6 +1,6 @@
 # Skills overview
 
-**skills.sh updated at:** `2026-11-07T17:50:38Z`
+**skills.sh updated at:** `2026-11-07T17:52:05Z`
 
 Repository skills live in [root `.agents/skills/`](../.agents/skills/). Open a skill for its full procedure and invocation rules. This catalog excludes personal and plugin skills.
 
