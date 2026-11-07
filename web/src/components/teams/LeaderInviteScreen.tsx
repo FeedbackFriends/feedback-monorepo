@@ -1,12 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "./AuthProvider"
+import { useAuth } from "@/components/auth/AuthProvider"
 import { signInWithGoogle, signOut } from "@/lib/auth"
 import {
-  teamRequest,
-  type TeamContext,
+  getLeaderInvitation,
+  acceptLeaderInvitation,
   type LeaderInvitationInfo,
 } from "@/lib/api/teams"
 import { APIHTTPError, apiErrorPresentation } from "@/lib/api/client"
@@ -21,20 +21,27 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function LeaderInviteScreen({ code }: { code: string }) {
+  const { user } = useAuth()
+  return (
+    <LeaderInvitation
+      key={`${user?.uid ?? "signed-out"}:${code}`}
+      code={code}
+    />
+  )
+}
+
+function LeaderInvitation({ code }: { code: string }) {
   const { status, user, configured } = useAuth()
   const router = useRouter()
   const [info, setInfo] = useState<LeaderInvitationInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const actionController = useRef<AbortController | null>(null)
+  useEffect(() => () => actionController.current?.abort(), [])
   useEffect(() => {
     if (status !== "authenticated") return
     const controller = new AbortController()
-    teamRequest<LeaderInvitationInfo>(
-      `/leader-invitations/${encodeURIComponent(code)}`,
-      "GET",
-      undefined,
-      controller.signal,
-    )
+    getLeaderInvitation(code, controller.signal)
       .then((next) => {
         if (!controller.signal.aborted) setInfo(next)
       })
@@ -49,12 +56,21 @@ export default function LeaderInviteScreen({ code }: { code: string }) {
       })
     return () => controller.abort()
   }, [status, code])
-  async function run(action: () => Promise<void>) {
+  async function run(action: (signal: AbortSignal) => Promise<void>) {
+    if (actionController.current) return
+    const controller = new AbortController()
+    actionController.current = controller
     setBusy(true)
     setError(null)
     try {
-      await action()
+      await action(controller.signal)
     } catch (cause) {
+      if (controller.signal.aborted) return
+      if (
+        cause instanceof APIHTTPError &&
+        [401, 403, 404].includes(cause.status)
+      )
+        setInfo(null)
       setError(
         cause instanceof APIHTTPError && cause.status === 403
           ? "Log ind med den verificerede Google-e-mail, som invitationen er sendt til."
@@ -64,7 +80,10 @@ export default function LeaderInviteScreen({ code }: { code: string }) {
               "Noget gik galt. Prøv igen."),
       )
     } finally {
-      setBusy(false)
+      if (!controller.signal.aborted) {
+        actionController.current = null
+        setBusy(false)
+      }
     }
   }
   return (
@@ -106,15 +125,11 @@ export default function LeaderInviteScreen({ code }: { code: string }) {
                   <Button
                     disabled={busy}
                     onClick={() =>
-                      run(async () => {
-                        const context = await teamRequest<TeamContext>(
-                          "/leader-invitations/accept",
-                          "POST",
-                          { code },
-                        )
-                        router.replace(
-                          `/dashboard/teams/${context.managedTeams[0].id}`,
-                        )
+                      run(async (signal) => {
+                        await acceptLeaderInvitation({ code }, signal)
+                        signal.throwIfAborted()
+                        if (info)
+                          router.replace(`/dashboard/teams/${info.team.id}`)
                       })
                     }
                   >

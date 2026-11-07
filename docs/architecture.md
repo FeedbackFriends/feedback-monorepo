@@ -41,7 +41,7 @@ Main traits:
 - `web/src/app/` contains routes such as dashboard, invite, login, privacy policy, and API route handlers.
 - `web/src/components/` contains UI, layout, auth, and landing components.
 - `web/src/lib/api/generated/openapi.ts` is generated from `contracts/openapi/feedback-api.yaml`.
-- `web/package.json` pins Node `20.19.0` and defines `dev`, `build`, `lint`, `generate:api-types`, and `test:e2e`.
+- `web/package.json` pins Node `24.22.2` and defines `dev`, `build`, `lint`, `generate:api-types`, and `test:e2e`.
 
 Generated API types are not hand-edited. Regenerate them from the root script after backend API changes.
 

@@ -3,7 +3,7 @@ import { appStoreUrl } from "@/components/landing/content"
 import { Button } from "@/components/ui/button"
 import { notFound } from "next/navigation"
 
-export const metadata = { title: "Teaminvitation | Lets Grow" }
+export const metadata = { title: "Teaminvitation | Lets Grow", robots: { index: false, follow: false }, referrer: "no-referrer" as const }
 export default async function TeamInvitePage({
   params,
 }: {

@@ -1,16 +1,25 @@
 'use client'
 
+import { useEffect, useState } from "react"
 import { ArrowRight } from "lucide-react"
 import PrimaryButton from "@/components/ui/PrimaryButton"
 
 type MobileStickyCtaProps = {
   ctaHref: string
-  visible: boolean
 }
 
-function MobileStickyCta({ ctaHref, visible }: MobileStickyCtaProps) {
+function MobileStickyCta({ ctaHref }: MobileStickyCtaProps) {
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const hero = document.getElementById("hero")
+    if (!hero) return
+    const observer = new IntersectionObserver(([entry]) => setVisible(!entry.isIntersecting), { threshold: 0.2 })
+    observer.observe(hero)
+    return () => observer.disconnect()
+  }, [])
   return (
     <div
+      inert={!visible}
       className={`mobile-cta-safe fixed inset-x-0 bottom-0 z-40 border-t border-white/70 bg-white/88 backdrop-blur-xl transition-transform duration-300 sm:hidden ${
         visible ? "translate-y-0" : "pointer-events-none translate-y-full"
       }`}

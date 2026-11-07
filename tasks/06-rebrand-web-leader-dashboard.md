@@ -28,7 +28,7 @@ Depends on **02–05**. It can be built incrementally as each lands. It must rea
 
 - In scope:
   - **Dashboard overview.** Four cards: new suggestions, most supported, awaiting a decision (with age), and trials due for follow-up.
-  - **Navigation.** Rebuild the dashboard navigation in `web/src/components/auth/DashboardShell.tsx` around Overblik, Forslag, Det arbejder vi på, Resultater/historik, and Team.
+  - **Navigation.** Rebuild the dashboard navigation in `web/src/components/dashboard/DashboardShell.tsx` around Overblik, Forslag, Det arbejder vi på, Resultater/historik, and Team.
   - **Process metrics.** The strategy's metrics from section 12:
     - share of suggestions with a decision and explanation
     - time to first meaningful response
@@ -43,7 +43,7 @@ Depends on **02–05**. It can be built incrementally as each lands. It must rea
 ## Context
 
 - Current behavior:
-  - `/dashboard/*` lives in `web/src/app/dashboard/` and `web/src/components/auth/DashboardShell.tsx`. It is static copy plus Firebase user info.
+  - `/dashboard/*` lives in `web/src/app/(account)/dashboard/` and `web/src/components/dashboard/DashboardShell.tsx`. The implemented overview now supports organizations/teams and employee management; legacy meeting-era route pages still contain static copy. Product-level suggestion/trial metrics remain this task’s scope.
   - `/dashboard/sessions`, `/dashboard/how-it-works`, and `/dashboard/surveys` describe the meeting and calendar model.
   - The backend has no outbound email. Push exists for iOS only.
 - Reading path:

@@ -3,9 +3,8 @@ import MarketingShell from "@/components/layout/MarketingShell"
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Lets Grow",
+  alternates: { canonical: "https://letsgrow.dk/privacy-policy" },
 }
-
-export const dynamic = "force-dynamic"
 
 export default function PrivacyPolicyPage() {
   return (

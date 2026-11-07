@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import { Montserrat } from "next/font/google"
-import { AuthProvider } from "@/components/auth/AuthProvider"
 import "./globals.css"
 
 const montserrat = Montserrat({
@@ -22,10 +21,12 @@ type RootLayoutProps = Readonly<{
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="da" className={montserrat.variable}>
-      <body className="font-sans">
-        <AuthProvider>{children}</AuthProvider>
-      </body>
+    <html
+      data-scroll-behavior="smooth"
+      lang="da"
+      className={`relative ${montserrat.variable}`}
+    >
+      <body className="font-sans">{children}</body>
     </html>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
@@ -25,76 +25,39 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog"
-import { APIHTTPError, apiErrorPresentation } from "@/lib/api/client"
 import {
-  teamRequest,
-  type TeamContext,
+  getTeamContext,
+  getTeam,
+  approveTeamRequest,
+  rejectTeamRequest,
+  removeTeamMember,
   type TeamManagement,
 } from "@/lib/api/teams"
+import { useTeamResource } from "./useTeamResource"
 
 export default function EmployeesScreen() {
-  const [teams, setTeams] = useState<TeamManagement[]>([])
-  const [loading, setLoading] = useState(true)
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const showError = (cause: unknown) => {
-    if (cause instanceof APIHTTPError && [401, 403, 404].includes(cause.status))
-      setTeams([])
-    setError(
-      apiErrorPresentation(cause, "da")?.message ??
-        "Noget gik galt. Prøv igen.",
+  const load = useCallback(async (signal: AbortSignal) => {
+    const context = await getTeamContext(signal)
+    return Promise.all(
+      context.managedTeams.map((team) => getTeam(team.id, signal)),
     )
-  }
-  const load = useCallback(async (signal?: AbortSignal) => {
-    const context = await teamRequest<TeamContext>(
-      "/context",
-      "GET",
-      undefined,
-      signal,
-    )
-    const next = await Promise.all(
-      context.managedTeams.map((team) =>
-        teamRequest<TeamManagement>(
-          `/${encodeURIComponent(team.id)}`,
-          "GET",
-          undefined,
-          signal,
-        ),
-      ),
-    )
-    if (!signal?.aborted) setTeams(next)
   }, [])
-  useEffect(() => {
-    const controller = new AbortController()
-    load(controller.signal)
-      .catch((cause) => {
-        if (!controller.signal.aborted) showError(cause)
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoading(false)
-      })
-    return () => controller.abort()
-  }, [load])
-  async function run(action: () => Promise<void>) {
-    setBusy(true)
-    setError(null)
-    try {
-      await action()
-    } catch (cause) {
-      showError(cause)
-    } finally {
-      setBusy(false)
-    }
-  }
-  async function mutate(teamId: string, path: string, method = "POST") {
-    await run(async () => {
-      const next = await teamRequest<TeamManagement>(
-        `/${encodeURIComponent(teamId)}${path}`,
-        method,
-      )
-      setTeams((current) =>
-        current.map((team) => (team.team.id === teamId ? next : team)),
-      )
+  const {
+    data,
+    loading,
+    busy,
+    error,
+    refresh,
+    mutate: update,
+  } = useTeamResource(load)
+  const teams = data ?? []
+  async function mutate(
+    teamId: string,
+    action: (signal: AbortSignal) => Promise<TeamManagement>,
+  ) {
+    await update(async (signal) => {
+      const next = await action(signal)
+      return teams.map((team) => (team.team.id === teamId ? next : team))
     })
   }
   const employees = teams.flatMap((team) => [
@@ -125,7 +88,7 @@ export default function EmployeesScreen() {
         <Button
           variant="outline"
           disabled={busy || loading}
-          onClick={() => run(() => load())}
+          onClick={() => void refresh()}
         >
           Opdater
         </Button>
@@ -137,7 +100,7 @@ export default function EmployeesScreen() {
             <Button
               variant="outline"
               disabled={busy}
-              onClick={() => run(() => load())}
+              onClick={() => void refresh()}
             >
               Prøv igen
             </Button>
@@ -208,9 +171,12 @@ export default function EmployeesScreen() {
                               size="sm"
                               disabled={busy}
                               onClick={() =>
-                                mutate(
-                                  employee.team.id,
-                                  `/requests/${encodeURIComponent(employee.id)}/approve`,
+                                mutate(employee.team.id, (signal) =>
+                                  approveTeamRequest(
+                                    employee.team.id,
+                                    employee.id,
+                                    signal,
+                                  ),
                                 )
                               }
                             >
@@ -221,9 +187,12 @@ export default function EmployeesScreen() {
                               variant="outline"
                               disabled={busy}
                               onClick={() =>
-                                mutate(
-                                  employee.team.id,
-                                  `/requests/${encodeURIComponent(employee.id)}/reject`,
+                                mutate(employee.team.id, (signal) =>
+                                  rejectTeamRequest(
+                                    employee.team.id,
+                                    employee.id,
+                                    signal,
+                                  ),
                                 )
                               }
                             >
@@ -253,10 +222,12 @@ export default function EmployeesScreen() {
                                 <AlertDialogAction
                                   variant="destructive"
                                   onClick={() =>
-                                    void mutate(
-                                      employee.team.id,
-                                      `/members/${encodeURIComponent(employee.id)}`,
-                                      "DELETE",
+                                    void mutate(employee.team.id, (signal) =>
+                                      removeTeamMember(
+                                        employee.team.id,
+                                        employee.id,
+                                        signal,
+                                      ),
                                     )
                                   }
                                 >

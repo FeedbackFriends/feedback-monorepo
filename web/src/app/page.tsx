@@ -1,8 +1,11 @@
+import type { Metadata } from "next"
 import MarketingShell from "@/components/layout/MarketingShell"
 import LandingPage from "@/components/landing/LandingPage"
 import { contactUrl } from "@/components/landing/content"
 
-export const dynamic = "force-dynamic"
+export const metadata: Metadata = {
+  alternates: { canonical: "https://letsgrow.dk/" },
+}
 
 export default function HomePage() {
   return (

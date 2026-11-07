@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import DashboardSessionsView from "@/components/auth/DashboardSessionsView"
+import DashboardSessionsView from "@/components/dashboard/DashboardSessionsView"
 
 export const metadata: Metadata = {
   title: "Sessions | Dashboard | Lets Grow",

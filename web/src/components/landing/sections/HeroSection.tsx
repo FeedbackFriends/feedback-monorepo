@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from "framer-motion"
-import type { MouseEventHandler, Ref } from "react"
 import { Lightbulb, HeartHandshake, MessageCircle, Target, TrendingUp, Users } from "lucide-react"
 import PhoneFrames from "@/components/landing/PhoneFrames"
 import { contactUrl } from "@/components/landing/content"
@@ -10,18 +9,10 @@ import PrimaryButton from "@/components/ui/PrimaryButton"
 import SecondaryButton from "@/components/ui/SecondaryButton"
 import { navbarSurfaceShadowClass } from "@/lib/letsgrow"
 
-type HeroSectionProps = {
-  heroSectionRef: Ref<HTMLElement>
-  onHowItWorksClick: MouseEventHandler<HTMLAnchorElement>
-}
-
-function HeroSection({
-  heroSectionRef,
-  onHowItWorksClick,
-}: HeroSectionProps) {
+function HeroSection() {
   return (
     <section
-      ref={heroSectionRef}
+      id="hero"
       className="container flex min-h-screen items-center pb-12 pt-28 sm:py-16"
     >
       <div className="grid w-full items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -84,7 +75,7 @@ function HeroSection({
               size="lg"
               className={`h-12 border-[#DCE3F4] bg-transparent px-6 ${navbarSurfaceShadowClass} hover:bg-transparent active:bg-transparent`}
             >
-              <a href="#how-it-works" onClick={onHowItWorksClick}>
+              <a href="#how-it-works">
                 Se hvad der kommer
               </a>
             </SecondaryButton>

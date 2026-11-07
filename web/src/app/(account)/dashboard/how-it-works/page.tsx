@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import DashboardHowItWorksView from "@/components/auth/DashboardHowItWorksView"
+import DashboardHowItWorksView from "@/components/dashboard/DashboardHowItWorksView"
 
 export const metadata: Metadata = {
   title: "Sådan Virker Det | Dashboard | Lets Grow",

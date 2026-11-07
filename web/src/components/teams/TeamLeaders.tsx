@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
+import { useCallback, useRef, useState, type FormEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -32,81 +32,65 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table"
-import { apiErrorPresentation } from "@/lib/api/client"
-import { teamRequest, type TeamLeadership } from "@/lib/api/teams"
+import {
+  getTeamLeaders,
+  inviteTeamLeader,
+  removeTeamLeader,
+  revokeLeaderInvitation,
+  type LeaderInvitationInput,
+  type TeamLeadership,
+} from "@/lib/api/teams"
+import { useTeamResource } from "./useTeamResource"
 
 export default function TeamLeaders({ teamId }: { teamId: string }) {
-  const [data, setData] = useState<TeamLeadership | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const load = useCallback(
+    (signal: AbortSignal) => getTeamLeaders(teamId, signal),
+    [teamId],
+  )
+  const { data, error, busy, accessDenied, refresh, mutate, setError } =
+    useTeamResource(load)
   const [email, setEmail] = useState("")
   const [copied, setCopied] = useState(false)
-  const [busy, setBusy] = useState(false)
   const [open, setOpen] = useState(false)
-  const draft = useRef<{ id: string; email: string } | null>(null)
-  const path = `/${encodeURIComponent(teamId)}/leaders`
-  const load = useCallback(
-    async (signal?: AbortSignal) => {
-      const result = await teamRequest<TeamLeadership>(
-        path,
-        "GET",
-        undefined,
-        signal,
-      )
-      if (!signal?.aborted) setData(result)
-    },
-    [path],
-  )
-  useEffect(() => {
-    const controller = new AbortController()
-    load(controller.signal).catch((cause) => {
-      if (!controller.signal.aborted) {
-        setData(null)
-        setError(
-          apiErrorPresentation(cause, "da")?.message ??
-            "Kunne ikke hente ledere.",
-        )
-      }
-    })
-    return () => controller.abort()
-  }, [load])
-  async function run(action: () => Promise<void>) {
-    setBusy(true)
-    setError(null)
-    setCopied(false)
-    try {
-      await action()
-    } catch (cause) {
-      setData(null)
-      setError(
-        apiErrorPresentation(cause, "da")?.message ??
-          "Noget gik galt. Prøv igen.",
-      )
-    } finally {
-      setBusy(false)
-    }
-  }
+  const draft = useRef<LeaderInvitationInput | null>(null)
   async function invite(event: FormEvent) {
     event.preventDefault()
-    await run(async () => {
-      const normalized = email.trim().toLowerCase()
-      if (draft.current?.email !== normalized)
-        draft.current = { id: crypto.randomUUID(), email: normalized }
-      setData(
-        await teamRequest<TeamLeadership>(
-          `${path}/invitations`,
-          "POST",
-          draft.current,
-        ),
-      )
+    const normalized = email.trim().toLowerCase()
+    if (draft.current?.email !== normalized)
+      draft.current = { id: crypto.randomUUID(), email: normalized }
+    const input = draft.current
+    setCopied(false)
+    const next = await mutate((signal) =>
+      inviteTeamLeader(teamId, input, signal),
+    )
+    if (next) {
       draft.current = null
       setEmail("")
-    })
+    }
   }
-  async function remove(suffix: string) {
-    await run(async () =>
-      setData(await teamRequest<TeamLeadership>(`${path}${suffix}`, "DELETE")),
+  async function remove(
+    action: (signal: AbortSignal) => Promise<TeamLeadership>,
+  ) {
+    setCopied(false)
+    await mutate(action)
+  }
+
+  if (accessDenied)
+    return (
+      <Alert variant="destructive">
+        <AlertDescription className="space-y-2">
+          <p>{error}</p>
+          <Button
+            variant="outline"
+            disabled={busy}
+            onClick={() => void refresh()}
+          >
+            Prøv igen
+          </Button>
+        </AlertDescription>
+      </Alert>
     )
-  }
+
   return (
     <section className="space-y-4" aria-labelledby="leaders-heading">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -115,7 +99,9 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
         </h2>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline">Invitér leder</Button>
+            <Button variant="outline" disabled={busy}>
+              Invitér leder
+            </Button>
           </DialogTrigger>
           <DialogContent className="max-h-[85svh] overflow-y-auto">
             <DialogHeader>
@@ -194,7 +180,7 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
             <Button
               variant="outline"
               disabled={busy}
-              onClick={() => run(() => load())}
+              onClick={() => void refresh()}
             >
               Prøv igen
             </Button>
@@ -242,8 +228,12 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
                         <AlertDialogCancel>Annuller</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() =>
-                            void remove(
-                              `/${encodeURIComponent(leader.accountId)}`,
+                            void remove((signal) =>
+                              removeTeamLeader(
+                                teamId,
+                                leader.accountId,
+                                signal,
+                              ),
                             )
                           }
                         >
@@ -266,7 +256,11 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
                     size="sm"
                     variant="outline"
                     disabled={busy}
-                    onClick={() => remove(`/invitations/${invitation.id}`)}
+                    onClick={() =>
+                      remove((signal) =>
+                        revokeLeaderInvitation(teamId, invitation.id, signal),
+                      )
+                    }
                   >
                     Tilbagekald
                   </Button>

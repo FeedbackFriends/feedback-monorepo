@@ -18,7 +18,7 @@ Reproducer og ret den rapporterede navigation med eksisterende Sheet/Sidebar. In
 ## Context
 
 - web/src/components/layout/Navbar.tsx: offentlig topmenu bruger et højresheet på mobil.
-- web/src/components/auth/DashboardShell.tsx: dashboard bruger Sidebar; shellens viste header indeholder ikke en mobiltrigger.
+- web/src/components/dashboard/DashboardShell.tsx: dashboard bruger Sidebar og har nu en SidebarTrigger i headeren samt mobil-lukning ved navigation. Den oprindelige trigger-observation er forældet; den rapporterede fejl skal reproduceres på ny.
 - web/src/components/ui/sidebar.tsx; web/src/components/ui/sheet.tsx; web/tests/routes.spec.ts; web/tests/auth.spec.ts
 - web/AGENTS.md; web/docs/agents/ui.md; web/docs/agents/validation.md
 

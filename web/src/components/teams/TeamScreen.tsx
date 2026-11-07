@@ -2,9 +2,8 @@
 
 import TeamLeaders from "./TeamLeaders"
 import Link from "next/link"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -26,106 +25,60 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog"
-import { APIHTTPError, apiErrorPresentation } from "@/lib/api/client"
 import {
-  teamRequest,
+  getTeam,
+  getTeamContext,
+  rotateTeamInvite,
+  approveTeamRequest,
+  rejectTeamRequest,
+  removeTeamMember,
   type TeamManagement,
-  type TeamContext,
 } from "@/lib/api/teams"
+import { useTeamResource } from "./useTeamResource"
 
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog"
+import TeamInviteDialog from "./TeamInviteDialog"
 
 export default function TeamScreen({ teamId }: { teamId: string }) {
-  const [details, setDetails] = useState<TeamManagement | null>(null)
-  const [isOwner, setIsOwner] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [inviteOpen, setInviteOpen] = useState(false)
-  const showError = (cause: unknown) => {
-    if (
-      cause instanceof APIHTTPError &&
-      [401, 403, 404].includes(cause.status)
-    ) {
-      setDetails(null)
-      setIsOwner(false)
-      setInviteOpen(false)
-    }
-    setError(
-      apiErrorPresentation(cause, "da")?.message ??
-        "Noget gik galt. Prøv igen.",
-    )
-  }
   const load = useCallback(
-    async (signal?: AbortSignal) => {
-      const [next, context] = await Promise.all([
-        teamRequest<TeamManagement>(
-          `/${encodeURIComponent(teamId)}`,
-          "GET",
-          undefined,
-          signal,
-        ),
-        teamRequest<TeamContext>("/context", "GET", undefined, signal),
+    async (signal: AbortSignal) => {
+      const [details, context] = await Promise.all([
+        getTeam(teamId, signal),
+        getTeamContext(signal),
       ])
-      if (!signal?.aborted) {
-        setDetails(next)
-        setIsOwner(context.isOwner)
-      }
+      return { details, isOwner: context.isOwner }
     },
     [teamId],
   )
-  useEffect(() => {
-    const controller = new AbortController()
-    load(controller.signal).catch((cause) => {
-      if (!controller.signal.aborted) showError(cause)
-    })
-    return () => controller.abort()
-  }, [load])
-  async function run(action: () => Promise<void>) {
-    setBusy(true)
-    setError(null)
-    setCopied(false)
-    try {
-      await action()
-    } catch (cause) {
-      showError(cause)
-    } finally {
-      setBusy(false)
-    }
+  const {
+    data,
+    error,
+    busy,
+    refresh,
+    mutate: update,
+    setError,
+  } = useTeamResource(load)
+  const details = data?.details ?? null
+  const isOwner = data?.isOwner ?? false
+  const [inviteOpen, setInviteOpen] = useState(false)
+  async function mutate(
+    action: (signal: AbortSignal) => Promise<TeamManagement>,
+  ) {
+    if (!data) return
+    await update(async (signal) => ({ ...data, details: await action(signal) }))
   }
-  async function mutate(path: string, method = "POST") {
-    await run(async () => {
-      setDetails(
-        await teamRequest<TeamManagement>(
-          `/${encodeURIComponent(teamId)}${path}`,
-          method,
-        ),
-      )
-    })
-  }
-  const invite = details
-    ? `${typeof window === "undefined" ? "" : window.location.origin}/team-invite/${details.inviteCode}`
-    : ""
   return (
     <div className="space-y-6">
       <Button asChild variant="link" className="h-auto p-0">
         <Link href="/dashboard">← Alle teams</Link>
       </Button>
-      {error && !inviteOpen && (
+      {error && (!inviteOpen || !details) && (
         <Alert variant="destructive">
           <AlertDescription className="space-y-3">
             <p>{error}</p>
             <Button
               variant="outline"
               disabled={busy}
-              onClick={() => run(() => load())}
+              onClick={() => void refresh()}
             >
               Prøv igen
             </Button>
@@ -153,91 +106,23 @@ export default function TeamScreen({ teamId }: { teamId: string }) {
               <Button
                 variant="outline"
                 disabled={busy}
-                onClick={() => run(() => load())}
+                onClick={() => void refresh()}
               >
                 Opdater
               </Button>
-              <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
-                <DialogTrigger asChild>
-                  <Button>Invitér medarbejdere</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle asChild>
-                      <h2>Invitér til {details.team.name}</h2>
-                    </DialogTitle>
-                    <DialogDescription>
-                      Del linket med medarbejderne. De åbner det i iOS-appen og
-                      anmoder om adgang. Du godkender hver person her.
-                    </DialogDescription>
-                  </DialogHeader>
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap gap-3">
-                      <Input
-                        aria-label="Invitationslink"
-                        readOnly
-                        value={invite}
-                        className="min-w-0 w-full"
-                      />
-                      <Button
-                        disabled={busy}
-                        onClick={async () => {
-                          try {
-                            await navigator.clipboard.writeText(invite)
-                            setCopied(true)
-                          } catch {
-                            setError(
-                              "Kunne ikke kopiere. Markér og kopiér linket i feltet.",
-                            )
-                          }
-                        }}
-                      >
-                        Kopiér link
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="outline" disabled={busy}>
-                            Nyt invitationslink
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Opret et nyt invitationslink?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Det gamle link kan derefter ikke bruges til nye
-                              anmodninger. Eksisterende anmodninger og medlemmer
-                              bevares.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Annuller</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => void mutate("/invite")}
-                            >
-                              Opret nyt link
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                    {copied && (
-                      <p
-                        role="status"
-                        className="text-sm text-muted-foreground"
-                      >
-                        Link kopieret
-                      </p>
-                    )}
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <TeamInviteDialog
+                key={details.inviteCode}
+                team={details.team}
+                inviteCode={details.inviteCode}
+                busy={busy}
+                error={error}
+                open={inviteOpen}
+                onOpenChange={setInviteOpen}
+                onRotate={() =>
+                  mutate((signal) => rotateTeamInvite(teamId, signal))
+                }
+                onError={setError}
+              />
             </div>
           </div>
           {isOwner && <TeamLeaders teamId={teamId} />}
@@ -277,7 +162,13 @@ export default function TeamScreen({ teamId }: { teamId: string }) {
                               size="sm"
                               disabled={busy}
                               onClick={() =>
-                                mutate(`/requests/${request.id}/approve`)
+                                mutate((signal) =>
+                                  approveTeamRequest(
+                                    teamId,
+                                    request.id,
+                                    signal,
+                                  ),
+                                )
                               }
                             >
                               Godkend
@@ -287,7 +178,9 @@ export default function TeamScreen({ teamId }: { teamId: string }) {
                               variant="outline"
                               disabled={busy}
                               onClick={() =>
-                                mutate(`/requests/${request.id}/reject`)
+                                mutate((signal) =>
+                                  rejectTeamRequest(teamId, request.id, signal),
+                                )
                               }
                             >
                               Afvis
@@ -350,9 +243,12 @@ export default function TeamScreen({ teamId }: { teamId: string }) {
                               <AlertDialogAction
                                 variant="destructive"
                                 onClick={() =>
-                                  void mutate(
-                                    `/members/${encodeURIComponent(member.accountId)}`,
-                                    "DELETE",
+                                  void mutate((signal) =>
+                                    removeTeamMember(
+                                      teamId,
+                                      member.accountId,
+                                      signal,
+                                    ),
                                   )
                                 }
                               >

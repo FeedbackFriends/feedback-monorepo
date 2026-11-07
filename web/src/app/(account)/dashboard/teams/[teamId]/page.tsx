@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import TeamScreen from "@/components/auth/TeamScreen"
+import TeamScreen from "@/components/teams/TeamScreen"
 
 export const metadata: Metadata = { title: "Team | Lets Grow" }
 

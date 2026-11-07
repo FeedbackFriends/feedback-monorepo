@@ -22,7 +22,7 @@ npx shadcn@latest add @shadcn/sidebar-07 --cwd web
 
 The leader app must use shadcn components wherever available. Product components
 compose the primitives and own behavior; do not build replacement controls or
-primitive styling. Prefer blocks for app-shell structure. `sidebar-07` supplies the leader shell composition in `DashboardShell.tsx`: a
+primitive styling. Prefer blocks for app-shell structure. `sidebar-07` supplies the leader shell composition in `src/components/dashboard/DashboardShell.tsx`: a
 collapsible desktop sidebar, mobile sheet, Teams/Medarbejdere navigation and account controls.
 Keep navigation tied to implemented features rather than shipping placeholder sections.
 Mobile sidebar buttons omit desktop tooltips so Escape dismisses the sheet directly.
@@ -35,3 +35,5 @@ consumers too and rerun lint, production build, and affected browser journeys.
 
 
 Leader navigation separates overview from actions. `/dashboard` lists teams and opens team creation in a registry Dialog. `/dashboard/teams/[teamId]` shows one team's membership and exposes invitation sharing through a Dialog. `/dashboard/employees` lists active employees and pending requests across authorized teams with status and membership actions. Keep unsupported profile fields and management actions out of the UI. The employee overview uses the existing team-management API in parallel after loading context; authorization remains on the backend.
+
+Team invitation sharing lives in `src/components/teams/TeamInviteDialog.tsx`; data/mutations remain owned by the team screen's resource lifecycle. Public anchor navigation uses native links with CSS scroll margins and reduced-motion support. Hidden mobile CTA controls are inert, so keyboard focus cannot enter offscreen actions.

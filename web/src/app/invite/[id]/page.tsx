@@ -12,6 +12,8 @@ type InvitePageProps = {
 
 export const metadata: Metadata = {
   title: "Invitation | Lets Grow",
+  robots: { index: false, follow: false },
+  referrer: "no-referrer",
 }
 
 export const dynamic = "force-dynamic"

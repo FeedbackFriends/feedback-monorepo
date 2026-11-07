@@ -6,18 +6,19 @@ async function forward(
   context: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await context.params
+  const noStore = { "Cache-Control": "no-store" }
   const allowed =
     path[0] === "teams" &&
     path.every((segment) => /^[A-Za-z0-9_-]+$/.test(segment))
-  if (!allowed) return Response.json({ error: "Not found" }, { status: 404 })
+  if (!allowed) return Response.json({ error: "Not found" }, { status: 404, headers: noStore })
   const authorization = request.headers.get("authorization")
   if (!authorization?.startsWith("Bearer "))
-    return Response.json({}, { status: 401 })
+    return Response.json({}, { status: 401, headers: noStore })
   const origin = process.env.FEEDBACK_API_ORIGIN
   if (!origin)
     return Response.json(
       { error: "FEEDBACK_API_ORIGIN is required" },
-      { status: 503 }
+      { status: 503, headers: noStore }
     )
   try {
     const response = await fetch(new URL(`/${path.join("/")}`, origin), {
@@ -30,7 +31,7 @@ async function forward(
       body: request.method === "POST" ? await request.text() : undefined,
       cache: "no-store",
       redirect: "error",
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.any([request.signal, AbortSignal.timeout(15000)]),
     })
     return new Response(await response.text(), {
       status: response.status,
@@ -40,7 +41,7 @@ async function forward(
       },
     })
   } catch {
-    return Response.json({}, { status: 502 })
+    return Response.json({}, { status: 502, headers: noStore })
   }
 }
 

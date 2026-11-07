@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "engines": {
-    "node": "20.19.0"
+    "node": "24.22.2"
   },
   "scripts": {
     "dev": "dotenv -e ../.env -- next dev",
@@ -31,10 +31,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@next/eslint-plugin-next": "16.1.6",
+    "@next/eslint-plugin-next": "16.4.1",
     "@playwright/test": "^1.52.0",
     "@tailwindcss/postcss": "^4.2.1",
-    "@types/node": "^22.10.1",
+    "@types/node": "^24.0.0",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "dotenv-cli": "^11.0.0",
@@ -49,6 +49,10 @@
   },
   "overrides": {
     "flatted": "^3.4.2",
-    "sucrase": "^3.35.1"
+    "sucrase": "^3.35.1",
+    "@grpc/grpc-js": "^1.14.7",
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^11.0.1"
+    }
   }
 }

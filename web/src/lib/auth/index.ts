@@ -16,6 +16,9 @@ let authClient: AuthClient = createAuthClient()
 let runtimeAuthLoadPromise: Promise<AuthClient> | null = null
 
 function createAuthClient(firebaseConfig: FirebaseConfigInput = {}) {
+  if (e2eAuthEnabled && process.env.NODE_ENV === "production") {
+    throw new Error("Test authentication is unavailable in production")
+  }
   return e2eAuthEnabled
     ? new E2EAuthClient()
     : new FirebaseAuthClient(firebaseConfig)

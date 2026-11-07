@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import LeaderInviteScreen from "@/components/auth/LeaderInviteScreen"
+import LeaderInviteScreen from "@/components/teams/LeaderInviteScreen"
 
 export const metadata: Metadata = {
   title: "Lederinvitation | Lets Grow",

@@ -563,3 +563,59 @@ test("invalid leader links and wrong Google accounts show clear errors", async (
     page.getByText(/Log ind med den verificerede Google-e-mail/),
   ).toBeVisible()
 })
+
+test("a response from a previous login cannot replace the current team's data", async ({ page }) => {
+  await mockTeams(page, true)
+  await login(page)
+  await page.goto("/dashboard/teams/it")
+  await expect(page.getByRole("button", { name: "Godkend", exact: true })).toBeVisible()
+  let release!: () => void
+  const pending = new Promise<void>((resolve) => { release = resolve })
+  let started!: () => void
+  const requested = new Promise<void>((resolve) => { started = resolve })
+  await page.route("**/api/leader/teams/it/requests/request/approve", async (route) => {
+    started()
+    await pending
+    await route.fulfill({ json: {
+      team: { id: "it", name: "OLD RESPONSE", organizationName: "Acme", organizationId: "org" },
+      inviteCode: "old", pendingRequests: [], members: [], memberCount: 0,
+    } }).catch(() => {}) // The old fetch is intentionally canceled on logout.
+  })
+  try {
+    await page.getByRole("button", { name: "Godkend", exact: true }).click()
+    await requested
+    await page.getByRole("button", { name: "Log ud", exact: true }).click()
+    await expect(page).toHaveURL(/\/login$/)
+    await page.getByRole("button", { name: "Fortsæt med Google" }).click()
+    await expect(page).toHaveURL(/\/dashboard$/)
+    await page.goto("/dashboard/teams/it")
+    await expect(page.getByRole("heading", { name: "IT", exact: true })).toBeVisible()
+    release()
+    await expect(page.getByRole("button", { name: "Godkend", exact: true })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "OLD RESPONSE", exact: true })).toHaveCount(0)
+  } finally { release() }
+})
+
+test("team invitation dialog restores keyboard focus after Escape", async ({ page }) => {
+  await mockTeams(page, true)
+  await login(page)
+  await page.goto("/dashboard/teams/it")
+  const trigger = page.getByRole("button", { name: "Invitér medarbejdere", exact: true })
+  await trigger.focus()
+  await page.keyboard.press("Enter")
+  await expect(page.getByRole("dialog")).toBeVisible()
+  await page.keyboard.press("Escape")
+  await expect(page.getByRole("dialog")).toHaveCount(0)
+  await expect(trigger).toBeFocused()
+})
+
+test("dashboard error boundary retries the real rendering path", async ({ page }) => {
+  await mockTeams(page, true)
+  await login(page)
+  await page.route("**/api/leader/teams/it", (route) => route.fulfill({ json: { team: null } }))
+  await page.goto("/dashboard/teams/it")
+  await expect(page.getByText("Siden kunne ikke vises", { exact: true })).toBeVisible()
+  await page.unroute("**/api/leader/teams/it")
+  await page.getByRole("button", { name: "Prøv igen", exact: true }).click()
+  await expect(page.getByRole("heading", { name: "IT", exact: true })).toBeVisible()
+})

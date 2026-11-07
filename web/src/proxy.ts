@@ -14,10 +14,15 @@ export function proxy(request: NextRequest) {
       path.startsWith("/dashboard/"))
   ) {
     return NextResponse.redirect(
-      new URL(path + request.nextUrl.search, "https://app.letsgrow.dk")
+      new URL(path + request.nextUrl.search, "https://app.letsgrow.dk"),
     )
   }
-  return NextResponse.next()
+  const response = NextResponse.next()
+  if (host === "app.letsgrow.dk")
+    response.headers.set("X-Robots-Tag", "noindex, nofollow")
+  return response
 }
 
-export const config = { matcher: ["/", "/login", "/dashboard/:path*", "/leader-invite/:path*"] }
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+}

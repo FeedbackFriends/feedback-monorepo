@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
+import { useRef, useState, type FormEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -31,93 +31,60 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog"
-import { apiErrorPresentation } from "@/lib/api/client"
+import { useTeamResource } from "./useTeamResource"
 import {
-  teamRequest,
-  type TeamContext,
+  getTeamContext,
+  createOrganization as createOrganizationAPI,
+  createTeam,
   type OrganizationInput,
   type TeamInput,
 } from "@/lib/api/teams"
 
 export default function DashboardScreen() {
   const router = useRouter()
-  const [context, setContext] = useState<TeamContext | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const {
+    data: context,
+    error,
+    busy,
+    loading,
+    refresh,
+    mutate,
+    setError,
+  } = useTeamResource(getTeamContext)
   const [createOpen, setCreateOpen] = useState(false)
   const [organizationName, setOrganizationName] = useState("")
   const [teamName, setTeamName] = useState("")
   const organizationDraft = useRef<OrganizationInput | null>(null)
   const teamDraft = useRef<TeamInput | null>(null)
-  const showError = (cause: unknown) =>
-    setError(
-      apiErrorPresentation(cause, "da")?.message ??
-        "Noget gik galt. Prøv igen.",
-    )
-  const loadContext = useCallback(async (signal?: AbortSignal) => {
-    const next = await teamRequest<TeamContext>(
-      "/context",
-      "GET",
-      undefined,
-      signal,
-    )
-    if (!signal?.aborted) setContext(next)
-  }, [])
-  useEffect(() => {
-    const controller = new AbortController()
-    loadContext(controller.signal)
-      .catch((cause) => {
-        if (!controller.signal.aborted) showError(cause)
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoading(false)
-      })
-    return () => controller.abort()
-  }, [loadContext])
-  async function run(action: () => Promise<void>) {
-    setBusy(true)
-    setError(null)
-    try {
-      await action()
-    } catch (cause) {
-      showError(cause)
-    } finally {
-      setBusy(false)
-    }
-  }
   async function createOrganization(event: FormEvent) {
     event.preventDefault()
-    await run(async () => {
-      organizationDraft.current = {
-        id: organizationDraft.current?.id ?? crypto.randomUUID(),
-        name: organizationName.trim(),
-        teamId: organizationDraft.current?.teamId ?? crypto.randomUUID(),
-        teamName: teamName.trim(),
-      }
-      await teamRequest<TeamContext>(
-        "/organizations",
-        "POST",
-        organizationDraft.current,
-      )
-      router.push(`/dashboard/teams/${organizationDraft.current.teamId}`)
-    })
+    organizationDraft.current = {
+      id: organizationDraft.current?.id ?? crypto.randomUUID(),
+      name: organizationName.trim(),
+      teamId: organizationDraft.current?.teamId ?? crypto.randomUUID(),
+      teamName: teamName.trim(),
+    }
+    const input = organizationDraft.current
+    const next = await mutate((signal) => createOrganizationAPI(input, signal))
+    if (next) router.push(`/dashboard/teams/${input.teamId}`)
   }
   async function addTeam(event: FormEvent) {
     event.preventDefault()
-    await run(async () => {
-      teamDraft.current = {
-        id: teamDraft.current?.id ?? crypto.randomUUID(),
-        name: teamName.trim(),
-      }
-      const team = await teamRequest<{ id: string }>(
-        `/organizations/${context!.organization!.id}`,
-        "POST",
-        teamDraft.current,
-      )
-      setCreateOpen(false)
-      router.push(`/dashboard/teams/${team.id}`)
+    if (!context?.organization) return
+    teamDraft.current = {
+      id: teamDraft.current?.id ?? crypto.randomUUID(),
+      name: teamName.trim(),
+    }
+    const input = teamDraft.current
+    const organizationId = context.organization.id
+    const next = await mutate(async (signal) => {
+      const team = await createTeam(organizationId, input, signal)
+      return { ...context, managedTeams: [...context.managedTeams, team] }
     })
+    if (next) {
+      setCreateOpen(false)
+      router.push(`/dashboard/teams/${input.id}`)
+    }
   }
   const errorAlert = error && (
     <Alert variant="destructive">
@@ -126,7 +93,7 @@ export default function DashboardScreen() {
         <Button
           variant="outline"
           disabled={busy}
-          onClick={() => run(() => loadContext())}
+          onClick={() => void refresh()}
         >
           Prøv igen
         </Button>

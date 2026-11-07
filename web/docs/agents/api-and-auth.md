@@ -35,3 +35,7 @@ not create a join request in the browser. The matching iOS flow belongs to the
 remaining phase of task 02. Event invitations retain `/invite/[id]`.
 
 `TeamContext.isOwner` gates organization/team creation and leadership administration; `managedTeams` already contains only the caller’s authorized scope. Team detail clears protected state on denied responses. `/leader-invite/[code]` keeps its personal token in the URL through Google login and explicitly accepts via the API; the API requires the matching verified Google email. Only owners create/revoke these links or remove leaders. Links expire after seven days and are distinct from employee invitations.
+
+AuthProvider is scoped to `src/app/(account)/layout.tsx`, shared by login, dashboard and leader invitations. Public routes do not initialize auth. Firebase is imported only by the account route group, initializes from runtime configuration and rejects E2E authentication in production. Protected screen state is recreated on account changes.
+
+Use the named operations in `src/lib/api/teams.ts` rather than constructing paths and choosing arbitrary response types in components. The relay propagates the request's cancellation signal, enforces a 15-second upstream timeout, rejects redirects and sends `Cache-Control: no-store` for both success and failure responses.

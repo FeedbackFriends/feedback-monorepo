@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState, type ReactNode } from "react"
 import { Leaf, LogOut, Users, UserRound } from "lucide-react"
-import { useAuth } from "./AuthProvider"
+import { useAuth } from "@/components/auth/AuthProvider"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -27,7 +27,7 @@ import {
 import { signOut } from "@/lib/auth"
 
 export default function DashboardShell({ children }: { children: ReactNode }) {
-  const { status } = useAuth()
+  const { status, user } = useAuth()
   const router = useRouter()
   useEffect(() => {
     if (status === "unauthenticated") router.replace("/login")
@@ -45,7 +45,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
     )
   return (
     <SidebarProvider>
-      <LeaderLayout>{children}</LeaderLayout>
+      <LeaderLayout key={user?.uid}>{children}</LeaderLayout>
     </SidebarProvider>
   )
 }

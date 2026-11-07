@@ -83,10 +83,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       unsubscribe = subscribeToAuthState(
         (nextUser) => {
+          if (!isMounted) return
           setUser(nextUser)
           setStatus(nextUser ? "authenticated" : "unauthenticated")
         },
         (error) => {
+          if (!isMounted) return
           setUser(null)
           setStatus("unauthenticated")
           setAuthError(

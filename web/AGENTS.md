@@ -2,7 +2,7 @@
 
 Next.js frontend for LetsGrow, using React, TypeScript, Tailwind CSS, and Firebase client auth.
 
-Use npm with Node.js `20.19.0`; run web commands from `web/`. The `dev`, `build`, and `start` scripts load the root `.env` through `dotenv-cli`.
+Use npm with Node.js `24.22.2`; run web commands from `web/`. The `dev`, `build`, and `start` scripts load the root `.env` through `dotenv-cli`.
 
 ## Read when relevant
 

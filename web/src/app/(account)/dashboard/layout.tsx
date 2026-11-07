@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import DashboardShell from "@/components/auth/DashboardShell"
+import DashboardShell from "@/components/dashboard/DashboardShell"
 
 type DashboardLayoutProps = Readonly<{
   children: ReactNode

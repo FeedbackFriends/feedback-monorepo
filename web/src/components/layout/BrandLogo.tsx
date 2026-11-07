@@ -9,7 +9,11 @@ type BrandLogoProps = Readonly<{
 
 function BrandLogo({ className, href = "/" }: BrandLogoProps) {
   return (
-    <Link href={href} className={cn("flex items-center space-x-4", className)}>
+    <Link
+      prefetch={false}
+      href={href}
+      className={cn("flex items-center space-x-4", className)}
+    >
       <Image
         src="/branding/icon_transparent.png"
         alt="Lets Grow Icon"
@@ -20,6 +24,7 @@ function BrandLogo({ className, href = "/" }: BrandLogoProps) {
       />
 
       <Image
+        loading="eager"
         src="/branding/headline4.png"
         alt="Lets Grow"
         width={732}

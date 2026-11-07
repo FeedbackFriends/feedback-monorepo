@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import DashboardPlaceholderView from "@/components/auth/DashboardPlaceholderView"
+import DashboardPlaceholderView from "@/components/dashboard/DashboardPlaceholderView"
 
 export const metadata: Metadata = {
   title: "Spørgeskemaer | Dashboard | Lets Grow",
