@@ -1,0 +1,27 @@
+ios-app/Feedback.xcodeproj/project.xcproj
+  s_f909154fe6fa69::t_41da4f78f11d78 37
+.agents/skills/lg-improve-harness/SKILL.md
+  s_f909154fe6fa69::t_2037704e97a3fa 13
+docs/agent-tooling.md
+  s_f909154fe6fa69::t_3853f86ead1f41 88
+docs/skills.md
+  s_f909154fe6fa69::t_2f309da9f45a8e 70
+ios-app/Docs/agent-harness.md
+  s_f909154fe6fa69::t_0b53753e3e6801 61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fd16211064e76bcbfa7f46530572247fbf28892d",
+  "prompts": {},
+  "sessions": {
+    "s_f909154fe6fa69": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b766-532e-7583-aa7d-ab19f6177922",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
