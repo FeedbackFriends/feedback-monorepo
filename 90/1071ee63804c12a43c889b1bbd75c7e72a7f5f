@@ -1,0 +1,107 @@
+.agents/skills/lg-ios-login/SKILL.md
+  s_5243c773ad13be::t_8e051288dea9ef 8,12-14,16,18-29,35,38-40,42,44
+.claude/skills/agent-browser
+  s_5243c773ad13be::t_9196bd5794dd05 1
+.claude/skills/email-best-practices
+  s_5243c773ad13be::t_5775fc2f49bfb6 1
+.claude/skills/find-skills
+  s_5243c773ad13be::t_26e66a55e20a28 1
+.claude/skills/frontend-design
+  s_5243c773ad13be::t_cb69c1959e0c79 1
+.claude/skills/lg-commit-and-push
+  s_5243c773ad13be::t_db6cb70475b158 1
+.claude/skills/lg-coolify-operations
+  s_5243c773ad13be::t_f1847f8d511101 1
+.claude/skills/lg-create-task
+  s_5243c773ad13be::t_69bbf22a3fdce4 1
+.claude/skills/lg-implement
+  s_5243c773ad13be::t_a95ec4e00a2853 1
+.claude/skills/lg-improve-harness
+  s_5243c773ad13be::t_2e2efec18bd8a1 1
+.claude/skills/lg-investigate
+  s_5243c773ad13be::t_fb274552c0cf83 1
+.claude/skills/lg-ios-localhost
+  s_5243c773ad13be::t_92a992a0fcb8c5 1
+.claude/skills/lg-ios-login
+  s_5243c773ad13be::t_0bd8ec128ce03b 1
+.claude/skills/lg-ios-production
+  s_5243c773ad13be::t_681fbf21f8f9fa 1
+.claude/skills/lg-ios-run-simulator
+  s_5243c773ad13be::t_2f3d24aba6c300 1
+.claude/skills/lg-ios-screenshots
+  s_5243c773ad13be::t_ca325d0e16da41 1
+.claude/skills/lg-ios-sync-openapi
+  s_5243c773ad13be::t_d9d9d19e8dc412 1
+.claude/skills/lg-ios-test-notifications
+  s_5243c773ad13be::t_aa617e6afc9334 1
+.claude/skills/lg-maintain-docs
+  s_5243c773ad13be::t_cb385e9b078861 1
+.claude/skills/lg-refine
+  s_5243c773ad13be::t_545ad7f15697f5 1
+.claude/skills/lg-review
+  s_5243c773ad13be::t_8dcf3d3c5c6fc0 1
+.claude/skills/lg-tailwind-nextjs-expert
+  s_5243c773ad13be::t_9b95c63f3ac627 1
+.claude/skills/lg-verify
+  s_5243c773ad13be::t_52476e29538e3f 1
+.claude/skills/maestro-mobile-testing
+  s_5243c773ad13be::t_34bbcb8c9ace24 1
+.claude/skills/marketing-psychology
+  s_5243c773ad13be::t_05457077a39ba7 1
+.claude/skills/next-best-practices
+  s_5243c773ad13be::t_3b431a7d3df532 1
+.claude/skills/next-cache-components
+  s_5243c773ad13be::t_6b324b91e6f102 1
+.claude/skills/next-upgrade
+  s_5243c773ad13be::t_bfbc649f7ae267 1
+.claude/skills/playwright-cli
+  s_5243c773ad13be::t_4844326993a3bc 1
+.claude/skills/retro
+  s_5243c773ad13be::t_8afe1ee38fbe93 1
+.claude/skills/seo-audit
+  s_5243c773ad13be::t_54e9462bfa169a 1
+.claude/skills/shadcn
+  s_5243c773ad13be::t_a7ba0d196fb475 1
+.claude/skills/ui-ux-pro-max
+  s_5243c773ad13be::t_70fce8dfde7a21 1
+.claude/skills/vercel-composition-patterns
+  s_5243c773ad13be::t_1ddc250df673ec 1
+.claude/skills/vercel-react-best-practices
+  s_5243c773ad13be::t_a9ae2be2c96d11 1
+.claude/skills/wait-what
+  s_5243c773ad13be::t_e079da10f0d0d1 1
+.claude/skills/web-design-guidelines
+  s_5243c773ad13be::t_2e4f1ccc96d935 1
+.claude/skills/webapp-testing
+  s_5243c773ad13be::t_a391873a029e1e 1
+.claude/skills/writing-for-agents
+  s_5243c773ad13be::t_554f22712a72d9 1
+docs/agent-tooling.md
+  s_5243c773ad13be::t_9add04c53ae5bc 30,33,42,70,74-88
+ios-app/Docs/agents/simulator.md
+  s_5243c773ad13be::t_d278dbb9d891ec 24
+.gitignore
+  s_5243c773ad13be::t_1194af348ba8af 49
+.mcp.json
+  s_5243c773ad13be::t_5c14c4e6709440 1-28
+docs/skills.md
+  s_5243c773ad13be::t_57d4c4f486e4bd 5
+ios-app/Docs/agent-harness.md
+  s_5243c773ad13be::t_df014c2fc2fd5c 7,9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "901071ee63804c12a43c889b1bbd75c7e72a7f5f",
+  "prompts": {},
+  "sessions": {
+    "s_5243c773ad13be": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b72b-ed96-7513-9a1a-371dde9c9da7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
