@@ -1,0 +1,141 @@
+.agents/skills/copywriting/SKILL.md
+  s_721c0584e5ef08::t_4e51a563c65587 1-339
+.agents/skills/copywriting/evals/evals.json
+  s_721c0584e5ef08::t_4b0513f8670ba5 1-154
+.agents/skills/copywriting/references/ai-tells.md
+  s_721c0584e5ef08::t_716aebf428413c 1-309
+.agents/skills/copywriting/references/copy-frameworks.md
+  s_721c0584e5ef08::t_a251bb6342efea 1-29,32,34-35,37-38,40-41,43,45-51,53-54,58,60-61,63-64,66,68,70-71,73-74,76,78,80-81,83-84,86-87,89-90,92-93,95-99,103,105,107-111,113-117,119-122,124-127,129-132,134-137,141-208,210,212,214,217-225,227,229,231-242,245-247,249,252-260,264,266-277,279,281-283,285-292,295,297,299,301,303-307,309-312,314,316-319,321,323-326,328-331,333,335-339,341-344,346,348,350,352,354,356,358-363,365,367,369,371-373,375,377,379-383,385,387,389,391,393-398,400,402-403,405,407,409,411,413,415-417,419,421,423-430,432
+.agents/skills/copywriting/references/natural-transitions.md
+  s_721c0584e5ef08::t_f63c5703b1be67 1-256
+.agents/skills/customer-research/SKILL.md
+  s_721c0584e5ef08::t_f134493871893e 2-3,5,8,10,12,14,16-17,21,23-24,26-27,29-30,32,36,38,40-42,44-47,49-52,54-57,59-61,63,65,67-70,72-73,75-76,78-79,81-82,84-85,87,89,91-95,97,99,101-105,107,109-113,115,119,121,123,125,127-133,135-140,142,144,146-153,155,157,159-160,162-169,171-172,176,178,180,182-188,190,194,196,198,200-203,205,208,210,212-213,215-220,222-223,225-228,230-233,235-238,240-241,243-244,246-249,251-255,257,259-262,266,268,270-275,277,281,283,285-289,291,297-308
+.agents/skills/customer-research/evals/evals.json
+  s_721c0584e5ef08::t_e5afd1d65c53bf 1-176
+.agents/skills/customer-research/references/interviews-and-surveys.md
+  s_721c0584e5ef08::t_6e5642c121b0a4 1-155
+.agents/skills/customer-research/references/source-guides.md
+  s_721c0584e5ef08::t_66b0c541300bdc 1-401
+.agents/skills/lg-audit-community-skills/SKILL.md
+  s_721c0584e5ef08::t_56c74cc826de4d 1-56
+.agents/skills/lg-refine/SKILL.md
+  s_721c0584e5ef08::t_192e7628d3748e 14-15
+.agents/skills/onboarding/SKILL.md
+  s_721c0584e5ef08::t_97cf8040fb4e6d 1-267
+.agents/skills/onboarding/evals/evals.json
+  s_721c0584e5ef08::t_f5a36b6f242f94 2,6-7,10-16,22-23,25-32,38-39,42-47,53-54,56-61,67-68,70-75,81-82,84-103
+.agents/skills/onboarding/references/activation-models.md
+  s_721c0584e5ef08::t_7f3d9837843049 1-60
+.agents/skills/onboarding/references/experiments.md
+  s_721c0584e5ef08::t_516d499e8c0120 1-258
+.agents/skills/onboarding/references/minimum-path-to-value.md
+  s_721c0584e5ef08::t_5c460f489084b1 1-49
+.agents/skills/supabase-postgres-best-practices/CHANGELOG.md
+  s_721c0584e5ef08::t_1ad358d8a93d32 1-73
+.agents/skills/supabase-postgres-best-practices/SKILL.md
+  s_721c0584e5ef08::t_0dca758847b323 1-64
+.agents/skills/supabase-postgres-best-practices/references/_contributing.md
+  s_721c0584e5ef08::t_d7d5b6aa4487ce 1-170
+.agents/skills/supabase-postgres-best-practices/references/_sections.md
+  s_721c0584e5ef08::t_6059f608482d67 1-39
+.agents/skills/supabase-postgres-best-practices/references/_template.md
+  s_721c0584e5ef08::t_de89cbf1fa5656 1-34
+.agents/skills/supabase-postgres-best-practices/references/advanced-full-text-search.md
+  s_721c0584e5ef08::t_809d70fe3fead6 1-55
+.agents/skills/supabase-postgres-best-practices/references/advanced-jsonb-indexing.md
+  s_721c0584e5ef08::t_589a9e7e58a761 1-49
+.agents/skills/supabase-postgres-best-practices/references/conn-idle-timeout.md
+  s_721c0584e5ef08::t_2e4448a5f060ab 1-46
+.agents/skills/supabase-postgres-best-practices/references/conn-limits.md
+  s_721c0584e5ef08::t_6704a7ad503c18 1-44
+.agents/skills/supabase-postgres-best-practices/references/conn-pooling.md
+  s_721c0584e5ef08::t_37b212cb1f2591 1-41
+.agents/skills/supabase-postgres-best-practices/references/conn-prepared-statements.md
+  s_721c0584e5ef08::t_c9f15d64cbbd2a 1-46
+.agents/skills/supabase-postgres-best-practices/references/data-batch-inserts.md
+  s_721c0584e5ef08::t_1799cc600d5d2b 1-54
+.agents/skills/supabase-postgres-best-practices/references/data-n-plus-one.md
+  s_721c0584e5ef08::t_5f8cec17cf70eb 1-53
+.agents/skills/supabase-postgres-best-practices/references/data-pagination.md
+  s_721c0584e5ef08::t_8b51d5c1d4df65 1-50
+.agents/skills/supabase-postgres-best-practices/references/data-upsert.md
+  s_721c0584e5ef08::t_b5e506c9beae8e 1-50
+.agents/skills/supabase-postgres-best-practices/references/lock-advisory.md
+  s_721c0584e5ef08::t_e11d3be76e71c5 1-56
+.agents/skills/supabase-postgres-best-practices/references/lock-deadlock-prevention.md
+  s_721c0584e5ef08::t_4d02e440264d41 1-68
+.agents/skills/supabase-postgres-best-practices/references/lock-short-transactions.md
+  s_721c0584e5ef08::t_f93bdade21f9c3 1-50
+.agents/skills/supabase-postgres-best-practices/references/lock-skip-locked.md
+  s_721c0584e5ef08::t_399bde334c6d7f 1-54
+.agents/skills/supabase-postgres-best-practices/references/monitor-explain-analyze.md
+  s_721c0584e5ef08::t_59d6834f705272 1-45
+.agents/skills/supabase-postgres-best-practices/references/monitor-pg-stat-statements.md
+  s_721c0584e5ef08::t_5f7d2ade927529 1-55
+.agents/skills/supabase-postgres-best-practices/references/monitor-vacuum-analyze.md
+  s_721c0584e5ef08::t_074efe8dbfd1da 1-55
+.agents/skills/supabase-postgres-best-practices/references/query-composite-indexes.md
+  s_721c0584e5ef08::t_94eb7be57338af 1-44
+.agents/skills/supabase-postgres-best-practices/references/query-covering-indexes.md
+  s_721c0584e5ef08::t_957cc2cb4db3db 1-40
+.agents/skills/supabase-postgres-best-practices/references/query-index-types.md
+  s_721c0584e5ef08::t_6176878b6b3f86 1-48
+.agents/skills/supabase-postgres-best-practices/references/query-missing-indexes.md
+  s_721c0584e5ef08::t_4b881cd8bf484b 2-5,8,10,12,14-16,18,21,23-25,27,29,32,34-36,38-41,43
+.agents/skills/supabase-postgres-best-practices/references/query-partial-indexes.md
+  s_721c0584e5ef08::t_c124ef7029d7d7 1-45
+.agents/skills/supabase-postgres-best-practices/references/schema-constraints.md
+  s_721c0584e5ef08::t_01d69cb0ee3792 1-80
+.agents/skills/supabase-postgres-best-practices/references/schema-data-types.md
+  s_721c0584e5ef08::t_c20b25794e9d83 1-46
+.agents/skills/supabase-postgres-best-practices/references/schema-foreign-key-indexes.md
+  s_721c0584e5ef08::t_2bc1ff35d7c72b 1-59
+.agents/skills/supabase-postgres-best-practices/references/schema-lowercase-identifiers.md
+  s_721c0584e5ef08::t_0049471cf8c54d 1-55
+.agents/skills/supabase-postgres-best-practices/references/schema-partitioning.md
+  s_721c0584e5ef08::t_787226aa89269f 1-55
+.agents/skills/supabase-postgres-best-practices/references/schema-primary-keys.md
+  s_721c0584e5ef08::t_213f7653ac66ce 1-61
+.agents/skills/supabase-postgres-best-practices/references/security-privileges.md
+  s_721c0584e5ef08::t_a425a2dd1e7938 1-54
+.agents/skills/supabase-postgres-best-practices/references/security-rls-basics.md
+  s_721c0584e5ef08::t_b637a6aa35a994 1-50
+.agents/skills/supabase-postgres-best-practices/references/security-rls-performance.md
+  s_721c0584e5ef08::t_8485cbfc51c92a 1-63
+.claude/skills/copywriting
+  s_721c0584e5ef08::t_0f9c1d9bb85d36 1
+.claude/skills/customer-research
+  s_721c0584e5ef08::t_2cc5462513b6f9 1
+.claude/skills/lg-audit-community-skills
+  s_721c0584e5ef08::t_da601399fedc9a 1
+.claude/skills/onboarding
+  s_721c0584e5ef08::t_85dc9e1c5ea806 1
+.claude/skills/supabase-postgres-best-practices
+  s_721c0584e5ef08::t_a0c798ab67a38b 1
+backend/docs/agents/persistence.md
+  s_721c0584e5ef08::t_2fce7a12f50c0f 11-12
+docs/agents/browser-access.md
+  s_721c0584e5ef08::t_d3329f7e1ec5b5 6-11
+docs/skills.md
+  s_721c0584e5ef08::t_31e4a691e50964 7,13,37-38,44,48,55-82
+skills-lock.json
+  s_721c0584e5ef08::t_29d79dc1be8900 10-21,52-57,76-81
+web/docs/agents/architecture.md
+  s_721c0584e5ef08::t_c2503963295e2e 38-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5bd3f8ce0f6bd04a87aa489ed750ab4fb569caa6",
+  "prompts": {},
+  "sessions": {
+    "s_721c0584e5ef08": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b78d-4f05-7850-a95a-8c331286c386",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
