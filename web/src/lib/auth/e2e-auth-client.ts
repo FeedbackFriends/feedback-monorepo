@@ -13,6 +13,11 @@ const e2eUserStorageKey = "feedback.e2e.auth.user"
 export class E2EAuthClient implements AuthClient {
   private readonly listeners = new Set<(user: AppAuthUser | null) => void>()
 
+  async getIdToken() {
+    if (!this.getUser()) throw new Error("Authentication required")
+    return "playwright-test-token"
+  }
+
   getConfigError() {
     return null
   }

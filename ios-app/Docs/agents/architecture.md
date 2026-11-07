@@ -29,8 +29,8 @@ Paths are relative to `ios-app/` unless stated otherwise.
 
 - Authenticated app state is held as a shared `Bootstrap` value.
 - Account access has two states: signed-in owners (`Role.manager`) and anonymous feedback users (`role == nil`). There is no participant account role or owner-mode toggle. Session participation (`ParticipantEvent`) is independent of account access.
-- Apple/Google login always creates or restores owner access. Anonymous users can continue giving feedback with a PIN without signing up.
-- The tab bar contains `Giv feedback` and `Aktiviteter`. Owner feedback notifications open the session in the activity navigation stack; anonymous users see sign-in on `Aktiviteter`.
+- Apple/Google login restores existing legacy access without requesting Manager privileges. Anonymous employee identities are not linked to Google/Apple accounts. Team leadership is authorized by backend ownership/assignments, separate from legacy Manager claims.
+- The tab bar contains `Giv feedback` and either legacy `Aktiviteter` (Manager) or `Mit team` (employees). Employee membership uses `Bootstrap.teamContext`, Domain models and the API adapter. Fetch on team-screen launch, foreground and manual refresh; no employee polling. Legacy activity sign-in remains in the profile. Owner feedback notifications open the session in the activity navigation stack.
 - Feature state should name this shared value `@Shared var bootstrap: Bootstrap`.
 - `RootFeature` creates and passes the same `Shared<Bootstrap>` through the logged-in feature tree.
 - UI and reducers should derive account, role, activity, event, participant-event, and notification data directly from `bootstrap`.

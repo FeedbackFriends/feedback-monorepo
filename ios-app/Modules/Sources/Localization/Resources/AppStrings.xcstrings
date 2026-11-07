@@ -5208,13 +5208,13 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opret dig og få feedback på dine egne aktiviteter, uanset om det er møder, workshops eller oplæg."
+            "value" : "Log ind på din eksisterende konto for at se dine aktiviteter. Nye teams administreres på app.letsgrow.dk."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sign up to get feedback on your own activities, whether they are meetings, workshops or talks."
+            "value" : "Sign in to your existing account to see your activities. Manage new teams at app.letsgrow.dk."
           }
         }
       }
@@ -6169,6 +6169,330 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "How useful was the workshop?"
+          }
+        }
+      }
+    },
+    "team.title" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit team"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My team"
+          }
+        }
+      }
+    },
+    "team.code" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitationskode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitation code"
+          }
+        }
+      }
+    },
+    "team.name" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit navn"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your name"
+          }
+        }
+      }
+    },
+    "team.nameExplanation" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din leder bruger navnet til at godkende dig. Navnet knyttes ikke til fremtidige anonyme forslag eller stemmer."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your leader uses your name to approve you. It is not linked to future anonymous suggestions or votes."
+          }
+        }
+      }
+    },
+    "team.joinMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indtast koden fra din leder og dit navn for at anmode om adgang til teamet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the code from your leader and your name to request access to the team."
+          }
+        }
+      }
+    },
+    "team.joinAction" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmod om adgang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request access"
+          }
+        }
+      }
+    },
+    "team.pendingTitle" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afventer godkendelse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for approval"
+          }
+        }
+      }
+    },
+    "team.pendingMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din leder skal godkende din anmodning. Tryk Opdater for at se, om du er godkendt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your leader needs to approve your request. Tap Refresh to check your status."
+          }
+        }
+      }
+    },
+    "team.joinedMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du er tilmeldt teamet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have joined the team."
+          }
+        }
+      }
+    },
+    "team.rejectedMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din anmodning blev afvist. Kontakt din leder. Du kan sende en ny anmodning med en invitationskode."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your request was declined. Contact your leader. You can send a new request with an invitation code."
+          }
+        }
+      }
+    },
+    "team.cancelAction" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuller anmodning"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel request"
+          }
+        }
+      }
+    },
+    "team.cancelTitle" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuller din anmodning?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel your request?"
+          }
+        }
+      }
+    },
+    "team.leaveAction" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forlad team"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave team"
+          }
+        }
+      }
+    },
+    "team.leaveTitle" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forlad teamet?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave the team?"
+          }
+        }
+      }
+    },
+    "team.leaveMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du mister adgang til teamet og skal godkendes igen for at deltage."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You lose access to the team and need approval to rejoin."
+          }
+        }
+      }
+    },
+    "team.refresh" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opdater"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh"
+          }
+        }
+      }
+    },
+    "team.leaderMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du er leder. Administrer dit team på app.letsgrow.dk."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are a leader. Manage your team at app.letsgrow.dk."
+          }
+        }
+      }
+    },
+    "team.legacySignIn" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log ind på eksisterende aktivitetskonto"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to an existing activity account"
           }
         }
       }

@@ -36,7 +36,7 @@ object LocalizedApiErrors {
     fun response(exception: Exception, request: HttpServletRequest, status: HttpStatus, domainCode: DomainCode? = null): ResponseEntity<ApiError> {
         val language = language(request.getHeader(HttpHeaders.ACCEPT_LANGUAGE))
         val messages = ResourceBundle.getBundle("errors", Locale.forLanguageTag(language))
-        val key = domainCode?.name ?: when (status.value()) {
+        val key = if (exception is dk.example.feedback.model.exceptions.InvalidTeamInviteException) "teamInviteNotFound" else domainCode?.name ?: when (status.value()) {
             400, 405, 415, 422 -> "validation"
             401 -> "authentication"
             403 -> "forbidden"

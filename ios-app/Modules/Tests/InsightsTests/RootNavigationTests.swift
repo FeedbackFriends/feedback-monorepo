@@ -42,8 +42,8 @@ struct RootNavigationTests {
     }
 
     @Test
-    func authenticatedUsersAlwaysCreateOwnerAccounts() async {
-        let requestedRole = LockIsolated<Role?>(nil)
+    func authenticatedUsersDoNotRequestManagerPrivileges() async {
+        let requestedRole = LockIsolated<Role?>(.manager)
         let store = Store(initialState: RootFeature.State()) { RootFeature() } withDependencies: {
             $0.apiClient.createAccount = { role in
                 requestedRole.setValue(role)
@@ -52,7 +52,7 @@ struct RootNavigationTests {
         }
 
         await store.send(.authenticationStateChanged(.authenticated)).finish()
-        #expect(requestedRole.value == .manager)
+        #expect(requestedRole.value == nil)
         #expect(store.state.destination.loggedIn?.selectedTab == .feedback)
     }
 
@@ -100,6 +100,16 @@ struct RootNavigationTests {
         #expect(store.state.canSignOut)
         await store.send(.logout(.logoutButtonTap)).finish()
         #expect(logoutCalls.value == 2)
+    }
+
+    @Test
+    func teamInvitationSurvivesColdStartupWithoutSubmittingARequest() {
+        let store = Store(initialState: RootFeature.State()) { RootFeature() }
+        store.send(.onUrlOpen(.joinTeam(code: "invite-code")))
+        store.send(.createAccountResponse(.mockAnonymous(), nil))
+        #expect(store.destination.loggedIn?.selectedTab == .activities)
+        #expect(store.destination.loggedIn?.employeeTeam.code == "invite-code")
+        #expect(store.destination.loggedIn?.employeeTeam.requestID == nil)
     }
 
 }

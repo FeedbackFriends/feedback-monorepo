@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0027-add-teams
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE organization (
+                id UUID PRIMARY KEY,
+                creator_id VARCHAR(255) NOT NULL UNIQUE REFERENCES account(id),
+                name VARCHAR(100) NOT NULL
+              );
+              CREATE TABLE team (
+                id UUID PRIMARY KEY,
+                organization_id UUID NOT NULL REFERENCES organization(id),
+                name VARCHAR(100) NOT NULL,
+                invite_code VARCHAR(64) NOT NULL UNIQUE
+              );
+              CREATE TABLE team_membership (
+                account_id VARCHAR(255) PRIMARY KEY REFERENCES account(id),
+                team_id UUID NOT NULL REFERENCES team(id),
+                name VARCHAR(100) NOT NULL
+              );
+              CREATE TABLE team_join_request (
+                id UUID PRIMARY KEY,
+                account_id VARCHAR(255) NOT NULL REFERENCES account(id),
+                team_id UUID NOT NULL REFERENCES team(id),
+                name VARCHAR(100) NOT NULL,
+                current_request BOOLEAN NOT NULL DEFAULT TRUE,
+                status VARCHAR(16) NOT NULL CHECK (status IN ('Pending', 'Rejected', 'Approved', 'Canceled'))
+              );
+              CREATE INDEX idx_team_organization ON team(organization_id);
+              CREATE INDEX idx_team_membership_team ON team_membership(team_id);
+              CREATE INDEX idx_team_request_team ON team_join_request(team_id);

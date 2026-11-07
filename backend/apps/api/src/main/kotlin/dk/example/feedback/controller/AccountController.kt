@@ -3,6 +3,7 @@ package dk.example.feedback.controller
 import dk.example.feedback.dto.BootstrapDto
 import dk.example.feedback.firebase.FirebaseService
 import dk.example.feedback.helpers.getAccountId
+import dk.example.feedback.helpers.role
 import dk.example.feedback.model.enumerations.RoleConstants
 import dk.example.feedback.payloads.CreateAccountInput
 import dk.example.feedback.payloads.LinkFCMTokenToAccountInput
@@ -37,7 +38,6 @@ class AccountController(
         @RequestBody input: CreateAccountInput,
         @AuthenticationPrincipal principal: Jwt,
     ): BootstrapDto {
-        firebaseService.setRole(userId = principal.getAccountId(), requestedRole = input.requestedRole)
         val user = firebaseService.getUser(principal.getAccountId())
         val normalizedEmail = user.email.normalizedEmail()
         normalizedEmail
@@ -51,14 +51,14 @@ class AccountController(
                 )
             }
         accountService.createAccount(
-            requestedRole = input.requestedRole,
+            requestedRole = principal.role(),
             name = user.displayName,
             email = normalizedEmail,
             phoneNumber = user.phoneNumber,
             jwt = principal,
             fcmToken = input.fcmToken
         )
-        return bootstrapService.getEvent(jwt = principal, roleOverride = input.requestedRole)
+        return bootstrapService.getEvent(jwt = principal)
     }
 
     @PutMapping

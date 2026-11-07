@@ -32,6 +32,7 @@ public extension Tabbar.State {
         self.activities = .init(bootstrap: bootstrap)
         self.deleteAccount = deleteAccount
         self.destination = destination
+        self.employeeTeam = .init(bootstrap: bootstrap)
         self.signUp = signUp
     }
     
@@ -50,6 +51,7 @@ public extension Tabbar.State {
         self.activities = .init(bootstrap: bootstrap)
         self.tabbarLifecyle = .init(bootstrap: bootstrap)
         self.destination = destination
+        self.employeeTeam = .init(bootstrap: bootstrap)
         self.signUp = .init()
     }
 }
@@ -71,6 +73,8 @@ public struct Tabbar: Sendable {
         
         @Shared public var bootstrap: Bootstrap
         var tabbarLifecyle: TabbarLifecycle.State
+        public var employeeTeam: EmployeeTeamMembership.State
+        var legacySignInPresented = false
         var signUp: SignUp.State
         var enterCode: EnterCode.State
         var moreSection: MoreSection.State
@@ -96,6 +100,7 @@ public struct Tabbar: Sendable {
         case tabbarLifecyle(TabbarLifecycle.Action)
         case notificationAuthorizationFailed(Error)
         case deleteAccount(DeleteAccount.Action)
+        case employeeTeam(EmployeeTeamMembership.Action)
         case signUp(SignUp.Action)
         case dismissFeedbackFlow
         public enum Toolbar: Equatable {
@@ -135,11 +140,16 @@ public struct Tabbar: Sendable {
         Scope(state: \.deleteAccount, action: \.deleteAccount) {
             DeleteAccount()
         }
+        Scope(state: \.employeeTeam, action: \.employeeTeam) {
+            EmployeeTeamMembership()
+        }
         Scope(state: \.signUp, action: \.signUp) {
             SignUp()
         }
         Reduce { state, action in
             switch action {
+            case .employeeTeam:
+                return .none
             case .signUp:
                 return .none
             case .dismissFeedbackFlow:
@@ -160,6 +170,9 @@ public struct Tabbar: Sendable {
                 state.destination = .alert(.init(error: error))
                 return .none
 
+            case .tabbarLifecyle(.enterForeground):
+                guard state.bootstrap.role != .manager else { return .none }
+                return .send(.employeeTeam(.refresh))
             case .tabbarLifecyle:
                 return .none
                 

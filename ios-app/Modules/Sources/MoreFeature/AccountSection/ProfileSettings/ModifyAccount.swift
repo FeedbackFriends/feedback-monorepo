@@ -56,7 +56,7 @@ public struct ModifyAccount: Sendable {
                         _ = try await self.apiClient.modifyAccount(
                             name: state.nameInput,
                             email: state.emailInput,
-                            phoneNumber: Self.e164PhoneNumber(from: state.phoneNumberInput)
+                            phoneNumber: Self.e164PhoneNumber(from: state.phoneNumberInput) ?? ""
                         )
                         await send(.updateAccountResponse)
                     } catch {

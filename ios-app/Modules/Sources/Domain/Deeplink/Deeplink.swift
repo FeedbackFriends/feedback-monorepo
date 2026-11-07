@@ -2,6 +2,7 @@ import Foundation
 import Logger
 
 public enum Deeplink: Equatable, Sendable {
+    case joinTeam(code: String)
     case joinEvent(pinCodeInput: PinCodeInput)
     case managerEvent(id: UUID)
 }
@@ -14,6 +15,11 @@ public extension Deeplink {
         else { return nil }
 
         switch (comps.host, comps.queryItems) {
+        case ("team-invite", let items?):
+            guard let code = items.first(where: { $0.name == "code" })?.value,
+                  !code.isEmpty, code.count <= 64 else { return nil }
+            self = .joinTeam(code: code)
+            return
         case ("invite", let items?):
             if let pinCodeInput = items.first(where: { $0.name == "pin_code" })?.value {
                 self = .joinEvent(pinCodeInput: .init(value: pinCodeInput))

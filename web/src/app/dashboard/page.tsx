@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import DashboardScreen from "@/components/auth/DashboardScreen"
 
 export const metadata: Metadata = {
-  title: "Profil | Dashboard | Lets Grow",
-  description: "Profil og kontooverblik for autentificerede Lets Grow-brugere.",
+  title: "Teams | Lets Grow",
+  description: "Opret teams, invitér medarbejdere og administrer medlemskab.",
 }
 
 export default function DashboardPage() {

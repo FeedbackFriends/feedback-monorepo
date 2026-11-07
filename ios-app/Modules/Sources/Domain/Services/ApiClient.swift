@@ -3,6 +3,13 @@ import Foundation
 
 @DependencyClient
 public struct APIClient: Sendable {
+    public var getTeamContext: @Sendable () async throws -> EmployeeTeamContext
+    @DependencyEndpoint
+    public var requestTeamMembership: @Sendable (_ id: UUID, _ code: String, _ name: String) async throws -> EmployeeTeamContext
+    @DependencyEndpoint
+    public var cancelTeamRequest: @Sendable (_ id: String) async throws -> EmployeeTeamContext
+    @DependencyEndpoint
+    public var leaveTeam: @Sendable (_ id: String) async throws -> EmployeeTeamContext
     public var deleteAccount: @Sendable () async throws -> Void
     @DependencyEndpoint
     public var modifyAccount: @Sendable (

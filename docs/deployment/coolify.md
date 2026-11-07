@@ -86,3 +86,14 @@ Official setup and security references:
 - [How Coolify MCP works](https://coolify.io/docs/mcp/how-mcp-works)
 - [Coolify MCP security](https://coolify.io/docs/mcp/security)
 - [Coolify deploy API](https://coolify.io/docs/api/endpoints/deployments/deploy-by-tag-or-uuid)
+
+## Leader application domain
+
+Route both `letsgrow.dk` and `app.letsgrow.dk` to the same web service on port
+3000, with DNS and TLS for both. The public `/` remains the marketing page;
+the app domain `/` redirects into the leader dashboard. Add `app.letsgrow.dk`
+to Firebase Authentication's authorized domains for Google popup sign-in.
+The root Compose file supplies `FEEDBACK_API_ORIGIN=http://api:8080` to the web
+service at runtime. Deploy the team API/migration before the leader UI.
+These repository changes do not provision DNS, alter Firebase configuration,
+or deploy a Coolify resource automatically.

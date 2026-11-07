@@ -89,7 +89,7 @@ private extension TabbarView {
                 Text(String(appStrings: .commonGiveFeedback))
             }
 
-            SwiftUI.Tab(String(appStrings: .commonActivities), systemImage: "sparkle", value: Tab.activities) {
+            SwiftUI.Tab(String(appStrings: isManager ? .commonActivities : .teamTitle), systemImage: "person.3", value: Tab.activities) {
                 if isManager {
                     ActivityListView(
                         store: store.scope(state: \.activities, action: \.activities),
@@ -97,10 +97,10 @@ private extension TabbarView {
                         syncPhase: store.tabbarLifecyle.syncPhase
                     )
                 } else {
-                    SignUpView(
-                        store: store.scope(state: \.signUp, action: \.signUp),
-                        onProfileButtonTap: { store.send(.toolbar(.profileButtonTap)) }
-                    )
+                    NavigationStack {
+                        EmployeeTeamMembershipView(store: store.scope(state: \.employeeTeam, action: \.employeeTeam))
+                            .toolbar { profileToolbarItem }
+                    }
                 }
             }
             .badge(isManager ? store.bootstrap.managerUnseenResponses : 0)
@@ -111,6 +111,12 @@ private extension TabbarView {
     var profileSheet: some View {
         NavigationStack {
             List {
+                if !isManager {
+                    Section {
+                        Button(String(appStrings: .teamLegacySignIn)) { store.legacySignInPresented = true }
+                            .bodyTextStyle()
+                    }
+                }
                 MoreSectionView(
                     store: store.scope(state: \.moreSection, action: \.moreSection)
                 )
@@ -137,6 +143,9 @@ private extension TabbarView {
                 profileSettingsToolbarItem
             }
             .alert($store.scope(state: \.deleteAccount.destination?.alert, action: \.deleteAccount.destination.alert))
+        }
+        .sheet(isPresented: $store.legacySignInPresented) {
+            SignUpView(store: store.scope(state: \.signUp, action: \.signUp))
         }
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)

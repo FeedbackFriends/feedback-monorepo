@@ -51,6 +51,7 @@ public struct RootFeature: Sendable {
             return false
         }
         var notificationDeeplinkInFlight = false
+        var pendingURL: Deeplink?
         /// Set when the user explicitly asks to sign up / sign out, so that the
         /// resulting `.loggedOut` state shows the SignUp screen instead of
         /// silently signing back in anonymously.
@@ -193,6 +194,10 @@ public struct RootFeature: Sendable {
                 return .none
                 
             case .createAccountResponse(let bootstrap, _):
+                if let deeplink = state.pendingURL {
+                    state = .fromDeeplink(deeplink: deeplink, sharedBootstrap: Shared(value: bootstrap))
+                    return .none
+                }
                 state.authenticationState = bootstrap.role == .manager ? .authenticated : .anonymous
                 state.isLoading = false
                 state.destination = Destination.State.loggedIn(
@@ -214,6 +219,7 @@ public struct RootFeature: Sendable {
                 
             case .onUrlOpen(let deeplink):
                 guard case let .loggedIn(existingState) = state.destination else {
+                    state.pendingURL = deeplink
                     return .none
                 }
                 state = .fromDeeplink(
@@ -259,6 +265,10 @@ extension RootFeature.State {
                     )
                 )
             )
+        case .joinTeam(let code):
+            var tabs = Tabbar.State(bootstrap: sharedBootstrap, selectedTab: .activities)
+            tabs.employeeTeam = .init(bootstrap: sharedBootstrap, code: code)
+            return RootFeature.State(destination: .loggedIn(tabs))
         case .managerEvent(let eventId):
             var newTabbarState = Tabbar.State(
                 bootstrap: sharedBootstrap,
@@ -333,7 +343,7 @@ private extension RootFeature {
         state.destination = .isLoading
         return .run { send in
             do {
-                let role = Role.manager
+                let role: Role? = nil
                 let bootstrap = try await apiClient.createAccount(role)
                 await send(.createAccountResponse(bootstrap, role))
             } catch {

@@ -29,3 +29,7 @@ Tests live next to their modules under `src/test/kotlin`. API and persistence te
 - `Role.Manager` is the only named account role; anonymous feedback users have no role.
 - Session participation and feedback records are independent of account roles.
 - Role switching (`PUT /account/role`) has been removed.
+
+## Team access
+
+Organization creators own all organization teams. Additional leaders have one database assignment to one team; only the owner creates teams or changes leaders. Check current database authority on every team request, never legacy Manager claims. Personal leader invitations require the matching verified Google email and expire after seven days; employee invitation codes remain separate.

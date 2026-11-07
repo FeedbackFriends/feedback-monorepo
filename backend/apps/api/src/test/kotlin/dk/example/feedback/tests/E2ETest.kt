@@ -248,7 +248,7 @@ class E2ETest(
     }
 
     @Test
-    fun `account post uses requested manager role for bootstrap even when jwt role is anonymous`() {
+    fun `account post cannot grant requested manager role to anonymous identity`() {
         val accountId = "account-role-override-manager"
 
         val response = mockMvc.perform(
@@ -261,8 +261,8 @@ class E2ETest(
             .andReturn()
 
         val body = objectMapper.readTree(response.response.contentAsString)
-        assertEquals(Role.Manager.value, body.get("role").asText())
-        assertEquals(false, body.get("managerData").isNull)
+        assertTrue(body.get("role").isNull)
+        assertTrue(body.get("managerData").isNull)
     }
 
     

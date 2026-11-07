@@ -130,3 +130,5 @@ The user will perform broader manual owner/anonymous, language/device/provider, 
 Maintenance 2026-11-06: answer-type selection now uses an explicit temporary-choice sheet; `common.choose` supplies Danish “Vælg” and English “Choose” for opening/confirming that selection. Question text remains user data.
 
 Maintenance 2026-11-06: `productContact.*` owns in-app product feedback, bug validation, server receipt and explicit native-mail/copy alternatives. `feedback.emoji.*` supplies shared rating accessibility labels. Stored metadata is limited to app version/build and OS version; DeviceInfo diagnostic summaries are not uploaded by contact actions.
+
+Team membership copy lives in `Localization/Resources/AppStrings.xcstrings` under `team.*` (Danish/English). EmployeeTeamMembership renders typed resources; team/organization names and invitation codes remain user data. Legacy activity sign-in no longer promises newly granted Manager access.

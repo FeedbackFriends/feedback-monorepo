@@ -7,6 +7,7 @@ import dk.example.feedback.model.exceptions.CannotJoinOwnEventException
 import dk.example.feedback.model.exceptions.ForbiddenResourceAccessException
 import dk.example.feedback.persistence.repo.ActivityRepo
 import dk.example.feedback.persistence.repo.EventRepo
+import dk.example.feedback.persistence.repo.TeamRepo
 import java.util.UUID
 import org.springframework.stereotype.Service
 
@@ -14,7 +15,12 @@ import org.springframework.stereotype.Service
 class AuthorizationService(
     private val activityRepo: ActivityRepo,
     private val eventRepo: EventRepo,
+    private val teamRepo: TeamRepo,
 ) {
+
+    fun requireTeamLeader(teamId: UUID, actorAccountId: String) = teamRepo.requireLeader(actorAccountId, teamId)
+
+    fun requireTeamMember(teamId: UUID, actorAccountId: String) = teamRepo.requireMember(actorAccountId, teamId)
 
     fun requireSelf(targetAccountId: String, actorAccountId: String) {
         if (targetAccountId != actorAccountId) {

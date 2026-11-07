@@ -144,4 +144,130 @@ struct MockAPI: APIProtocol {
     func markNotificationHistoryAsSeen(_ input: Operations.MarkNotificationHistoryAsSeen.Input) async throws -> Operations.MarkNotificationHistoryAsSeen.Output {
         try await markNotificationHistoryAsSeenHandler(input)
     }
+
+    var rejectHandler: @Sendable (Operations.Reject.Input) async throws -> Operations.Reject.Output = { _ in
+        fatalError("MockAPI: reject unimplemented")
+    }
+    func reject(_ input: Operations.Reject.Input) async throws -> Operations.Reject.Output {
+        try await rejectHandler(input)
+    }
+
+    var approveHandler: @Sendable (Operations.Approve.Input) async throws -> Operations.Approve.Output = { _ in
+        fatalError("MockAPI: approve unimplemented")
+    }
+    func approve(_ input: Operations.Approve.Input) async throws -> Operations.Approve.Output {
+        try await approveHandler(input)
+    }
+
+    var inviteLeaderHandler: @Sendable (Operations.InviteLeader.Input) async throws -> Operations.InviteLeader.Output = { _ in
+        fatalError("MockAPI: inviteLeader unimplemented")
+    }
+    func inviteLeader(_ input: Operations.InviteLeader.Input) async throws -> Operations.InviteLeader.Output {
+        try await inviteLeaderHandler(input)
+    }
+
+    var rotateHandler: @Sendable (Operations.Rotate.Input) async throws -> Operations.Rotate.Output = { _ in
+        fatalError("MockAPI: rotate unimplemented")
+    }
+    func rotate(_ input: Operations.Rotate.Input) async throws -> Operations.Rotate.Output {
+        try await rotateHandler(input)
+    }
+
+    var joinHandler: @Sendable (Operations.Join.Input) async throws -> Operations.Join.Output = { _ in
+        fatalError("MockAPI: join unimplemented")
+    }
+    func join(_ input: Operations.Join.Input) async throws -> Operations.Join.Output {
+        try await joinHandler(input)
+    }
+
+    var createOrganizationHandler: @Sendable (Operations.CreateOrganization.Input) async throws -> Operations.CreateOrganization.Output = { _ in
+        fatalError("MockAPI: createOrganization unimplemented")
+    }
+    func createOrganization(_ input: Operations.CreateOrganization.Input) async throws -> Operations.CreateOrganization.Output {
+        try await createOrganizationHandler(input)
+    }
+
+    var createTeamHandler: @Sendable (Operations.CreateTeam.Input) async throws -> Operations.CreateTeam.Output = { _ in
+        fatalError("MockAPI: createTeam unimplemented")
+    }
+    func createTeam(_ input: Operations.CreateTeam.Input) async throws -> Operations.CreateTeam.Output {
+        try await createTeamHandler(input)
+    }
+
+    var acceptLeadershipHandler: @Sendable (Operations.AcceptLeadership.Input) async throws -> Operations.AcceptLeadership.Output = { _ in
+        fatalError("MockAPI: acceptLeadership unimplemented")
+    }
+    func acceptLeadership(_ input: Operations.AcceptLeadership.Input) async throws -> Operations.AcceptLeadership.Output {
+        try await acceptLeadershipHandler(input)
+    }
+
+    var managementHandler: @Sendable (Operations.Management.Input) async throws -> Operations.Management.Output = { _ in
+        fatalError("MockAPI: management unimplemented")
+    }
+    func management(_ input: Operations.Management.Input) async throws -> Operations.Management.Output {
+        try await managementHandler(input)
+    }
+
+    var leadershipHandler: @Sendable (Operations.Leadership.Input) async throws -> Operations.Leadership.Output = { _ in
+        fatalError("MockAPI: leadership unimplemented")
+    }
+    func leadership(_ input: Operations.Leadership.Input) async throws -> Operations.Leadership.Output {
+        try await leadershipHandler(input)
+    }
+
+    var leaderInvitationHandler: @Sendable (Operations.LeaderInvitation.Input) async throws -> Operations.LeaderInvitation.Output = { _ in
+        fatalError("MockAPI: leaderInvitation unimplemented")
+    }
+    func leaderInvitation(_ input: Operations.LeaderInvitation.Input) async throws -> Operations.LeaderInvitation.Output {
+        try await leaderInvitationHandler(input)
+    }
+
+    var resolveHandler: @Sendable (Operations.Resolve.Input) async throws -> Operations.Resolve.Output = { _ in
+        fatalError("MockAPI: resolve unimplemented")
+    }
+    func resolve(_ input: Operations.Resolve.Input) async throws -> Operations.Resolve.Output {
+        try await resolveHandler(input)
+    }
+
+    var contextHandler: @Sendable (Operations.Context.Input) async throws -> Operations.Context.Output = { _ in
+        fatalError("MockAPI: context unimplemented")
+    }
+    func context(_ input: Operations.Context.Input) async throws -> Operations.Context.Output {
+        try await contextHandler(input)
+    }
+
+    var leaveHandler: @Sendable (Operations.Leave.Input) async throws -> Operations.Leave.Output = { _ in
+        fatalError("MockAPI: leave unimplemented")
+    }
+    func leave(_ input: Operations.Leave.Input) async throws -> Operations.Leave.Output {
+        try await leaveHandler(input)
+    }
+
+    var removeHandler: @Sendable (Operations.Remove.Input) async throws -> Operations.Remove.Output = { _ in
+        fatalError("MockAPI: remove unimplemented")
+    }
+    func remove(_ input: Operations.Remove.Input) async throws -> Operations.Remove.Output {
+        try await removeHandler(input)
+    }
+
+    var removeLeaderHandler: @Sendable (Operations.RemoveLeader.Input) async throws -> Operations.RemoveLeader.Output = { _ in
+        fatalError("MockAPI: removeLeader unimplemented")
+    }
+    func removeLeader(_ input: Operations.RemoveLeader.Input) async throws -> Operations.RemoveLeader.Output {
+        try await removeLeaderHandler(input)
+    }
+
+    var revokeLeaderInviteHandler: @Sendable (Operations.RevokeLeaderInvite.Input) async throws -> Operations.RevokeLeaderInvite.Output = { _ in
+        fatalError("MockAPI: revokeLeaderInvite unimplemented")
+    }
+    func revokeLeaderInvite(_ input: Operations.RevokeLeaderInvite.Input) async throws -> Operations.RevokeLeaderInvite.Output {
+        try await revokeLeaderInviteHandler(input)
+    }
+
+    var cancelHandler: @Sendable (Operations.Cancel.Input) async throws -> Operations.Cancel.Output = { _ in
+        fatalError("MockAPI: cancel unimplemented")
+    }
+    func cancel(_ input: Operations.Cancel.Input) async throws -> Operations.Cancel.Output {
+        try await cancelHandler(input)
+    }
 }

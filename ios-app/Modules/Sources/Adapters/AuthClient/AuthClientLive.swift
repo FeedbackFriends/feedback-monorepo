@@ -35,11 +35,11 @@ public extension AuthClient {
             },
             googleLogin: {
                 let credential = try await FirebaseService().startGoogleSignInFlow()
-                try await credential.linkOrSignInWithCredential()
+                try await credential.signInWithCredential()
             },
             appleLogin: {
                 let credential = try await FirebaseService().startSignInWithAppleFlow()
-                try await credential.linkOrSignInWithCredential()
+                try await credential.signInWithCredential()
             },
             logout: {
                 try Auth.auth().signOut()
@@ -70,25 +70,7 @@ public extension AuthClient {
 }
 
 extension AuthCredential {
-    func linkOrSignInWithCredential () async throws {
-        guard let currentUser = Auth.auth().currentUser else {
-            _ = try await Auth.auth().signIn(with: self)
-            return
-        }
-        do {
-            if currentUser.isAnonymous {
-                try await currentUser.link(with: self)
-            } else {
-                try Auth.auth().signOut()
-                _ = try await Auth.auth().signIn(with: self)
-            }
-        } catch let error as NSError {
-            switch error.code {
-            case AuthErrorCode.credentialAlreadyInUse.rawValue:
-                _ = try await Auth.auth().signIn(with: self)
-            default:
-                throw error
-            }
-        }
+    func signInWithCredential () async throws {
+        _ = try await Auth.auth().signIn(with: self)
     }
 }

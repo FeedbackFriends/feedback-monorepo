@@ -31,6 +31,7 @@ public struct AnonymousSession: Equatable, Sendable {
 }
 
 public struct Bootstrap: Equatable, Sendable {
+    public var teamContext: EmployeeTeamContext?
     public var participantEvents: IdentifiedArrayOf<ParticipantEvent>
     public var managerData: ManagerData?
     public var accountInfo: AccountInfo

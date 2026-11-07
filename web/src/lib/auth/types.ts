@@ -12,6 +12,7 @@ export type AuthStateListener = (user: AppAuthUser | null) => void
 export type AuthErrorListener = (error: unknown) => void
 
 export interface AuthClient {
+  getIdToken(): Promise<string>
   getConfigError(): string | null
   initializePersistence(): Promise<void>
   isConfigured(): boolean

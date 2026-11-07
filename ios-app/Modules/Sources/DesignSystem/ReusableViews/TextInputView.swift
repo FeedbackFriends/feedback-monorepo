@@ -5,6 +5,7 @@ public struct TextInputView: View {
     private let prompt: String
     @Binding private var text: String
     @FocusState.Binding private var isFocused: Bool
+    private let capitalization: TextInputAutocapitalization
     private let axis: Axis
     private let lineLimit: ClosedRange<Int>
     private let accessibilityLabel: String
@@ -16,6 +17,7 @@ public struct TextInputView: View {
         text: Binding<String>,
         isFocused: FocusState<Bool>.Binding,
         axis: Axis = .horizontal,
+        capitalization: TextInputAutocapitalization = .sentences,
         lineLimit: ClosedRange<Int> = 1...1,
         accessibilityLabel: String? = nil,
         accessibilityIdentifier: String
@@ -24,6 +26,7 @@ public struct TextInputView: View {
         self.prompt = prompt
         self._text = text
         self._isFocused = isFocused
+        self.capitalization = capitalization
         self.axis = axis
         self.lineLimit = lineLimit
         self.accessibilityLabel = accessibilityLabel ?? title
@@ -42,7 +45,7 @@ public struct TextInputView: View {
                 axis: axis
             )
             .textInputTextStyle()
-            .textInputAutocapitalization(.sentences)
+            .textInputAutocapitalization(capitalization)
             .lineLimit(lineLimit)
             .focused($isFocused)
             .accessibilityLabel(accessibilityLabel)

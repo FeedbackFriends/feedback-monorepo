@@ -59,7 +59,7 @@ class DeeplinkParserTests {
         switch deeplink {
         case .joinEvent(let pinCode):
             #expect(pinCode == .init(value: "1234"))
-        case .managerEvent:
+        case .managerEvent, .joinTeam:
             fatalError()
         }
     }

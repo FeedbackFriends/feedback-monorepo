@@ -27,6 +27,9 @@ class ControllerAdvisor() {
             is AuthenticationException -> HttpStatus.UNAUTHORIZED
             is dk.example.feedback.model.exceptions.InvalidSupportSubmissionException -> HttpStatus.BAD_REQUEST
             is dk.example.feedback.model.exceptions.SupportSubmissionConflictException -> HttpStatus.CONFLICT
+            is dk.example.feedback.model.exceptions.TeamConflictException -> HttpStatus.CONFLICT
+            is dk.example.feedback.model.exceptions.InvalidTeamInputException -> HttpStatus.BAD_REQUEST
+            is dk.example.feedback.model.exceptions.TeamNotFoundException -> HttpStatus.NOT_FOUND
             is ConstraintViolationException -> HttpStatus.BAD_REQUEST
             is org.springframework.beans.TypeMismatchException -> HttpStatus.BAD_REQUEST
             is org.springframework.http.converter.HttpMessageNotReadableException -> HttpStatus.BAD_REQUEST

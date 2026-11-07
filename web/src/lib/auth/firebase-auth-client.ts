@@ -47,6 +47,12 @@ export class FirebaseAuthClient implements AuthClient {
     this.googleProvider.setCustomParameters({ prompt: "select_account" })
   }
 
+  async getIdToken() {
+    const user = this.requireFirebaseAuth().currentUser
+    if (!user) throw new Error("Authentication required")
+    return user.getIdToken()
+  }
+
   getConfigError() {
     if (this.firebaseConfig) {
       return null

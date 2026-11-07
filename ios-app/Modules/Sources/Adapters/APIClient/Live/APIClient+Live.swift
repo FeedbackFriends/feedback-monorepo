@@ -8,6 +8,22 @@ public extension APIClient {
         sessionCache: APIClientCache = APIClientCache()
     ) -> APIClient {
         APIClient(
+            getTeamContext: { try await withAuthorization { EmployeeTeamContext(try await api.context(.init()).ok.body.json) } },
+            requestTeamMembership: { id, code, name in
+                try await withAuthorization {
+                    EmployeeTeamContext(try await api.join(.init(body: .json(.init(id: id.uuidString, code: code, name: name)))).ok.body.json)
+                }
+            },
+            cancelTeamRequest: { id in
+                try await withAuthorization {
+                    EmployeeTeamContext(try await api.cancel(.init(path: .init(requestId: id))).ok.body.json)
+                }
+            },
+            leaveTeam: { id in
+                try await withAuthorization {
+                    EmployeeTeamContext(try await api.leave(.init(path: .init(teamId: id))).ok.body.json)
+                }
+            },
             deleteAccount: makeDeleteAccount(api: api),
             modifyAccount: makeModifyAccount(api: api, sessionCache: sessionCache),
             linkFCMTokenToAccount: makeLinkFCMTokenToAccount(api: api),

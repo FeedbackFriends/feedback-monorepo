@@ -84,7 +84,8 @@ public struct TabbarLifecycle: Sendable {
                             await send(.sessionUpdated(session))
                         }
                     },
-                    .run { [uuid] send in
+                    .run { [uuid, role = state.bootstrap.role] send in
+                        guard role == .manager else { return }
                         for await _ in self.clock.timer(interval: .seconds(10)) {
                             let requestID = uuid()
                             await send(.syncStarted(requestID))

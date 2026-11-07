@@ -100,3 +100,8 @@ databaseChangeLog:
   - include:
       file: 0026-add-support-submissions.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0027-add-teams.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db/changelog/0028-add-team-leaders.yaml

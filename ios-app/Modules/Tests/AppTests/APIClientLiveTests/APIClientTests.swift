@@ -1,5 +1,5 @@
 @testable import Domain
-import Adapters
+@testable import Adapters
 import ComposableArchitecture
 import Foundation
 import OpenAPI
@@ -863,5 +863,42 @@ struct APIClientMappingTests {
         #expect(manager.managerData?.bootstrapHash == APIFixture.sessionHash)
         #expect(anonymous.role == nil)
         #expect(anonymous.participantEvents.isEmpty)
+    }
+}
+
+struct TeamAdapterTests {
+    @Test
+    func membershipRequestsAndContextMapWithoutChangingLegacyMeetingCache() async throws {
+        let id = UUID()
+        let team = Components.Schemas.TeamInfo(id: "team", organizationId: "org", organizationName: "Acme", name: "IT")
+        var api = MockAPI()
+        api.joinHandler = { request in
+            #expect(Request.needsAuthorization)
+            guard case .json(let body) = request.body else { fatalError() }
+            #expect(body.id == id.uuidString)
+            #expect(body.code == "invite")
+            #expect(body.name == "Ada")
+            return .ok(.init(body: .json(.init(isOwner: false, managedTeams: [], request: .init(id: id.uuidString, team: team, name: "Ada", status: .pending)))))
+        }
+        api.contextHandler = { _ in
+            #expect(Request.needsAuthorization)
+            return .ok(.init(body: .json(.init(isOwner: false, managedTeams: [], membership: team))))
+        }
+        api.cancelHandler = { input in
+            #expect(input.path.requestId == id.uuidString)
+            return .ok(.init(body: .json(.init(isOwner: false, managedTeams: []))))
+        }
+        api.leaveHandler = { input in
+            #expect(input.path.teamId == "team")
+            return .ok(.init(body: .json(.init(isOwner: false, managedTeams: []))))
+        }
+        let before = Bootstrap.mockAnonymous()
+        let cache = APIClientCache(bootstrap: before)
+        let client = APIClient.live(client: api, provideFcmToken: { nil }, sessionCache: cache)
+        #expect(try await client.requestTeamMembership(id, "invite", "Ada").request?.status == .pending)
+        #expect(try await client.getTeamContext().membership?.name == "IT")
+        #expect(try await client.cancelTeamRequest(id.uuidString) == .init())
+        #expect(try await client.leaveTeam("team") == .init())
+        #expect(await cache.getBootstrap() == before)
     }
 }

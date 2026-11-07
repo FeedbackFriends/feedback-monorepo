@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0028-add-team-leaders
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE team_leader (
+                account_id VARCHAR(255) PRIMARY KEY REFERENCES account(id),
+                team_id UUID NOT NULL REFERENCES team(id),
+                email VARCHAR(254) NOT NULL
+              );
+              CREATE TABLE team_leader_invitation (
+                id UUID PRIMARY KEY,
+                team_id UUID NOT NULL REFERENCES team(id),
+                email VARCHAR(254) NOT NULL,
+                code VARCHAR(64) NOT NULL UNIQUE,
+                expires_at BIGINT NOT NULL,
+                revoked BOOLEAN NOT NULL DEFAULT FALSE,
+                accepted_by VARCHAR(255) REFERENCES account(id)
+              );
+              CREATE INDEX idx_team_leader_team ON team_leader(team_id);
+              CREATE INDEX idx_leader_invitation_team ON team_leader_invitation(team_id);

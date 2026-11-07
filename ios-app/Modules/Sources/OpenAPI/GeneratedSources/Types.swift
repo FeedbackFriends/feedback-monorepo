@@ -41,6 +41,30 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `PUT /account/fcm-token`.
     /// - Remark: Generated from `#/paths//account/fcm-token/put(linkFCMTokenToAccount)`.
     func linkFCMTokenToAccount(_ input: Operations.LinkFCMTokenToAccount.Input) async throws -> Operations.LinkFCMTokenToAccount.Output
+    /// - Remark: HTTP `POST /teams/{teamId}/requests/{requestId}/reject`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)`.
+    func reject(_ input: Operations.Reject.Input) async throws -> Operations.Reject.Output
+    /// - Remark: HTTP `POST /teams/{teamId}/requests/{requestId}/approve`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)`.
+    func approve(_ input: Operations.Approve.Input) async throws -> Operations.Approve.Output
+    /// - Remark: HTTP `POST /teams/{teamId}/leaders/invitations`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)`.
+    func inviteLeader(_ input: Operations.InviteLeader.Input) async throws -> Operations.InviteLeader.Output
+    /// - Remark: HTTP `POST /teams/{teamId}/invite`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)`.
+    func rotate(_ input: Operations.Rotate.Input) async throws -> Operations.Rotate.Output
+    /// - Remark: HTTP `POST /teams/requests`.
+    /// - Remark: Generated from `#/paths//teams/requests/post(join)`.
+    func join(_ input: Operations.Join.Input) async throws -> Operations.Join.Output
+    /// - Remark: HTTP `POST /teams/organizations`.
+    /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)`.
+    func createOrganization(_ input: Operations.CreateOrganization.Input) async throws -> Operations.CreateOrganization.Output
+    /// - Remark: HTTP `POST /teams/organizations/{organizationId}`.
+    /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)`.
+    func createTeam(_ input: Operations.CreateTeam.Input) async throws -> Operations.CreateTeam.Output
+    /// - Remark: HTTP `POST /teams/leader-invitations/accept`.
+    /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)`.
+    func acceptLeadership(_ input: Operations.AcceptLeadership.Input) async throws -> Operations.AcceptLeadership.Output
     /// Save product feedback or a bug report without affecting meeting feedback.
     ///
     /// - Remark: HTTP `POST /support/submissions`.
@@ -64,6 +88,21 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `POST /account/logout`.
     /// - Remark: Generated from `#/paths//account/logout/post(logout)`.
     func logout(_ input: Operations.Logout.Input) async throws -> Operations.Logout.Output
+    /// - Remark: HTTP `GET /teams/{teamId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)`.
+    func management(_ input: Operations.Management.Input) async throws -> Operations.Management.Output
+    /// - Remark: HTTP `GET /teams/{teamId}/leaders`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)`.
+    func leadership(_ input: Operations.Leadership.Input) async throws -> Operations.Leadership.Output
+    /// - Remark: HTTP `GET /teams/leader-invitations/{code}`.
+    /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)`.
+    func leaderInvitation(_ input: Operations.LeaderInvitation.Input) async throws -> Operations.LeaderInvitation.Output
+    /// - Remark: HTTP `GET /teams/invites/{code}`.
+    /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)`.
+    func resolve(_ input: Operations.Resolve.Input) async throws -> Operations.Resolve.Output
+    /// - Remark: HTTP `GET /teams/context`.
+    /// - Remark: Generated from `#/paths//teams/context/get(context)`.
+    func context(_ input: Operations.Context.Input) async throws -> Operations.Context.Output
     /// - Remark: HTTP `GET /notification-history/mark-as-seen`.
     /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)`.
     func markNotificationHistoryAsSeen(_ input: Operations.MarkNotificationHistoryAsSeen.Input) async throws -> Operations.MarkNotificationHistoryAsSeen.Output
@@ -77,6 +116,21 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `GET /bootstrap/bootstrap-update/{hash}`.
     /// - Remark: Generated from `#/paths//bootstrap/bootstrap-update/{hash}/get(getBoostrapUpdate)`.
     func getBoostrapUpdate(_ input: Operations.GetBoostrapUpdate.Input) async throws -> Operations.GetBoostrapUpdate.Output
+    /// - Remark: HTTP `DELETE /teams/{teamId}/membership`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)`.
+    func leave(_ input: Operations.Leave.Input) async throws -> Operations.Leave.Output
+    /// - Remark: HTTP `DELETE /teams/{teamId}/members/{accountId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)`.
+    func remove(_ input: Operations.Remove.Input) async throws -> Operations.Remove.Output
+    /// - Remark: HTTP `DELETE /teams/{teamId}/leaders/{accountId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)`.
+    func removeLeader(_ input: Operations.RemoveLeader.Input) async throws -> Operations.RemoveLeader.Output
+    /// - Remark: HTTP `DELETE /teams/{teamId}/leaders/invitations/{invitationId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)`.
+    func revokeLeaderInvite(_ input: Operations.RevokeLeaderInvite.Input) async throws -> Operations.RevokeLeaderInvite.Output
+    /// - Remark: HTTP `DELETE /teams/requests/{requestId}`.
+    /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)`.
+    func cancel(_ input: Operations.Cancel.Input) async throws -> Operations.Cancel.Output
 }
 
 /// Convenience overloads for operation inputs.
@@ -189,6 +243,98 @@ extension APIProtocol {
             body: body
         ))
     }
+    /// - Remark: HTTP `POST /teams/{teamId}/requests/{requestId}/reject`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)`.
+    public func reject(
+        path: Operations.Reject.Input.Path,
+        headers: Operations.Reject.Input.Headers = .init()
+    ) async throws -> Operations.Reject.Output {
+        try await reject(Operations.Reject.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/requests/{requestId}/approve`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)`.
+    public func approve(
+        path: Operations.Approve.Input.Path,
+        headers: Operations.Approve.Input.Headers = .init()
+    ) async throws -> Operations.Approve.Output {
+        try await approve(Operations.Approve.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/leaders/invitations`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)`.
+    public func inviteLeader(
+        path: Operations.InviteLeader.Input.Path,
+        headers: Operations.InviteLeader.Input.Headers = .init(),
+        body: Operations.InviteLeader.Input.Body
+    ) async throws -> Operations.InviteLeader.Output {
+        try await inviteLeader(Operations.InviteLeader.Input(
+            path: path,
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/invite`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)`.
+    public func rotate(
+        path: Operations.Rotate.Input.Path,
+        headers: Operations.Rotate.Input.Headers = .init()
+    ) async throws -> Operations.Rotate.Output {
+        try await rotate(Operations.Rotate.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `POST /teams/requests`.
+    /// - Remark: Generated from `#/paths//teams/requests/post(join)`.
+    public func join(
+        headers: Operations.Join.Input.Headers = .init(),
+        body: Operations.Join.Input.Body
+    ) async throws -> Operations.Join.Output {
+        try await join(Operations.Join.Input(
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `POST /teams/organizations`.
+    /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)`.
+    public func createOrganization(
+        headers: Operations.CreateOrganization.Input.Headers = .init(),
+        body: Operations.CreateOrganization.Input.Body
+    ) async throws -> Operations.CreateOrganization.Output {
+        try await createOrganization(Operations.CreateOrganization.Input(
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `POST /teams/organizations/{organizationId}`.
+    /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)`.
+    public func createTeam(
+        path: Operations.CreateTeam.Input.Path,
+        headers: Operations.CreateTeam.Input.Headers = .init(),
+        body: Operations.CreateTeam.Input.Body
+    ) async throws -> Operations.CreateTeam.Output {
+        try await createTeam(Operations.CreateTeam.Input(
+            path: path,
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `POST /teams/leader-invitations/accept`.
+    /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)`.
+    public func acceptLeadership(
+        headers: Operations.AcceptLeadership.Input.Headers = .init(),
+        body: Operations.AcceptLeadership.Input.Body
+    ) async throws -> Operations.AcceptLeadership.Output {
+        try await acceptLeadership(Operations.AcceptLeadership.Input(
+            headers: headers,
+            body: body
+        ))
+    }
     /// Save product feedback or a bug report without affecting meeting feedback.
     ///
     /// - Remark: HTTP `POST /support/submissions`.
@@ -268,6 +414,55 @@ extension APIProtocol {
             body: body
         ))
     }
+    /// - Remark: HTTP `GET /teams/{teamId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)`.
+    public func management(
+        path: Operations.Management.Input.Path,
+        headers: Operations.Management.Input.Headers = .init()
+    ) async throws -> Operations.Management.Output {
+        try await management(Operations.Management.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `GET /teams/{teamId}/leaders`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)`.
+    public func leadership(
+        path: Operations.Leadership.Input.Path,
+        headers: Operations.Leadership.Input.Headers = .init()
+    ) async throws -> Operations.Leadership.Output {
+        try await leadership(Operations.Leadership.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `GET /teams/leader-invitations/{code}`.
+    /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)`.
+    public func leaderInvitation(
+        path: Operations.LeaderInvitation.Input.Path,
+        headers: Operations.LeaderInvitation.Input.Headers = .init()
+    ) async throws -> Operations.LeaderInvitation.Output {
+        try await leaderInvitation(Operations.LeaderInvitation.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `GET /teams/invites/{code}`.
+    /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)`.
+    public func resolve(
+        path: Operations.Resolve.Input.Path,
+        headers: Operations.Resolve.Input.Headers = .init()
+    ) async throws -> Operations.Resolve.Output {
+        try await resolve(Operations.Resolve.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `GET /teams/context`.
+    /// - Remark: Generated from `#/paths//teams/context/get(context)`.
+    public func context(headers: Operations.Context.Input.Headers = .init()) async throws -> Operations.Context.Output {
+        try await context(Operations.Context.Input(headers: headers))
+    }
     /// - Remark: HTTP `GET /notification-history/mark-as-seen`.
     /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)`.
     public func markNotificationHistoryAsSeen(headers: Operations.MarkNotificationHistoryAsSeen.Input.Headers = .init()) async throws -> Operations.MarkNotificationHistoryAsSeen.Output {
@@ -289,6 +484,61 @@ extension APIProtocol {
         headers: Operations.GetBoostrapUpdate.Input.Headers = .init()
     ) async throws -> Operations.GetBoostrapUpdate.Output {
         try await getBoostrapUpdate(Operations.GetBoostrapUpdate.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `DELETE /teams/{teamId}/membership`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)`.
+    public func leave(
+        path: Operations.Leave.Input.Path,
+        headers: Operations.Leave.Input.Headers = .init()
+    ) async throws -> Operations.Leave.Output {
+        try await leave(Operations.Leave.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `DELETE /teams/{teamId}/members/{accountId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)`.
+    public func remove(
+        path: Operations.Remove.Input.Path,
+        headers: Operations.Remove.Input.Headers = .init()
+    ) async throws -> Operations.Remove.Output {
+        try await remove(Operations.Remove.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `DELETE /teams/{teamId}/leaders/{accountId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)`.
+    public func removeLeader(
+        path: Operations.RemoveLeader.Input.Path,
+        headers: Operations.RemoveLeader.Input.Headers = .init()
+    ) async throws -> Operations.RemoveLeader.Output {
+        try await removeLeader(Operations.RemoveLeader.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `DELETE /teams/{teamId}/leaders/invitations/{invitationId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)`.
+    public func revokeLeaderInvite(
+        path: Operations.RevokeLeaderInvite.Input.Path,
+        headers: Operations.RevokeLeaderInvite.Input.Headers = .init()
+    ) async throws -> Operations.RevokeLeaderInvite.Output {
+        try await revokeLeaderInvite(Operations.RevokeLeaderInvite.Input(
+            path: path,
+            headers: headers
+        ))
+    }
+    /// - Remark: HTTP `DELETE /teams/requests/{requestId}`.
+    /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)`.
+    public func cancel(
+        path: Operations.Cancel.Input.Path,
+        headers: Operations.Cancel.Input.Headers = .init()
+    ) async throws -> Operations.Cancel.Output {
+        try await cancel(Operations.Cancel.Input(
             path: path,
             headers: headers
         ))
@@ -1477,6 +1727,417 @@ public enum Components {
                 case fcmToken
             }
         }
+        /// - Remark: Generated from `#/components/schemas/TeamInfo`.
+        public struct TeamInfo: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/TeamInfo/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/TeamInfo/organizationId`.
+            public var organizationId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/TeamInfo/organizationName`.
+            public var organizationName: Swift.String
+            /// - Remark: Generated from `#/components/schemas/TeamInfo/name`.
+            public var name: Swift.String
+            /// Creates a new `TeamInfo`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - organizationId:
+            ///   - organizationName:
+            ///   - name:
+            public init(
+                id: Swift.String,
+                organizationId: Swift.String,
+                organizationName: Swift.String,
+                name: Swift.String
+            ) {
+                self.id = id
+                self.organizationId = organizationId
+                self.organizationName = organizationName
+                self.name = name
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case organizationId
+                case organizationName
+                case name
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/TeamJoinRequest`.
+        public struct TeamJoinRequest: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/TeamJoinRequest/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/TeamJoinRequest/team`.
+            public var team: Components.Schemas.TeamInfo
+            /// - Remark: Generated from `#/components/schemas/TeamJoinRequest/name`.
+            public var name: Swift.String
+            /// - Remark: Generated from `#/components/schemas/TeamJoinRequest/status`.
+            @frozen public enum StatusPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case pending = "Pending"
+                case rejected = "Rejected"
+                case approved = "Approved"
+                case canceled = "Canceled"
+            }
+            /// - Remark: Generated from `#/components/schemas/TeamJoinRequest/status`.
+            public var status: Components.Schemas.TeamJoinRequest.StatusPayload
+            /// Creates a new `TeamJoinRequest`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - team:
+            ///   - name:
+            ///   - status:
+            public init(
+                id: Swift.String,
+                team: Components.Schemas.TeamInfo,
+                name: Swift.String,
+                status: Components.Schemas.TeamJoinRequest.StatusPayload
+            ) {
+                self.id = id
+                self.team = team
+                self.name = name
+                self.status = status
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case team
+                case name
+                case status
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/TeamManagement`.
+        public struct TeamManagement: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/TeamManagement/team`.
+            public var team: Components.Schemas.TeamInfo
+            /// - Remark: Generated from `#/components/schemas/TeamManagement/inviteCode`.
+            public var inviteCode: Swift.String
+            /// - Remark: Generated from `#/components/schemas/TeamManagement/members`.
+            public var members: [Components.Schemas.TeamMember]
+            /// - Remark: Generated from `#/components/schemas/TeamManagement/pendingRequests`.
+            public var pendingRequests: [Components.Schemas.TeamJoinRequest]
+            /// - Remark: Generated from `#/components/schemas/TeamManagement/memberCount`.
+            public var memberCount: Swift.Int32
+            /// Creates a new `TeamManagement`.
+            ///
+            /// - Parameters:
+            ///   - team:
+            ///   - inviteCode:
+            ///   - members:
+            ///   - pendingRequests:
+            ///   - memberCount:
+            public init(
+                team: Components.Schemas.TeamInfo,
+                inviteCode: Swift.String,
+                members: [Components.Schemas.TeamMember],
+                pendingRequests: [Components.Schemas.TeamJoinRequest],
+                memberCount: Swift.Int32
+            ) {
+                self.team = team
+                self.inviteCode = inviteCode
+                self.members = members
+                self.pendingRequests = pendingRequests
+                self.memberCount = memberCount
+            }
+            public enum CodingKeys: String, CodingKey {
+                case team
+                case inviteCode
+                case members
+                case pendingRequests
+                case memberCount
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/TeamMember`.
+        public struct TeamMember: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/TeamMember/accountId`.
+            public var accountId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/TeamMember/name`.
+            public var name: Swift.String
+            /// Creates a new `TeamMember`.
+            ///
+            /// - Parameters:
+            ///   - accountId:
+            ///   - name:
+            public init(
+                accountId: Swift.String,
+                name: Swift.String
+            ) {
+                self.accountId = accountId
+                self.name = name
+            }
+            public enum CodingKeys: String, CodingKey {
+                case accountId
+                case name
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/InviteLeaderInput`.
+        public struct InviteLeaderInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/InviteLeaderInput/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/InviteLeaderInput/email`.
+            public var email: Swift.String
+            /// Creates a new `InviteLeaderInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - email:
+            public init(
+                id: Swift.String,
+                email: Swift.String
+            ) {
+                self.id = id
+                self.email = email
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case email
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/LeaderInvitation`.
+        public struct LeaderInvitation: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/LeaderInvitation/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/LeaderInvitation/email`.
+            public var email: Swift.String
+            /// - Remark: Generated from `#/components/schemas/LeaderInvitation/code`.
+            public var code: Swift.String
+            /// - Remark: Generated from `#/components/schemas/LeaderInvitation/expiresAt`.
+            public var expiresAt: Swift.Int64
+            /// Creates a new `LeaderInvitation`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - email:
+            ///   - code:
+            ///   - expiresAt:
+            public init(
+                id: Swift.String,
+                email: Swift.String,
+                code: Swift.String,
+                expiresAt: Swift.Int64
+            ) {
+                self.id = id
+                self.email = email
+                self.code = code
+                self.expiresAt = expiresAt
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case email
+                case code
+                case expiresAt
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/TeamLeader`.
+        public struct TeamLeader: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/TeamLeader/accountId`.
+            public var accountId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/TeamLeader/email`.
+            public var email: Swift.String
+            /// Creates a new `TeamLeader`.
+            ///
+            /// - Parameters:
+            ///   - accountId:
+            ///   - email:
+            public init(
+                accountId: Swift.String,
+                email: Swift.String
+            ) {
+                self.accountId = accountId
+                self.email = email
+            }
+            public enum CodingKeys: String, CodingKey {
+                case accountId
+                case email
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/TeamLeadership`.
+        public struct TeamLeadership: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/TeamLeadership/leaders`.
+            public var leaders: [Components.Schemas.TeamLeader]
+            /// - Remark: Generated from `#/components/schemas/TeamLeadership/invitations`.
+            public var invitations: [Components.Schemas.LeaderInvitation]
+            /// Creates a new `TeamLeadership`.
+            ///
+            /// - Parameters:
+            ///   - leaders:
+            ///   - invitations:
+            public init(
+                leaders: [Components.Schemas.TeamLeader],
+                invitations: [Components.Schemas.LeaderInvitation]
+            ) {
+                self.leaders = leaders
+                self.invitations = invitations
+            }
+            public enum CodingKeys: String, CodingKey {
+                case leaders
+                case invitations
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/JoinTeamInput`.
+        public struct JoinTeamInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/JoinTeamInput/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/JoinTeamInput/code`.
+            public var code: Swift.String
+            /// - Remark: Generated from `#/components/schemas/JoinTeamInput/name`.
+            public var name: Swift.String
+            /// Creates a new `JoinTeamInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - code:
+            ///   - name:
+            public init(
+                id: Swift.String,
+                code: Swift.String,
+                name: Swift.String
+            ) {
+                self.id = id
+                self.code = code
+                self.name = name
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case code
+                case name
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/OrganizationInfo`.
+        public struct OrganizationInfo: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/OrganizationInfo/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/OrganizationInfo/name`.
+            public var name: Swift.String
+            /// Creates a new `OrganizationInfo`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - name:
+            public init(
+                id: Swift.String,
+                name: Swift.String
+            ) {
+                self.id = id
+                self.name = name
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case name
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/TeamContext`.
+        public struct TeamContext: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/TeamContext/organization`.
+            public var organization: Components.Schemas.OrganizationInfo?
+            /// - Remark: Generated from `#/components/schemas/TeamContext/isOwner`.
+            public var isOwner: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/TeamContext/managedTeams`.
+            public var managedTeams: [Components.Schemas.TeamInfo]
+            /// - Remark: Generated from `#/components/schemas/TeamContext/membership`.
+            public var membership: Components.Schemas.TeamInfo?
+            /// - Remark: Generated from `#/components/schemas/TeamContext/request`.
+            public var request: Components.Schemas.TeamJoinRequest?
+            /// Creates a new `TeamContext`.
+            ///
+            /// - Parameters:
+            ///   - organization:
+            ///   - isOwner:
+            ///   - managedTeams:
+            ///   - membership:
+            ///   - request:
+            public init(
+                organization: Components.Schemas.OrganizationInfo? = nil,
+                isOwner: Swift.Bool,
+                managedTeams: [Components.Schemas.TeamInfo],
+                membership: Components.Schemas.TeamInfo? = nil,
+                request: Components.Schemas.TeamJoinRequest? = nil
+            ) {
+                self.organization = organization
+                self.isOwner = isOwner
+                self.managedTeams = managedTeams
+                self.membership = membership
+                self.request = request
+            }
+            public enum CodingKeys: String, CodingKey {
+                case organization
+                case isOwner
+                case managedTeams
+                case membership
+                case request
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/CreateOrganizationInput`.
+        public struct CreateOrganizationInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/CreateOrganizationInput/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CreateOrganizationInput/name`.
+            public var name: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CreateOrganizationInput/teamId`.
+            public var teamId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CreateOrganizationInput/teamName`.
+            public var teamName: Swift.String
+            /// Creates a new `CreateOrganizationInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - name:
+            ///   - teamId:
+            ///   - teamName:
+            public init(
+                id: Swift.String,
+                name: Swift.String,
+                teamId: Swift.String,
+                teamName: Swift.String
+            ) {
+                self.id = id
+                self.name = name
+                self.teamId = teamId
+                self.teamName = teamName
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case name
+                case teamId
+                case teamName
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/CreateTeamInput`.
+        public struct CreateTeamInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/CreateTeamInput/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/CreateTeamInput/name`.
+            public var name: Swift.String
+            /// Creates a new `CreateTeamInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - name:
+            public init(
+                id: Swift.String,
+                name: Swift.String
+            ) {
+                self.id = id
+                self.name = name
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case name
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/AcceptLeaderInput`.
+        public struct AcceptLeaderInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/AcceptLeaderInput/code`.
+            public var code: Swift.String
+            /// Creates a new `AcceptLeaderInput`.
+            ///
+            /// - Parameters:
+            ///   - code:
+            public init(code: Swift.String) {
+                self.code = code
+            }
+            public enum CodingKeys: String, CodingKey {
+                case code
+            }
+        }
         /// - Remark: Generated from `#/components/schemas/SupportClientMetadataInput`.
         public struct SupportClientMetadataInput: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/SupportClientMetadataInput/appVersion`.
@@ -1952,7 +2613,7 @@ public enum Components {
         ///
         /// - Remark: Generated from `#/components/schemas/CreateAccountInput`.
         public struct CreateAccountInput: Codable, Hashable, Sendable {
-            /// Requested role for the new account.
+            /// Legacy field; ignored. Roles are controlled by the server.
             ///
             /// - Remark: Generated from `#/components/schemas/CreateAccountInput/requestedRole`.
             public var requestedRole: Swift.String?
@@ -1961,7 +2622,7 @@ public enum Components {
             /// Creates a new `CreateAccountInput`.
             ///
             /// - Parameters:
-            ///   - requestedRole: Requested role for the new account.
+            ///   - requestedRole: Legacy field; ignored. Roles are controlled by the server.
             ///   - fcmToken:
             public init(
                 requestedRole: Swift.String? = nil,
@@ -2303,6 +2964,29 @@ public enum Components {
             }
             public enum CodingKeys: String, CodingKey {
                 case fcmToken
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/LeaderInvitationInfo`.
+        public struct LeaderInvitationInfo: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/LeaderInvitationInfo/team`.
+            public var team: Components.Schemas.TeamInfo
+            /// - Remark: Generated from `#/components/schemas/LeaderInvitationInfo/email`.
+            public var email: Swift.String
+            /// Creates a new `LeaderInvitationInfo`.
+            ///
+            /// - Parameters:
+            ///   - team:
+            ///   - email:
+            public init(
+                team: Components.Schemas.TeamInfo,
+                email: Swift.String
+            ) {
+                self.team = team
+                self.email = email
+            }
+            public enum CodingKeys: String, CodingKey {
+                case team
+                case email
             }
         }
         /// - Remark: Generated from `#/components/schemas/ApiError`.
@@ -6564,6 +7248,3473 @@ public enum Operations {
             }
         }
     }
+    /// - Remark: HTTP `POST /teams/{teamId}/requests/{requestId}/reject`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)`.
+    public enum Reject {
+        public static let id: Swift.String = "reject"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/path/requestId`.
+                public var requestId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - requestId:
+                public init(
+                    teamId: Swift.String,
+                    requestId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.requestId = requestId
+                }
+            }
+            public var path: Operations.Reject.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Reject.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Reject.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Reject.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Reject.Input.Path,
+                headers: Operations.Reject.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamManagement)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamManagement {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Reject.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Reject.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Reject.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Reject.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Reject.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Reject.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Reject.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Reject.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Reject.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Reject.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Reject.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Reject.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Reject.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Reject.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Reject.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Reject.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Reject.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Reject.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Reject.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Reject.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Reject.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Reject.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Reject.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Reject.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/reject/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Reject.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Reject.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/reject/post(reject)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Reject.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Reject.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/requests/{requestId}/approve`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)`.
+    public enum Approve {
+        public static let id: Swift.String = "approve"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/path/requestId`.
+                public var requestId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - requestId:
+                public init(
+                    teamId: Swift.String,
+                    requestId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.requestId = requestId
+                }
+            }
+            public var path: Operations.Approve.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Approve.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Approve.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Approve.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Approve.Input.Path,
+                headers: Operations.Approve.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamManagement)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamManagement {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Approve.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Approve.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Approve.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Approve.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Approve.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Approve.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Approve.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Approve.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Approve.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Approve.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Approve.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Approve.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Approve.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Approve.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Approve.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Approve.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Approve.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Approve.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Approve.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Approve.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Approve.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Approve.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Approve.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Approve.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/requests/{requestId}/approve/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Approve.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Approve.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/requests/{requestId}/approve/post(approve)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Approve.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Approve.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/leaders/invitations`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)`.
+    public enum InviteLeader {
+        public static let id: Swift.String = "inviteLeader"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/path/teamId`.
+                public var teamId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                public init(teamId: Swift.String) {
+                    self.teamId = teamId
+                }
+            }
+            public var path: Operations.InviteLeader.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.InviteLeader.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.InviteLeader.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.InviteLeader.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.InviteLeaderInput)
+            }
+            public var body: Operations.InviteLeader.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            ///   - body:
+            public init(
+                path: Operations.InviteLeader.Input.Path,
+                headers: Operations.InviteLeader.Input.Headers = .init(),
+                body: Operations.InviteLeader.Input.Body
+            ) {
+                self.path = path
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamLeadership)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamLeadership {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.InviteLeader.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.InviteLeader.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.InviteLeader.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.InviteLeader.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.InviteLeader.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.InviteLeader.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.InviteLeader.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.InviteLeader.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.InviteLeader.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.InviteLeader.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.InviteLeader.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.InviteLeader.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.InviteLeader.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.InviteLeader.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.InviteLeader.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.InviteLeader.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.InviteLeader.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.InviteLeader.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.InviteLeader.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.InviteLeader.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.InviteLeader.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.InviteLeader.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.InviteLeader.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.InviteLeader.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.InviteLeader.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.InviteLeader.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/post(inviteLeader)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.InviteLeader.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.InviteLeader.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/invite`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)`.
+    public enum Rotate {
+        public static let id: Swift.String = "rotate"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/path/teamId`.
+                public var teamId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                public init(teamId: Swift.String) {
+                    self.teamId = teamId
+                }
+            }
+            public var path: Operations.Rotate.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Rotate.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Rotate.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Rotate.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Rotate.Input.Path,
+                headers: Operations.Rotate.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamManagement)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamManagement {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Rotate.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Rotate.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Rotate.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Rotate.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Rotate.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Rotate.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Rotate.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Rotate.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Rotate.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Rotate.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Rotate.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Rotate.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Rotate.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Rotate.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Rotate.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Rotate.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Rotate.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Rotate.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Rotate.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Rotate.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Rotate.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Rotate.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Rotate.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Rotate.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/invite/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Rotate.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Rotate.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/invite/post(rotate)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Rotate.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Rotate.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/requests`.
+    /// - Remark: Generated from `#/paths//teams/requests/post(join)`.
+    public enum Join {
+        public static let id: Swift.String = "join"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/requests/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Join.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Join.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Join.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/requests/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.JoinTeamInput)
+            }
+            public var body: Operations.Join.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            ///   - body:
+            public init(
+                headers: Operations.Join.Input.Headers = .init(),
+                body: Operations.Join.Input.Body
+            ) {
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamContext)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamContext {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Join.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Join.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/post(join)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Join.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Join.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Join.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Join.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/post(join)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Join.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Join.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Join.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Join.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/post(join)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Join.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Join.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Join.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Join.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/post(join)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Join.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Join.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Join.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Join.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/post(join)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Join.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Join.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Join.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Join.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/post(join)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Join.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Join.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Join.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Join.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/post(join)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Join.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Join.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/organizations`.
+    /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)`.
+    public enum CreateOrganization {
+        public static let id: Swift.String = "createOrganization"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/organizations/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateOrganization.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateOrganization.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.CreateOrganization.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/organizations/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.CreateOrganizationInput)
+            }
+            public var body: Operations.CreateOrganization.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            ///   - body:
+            public init(
+                headers: Operations.CreateOrganization.Input.Headers = .init(),
+                body: Operations.CreateOrganization.Input.Body
+            ) {
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamContext)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamContext {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateOrganization.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateOrganization.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.CreateOrganization.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.CreateOrganization.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateOrganization.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateOrganization.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.CreateOrganization.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.CreateOrganization.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateOrganization.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateOrganization.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.CreateOrganization.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.CreateOrganization.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateOrganization.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateOrganization.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.CreateOrganization.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.CreateOrganization.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateOrganization.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateOrganization.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.CreateOrganization.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.CreateOrganization.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateOrganization.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateOrganization.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.CreateOrganization.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.CreateOrganization.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateOrganization.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateOrganization.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/post(createOrganization)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.CreateOrganization.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.CreateOrganization.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/organizations/{organizationId}`.
+    /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)`.
+    public enum CreateTeam {
+        public static let id: Swift.String = "createTeam"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/path/organizationId`.
+                public var organizationId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - organizationId:
+                public init(organizationId: Swift.String) {
+                    self.organizationId = organizationId
+                }
+            }
+            public var path: Operations.CreateTeam.Input.Path
+            /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateTeam.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.CreateTeam.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.CreateTeam.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.CreateTeamInput)
+            }
+            public var body: Operations.CreateTeam.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            ///   - body:
+            public init(
+                path: Operations.CreateTeam.Input.Path,
+                headers: Operations.CreateTeam.Input.Headers = .init(),
+                body: Operations.CreateTeam.Input.Body
+            ) {
+                self.path = path
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamInfo)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamInfo {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateTeam.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateTeam.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.CreateTeam.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.CreateTeam.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateTeam.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateTeam.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.CreateTeam.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.CreateTeam.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateTeam.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateTeam.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.CreateTeam.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.CreateTeam.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateTeam.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateTeam.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.CreateTeam.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.CreateTeam.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateTeam.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateTeam.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.CreateTeam.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.CreateTeam.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateTeam.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateTeam.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.CreateTeam.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.CreateTeam.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/organizations/{organizationId}/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.CreateTeam.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.CreateTeam.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/organizations/{organizationId}/post(createTeam)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.CreateTeam.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.CreateTeam.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/leader-invitations/accept`.
+    /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)`.
+    public enum AcceptLeadership {
+        public static let id: Swift.String = "acceptLeadership"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.AcceptLeadership.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.AcceptLeadership.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.AcceptLeadership.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.AcceptLeaderInput)
+            }
+            public var body: Operations.AcceptLeadership.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            ///   - body:
+            public init(
+                headers: Operations.AcceptLeadership.Input.Headers = .init(),
+                body: Operations.AcceptLeadership.Input.Body
+            ) {
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamContext)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamContext {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AcceptLeadership.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AcceptLeadership.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.AcceptLeadership.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.AcceptLeadership.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AcceptLeadership.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AcceptLeadership.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.AcceptLeadership.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.AcceptLeadership.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AcceptLeadership.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AcceptLeadership.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.AcceptLeadership.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.AcceptLeadership.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AcceptLeadership.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AcceptLeadership.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.AcceptLeadership.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.AcceptLeadership.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AcceptLeadership.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AcceptLeadership.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.AcceptLeadership.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.AcceptLeadership.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AcceptLeadership.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AcceptLeadership.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.AcceptLeadership.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.AcceptLeadership.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/accept/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AcceptLeadership.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AcceptLeadership.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/accept/post(acceptLeadership)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.AcceptLeadership.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.AcceptLeadership.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
     /// Save product feedback or a bug report without affecting meeting feedback.
     ///
     /// - Remark: HTTP `POST /support/submissions`.
@@ -9532,6 +13683,2148 @@ public enum Operations {
             }
         }
     }
+    /// - Remark: HTTP `GET /teams/{teamId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)`.
+    public enum Management {
+        public static let id: Swift.String = "management"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/GET/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/GET/path/teamId`.
+                public var teamId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                public init(teamId: Swift.String) {
+                    self.teamId = teamId
+                }
+            }
+            public var path: Operations.Management.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Management.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Management.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Management.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Management.Input.Path,
+                headers: Operations.Management.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamManagement)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamManagement {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Management.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Management.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Management.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Management.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Management.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Management.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Management.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Management.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Management.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Management.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Management.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Management.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Management.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Management.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Management.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Management.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Management.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Management.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Management.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Management.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Management.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Management.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Management.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Management.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/GET/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Management.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Management.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/get(management)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Management.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Management.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `GET /teams/{teamId}/leaders`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)`.
+    public enum Leadership {
+        public static let id: Swift.String = "leadership"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/path/teamId`.
+                public var teamId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                public init(teamId: Swift.String) {
+                    self.teamId = teamId
+                }
+            }
+            public var path: Operations.Leadership.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Leadership.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Leadership.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Leadership.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Leadership.Input.Path,
+                headers: Operations.Leadership.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamLeadership)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamLeadership {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leadership.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leadership.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Leadership.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Leadership.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leadership.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leadership.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Leadership.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Leadership.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leadership.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leadership.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Leadership.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Leadership.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leadership.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leadership.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Leadership.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Leadership.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leadership.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leadership.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Leadership.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Leadership.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leadership.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leadership.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Leadership.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Leadership.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/GET/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leadership.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leadership.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/get(leadership)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Leadership.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Leadership.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `GET /teams/leader-invitations/{code}`.
+    /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)`.
+    public enum LeaderInvitation {
+        public static let id: Swift.String = "leaderInvitation"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/path/code`.
+                public var code: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - code:
+                public init(code: Swift.String) {
+                    self.code = code
+                }
+            }
+            public var path: Operations.LeaderInvitation.Input.Path
+            /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.LeaderInvitation.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.LeaderInvitation.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.LeaderInvitation.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.LeaderInvitation.Input.Path,
+                headers: Operations.LeaderInvitation.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/200/content/application\/json`.
+                    case json(Components.Schemas.LeaderInvitationInfo)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.LeaderInvitationInfo {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.LeaderInvitation.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.LeaderInvitation.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.LeaderInvitation.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.LeaderInvitation.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.LeaderInvitation.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.LeaderInvitation.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.LeaderInvitation.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.LeaderInvitation.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.LeaderInvitation.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.LeaderInvitation.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.LeaderInvitation.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.LeaderInvitation.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.LeaderInvitation.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.LeaderInvitation.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.LeaderInvitation.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.LeaderInvitation.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.LeaderInvitation.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.LeaderInvitation.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.LeaderInvitation.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.LeaderInvitation.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.LeaderInvitation.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.LeaderInvitation.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.LeaderInvitation.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.LeaderInvitation.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/leader-invitations/{code}/GET/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.LeaderInvitation.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.LeaderInvitation.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/leader-invitations/{code}/get(leaderInvitation)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.LeaderInvitation.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.LeaderInvitation.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `GET /teams/invites/{code}`.
+    /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)`.
+    public enum Resolve {
+        public static let id: Swift.String = "resolve"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/path/code`.
+                public var code: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - code:
+                public init(code: Swift.String) {
+                    self.code = code
+                }
+            }
+            public var path: Operations.Resolve.Input.Path
+            /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Resolve.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Resolve.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Resolve.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Resolve.Input.Path,
+                headers: Operations.Resolve.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamInfo)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamInfo {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Resolve.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Resolve.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Resolve.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Resolve.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Resolve.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Resolve.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Resolve.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Resolve.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Resolve.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Resolve.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Resolve.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Resolve.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Resolve.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Resolve.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Resolve.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Resolve.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Resolve.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Resolve.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Resolve.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Resolve.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Resolve.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Resolve.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Resolve.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Resolve.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/invites/{code}/GET/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Resolve.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Resolve.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/invites/{code}/get(resolve)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Resolve.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Resolve.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `GET /teams/context`.
+    /// - Remark: Generated from `#/paths//teams/context/get(context)`.
+    public enum Context {
+        public static let id: Swift.String = "context"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/context/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Context.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Context.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Context.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            public init(headers: Operations.Context.Input.Headers = .init()) {
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/context/GET/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/context/GET/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamContext)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamContext {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Context.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Context.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/context/get(context)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Context.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Context.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/context/GET/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/context/GET/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Context.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Context.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/context/get(context)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Context.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Context.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/context/GET/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/context/GET/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Context.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Context.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/context/get(context)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Context.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Context.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/context/GET/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/context/GET/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Context.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Context.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/context/get(context)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Context.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Context.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/context/GET/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/context/GET/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Context.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Context.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/context/get(context)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Context.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Context.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/context/GET/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/context/GET/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Context.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Context.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/context/get(context)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Context.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Context.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/context/GET/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/context/GET/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Context.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Context.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/context/get(context)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Context.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Context.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
     /// - Remark: HTTP `GET /notification-history/mark-as-seen`.
     /// - Remark: Generated from `#/paths//notification-history/mark-as-seen/get(markNotificationHistoryAsSeen)`.
     public enum MarkNotificationHistoryAsSeen {
@@ -10772,6 +17065,2187 @@ public enum Operations {
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
             public var internalServerError: Operations.GetBoostrapUpdate.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `DELETE /teams/{teamId}/membership`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)`.
+    public enum Leave {
+        public static let id: Swift.String = "leave"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/path/teamId`.
+                public var teamId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                public init(teamId: Swift.String) {
+                    self.teamId = teamId
+                }
+            }
+            public var path: Operations.Leave.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Leave.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Leave.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Leave.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Leave.Input.Path,
+                headers: Operations.Leave.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamContext)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamContext {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leave.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leave.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Leave.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Leave.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leave.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leave.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Leave.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Leave.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leave.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leave.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Leave.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Leave.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leave.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leave.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Leave.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Leave.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leave.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leave.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Leave.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Leave.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leave.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leave.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Leave.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Leave.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/membership/DELETE/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Leave.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Leave.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/membership/delete(leave)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Leave.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Leave.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `DELETE /teams/{teamId}/members/{accountId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)`.
+    public enum Remove {
+        public static let id: Swift.String = "remove"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/path/accountId`.
+                public var accountId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - accountId:
+                public init(
+                    teamId: Swift.String,
+                    accountId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.accountId = accountId
+                }
+            }
+            public var path: Operations.Remove.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Remove.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Remove.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Remove.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Remove.Input.Path,
+                headers: Operations.Remove.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamManagement)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamManagement {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Remove.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Remove.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Remove.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Remove.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Remove.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Remove.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Remove.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Remove.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Remove.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Remove.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Remove.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Remove.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Remove.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Remove.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Remove.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Remove.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Remove.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Remove.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Remove.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Remove.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Remove.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Remove.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Remove.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Remove.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/members/{accountId}/DELETE/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Remove.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Remove.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/members/{accountId}/delete(remove)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Remove.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Remove.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `DELETE /teams/{teamId}/leaders/{accountId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)`.
+    public enum RemoveLeader {
+        public static let id: Swift.String = "removeLeader"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/path/accountId`.
+                public var accountId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - accountId:
+                public init(
+                    teamId: Swift.String,
+                    accountId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.accountId = accountId
+                }
+            }
+            public var path: Operations.RemoveLeader.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.RemoveLeader.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.RemoveLeader.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.RemoveLeader.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.RemoveLeader.Input.Path,
+                headers: Operations.RemoveLeader.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamLeadership)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamLeadership {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RemoveLeader.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RemoveLeader.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.RemoveLeader.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.RemoveLeader.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RemoveLeader.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RemoveLeader.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.RemoveLeader.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.RemoveLeader.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RemoveLeader.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RemoveLeader.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.RemoveLeader.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.RemoveLeader.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RemoveLeader.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RemoveLeader.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.RemoveLeader.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.RemoveLeader.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RemoveLeader.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RemoveLeader.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.RemoveLeader.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.RemoveLeader.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RemoveLeader.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RemoveLeader.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.RemoveLeader.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.RemoveLeader.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/{accountId}/DELETE/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RemoveLeader.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RemoveLeader.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/{accountId}/delete(removeLeader)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.RemoveLeader.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.RemoveLeader.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `DELETE /teams/{teamId}/leaders/invitations/{invitationId}`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)`.
+    public enum RevokeLeaderInvite {
+        public static let id: Swift.String = "revokeLeaderInvite"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/path/invitationId`.
+                public var invitationId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - invitationId:
+                public init(
+                    teamId: Swift.String,
+                    invitationId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.invitationId = invitationId
+                }
+            }
+            public var path: Operations.RevokeLeaderInvite.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.RevokeLeaderInvite.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.RevokeLeaderInvite.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.RevokeLeaderInvite.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.RevokeLeaderInvite.Input.Path,
+                headers: Operations.RevokeLeaderInvite.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamLeadership)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamLeadership {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RevokeLeaderInvite.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RevokeLeaderInvite.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.RevokeLeaderInvite.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.RevokeLeaderInvite.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RevokeLeaderInvite.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RevokeLeaderInvite.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.RevokeLeaderInvite.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.RevokeLeaderInvite.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RevokeLeaderInvite.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RevokeLeaderInvite.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.RevokeLeaderInvite.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.RevokeLeaderInvite.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RevokeLeaderInvite.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RevokeLeaderInvite.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.RevokeLeaderInvite.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.RevokeLeaderInvite.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RevokeLeaderInvite.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RevokeLeaderInvite.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.RevokeLeaderInvite.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.RevokeLeaderInvite.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RevokeLeaderInvite.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RevokeLeaderInvite.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.RevokeLeaderInvite.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.RevokeLeaderInvite.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/leaders/invitations/{invitationId}/DELETE/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.RevokeLeaderInvite.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.RevokeLeaderInvite.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/leaders/invitations/{invitationId}/delete(revokeLeaderInvite)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.RevokeLeaderInvite.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.RevokeLeaderInvite.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `DELETE /teams/requests/{requestId}`.
+    /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)`.
+    public enum Cancel {
+        public static let id: Swift.String = "cancel"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/path/requestId`.
+                public var requestId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - requestId:
+                public init(requestId: Swift.String) {
+                    self.requestId = requestId
+                }
+            }
+            public var path: Operations.Cancel.Input.Path
+            /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Cancel.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.Cancel.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.Cancel.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.Cancel.Input.Path,
+                headers: Operations.Cancel.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/200/content/application\/json`.
+                    case json(Components.Schemas.TeamContext)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.TeamContext {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Cancel.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Cancel.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.Cancel.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.Cancel.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Cancel.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Cancel.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.Cancel.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.Cancel.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Cancel.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Cancel.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.Cancel.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.Cancel.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Cancel.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Cancel.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.Cancel.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.Cancel.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Cancel.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Cancel.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.Cancel.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.Cancel.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Cancel.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Cancel.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.Cancel.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.Cancel.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/requests/{requestId}/DELETE/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.Cancel.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.Cancel.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/requests/{requestId}/delete(cancel)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.Cancel.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.Cancel.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
