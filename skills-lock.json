@@ -43,6 +43,13 @@
       "skillPath": ".agents/skills/next-best-practices/SKILL.md",
       "computedHash": "515ba75178bd44875812d9a560bdf14651f86709f89cf1d4f209638e879807f3"
     },
+    "next-dev-loop": {
+      "source": "vercel/next.js",
+      "ref": "canary",
+      "sourceType": "github",
+      "skillPath": "skills/next-dev-loop/SKILL.md",
+      "computedHash": "68e70a9270eb02cc9c63cb19ce5106772ce4c140242199f4d90c77f6acb56355"
+    },
     "next-upgrade": {
       "source": "vercel-labs/openreview",
       "sourceType": "github",
