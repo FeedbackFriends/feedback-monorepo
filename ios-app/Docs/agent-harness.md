@@ -58,4 +58,4 @@ Use loaded Apple guidance for native operations and the [simulator guide](agents
 
 Local agent Xcode operations use native MCP. Explicit Maestro runners and hosted CI have their documented exceptions. Launch/login does not imply fixture reset; follow the chosen workflow's data-preservation rules. See [runtime guidance](../../docs/agents/runtime-and-deployment.md) before other stack commands.
 
-The [guidance navigator](SETUP.md#repository-guidance-in-the-navigator) exposes checked-in docs and skills without target membership. Refresh it after guidance moves. Validate affected routing, metadata, and links; helper changes also need their relevant regression checks.
+Validate affected guidance routing, metadata, and links; helper changes also need their relevant regression checks.

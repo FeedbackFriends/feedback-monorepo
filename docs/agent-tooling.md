@@ -85,4 +85,4 @@ Claude uses `headersHelper` for the same Coolify helper that Codex names `http_h
 
 The [iOS login skill](../.agents/skills/lg-ios-login/SKILL.md) uses the same direct flow in both clients: run the local token helper, then pass its output to native Xcode MCP as per-launch arguments. Local test tokens may appear in agent tool output and arguments; keep them out of tracked files. No private orchestration runtime is required. Personal Codex plugins and execution wrappers are not automatically available in Claude.
 
-Xcode Repository guidance includes custom `lg-` skills and repository documentation; community skill packages are excluded. When repository-owned guidance files move, repair callers and refresh the [Xcode guidance navigator](../ios-app/Docs/SETUP.md#repository-guidance-in-the-navigator). Add executable hooks only for concrete failures they can reliably detect.
+When repository-owned guidance files move, repair callers and indexes. Add executable hooks only for concrete failures they can reliably detect.

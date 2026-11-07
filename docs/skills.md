@@ -67,4 +67,4 @@ python3 scripts/update-community-skills.py
 
 The [helper](../scripts/update-community-skills.py) reinstalls explicit names from each recorded source through `skills.sh add`, avoiding observed skips of nested Next.js skills by `skills update`. `skills-lock.json` owns provenance. Unavailable sources, skipped installs, and inventory mismatches fail the run. Keep community content upstream-owned and update inventory/source links when adding or removing skills.
 
-Community packages are excluded from Xcode's Repository guidance group. Their update workflow does not refresh or modify the Xcode project. Custom skills and repository guidance remain maintained through [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md); ordinary tasks do not wait on community freshness. Local updates do not authorize committing, pushing, or executing installed workflows.
+Custom skills and repository guidance remain maintained through [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md); ordinary tasks do not wait on community freshness. Local updates do not authorize committing, pushing, or executing installed workflows.
