@@ -5,7 +5,7 @@ description: Capture and compare the curated LetsGrow iOS catalog through app-ho
 
 # Capture and review iOS screenshots
 
-Follow the [iOS policy](../../../ios-app/AGENTS.md), [visual review rules](../../../ios-app/Docs/agents/visual-review.md), and [capture documentation](../../../ios-app/Docs/screenshots/README.md). The user authorized migration from RenderPreview to Point-Free SnapshotTesting. Keep SwiftUI previews for interactive development; do not use them to generate review images or silently fall back to another renderer.
+Follow the [iOS policy](../../../ios-app/AGENTS.md), [visual review rules](../../../ios-app/Docs/agents/visual-review.md), and [capture documentation](../../../ios-app/Docs/screenshots/README.md). Point-Free SnapshotTesting owns catalog capture. Keep SwiftUI previews for interactive development; do not use them to generate review images or silently fall back to another renderer.
 
 For a one-command local capture, run `./ios-app/scripts/screenshots` from the repository root (`--no-open` skips opening the gallery). It uses Apple's native `xcrun mcpbridge`, builds and captures through Xcode MCP, and publishes only after the capture test passes. Xcode may require first-use permission for this command-line client. Do not automate that permission dialog. The steps below describe the same workflow through the connected tools.
 
@@ -14,7 +14,7 @@ For a one-command local capture, run `./ios-app/scripts/screenshots` from the re
 3. Discover and run `ScreenSnapshotTests/testCaptureCatalog()` with native Xcode MCP. The catalog test captures all selected states, including the native alert, once using Point-Free SnapshotTesting after bounded layout readiness checks. The alert is verified for presentation and text before its image is written to the same batch.
 4. Stop publication if either test fails. Report the exact failing state and diagnose it; do not substitute a previous capture, change tolerances, mask pixels, or accept images automatically.
 5. On success, run `python3 ios-app/scripts/screen-catalog.py --publish screenshots/capture`, then `ios-app/.build/screenshot-tools/bin/python ios-app/scripts/review-preview-catalog.py`. Follow the README's venv/dependency setup if needed. The approved PNGs under `Docs/screenshots/catalog/` remain untouched.
-6. Review all current screenshots manually or with an agent, recording IDs/hashes and meaningful findings or uncertainty beside the report. Do not use pixel equality as the decision gate. Report reviewed/pending, added, and removed counts, `screenshots/index.html`. Full-content states retain their own canvas dimensions. Explain the one-time format/framing change when comparing the migrated renderer with old Xcode baselines.
+6. Review all current screenshots manually or with an agent, recording IDs/hashes and meaningful findings or uncertainty beside the report. Do not use pixel equality as the decision gate. Report reviewed/pending, added, and removed counts, `screenshots/index.html`. Full-content states retain their own canvas dimensions.
 7. Return to the normal `UnitTests` plan. Continue simulator verification for behavior and native presentations; snapshot images verify fixture layouts.
 8. Only after explicit approval, run the review script's `--accept screen.id ...` or `--accept-all` for the approved report. Never commit or push unless separately requested.
 

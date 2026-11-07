@@ -48,7 +48,6 @@ out/
 
 .env
 .claude/settings.local.json
-.agents/local-plugins/
 firebase-debug.log
 scripts/tests/__pycache__/
 scripts/__pycache__/
