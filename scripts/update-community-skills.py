@@ -21,7 +21,12 @@ def refresh(root=ROOT):
     catalog_path = root / "docs/skills.md"
     catalog = catalog_path.read_text()
     listed = re.findall(r"^\| \[([^]]+)\]\(\.\./\.agents/skills/[^)]+\)", catalog, re.M)
-    installed = {path.parent.name for path in (root / ".agents/skills").glob("*/SKILL.md")}
+    skills = root / ".agents/skills"
+    apple = (root / ".agents/apple-skills").resolve()
+    installed = {
+        path.parent.name for path in skills.glob("*/SKILL.md")
+        if not (path.parent.is_symlink() and path.parent.resolve() == apple / path.parent.name)
+    }
     if len(listed) != len(set(listed)) or set(listed) != installed:
         raise ValueError("Skills overview must list every installed skill exactly once")
     if installed - {name for name in installed if name.startswith("lg-")} != set(locked):

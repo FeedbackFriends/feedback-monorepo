@@ -2,7 +2,7 @@
 
 **skills.sh updated at:** `2026-11-07T17:58:06Z`
 
-Repository skills live in [root `.agents/skills/`](../.agents/skills/). Claude Code discovers the same content through per-skill symlinks under `.claude/skills/`. When adding, removing, or renaming a skill, maintain its alias as well as this catalog; edit canonical content only. Open a skill for its full procedure and invocation rules. This catalog excludes personal and plugin skills.
+Repository skills live in [root `.agents/skills/`](../.agents/skills/). Claude Code discovers the same content through per-skill symlinks under `.claude/skills/`. When adding, removing, or renaming a skill, maintain its alias as well as this catalog; edit canonical content only. Open a skill for its full procedure and invocation rules. This catalog excludes personal skills and local Apple exports.
 
 Custom workflows use `lg-` names. Community provenance is recorded in [skills-lock.json](../skills-lock.json); use [the community update procedure](#update-community-skills) for installer updates and [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) for repository-owned guidance improvements. Keep this catalog aligned when skills are added, removed, or renamed.
 
@@ -52,6 +52,10 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [web-design-guidelines](../.agents/skills/web-design-guidelines/SKILL.md) | Review UI against web interface and accessibility guidance. | [vercel-labs/agent-skills](https://skills.sh/vercel-labs/agent-skills/web-design-guidelines) |
 | [webapp-testing](../.agents/skills/webapp-testing/SKILL.md) | Test web applications with Playwright. | [anthropics/skills](https://skills.sh/anthropics/skills/webapp-testing) |
 | [writing-for-agents](../.agents/skills/writing-for-agents/SKILL.md) | Write concise, effective agent instructions and skills. | [mattpocock/skills](https://skills.sh/mattpocock/skills/writing-for-agents) |
+
+## Local Apple skills
+
+Apple guidance lives in ignored `.agents/apple-skills/`, with generated discovery symlinks in both clients' skill directories. Run `python3 scripts/update-xcode-skills.py` on initial setup and after Xcode upgrades; see [Apple skills setup](../ios-app/Docs/agent-harness.md#apple-skills-setup). The native exporter owns this inventory independently of `skills-lock.json` and the community freshness timestamp. The community updater excludes these Apple aliases while retaining inventory checks for custom and community skills.
 
 ## Update community skills
 

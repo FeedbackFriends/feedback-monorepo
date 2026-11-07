@@ -1,6 +1,3 @@
-[plugins."xcode-integration@letsgrow-xcode"]
-enabled = true
-
 [mcp_servers.xcode]
 command = "xcrun"
 args = ["mcpbridge"]

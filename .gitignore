@@ -55,3 +55,8 @@ scripts/__pycache__/
 
 # Generated iOS screenshots and visual review gallery
 /screenshots/
+
+# Local Apple skill exports and generated discovery ignores
+/.agents/apple-skills/
+/.agents/skills/.gitignore
+/.claude/skills/.gitignore
