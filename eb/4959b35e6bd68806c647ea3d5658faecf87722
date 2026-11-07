@@ -1,0 +1,31 @@
+.agents/skills/next-dev-loop/SKILL.md
+  s_4b0b48164cf7bc::t_1325f160a57fd5 1-212
+.claude/skills/next-dev-loop
+  s_4b0b48164cf7bc::t_5229298c7612bf 1
+docs/agents/browser-access.md
+  s_4b0b48164cf7bc::t_b7a3e60319ea07 12-23
+docs/skills.md
+  s_4b0b48164cf7bc::t_5987f58c0072de 43,64
+skills-lock.json
+  s_4b0b48164cf7bc::t_ddd7f7140be387 46-52
+web/docs/agents/architecture.md
+  s_4b0b48164cf7bc::t_efcbaf978c3d5e 41-42
+web/docs/agents/validation.md
+  s_4b0b48164cf7bc::t_72252db605cd19 32-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eb4959b35e6bd68806c647ea3d5658faecf87722",
+  "prompts": {},
+  "sessions": {
+    "s_4b0b48164cf7bc": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b81b-4a02-78c3-9601-84dfe98ac804",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
