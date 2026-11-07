@@ -1,24 +1,7 @@
 # Notifications
 
-The app uses Firebase Cloud Messaging (FCM) for push notifications.
+The app uses Firebase Cloud Messaging. [AppDelegate](../App/AppDelegate.swift) handles registration/token callbacks; [entitlements](../App/Entitlements.entitlements) enable push. Firebase configuration comes from Info.plist and local `App/Config/secrets.xcconfig`; see [configuration](CONFIGURATION.md).
 
-## Setup
+The [localization guide](localization.md#notification-and-system-string-packaging) owns APNs keys, string arguments, and linked main-app resources. Preserve that contract when changing payloads.
 
-1. Ensure `GoogleService-Info.plist` is present under `Xcode_project/`.
-2. Push entitlement is enabled in `Xcode_project/App/Entitlements.entitlements`.
-3. The app registers for push in `AppDelegate` and links the FCM token to the backend when available.
-
-## Local testing
-
-Use the provided sample payloads in `Docs/push_notifications/` to test on a booted simulator or device:
-
-```bash
-xcrun simctl push booted <your.bundle.id> Docs/push_notifications/new_feedback_received.apns
-```
-
-## Code references
-
-- Entitlements: `Xcode_project/App/Entitlements.entitlements`
-- App delegate registration and token handling: `Xcode_project/App/AppDelegate.swift`
-
-
+Use [lg-ios-test-notifications](../../.agents/skills/lg-ios-test-notifications/SKILL.md) for notification verification. The [backend-dependent runner](../.maestro/notifications/README.md) documents setup, data cleanup, and delivery limits. Simulator injection verifies presentation/navigation, not production FCM/APNs transport or device provisioning. A [sample payload](push_notifications/new_feedback_received.apns) remains available for manual inspection; local agent simulator operations follow [native Xcode policy](agents/simulator.md).

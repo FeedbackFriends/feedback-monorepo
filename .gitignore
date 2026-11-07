@@ -43,9 +43,7 @@ out/
 .next/
 
 # Tooling artifacts
-skills-lock.json
 .specify/
-skills-lock.json
 
 .env
 firebase-debug.log

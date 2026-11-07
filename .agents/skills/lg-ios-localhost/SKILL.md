@@ -5,7 +5,7 @@ description: Start the local LetsGrow backend and launch iOS for manual testing,
 
 # Build and run LetsGrow locally
 
-Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md), the [native simulator workflow](../../../ios-app/.agents/skills/lg-ios-run-simulator/SKILL.md), and the [manual testing guide](../../../ios-app/Docs/local-testing.md). Use launch-only mode; this command does not require running the test suites or screenshot catalog.
+Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md), the [native simulator workflow](../lg-ios-run-simulator/SKILL.md), and the [manual testing guide](../../../ios-app/Docs/local-testing.md). Use launch-only mode; this command does not require running the test suites or screenshot catalog.
 
 ## Invocation
 
@@ -54,6 +54,6 @@ The fixed loopback origin prevents a caller's `API_BASE_URL` environment overrid
 4. Inspect the UI with `DeviceInteractionSynthesize`. Verify manager access to owner features and anonymous access to the PIN feedback flow without manager access. For `both`, keep both interaction sessions until the second launch is complete, then inspect both again to establish that both apps are running in the expected state. A startup error, lost first app, or wrong role is a failed/incomplete launch, not success. Do not run a session/feedback mutation just to prove login unless requested.
 5. Close every interaction session in cleanup, including on failure. Do not call `StopProject`, terminate either app, or stop the backend after a successful setup. Leave both apps available for the user's manual testing.
 
-For the no-mode run, use the ordinary `Feedback Localhost` launch route in the shared simulator workflow. For a requested custom manager account ID, use `Feedback Localhost` and the [existing local login workflow](../../../ios-app/.agents/skills/lg-ios-login/SKILL.md), whose helper accepts that ID; the Manager scheme always selects the fixed sample manager.
+For the no-mode run, use the ordinary `Feedback Localhost` launch route in the shared simulator workflow. For a requested custom manager account ID, use `Feedback Localhost` and the [existing local login workflow](../lg-ios-login/SKILL.md), whose helper accepts that ID; the Manager scheme always selects the fixed sample manager.
 
 Report backend health/API URL, whether data was preserved, fixture-prepared, or fully reset, and each role's scheme, simulator, build/launch, and visibly verified login. Separate observed success from blocked or unverified steps. This skill configures Localhost testing, not TestFlight or production.

@@ -1,161 +1,20 @@
-# Feedback Monorepo
+# LetsGrow
 
-This repository contains the Feedback platform as a single monorepo: the web app, the backend services, and the root-level infrastructure used to run and deploy them together.
+LetsGrow has a Next.js web app, Kotlin/Spring backend and scheduler, and a native SwiftUI/TCA iOS app.
 
-The root of the repo is for shared orchestration only. Product work should usually happen inside `web/` or `backend/`.
+| Area | Entry point |
+| --- | --- |
+| Shared and platform documentation | [Docs index](docs/README.md) |
+| Web architecture and development | [Web guide](web/AGENTS.md) |
+| Backend and scheduler | [Backend README](backend/README.md) |
+| iOS | [iOS README](ios-app/README.md) |
+| Agent instructions | [Root policy](AGENTS.md), [harness architecture](docs/agent-tooling.md) |
+| Unfinished work | [Tasks](tasks/README.md) |
 
-## What Lives Here
+## Local development
 
-- `web/` contains the Next.js frontend.
-- `backend/` contains the Kotlin services, shared backend libraries, and database tooling.
-- `docker-compose.yml` is the canonical stack for shared and production wiring using published images.
-- `docker-compose.override.yml` adds only local development concerns: host ports, local backend startup wiring, and locally built images for the backend and web app.
-- `.github/workflows/` contains CI and release automation.
+Use Node.js from `web/.nvmrc` for web commands. The root Compose override supplies local Postgres and development wiring; the base Compose file defines production services.
 
-## Tech Stack
+Read [runtime and deployment](docs/agents/runtime-and-deployment.md) before running the stack. From the root, `./scripts/run -d` regenerates API artifacts, rebuilds images, and starts services. **It deletes local Compose volumes and their data.** For data-preserving backend startup and iOS launch, use the [iOS workflows](docs/agents/ios-workflows.md).
 
-### Frontend
-
-- Next.js 16
-- React 19
-- Node.js 20.19.0 for the `web/` app in local development, CI, and Docker
-- TypeScript
-- Tailwind CSS
-- Radix UI / shadcn-style primitives
-- Firebase client auth
-- Playwright for end-to-end testing
-
-### Backend
-
-- Kotlin
-- Spring Boot
-- Gradle
-- PostgreSQL
-- Liquibase
-- OpenAPI / Swagger
-- Firebase integration
-- Dedicated scheduler service for background jobs
-
-### Infrastructure
-
-- Docker Compose
-- GitHub Actions
-- Coolify for production deployment
-- Published Docker images for `feedback-api`, `feedback-scheduler`, and `feedback-web`
-
-## Repository Structure
-
-```text
-.
-|-- web/                    # Frontend app
-|-- backend/                # API, scheduler, shared backend code, DB tooling
-|-- docker-compose.yml      # Base stack using published production images
-|-- docker-compose.override.yml
-|-- .github/workflows/      # CI/CD pipelines
-|-- AGENTS.md               # Root-level repo working rules
-```
-
-App-specific instructions live in:
-
-- `web/README.md`
-- `backend/README.md`
-- `web/AGENTS.md`
-- `backend/AGENTS.md`
-
-Project MCP definitions, harness guidance, and skills are documented in
-[`docs/agent-tooling.md`](./docs/agent-tooling.md).
-
-For frontend work, use Node `20.19.0` in `web/` so local installs match
-GitHub Actions (`web/.nvmrc`) and the pinned web Docker image.
-
-The backend setup and day-to-day commands now live directly in `backend/README.md` instead of a separate getting-started document.
-
-## Local Development
-
-For full-stack local development from the repo root:
-
-```bash
-./scripts/run -d
-```
-
-The override starts a local `db` service (Postgres 16) inside Compose. The backend services connect to that container (`POSTGRES_HOST=db`, `POSTGRES_PORT=5432`) and still use your root `.env` for database name, user, password, and host port mapping.
-
-Useful root-level commands:
-
-```bash
-docker compose down
-docker compose logs -f
-docker compose ps
-```
-
-Generate the canonical API OpenAPI contract from the repo root:
-
-```bash
-cd backend && SPRING_PROFILES_ACTIVE=openapi ./gradlew syncOpenApiSpec --no-configuration-cache
-```
-
-Generate all committed API artifacts from the repo root:
-
-```bash
-./scripts/generate-api-artifacts.sh
-```
-
-The generated contract is committed at `contracts/openapi/feedback-api.yaml`.
-Both generated clients read from that file:
-
-- `web/src/lib/api/generated/openapi.ts`
-- `ios-app/Modules/Sources/OpenAPI/GeneratedSources/`
-
-How Compose is wired:
-
-- `docker-compose.yml` contains the shared service definitions, explicit runtime env contract, and published images.
-- `docker-compose.override.yml` connects the backend services to a local Postgres instance outside Compose, publishes local ports, and uses locally built images for `api`, `scheduler`, and `web`.
-- Local Compose still expects the full env contract to exist in `.env`, and [`.env.example`](./.env.example) includes every variable needed for a local run with explicit values or intentionally blank placeholders. There are no Compose fallbacks. The developer is responsible for running a reachable local Postgres instance, and Compose uses `host.docker.internal` to reach it from containers.
-- For the API docs: `SPRING_DOC_API_DOCS_ENABLED` controls the raw OpenAPI document at `/v3/api-docs` and `/v3/api-docs.yaml`, while `SPRING_DOC_SWAGGER_UI_ENABLED` controls the interactive Swagger UI served at `/`.
-
-For feature work inside a single app, switch into that app directory and use its local README and AGENTS instructions.
-
-## Environment
-
-Compose reads variables from the root `.env` file when present.
-
-Typical values stored there include:
-
-- Compose/image settings
-- Runtime image platform selection via `IMAGE_PLATFORM`
-- Postgres connection settings
-- JWT / auth configuration
-- Firebase configuration
-- Zoho mail settings
-- public frontend variables prefixed with `NEXT_PUBLIC_`
-
-Rules:
-
-- never commit real secrets
-- keep secrets in `.env`, GitHub secrets, or Coolify-managed environment variables
-- treat `NEXT_PUBLIC_*` values as client-exposed
-
-## Deployment
-
-Production deployment is handled through Coolify using the root `docker-compose.yml`.
-
-Important deployment assumptions:
-
-- production should pull the mutable `prod` image tags
-- `IMAGE_PLATFORM` must match the CPU architecture of the Docker host that will run the published images: use `linux/amd64` for x86_64 hosts and `linux/arm64` for ARM64 hosts
-- root deployment changes should stay aligned with the current Coolify setup and runtime env contract
-- infrastructure changes should call out any new env vars, ports, domains, or image changes
-
-## CI/CD
-
-GitHub Actions in `.github/workflows/` handle validation and releases.
-
-- `ci.yml` runs backend build/tests plus web install, lint, and build
-- `ci.yml` also verifies the committed OpenAPI contract, generated TypeScript client, and generated Swift client are up to date
-- `release.yml` runs web e2e tests, builds and publishes Docker images, creates a GitHub release with the committed OpenAPI contract, and triggers deployment
-
-## Where To Work
-
-- Work in `web/` for frontend routes, components, and UI behavior.
-- Work in `backend/` for API logic, scheduler jobs, database changes, and backend integrations.
-- Keep root changes focused on documentation, Docker Compose, CI/CD, and deployment wiring.
+Keep credentials in the ignored root `.env` and local iOS configuration. Use `.env.example` and the owning app guides for setup. Production deployment is documented in [Coolify](docs/deployment/coolify.md).

@@ -9,7 +9,7 @@ Read [root policy](../../../AGENTS.md), [task workflow](../../../docs/agents/tas
 
 ## Understand the need
 
-Read the supplied task, or inspect `tasks/` for matching work before creating one. Establish the current problem, target users, desired behavior, affected product surfaces, and scope. Use available product documentation and [domain guidance](../lg-domain/SKILL.md) where relevant. Inspect relevant code and architecture documentation to ground questions in existing responsibilities, boundaries, data flows, and constraints. Read the owning app guidance before exploring its implementation.
+Read the supplied task, or inspect `tasks/` for matching work before creating one. Establish the current problem, target users, desired behavior, affected product surfaces, and scope. Use available product documentation and [domain guidance](../../../docs/product/lets-grow-strategi-teamtrivsel.md) where relevant. Inspect relevant code and architecture documentation to ground questions in existing responsibilities, boundaries, data flows, and constraints. Read the owning app guidance before exploring its implementation.
 
 ## Grill requirements and architecture
 

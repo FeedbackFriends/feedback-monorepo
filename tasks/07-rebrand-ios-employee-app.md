@@ -27,7 +27,7 @@ Every manager surface is removed. The PIN and meeting feedback entry is retired 
 
 ## Rebrand series
 
-Depends on **02–05** for the features. The manager removal must wait until **06** gives leaders parity on web. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
+Depends on **02–05** for the features. The manager removal must wait until **06** gives leaders parity on web. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

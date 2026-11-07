@@ -23,7 +23,7 @@ Outcome: an Android app gives employees the same experience as the iOS employee 
 
 ## Rebrand series
 
-This task follows the series and depends on **02–07**, which define the employee feature set and the API. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
+This task follows the series and depends on **02–07**, which define the employee feature set and the API. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

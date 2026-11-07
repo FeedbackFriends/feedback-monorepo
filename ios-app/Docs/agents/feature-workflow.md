@@ -1,32 +1,24 @@
 # iOS feature development
 
-Start at the monorepo root. The shared [task workflow](../../../docs/agents/task-workflow.md) connects product decisions, implementation, and verification across platforms. This page adds iOS-specific guidance. The flow is **refine task → save a Markdown plan in root `tasks/` → implement the task**. A clear direct implementation request still gets a proportionate task file before code changes, without an extra approval ceremony.
+Start at the monorepo root. The shared [task workflow](../../../docs/agents/task-workflow.md) connects product decisions, implementation, and verification across platforms. This page adds iOS-specific guidance. Use the shared draft → refinement → implementation lifecycle. A clear direct implementation request still gets a proportionate task file before code changes, without an extra approval ceremony.
 
 | Task | Entry point | Result |
 | --- | --- | --- |
 | Capture upcoming work or write a task plan | [$lg-create-task](../../../.agents/skills/lg-create-task/SKILL.md) | One task file with the canonical structure and status |
 | Shape an idea or stress-test a plan | [$lg-refine](../../../.agents/skills/lg-refine/SKILL.md) | Code-grounded plan saved to `tasks/ios-<slug>.md`, ready for another agent |
 | Implement a feature or fix | [$lg-implement](../../../.agents/skills/lg-implement/SKILL.md) | Implemented slice; the same task file records progress, acceptance, verification, and handoff |
-| Write/refactor Swift | [$lg-ios-swift](../../../.agents/skills/lg-ios-swift/SKILL.md) | LetsGrow architecture, UI, localization, and testing conventions applied |
+| Write/refactor Swift | [Swift guidance](swift.md) | LetsGrow architecture, UI, localization, and testing conventions applied |
 | Check behavior or reproduce steps | [$lg-verify](../../../.agents/skills/lg-verify/SKILL.md) | Separate build, test, lint, login, UI, and visual evidence |
 | Review code or a diff | [$lg-review](../../../.agents/skills/lg-review/SKILL.md) | Ranked findings grounded in a concrete failure path |
 | Find an unknown bug cause | [$lg-investigate](../../../.agents/skills/lg-investigate/SKILL.md) | Evidence, reproduction, cause/confidence, and a regression scenario |
 
 These are agent prompts, not shell commands. Natural-language requests work too. Existing launch, login, screenshot, notification, and API-sync skills continue to own their procedures; see [shared iOS workflows](../../../docs/agents/ios-workflows.md) and [simulator guidance](simulator.md).
 
-## Task files are the handoff
-
-All upcoming work lives in root [tasks/](../../../tasks/README.md), one Markdown file per task. Do not use GitHub Issues or GitHub Projects for LetsGrow task management. The [create-task skill](../../../.agents/skills/lg-create-task/SKILL.md) defines the required structure, filename and lifecycle; its [template](../../../.agents/skills/lg-create-task/assets/task.md) is the single source for the format.
-
-Refinement always creates or updates the file. It includes code-grounded context, decisions and open questions, acceptance criteria, an implementation checklist, verification scenarios, and the next action. Large tasks have ordered phases in that file. A ready task must make sense to an agent that has not seen the original chat.
-
-Implementation reads that file first, works through the authorized scope/phases, and updates status, acceptance/checklist progress, actual verification evidence, and handoff notes in place. A request to implement the whole task continues through phase boundaries; a request for one phase stops there and records what remains. Once the whole task satisfies acceptance and required verification, include its human-review guide and results in the final response and delete the task file following the create-task completion procedure. Partially completed tasks stay in place.
-
-Facts belong in their existing architecture or domain documentation home. Link those sources from the task rather than maintaining another glossary. Technical documentation can remain under `docs/`; upcoming task plans belong in `tasks/`.
+Task structure, readiness, phases, completion, and handoff are owned by [create-task](../../../.agents/skills/lg-create-task/SKILL.md). Keep iOS progress/evidence in the same root task file; put enduring knowledge in its owning guide.
 
 ## Choose verification by the change
 
-Use the smallest combination that can detect the actual regression. The [simulator workflow](../../.agents/skills/lg-ios-run-simulator/SKILL.md) owns execution and result reporting; [testing](testing.md) owns lint and test policy. UI changes retain the [full-catalog visual review](visual-review.md) requirement.
+Use the smallest combination that can detect the actual regression. The [simulator workflow](../../../.agents/skills/lg-ios-run-simulator/SKILL.md) owns execution and result reporting; [testing](testing.md) owns lint and test policy. UI changes retain the [full-catalog visual review](visual-review.md) requirement.
 
 | Change | Behavioral evidence | Runtime/data needs |
 | --- | --- | --- |

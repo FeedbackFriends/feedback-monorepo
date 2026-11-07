@@ -229,7 +229,7 @@ Source: [MoreSection](../../Modules/Sources/MoreFeature/MoreSection/MoreSection.
 ## 17. Shared experience and platform requirements
 
 - Target iOS 26+ using the native SwiftUI app.
-- Use Danish-first, practical product language; existing screens still contain some English strings.
+- Use Danish-first, practical product language and the Localization module for app-owned Danish/English copy.
 - Keep participant feedback accessible without Apple/Google sign-in.
 - Keep loading, success, empty, and error states understandable, with retry where implemented.
 - Use the shared design system and native sheets, navigation, and sharing integrations.
@@ -237,7 +237,7 @@ Source: [MoreSection](../../Modules/Sources/MoreFeature/MoreSection/MoreSection.
 
 ## 18. Scope boundaries and documentation gaps
 
-- Current navigation has two tabs. The three-tab **Overblik / Aktiviteter / Giv feedback** description in [insights.md](insights.md) does not match the current `TabbarView`; a separate overview dashboard is not included as a current feature here.
+- Current navigation has two tabs, Giv feedback and Aktiviteter; a separate overview tab is not reachable from `TabbarView`.
 - Communication preferences are UI state only, as noted above.
 - Workspace administration, owner invitations, billing, and subscription checkout are not exposed as iOS features in the reviewed navigation.
 - Improvement suggestions and action tracking are deferred in the existing feature documentation.

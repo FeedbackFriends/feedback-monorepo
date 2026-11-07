@@ -19,7 +19,7 @@ Set `in-progress` when starting. Follow phase dependency order; complete each ph
 
 Use the task workflow's platform map:
 
-- **iOS:** use [Swift guidance](../lg-ios-swift/SKILL.md), existing TCA/Bootstrap and Domain/Adapters boundaries, localized UI, and existing DesignSystem/previews. Native Xcode MCP owns local app builds, tests, and simulator operations.
+- **iOS:** use [Swift guidance](../../../ios-app/Docs/agents/swift.md), existing TCA/Bootstrap and Domain/Adapters boundaries, localized UI, and existing DesignSystem/previews. Native Xcode MCP owns local app builds, tests, and simulator operations.
 - **Backend/scheduler:** follow Kotlin architecture, service/persistence ownership, constructor injection, authorization, and migration guidance. Run Gradle from `backend/`; do not edit applied migrations or hide warnings/failures.
 - **Web:** follow web architecture/UI/auth guidance and existing npm commands. Inspect the live affected flow when appropriate.
 - **Cross-platform API:** change canonical backend source, regenerate through the root API script, and update handwritten consumers. Never patch generated clients manually. Keep server/client compatibility and deployment order explicit in the task.

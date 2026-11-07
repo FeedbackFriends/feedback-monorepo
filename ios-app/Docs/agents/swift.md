@@ -2,6 +2,8 @@
 
 Read the owning feature and its nearest maintained sibling before choosing a pattern. The toolchain and dependency versions live in [iOS policy](../../AGENTS.md) and [Package.swift](../../Modules/Package.swift). Use those and resolved packages rather than examples from another app or a different TCA release.
 
+Use Apple's current guidance exposed by native Xcode MCP for unfamiliar or version-sensitive APIs. Installed SwiftUI/concurrency skills may supplement these repository rules when relevant. For handwritten Domain/adapters that need reconciliation with generated APIs, use the [sync workflow](../../../.agents/skills/lg-ios-sync-openapi/SKILL.md).
+
 ## Choose the owner before the type
 
 The [architecture guide](architecture.md) owns module boundaries, shared Bootstrap, access roles, and dependency placement. A new screen generally extends its existing feature target. A new target needs a distinct responsibility, manifest dependencies, test-plan integration when adding tests, and successful Xcode discovery; creating folders alone does not wire a module into the app.
@@ -30,7 +32,7 @@ Surface errors through the existing Domain error/alert mapping. Keep diagnostics
 
 ## UI, localization, and fixtures
 
-Read the [design-system skill](../../.agents/skills/lg-ios-design-system/SKILL.md) before SwiftUI edits. Reuse the current components and semantic tokens. Preserve keyboard behavior, focus, accessibility labels, hit areas, disabled/loading behavior, and native sheet/alert semantics when replacing controls.
+Read the [design-system guide](design-system.md) before SwiftUI edits. Reuse the current components and semantic tokens. Preserve keyboard behavior, focus, accessibility labels, hit areas, disabled/loading behavior, and native sheet/alert semantics when replacing controls.
 
 Follow [product language](product-language.md) and its localization references. App-owned copy uses typed Localization resources with Danish/English translations, parameter/plural semantics, and locale-aware formatting. User-authored session titles, questions, comments, URLs, and PINs remain data.
 

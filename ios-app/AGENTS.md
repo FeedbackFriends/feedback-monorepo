@@ -20,6 +20,7 @@ For Swift changes, run `python3 ios-app/scripts/lint-swift-changes.py --base <me
 | Writing or refactoring Swift | [Swift implementation](Docs/agents/swift.md) |
 | Features, dependencies, shared state, or module ownership | [Architecture and state](Docs/agents/architecture.md) |
 | API adapters, mappers, or generated clients | [API integration](Docs/agents/api-contract.md) |
+| SwiftUI components, tokens, or styling | [Design system](Docs/agents/design-system.md) |
 | SwiftUI/reducer naming or form validation | [UI conventions](Docs/agents/ui.md) |
 | Build, test, launch, simulator interaction, or login | [Simulator workflows](Docs/agents/simulator.md) |
 | UI changes, screenshots, or baseline acceptance | [Visual review](Docs/agents/visual-review.md) |

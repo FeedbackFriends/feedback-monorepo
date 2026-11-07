@@ -25,7 +25,7 @@ Outcome:
 
 ## Rebrand series
 
-Depends on **04**. Feeds 06 and 07. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../lets-grow-strategi-teamtrivsel.md).
+Depends on **04**. Feeds 06 and 07. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 

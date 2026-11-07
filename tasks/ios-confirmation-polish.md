@@ -40,7 +40,7 @@ Alertens titel og hjælpetekst ved kopiering af aktivitetsmail. Ingen ændring a
 ### Kopiering af mailadresse
 
 - ios-app/Modules/Sources/ActivityFeature/Activities/ActivityDetail/Views/ActivityDetailHowItWorksView.swift: activityCopyEmailTitle og activityCopyEmailMessage.
-- ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings; docs/ios-localization-conventions.md; docs/ios-localization-inventory.md
+- ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings; ios-app/Docs/localization.md
 
 
 ## Decisions and open questions

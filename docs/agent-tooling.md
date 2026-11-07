@@ -1,52 +1,71 @@
-# Agent Tooling
+# Agent harness architecture
 
-This repository keeps project guidance, skills, and MCP server definitions in
-version control. Credentials and user-level MCP connections stay outside Git.
+The harness is the repository's instructions, workflows, task files, tool connections, and checks. The agent client provides the model, tool execution, permissions, and personal plugins; this repository has no separate agent runtime.
 
-## Harness and skills
+```mermaid
+flowchart TD
+    Request[User request] --> Agent[Agent session]
+    Policy[Root and app AGENTS.md] --> Agent
+    Guides[Owning guides and skills] --> Agent
+    Agent <--> Tasks[Root tasks: unfinished work]
+    Agent --> Tools[MCP and explicit commands]
+    Tools --> Apps[Web, backend, iOS, infrastructure]
+    Apps --> Evidence[Tests and observable checks]
+    Evidence --> Agent
+    Agent --> Review[Human review handoff]
+    Git[Git events] --> CI[CI and releases]
+```
 
-- Root [`AGENTS.md`](../AGENTS.md) defines repository-wide boundaries and
-  conventions.
-- App-specific guidance lives in [`web/AGENTS.md`](../web/AGENTS.md),
-  [`backend/AGENTS.md`](../backend/AGENTS.md), and
-  [`ios-app/AGENTS.md`](../ios-app/AGENTS.md).
-- For iOS setup and verification, read the [iOS harness overview](../ios-app/Docs/agent-harness.md). The root instructions explicitly route to its nested simulator skill even when that skill is not in the initial skill picker.
-- Project skills are stored under [`.agents/skills/`](../.agents/skills):
-  `lg-coolify-operations`, `lg-architecture`, `lg-commit-and-push`,
-  `lg-domain`, `lg-create-task`, `lg-refine`, `lg-implement`, `lg-review`,
-  `lg-investigate`, `lg-verify`, platform-specific `lg-ios-*` skills, and `ux-designer`.
-  Shared lifecycle skills route through the [task workflow](agents/task-workflow.md);
-  they apply to backend, iOS, web, and tooling tasks.
-- The root `lg-ios-localhost` and `lg-ios-production` skills prepare the chosen backend and build/launch the matching simulator scheme through Xcode MCP. See [build/run workflows](../ios-app/Docs/agent-harness.md#build-and-run-workflows).
-- The `skills-lock.json` files are local installer state and are ignored by
-  Git. The skill instructions themselves are committed in the repository.
+Reading guidance does not execute a hook or grant tool permission. The agent performs the workflow; scripts and CI enforce their own checks.
 
-For browser work, follow the [browser access guidance](agents/browser-access.md).
+## Ownership and discovery
 
-## MCP servers
+| Home | Owns |
+| --- | --- |
+| [Root AGENTS.md](../AGENTS.md) and app policies | Shared boundaries and routes to platform rules |
+| [Docs index](README.md), root `docs/`, and app docs | Shared knowledge and platform-specific invariants, with one maintained home per topic |
+| [Root .agents/skills](../.agents/skills/) | Reusable execution procedures |
+| [tasks/](../tasks/README.md) | Unfinished requirements, decisions, progress, evidence, and next action |
+| [.codex/config.toml](../.codex/config.toml) | Project MCP startup and connection definitions |
+| Scripts, test suites, and [.github/workflows](../.github/workflows/) | Executable checks and automation |
 
-Codex reads this repository's MCP definitions from
-[`.codex/config.toml`](../.codex/config.toml):
+Start sessions at the monorepo root. Shared docs live under root `docs/`; platform detail stays beside its app. Keep `AGENTS.md` short and route to the owning guide. Root skills are also discoverable from app subdirectories. Personal/plugin skills and credentials are outside the maintained repository harness.
 
-- Coolify uses Streamable HTTP; its header helper reads `COOLIFY_MCP_TOKEN`
-  from the local root `.env` file.
-- Maestro runs the local `maestro mcp` command and requires the Maestro CLI.
-- Xcode runs Apple's native `xcrun mcpbridge`; see the iOS harness overview for setup and a connection check.
-- shadcn runs from `web/` through `npx`.
-- GoDaddy uses its hosted MCP endpoint and may require account authentication
-  in the MCP client.
+## Rules and skills
 
-The adjacent [`.agents/config.toml`](../.agents/config.toml) keeps the same
-Xcode, Maestro, shadcn, and GoDaddy definitions for harnesses that read that format.
-Codex uses `.codex/config.toml`.
+Rules describe constraints that apply whenever an area is edited: module boundaries, generated-file ownership, product language, and authorization. Keep them in the owning guide. Skills describe reusable jobs such as refinement, implementation, verification, simulator launch, or deployment. A skill links to rules rather than copying them. Metadata under `agents/` does not create worker agents.
 
-The root [`.env.example`](../.env.example) contains an empty placeholder for
-`COOLIFY_MCP_TOKEN`. Put the real token only in `.env`, keep `.env` ignored, and
-restrict its permissions with `chmod 600 .env`. Never commit or paste token
-values into documentation.
+Browse the [skills overview](skills.md) for every repository skill and its community source. All repository skills have one canonical home under root `.agents/skills/`:
 
-MCP definitions describe how to connect; they do not install the server
-software or grant account access. Local CLIs, Codex authentication, and any
-required account permissions must be set up on each machine. Personal or
-organization-level connectors should remain in the user's Codex configuration
-unless the whole team needs them.
+- Custom workflows use `lg-` names, with platform prefixes when relevant.
+- Community skills are installed through [skills.sh](https://skills.sh/) and recorded in the tracked [skills-lock.json](../skills-lock.json). Preserve upstream contents; keep repository-specific rules in our guides.
+- Use [lg-update-skills](../.agents/skills/lg-update-skills/SKILL.md) to update either kind. Use [lg-maintain-docs](../.agents/skills/lg-maintain-docs/SKILL.md) to audit and trim guidance against source.
+
+## Task and verification flow
+
+The [task workflow](agents/task-workflow.md) owns draft → refinement → implementation → verification and the [human review handoff](agents/human-review.md). Root `tasks/` retains unfinished work only. Authorized direct implementation proceeds with a proportionate saved plan; phase boundaries do not add approval gates.
+
+Use the owning platform's tools and validation: [iOS workflows](agents/ios-workflows.md), [backend validation](../backend/docs/agents/validation.md), [web validation](../web/docs/agents/validation.md), and [browser access](agents/browser-access.md). The [API guide](agents/api-contract.md) owns backend-to-generated-client flow. The [runtime guide](agents/runtime-and-deployment.md) owns service commands, including the volume reset performed by `scripts/run`.
+
+Report actual evidence: build, tests, app launch, service health, and a live user journey establish different things. Documentation-only changes need link, metadata, source-claim, and routing checks; they do not require an app build. No separate subagent or reviewer process is required.
+
+## Hooks and automation
+
+The checked-in configuration enables no agent lifecycle/edit hooks. CI and explicit helpers are separate:
+
+| Mechanism | Behavior and source |
+| --- | --- |
+| iOS agent hooks | [hooks.json](../ios-app/.agents/hooks.json) is empty; [local config](../ios-app/.agents/config.toml) disables hooks |
+| Local Swift lint | [Changed-line lint](../ios-app/scripts/lint-swift-changes.py) runs explicitly or in CI; the historical [hook entry point](../ios-app/.agents/hooks/swiftlint-fix-changed.sh) delegates to it without rewriting files |
+| GitHub Actions | [CI/CD](agents/ci-cd.md) owns builds, tests, artifact checks, and release automation; release workflows can publish images, deploy, and push tags |
+| Xcode Cloud | [Post-clone](../ios-app/CI_scripts/ci_post_clone.sh) sets build preferences and can push a version tag when `GITHUB_WRITE_PAT` is configured; [pre-build](../ios-app/CI_scripts/ci_pre_xcodebuild.sh) writes local build secrets. Both skip work when `TEST_RUNNER_CI=TRUE` |
+
+Local Git hooks, client settings, and remotely managed Xcode Cloud workflows can add behavior outside checked-in configuration. Inspect them when relevant; a helper stored under `hooks/` is not evidence that an event invokes it.
+
+## MCP and client boundary
+
+The [Codex configuration](../.codex/config.toml) connects native Xcode (`xcrun mcpbridge`), Coolify, Maestro, shadcn, and GoDaddy. The [compatibility configuration](../.agents/config.toml) repeats connections for other clients; app-local files may differ. Inspect tools actually exposed in the session rather than assuming every client merges these files or every configured server is connected.
+
+Connections do not install CLIs, grant account access, or schedule work. The Coolify [auth helper](../scripts/coolify-mcp-auth-headers) reads `COOLIFY_MCP_TOKEN` from the ignored root `.env`; keep real credentials outside Git and restrict that file with `chmod 600 .env`. [iOS harness setup](../ios-app/Docs/agent-harness.md) owns Xcode connection details.
+
+When guidance files move, repair callers and refresh the [Xcode guidance navigator](../ios-app/Docs/SETUP.md#repository-guidance-in-the-navigator). Add executable hooks only for concrete failures they can reliably detect.

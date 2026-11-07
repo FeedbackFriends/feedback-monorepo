@@ -19,7 +19,7 @@ Read the owning `AGENTS.md` before editing. For multi-platform tasks, inspect ea
 
 | Area | Guidance | Implementation and verification |
 | --- | --- | --- |
-| iOS | [iOS policy](../../ios-app/AGENTS.md), [feature workflow](../../ios-app/Docs/agents/feature-workflow.md) | [Swift skill](../../.agents/skills/lg-ios-swift/SKILL.md); native Xcode builds/tests/live journeys; changed-line Swift lint; full-catalog review for UI changes |
+| iOS | [iOS policy](../../ios-app/AGENTS.md), [feature workflow](../../ios-app/Docs/agents/feature-workflow.md) | [Swift guidance](../../ios-app/Docs/agents/swift.md); native Xcode builds/tests/live journeys; changed-line Swift lint; full-catalog review for UI changes |
 | Backend/scheduler | [Backend policy](../../backend/AGENTS.md), [validation](../../backend/docs/agents/validation.md), [persistence](../../backend/docs/agents/persistence.md) | Kotlin services/DAOs, incremental migrations, relevant Gradle module/API/persistence tests; warnings fail the build |
 | Web | [Web policy](../../web/AGENTS.md), [validation](../../web/docs/agents/validation.md) | Existing UI/auth/data boundaries, npm lint/build and affected Playwright journeys, responsive checks for visual work |
 | Shared contract | [API guidance](api-contract.md) | Backend source → root artifact generation → handwritten consumers; producer and consumer verification |
@@ -28,17 +28,6 @@ Read the owning `AGENTS.md` before editing. For multi-platform tasks, inspect ea
 
 Tests should detect the behavior that can regress. Distinguish a compilation pass, passing behavioral tests, service health, app launch, a live acceptance journey, and fresh visual evidence. Planned verification is not a result. A documentation-only task does not require a running app or database.
 
-## Agent handoff
+## Handoff
 
-Creation saves a nontechnical `draft` describing the need and desired outcome. Refinement grills the user on specific feature requirements and technical choices, focusing on overall architecture, and updates the same file. A ready task includes scope, product and consequential architectural decisions with tradeoffs, dependencies, acceptance criteria, and observable checks. Material feature or architectural questions block readiness; routine coding details do not. The implementing agent validates the refined direction against the checkout and adds detailed implementation steps, source reading paths, and test commands. Implementation updates the same file with actual results, the exact next action, and a [human review section](human-review.md) that explains architectural decisions, tradeoffs, a source reading path, and verification limits. A concise version appears in the implementation output. Existing coding standards are the default; the agent handles routine convention and correctness checks. A phase boundary is a checkpoint, not an extra approval gate; honor an explicitly requested phase-only scope. Once the whole task meets acceptance and required verification, follow the create-task completion procedure: include a self-contained human review and results in the final response, preserve enduring documentation/update references, and delete the task file. Keep partially completed or blocked tasks; do not retain or archive completed ones.
-
-```text
-$lg-create-task Add validation to the session API.
-# Saves a nontechnical draft in tasks/backend-session-validation.md.
-$lg-refine tasks/backend-session-validation.md
-$lg-implement tasks/backend-session-validation.md
-
-$lg-refine Let owners duplicate an activity's question setup in iOS.
-# Saves tasks/ios-duplicate-activity.md.
-$lg-implement tasks/ios-duplicate-activity.md
-```
+Keep requirements, decisions, progress, actual evidence, and the exact next action in the same task file. Follow [create-task](../../.agents/skills/lg-create-task/SKILL.md#lifecycle-and-handoff) for readiness and completion, and [human review](human-review.md) for the architectural explanation. On full completion, deliver that explanation with verification results, preserve enduring guidance, repair callers, and delete the task. Retain partially completed tasks.

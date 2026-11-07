@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow Docs Maintenance"
+  short_description: "Trim docs and check them against the system"
+  default_prompt: "Use $lg-maintain-docs to simplify the documentation and verify it against the current system."

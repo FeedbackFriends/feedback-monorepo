@@ -97,3 +97,7 @@ The root Compose file supplies `FEEDBACK_API_ORIGIN=http://api:8080` to the web
 service at runtime. Deploy the team API/migration before the leader UI.
 These repository changes do not provision DNS, alter Firebase configuration,
 or deploy a Coolify resource automatically.
+
+## Calendar import mail routing
+
+Provision Zoho aliases or catch-all delivery for activity addresses `1000@letsgrow.dk` through `9999@letsgrow.dk` into the polled mailbox. The scheduler accepts exactly one activity recipient and requires the organizer to own that activity; the old shared address does not select an activity. See [recipient validation](../../backend/apps/scheduler/src/main/kotlin/dk/example/feedback/service/ZohoMailPollingService.kt) and [address allocation](../../backend/lib/persistence/src/main/kotlin/dk/example/feedback/persistence/repo/ActivityRepo.kt). Mailbox delivery is external configuration; this repository does not prove it is provisioned.
