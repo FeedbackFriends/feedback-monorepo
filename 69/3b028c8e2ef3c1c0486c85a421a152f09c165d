@@ -1,0 +1,85 @@
+.agents/skills/lg-audit-community-skills/SKILL.md
+  s_54c23e5dc38412::t_e938b66c60aff7 56
+.agents/skills/lg-create-task/SKILL.md
+  s_54c23e5dc38412::t_6419f44e8c6814 3,8,12,14,32,38
+.agents/skills/lg-create-task/agents/openai.yaml
+  s_54c23e5dc38412::t_4afff3cccf9ca2 4
+.agents/skills/lg-implement/SKILL.md
+  s_54c23e5dc38412::t_49dd50c6b03702 3,8,24,32,42
+.agents/skills/lg-implement/agents/openai.yaml
+  s_54c23e5dc38412::t_6728e76ca574a3 4
+.agents/skills/lg-investigate/SKILL.md
+  s_54c23e5dc38412::t_8c30e8f60bbea0 14
+.agents/skills/lg-refine/SKILL.md
+  s_54c23e5dc38412::t_87c259e4585580 8,12,28
+.agents/skills/lg-review/SKILL.md
+  s_54c23e5dc38412::t_41aad9e190ce88 14
+AGENTS.md
+  s_54c23e5dc38412::t_59039789f0ccf8 8-9
+README.md
+  s_54c23e5dc38412::t_6a83d26f8c39a6 12
+docs/README.md
+  s_54c23e5dc38412::t_37587dcdc31323 12
+docs/agent-tooling.md
+  s_54c23e5dc38412::t_b0d03ede3f6dfa 10,28,48,52-53
+docs/agents/human-review.md
+  s_54c23e5dc38412::t_52a86adea141c7 3
+docs/agents/ios-workflows.md
+  s_54c23e5dc38412::t_6d643469dcbe3c 10
+docs/agents/task-workflow.md
+  s_54c23e5dc38412::t_e56dbd3ece403e 3,15-18,25,27
+docs/skills.md
+  s_54c23e5dc38412::t_86ee02ed8f8fff 63
+ios-app/.maestro/README.md
+  s_54c23e5dc38412::t_77fb8e58207e69 5
+ios-app/Docs/agents/feature-workflow.md
+  s_54c23e5dc38412::t_6e370fece043c6 8,20,53-54
+ios-app/Docs/agents/swift.md
+  s_54c23e5dc38412::t_d252c097a4c5bc 52
+ios-app/Docs/agents/visual-review.md
+  s_54c23e5dc38412::t_5bd7149ca70791 7-8,10
+todos/03-rebrand-suggestions-and-votes.md
+  s_54c23e5dc38412::t_64de8b6130dfa7 59
+todos/10-rebrand-android-app.md
+  s_54c23e5dc38412::t_2e4d8adfc07150 89
+todos/11-rebrand-hr-overview.md
+  s_54c23e5dc38412::t_7e772a7fb48e28 74
+todos/12-rebrand-web-language-switch.md
+  s_54c23e5dc38412::t_11cee1165d325b 76
+todos/13-rebrand-wellbeing-check.md
+  s_54c23e5dc38412::t_7c31e1372be776 88
+todos/README.md
+  s_54c23e5dc38412::t_95396bb9aebdcc 1,15-17
+todos/ios-answer-type-picker-and-icons.md
+  s_54c23e5dc38412::t_87c112a198f7e0 127
+todos/ios-confirmation-polish.md
+  s_54c23e5dc38412::t_c88d71bb77be2f 111
+todos/ios-manager-events-sync-bar.md
+  s_54c23e5dc38412::t_fe585e222e53b2 104
+todos/ios-missing-text-not-found.md
+  s_54c23e5dc38412::t_5d54adea676db6 22
+todos/ios-profile-and-navigation-polish.md
+  s_54c23e5dc38412::t_3478dcf322027e 188
+todos/shared-error-messages.md
+  s_54c23e5dc38412::t_04ec4849352a5d 162
+todos/shared-in-app-product-feedback-and-bug-reports.md
+  s_54c23e5dc38412::t_e23e7b9b34daf5 126
+web/docs/agents/validation.md
+  s_54c23e5dc38412::t_8959f45b467eac 31,35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "693b028c8e2ef3c1c0486c85a421a152f09c165d",
+  "prompts": {},
+  "sessions": {
+    "s_54c23e5dc38412": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b844-3b39-7e52-8ad7-913625abef08",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
