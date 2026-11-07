@@ -16,6 +16,9 @@ DIRECTORIES = (
     "backend/.agents/", "backend/docs/",
     "web/.agents/", "web/docs/",
 )
+SKILL_DIRECTORIES = tuple(
+    f"{prefix}.agents/skills/" for prefix in ("", "ios-app/", "backend/", "web/")
+)
 FILES = {
     f"{prefix}{name}"
     for prefix in ("", "ios-app/", "backend/", "web/")
@@ -31,6 +34,11 @@ def guidance_files():
     result = []
     for name in sorted(set(tracked)):
         if name not in FILES and not name.startswith(DIRECTORIES):
+            continue
+        if any(
+            name.startswith(prefix) and not name[len(prefix):].split("/", 1)[0].startswith("lg-")
+            for prefix in SKILL_DIRECTORIES
+        ):
             continue
         path = ROOT / name
         if path.is_symlink():

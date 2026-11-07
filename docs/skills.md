@@ -56,18 +56,16 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 
 ## Update community skills
 
-This procedure updates third-party packages independently of harness improvements. From the monorepo root:
+[Update community skills](../.github/workflows/update-community-skills.yml) runs every Monday at 06:23 UTC and supports manual runs from GitHub Actions. It validates and refreshes all locked community skills, records the successful completion timestamp above, and commits directly to `main`. Failed or partial refreshes are not committed and do not advance the timestamp. A concurrent change to `main` causes the normal push to fail; rerun from the latest main.
+
+The workflow uses the built-in `GITHUB_TOKEN` with `contents: write`; repository rules must allow it to push to `main`. No additional secret or PR is needed. Bot-token pushes do not trigger other GitHub Actions workflows, so this workflow performs its own focused validation.
+
+For a local refresh, inspect local edits first, then run from the monorepo root:
 
 ```sh
-npx --yes skills@latest update --project --yes
+python3 scripts/update-community-skills.py
 ```
 
-Inspect local edits before reinstalling. Use `skills-lock.json` for provenance and keep it tracked. If the updater skips an installed skill, retry with its recorded source and name:
+The [helper](../scripts/update-community-skills.py) reinstalls explicit names from each recorded source through `skills.sh add`, avoiding observed skips of nested Next.js skills by `skills update`. `skills-lock.json` owns provenance. Unavailable sources, skipped installs, and inventory mismatches fail the run. Keep community content upstream-owned and update inventory/source links when adding or removing skills.
 
-```sh
-npx --yes skills@latest add <owner/repo> --skill <name> --agent codex --yes
-```
-
-Inspect the result and changed contents. Report unavailable sources rather than silently substituting another author. Keep community contents upstream-owned; repository-specific rules belong in our guides or custom workflows.
-
-After every community skill has successfully refreshed or been confirmed current, set **skills.sh updated at** above to the completion time in UTC ISO 8601 format (`YYYY-MM-DDTHH:MM:SSZ`). Partial, skipped, or failed refreshes leave it unchanged. Keep this inventory and source links aligned with the installed skills and lockfile. Check metadata, local references, and relevant helper behavior after updates; refresh the [guidance navigator](../ios-app/Docs/SETUP.md#repository-guidance-in-the-navigator) when files change. Report failures and preserve existing authorization boundaries for running workflows, committing, and pushing.
+Community packages are excluded from Xcode's Repository guidance group. Their update workflow does not refresh or modify the Xcode project. Custom skills and repository guidance remain maintained through [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md); ordinary tasks do not wait on community freshness. Local updates do not authorize committing, pushing, or executing installed workflows.

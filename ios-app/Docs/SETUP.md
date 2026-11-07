@@ -22,8 +22,8 @@ Apple documents the conversion and rollback in [Updating your Xcode project conf
 
 The **Repository guidance** group mirrors paths from the monorepo root:
 root/app `AGENTS.md` and READMEs, `docs/`, `tasks/`, `.agents/`, `.codex/`,
-and the iOS/backend/web documentation and agent directories. Skills appear at
-their canonical root filesystem locations. Redundant app aliases are removed.
+and the iOS/backend/web documentation and agent directories. Only custom `lg-` skills appear at
+their canonical filesystem locations; community skill packages are excluded. Redundant app aliases are removed.
 
 These are explicit navigator groups with no target membership. They expose
 checked-in documentation, approved screenshot baselines, skill metadata,

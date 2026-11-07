@@ -36,7 +36,7 @@ jobs:
       - name: Refresh and validate community skills
         run: python3 scripts/update-community-skills.py
 
-      - name: Stage community updates and refresh guidance navigator
+      - name: Stage community updates
         run: |
           python3 - <<'PY'
           import json
@@ -49,10 +49,7 @@ jobs:
               *[f".agents/skills/{name}" for name in names],
           ], check=True)
           PY
-          python3 ios-app/scripts/sync-guidance-navigator.py
-          python3 ios-app/scripts/sync-guidance-navigator.py --check
-          git add ios-app/Feedback.xcodeproj/project.xcproj
-          git diff --cached --check -- docs/skills.md skills-lock.json ios-app/Feedback.xcodeproj/project.xcproj
+          git diff --cached --check -- docs/skills.md skills-lock.json
 
       - name: Commit and push to main
         run: |

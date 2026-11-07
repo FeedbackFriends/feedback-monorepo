@@ -69,4 +69,4 @@ The [Codex configuration](../.codex/config.toml) connects native Xcode (`xcrun m
 
 Connections do not install CLIs, grant account access, or schedule work. The Coolify [auth helper](../scripts/coolify-mcp-auth-headers) reads `COOLIFY_MCP_TOKEN` from the ignored root `.env`; keep real credentials outside Git and restrict that file with `chmod 600 .env`. [iOS harness setup](../ios-app/Docs/agent-harness.md) owns Xcode connection details.
 
-When guidance files move, repair callers and refresh the [Xcode guidance navigator](../ios-app/Docs/SETUP.md#repository-guidance-in-the-navigator). Add executable hooks only for concrete failures they can reliably detect.
+Xcode Repository guidance includes custom `lg-` skills and repository documentation; community skill packages are excluded. When repository-owned guidance files move, repair callers and refresh the [Xcode guidance navigator](../ios-app/Docs/SETUP.md#repository-guidance-in-the-navigator). Add executable hooks only for concrete failures they can reliably detect.

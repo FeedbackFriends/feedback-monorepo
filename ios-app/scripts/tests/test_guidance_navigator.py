@@ -29,6 +29,31 @@ class GuidanceNavigatorTests(unittest.TestCase):
             ):
                 self.assertEqual(navigator.guidance_files(), ["docs/guide.md"])
 
+    def test_inventory_keeps_custom_skills_but_excludes_community_packages(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            custom = []
+            community = []
+            for prefix in ("", "ios-app/", "backend/", "web/"):
+                custom.append(f"{prefix}.agents/skills/lg-workflow/SKILL.md")
+                community.extend([
+                    f"{prefix}.agents/skills/community/SKILL.md",
+                    f"{prefix}.agents/skills/community/agents/AGENTS.md",
+                    f"{prefix}.agents/skills/community/scripts/helper.py",
+                ])
+            paths = custom + community + ["docs/skills.md", ".agents/config.toml"]
+            for name in paths:
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("guidance")
+            tracked = "\0".join(paths).encode()
+            with patch.object(navigator, "ROOT", root), patch.object(
+                navigator.subprocess, "check_output", return_value=tracked
+            ):
+                self.assertEqual(
+                    navigator.guidance_files(), sorted(custom + ["docs/skills.md", ".agents/config.toml"])
+                )
+
     def test_broken_alias_is_an_error(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
