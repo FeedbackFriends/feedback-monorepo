@@ -1,0 +1,19 @@
+.github/workflows/update-community-skills.yml
+  s_c27fa7d7602cff::t_1bfda1f8d69c95 18,24,29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "391a3aea0ac7e6cf10858553ac3d39bba0726e57",
+  "prompts": {},
+  "sessions": {
+    "s_c27fa7d7602cff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b6f6-6693-7951-a55e-ec78b7fdc4e5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
