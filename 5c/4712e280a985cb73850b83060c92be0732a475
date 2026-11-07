@@ -1,0 +1,125 @@
+.github/workflows/ci.yml
+  s_4b0b48164cf7bc::t_690ac47fe8881e 68-75
+docs/architecture.md
+  s_4b0b48164cf7bc::t_d0d51f14b01154 44
+tasks/06-rebrand-web-leader-dashboard.md
+  s_4b0b48164cf7bc::t_02854bcca66934 31,46
+tasks/web-mobile-navigation.md
+  s_4b0b48164cf7bc::t_81441b286801a7 21
+web/.nvmrc
+  s_4b0b48164cf7bc::t_ffd3f5be5bcc70 1
+web/AGENTS.md
+  s_4b0b48164cf7bc::t_ad64c18a2f9691 5
+web/Dockerfile
+  s_4b0b48164cf7bc::t_8ce491f9fbb4a0 3,9,18
+web/docs/agents/api-and-auth.md
+  s_4b0b48164cf7bc::t_e9ce4f68fb9af4 38-41
+web/docs/agents/architecture.md
+  s_4b0b48164cf7bc::t_c6496ed7d688e8 14,20-23,49-58
+web/docs/agents/ui.md
+  s_4b0b48164cf7bc::t_40e3a7ab24d44d 25,38-39
+web/docs/agents/validation.md
+  s_4b0b48164cf7bc::t_3ebee7d8aa3eeb 40-49
+web/package-lock.json
+  s_4b0b48164cf7bc::t_6562a247b44b9f 27,30,44,899-901,904-905,908-926,1514-1520,1571-1580,1588-1590,1594,3805-3807,3810,3834-3836,3841-3844,3847,3857,3859,3863-3865,3873-3875,3879-3882,3894,3898-3900,3904-3905,3916,3920-3922,3926-3927,3938-3940,3951,3955-3957,3961-3963,3965,3976,3980-3982,3994-3996,4000-4003,4008,4018,4045-4047,4051-4052,4055,4062-4064,4069-4071,4082,4086-4088,4092,6447-6449,6454,6482-6484,6508-6510,6567-6569,6573-6576,6587,6591-6593
+web/package.json
+  s_4b0b48164cf7bc::t_24a22be5608f0d 7,34,37,52-56
+web/playwright.config.ts
+  s_4b0b48164cf7bc::t_4aee0219158532 17-21,23-36
+web/src/app/(account)/dashboard/employees/page.tsx
+  s_4b0b48164cf7bc::t_3ef87ab5fea636 2
+web/src/app/(account)/dashboard/error.tsx
+  s_4b0b48164cf7bc::t_8f6058109e1d4e 1-18
+web/src/app/(account)/dashboard/how-it-works/page.tsx
+  s_4b0b48164cf7bc::t_3824b349c0b3ef 2
+web/src/app/(account)/dashboard/layout.tsx
+  s_4b0b48164cf7bc::t_81f41eae3c9b82 2
+web/src/app/(account)/dashboard/page.tsx
+  s_4b0b48164cf7bc::t_47c852a997212e 2
+web/src/app/(account)/dashboard/sessions/page.tsx
+  s_4b0b48164cf7bc::t_2ca5ce194362dc 2
+web/src/app/(account)/dashboard/surveys/page.tsx
+  s_4b0b48164cf7bc::t_ccb6d9ba7e01d6 2
+web/src/app/(account)/dashboard/teams/[teamId]/page.tsx
+  s_4b0b48164cf7bc::t_64bfb856e6b8c5 2
+web/src/app/(account)/layout.tsx
+  s_4b0b48164cf7bc::t_8dc7117b1d3c9b 1-9
+web/src/app/(account)/leader-invite/[code]/page.tsx
+  s_4b0b48164cf7bc::t_45f727f971cdf9 2
+web/src/app/api/leader/[...path]/route.ts
+  s_4b0b48164cf7bc::t_896c51ec465948 9,13,16,21,34,44
+web/src/app/globals.css
+  s_4b0b48164cf7bc::t_6df6481e9bb3a1 283-289
+web/src/app/invite/[id]/page.tsx
+  s_4b0b48164cf7bc::t_a60c966d740de1 15-16
+web/src/app/layout.tsx
+  s_4b0b48164cf7bc::t_f09c9fc548375e 24-29
+web/src/app/not-found.tsx
+  s_4b0b48164cf7bc::t_b487a71d12025f 1-14
+web/src/app/page.tsx
+  s_4b0b48164cf7bc::t_24168ecbc0ede5 1,6-8
+web/src/app/privacy-policy/page.tsx
+  s_4b0b48164cf7bc::t_cdfca7cfca31e0 6
+web/src/app/robots.ts
+  s_4b0b48164cf7bc::t_aa96ed3a76a28f 1-13
+web/src/app/sitemap.ts
+  s_4b0b48164cf7bc::t_a23b21521c939d 1-7
+web/src/app/team-invite/[code]/page.tsx
+  s_4b0b48164cf7bc::t_098b20f263da06 6
+web/src/components/auth/AuthProvider.tsx
+  s_4b0b48164cf7bc::t_935a22219f9236 86,91
+web/src/components/dashboard/DashboardShell.tsx
+  s_4b0b48164cf7bc::t_7dfc63bffd61c0 7,30,48
+web/src/components/landing/LandingPage.tsx
+  s_4b0b48164cf7bc::t_f24a658477d434 9,11-18
+web/src/components/landing/sections/HeroSection.tsx
+  s_4b0b48164cf7bc::t_13cefaa0072907 12,15,78
+web/src/components/landing/sections/MobileStickyCta.tsx
+  s_4b0b48164cf7bc::t_7774c038770eff 3,11-19,22
+web/src/components/layout/BrandLogo.tsx
+  s_4b0b48164cf7bc::t_00b6051382bf81 12-16,27
+web/src/components/teams/DashboardScreen.tsx
+  s_4b0b48164cf7bc::t_7fb2ae5828e3e7 5,34,36-38,45-53,61-69,73-82,84-87,96
+web/src/components/teams/EmployeesScreen.tsx
+  s_4b0b48164cf7bc::t_89bfac57549c91 4,29-33,36,39-42,45-60,91,103,174-179,190-195,225-230
+web/src/components/teams/LeaderInviteScreen.tsx
+  s_4b0b48164cf7bc::t_17b1a4ee0dde66 3,5,8-9,24-33,39-40,44,59-62,66,68-73,83-86,128-132
+web/src/components/teams/TeamInviteDialog.tsx
+  s_4b0b48164cf7bc::t_95c09b92ebbe9a 1-133
+web/src/components/teams/TeamLeaders.tsx
+  s_4b0b48164cf7bc::t_f60296eb84fe95 3,35-43,46-51,55,58-66,69,71-75,77-93,102-104,183,231-236,259-263
+web/src/components/teams/TeamScreen.tsx
+  s_4b0b48164cf7bc::t_b3c64e0aa8ed12 5,29-34,37,39,43-46,48,52-67,74,81,109,113-125,165-171,181-183,246-251
+web/src/components/teams/useTeamResource.ts
+  s_4b0b48164cf7bc::t_ef37106c9c9386 1-72
+web/src/lib/api/teams.ts
+  s_4b0b48164cf7bc::t_3ab6e5108c0f91 1,10-12,14-33,35-36,38-39,41,53,56-156
+web/src/lib/auth/index.ts
+  s_4b0b48164cf7bc::t_cd101988644207 19-21
+web/src/proxy.ts
+  s_4b0b48164cf7bc::t_8443e9c5e11ed3 17,20-23,26-28
+web/tests/architecture.spec.ts
+  s_4b0b48164cf7bc::t_a5da2579dbeb2e 1-84
+web/tests/fixtures/upstream.ts
+  s_4b0b48164cf7bc::t_8fc2ef23c6c798 1-40
+web/tests/relay.spec.ts
+  s_4b0b48164cf7bc::t_552482e7260d4b 1-65
+web/tests/teams.spec.ts
+  s_4b0b48164cf7bc::t_4d46d2d2bc780b 566-621
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5c4712e280a985cb73850b83060c92be0732a475",
+  "prompts": {},
+  "sessions": {
+    "s_4b0b48164cf7bc": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b81b-4a02-78c3-9601-84dfe98ac804",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
