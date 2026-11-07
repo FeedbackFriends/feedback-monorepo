@@ -1,0 +1,33 @@
+.gitignore
+  s_78f47d0f61cc21::t_33cbcef9743f49 58-59
+docs/agent-tooling.md
+  s_78f47d0f61cc21::t_572624e52489e2 71
+docs/skills.md
+  s_78f47d0f61cc21::t_dfedcb6f09ab26 58
+ios-app/Docs/agent-harness.md
+  s_78f47d0f61cc21::t_b3b06a0273b0f7 15,21
+scripts/tests/test_update_community_skills.py
+  s_78f47d0f61cc21::t_b9d285de73e11b 62-64,66,69
+scripts/tests/test_update_xcode_skills.py
+  s_78f47d0f61cc21::t_befb0db1caf41e 37,42-43,54-63
+scripts/update-community-skills.py
+  s_78f47d0f61cc21::t_0675960a1bfb36 25-27
+scripts/update-xcode-skills.py
+  s_78f47d0f61cc21::t_3d4e55ee8f917f 2,7,16-25,37-38,42-52,54-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7af7974bfc6a4c645c7a06b696efd5e2e6f86352",
+  "prompts": {},
+  "sessions": {
+    "s_78f47d0f61cc21": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b76e-e564-7900-8e8d-ce3b486af088",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
