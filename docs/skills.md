@@ -16,7 +16,6 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-create-task](../.agents/skills/lg-create-task/SKILL.md) | Add a short nontechnical item to `todos.md` only when requested. |
 | [lg-implement](../.agents/skills/lg-implement/SKILL.md) | Implement the agreed conversation plan and prepare its handoff. |
 | [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) | Improve custom skills, AGENTS.md, rules, docs, and guidance routing. |
-| [lg-investigate](../.agents/skills/lg-investigate/SKILL.md) | Trace a bug and record its cause and follow-up. |
 | [lg-ios-localhost](../.agents/skills/lg-ios-localhost/SKILL.md) | Start the local backend and launch manager/anonymous apps. |
 | [lg-ios-login](../.agents/skills/lg-ios-login/SKILL.md) | Launch iOS with a local test-account login. |
 | [lg-ios-production](../.agents/skills/lg-ios-production/SKILL.md) | Launch a Release simulator app against deployed production. |

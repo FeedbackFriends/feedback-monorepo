@@ -1,4 +1,0 @@
-interface:
-  display_name: "LetsGrow Investigate"
-  short_description: "Trace bugs across clients, API, data, and runtime"
-  default_prompt: "Use $lg-investigate to investigate this bug across affected platforms and recommend a grounded fix."
