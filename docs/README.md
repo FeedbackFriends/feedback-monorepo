@@ -16,7 +16,7 @@ Use this index to find the maintained source rather than copying it.
 | Local services and production | [Runtime and deployment](agents/runtime-and-deployment.md) |
 | CI and releases | [CI/CD](agents/ci-cd.md) |
 | Browser access | [Browser policy](agents/browser-access.md) |
-| Web | [Architecture](../web/docs/agents/architecture.md), [policy and guide map](../web/AGENTS.md) |
+| Web | [Policy, architecture, and guide map](../web/AGENTS.md) |
 | Backend | [App overview](../backend/README.md), [policy and guide map](../backend/AGENTS.md) |
 | iOS | [App overview](../ios-app/README.md), [policy and guide map](../ios-app/AGENTS.md), [iOS harness](../ios-app/Docs/agent-harness.md) |
 

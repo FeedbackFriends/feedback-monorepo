@@ -15,14 +15,13 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-coolify-operations](../.agents/skills/lg-coolify-operations/SKILL.md) | Operate and troubleshoot Coolify production deployments. |
 | [lg-add-todo](../.agents/skills/lg-add-todo/SKILL.md) | Add a short nontechnical item to `todos.md` only when requested. |
 | [lg-implement](../.agents/skills/lg-implement/SKILL.md) | Implement the agreed conversation plan and prepare its handoff. |
-| [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) | Improve custom skills, AGENTS.md, rules, docs, and guidance routing. |
+| [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) | Simplify custom skills, AGENTS.md, rules, and documentation; audit guidance against source. |
 | [lg-ios-localhost](../.agents/skills/lg-ios-localhost/SKILL.md) | Start the local backend and launch manager/anonymous apps. |
 | [lg-ios-login](../.agents/skills/lg-ios-login/SKILL.md) | Launch iOS with a local test-account login. |
 | [lg-ios-production](../.agents/skills/lg-ios-production/SKILL.md) | Launch a Release simulator app against deployed production. |
 | [lg-ios-screenshots](../.agents/skills/lg-ios-screenshots/SKILL.md) | Capture and compare the curated iOS screenshot catalog. |
 | [lg-ios-sync-openapi](../.agents/skills/lg-ios-sync-openapi/SKILL.md) | Sync handwritten iOS API boundaries with generated clients. |
 | [lg-ios-test-notifications](../.agents/skills/lg-ios-test-notifications/SKILL.md) | Run the iOS notification test command. |
-| [lg-maintain-docs](../.agents/skills/lg-maintain-docs/SKILL.md) | Audit, trim, and update documentation against source. |
 | [lg-refine](../.agents/skills/lg-refine/SKILL.md) | Grill requirements and architecture with the user before implementation. |
 | [lg-review](../.agents/skills/lg-review/SKILL.md) | Review changes for concrete regressions. |
 | [lg-tailwind-nextjs-expert](../.agents/skills/lg-tailwind-nextjs-expert/SKILL.md) | Implement web styling with existing tokens and components. |

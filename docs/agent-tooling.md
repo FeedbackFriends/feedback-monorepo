@@ -41,7 +41,7 @@ Browse the [skills overview](skills.md) for every repository skill and its commu
 - Custom workflows use `lg-` names, with platform prefixes when relevant.
 - Claude Code's `.claude/skills/<name>` entries are directory symlinks to the same-named canonical skills. Preserve these aliases when adding, removing, or renaming skills; community updates replace canonical content and keep aliases intact. See [Claude skill discovery](https://code.claude.com/docs/en/skills).
 - Community skills are installed through [skills.sh](https://skills.sh/) and recorded in the tracked [skills-lock.json](../skills-lock.json). Preserve upstream contents; keep repository-specific rules in our guides.
-- Use [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) to improve custom workflows, policy, rules, and guidance. Community installation updates follow [their separate procedure](skills.md#update-community-skills). Use [lg-maintain-docs](../.agents/skills/lg-maintain-docs/SKILL.md) to audit and trim guidance against source.
+- Use [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) to improve custom workflows, policy, rules, and documentation, including audits against source. Community installation updates follow [their separate procedure](skills.md#update-community-skills).
 
 ## Task and verification flow
 
