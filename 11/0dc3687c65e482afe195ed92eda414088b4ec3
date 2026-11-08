@@ -1,0 +1,25 @@
+.agents/skills/lg-add-todo/SKILL.md
+  s_3ec592f238ba1b::t_5eef242c93d46a 11-12
+AGENTS.md
+  s_3ec592f238ba1b::t_4f6c241bc60152 10
+docs/shared/agents/task-workflow.md
+  s_3ec592f238ba1b::t_83719513317e34 3
+todos.md
+  s_3ec592f238ba1b::t_29e6af61615ffe 3-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "110dc3687c65e482afe195ed92eda414088b4ec3",
+  "prompts": {},
+  "sessions": {
+    "s_3ec592f238ba1b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bd15-6cf7-7cb0-b96c-ce52b0f8a132",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
