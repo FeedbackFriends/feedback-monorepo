@@ -34,7 +34,6 @@
     { "path": "<PROJECT>/Modules/Tests/ScreenSnapshotTests/SnapshotHost.swift", "target-membership": [ "SnapshotHost/compile-sources" ] },
     { "path": "<PRODUCTS>/ScreenSnapshotTests.xctest", "id": "AA2026102700000000000005", "type": "wrapper.cfbundle" },
     { "path": "<PRODUCTS>/SnapshotHost.app", "id": "AA2026102700000000000006", "type": "wrapper.application" },
-    ,
     { "path": ".swiftlint.yml" },
     { "path": "UnitTests.xctestplan" },
     {
