@@ -15,6 +15,6 @@ LetsGrow has a Next.js web app, Kotlin/Spring backend and scheduler, and a nativ
 
 Use Node.js from `web/.nvmrc` for web commands. The root Compose override supplies local Postgres and development wiring; the base Compose file defines production services.
 
-Read [runtime and deployment](docs/shared/agents/runtime-and-deployment.md) before running the stack. From the root, `./scripts/shared/run -d` regenerates API artifacts, rebuilds images, and starts services. **It deletes local Compose volumes and their data.** For data-preserving backend startup and iOS launch, use the [iOS workflows](docs/shared/agents/ios-workflows.md).
+Read [runtime and deployment](docs/shared/agents/runtime-and-deployment.md) before running the stack. From the root, `./scripts/shared/run -d` regenerates API artifacts, rebuilds images, and starts services. **It deletes local Compose volumes and their data.** For data-preserving backend startup and iOS launch, use the [localhost workflow](.agents/skills/lg-ios-run-local/SKILL.md).
 
 Keep credentials in the ignored root `.env` and local iOS configuration. Use `.env.example` and the owning app guides for setup. Production deployment is documented in [Coolify](docs/shared/deployment/coolify.md).

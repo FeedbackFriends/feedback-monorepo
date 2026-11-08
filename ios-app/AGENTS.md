@@ -27,4 +27,4 @@ For Swift changes, run `python3 scripts/ios/lint-swift-changes.py --base <merge-
 | Swift tests, linting, CI, or Maestro flows | [Testing and linting](../docs/ios/agents/testing.md) |
 | Product copy, onboarding, or domain naming | [Product language](../docs/ios/agents/product-language.md) |
 
-Repository-wide rules remain in the [root AGENTS.md](../AGENTS.md). For backend preparation and local/production app launch, use the [shared iOS workflows](../docs/shared/agents/ios-workflows.md).
+Repository-wide rules remain in the [root AGENTS.md](../AGENTS.md). For backend preparation and local/production app launch, use the [iOS workflows](../docs/ios/agent-harness.md#workflows).

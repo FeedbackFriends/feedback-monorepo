@@ -69,7 +69,7 @@ This ensures the client stays in sync with the backend contract.
 
 For the feature-development harness, see [refinement, implementation, Swift, verification, review, and investigation workflows](../docs/ios/agents/feature-workflow.md). These skills are available from agent sessions started at the monorepo root.
 
-For a complete backend and simulator run, use `$lg-ios-run-local`. To build a Release simulator app against the existing Coolify deployment, use `$lg-ios-run-production`. See [build/run workflows](../docs/shared/agents/ios-workflows.md).
+For a complete backend and simulator run, use `$lg-ios-run-local`. To build a Release simulator app against the existing Coolify deployment, use `$lg-ios-run-production`. See [build/run workflows](../docs/ios/agent-harness.md#workflows).
 
 - Unit and reducer tests: `ios-app/Modules/Tests/`
 - Snapshot tests via `swift-snapshot-testing`

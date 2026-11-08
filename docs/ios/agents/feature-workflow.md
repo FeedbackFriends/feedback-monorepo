@@ -10,7 +10,7 @@ Start at the monorepo root. The shared [task workflow](../../shared/agents/task-
 | Write/refactor Swift | [Swift guidance](swift.md) | LetsGrow architecture, UI, localization, and testing conventions applied |
 | Review code or a diff | [$lg-review](../../../.agents/skills/lg-review/SKILL.md) | Ranked findings grounded in a concrete failure path |
 
-These are agent prompts, not shell commands. Natural-language requests work too. Existing launch, login, screenshot, notification, and API-sync skills continue to own their procedures; see [shared iOS workflows](../../shared/agents/ios-workflows.md) and [simulator guidance](simulator.md).
+These are agent prompts, not shell commands. Natural-language requests work too. Existing launch, login, screenshot, notification, and API-sync skills continue to own their procedures; see [iOS workflows](../agent-harness.md#workflows) and [simulator guidance](simulator.md).
 
 The [shared task workflow](../../shared/agents/task-workflow.md) owns backlog simplicity, refinement, and completion. Keep iOS plans and evidence in the conversation; put enduring knowledge in its owning guide.
 

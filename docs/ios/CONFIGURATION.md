@@ -17,7 +17,7 @@ See `ios-app/App/InfoPlist/Info.plist` and scheme‑specific `.xcconfig` files u
 
 ## Schemes
 
-The default local scheme is `Feedback Localhost`; `Feedback Production` targets production. See [setup](SETUP.md) and [the harness overview](agent-harness.md) for running and testing.
+The default local scheme is `Feedback Localhost`; `Feedback Production` targets production. See [setup and workflows](agent-harness.md) for running and testing.
 
 ## Accessing values
 

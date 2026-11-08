@@ -13,4 +13,4 @@ Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md) and 
 
 Report production health, API URL, scheme/configuration, simulator, and app build/launch result separately. State whether login or any API journey was actually checked. A production app run uses real production data; additional mutations require the user's requested product action.
 
-See the [harness guide](../../../docs/shared/agents/ios-workflows.md) for setup and runtime assumptions.
+See the [harness guide](../../../docs/ios/agent-harness.md) for setup and runtime assumptions.

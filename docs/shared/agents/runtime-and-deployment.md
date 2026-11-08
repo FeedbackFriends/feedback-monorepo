@@ -16,7 +16,7 @@ docker compose logs -f
 docker compose ps
 ```
 
-`./scripts/shared/run` stops the stack with `docker compose down --volumes --remove-orphans`, regenerates API artifacts, rebuilds backend images, and starts Compose. For local backend plus iOS work, follow [iOS workflows](ios-workflows.md), which routes to the data-preserving startup workflow.
+`./scripts/shared/run` stops the stack with `docker compose down --volumes --remove-orphans`, regenerates API artifacts, rebuilds backend images, and starts Compose. For local backend plus iOS work, use the [data-preserving localhost skill](../../../.agents/skills/lg-ios-run-local/SKILL.md).
 
 ## Environment
 
