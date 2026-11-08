@@ -74,7 +74,7 @@ Connections do not install CLIs, grant account access, or schedule work. The Coo
 
 ## Claude Code setup
 
-Start `claude` at the monorepo root. Root [CLAUDE.md](../CLAUDE.md) records that both Codex and Claude Code are active and imports [AGENTS.md](../AGENTS.md), which owns shared policy. Read the nearest app `AGENTS.md` before editing its subtree, as root policy requires. Keep client-specific connection files and skill discovery working for both clients.
+Start a current Claude Code version at the monorepo root and load [AGENTS.md](../AGENTS.md) directly. It owns shared policy and records that both Codex and Claude Code are active. A separate `CLAUDE.md` is unnecessary. If instructions are absent, check `/config` → Project instructions; an ancestor `CLAUDE.md` can take precedence, so select `claude-md-and-agents-md` when needed. See [Claude instruction loading](https://code.claude.com/docs/en/memory#agentsmd). Read the nearest app `AGENTS.md` before editing its subtree, as root policy requires. Keep client-specific connection files and skill discovery working for both clients.
 
 Verify a new session:
 
