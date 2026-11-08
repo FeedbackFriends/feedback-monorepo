@@ -9,17 +9,17 @@ Use the Gradle wrapper from `backend/`; warnings fail the build.
 - Build: `./gradlew clean build`
 - Test: `./gradlew test` or the affected module task, such as `./gradlew :api:test`.
 - Build local images: `./gradlew --no-configuration-cache buildLocalImages`.
-- Regenerate the contract and clients from the monorepo root: `./scripts/generate-api-artifacts.sh`.
+- Regenerate the contract and clients from the monorepo root: `./scripts/shared/generate-api-artifacts.sh`.
 
 ## Read when relevant
 
 | Task | Guidance |
 | --- | --- |
-| Task refinement, implementation, review, or handoff | [Shared task workflow](../docs/agents/task-workflow.md) |
+| Task refinement, implementation, review, or handoff | [Shared task workflow](../docs/shared/agents/task-workflow.md) |
 | Kotlin implementation or module ownership | [Architecture and conventions](#architecture-and-conventions) |
 | Endpoints, DTOs, or generated contracts | [API contract](#api-contract) |
-| Database, DAO, or migration changes | [Persistence](docs/agents/persistence.md) |
-| Build, tests, or validation | [Commands and validation](docs/agents/validation.md) |
+| Database, DAO, or migration changes | [Persistence](../docs/backend/agents/persistence.md) |
+| Build, tests, or validation | [Commands and validation](../docs/backend/agents/validation.md) |
 | Service startup or environment | [Runtime](#runtime-and-environment) |
 
 Repository-wide rules remain in the [root AGENTS.md](../AGENTS.md).
@@ -34,7 +34,7 @@ Repository-wide rules remain in the [root AGENTS.md](../AGENTS.md).
 - `lib/persistence/`: Exposed repositories/DAOs and Liquibase migrations.
 - `lib/firebase/`: Firebase integration helpers.
 - `lib/ical-parser/`: iCal parsing utilities.
-- `docs/`: backend architecture notes and PlantUML diagrams.
+- `../docs/backend/`: backend architecture notes and PlantUML diagrams.
 
 Tests live next to their modules under `src/test/kotlin`. API and persistence tests are the main integration coverage points.
 
@@ -58,18 +58,18 @@ Tests live next to their modules under `src/test/kotlin`. API and persistence te
 
 Organization creators own all organization teams. Additional leaders have one database assignment to one team; only the owner creates teams or changes leaders. Check current database authority on every team request, never legacy Manager claims. Personal leader invitations require the matching verified email and expire after seven days; employee invitation codes remain separate.
 
-Supabase Auth is verified by the API against its project JWKS and user endpoint. See [setup/cutover](../docs/agents/supabase-auth.md). `authenticated` is a provider role, never a team role. Nonanonymous sessions retain the existing personal-meeting Manager capability; team authority remains stored ownership/assignment.
+Supabase Auth is verified by the API against its project JWKS and user endpoint. See [setup/cutover](../docs/shared/agents/supabase-auth.md). `authenticated` is a provider role, never a team role. Nonanonymous sessions retain the existing personal-meeting Manager capability; team authority remains stored ownership/assignment.
 
 ## API contract
 
 - Backend controllers, DTOs, and OpenAPI configuration are the source of truth.
 - `syncOpenApiSpec` writes `contracts/openapi/feedback-api.yaml`.
-- Do not hand-edit the contract or generated clients; see the [shared API contract guide](../docs/agents/api-contract.md).
-- After endpoint, request, response, enum, or error-shape changes, regenerate with `./scripts/generate-api-artifacts.sh` from the monorepo root and update affected call sites.
+- Do not hand-edit the contract or generated clients; see the [shared API contract guide](../docs/shared/agents/api-contract.md).
+- After endpoint, request, response, enum, or error-shape changes, regenerate with `./scripts/shared/generate-api-artifacts.sh` from the monorepo root and update affected call sites.
 
 ## Runtime and environment
 
-- Local full-stack runtime is orchestrated from the monorepo root with `./scripts/run`.
+- Local full-stack runtime is orchestrated from the monorepo root with `./scripts/shared/run`.
 - Direct service runs require the same environment contract described in `backend/README.md` and the root `.env.example`.
 - Keep secrets out of source control. Treat Supabase secret keys, SMTP credentials, Firebase service accounts and Zoho values as secrets.
-- Configure managed auth, mail, native clients and cutover through [Supabase auth setup](../docs/agents/supabase-auth.md).
+- Configure managed auth, mail, native clients and cutover through [Supabase auth setup](../docs/shared/agents/supabase-auth.md).

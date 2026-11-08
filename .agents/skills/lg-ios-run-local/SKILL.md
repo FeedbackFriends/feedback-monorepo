@@ -5,7 +5,7 @@ description: Start the local LetsGrow backend and launch iOS for manual testing,
 
 # Build and run LetsGrow locally
 
-Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md), the [simulator guide](../../../ios-app/Docs/agents/simulator.md), and the [manual testing guide](../../../ios-app/Docs/local-testing.md). Use launch-only mode; this command does not require running the test suites or screenshot catalog.
+Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md), the [simulator guide](../../../docs/ios/agents/simulator.md), and the [manual testing guide](../../../docs/ios/local-testing.md). Use launch-only mode; this command does not require running the test suites or screenshot catalog.
 
 ## Invocation
 
@@ -40,15 +40,15 @@ $lg-ios-run-local anonymous
 
 ## Backend and data
 
-1. Run `./scripts/ios-backend localhost`. It builds the API image, starts API/Postgres, and waits for health while preserving volumes. Stop on failure and report the failing stage. Do not use `scripts/run` or remove Compose volumes.
-2. Only when `reset-db` was requested, run `API_BASE_URL=http://localhost:8080 E2E_ADMIN_RETRIES=1 ./scripts/e2e-admin reset`. Stop on failure; never retry a destructive operation automatically.
-3. If `seed-manager` was requested, or after a successful requested database reset when mode is `manager` or `both`, run `API_BASE_URL=http://localhost:8080 E2E_ADMIN_RETRIES=1 ./scripts/e2e-admin seed-manager-with-data > /dev/null`. Stop on failure. Discard token output and never log credentials. Do not seed twice when both options are present.
+1. Run `./scripts/ios/ios-backend localhost`. It builds the API image, starts API/Postgres, and waits for health while preserving volumes. Stop on failure and report the failing stage. Do not use `scripts/shared/run` or remove Compose volumes.
+2. Only when `reset-db` was requested, run `API_BASE_URL=http://localhost:8080 E2E_ADMIN_RETRIES=1 ./scripts/shared/e2e-admin reset`. Stop on failure; never retry a destructive operation automatically.
+3. If `seed-manager` was requested, or after a successful requested database reset when mode is `manager` or `both`, run `API_BASE_URL=http://localhost:8080 E2E_ADMIN_RETRIES=1 ./scripts/shared/e2e-admin seed-manager-with-data > /dev/null`. Stop on failure. Discard token output and never log credentials. Do not seed twice when both options are present.
 
 The fixed loopback origin prevents a caller's `API_BASE_URL` environment override from redirecting fixture operations elsewhere. Missing fixtures or disabled admin endpoints are actionable failures; do not silently seed/reset without the corresponding option. Explain that `seed-manager` replaces the fixture's sample data when describing a first-time invocation.
 
 ## Simulator launch
 
-1. Follow [shared launch setup](../../../ios-app/Docs/agents/simulator.md#shared-launch-setup) in launch-only mode. If the workspace remains unavailable, report the blocker and leave the healthy backend running.
+1. Follow [shared launch setup](../../../docs/ios/agents/simulator.md#shared-launch-setup) in launch-only mode. If the workspace remains unavailable, report the blocker and leave the healthy backend running.
 2. Select the scheme for the requested mode, then discover eligible run destinations. Keep the active eligible iPhone simulator for the first role unless the user chose another. For `both`, choose a second existing eligible iPhone simulator with a different device UUID; prefer an already running second simulator when native tool output identifies one. Report the selected role-to-device mapping. Do not create or erase simulators, or select physical/generic devices. If fewer than two are available, report the missing destination rather than claiming both launched.
 3. For each role, select its scheme and run destination, using a separate workspace-backed interaction session. Confirm `deviceIsSimulator` and distinct `deviceUUID` values. Launch directly with `DeviceInteractionInstallAndRun`, setting `environmentVariables` to `{"LETSGROW_LOCAL_TEST_ACCOUNT":"manager"}` or `{"LETSGROW_LOCAL_TEST_ACCOUNT":"anonymous"}` respectively. Do not also call `RunProject` or supply legacy custom-token launch arguments. The DEBUG startup helper fetches the manager token internally before RootFeature observes auth; anonymous mode preserves a current anonymous identity or creates a new one after signing out a manager. No tokens belong in shared schemes.
 4. Inspect the UI using Apple device-interaction guidance and current native tools. Verify manager access to owner features and anonymous access to the PIN feedback flow without manager access. For `both`, keep both interaction sessions until the second launch is complete, then inspect both again to establish that both apps are running in the expected state. A startup error, lost first app, or wrong role is a failed/incomplete launch, not success. Do not run a session/feedback mutation just to prove login unless requested.

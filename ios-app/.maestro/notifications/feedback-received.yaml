@@ -1,4 +1,4 @@
-# Run via scripts/test-notifications.py, which prepares an offline owner/session
+# Run via scripts/ios/test-notifications.py, which prepares an offline owner/session
 # and injects the actual localized APNs payload. Deliberately no launchApp: tapping the
 # notification must launch/resume the app, including the terminated-app case.
 appId: dk.nicolaidam.letsgrow

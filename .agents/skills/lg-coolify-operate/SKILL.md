@@ -33,7 +33,7 @@ owner's instruction.
 
 If a Coolify MCP connection is available, start with the infrastructure overview and search for the LetsGrow Compose resource. Inspect deployment history, resource/service health, and supported log summaries. Use a team-scoped token with read access for inspection; add deploy permission only when the task requires lifecycle operations. Keep the token in the MCP client's secret storage.
 
-The MCP endpoint is the trusted Coolify instance's HTTPS URL ending in `/mcp`, using Streamable HTTP and a Bearer token. Do not expose it through the customer-facing LetsGrow domain. See `docs/deployment/coolify.md` for setup details.
+The MCP endpoint is the trusted Coolify instance's HTTPS URL ending in `/mcp`, using Streamable HTTP and a Bearer token. Do not expose it through the customer-facing LetsGrow domain. See `docs/shared/deployment/coolify.md` for setup details.
 
 ## Access limits
 

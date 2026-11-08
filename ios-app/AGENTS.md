@@ -10,21 +10,21 @@ Use Swift Package Manager. The main project is `Feedback.xcodeproj`; the develop
 
 ## Non-standard validation
 
-For Swift changes, run `python3 ios-app/scripts/lint-swift-changes.py --base <merge-base>` from the monorepo root. Use the merge base with the target branch (normally `origin/main`), or `HEAD` for uncommitted changes only. Follow the testing guide for changed-line lint rules and reporting.
+For Swift changes, run `python3 scripts/ios/lint-swift-changes.py --base <merge-base>` from the monorepo root. Use the merge base with the target branch (normally `origin/main`), or `HEAD` for uncommitted changes only. Follow the testing guide for changed-line lint rules and reporting.
 
 ## Read when relevant
 
 | Task | Guidance |
 | --- | --- |
-| Refining, implementing, verifying, reviewing, or investigating a feature | [Feature development](Docs/agents/feature-workflow.md) |
-| Writing or refactoring Swift | [Swift implementation](Docs/agents/swift.md) |
-| Features, dependencies, shared state, or module ownership | [Architecture and state](Docs/agents/architecture.md) |
-| API adapters, mappers, or generated clients | [API integration](Docs/agents/api-contract.md) |
-| SwiftUI components, tokens, or styling | [Design system](Docs/agents/design-system.md) |
-| SwiftUI/reducer naming or form validation | [UI conventions](Docs/agents/ui.md) |
-| Build, test, launch, simulator interaction, or login | [Simulator workflows](Docs/agents/simulator.md) |
-| UI changes, screenshots, or baseline acceptance | [Visual review](Docs/agents/visual-review.md) |
-| Swift tests, linting, CI, or Maestro flows | [Testing and linting](Docs/agents/testing.md) |
-| Product copy, onboarding, or domain naming | [Product language](Docs/agents/product-language.md) |
+| Refining, implementing, verifying, reviewing, or investigating a feature | [Feature development](../docs/ios/agents/feature-workflow.md) |
+| Writing or refactoring Swift | [Swift implementation](../docs/ios/agents/swift.md) |
+| Features, dependencies, shared state, or module ownership | [Architecture and state](../docs/ios/agents/architecture.md) |
+| API adapters, mappers, or generated clients | [API integration](../docs/ios/agents/api-contract.md) |
+| SwiftUI components, tokens, or styling | [Design system](../docs/ios/agents/design-system.md) |
+| SwiftUI/reducer naming or form validation | [UI conventions](../docs/ios/agents/ui.md) |
+| Build, test, launch, simulator interaction, or login | [Simulator workflows](../docs/ios/agents/simulator.md) |
+| UI changes, screenshots, or baseline acceptance | [Visual review](../docs/ios/agents/visual-review.md) |
+| Swift tests, linting, CI, or Maestro flows | [Testing and linting](../docs/ios/agents/testing.md) |
+| Product copy, onboarding, or domain naming | [Product language](../docs/ios/agents/product-language.md) |
 
-Repository-wide rules remain in the [root AGENTS.md](../AGENTS.md). For backend preparation and local/production app launch, use the [shared iOS workflows](../docs/agents/ios-workflows.md).
+Repository-wide rules remain in the [root AGENTS.md](../AGENTS.md). For backend preparation and local/production app launch, use the [shared iOS workflows](../docs/shared/agents/ios-workflows.md).

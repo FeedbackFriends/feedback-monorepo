@@ -6,7 +6,7 @@ description: Run the LetsGrow iOS notification test command.
 From the monorepo root, run:
 
 ```bash
-python3 ios-app/scripts/test-notifications.py --counts 0 1 2 99
+python3 scripts/ios/test-notifications.py --counts 0 1 2 99
 ```
 
 For `smoke`, use `--counts 99` instead. Forward explicitly supplied runner options.

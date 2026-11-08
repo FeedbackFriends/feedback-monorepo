@@ -5,7 +5,7 @@ description: Start the LetsGrow iOS app already logged in as a local test user b
 
 # Log In to LetsGrow iOS
 
-Follow [iOS policy](../../../ios-app/AGENTS.md) and the [shared launch setup](../../../ios-app/Docs/agents/simulator.md#shared-launch-setup) in launch-only mode. Use loaded Apple guidance for device interaction. Keep local test tokens out of tracked files and shared schemes; they may appear in helper output and MCP arguments.
+Follow [iOS policy](../../../ios-app/AGENTS.md) and the [shared launch setup](../../../docs/ios/agents/simulator.md#shared-launch-setup) in launch-only mode. Use loaded Apple guidance for device interaction. Keep local test tokens out of tracked files and shared schemes; they may appear in helper output and MCP arguments.
 
 ## Prepare
 

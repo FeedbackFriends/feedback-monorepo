@@ -5,7 +5,7 @@ Localhost Maestro setup for seeded iOS simulator E2E.
 Deferred journey-coverage work is listed in the root [todos](../../todos.md); grill its current scope before implementation.
 
 Notification localization and tap checks have a separate [notification guide](notifications/README.md).
-Run `python3 ios-app/scripts/test-notifications.py` for notification injection and
+Run `python3 scripts/ios/test-notifications.py` for notification injection and
 UI assertions against the real local backend. It uses the data-preserving
 `ios-backend localhost` startup and existing manager login. Add `--seed-manager`
 only to replace the standard sample fixture; no whole-database reset is used.
@@ -22,7 +22,7 @@ only to replace the standard sample fixture; no whole-database reset is used.
 From repo root:
 
 ```bash
-./scripts/e2e
+./scripts/ios/e2e
 ```
 
 The default flow is `manager-create-activity-event`.
@@ -30,15 +30,15 @@ The default flow is `manager-create-activity-event`.
 Run a specific flow or scenario:
 
 ```bash
-./scripts/e2e manager-create-activity-event
-./scripts/e2e debug-auth-seed-manager
-./scripts/e2e ios-app/.maestro/flows/manager-create-activity-event.yaml
-./scripts/e2e all
+./scripts/ios/e2e manager-create-activity-event
+./scripts/ios/e2e debug-auth-seed-manager
+./scripts/ios/e2e ios-app/.maestro/flows/manager-create-activity-event.yaml
+./scripts/ios/e2e all
 ```
 
 What it does:
 
-1. Starts local stack via `./scripts/run -d`
+1. Starts local stack via `./scripts/shared/run -d`
 2. Waits for API health on `http://localhost:8090/actuator/health`
 3. Builds and installs iOS app with `Feedback Localhost` scheme
 4. Resets backend state before each flow
@@ -50,7 +50,7 @@ Set `E2E_SKIP_BACKEND_START=1` if you already have the local backend stack runni
 
 ## Runtime Auth
 
-Most flows use script-based backend seeding plus E2E launch arguments. The app does not call admin seed endpoints; the runner seeds through `./scripts/e2e-admin`, captures the custom token, and passes it to Maestro without printing it.
+Most flows use script-based backend seeding plus E2E launch arguments. The app does not call admin seed endpoints; the runner seeds through `./scripts/shared/e2e-admin`, captures the custom token, and passes it to Maestro without printing it.
 
 `manager-create-activity-event` uses auto-login via `E2E_ENABLE_AUTO_LOGIN=1`.
 
@@ -58,11 +58,11 @@ Most flows use script-based backend seeding plus E2E launch arguments. The app d
 
 ## Admin Helper
 
-The runner uses `./scripts/e2e-admin` for local backend reset and seed commands:
+The runner uses `./scripts/shared/e2e-admin` for local backend reset and seed commands:
 
 ```bash
-./scripts/e2e-admin reset
-./scripts/e2e-admin seed-manager-empty
+./scripts/shared/e2e-admin reset
+./scripts/shared/e2e-admin seed-manager-empty
 ```
 
 Seed commands print only the custom token to stdout.
@@ -73,5 +73,5 @@ Seed commands print only the custom token to stdout.
 - Override simulator by setting `SIMULATOR_NAME`:
 
 ```bash
-SIMULATOR_NAME="iPhone 16 Pro" ./scripts/e2e
+SIMULATOR_NAME="iPhone 16 Pro" ./scripts/ios/e2e
 ```

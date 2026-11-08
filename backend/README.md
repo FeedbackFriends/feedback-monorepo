@@ -121,7 +121,7 @@ This writes the committed monorepo contract to `../contracts/openapi/feedback-ap
 Zoho OAuth scopes for Self Client should use `ZohoMail.messages.READ` for the scheduler runtime. If Zoho rejects multiple scopes in a Self Client grant, obtain `ZOHO_ACCOUNT_ID` and `ZOHO_FOLDER_ID` with one-off access tokens using `ZohoMail.accounts.READ` and `ZohoMail.folders.READ`, then switch the refresh token to `ZohoMail.messages.READ` for the runtime path.
 
 ## Documentation
-- [Architecture Overview](./docs/overview.md) explains module roles and request/notification flows.
-- [Diagrams](./docs/diagrams/) contains PlantUML diagrams.
+- [Architecture Overview](../docs/backend/overview.md) explains module roles and request/notification flows.
+- [Diagrams](../docs/backend/diagrams) contains PlantUML diagrams.
 
-Managed authentication, invitation SMTP, fresh-account cutover and rollback are documented in [Supabase auth setup](../docs/agents/supabase-auth.md). Firebase remains responsible for push delivery only.
+Managed authentication, invitation SMTP, fresh-account cutover and rollback are documented in [Supabase auth setup](../docs/shared/agents/supabase-auth.md). Firebase remains responsible for push delivery only.

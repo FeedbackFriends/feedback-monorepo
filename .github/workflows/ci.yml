@@ -104,7 +104,7 @@ jobs:
         working-directory: web
 
       - name: Generate committed API artifacts
-        run: ./scripts/generate-api-artifacts.sh
+        run: ./scripts/shared/generate-api-artifacts.sh
 
       - name: Verify committed Swift API artifacts are up to date
         run: git diff --exit-code -- ios-app/Modules/Sources/OpenAPI/GeneratedSources

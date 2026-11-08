@@ -31,10 +31,10 @@ jobs:
           node-version: "22"
 
       - name: Test update helper
-        run: python3 -m unittest discover -s scripts/tests -p test_update_community_skills.py -v
+        run: python3 -m unittest discover -s scripts/shared/tests -p test_update_community_skills.py -v
 
       - name: Refresh and validate community skills
-        run: python3 scripts/update-community-skills.py
+        run: python3 scripts/shared/update-community-skills.py
 
       - name: Stage community updates
         run: |
@@ -45,11 +45,11 @@ jobs:
 
           names = json.loads(Path("skills-lock.json").read_text())["skills"]
           subprocess.run([
-              "git", "add", "-A", "--", "skills-lock.json", "docs/skills.md",
+              "git", "add", "-A", "--", "skills-lock.json", "docs/shared/skills.md",
               *[f".agents/skills/{name}" for name in names],
           ], check=True)
           PY
-          git diff --cached --check -- docs/skills.md skills-lock.json
+          git diff --cached --check -- docs/shared/skills.md skills-lock.json
 
       - name: Commit and push to main
         run: |

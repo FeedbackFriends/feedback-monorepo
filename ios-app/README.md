@@ -7,11 +7,11 @@ This repository contains the source code for the **Lets Grow: Feedback** iOS app
 The app is 100% SwiftUI, [The Composable Architecture (TCA)](https://github.com/pointfreeco/swift-composable-architecture) and leverages iOS 26’s **Liquid Glass** effects.
 
 <p float="left">
-  <img src="Docs/screenshots/screenshot_1.jpg" width="19%" />
-  <img src="Docs/screenshots/screenshot_2.jpg" width="19%" />
-  <img src="Docs/screenshots/screenshot_3.jpg" width="19%" />
-  <img src="Docs/screenshots/screenshot_4.jpg" width="19%" />
-  <img src="Docs/screenshots/screenshot_5.jpg" width="19%" />
+  <img src="../docs/ios/screenshots/screenshot_1.jpg" width="19%" />
+  <img src="../docs/ios/screenshots/screenshot_2.jpg" width="19%" />
+  <img src="../docs/ios/screenshots/screenshot_3.jpg" width="19%" />
+  <img src="../docs/ios/screenshots/screenshot_4.jpg" width="19%" />
+  <img src="../docs/ios/screenshots/screenshot_5.jpg" width="19%" />
 </p>
 
 
@@ -45,9 +45,9 @@ ios-app/
       Logger/, Utility/, InfoPlist/  # Cross‑cutting utilities
     Tests/                     # Reducer & snapshot tests
   Resources/                   # Assets, launch screen, localization
-  Docs/                        # Documentation, screenshots, push samples
 ```
 
+Documentation and screenshot assets live under root `docs/ios/`; helper scripts live under `scripts/ios/`.
 See also: `ios-app/Modules/Package.swift` for module targets and dependencies.
 
 
@@ -60,21 +60,21 @@ This ensures the client stays in sync with the backend contract.
 
 - The generated client and generator configuration live under `ios-app/Modules/Sources/OpenAPI/`.
 - Committed generated Swift sources live under `ios-app/Modules/Sources/OpenAPI/GeneratedSources/`.
-- Regenerate the backend contract, TypeScript client, and Swift client from the monorepo root with `./scripts/generate-api-artifacts.sh`.
+- Regenerate the backend contract, TypeScript client, and Swift client from the monorepo root with `./scripts/shared/generate-api-artifacts.sh`.
 - The live `APIClient` is injected via TCA dependencies.
 
 ---
 
 ## 🧪 Testing
 
-For the feature-development harness, see [refinement, implementation, Swift, verification, review, and investigation workflows](Docs/agents/feature-workflow.md). These skills are available from agent sessions started at the monorepo root.
+For the feature-development harness, see [refinement, implementation, Swift, verification, review, and investigation workflows](../docs/ios/agents/feature-workflow.md). These skills are available from agent sessions started at the monorepo root.
 
-For a complete backend and simulator run, use `$lg-ios-run-local`. To build a Release simulator app against the existing Coolify deployment, use `$lg-ios-run-production`. See [build/run workflows](../docs/agents/ios-workflows.md).
+For a complete backend and simulator run, use `$lg-ios-run-local`. To build a Release simulator app against the existing Coolify deployment, use `$lg-ios-run-production`. See [build/run workflows](../docs/shared/agents/ios-workflows.md).
 
 - Unit and reducer tests: `ios-app/Modules/Tests/`
 - Snapshot tests via `swift-snapshot-testing`
 - The `Feedback Localhost` scheme uses the shared `UnitTests` plan with `AppTests` and `InsightsTests`.
-- Agent build, test, launch, and UI verification use the [simulator guide](Docs/agents/simulator.md). See the [harness overview](Docs/agent-harness.md) for Xcode MCP setup and lint commands.
+- Agent build, test, launch, and UI verification use the [simulator guide](../docs/ios/agents/simulator.md). See the [harness overview](../docs/ios/agent-harness.md) for Xcode MCP setup and lint commands.
 
 
 ---
@@ -109,7 +109,7 @@ Schemes select different environments (Prod/Debug/Localhost/Mock) using `.xcconf
 ## 🔔 Notifications
 
 - Push is enabled via `ios-app/App/Entitlements.entitlements`.
-- Sample payloads and manual notification-testing instructions are in [notification guide](Docs/NOTIFICATIONS.md).
+- Sample payloads and manual notification-testing instructions are in [notification guide](../docs/ios/NOTIFICATIONS.md).
 - Local agent simulator operations follow [the iOS harness policy](AGENTS.md).
 
 
@@ -117,7 +117,7 @@ Schemes select different environments (Prod/Debug/Localhost/Mock) using `.xcconf
 
 ## 🧰 CI
 
-- GitHub Actions builds the iOS app, runs both unit-test targets, and gates changed-line lint in the path-filtered `iOS` workflow. See [CI setup and cost assumptions](../docs/agents/ci-cd.md).
+- GitHub Actions builds the iOS app, runs both unit-test targets, and gates changed-line lint in the path-filtered `iOS` workflow. See [CI setup and cost assumptions](../docs/shared/agents/ci-cd.md).
 - The existing `CI` workflow separately verifies generated Swift OpenAPI sources against the canonical contract.
 - `ios-app/CI_scripts/` contains separate Xcode Cloud hooks; GitHub Actions does not invoke them.
 - Xcode Cloud hooks resolve app files under `CI_PRIMARY_REPOSITORY_PATH/ios-app/`. The pre-build hook writes environment-provided secrets to `ios-app/App/Config/secrets.xcconfig`.

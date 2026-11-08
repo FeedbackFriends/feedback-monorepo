@@ -49,8 +49,7 @@ out/
 .env
 .claude/settings.local.json
 firebase-debug.log
-scripts/tests/__pycache__/
-scripts/__pycache__/
+/scripts/**/__pycache__/
 
 # Generated iOS screenshots and visual review gallery
 /screenshots/

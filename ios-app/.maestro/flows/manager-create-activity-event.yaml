@@ -1,5 +1,5 @@
 # Manager Activity/Event flow (localhost):
-# - Seed manager-empty via scripts/e2e-admin
+# - Seed manager-empty via scripts/shared/e2e-admin
 # - Login via E2E auto-login launch arguments
 # - Create Activity: "AIW1"
 # - Create one Event from the Activity setup

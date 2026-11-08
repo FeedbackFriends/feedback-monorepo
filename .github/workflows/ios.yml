@@ -5,15 +5,15 @@ on:
     branches: [main]
     paths:
       - "ios-app/**"
-      - "scripts/ios-backend"
-      - "scripts/tests/**"
+      - "scripts/ios/**"
+      - "scripts/shared/**"
       - ".github/workflows/ios.yml"
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - "ios-app/**"
-      - "scripts/ios-backend"
-      - "scripts/tests/**"
+      - "scripts/ios/**"
+      - "scripts/shared/**"
       - ".github/workflows/ios.yml"
 
 permissions:
@@ -46,27 +46,27 @@ jobs:
       - name: Install screenshot tooling dependencies
         run: |
           python3 -m venv "$RUNNER_TEMP/ios-tools"
-          "$RUNNER_TEMP/ios-tools/bin/python" -m pip install -r ios-app/scripts/screenshot-requirements.txt
+          "$RUNNER_TEMP/ios-tools/bin/python" -m pip install -r scripts/ios/screenshot-requirements.txt
           echo "$RUNNER_TEMP/ios-tools/bin" >> "$GITHUB_PATH"
 
-      - name: Check lint script behavior
-        run: python3 -m unittest discover -s ios-app/scripts/tests -v
+      - name: Check iOS helper behavior
+        run: python3 -m unittest discover -s scripts/ios/tests -v
 
       - name: Validate localization catalogs and notification payload contract
-        run: python3 ios-app/scripts/validate-localization.py
+        run: python3 scripts/ios/validate-localization.py
 
       - name: Check direct user-visible literals
-        run: python3 ios-app/scripts/check-localized-copy.py
+        run: python3 scripts/ios/check-localized-copy.py
 
-      - name: Check iOS backend workflow behavior
-        run: python3 -m unittest discover -s scripts/tests -v
+      - name: Check shared helper behavior
+        run: python3 -m unittest discover -s scripts/shared/tests -v
 
       - name: Lint changed Swift lines
         shell: bash
         run: |
           set -euo pipefail
           base=$(git merge-base "$LINT_BASE" HEAD)
-          python3 ios-app/scripts/lint-swift-changes.py --base "$base"
+          python3 scripts/ios/lint-swift-changes.py --base "$base"
 
       - name: Select an available iPhone simulator
         run: |
@@ -110,7 +110,7 @@ jobs:
       - name: Validate notification strings in the built app
         if: ${{ !cancelled() }}
         run: >-
-          python3 ios-app/scripts/validate-localization.py
+          python3 scripts/ios/validate-localization.py
           --app-bundle ios-app/.build/ci/DerivedData/Build/Products/DebugLocalhost-iphonesimulator/App.app
 
       - name: Upload test results

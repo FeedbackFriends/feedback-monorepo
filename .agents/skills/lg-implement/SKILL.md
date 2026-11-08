@@ -5,7 +5,7 @@ description: Implement an agreed LetsGrow change across iOS, backend, web, or to
 
 # Implement a LetsGrow change
 
-Read [root policy](../../../AGENTS.md) and the [task workflow](../../../docs/agents/task-workflow.md). Use the agreed conversation plan and selected `todos.md` item, if any. Create no task files. Add todos only when explicitly requested. Use [refinement](../lg-refine/SKILL.md) to grill material requirements or architectural gaps; a clear direct implementation request needs no extra planning approval.
+Read [root policy](../../../AGENTS.md) and the [task workflow](../../../docs/shared/agents/task-workflow.md). Use the agreed conversation plan and selected `todos.md` item, if any. Create no task files. Add todos only when explicitly requested. Use [refinement](../lg-refine/SKILL.md) to grill material requirements or architectural gaps; a clear direct implementation request needs no extra planning approval.
 
 ## Establish the slice
 
@@ -19,7 +19,7 @@ Follow phase dependency order; complete each phase's deliverables and checks bef
 
 Use the task workflow's platform map:
 
-- **iOS:** use [Swift guidance](../../../ios-app/Docs/agents/swift.md), existing TCA/Bootstrap and Domain/Adapters boundaries, localized UI, and existing DesignSystem/previews. Native Xcode MCP owns local app builds, tests, and simulator operations.
+- **iOS:** use [Swift guidance](../../../docs/ios/agents/swift.md), existing TCA/Bootstrap and Domain/Adapters boundaries, localized UI, and existing DesignSystem/previews. Native Xcode MCP owns local app builds, tests, and simulator operations.
 - **Backend/scheduler:** follow Kotlin architecture, service/persistence ownership, constructor injection, authorization, and migration guidance. Run Gradle from `backend/`; do not edit applied migrations or hide warnings/failures.
 - **Web:** follow web architecture/UI/auth guidance and existing npm commands. Run relevant automated tests and required lint/build checks.
 - **Cross-platform API:** change canonical backend source, regenerate through the root API script, and update handwritten consumers. Never patch generated clients manually. Keep server/client compatibility and deployment order explicit in the conversation.

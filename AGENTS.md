@@ -13,25 +13,25 @@ LetsGrow is a feedback-after-meetings product with a Next.js web app, Kotlin bac
 
 Run from the monorepo root:
 
-- `./scripts/generate-api-artifacts.sh`: regenerate the backend OpenAPI contract and TypeScript/Swift clients; never hand-edit generated API artifacts.
-- `./scripts/run` (or `./scripts/run -d`): rebuild and start the local stack; this resets Compose volumes. Read the runtime guide before use.
+- `./scripts/shared/generate-api-artifacts.sh`: regenerate the backend OpenAPI contract and TypeScript/Swift clients; never hand-edit generated API artifacts.
+- `./scripts/shared/run` (or `./scripts/shared/run -d`): rebuild and start the local stack; this resets Compose volumes. Read the runtime guide before use.
 
 ## Read when relevant
 
 | Task | Guidance |
 | --- | --- |
 | Documentation overview | [Documentation index](docs/README.md) |
-| Agent harness, tools, skills, or hooks | [Agent harness architecture](docs/agent-tooling.md) |
-| Cross-platform architecture or repository orientation | [Architecture overview](docs/architecture.md) |
-| Product, UX, marketing, or domain terminology | [Domain guidance](docs/product/lets-grow-strategi-teamtrivsel.md) |
+| Agent harness, tools, skills, or hooks | [Agent harness architecture](docs/shared/agent-tooling.md) |
+| Cross-platform architecture or repository orientation | [Architecture overview](docs/shared/architecture.md) |
+| Product, UX, marketing, or domain terminology | [Domain guidance](docs/shared/product/lets-grow-strategi-teamtrivsel.md) |
 | Web frontend | [web/AGENTS.md](web/AGENTS.md) |
 | Backend API, scheduler, or persistence | [backend/AGENTS.md](backend/AGENTS.md) |
-| Task creation, refinement, implementation, verification, review, or handoff | [Shared task workflow](docs/agents/task-workflow.md) and [add-todo skill](.agents/skills/lg-add-todo/SKILL.md) |
+| Task creation, refinement, implementation, verification, review, or handoff | [Shared task workflow](docs/shared/agents/task-workflow.md) and [add-todo skill](.agents/skills/lg-add-todo/SKILL.md) |
 | iOS app | [ios-app/AGENTS.md](ios-app/AGENTS.md) |
-| iOS feature refinement, implementation, Swift, review, or investigation | [iOS feature workflow](ios-app/Docs/agents/feature-workflow.md) |
-| File ownership or shared implementation conventions | [Repository scope](docs/agents/repository-scope.md) |
-| API shape or generated clients | [API contract](docs/agents/api-contract.md) |
-| Docker, environment, or production deployment | [Runtime and deployment](docs/agents/runtime-and-deployment.md) |
-| GitHub Actions or release automation | [CI/CD](docs/agents/ci-cd.md) |
-| iOS build, test, launch, or verification, including from the root | [iOS workflows](docs/agents/ios-workflows.md) |
-| Browser access or website authentication | [Browser access](docs/agents/browser-access.md) |
+| iOS feature refinement, implementation, Swift, review, or investigation | [iOS feature workflow](docs/ios/agents/feature-workflow.md) |
+| Creating or moving docs/scripts, file ownership, or shared conventions | [Repository scope](docs/shared/agents/repository-scope.md) |
+| API shape or generated clients | [API contract](docs/shared/agents/api-contract.md) |
+| Docker, environment, or production deployment | [Runtime and deployment](docs/shared/agents/runtime-and-deployment.md) |
+| GitHub Actions or release automation | [CI/CD](docs/shared/agents/ci-cd.md) |
+| iOS build, test, launch, or verification, including from the root | [iOS workflows](docs/shared/agents/ios-workflows.md) |
+| Browser access or website authentication | [Browser access](docs/shared/agents/browser-access.md) |

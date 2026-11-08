@@ -37,7 +37,7 @@ enum LocalTestAccountLaunch {
             case .loginFailed:
                 "Kunne ikke hente testlogin. Start den lokale backend, og aktivér test-admin-endpoints."
             case .managerNotPrepared:
-                "Testkontoen mangler mødeejeradgang. Kør ./scripts/e2e-admin seed-manager-with-data > /dev/null fra projektets rod, og start appen igen."
+                "Testkontoen mangler mødeejeradgang. Kør ./scripts/shared/e2e-admin seed-manager-with-data > /dev/null fra projektets rod, og start appen igen."
             }
         }
     }

@@ -8,15 +8,15 @@ There are no in-app notification fixtures or substituted dependency clients.
 From the repository root:
 
 ```bash
-python3 ios-app/scripts/test-notifications.py --counts 0 1 2 99
+python3 scripts/ios/test-notifications.py --counts 0 1 2 99
 ```
 
-The runner starts the backend through `scripts/ios-backend localhost`, preserving
+The runner starts the backend through `scripts/ios/ios-backend localhost`, preserving
 Compose volumes. It requires the existing `mock-manager-with-data` account. On
 first use, explicitly prepare that standard sample fixture:
 
 ```bash
-python3 ios-app/scripts/test-notifications.py --seed-manager --counts 0 1 2 99
+python3 scripts/ios/test-notifications.py --seed-manager --counts 0 1 2 99
 ```
 
 `--seed-manager` replaces only the standard sample manager and its sample data.
@@ -27,7 +27,7 @@ be enabled; missing/invalid login is a setup failure, not a fallback to fixtures
 To reuse a running backend and an app already built through native Xcode:
 
 ```bash
-python3 ios-app/scripts/test-notifications.py \
+python3 scripts/ios/test-notifications.py \
   --skip-backend-start --app '/absolute/path/to/App.app' --counts 99
 ```
 
@@ -73,8 +73,8 @@ provisioning. Reducer payload/navigation cases remain in `NotificationTests` und
 the UnitTests plan. Tooling checks:
 
 ```bash
-python3 ios-app/scripts/validate-localization.py
-python3 -m unittest discover -s ios-app/scripts/tests -p test_notification_runner.py
+python3 scripts/ios/validate-localization.py
+python3 -m unittest discover -s scripts/ios/tests -p test_notification_runner.py
 ```
 
 ## Backend-dependent verification

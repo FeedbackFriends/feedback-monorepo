@@ -1,0 +1,38 @@
+# LetsGrow iOS Design System
+
+Use `Modules/Sources/DesignSystem/` as the source of truth. Prefer reusing existing tokens, styles, and reusable views before introducing new UI primitives.
+
+## When to read
+
+If you are touching a SwiftUI file in this app, read this guide first. This includes adding a view, editing a view, refactoring a view, reviewing SwiftUI code, or changing UI styling in a `.swift` file that contains SwiftUI.
+
+## Applying the design system
+
+1. Inspect the relevant tokens, styles, or reusable views in [DesignSystem](../../../ios-app/Modules/Sources/DesignSystem).
+2. Inspect the exact source files you plan to use or change before making UI edits.
+3. Reuse existing `Color`, `Font`, button style, reusable view, and modifier APIs where they fit.
+4. Add new DesignSystem code only when the existing surface clearly does not cover the need.
+
+## Rules
+
+- Use only semantic colors exposed from `Resources/Colors/Colors.swift`, such as `Color.theme...` and UIKit bridges defined there. Do not use SwiftUI/UIKit system colors or raw palette colors in app UI, including `.secondarySystemBackground`, `.systemGray`, `.secondary`, `.tertiary`, `.green`, `Color.gray`, `Color.black`, `Color.white`, or `UIColor.white`.
+- Use the DesignSystem public text-style modifiers. Direct font calls belong inside DesignSystem font/style infrastructure; do not introduce ad hoc font families.
+- Prefer existing button styles from `Styles/ButtonStyles/` over custom inline button styling.
+- Prefer existing reusable views from `ReusableViews/` for common empty, error, banner, close, picker, and event-info UI.
+- Use `Theme.cornerRadius`, `Theme.padding`, and `Constants.maxWidthForLargeDevices` instead of duplicating those layout constants.
+- Use `.isLoading(...)` when working with loading-aware button styles.
+- Keep app-facing UI code free of raw asset names when `Image` helpers already exist in `Resources/Images/Images.swift`.
+- When extending the design system, put new code in the matching DesignSystem subfolder and follow the established API shape.
+
+## Source map
+
+| Need | Owner under `Modules/Sources/DesignSystem/` |
+| --- | --- |
+| Semantic colors and layout tokens | `Resources/Colors/Colors.swift`, `DomainColors.swift`, `Constants.swift` |
+| Typography | `Styles/OtherStyles/TextStyles.swift`, `Resources/Fonts/` |
+| Icons and asset helpers | `Resources/Images/Images.swift` |
+| Loading/pressed button behavior | `Styles/ButtonStyles/`; supply `.isLoading(...)` with a stable label |
+| Empty/error states, banners, close controls, inputs | `ReusableViews/` and `FirstResponderField.swift` |
+| Shared modifiers and UIKit appearance | `ViewModifiers/` and `AppTheme/` |
+
+Keep font sizing inside the typography/icon infrastructure. Text styles set their foreground; apply a semantic foreground override afterward when state or sentiment needs it. Keep one-off layouts and product copy in features. Add shared primitives only when existing composition does not fit.

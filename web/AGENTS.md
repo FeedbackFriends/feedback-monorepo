@@ -8,11 +8,11 @@ Use npm with Node.js `24.22.2`; run web commands from `web/`. The `dev`, `build`
 
 | Task | Guidance |
 | --- | --- |
-| Task refinement, implementation, review, or handoff | [Shared task workflow](../docs/agents/task-workflow.md) |
+| Task refinement, implementation, review, or handoff | [Shared task workflow](../docs/shared/agents/task-workflow.md) |
 | Routes, components, or code organization | [Architecture and coding conventions](#architecture-and-conventions) |
-| Layout, styling, or responsive behavior | [UI guidelines](docs/agents/ui.md) |
+| Layout, styling, or responsive behavior | [UI guidelines](../docs/web/agents/ui.md) |
 | API types, authentication, or environment | [API and auth](#api-authentication-and-environment) |
-| Running, testing, or validating changes | [Commands and validation](docs/agents/validation.md) |
+| Running, testing, or validating changes | [Commands and validation](../docs/web/agents/validation.md) |
 
 Repository-wide rules remain in the [root AGENTS.md](../AGENTS.md).
 
@@ -35,8 +35,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ### API Contract
 
 - `src/lib/api/generated/openapi.ts` is generated from `contracts/openapi/feedback-api.yaml`; never hand-edit it.
-- When the contract changes, regenerate from the monorepo root with `./scripts/generate-api-artifacts.sh` and update typed call sites.
-- Backend controllers, DTOs, and OpenAPI configuration own API shape; see the [shared API contract guide](../docs/agents/api-contract.md).
+- When the contract changes, regenerate from the monorepo root with `./scripts/shared/generate-api-artifacts.sh` and update typed call sites.
+- Backend controllers, DTOs, and OpenAPI configuration own API shape; see the [shared API contract guide](../docs/shared/agents/api-contract.md).
 
 ### Auth And Environment
 
@@ -69,7 +69,7 @@ AuthProvider is scoped to `src/app/(account)/layout.tsx`, shared by login, dashb
 
 Use the named operations in `src/lib/api/teams.ts` rather than constructing paths and choosing arbitrary response types in components. The relay propagates the request's cancellation signal, enforces a 15-second upstream timeout, rejects redirects and sends `Cache-Control: no-store` for both success and failure responses.
 
-Managed provider setup, native configuration and fresh-start release/rollback: [Supabase auth](../docs/agents/supabase-auth.md). Pending personal invitations are listed before organization creation; provider roles never grant team authority.
+Managed provider setup, native configuration and fresh-start release/rollback: [Supabase auth](../docs/shared/agents/supabase-auth.md). Pending personal invitations are listed before organization creation; provider roles never grant team authority.
 
 ## Architecture and conventions
 
@@ -112,7 +112,7 @@ Managed provider setup, native configuration and fresh-start release/rollback: [
 
 ### Community guidance compatibility
 
-Use `next-best-practices` for Next.js architecture and conventions, `vercel-react-best-practices` for relevant performance concerns, and `vercel-composition-patterns` when designing reusable component APIs. Use `next-upgrade` for framework migrations. Runtime verification follows the [validation guide](docs/agents/validation.md#nextjs-runtime-verification).
+Use `next-best-practices` for Next.js architecture and conventions, `vercel-react-best-practices` for relevant performance concerns, and `vercel-composition-patterns` when designing reusable component APIs. Use `next-upgrade` for framework migrations. Runtime verification follows the [validation guide](../docs/web/agents/validation.md#nextjs-runtime-verification).
 
 Use `next-best-practices` as a discovery aid alongside the version-matched Next.js documentation required by web policy. Its upstream `rsc-boundaries.md` incorrectly restricts props to JSON types: React supports `Date`, `Map`, and `Set` containing serializable values across the Server/Client boundary. Follow [React's supported types](https://react.dev/reference/rsc/use-client#serializable-types-returned-by-server-components), rather than converting those types solely to satisfy that reference. This boundary differs from the JSON HTTP API contract.
 
