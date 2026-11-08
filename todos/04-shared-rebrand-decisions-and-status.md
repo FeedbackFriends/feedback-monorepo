@@ -2,10 +2,10 @@
 status: draft
 areas: [backend, web, ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 04 — Leader decisions and suggestion status
+# Leader decisions and suggestion status
 
 ## Problem and outcome
 
@@ -16,7 +16,9 @@ Outcome:
 - On web, the leader sets a suggestion's status, writes a justification, and names a responsible person and a date when the team will hear more.
 - Employees see the status and the answer on iOS. They get a short push notification when something relevant changes.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Depends on **03**. Feeds 05 (trials), 06, and 07. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -41,6 +43,8 @@ Depends on **03**. Feeds 05 (trials), 06, and 07. The coming-soon landing page (
   - Response-time service-level targets and reporting (06).
 
 ## Context
+
+- Priority: 04 of 25. Give suggestions an accountable leader response after suggestions and voting exist.
 
 - Current behavior:
   - Push is APNs-only through FCM in `backend/lib/firebase/.../FirebaseServiceImpl.kt`. It uses localization keys that live in iOS `Localization/AppBundleResources/Localizable.xcstrings`.

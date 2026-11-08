@@ -2,7 +2,7 @@
 status: draft
 areas: [ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # Afklar og ret tom tekst / “Not Found”
@@ -17,9 +17,11 @@ Afgrænset reproduktion og rettelse af det rapporterede sted. Ingen global under
 
 ## Context
 
+- Priority: 11 of 25. Clarify and fix the reported missing-content presentation before release.
+
 - ios-app/Modules/Sources/MoreFeature/AccountSection/ProfileSettingsView.swift bruger profileMissingValue til manglende navn, mail og telefon.
 - ios-app/Modules/Sources/Localization/Resources/AppStrings.xcstrings: profile.missingValue er allerede “Ikke angivet” / “Not provided”, ikke “Not Found”.
-- todos/shared-error-messages.md beskriver en separat, større ændring af API-fejltekster; denne opgave må ikke duplikere den.
+- todos/09-shared-error-messages.md beskriver en separat, større ændring af API-fejltekster; denne opgave må ikke duplikere den.
 
 ## Decisions and open questions
 

@@ -2,10 +2,10 @@
 status: draft
 areas: [web]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 12 — Danish and English language switch on web (low priority)
+# Danish and English language switch on web (low priority)
 
 **Priority: low.** The web leader UI stays Danish-only for now (user, 2026-11-06).
 
@@ -15,7 +15,9 @@ The iOS app supports Danish and English. The web app has hardcoded Danish string
 
 Outcome: a leader can switch the web app between Danish and English. Danish stays the default, and the choice is remembered.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Best done after **06** (leader dashboard) and **08** (marketing copy), so the strings are stable. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -30,6 +32,8 @@ Best done after **06** (leader dashboard) and **08** (marketing copy), so the st
   - Translating the privacy policy. Legal text has its own review.
 
 ## Context
+
+- Priority: 23 of 25. Add English web support after the core dashboard and launch copy stabilize.
 
 - Current behavior: Danish strings are hardcoded in `web/src/components/**` and `web/src/app/**`. The root `<html lang="en">` is wrong, and task 01 fixes it to `da`.
 - Reading path:
@@ -73,4 +77,4 @@ Not implemented yet.
 - Completed: None.
 - Verification results: Not run.
 - Blockers: None. Low priority.
-- Next action: None until prioritized. Then run `$lg-refine todos/12-rebrand-web-language-switch.md`.
+- Next action: None until prioritized. Then run `$lg-refine todos/23-web-rebrand-language-switch.md`.

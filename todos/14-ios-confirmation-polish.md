@@ -2,7 +2,7 @@
 status: in-progress
 areas: [ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # Små forbedringer af bekræftelser
@@ -30,6 +30,8 @@ Alertens titel og hjælpetekst ved kopiering af aktivitetsmail. Ingen ændring a
 
 
 ## Context
+
+- Priority: 14 of 25. Close existing confirmation work; reassess obsolete calendar-email copy with Zoho removal.
 
 ### Toastens haptik
 
@@ -108,5 +110,5 @@ Læsesti: `ios-app/Modules/Sources/DesignSystem/ViewModifiers/SuccessMessageModi
 
 - Completed: Haptik begrænset til visning, kaldere gennemgået uden timerændringer; aktivitetsmail-alert præciseret i begge sprog og inventory opdateret.
 - Verification results: 2026-11-06 Feedback Localhost / LetsGrow Manager iOS 27.2: native BuildProject og buildForTesting bestået; SuccessConfirmationTests/waitsForCompletedTransitionAndIgnoresDuplicateCallbacks(): 1 passed. SwiftLint --base HEAD: 0 violations i 1 fil. validate-localization.py: 313 nøgler gyldige; check-localized-copy.py: 215 filer bestået. Frisk ScreenSnapshots: 1 passed, 56 billeder publiceret; 52 hashes uændrede fra gennemgået fokus-capture og 4 ændrede billeder geninspiceret. Findings/hashes: `screenshots/review/confirmation-findings.json`; galleri `screenshots/index.html`. Ingen baselines accepteret.
-- Blockers: Fysisk haptik kræver Nicolais test, samlet i `todos/ios-physical-device-verification.md`. Live alert/clipboard-kontrol er blokeret af native Xcode-interaktionssession-fejlen dokumenteret i `todos/ios-text-input-full-surface-focus.md`; screenshotkataloget viser ikke copy-alerten. Ingen fuld runtime-verifikation hævdes.
+- Blockers: Fysisk haptik kræver Nicolais test, samlet i `todos/17-ios-physical-device-verification.md`. Live alert/clipboard-kontrol er blokeret af native Xcode-interaktionssession-fejlen dokumenteret i `todos/13-ios-text-input-full-surface-focus.md`; screenshotkataloget viser ikke copy-alerten. Ingen fuld runtime-verifikation hævdes.
 - Next action: Få native interaktionssession tilbage, kontrollér copy-alert/clipboard i begge sprog og genstart appen med rettelsen. Nicolai udfører fysisk haptiktest; tasken beholdes indtil required checks er dækket.

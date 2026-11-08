@@ -2,7 +2,7 @@
 status: ready
 areas: [ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # Fysisk afprøvning af implementerede ændringer
@@ -16,6 +16,8 @@ Samlet tjekliste til Nicolai over adfærd, der kræver en fysisk iPhone. Simulat
 Fysiske kontroller fra implementeringsopgaverne. Listen udvides løbende før relevante commits/pushes. Ingen produktionstest, deploy eller automatisk godkendelse af screenshots.
 
 ## Context
+
+- Priority: 17 of 25. Run the human-owned physical release checks against the relevant finished app; this does not replace automated verification.
 
 - Oprettet efter brugerens ønske 2026-11-06 under gennemførsel af backloggen.
 - `ios-app/Modules/Sources/DesignSystem/ViewModifiers/SuccessMessageModifier.swift` ejer success-haptik; features ejer toastens timing.
@@ -41,7 +43,7 @@ Fysiske kontroller fra implementeringsopgaverne. Listen udvides løbende før re
 
 ## Implementation plan
 
-- [x] Implementér haptikrettelsen i `ios-confirmation-polish.md` (`d9b56d4`).
+- [x] Implementér haptikrettelsen i `14-ios-confirmation-polish.md` (`d9b56d4`).
 - [ ] Tilføj relevante fysiske kontroller løbende med reproduktionstrin og forventning.
 - [ ] Nicolai gennemfører og registrerer resultater; fejl følges op i særskilt task ved behov.
 

@@ -2,10 +2,10 @@
 status: draft
 areas: [backend, web, ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 09 — Retire the meeting-feedback model
+# Retire the meeting-feedback model
 
 ## Problem and outcome
 
@@ -13,24 +13,30 @@ Once leaders work on web (06) and employees work in the new iOS app (07), the me
 
 Outcome: the backend, contract, web, and iOS contain only the improvement-loop model, and existing data is handled by an agreed migration.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Last in the series. Depends on **06** and **07**. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
 ## Scope
 
+Zoho calendar-email removal and its user-facing calendar-email entry points now belong to [Remove Zoho calendar-email processing](19-shared-remove-zoho-calendar-email.md), created at the user's request on 2026-11-08. Coordinate cutover with that task instead of implementing its removal twice; this task retains the rest of the meeting-model retirement and historical-data decisions.
+
 - In scope:
   - **Endpoints.** Remove the activity, event, PIN-join, feedback start/submit, notification-history, and legacy bootstrap fields, along with their services, DTOs, and mappings.
   - **Tables.** Drop the legacy tables through an incremental Liquibase changeset, after the data decision: `activity`, `activity_invite`, `event`, `event_participant`, `pin_code`, `question`, `feedback`, `new_feedback_notification`, `notification_history`, `mail_listener_state`, and `zoho_processed_message`.
-  - **Scheduler and mail.** Remove `cleanUpPinsScheduler`, the feedback push scheduler, the `ZohoMailPollingService`, `ZohoMailClient`, the `lib/ical-parser` module, and the related config and env vars.
+  - **Scheduler and mail.** Remove `cleanUpPinsScheduler` and the legacy feedback push scheduler. Zoho polling, its client, calendar parsing and their configuration are owned by the linked removal task. Coordinate with [platform consolidation](02-shared-platform-consolidation.md) for replacement notification delivery.
   - **Roles.** Remove the legacy `Manager` role and claim handling that 02 left for compatibility.
   - **Admin seeds.** Update the admin seed endpoints to seed teams, suggestions, and trials instead.
   - **Contract.** Regenerate and clean up the consumers on web and iOS.
-  - **Docs.** Update runtime and deployment env docs: drop the Zoho variables and update `docs/agents/runtime-and-deployment.md`.
+  - **Docs.** Update runtime and deployment documentation for the remaining meeting-model retirement; Zoho-specific documentation belongs to the linked removal task.
 - Out of scope:
   - The support submission feature (product feedback and bug reports) stays.
 
 ## Context
+
+- Priority: 20 of 25. Retire the remaining meeting model after web/native parity and the data/compatibility decision; coordinate Zoho removal separately.
 
 - Current behavior:
   - Legacy tables in `backend/lib/persistence/.../table/`.
@@ -48,7 +54,7 @@ Last in the series. Depends on **06** and **07**. The coming-soon landing page (
 
 - Confirmed: None.
 - Assumptions:
-  - The meeting-feedback model is fully replaced by the improvement loop. This depends on the open PIN-feedback question in `07-rebrand-ios-employee-app.md`.
+  - The meeting-feedback model is fully replaced by the improvement loop. This depends on the open PIN-feedback question in `07-ios-rebrand-employee-app.md`.
   - Old iOS app versions in the field will break against removed endpoints. A minimum supported version or forced update message is needed before removal.
 - Unresolved:
   - **Data handling.** Decide between export and archive, migration of anything useful, or deletion of legacy production data. Decide whether users must be informed under GDPR.
@@ -59,7 +65,7 @@ Last in the series. Depends on **06** and **07**. The coming-soon landing page (
 
 - [ ] AC-1: No legacy endpoints remain in `contracts/openapi/feedback-api.yaml`, and the web and iOS consumers compile without them.
 - [ ] AC-2: The legacy tables are handled per the agreed data decision through an incremental changeset, and migration tests pass.
-- [ ] AC-3: The scheduler and API start without the Zoho and mail configuration, and no legacy jobs run.
+- [ ] AC-3: No legacy meeting jobs run; the linked Zoho removal task establishes operation without its mail configuration.
 - [ ] AC-4: Old app versions get the agreed update experience instead of silent failures.
 - [ ] AC-5: The runtime and deployment docs and the environment examples are updated.
 

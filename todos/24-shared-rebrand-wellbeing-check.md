@@ -2,10 +2,10 @@
 status: draft
 areas: [backend, ios, web]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 13 — Optional team well-being check (future, low priority)
+# Optional team well-being check (future, low priority)
 
 **Priority: low.** This is not part of the first launch (user, 2026-11-06). Build the core improvement loop first (02–07). Start this task only if pilot customers ask for it.
 
@@ -20,7 +20,9 @@ Outcome:
 - The leader sees team-level results on web, and only when enough people have answered.
 - A low result leads naturally to the improvement loop, for example a prompt to suggest or prioritize an improvement, instead of becoming a dashboard of scores.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Depends on **02** (teams), **03** (anonymity model and thresholds), **06** (web leader dashboard), and **07** (iOS employee app). The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -38,6 +40,8 @@ Depends on **02** (teams), **03** (anonymity model and thresholds), **06** (web 
   - Automatic conclusions about employees.
 
 ## Context
+
+- Priority: 24 of 25. Keep optional measurement behind the improvement loop and evidence of pilot demand.
 
 - Task 05 builds trial evaluations: one question, anonymous answers, and thresholded aggregates. Reuse that answer model and its components where possible, instead of a second survey system.
 - The old event-scoped feedback model is removed in 09, so do not build on it.
@@ -85,4 +89,4 @@ Not implemented yet.
 - Completed: None.
 - Verification results: Not run.
 - Blockers: Deferred until the core loop has shipped and pilots ask for it.
-- Next action: None until prioritized. Then run `$lg-refine todos/13-rebrand-wellbeing-check.md`.
+- Next action: None until prioritized. Then run `$lg-refine todos/24-shared-rebrand-wellbeing-check.md`.

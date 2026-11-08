@@ -2,10 +2,10 @@
 status: draft
 areas: [web, ios, docs]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 08 — Finish the landing page, and the brand identity
+# Finish the landing page, and the brand identity
 
 ## Problem and outcome
 
@@ -34,7 +34,9 @@ Outcome:
 - **Employee CTA.** "Hent appen" leads to the App Store.
 - **Everywhere else.** The privacy policy, the iOS copy, and the App Store listing match the shipped product.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Depends on **01** (coming-soon page) and on the shipped features in **06** (web leader dashboard) and **07** (iOS employee app). Copy must describe only what has shipped, including the anonymity model decided in 03. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -58,6 +60,8 @@ Depends on **01** (coming-soon page) and on the shipped features in **06** (web 
   - English on web. Task 12 covers this.
 
 ## Context
+
+- Priority: 18 of 25. Finish launch copy and real screenshots after the shipped web/native experiences and anonymity rules are known.
 
 - Current behavior:
   - Task 01 leaves a coming-soon page at `/` with one replaceable early-access CTA (`web/src/components/ui/EarlyAccessButton.tsx`).

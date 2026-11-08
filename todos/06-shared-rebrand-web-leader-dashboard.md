@@ -2,10 +2,10 @@
 status: draft
 areas: [web, backend]
 created: 2026-11-06
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 
-# Rebrand 06 — Web leader dashboard
+# Web leader dashboard
 
 ## Problem and outcome
 
@@ -20,7 +20,9 @@ The company overview must show process and results without becoming a tool for m
 
 Outcome: a data-driven `/dashboard` replaces the static meeting-era pages (Profil, Sessions, "Fra møde til feedback", Spørgeskemaer). Leaders get timely signals about work that needs their attention.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Depends on **02–05**. It can be built incrementally as each lands. It must reach parity before task 07 (phase 2) removes the iOS manager features. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -34,13 +36,15 @@ Depends on **02–05**. It can be built incrementally as each lands. It must rea
     - time to first meaningful response
     - share of trials with completed follow-up
   - **Leader notifications.** Email digest or web notifications for new suggestions and due follow-ups. The mechanism is to be decided.
-  - **Responsive layout.** The leader UI must work on mobile web (see `web-mobile-navigation.md`).
+  - **Responsive layout.** The leader UI must work on mobile web (see `08-web-mobile-navigation.md`).
 - Out of scope:
   - A company or HR overview. Task 11 covers this.
   - English on web. Task 12 covers this.
   - Advanced reporting, exports, and integrations. The strategy defers these.
 
 ## Context
+
+- Priority: 06 of 25. Give leaders a complete workspace before removing native manager features; build incrementally with the core loop.
 
 - Current behavior:
   - `/dashboard/*` lives in `web/src/app/(account)/dashboard/` and `web/src/components/dashboard/DashboardShell.tsx`. The implemented overview now supports organizations/teams and employee management; legacy meeting-era route pages still contain static copy. Product-level suggestion/trial metrics remain this task’s scope.

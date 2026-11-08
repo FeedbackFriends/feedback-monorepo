@@ -2,10 +2,10 @@
 status: draft
 areas: [backend, web, ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 05 — Improvement trials, evaluation, and history
+# Improvement trials, evaluation, and history
 
 ## Problem and outcome
 
@@ -23,7 +23,9 @@ Outcome:
 - At follow-up, employees answer a short evaluation, such as "Har mødefri formiddage gjort din arbejdsdag bedre?", with an optional comment.
 - The leader closes the trial with continue, adjust, or stop. The result appears in the team's improvement history.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Depends on **04**. Feeds 06 and 07. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -40,6 +42,8 @@ Depends on **04**. Feeds 06 and 07. The coming-soon landing page (01) is impleme
   - Generic survey builders, monthly well-being checks, and quarterly reviews. The strategy calls these supporting features and defers them.
 
 ## Context
+
+- Priority: 05 of 25. Complete the improvement loop with trials and follow-up after decisions.
 
 - Current behavior:
   - The current feedback flow (`ios-app/Modules/Sources/FeedbackFlowFeature/`) implements emoji, 0–10, thumbs, opinion, and comment answer types bound to PIN and event sessions.

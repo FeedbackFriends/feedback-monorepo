@@ -2,7 +2,7 @@
 status: in-progress
 areas: [ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # Svartypevælger med preview og tydelige ikoner
@@ -30,6 +30,8 @@ Fem redigerbare SVG-kilder, native iOS-assetintegration og alle eksisterende sva
 
 
 ## Context
+
+- Priority: 15 of 25. Reassess and close existing picker work; do not add new polish to answer types being retired.
 
 ### Sheet og valg
 
@@ -124,5 +126,5 @@ Læsesti: `ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/Questi
 
 - Completed: Separat sheet med midlertidigt valg og alle fem deltagerpreviews; uvalgt oprettelse og eksisterende redigering; Vælg-lokalisering på dansk/engelsk. Fem selvstændige SVG-assets og alle eksisterende mappings/kaldere integreret. Katalog tilføjet for uvalgt sheet, fem typer og 24/32pt i lys/mørk.
 - Verification results: 2026-11-06 Feedback Localhost / LetsGrow Manager iOS 27.2: native buildForTesting bestået; native SVG assetkompilering bestået. SwiftLint --base HEAD: 0 violations i 5 filer. Catalog --generate/--check: 66 states. validate-localization.py: 309 nøgler gyldige; localized-copy guard: 218 filer. Frisk ScreenSnapshots: 1 passed, 0 failed; 66 originale PNGer publiceret. Alle gennemgået via tidligere identiske hashes og friske kontaktark af ændrede billeder; emoji- og ratingikon forbedret efter første gennemgang og gen-captured/geninspiceret. `screenshots/review/answer-type-findings.json` indeholder IDs/hashes, `screenshots/index.html` galleri. Assetoversigt viser begge temaer. Ingen baselineaccept.
-- Blockers: Native interaktionssession-fejlen i `todos/ios-text-input-full-surface-focus.md` blokerer tryk/swipe/annuller/genåbn/save-ID-journey og Dynamic Type/VoiceOver. Snapshot viser at lang opinion-/ratingpreview kan ligge delvist under fold; ScrollView gør indholdet tilgængeligt, men scroll er endnu ikke live-verificeret. Tasken beholdes for required interaction checks.
+- Blockers: Native interaktionssession-fejlen i `todos/13-ios-text-input-full-surface-focus.md` blokerer tryk/swipe/annuller/genåbn/save-ID-journey og Dynamic Type/VoiceOver. Snapshot viser at lang opinion-/ratingpreview kan ligge delvist under fold; ScrollView gør indholdet tilgængeligt, men scroll er endnu ikke live-verificeret. Tasken beholdes for required interaction checks.
 - Next action: Når native DeviceInteraction fungerer, gennemfør AC-1–4 som create/edit inkl. annullering, bekræftelse, ID/tekst, langt indhold og stor tekst; kontrollér farvetint/VoiceOver i lys/mørk. Fysisk tjekliste er udvidet.

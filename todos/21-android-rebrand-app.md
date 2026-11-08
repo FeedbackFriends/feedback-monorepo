@@ -2,10 +2,10 @@
 status: draft
 areas: [android]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 10 — Android employee app (future, very low priority)
+# Android employee app (future, very low priority)
 
 **Priority: very low.** Do not start until the iOS and web rebrand (tasks 01–09) has shipped and pilots show a need. The launch covers iOS and web only.
 
@@ -21,7 +21,9 @@ Outcome: an Android app gives employees the same experience as the iOS employee 
 - answer evaluations
 - receive pushes
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 This task follows the series and depends on **02–07**, which define the employee feature set and the API. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -37,6 +39,8 @@ This task follows the series and depends on **02–07**, which define the employ
   - A web participation path for employees. The user decided against it on 2026-11-06.
 
 ## Context
+
+- Priority: 21 of 25. Expand employee access beyond iPhone once the core product and contract are stable.
 
 - Current behavior:
   - The repository has no Android code. The `areas` list in the task template has no `android` value yet.
@@ -86,4 +90,4 @@ Not implemented yet.
 - Completed: None.
 - Verification results: Not run.
 - Blockers: Deferred until after the iOS and web rebrand ships.
-- Next action: None until prioritized. Then run `$lg-refine todos/10-rebrand-android-app.md`.
+- Next action: None until prioritized. Then run `$lg-refine todos/21-android-rebrand-app.md`.

@@ -2,7 +2,7 @@
 status: in-progress
 areas: [ios]
 created: 2026-01-13
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # Manager events sync bar
@@ -17,6 +17,8 @@ Provide a clear syncing bar and a one-time success indication without changing s
 - Out of scope: networking/scheduling changes and unrelated header/list redesign.
 
 ## Context
+
+- Priority: 16 of 25. Reassess and close existing manager-sync work before retiring the manager experience; no new legacy feature investment.
 
 Current-code audit 2026-11-06: ManagerEventsView and SyncStatus no longer exist. ActivityListView is the owner list; TabbarLifecycle polls getBootstrapUpdate every 10 seconds and receives cache updates separately through sessionChangedListener. TabbarView already forwards foreground/background actions, which are currently no-ops. The historical design below describes intent only; the current implementation decisions supersede its symbol names.
 
@@ -101,5 +103,5 @@ Reading path: `ios-app/Modules/Sources/TabbarFeature/TabbarLifecycle.swift` → 
 
 - Completed: Historical symbols reconciled; lifecycle-owned sync phase, request correlation, one-time foreground success and reset implemented. Existing polling interval and network call order retained. Shared indicator supports Reduce Motion; activity-list active-sync snapshot added.
 - Verification results: 2026-11-06 Feedback Localhost / LetsGrow Manager iOS 27.2: buildForTesting passed; UnitTests discovery includes 218 enabled tests across AppTests/InsightsTests. TabbarLifecycleTests: 3 passed, 0 failed, testing failure before success, repeated success, 800ms timeout, timer cancellation on background, late response rejection after foreground and anonymous suppression. SwiftLint --base HEAD: 0 violations in 6 files. ScreenSnapshots capture: 1 passed; 59 PNGs published; 47 hashes retained from reviewed profile capture and 12 changed/new images reviewed. Findings/hashes `screenshots/review/sync-findings.json`, gallery `screenshots/index.html`; baselines preserved.
-- Blockers: Native live animation/foreground journey remains blocked by the Xcode session-state inconsistency recorded in `todos/ios-text-input-full-surface-focus.md`. Snapshots prove fixture layout, not movement; manual check added to `todos/ios-physical-device-verification.md`.
+- Blockers: Native live animation/foreground journey remains blocked by the Xcode session-state inconsistency recorded in `todos/13-ios-text-input-full-surface-focus.md`. Snapshots prove fixture layout, not movement; manual check added to `todos/17-ios-physical-device-verification.md`.
 - Next action: Restore native DeviceInteraction, launch the new build, wait for existing polls, verify blue motion/first green success/idle and background reset plus Reduce Motion; complete remaining required verification before deleting this task.

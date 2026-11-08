@@ -2,7 +2,7 @@
 status: draft
 areas: [ios, backend, tooling]
 created: 2026-06-07
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # iOS Maestro end-to-end coverage
@@ -17,6 +17,8 @@ Build reliable local end-to-end coverage of manager activity/session setup, anon
 - Out of scope: using Maestro as a fallback for native Xcode operations or adding CI/release automation before the suite is stable and its scope authorized.
 
 ## Context
+
+- Priority: 25 of 25. Defer the broad legacy-journey suite; reassess its relevance to the new product before investing. Required per-feature automated tests stay mandatory throughout.
 
 Cross-platform work spans `ios-app/.maestro/`, backend test-admin helpers, and root `scripts/e2e*`. Read [current Maestro guidance](../ios-app/.maestro/README.md), [iOS policy](../ios-app/AGENTS.md), [backend policy](../backend/AGENTS.md), and [runtime guidance](../docs/agents/runtime-and-deployment.md). The preserved plan is historical; confirm current flows/admin behavior rather than assuming its inventory is current.
 

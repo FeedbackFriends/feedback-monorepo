@@ -2,7 +2,7 @@
 status: in-progress
 areas: [ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # Gør hele tekstfeltets flade trykbar centralt
@@ -16,6 +16,8 @@ Aktivitetsnavnets tekstfelt får kun fokus på den egentlige tekstlinje. Hele de
 Fælles TextInputView og alle dens kaldere; gennemgå tilsvarende indrammede enkeltfelter og migrér kun kompatible tilfælde. Ingen global tap-handler eller formularomlægning.
 
 ## Context
+
+- Priority: 13 of 25. Review and close the existing shared-input fix where it remains relevant to the new app.
 
 - ios-app/Modules/Sources/DesignSystem/ReusableViews/TextInputView.swift: VStack med titel og TextField, surfaceCard(padding: 15), men ingen fokus ved tap på kortfladen.
 - ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivityView.swift og ios-app/Modules/Sources/ActivityFeature/Activities/ManageEvent/QuestionPickerView.swift er nuværende kaldere.

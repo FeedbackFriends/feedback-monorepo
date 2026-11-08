@@ -2,10 +2,10 @@
 status: draft
 areas: [backend, web]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 11 — HR overview role (future, low priority)
+# HR overview role (future, low priority)
 
 **Priority: low.** For now only team leaders and employees exist (user, 2026-11-06). Start this task only after the iOS and web rebrand has shipped and pilots ask for a company-level view.
 
@@ -15,7 +15,9 @@ The strategy (sections 3 and 10 of `lets-grow-strategi-teamtrivsel.md`) describe
 
 Outcome: an HR user signs in on web and sees an organization-wide overview of process and results across teams, such as suggestions with a decision, trials, and evaluations. The overview never monitors individual employees.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Depends on **02** (organization → team model) and **06** (leader dashboard and metrics). The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -30,6 +32,8 @@ Depends on **02** (organization → team model) and **06** (leader dashboard and
   - Advanced HR modules. The strategy explicitly defers these.
 
 ## Context
+
+- Priority: 22 of 25. Add organization-wide oversight after the core team workflow works.
 
 - Task 02 models organization → team(s), so this role can be added without restructuring.
 - Task 03 has an open question about who receives confidential messages. HR is one candidate once this role exists.
@@ -71,4 +75,4 @@ Not implemented yet.
 - Completed: None.
 - Verification results: Not run.
 - Blockers: Deferred until after the iOS and web rebrand ships.
-- Next action: None until prioritized. Then run `$lg-refine todos/11-rebrand-hr-overview.md`.
+- Next action: None until prioritized. Then run `$lg-refine todos/22-shared-rebrand-hr-overview.md`.

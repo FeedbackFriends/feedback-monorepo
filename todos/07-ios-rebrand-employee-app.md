@@ -2,10 +2,10 @@
 status: draft
 areas: [ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
-# Rebrand 07 — iOS as the employee-only app
+# iOS as the employee-only app
 
 ## Problem and outcome
 
@@ -25,7 +25,9 @@ Outcome: a reworked root and tab structure with four areas:
 
 Every manager surface is removed. The PIN and meeting feedback entry is retired together with 09.
 
-## Rebrand series
+## Rebrand series (historical IDs)
+
+The numeric references in this section and older planning notes are original rebrand IDs, not current backlog priorities. Current priority is the filename prefix. Rebrand 01 (coming-soon landing page) and 02 (teams/memberships) are already completed.
 
 Depends on **02–05** for the features. The manager removal must wait until **06** gives leaders parity on web. The coming-soon landing page (01) is implemented; product direction is documented in [the rebrand strategy](../docs/product/lets-grow-strategi-teamtrivsel.md).
 
@@ -49,6 +51,8 @@ Depends on **02–05** for the features. The manager removal must wait until **0
 
 ## Context
 
+- Priority: 07 of 25. Deliver the employee experience; manager removal waits for web parity.
+
 - Current behavior:
   - Tabs in `ios-app/Modules/Sources/TabbarFeature/TabbarView.swift`. The `.feedback` tab shows `EnterCodeView`. The `.activities` tab shows `ActivityListView` for managers and `SignUpView` otherwise.
   - Role and session state: `Domain/Models/Role.swift`, `Bootstrap.account`, and `managerData`.
@@ -60,8 +64,8 @@ Depends on **02–05** for the features. The manager removal must wait until **0
   - `ios-app/Docs/localization.md`
   - `docs/agents/ios-workflows.md`
 - Existing tasks affected by this rebrand. Review them before starting, and do not delete them without the user's confirmation:
-  - `ios-manager-events-sync-bar.md`, `ios-answer-type-picker-and-icons.md`, and `shared-ios-maestro-e2e.md`, whose flows are manager-centric.
-  - Possibly `ios-confirmation-polish.md` and `ios-profile-and-navigation-polish.md`.
+  - `16-ios-manager-events-sync-bar.md`, `15-ios-answer-type-picker-and-icons.md`, and `25-shared-ios-maestro-e2e.md`, whose flows are manager-centric.
+  - Possibly `14-ios-confirmation-polish.md` and `12-ios-profile-and-navigation-polish.md`.
 
 ## Decisions and open questions
 

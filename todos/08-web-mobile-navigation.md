@@ -2,7 +2,7 @@
 status: draft
 areas: [web]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # Ret webnavigation på mobil
@@ -16,6 +16,8 @@ Mobilnavigationen er rapporteret som defekt, men den konkrete overflade og fejl 
 Reproducer og ret den rapporterede navigation med eksisterende Sheet/Sidebar. Ingen generel redesign af websitet.
 
 ## Context
+
+- Priority: 08 of 25. Resolve reported navigation barriers before public release; reproduce the current issue before changing code.
 
 - web/src/components/layout/Navbar.tsx: offentlig topmenu bruger et højresheet på mobil.
 - web/src/components/dashboard/DashboardShell.tsx: dashboard bruger Sidebar og har nu en SidebarTrigger i headeren samt mobil-lukning ved navigation. Den oprindelige trigger-observation er forældet; den rapporterede fejl skal reproduceres på ny.

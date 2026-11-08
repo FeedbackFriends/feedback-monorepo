@@ -2,7 +2,7 @@
 status: in-progress
 areas: [ios]
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-08
 ---
 
 # Profil, indstillinger og navigation
@@ -46,6 +46,8 @@ Kun aktivitetstabens ikon; tabtitel, badges, rækkefølge og adgangsregler bevar
 
 
 ## Context
+
+- Priority: 12 of 25. Review and close already-implemented navigation/profile work; avoid expanding soon-to-be-retired manager UI.
 
 ### Log ud og adgang
 
@@ -185,5 +187,5 @@ Læsesti: `ios-app/Modules/Sources/RootFeature/RootFeature.swift` → `RootFeatu
 
 - Completed: Logout UI/reducer-guard, fjernet Kommunikation og døde oversættelser/state, fælles initialavatar på alle tre profilknapper og profilindstillinger, profilnavn synkroniseret ved save, sparkle-tab. Katalogtilstande for ejerindstillinger og ejerens startup-fejl tilføjet; anonym startup-fejl skjuler logout.
 - Verification results: 2026-11-06 Feedback Localhost / LetsGrow Manager iOS 27.2: buildForTesting bestået. UnitTests discovery: 215 enabled fra både AppTests og InsightsTests. RunAllTests: 235 passed, 0 failed/skipped (inkl. parameteriserede navnetests). SwiftLint --base HEAD: 0 violations i 13 filer. validate-localization.py: 308 gyldige nøgler; localized-copy guard: 216 filer. ScreenSnapshots: 1 passed; 58 billeder publiceret og alle gennemgået. `screenshots/review/profile-findings.json` har IDs/hashes; `screenshots/index.html` har galleri. Ingen baselines accepteret.
-- Blockers: Live rolle-/navigation-/navneændringsrejse, mørk tilstand, Dynamic Type og VoiceOver er endnu ikke kørt pga. native Xcode DeviceInteraction-sessionfejlen, dokumenteret i `todos/ios-text-input-full-surface-focus.md`. Katalog og reducerchecks er ikke fuld runtime-evidens. Fysisk kontrol er føjet til `todos/ios-physical-device-verification.md`.
+- Blockers: Live rolle-/navigation-/navneændringsrejse, mørk tilstand, Dynamic Type og VoiceOver er endnu ikke kørt pga. native Xcode DeviceInteraction-sessionfejlen, dokumenteret i `todos/13-ios-text-input-full-surface-focus.md`. Katalog og reducerchecks er ikke fuld runtime-evidens. Fysisk kontrol er føjet til `todos/17-ios-physical-device-verification.md`.
 - Next action: Når native session virker, åbn profil/indstillinger som ejer og anonym, gem et navn og kontrollér begge tabs/profilavatar, kontroller logout-adgang og badge i begge temaer samt stor tekst/VoiceOver. Behold tasken indtil required verification er dækket.
