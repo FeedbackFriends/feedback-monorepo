@@ -1,5 +1,5 @@
 ---
-name: lg-ios-sync-openapi
+name: lg-ios-sync-api
 description: >-
   Use when syncing the iOS app's handwritten API boundary from
   `Modules/Sources/OpenAPI/GeneratedSources/Client.swift` and `Types.swift`:
@@ -54,7 +54,7 @@ Use this skill when the user wants to:
 Paths below are relative to `ios-app/`. Run the inventory script from the monorepo root:
 
 ```bash
-(cd ios-app && python3 ../.agents/skills/lg-ios-sync-openapi/scripts/inventory_openapi_domain_sync.py)
+(cd ios-app && python3 ../.agents/skills/lg-ios-sync-api/scripts/inventory_openapi_domain_sync.py)
 ```
 
 That script prints:

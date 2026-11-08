@@ -32,8 +32,8 @@ Use loaded Apple guidance for native operations and the [simulator guide](agents
 | --- | --- |
 | Plan, implement, investigate, or review a feature | [Feature workflow](agents/feature-workflow.md) and [shared task lifecycle](../../docs/agents/task-workflow.md) |
 | Build, test, launch, or interact with a simulator | Loaded Apple guidance and [simulator policy](agents/simulator.md) |
-| Local backend and manager/anonymous apps | [Localhost skill](../../.agents/skills/lg-ios-localhost/SKILL.md); [manual two-simulator setup](local-testing.md) |
-| Release simulator build against deployed production | [Production skill](../../.agents/skills/lg-ios-production/SKILL.md) |
+| Local backend and manager/anonymous apps | [Localhost skill](../../.agents/skills/lg-ios-run-local/SKILL.md); [manual two-simulator setup](local-testing.md) |
+| Release simulator build against deployed production | [Production skill](../../.agents/skills/lg-ios-run-production/SKILL.md) |
 | Local test-account authentication | [Login skill](../../.agents/skills/lg-ios-login/SKILL.md) |
 | UI catalog and baseline review | [Visual review](agents/visual-review.md) |
 | Lint, tests, and CI boundaries | [Testing](agents/testing.md), [CI/CD](../../docs/agents/ci-cd.md), and [iOS workflow source](../../.github/workflows/ios.yml) |

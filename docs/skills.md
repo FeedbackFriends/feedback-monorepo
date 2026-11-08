@@ -4,7 +4,7 @@
 
 Repository skills live in [root `.agents/skills/`](../.agents/skills/). Claude Code discovers the same content through per-skill symlinks under `.claude/skills/`. When adding, removing, or renaming a skill, maintain its alias as well as this catalog; edit canonical content only. Open a skill for its full procedure and invocation rules. This catalog excludes personal skills and local Apple exports.
 
-Custom workflows use `lg-` names. Community provenance is recorded in [skills-lock.json](../skills-lock.json); use [the community update procedure](#update-community-skills) for installer updates and [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) for repository-owned guidance improvements. Use [lg-audit-community-skills](../.agents/skills/lg-audit-community-skills/SKILL.md) to assess suitability, alternatives, gaps, and overlap before changing the collection. Keep this catalog aligned when skills are added, removed, or renamed.
+Custom workflows use `lg-` names that describe the action. Group platform workflows under `lg-ios-`, `lg-web-`, or `lg-coolify-`; keep shared workflow names short. Community provenance is recorded in [skills-lock.json](../skills-lock.json); use [the community update procedure](#update-community-skills) for installer updates and [lg-maintain-harness](../.agents/skills/lg-maintain-harness/SKILL.md) for repository-owned guidance improvements. Use [lg-audit-community-skills](../.agents/skills/lg-audit-community-skills/SKILL.md) to assess suitability, alternatives, gaps, and overlap before changing the collection. Keep this catalog aligned when skills are added, removed, or renamed.
 
 ## LetsGrow workflows
 
@@ -12,19 +12,19 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | --- | --- |
 | [lg-audit-community-skills](../.agents/skills/lg-audit-community-skills/SKILL.md) | Compare installed community skills with skills.sh alternatives and recommend a coherent collection. |
 | [lg-commit-and-push](../.agents/skills/lg-commit-and-push/SKILL.md) | Commit or push when requested. |
-| [lg-coolify-operations](../.agents/skills/lg-coolify-operations/SKILL.md) | Operate and troubleshoot Coolify production deployments. |
+| [lg-coolify-operate](../.agents/skills/lg-coolify-operate/SKILL.md) | Operate and troubleshoot Coolify production deployments. |
 | [lg-add-todo](../.agents/skills/lg-add-todo/SKILL.md) | Add a short nontechnical item to `todos.md` only when requested. |
 | [lg-implement](../.agents/skills/lg-implement/SKILL.md) | Implement the agreed conversation plan and prepare its handoff. |
-| [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) | Simplify custom skills, AGENTS.md, rules, and documentation; audit guidance against source. |
-| [lg-ios-localhost](../.agents/skills/lg-ios-localhost/SKILL.md) | Start the local backend and launch manager/anonymous apps. |
+| [lg-maintain-harness](../.agents/skills/lg-maintain-harness/SKILL.md) | Simplify custom skills, AGENTS.md, rules, and documentation; audit guidance against source. |
+| [lg-ios-run-local](../.agents/skills/lg-ios-run-local/SKILL.md) | Start the local backend and launch manager/anonymous apps. |
 | [lg-ios-login](../.agents/skills/lg-ios-login/SKILL.md) | Launch iOS with a local test-account login. |
-| [lg-ios-production](../.agents/skills/lg-ios-production/SKILL.md) | Launch a Release simulator app against deployed production. |
-| [lg-ios-screenshots](../.agents/skills/lg-ios-screenshots/SKILL.md) | Capture and compare the curated iOS screenshot catalog. |
-| [lg-ios-sync-openapi](../.agents/skills/lg-ios-sync-openapi/SKILL.md) | Sync handwritten iOS API boundaries with generated clients. |
+| [lg-ios-run-production](../.agents/skills/lg-ios-run-production/SKILL.md) | Launch a Release simulator app against deployed production. |
+| [lg-ios-capture-screenshots](../.agents/skills/lg-ios-capture-screenshots/SKILL.md) | Capture and compare the curated iOS screenshot catalog. |
+| [lg-ios-sync-api](../.agents/skills/lg-ios-sync-api/SKILL.md) | Sync handwritten iOS API boundaries with generated clients. |
 | [lg-ios-test-notifications](../.agents/skills/lg-ios-test-notifications/SKILL.md) | Run the iOS notification test command. |
 | [lg-refine](../.agents/skills/lg-refine/SKILL.md) | Grill requirements and architecture with the user before implementation. |
 | [lg-review](../.agents/skills/lg-review/SKILL.md) | Review changes for concrete regressions. |
-| [lg-tailwind-nextjs-expert](../.agents/skills/lg-tailwind-nextjs-expert/SKILL.md) | Implement web styling with existing tokens and components. |
+| [lg-web-style](../.agents/skills/lg-web-style/SKILL.md) | Implement web styling with existing tokens and components. |
 
 ## Community skills
 
@@ -57,13 +57,13 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | Customer evidence and pilots | `customer-research` for interview plans and synthesis; `lg-refine` turns evidence into requirements and architecture. |
 | Public positioning and landing copy | `copywriting`, informed by research and the [product strategy](product/lets-grow-strategi-teamtrivsel.md); `seo-audit` checks public-page discoverability. |
 | First-use journeys | `onboarding` for the path to value; task requirements own account roles, invitations, and access checks. |
-| Web UI | `lg-tailwind-nextjs-expert` and `shadcn` implement existing tokens/components; `frontend-design` supports visual direction, `ui-ux-pro-max` targeted lookup, and `web-design-guidelines` interface review. |
+| Web UI | `lg-web-style` and `shadcn` implement existing tokens/components; `frontend-design` supports visual direction, `ui-ux-pro-max` targeted lookup, and `web-design-guidelines` interface review. |
 | Next.js implementation and verification | `next-best-practices` supports architecture alongside version-matched docs; `next-upgrade` handles migrations. For explicitly requested runtime checks, `next-dev-loop` provides the procedure through the [web validation guide](../web/docs/agents/validation.md); existing lint, build and Playwright checks remain required when relevant. |
 | React implementation | `vercel-composition-patterns` for component APIs; `vercel-react-best-practices` for relevant performance concerns. Use abstractions and dependencies only when the task warrants them. |
 | Browser exploration and repeatable tests | Follow [browser access and tool ownership](agents/browser-access.md); the TypeScript Playwright suite owns repeatable web tests. |
 | Native iOS and Maestro | Repository [iOS workflows](agents/ios-workflows.md), Apple guidance, and [existing Maestro flows](../ios-app/.maestro/README.md) own native verification. Use [official Maestro references](https://docs.maestro.dev/) for YAML commands; preserve deterministic fixtures and explicit auth state rather than substituting adaptive auth or mock responses for live acceptance. |
 | Database changes | Backend [persistence guidance](../backend/docs/agents/persistence.md) owns Exposed/Liquibase integration; `supabase-postgres-best-practices` supplies database-specific depth. |
-| Harness improvement and retrospectives | `lg-improve-harness`, supported by `writing-for-agents`. |
+| Harness improvement and retrospectives | `lg-maintain-harness`, supported by `writing-for-agents`. |
 
 ### Product and UX application
 
@@ -97,4 +97,4 @@ python3 scripts/update-community-skills.py
 
 The [helper](../scripts/update-community-skills.py) reinstalls explicit names from each recorded source through `skills.sh add`, avoiding observed skips of nested Next.js skills by `skills update`. `skills-lock.json` owns provenance. Unavailable sources, skipped installs, and inventory mismatches fail the run. Keep community content upstream-owned and update inventory/source links when adding or removing skills.
 
-Custom skills and repository guidance remain maintained through [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md); ordinary tasks do not wait on community freshness. Local updates do not authorize committing, pushing, or executing installed workflows.
+Custom skills and repository guidance remain maintained through [lg-maintain-harness](../.agents/skills/lg-maintain-harness/SKILL.md); ordinary tasks do not wait on community freshness. Local updates do not authorize committing, pushing, or executing installed workflows.

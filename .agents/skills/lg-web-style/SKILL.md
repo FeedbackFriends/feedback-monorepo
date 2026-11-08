@@ -1,5 +1,5 @@
 ---
-name: lg-tailwind-nextjs-expert
+name: lg-web-style
 description: Implement LetsGrow web UI with existing Tailwind tokens and shared components. Use for styling, responsive layouts, or design-token changes.
 ---
 

@@ -1,9 +1,9 @@
 ---
-name: lg-improve-harness
+name: lg-maintain-harness
 description: Improve LetsGrow's agent harness, including custom lg- skills, AGENTS.md, rules, documentation, and guidance routing. Use for harness simplification, documentation audits, and guidance drift reviews grounded in session evidence and the current system.
 ---
 
-# Improve the harness
+# Maintain the harness
 
 Read [harness ownership](../../../docs/agent-tooling.md), Git status, and the guidance involved in the request. Use [writing-for-agents](../writing-for-agents/SKILL.md). Follow the [task workflow](../../../docs/agents/task-workflow.md) for the simple backlog and conversation-based planning. Add todos only on explicit user request.
 

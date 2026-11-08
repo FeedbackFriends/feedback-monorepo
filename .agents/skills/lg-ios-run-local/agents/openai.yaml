@@ -1,0 +1,7 @@
+interface:
+  display_name: "LetsGrow iOS Run Local"
+  short_description: "Start backend and manager/anonymous iOS simulators"
+  default_prompt: "Use $lg-ios-run-local both to start the local backend and launch manager and anonymous apps on two simulators, preserving existing data."
+
+policy:
+  allow_implicit_invocation: true

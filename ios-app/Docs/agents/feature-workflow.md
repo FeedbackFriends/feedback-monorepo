@@ -35,15 +35,15 @@ A build proves compilation. A discovered and passing test proves the behavior it
 
 | Intent | Prompt | Data effect |
 | --- | --- | --- |
-| Run with existing login/data | `$lg-ios-localhost` | Preserve data |
-| Work as sample owner | `$lg-ios-localhost manager` | Login only; fixture must already exist |
-| Prepare owner sample data | `$lg-ios-localhost manager seed-manager` | Replace sample manager fixture and its associated data |
-| Owner and anonymous together | `$lg-ios-localhost both` | Preserve data; verify roles on two simulators |
-| Fresh sample data for both roles | `$lg-ios-localhost both seed-manager` | Replace manager fixture; anonymous identity is preserved when already anonymous |
-| Deliberately reset all local data | `$lg-ios-localhost both reset-db` | Delete all local database data and recreate manager fixture |
-| Run deployed API | `$lg-ios-production` | Production Release launch with normal login; real production data |
+| Run with existing login/data | `$lg-ios-run-local` | Preserve data |
+| Work as sample owner | `$lg-ios-run-local manager` | Login only; fixture must already exist |
+| Prepare owner sample data | `$lg-ios-run-local manager seed-manager` | Replace sample manager fixture and its associated data |
+| Owner and anonymous together | `$lg-ios-run-local both` | Preserve data; verify roles on two simulators |
+| Fresh sample data for both roles | `$lg-ios-run-local both seed-manager` | Replace manager fixture; anonymous identity is preserved when already anonymous |
+| Deliberately reset all local data | `$lg-ios-run-local both reset-db` | Delete all local database data and recreate manager fixture |
+| Run deployed API | `$lg-ios-run-production` | Production Release launch with normal login; real production data |
 
-The [localhost skill](../../../.agents/skills/lg-ios-localhost/SKILL.md) owns exact preparation/reset semantics and loopback restrictions. A request for seeded data selects fixture preparation; it does not imply `reset-db`. A launch request does not imply a feedback submission. Prefer deterministic injected test data for unusual errors, times, and edge cases rather than building new live fixture endpoints solely for a reducer test.
+The [localhost skill](../../../.agents/skills/lg-ios-run-local/SKILL.md) owns exact preparation/reset semantics and loopback restrictions. A request for seeded data selects fixture preparation; it does not imply `reset-db`. A launch request does not imply a feedback submission. Prefer deterministic injected test data for unusual errors, times, and edge cases rather than building new live fixture endpoints solely for a reducer test.
 
 ## Example requests
 
@@ -51,7 +51,7 @@ The [localhost skill](../../../.agents/skills/lg-ios-localhost/SKILL.md) owns ex
 $lg-refine Let owners duplicate an activity's question setup.
 # Grill the requirements and architecture in the conversation.
 $lg-implement Implement the agreed duplication behavior.
-$lg-ios-localhost both seed-manager
-$lg-ios-production
+$lg-ios-run-local both seed-manager
+$lg-ios-run-production
 $lg-review Review the current changes for shared-state and navigation regressions.
 ```

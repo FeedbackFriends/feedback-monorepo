@@ -1,5 +1,5 @@
 ---
-name: lg-ios-localhost
+name: lg-ios-run-local
 description: Start the local LetsGrow backend and launch iOS for manual testing, optionally as a manager, an anonymous user, or both on separate simulators. Supports explicit fixture preparation and optional database reset.
 ---
 
@@ -9,7 +9,7 @@ Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md), the
 
 ## Invocation
 
-Interpret the words following `$lg-ios-localhost` as the requested mode and options; these are agent instructions, not shell arguments.
+Interpret the words following `$lg-ios-run-local` as the requested mode and options; these are agent instructions, not shell arguments.
 
 | Mode | App launch |
 | --- | --- |
@@ -31,11 +31,11 @@ A natural-language request for seeded/sample manager data selects `seed-manager`
 Examples:
 
 ```text
-$lg-ios-localhost both
-$lg-ios-localhost both seed-manager
-$lg-ios-localhost both reset-db
-$lg-ios-localhost manager
-$lg-ios-localhost anonymous
+$lg-ios-run-local both
+$lg-ios-run-local both seed-manager
+$lg-ios-run-local both reset-db
+$lg-ios-run-local manager
+$lg-ios-run-local anonymous
 ```
 
 ## Backend and data

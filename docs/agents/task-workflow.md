@@ -24,7 +24,7 @@ Read the owning `AGENTS.md` before editing. For multi-platform tasks, inspect ea
 | Backend/scheduler | [Backend policy](../../backend/AGENTS.md), [validation](../../backend/docs/agents/validation.md), [persistence](../../backend/docs/agents/persistence.md) | Kotlin services/DAOs, incremental migrations, relevant Gradle module/API/persistence tests; warnings fail the build |
 | Web | [Web policy](../../web/AGENTS.md), [validation](../../web/docs/agents/validation.md) | Existing UI/auth/data boundaries, npm lint/build and affected automated Playwright tests |
 | Shared contract | [API guidance](api-contract.md) | Backend source → root artifact generation → handwritten consumers; producer and consumer verification |
-| Runtime/deployment | [Runtime guide](runtime-and-deployment.md), [Coolify skill](../../.agents/skills/lg-coolify-operations/SKILL.md) | Environment preparation and service health; deployment only when authorized |
+| Runtime/deployment | [Runtime guide](runtime-and-deployment.md), [Coolify skill](../../.agents/skills/lg-coolify-operate/SKILL.md) | Environment preparation and service health; deployment only when authorized |
 | Tooling/docs | [Repository scope](repository-scope.md) | Relevant helper regression tests or skill metadata/link/task-routing validation |
 
 Tests should detect the behavior that can regress. Distinguish a compilation pass, passing behavioral tests, service health, app launch, a live acceptance journey, and fresh visual evidence. Planned verification is not a result. A documentation-only task does not require a running app or database.

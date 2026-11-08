@@ -1,5 +1,5 @@
 ---
-name: lg-ios-screenshots
+name: lg-ios-capture-screenshots
 description: Capture and compare the curated LetsGrow iOS catalog through app-hosted Point-Free SnapshotTesting and native Xcode MCP.
 ---
 

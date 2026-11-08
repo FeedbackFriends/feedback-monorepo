@@ -2,7 +2,7 @@
 
 Read the owning feature and its nearest maintained sibling before choosing a pattern. The toolchain and dependency versions live in [iOS policy](../../AGENTS.md) and [Package.swift](../../Modules/Package.swift). Use those and resolved packages rather than examples from another app or a different TCA release.
 
-Use Apple's current guidance exposed by native Xcode MCP for unfamiliar or version-sensitive APIs. Installed SwiftUI/concurrency skills may supplement these repository rules when relevant. For handwritten Domain/adapters that need reconciliation with generated APIs, use the [sync workflow](../../../.agents/skills/lg-ios-sync-openapi/SKILL.md).
+Use Apple's current guidance exposed by native Xcode MCP for unfamiliar or version-sensitive APIs. Installed SwiftUI/concurrency skills may supplement these repository rules when relevant. For handwritten Domain/adapters that need reconciliation with generated APIs, use the [sync workflow](../../../.agents/skills/lg-ios-sync-api/SKILL.md).
 
 ## Choose the owner before the type
 

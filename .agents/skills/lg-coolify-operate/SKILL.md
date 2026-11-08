@@ -1,9 +1,9 @@
 ---
-name: lg-coolify-operations
+name: lg-coolify-operate
 description: Operate and troubleshoot the LetsGrow production deployment on Coolify. Use for releases, failed deployments, unhealthy services, HTTP 502 responses, and Coolify MCP setup.
 ---
 
-# Coolify Operations
+# Operate Coolify
 
 Use this skill for LetsGrow deployment and production-runtime work.
 

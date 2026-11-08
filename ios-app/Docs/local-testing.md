@@ -9,15 +9,15 @@ login tokens. Both schemes run the real app with `DebugLocalhost`.
 From an agent session in this repository, invoke:
 
 ```text
-$lg-ios-localhost both
+$lg-ios-run-local both
 ```
 
 This starts the backend and launches the manager and anonymous apps on two
 different simulators, preserving existing data. To prepare the sample manager on
-first use, run `$lg-ios-localhost both seed-manager`; this replaces the
+first use, run `$lg-ios-run-local both seed-manager`; this replaces the
 sample manager fixture and its data. To deliberately clear the entire local
 database and recreate the manager fixture, run
-`$lg-ios-localhost both reset-db`.
+`$lg-ios-run-local both reset-db`.
 
 Use `manager` or `anonymous` instead of `both` for one simulator. You can specify
 the simulator names in the same request. These commands are instructions for the
