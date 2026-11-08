@@ -1,0 +1,69 @@
+ios-app/.maestro/README.md
+  s_8d68282ba66d79::t_68f000d836a8f0 5
+todos/02-shared-platform-consolidation.md
+  s_8d68282ba66d79::t_bd9dc7633bb6a0 3-5,8,12,16-18,22-27,31-36,40-46,62,64-65
+todos/03-shared-rebrand-suggestions-and-votes.md
+  s_8d68282ba66d79::t_f92c848a0bb5ef 5,8,21,23-25,53-54,63
+todos/04-shared-rebrand-decisions-and-status.md
+  s_8d68282ba66d79::t_ccc293ab37fca4 5,8,19-21,47-48
+todos/05-shared-rebrand-trials-and-evaluation.md
+  s_8d68282ba66d79::t_205746e472ffd6 5,8,26-28,46-47
+todos/06-shared-rebrand-web-leader-dashboard.md
+  s_8d68282ba66d79::t_c88e6b9d6aca8f 5,8,23-25,39,47-48
+todos/07-ios-rebrand-employee-app.md
+  s_8d68282ba66d79::t_33adc8def9cb81 5,8,28-30,54-55,67-68
+todos/08-web-mobile-navigation.md
+  s_8d68282ba66d79::t_1b4f21b77f9352 5,20-21
+todos/09-shared-error-messages.md
+  s_8d68282ba66d79::t_ea9723810f378b 5,21-22,164
+todos/10-shared-in-app-product-feedback-and-bug-reports.md
+  s_8d68282ba66d79::t_0d75d9473ea194 5,20-21,128
+todos/11-ios-missing-text-not-found.md
+  s_8d68282ba66d79::t_7066c74cb0ee96 5,20-21,24
+todos/12-ios-profile-and-navigation-polish.md
+  s_8d68282ba66d79::t_311c16c8de9a99 5,50-51,190
+todos/13-ios-text-input-full-surface-focus.md
+  s_8d68282ba66d79::t_2547454fd32d28 5,20-21
+todos/14-ios-confirmation-polish.md
+  s_8d68282ba66d79::t_5e7c2ddfa3710e 5,34-35,113
+todos/15-ios-answer-type-picker-and-icons.md
+  s_8d68282ba66d79::t_907a7b568cb784 5,34-35,129
+todos/16-ios-manager-events-sync-bar.md
+  s_8d68282ba66d79::t_c45ef0d6bb51d1 5,21-22,106
+todos/17-ios-physical-device-verification.md
+  s_8d68282ba66d79::t_172e8efcf7a234 5,20-21,46
+todos/18-shared-rebrand-landing-page-finish-and-brand-identity.md
+  s_8d68282ba66d79::t_f5d12a8209a096 5,8,37-39,64-65
+todos/19-shared-remove-zoho-calendar-email.md
+  s_8d68282ba66d79::t_ec11c4f0fb2c6e 1-61
+todos/20-shared-rebrand-legacy-retirement.md
+  s_8d68282ba66d79::t_d8a1132ebd0703 5,8,16-18,24-25,29,33,39-40,57,68
+todos/21-android-rebrand-app.md
+  s_8d68282ba66d79::t_f055b5fa696251 5,8,24-26,43-44,93
+todos/22-shared-rebrand-hr-overview.md
+  s_8d68282ba66d79::t_e59b7f3f553916 5,8,18-20,36-37,78
+todos/23-web-rebrand-language-switch.md
+  s_8d68282ba66d79::t_b66ee0ee9fd096 5,8,18-20,36-37,80
+todos/24-shared-rebrand-wellbeing-check.md
+  s_8d68282ba66d79::t_eeccef83405772 5,8,23-25,44-45,92
+todos/25-shared-ios-maestro-e2e.md
+  s_8d68282ba66d79::t_1909c41d263cb6 5,21-22
+todos/README.md
+  s_8d68282ba66d79::t_299fa9a7dcfc88 9,23-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c4fee161aa7ae159b1e4bdae5e4ddf38b6f57de6",
+  "prompts": {},
+  "sessions": {
+    "s_8d68282ba66d79": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b84b-0aa4-7860-9112-f5d6a94293af",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
