@@ -1,0 +1,77 @@
+.agents/skills/lg-audit-community-skills/SKILL.md
+  s_263793f19bb985::t_4595e42a4bc234 56
+.agents/skills/lg-coolify-operate/SKILL.md
+  s_263793f19bb985::t_e77f9fe2d10a7a 2,6
+.agents/skills/lg-ios-capture-screenshots/SKILL.md
+  s_263793f19bb985::t_d3d4ed9c728a0c 2
+.agents/skills/lg-ios-run-local/SKILL.md
+  s_263793f19bb985::t_3921a2941c1eab 2,12,34-38
+.agents/skills/lg-ios-run-local/agents/openai.yaml
+  s_263793f19bb985::t_e77b9e76d41310 2,4
+.agents/skills/lg-ios-run-production/SKILL.md
+  s_263793f19bb985::t_c8d8a133aed5ce 2,10
+.agents/skills/lg-ios-run-production/agents/openai.yaml
+  s_263793f19bb985::t_6b1e44cc276de4 2,4
+.agents/skills/lg-ios-sync-api/SKILL.md
+  s_263793f19bb985::t_0b9d90a525c057 2,57
+.agents/skills/lg-maintain-harness/SKILL.md
+  s_263793f19bb985::t_acae0cdc6b8fed 2,6
+.agents/skills/lg-web-style/SKILL.md
+  s_263793f19bb985::t_d5e5ff7a5d8206 2
+.claude/skills/lg-coolify-operate
+  s_263793f19bb985::t_9efe7680394a56 1
+.claude/skills/lg-ios-capture-screenshots
+  s_263793f19bb985::t_f5c0b43cc1a928 1
+.claude/skills/lg-ios-run-local
+  s_263793f19bb985::t_197927f9128b00 1
+.claude/skills/lg-ios-run-production
+  s_263793f19bb985::t_b980a7aea98eae 1
+.claude/skills/lg-ios-sync-api
+  s_263793f19bb985::t_3d911b5dbbd30c 1
+.claude/skills/lg-maintain-harness
+  s_263793f19bb985::t_94502ddbd2a186 1
+.claude/skills/lg-web-style
+  s_263793f19bb985::t_5a74292076ad7e 1
+docs/agent-tooling.md
+  s_263793f19bb985::t_71b384e4724830 44
+docs/agents/ios-workflows.md
+  s_263793f19bb985::t_a2646ece7972c1 5-7
+docs/agents/task-workflow.md
+  s_263793f19bb985::t_17e061a44c1836 27
+docs/skills.md
+  s_263793f19bb985::t_378a451fa3917d 7,15,18-19,21-23,27,60,66,100
+ios-app/Docs/agent-harness.md
+  s_263793f19bb985::t_54f1bf6eec100b 35-36
+ios-app/Docs/agents/feature-workflow.md
+  s_263793f19bb985::t_6ff8fa7380a060 38-44,46,54-55
+ios-app/Docs/agents/simulator.md
+  s_263793f19bb985::t_078c2314c66dee 10
+ios-app/Docs/agents/swift.md
+  s_263793f19bb985::t_41f7f3d09e19ea 5
+ios-app/Docs/agents/visual-review.md
+  s_263793f19bb985::t_fecc789792f9d9 10
+ios-app/Docs/local-testing.md
+  s_263793f19bb985::t_20cfb1e3030793 12,17,20
+ios-app/Docs/localization.md
+  s_263793f19bb985::t_0342f9b0ceffe9 57
+ios-app/README.md
+  s_263793f19bb985::t_520a72c76a6b7b 72
+ios-app/scripts/screenshots
+  s_263793f19bb985::t_8453493c6dc05f 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3927fe30f839dc4ec285cdcb84d790aea96245d5",
+  "prompts": {},
+  "sessions": {
+    "s_263793f19bb985": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bcff-84b0-7e40-840f-62b53b47b54f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
