@@ -1,0 +1,195 @@
+.agents/skills/lg-add-todo/SKILL.md
+  s_263793f19bb985::t_f2546c8bbf04f8 8
+.agents/skills/lg-audit-community-skills/SKILL.md
+  s_263793f19bb985::t_2e39ffcfb7ca0a 12,14,56
+.agents/skills/lg-coolify-operate/SKILL.md
+  s_263793f19bb985::t_cd16c084315bba 36
+.agents/skills/lg-implement/SKILL.md
+  s_263793f19bb985::t_a81d77e181975a 8,22
+.agents/skills/lg-ios-capture-screenshots/SKILL.md
+  s_263793f19bb985::t_0485fd8a2f9fa2 8,10,12,16
+.agents/skills/lg-ios-login/SKILL.md
+  s_263793f19bb985::t_46c7d5bfe96b4f 8
+.agents/skills/lg-ios-run-local/SKILL.md
+  s_263793f19bb985::t_d4910b865805d2 8,43-45,51
+.agents/skills/lg-ios-run-production/SKILL.md
+  s_263793f19bb985::t_b614ef28184cc7 8,10,16
+.agents/skills/lg-ios-test-notifications/SKILL.md
+  s_263793f19bb985::t_aa03a8a4141229 9
+.agents/skills/lg-maintain-harness/SKILL.md
+  s_263793f19bb985::t_d3faf9650ecbad 8,12,14,20
+.agents/skills/lg-refine/SKILL.md
+  s_263793f19bb985::t_1b5cae5f3de481 8,12,14
+.agents/skills/lg-web-style/SKILL.md
+  s_263793f19bb985::t_0761fb4a4c105f 8,12
+.codex/config.toml
+  s_263793f19bb985::t_df36d961b6eda7 7
+.github/workflows/ci.yml
+  s_263793f19bb985::t_bc0a0491181d12 107
+.github/workflows/ios.yml
+  s_263793f19bb985::t_24453d659eab49 8-9,15-16,49,52-53,56,59,61-62,69,113
+.github/workflows/update-community-skills.yml
+  s_263793f19bb985::t_419614764a7727 34,37,48,52
+.gitignore
+  s_263793f19bb985::t_ba3ed579393bbd 52
+.mcp.json
+  s_263793f19bb985::t_e3777fe653229a 11
+AGENTS.md
+  s_263793f19bb985::t_63f52f3d43cbc5 16-17,24-26,29,31-37
+README.md
+  s_263793f19bb985::t_40e3676e880d03 11,18,20
+backend/AGENTS.md
+  s_263793f19bb985::t_c44b35c51d8b7c 12,18,21-22,37,61,67-68,72,75
+backend/README.md
+  s_263793f19bb985::t_4f10b17b6107b9 124-125,127
+contracts/openapi/README.md
+  s_263793f19bb985::t_2a7130da6f6d25 8
+docs/README.md
+  s_263793f19bb985::t_e0e9d5040b7360 3-5,10-14,16-20,23,26
+docs/backend/agents/validation.md
+  s_263793f19bb985::t_b3c10c394434cc 22,36
+docs/ios/ARCHITECTURE.md
+  s_263793f19bb985::t_25f7de710c6b6b 103
+docs/ios/NOTIFICATIONS.md
+  s_263793f19bb985::t_8885dc3433edc2 3,7
+docs/ios/SETUP.md
+  s_263793f19bb985::t_8c66e9cd409365 11,13
+docs/ios/agent-harness.md
+  s_263793f19bb985::t_ea919ab66fec4f 3,9,18,33,39-40,42
+docs/ios/agents/api-contract.md
+  s_263793f19bb985::t_8d365e875de6ba 13
+docs/ios/agents/architecture.md
+  s_263793f19bb985::t_4f10553480e797 17
+docs/ios/agents/design-system.md
+  s_263793f19bb985::t_5f153df2d0fbd4 11
+docs/ios/agents/feature-workflow.md
+  s_263793f19bb985::t_0678474cedcdbc 3,13,15,29
+docs/ios/agents/product-language.md
+  s_263793f19bb985::t_0565d210dcc756 5
+docs/ios/agents/simulator.md
+  s_263793f19bb985::t_94fbfebf4a5a74 10
+docs/ios/agents/swift.md
+  s_263793f19bb985::t_cebe8899ce41a8 3,47-50
+docs/ios/agents/testing.md
+  s_263793f19bb985::t_81ac5637da9885 8,12
+docs/ios/features/overview.md
+  s_263793f19bb985::t_c1054455b02508 22,35,48,66,79,97,112,125,141,153,165,179,189,203,216,227
+docs/ios/ios-answer-type-icons.md
+  s_263793f19bb985::t_0632a31107740c 28
+docs/ios/local-testing.md
+  s_263793f19bb985::t_c0d43e54d53fe6 32-33
+docs/ios/localization.md
+  s_263793f19bb985::t_30c3e353d8d2c4 3,7,21,36-37,44,51-52,55
+docs/ios/screenshots/README.md
+  s_263793f19bb985::t_55d21e161537b9 5,16-18,34,39,44,57-58,72,80,82,94
+docs/shared/agent-tooling.md
+  s_263793f19bb985::t_b24ac816b86a73 25-31,33,43-44,48,50,62,64-65,71,73,77,88
+docs/shared/agents/api-contract.md
+  s_263793f19bb985::t_dfafd03beba6b9 11,14
+docs/shared/agents/browser-access.md
+  s_263793f19bb985::t_99db6df208b32b 11,23
+docs/shared/agents/ios-workflows.md
+  s_263793f19bb985::t_c86e5cfc3510ab 3,5,7-8,10,12
+docs/shared/agents/repository-scope.md
+  s_263793f19bb985::t_76b5c0e81e866d 6,9,13-15,19-29
+docs/shared/agents/runtime-and-deployment.md
+  s_263793f19bb985::t_aa8dd59f390069 12-13,19
+docs/shared/agents/supabase-auth.md
+  s_263793f19bb985::t_1ead64746a95cc 15,34
+docs/shared/agents/task-workflow.md
+  s_263793f19bb985::t_96eed2bf990eaa 3,7-9,23-25,27,34
+docs/shared/api-error-copy.md
+  s_263793f19bb985::t_eee8992eddd8ab 22
+docs/shared/architecture.md
+  s_263793f19bb985::t_88eb376302fc94 31,64,82,98,107-111,127,147,172
+docs/shared/deployment/coolify.md
+  s_263793f19bb985::t_e7c23187758146 103
+docs/shared/skills.md
+  s_263793f19bb985::t_6c7de6f5c819fc 5,7,13-27,33-51,61,64-65,84,88,95,98,100
+docs/web/agents/validation.md
+  s_263793f19bb985::t_9a0375a12d136c 23,37,39
+ios-app/.maestro/README.md
+  s_263793f19bb985::t_af3e2078549f38 8,25,33-36,41,53,61,64-65,76
+ios-app/.maestro/flows/debug-auth-seed-manager.yaml
+  s_263793f19bb985::t_70b28ffd69eeeb 2-3
+ios-app/.maestro/flows/manager-create-activity-event.yaml
+  s_263793f19bb985::t_75ea8d1c1a178c 2
+ios-app/.maestro/notifications/README.md
+  s_263793f19bb985::t_3d6c5b57b6ac03 11,14,19,30,76-77
+ios-app/.maestro/notifications/feedback-received.yaml
+  s_263793f19bb985::t_744fc3109dae67 1
+ios-app/AGENTS.md
+  s_263793f19bb985::t_4e39eb13f0f146 13,19-30
+ios-app/App/DebugMenuView.swift
+  s_263793f19bb985::t_8f1ec4db515575 40
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_263793f19bb985::t_575e31df667a98 1047
+ios-app/Modules/Sources/EnterCodeFeature/ScreenCatalogPreviewView.swift
+  s_263793f19bb985::t_94c01b9a14b5f8 53
+ios-app/Modules/Sources/FeedbackFlowFeature/ScreenCatalogPreviewView.swift
+  s_263793f19bb985::t_3e5952bdc0c21c 460
+ios-app/Modules/Sources/MoreFeature/ScreenCatalogPreviewView.swift
+  s_263793f19bb985::t_2ad11d22a206a4 172
+ios-app/Modules/Sources/RootFeature/ScreenCatalogPreviewView.swift
+  s_263793f19bb985::t_7f3060136a9785 61
+ios-app/Modules/Sources/SignUpFeature/ScreenCatalogPreviewView.swift
+  s_263793f19bb985::t_5a85d9f4a1aa0c 70
+ios-app/Modules/Sources/TabbarFeature/ScreenCatalogPreviewView.swift
+  s_263793f19bb985::t_cadbd4c1fa4585 261
+ios-app/README.md
+  s_263793f19bb985::t_a0cc60f95e0501 10-14,50,63,70,72,77,112,120
+scripts/ios/check-localized-copy.py
+  s_263793f19bb985::t_a1c2c2d75987e3 15
+scripts/ios/e2e
+  s_263793f19bb985::t_326296980bd4f6 4,83,155,183,188
+scripts/ios/ios-backend
+  s_263793f19bb985::t_a68953b982283e 5,8
+scripts/ios/review-preview-catalog.py
+  s_263793f19bb985::t_f082063b06e9e3 14-15,181
+scripts/ios/screen-catalog.py
+  s_263793f19bb985::t_d826201dbf0d47 12,95
+scripts/ios/screenshots
+  s_263793f19bb985::t_8f51cb779960e0 9,92-93,95-96
+scripts/ios/test-notifications.py
+  s_263793f19bb985::t_add313a39cd939 25,116,187
+scripts/ios/tests/test_ios_backend.py
+  s_263793f19bb985::t_9e61cea79d6f07 20-21,55
+scripts/ios/validate-localization.py
+  s_263793f19bb985::t_1b1c8ed2561794 12
+scripts/shared/coolify-mcp-auth-headers
+  s_263793f19bb985::t_2a01c2e56d72ae 9
+scripts/shared/e2e-admin
+  s_263793f19bb985::t_ce24e6aae40531 11
+scripts/shared/generate-api-artifacts.sh
+  s_263793f19bb985::t_1ca87174de10f8 4
+scripts/shared/reset
+  s_263793f19bb985::t_9fc8d1e6aa4c25 4
+scripts/shared/run
+  s_263793f19bb985::t_bcc7589fee65e1 4,20,28
+scripts/shared/tests/test_update_community_skills.py
+  s_263793f19bb985::t_0f54dd3ce765e4 31-32,34
+scripts/shared/tests/test_update_xcode_skills.py
+  s_263793f19bb985::t_804c3708ff85ed 71-79
+scripts/shared/update-community-skills.py
+  s_263793f19bb985::t_d0065124e81dde 12,21,23
+scripts/shared/update-xcode-skills.py
+  s_263793f19bb985::t_706d694eb3c3dd 11-13,41
+web/AGENTS.md
+  s_263793f19bb985::t_0acd9328f25c6d 11,13,15,38-39,72,115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7b860747f738b477913621d40fd4162292474410",
+  "prompts": {},
+  "sessions": {
+    "s_263793f19bb985": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bcff-84b0-7e40-840f-62b53b47b54f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
