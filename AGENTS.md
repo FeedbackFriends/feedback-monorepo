@@ -26,7 +26,7 @@ Run from the monorepo root:
 | Product, UX, marketing, or domain terminology | [Domain guidance](docs/product/lets-grow-strategi-teamtrivsel.md) |
 | Web frontend | [web/AGENTS.md](web/AGENTS.md) |
 | Backend API, scheduler, or persistence | [backend/AGENTS.md](backend/AGENTS.md) |
-| Task creation, refinement, implementation, verification, review, or handoff | [Shared task workflow](docs/agents/task-workflow.md) and [create-task skill](.agents/skills/lg-create-task/SKILL.md) |
+| Task creation, refinement, implementation, verification, review, or handoff | [Shared task workflow](docs/agents/task-workflow.md) and [add-todo skill](.agents/skills/lg-add-todo/SKILL.md) |
 | iOS app | [ios-app/AGENTS.md](ios-app/AGENTS.md) |
 | iOS feature refinement, implementation, Swift, review, or investigation | [iOS feature workflow](ios-app/Docs/agents/feature-workflow.md) |
 | File ownership or shared implementation conventions | [Repository scope](docs/agents/repository-scope.md) |

@@ -1,5 +1,5 @@
 ---
-name: lg-create-task
+name: lg-add-todo
 description: Add a simple nontechnical item to root todos.md only when the user explicitly asks to capture a todo.
 ---
 

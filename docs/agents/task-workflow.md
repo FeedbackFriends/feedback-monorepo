@@ -4,7 +4,7 @@ Root [todos.md](../../todos.md) is the single backlog. Each item is one checkbox
 
 | Step | Skill | Result |
 | --- | --- | --- |
-| Capture a requested todo | [lg-create-task](../../.agents/skills/lg-create-task/SKILL.md) | A short item in `todos.md` |
+| Capture a requested todo | [lg-add-todo](../../.agents/skills/lg-add-todo/SKILL.md) | A short item in `todos.md` |
 | Grill the idea with the user | [lg-refine](../../.agents/skills/lg-refine/SKILL.md) | Requirements, architecture, acceptance, and open questions settled in the conversation |
 | Implement the agreed change | [lg-implement](../../.agents/skills/lg-implement/SKILL.md) | Working change, automated verification, and human review handoff |
 

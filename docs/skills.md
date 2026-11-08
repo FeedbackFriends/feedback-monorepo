@@ -13,7 +13,7 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-audit-community-skills](../.agents/skills/lg-audit-community-skills/SKILL.md) | Compare installed community skills with skills.sh alternatives and recommend a coherent collection. |
 | [lg-commit-and-push](../.agents/skills/lg-commit-and-push/SKILL.md) | Commit or push when requested. |
 | [lg-coolify-operations](../.agents/skills/lg-coolify-operations/SKILL.md) | Operate and troubleshoot Coolify production deployments. |
-| [lg-create-task](../.agents/skills/lg-create-task/SKILL.md) | Add a short nontechnical item to `todos.md` only when requested. |
+| [lg-add-todo](../.agents/skills/lg-add-todo/SKILL.md) | Add a short nontechnical item to `todos.md` only when requested. |
 | [lg-implement](../.agents/skills/lg-implement/SKILL.md) | Implement the agreed conversation plan and prepare its handoff. |
 | [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) | Improve custom skills, AGENTS.md, rules, docs, and guidance routing. |
 | [lg-ios-localhost](../.agents/skills/lg-ios-localhost/SKILL.md) | Start the local backend and launch manager/anonymous apps. |

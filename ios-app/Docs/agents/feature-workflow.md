@@ -4,7 +4,7 @@ Start at the monorepo root. The shared [task workflow](../../../docs/agents/task
 
 | Task | Entry point | Result |
 | --- | --- | --- |
-| Capture upcoming work or write a task plan | [$lg-create-task](../../../.agents/skills/lg-create-task/SKILL.md) | A short, nontechnical item in root `todos.md` |
+| Capture a requested todo | [$lg-add-todo](../../../.agents/skills/lg-add-todo/SKILL.md) | A short, nontechnical item in root `todos.md` |
 | Shape an idea or stress-test a plan | [$lg-refine](../../../.agents/skills/lg-refine/SKILL.md) | Requirements and architecture grilled with the user; an agreed plan in the conversation |
 | Implement a feature or fix | [$lg-implement](../../../.agents/skills/lg-implement/SKILL.md) | Implemented slice with automated verification and a conversation handoff |
 | Write/refactor Swift | [Swift guidance](swift.md) | LetsGrow architecture, UI, localization, and testing conventions applied |

@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow Add Todo"
+  short_description: "Capture a short nontechnical todo when requested"
+  default_prompt: "Use $lg-add-todo to add this need as a short nontechnical item in root todos.md for later grilling."

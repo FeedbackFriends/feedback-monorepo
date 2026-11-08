@@ -15,4 +15,4 @@ For a supplied PR, use connected GitHub tools or read-only Git commands without 
 
 Rank concrete findings by impact with a file/line, trigger, failure path, and observable consequence. Distinguish introduced from pre-existing problems. Async, retry, stale-cache, or concurrency claims need a concrete event timeline. Keep unsupported suspicions under uncertainty rather than presenting them as defects. Avoid stylistic padding.
 
-Report findings first, then checks actually performed and uncertainty. A clean review can say no findings with its limits. If the user asks to track a finding, use [create-task](../lg-create-task/SKILL.md). Otherwise remain read-only; fixes, external comments, thread resolution, commits, and branch changes require their own authorization.
+Report findings first, then checks actually performed and uncertainty. A clean review can say no findings with its limits. If the user asks to track a finding, use [add-todo](../lg-add-todo/SKILL.md). Otherwise remain read-only; fixes, external comments, thread resolution, commits, and branch changes require their own authorization.
