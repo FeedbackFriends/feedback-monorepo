@@ -45,7 +45,7 @@ Browse the [skills overview](skills.md) for every repository skill and its commu
 
 ## Task and verification flow
 
-The [task workflow](agents/task-workflow.md) owns todo → grill → implementation → verification and the [human review handoff](agents/human-review.md). Root `todos.md` holds short, nontechnical items only. Add items only on explicit user request. `lg-refine` grills requirements and architecture in the conversation; implementation uses that plan without creating task files. Phase boundaries do not add approval gates.
+The [task workflow](agents/task-workflow.md) owns todo → grill → implementation → verification and the [human review handoff](../.agents/skills/lg-implement/SKILL.md#prepare-the-human-review). Root `todos.md` holds short, nontechnical items only. Add items only on explicit user request. `lg-refine` grills requirements and architecture in the conversation; implementation uses that plan without creating task files. Phase boundaries do not add approval gates.
 
 Use the owning platform's tools and validation: [iOS workflows](agents/ios-workflows.md), [backend validation](../backend/docs/agents/validation.md), [web validation](../web/docs/agents/validation.md), and [browser access](agents/browser-access.md). The [API guide](agents/api-contract.md) owns backend-to-generated-client flow. The [runtime guide](agents/runtime-and-deployment.md) owns service commands, including the volume reset performed by `scripts/run`.
 

@@ -35,6 +35,15 @@ Report completed work, actual verification, changed decisions, blockers, and the
 
 ## Prepare the human review
 
-Follow the [human review guide](../../../docs/agents/human-review.md). Explain final behavior, consequential architectural decisions and tradeoffs, a short source reading path, and actual verification results and limits in the final response. For unchanged architecture, identify the existing pattern without inventing decisions. Report incomplete work and its next action honestly.
+Give a self-contained handoff in the final response, scaled to the change:
+
+- **Behavior and flow:** explain what changed and how the affected request, action, or data moves through the system. Use a before/after example when helpful.
+- **Architecture:** explain consequential ownership, boundary, dependency, state, contract, compatibility, or rollout decisions and their rationale/tradeoffs. Distinguish implementation decisions from choices settled in refinement. For unchanged architecture, identify the existing pattern without inventing alternatives.
+- **Reading path:** link to the few source symbols/files and tests that make those decisions reviewable, explaining what each shows.
+- **Verification and limits:** report actual automated results, material risks, remaining work, and useful human manual checks. For incomplete work, state the exact next action.
+
+The agent owns correctness, existing coding standards, and required automated checks; the human assesses architectural judgement and performs manual testing. Explain any deliberate departure from existing conventions and resolve routine violations before handoff. Settle material open requirements or architectural choices with the user before dependent implementation.
+
+Keep plans and evidence in the conversation and enduring knowledge in its owning guide. The handoff records the author's explanation and evidence; it does not imply human approval or add an approval gate.
 
 For iOS, report relevant automated test, build, and Swift lint results. Launch the app only when requested. Commit/push, deployment, and external PR updates require their applicable authorization.

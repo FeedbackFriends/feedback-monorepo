@@ -1,6 +1,6 @@
 # Shared review lens
 
-The human's review focuses on architectural judgement: ownership, boundaries, dependencies, state/data flow, contract changes, and tradeoffs. Use the implementation task's [human review section](human-review.md) as a reading guide and verify its claims against source. Existing coding standards are the default, and the implementing/reviewing agent remains responsible for convention and correctness checks.
+The human's review focuses on architectural judgement: ownership, boundaries, dependencies, state/data flow, contract changes, and tradeoffs. Use the implementation conversation's handoff, using the [human review guidance](../../.agents/skills/lg-implement/SKILL.md#prepare-the-human-review) as a reading guide and verify its claims against source. Existing coding standards are the default, and the implementing/reviewing agent remains responsible for convention and correctness checks.
 
 Review the actual task's intended behavior against complete changed functions, callers, tests, and both sides of contracts. A useful finding states a trigger, failure path, and observable consequence, and distinguishes an introduced issue from a pre-existing one.
 
