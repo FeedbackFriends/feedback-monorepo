@@ -1,7 +1,7 @@
 package dk.example.feedback.tests
 
 import dk.example.feedback.controller.AdminController.MockTokenDto
-import dk.example.feedback.controller.AdminController.SignInFirebaseResponseDto
+import dk.example.feedback.controller.AdminController.TestSessionDto
 import dk.example.feedback.config.SecurityConfig
 import dk.example.feedback.service.AdminService
 import dk.example.feedback.utils.TestConfig
@@ -36,8 +36,8 @@ class AdminSeedMockDataEnabledTest(
     lateinit var adminService: AdminService
 
     private val tokenDto = MockTokenDto(
-        firebaseResponse = SignInFirebaseResponseDto(
-            idToken = "id-token",
+        session = TestSessionDto(
+            accessToken = "id-token",
             refreshToken = "refresh-token",
             expiresIn = "3600",
         ),

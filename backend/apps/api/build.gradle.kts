@@ -15,6 +15,8 @@ dependencies {
     implementation(libs.springboot.starter.actuator)
     implementation(libs.springboot.starter.validation)
     implementation(libs.springboot.starter.web)
+    implementation(libs.springboot.mail)
+    implementation("org.springframework:spring-tx")
     implementation(libs.springboot.security)
     implementation(libs.springboot.oauth2.resource.server)
 

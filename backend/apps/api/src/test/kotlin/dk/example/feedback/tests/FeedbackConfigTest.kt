@@ -10,7 +10,6 @@ class FeedbackConfigTest {
     fun `throws when admin emails are missing and test admin endpoints are disabled`() {
         assertFailsWith<IllegalStateException> {
             FeedbackConfig(
-                firebaseApiKey = "test-key",
                 firebaseServiceAccountJsonB64 = "",
                 enableTestAdminEndpoints = false,
                 adminEmails = emptyList(),

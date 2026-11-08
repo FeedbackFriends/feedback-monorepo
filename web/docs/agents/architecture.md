@@ -9,7 +9,7 @@ Paths are relative to `web/` unless stated otherwise.
 - TypeScript
 - Tailwind CSS
 - Radix UI / shadcn-style primitives
-- Firebase client auth
+- Supabase client auth
 - Playwright for end-to-end tests
 - Node.js `24.22.2` from `.nvmrc` and `package.json`
 
@@ -25,13 +25,13 @@ Paths are relative to `web/` unless stated otherwise.
 - `src/components/layout/`: site-level layout components.
 - `src/components/ui/`: reusable UI primitives.
 - `src/lib/api/generated/openapi.ts`: generated TypeScript API types. Do not hand-edit.
-- `src/lib/auth/`: Firebase and e2e auth client wiring.
+- `src/lib/auth/`: Supabase and e2e auth client wiring.
 - `tests/`: Playwright tests.
 - `public/`: static assets.
 
 ## Coding Style
 
-- Prefer server components unless client state, browser APIs, Firebase auth, or effects require `"use client"`.
+- Prefer server components unless client state, browser APIs, Supabase auth, or effects require `"use client"`.
 - Keep route files thin. Move reusable UI and logic into components or `src/lib`.
 - Use existing UI primitives before adding new ones.
 - Use `lucide-react` icons where an icon is appropriate.
@@ -53,6 +53,6 @@ Protected data stays in the browser's authenticated feature tree. `DashboardShel
 
 Use named operations in `lib/api/teams.ts`, with inputs/results derived from the generated OpenAPI types; keep arbitrary response casts inside the transport boundary. `requestAPI` owns HTTP errors and safe display copy. The Next.js relay forwards only allowed team paths and bearer tokens; Kotlin owns identity and permission checks.
 
-Public landing/privacy content renders without auth. Firebase is loaded only inside the account route group; runtime Firebase configuration stays uncached and deployment-specific. Test authentication is available only in development. Public metadata and sitemap use the marketing domain; app-host responses and invitation/account metadata prevent indexing.
+Public landing/privacy content renders without auth. Supabase is loaded only inside the account route group; runtime Supabase configuration stays uncached and deployment-specific. Test authentication is available only in development. Public metadata and sitemap use the marketing domain; app-host responses and invitation/account metadata prevent indexing.
 
-Brand-logo links do not prefetch the marketing homepage. Prefetching that optional surface from login would eagerly download its animation code before the user needs it. Firebase stays a static dependency of the account route: another dynamic import adds an initialization waterfall without reducing the authenticated route's required code.
+Brand-logo links do not prefetch the marketing homepage. Prefetching that optional surface from login would eagerly download its animation code before the user needs it. Supabase stays a static dependency of the account route: another dynamic import adds an initialization waterfall without reducing the authenticated route's required code.

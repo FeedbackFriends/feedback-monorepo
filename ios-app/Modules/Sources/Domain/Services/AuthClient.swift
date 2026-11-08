@@ -8,7 +8,9 @@ public struct AuthClient: Sendable {
     public var appleLogin: @Sendable () async throws -> Void
     public var logout: @Sendable () async throws -> Void
     public var userStateChanged: @Sendable () async -> AsyncStream<UserState> = { .never }
-    public var signInWithCustomToken: @Sendable (String) async throws -> Void
+    public var restoreTestSession: @Sendable (String) async throws -> Void
+    public var sendEmailCode: @Sendable (String) async throws -> Void
+    public var verifyEmailCode: @Sendable (String, String) async throws -> Void
 }
 
 public enum UserState: Sendable {

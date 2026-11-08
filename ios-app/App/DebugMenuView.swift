@@ -3,13 +3,13 @@ import Localization
 import ComposableArchitecture
 import SwiftUI
 import Domain
-import FirebaseAuth
+import Adapters
 import FirebaseMessaging
 import TabbarFeature
 import DesignSystem
 import Logger
 
-/// Resolves a non-secret scheme selection before RootFeature observes Firebase auth.
+/// Resolves a non-secret scheme selection before RootFeature observes Supabase auth.
 @MainActor
 enum LocalTestAccountLaunch {
     static let environmentKey = "LETSGROW_LOCAL_TEST_ACCOUNT"
@@ -52,9 +52,9 @@ enum LocalTestAccountLaunch {
         switch ProcessInfo.processInfo.environment[environmentKey] {
         case "anonymous":
             // Preserve an existing anonymous identity and its submitted feedback.
-            if Auth.auth().currentUser?.isAnonymous != true {
-                try Auth.auth().signOut()
-                _ = try await Auth.auth().signInAnonymously()
+            if try SupabaseSession.client().currentUser?.isAnonymous != true {
+                try await SupabaseSession.client().signOut(scope: .local)
+                _ = try await SupabaseSession.client().signInAnonymously()
             }
 
         case "manager":
@@ -68,12 +68,7 @@ enum LocalTestAccountLaunch {
                 throw LaunchError.loginFailed
             }
             let login = try JSONDecoder().decode(LoginResponse.self, from: data)
-            let result = try await Auth.auth().signIn(withCustomToken: login.token)
-            let idToken = try await result.user.getIDTokenResult(forcingRefresh: true)
-            guard idToken.claims["role"] as? String == "Manager" else {
-                try Auth.auth().signOut()
-                throw LaunchError.managerNotPrepared
-            }
+            try await SupabaseSession.restoreTestSession(login.token)
 
         default:
             throw LaunchError.unknownAccount
@@ -183,8 +178,8 @@ struct DebugMenuView: View {
                         Button(String(appStrings: .debugPrintIdToken)) {
                             Task {
                                 await runAction(actionName: String(appStrings: .debugPrintIdToken)) {
-                                    let token = try await Auth.auth().currentUser?.getIDToken()
-                                    Logger.debug(token ?? "Not found")
+                                    let token = try await SupabaseSession.client().session.accessToken
+                                    Logger.debug(token)
                                 }
                             }
                         }
@@ -213,7 +208,7 @@ struct DebugMenuView: View {
                         Button(String(appStrings: .commonLogout)) {
                             Task {
                                 await runAction(actionName: String(appStrings: .commonLogout)) {
-                                    try Auth.auth().signOut()
+                                    try await SupabaseSession.client().signOut(scope: .local)
                                 }
                             }
                         }
@@ -259,8 +254,7 @@ struct DebugMenuView: View {
                 didAttemptE2EAutoLogin = true
                 guard let token = E2EAutoLoginConfig.tokenFromLaunchArguments() else { return }
                 await runAction(actionName: String(appStrings: .debugAutoLogin)) {
-                    try await Auth.auth().signIn(withCustomToken: token)
-                    _ = try await Auth.auth().currentUser?.getIDTokenResult(forcingRefresh: true)
+                    try await SupabaseSession.restoreTestSession(token)
                 }
             }
             .task {

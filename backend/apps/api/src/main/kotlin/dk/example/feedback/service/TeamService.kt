@@ -10,19 +10,32 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class TeamService(private val teams: TeamRepo, private val accounts: AccountRepo) {
+class TeamService(private val teams: TeamRepo, private val accounts: AccountRepo,
+    private val identities: SupabaseIdentityService, private val mail: LeaderInvitationMail) {
     fun actor(jwt: Jwt): String {
         val id = jwt.getAccountId()
         accounts.createOrGetAccount(null, null, null, id)
         return id
     }
 
-    fun createOrganization(jwt: Jwt, id: UUID, name: String, teamId: UUID, teamName: String) = run {
-        val firebase = jwt.getClaim<Map<String, Any>>("firebase")
-        if (firebase?.get("sign_in_provider") != "google.com") {
-            throw ForbiddenResourceAccessException("Google authentication required")
-        }
-        teams.createOrganization(actor(jwt), id, name(name), teamId, name(teamName))
+    @org.springframework.transaction.annotation.Transactional
+    fun createOrganization(jwt: Jwt, id: UUID, name: String, teamId: UUID, teamName: String, ownerName: String) = run {
+        val email = identities.verifiedEmail(jwt)
+        val actor = actor(jwt)
+        val context = teams.createOrganization(actor, id, name(name), teamId, name(teamName))
+        val existing = accounts.getAccount(actor)
+        accounts.updateAccount(actor, name(ownerName), email, existing.phoneNumber)
+        context
+    }
+
+    fun pendingInvitations(jwt: Jwt) = teams.pendingLeaderInvitations(identities.verifiedEmail(jwt))
+
+    fun inviteLeader(jwt: Jwt, teamId: UUID, id: UUID, email: String) = run {
+        val leadership = teams.inviteLeader(actor(jwt), teamId, id, email(email))
+        val invitation = leadership.invitations.find { it.id == id }
+            ?: throw dk.example.feedback.model.exceptions.TeamConflictException()
+        mail.send(invitation)
+        leadership
     }
 
     fun email(value: String): String = value.trim().lowercase(java.util.Locale.ROOT).also {
@@ -30,11 +43,7 @@ class TeamService(private val teams: TeamRepo, private val accounts: AccountRepo
     }
 
     fun acceptLeadership(jwt: Jwt, code: String) = run {
-        val firebase = jwt.getClaim<Map<String, Any>>("firebase")
-        if (firebase?.get("sign_in_provider") != "google.com" || jwt.getClaim<Boolean>("email_verified") != true) {
-            throw ForbiddenResourceAccessException("Verified Google email required")
-        }
-        val email = jwt.getClaim<String>("email") ?: throw ForbiddenResourceAccessException("Email required")
+        val email = identities.verifiedEmail(jwt)
         teams.acceptLeadership(actor(jwt), code(code), email(email))
     }
 

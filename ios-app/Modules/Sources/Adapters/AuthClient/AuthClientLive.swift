@@ -1,76 +1,45 @@
-import Foundation
-import Logger
-import FirebaseAuth
+import Auth
 import Domain
+import Foundation
 
-actor UserStateStream {
-    private var continuation: AsyncStream<UserState>.Continuation?
-    
-    func yield(_ state: UserState) {
-        if continuation == nil {
-            Logger.log(.error, "UserStateStream yielded but no one is listening")
-        }
-        continuation?.yield(state)
-    }
-    
-    func stream() -> AsyncStream<UserState> {
-        AsyncStream { continuation in
-            self.continuation = continuation
-        }
-    }
-}
-
-public extension AuthClient {
-    
+public extension Domain.AuthClient {
     static var live: Self {
-        let stateStream = UserStateStream()
-        return Self.init(
+        Self(
             signInAnonymously: {
-                guard Auth.auth().currentUser != nil else {
-                    Logger.debug("🔥 Firebase signInAnonymously: Signing in anonymously since no user was logged in before")
-                    try await Auth.auth().signInAnonymously()
-                    return
-                }
-                Logger.log(.error, "🔥 Firebase signInAnonymously: Sign in anonymously called but user was already logged in.")
+                let client = try SupabaseSession.client()
+                guard client.currentSession == nil else { return }
+                _ = try await client.signInAnonymously()
             },
             googleLogin: {
-                let credential = try await FirebaseService().startGoogleSignInFlow()
-                try await credential.signInWithCredential()
+                let credentials = try await NativeIdentityService().startGoogleSignInFlow()
+                _ = try await SupabaseSession.client().signInWithIdToken(credentials: credentials)
             },
             appleLogin: {
-                let credential = try await FirebaseService().startSignInWithAppleFlow()
-                try await credential.signInWithCredential()
+                let credentials = try await NativeIdentityService().startSignInWithAppleFlow()
+                _ = try await SupabaseSession.client().signInWithIdToken(credentials: credentials)
             },
-            logout: {
-                try Auth.auth().signOut()
-            },
+            logout: { try await SupabaseSession.client().signOut(scope: .local) },
             userStateChanged: {
-                
-                let stream = await stateStream.stream()
-                
-                _ = Auth.auth().addStateDidChangeListener { _, optionalUser in
-                    
-                    let userState: UserState = {
-                        guard let user = optionalUser.optional else { return .loggedOut }
-                        return user.isAnonymous ? .anonymous : .authenticated
-                    }()
-                    Task { [stateStream] in
-                        await stateStream.yield(userState)
+                AsyncStream { continuation in
+                    let task = Task {
+                        do {
+                            for await (event, session) in try SupabaseSession.client().authStateChanges {
+                                guard event != .tokenRefreshed else { continue }
+                                continuation.yield(session.map { $0.user.isAnonymous ? .anonymous : .authenticated } ?? .loggedOut)
+                            }
+                        } catch {
+                            continuation.yield(.loggedOut)
+                            continuation.finish()
+                        }
                     }
+                    continuation.onTermination = { _ in task.cancel() }
                 }
-                
-                return stream
             },
-            signInWithCustomToken: { customToken in
-                try await Auth.auth().signIn(withCustomToken: customToken)
-                _ = try await Auth.auth().currentUser?.getIDTokenResult(forcingRefresh: true)
+            restoreTestSession: { try await SupabaseSession.restoreTestSession($0) },
+            sendEmailCode: { email in try await SupabaseSession.client().signInWithOTP(email: email) },
+            verifyEmailCode: { email, code in
+                _ = try await SupabaseSession.client().verifyOTP(email: email, token: code, type: .email)
             }
         ).mappingAuthenticationErrors()
-    }
-}
-
-extension AuthCredential {
-    func signInWithCredential () async throws {
-        _ = try await Auth.auth().signIn(with: self)
     }
 }

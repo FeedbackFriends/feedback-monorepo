@@ -1,6 +1,6 @@
 import AuthenticationServices
 import Domain
-import FirebaseAuth
+import Auth
 import Foundation
 import GoogleSignIn
 import Logger
@@ -20,14 +20,11 @@ func normalizedAuthError(_ error: any Error) -> any Error {
         return diagnostic.code == GIDSignInError.canceled.rawValue
             ? AuthenticationError.loginCancelled : AppFailure.authenticationFailed
     }
-    guard diagnostic.domain == AuthErrors.domain else { return error }
-    Logger.debug("Firebase authentication failed: \(diagnostic.localizedDescription)")
-    switch AuthErrorCode(rawValue: diagnostic.code) {
-    case .networkError:
-        // Firebase supplies the underlying URL error when available.
-        return (diagnostic.userInfo[NSUnderlyingErrorKey] as? URLError) ?? URLError(.cannotConnectToHost)
-    case .tooManyRequests: return AppFailure.rateLimited
-    case .userTokenExpired, .invalidUserToken, .userDisabled: return AuthenticationError.notSignedIn
+    guard let authError = error as? AuthError else { return error }
+    switch authError.errorCode {
+    case .overRequestRateLimit, .overEmailSendRateLimit: return AppFailure.rateLimited
+    case .sessionNotFound, .refreshTokenNotFound, .refreshTokenAlreadyUsed, .invalidJWT:
+        return AuthenticationError.notSignedIn
     default: return AppFailure.authenticationFailed
     }
 }
@@ -40,16 +37,18 @@ private func withAuthErrorMapping<T>(_ operation: () async throws -> T) async th
     }
 }
 
-extension AuthClient {
+extension Domain.AuthClient {
     func mappingAuthenticationErrors() -> Self {
         var mapped = self
         mapped.signInAnonymously = { try await withAuthErrorMapping { try await self.signInAnonymously() } }
         mapped.googleLogin = { try await withAuthErrorMapping { try await self.googleLogin() } }
         mapped.appleLogin = { try await withAuthErrorMapping { try await self.appleLogin() } }
         mapped.logout = { try await withAuthErrorMapping { try await self.logout() } }
-        mapped.signInWithCustomToken = { token in
-            try await withAuthErrorMapping { try await self.signInWithCustomToken(token) }
+        mapped.restoreTestSession = { token in
+            try await withAuthErrorMapping { try await self.restoreTestSession(token) }
         }
+        mapped.sendEmailCode = { email in try await withAuthErrorMapping { try await self.sendEmailCode(email) } }
+        mapped.verifyEmailCode = { email, code in try await withAuthErrorMapping { try await self.verifyEmailCode(email, code) } }
         return mapped
     }
 }

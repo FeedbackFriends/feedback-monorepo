@@ -66,6 +66,7 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/supabase/supabase-swift.git", exact: "2.39.0"),
         .package(url: "https://github.com/liamnichols/xcstrings-tool-plugin.git", exact: "1.2.0"),
         .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", exact: "1.9.0"),
         .package(
@@ -108,7 +109,7 @@ let package = Package(
                 "Localization",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
-                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+                .product(name: "Auth", package: "supabase-swift"),
                 .product(name: "FirebaseMessaging", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
                 .product(name: "FirebasePerformance", package: "firebase-ios-sdk"),

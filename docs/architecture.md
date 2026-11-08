@@ -24,7 +24,7 @@ The core architecture is contract-driven from the backend outward:
 2. `cd backend && SPRING_PROFILES_ACTIVE=openapi ./gradlew syncOpenApiSpec --no-configuration-cache` writes `contracts/openapi/feedback-api.yaml`.
 3. `web` generates TypeScript API types from that contract.
 4. `ios-app` generates Swift OpenAPI sources from that contract.
-5. Clients authenticate with Firebase/JWT and call the backend API.
+5. Clients authenticate with Supabase/JWT and call the backend API.
 6. Backend services persist data in Postgres and record notification work.
 7. Scheduler jobs process delayed or batched notification work.
 
@@ -37,7 +37,7 @@ Location: `web/`
 Main traits:
 
 - Next.js 16, React 19, TypeScript, Tailwind CSS.
-- Firebase client auth.
+- Supabase client auth.
 - `web/src/app/` contains routes such as dashboard, invite, login, privacy policy, and API route handlers.
 - `web/src/components/` contains UI, layout, auth, and landing components.
 - `web/src/lib/api/generated/openapi.ts` is generated from `contracts/openapi/feedback-api.yaml`.

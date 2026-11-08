@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
+import LoginScreen from "@/components/auth/LoginScreen"
 import { useAuth } from "@/components/auth/AuthProvider"
-import { signInWithGoogle, signOut } from "@/lib/auth"
+import { signOut } from "@/lib/auth"
 import {
   getLeaderInvitation,
   acceptLeaderInvitation,
@@ -31,7 +32,7 @@ export default function LeaderInviteScreen({ code }: { code: string }) {
 }
 
 function LeaderInvitation({ code }: { code: string }) {
-  const { status, user, configured } = useAuth()
+  const { status, user } = useAuth()
   const router = useRouter()
   const [info, setInfo] = useState<LeaderInvitationInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -73,7 +74,7 @@ function LeaderInvitation({ code }: { code: string }) {
         setInfo(null)
       setError(
         cause instanceof APIHTTPError && cause.status === 403
-          ? "Log ind med den verificerede Google-e-mail, som invitationen er sendt til."
+          ? "Log ind med den verificerede e-mail, som invitationen er sendt til."
           : cause instanceof APIHTTPError && cause.status === 409
             ? "Du har allerede en anden tilknytning, eller invitationen er brugt. Forlad dit medarbejderteam eller kontakt ejeren."
             : (apiErrorPresentation(cause, "da")?.message ??
@@ -86,6 +87,7 @@ function LeaderInvitation({ code }: { code: string }) {
       }
     }
   }
+  if (status === "unauthenticated") return <LoginScreen destination={`/leader-invite/${encodeURIComponent(code)}`} />
   return (
     <main className="flex min-h-svh items-center justify-center bg-muted/40 p-4">
       <Card className="w-full max-w-md">
@@ -96,7 +98,7 @@ function LeaderInvitation({ code }: { code: string }) {
           <CardDescription>
             {info
               ? `${info.team.organizationName} · ${info.team.name}`
-              : "Log ind med Google for at se og acceptere din personlige invitation."}
+              : "Log ind for at se og acceptere din personlige invitation."}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -104,14 +106,6 @@ function LeaderInvitation({ code }: { code: string }) {
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
-          )}
-          {status === "unauthenticated" && (
-            <Button
-              disabled={busy || !configured}
-              onClick={() => run(signInWithGoogle)}
-            >
-              Fortsæt med Google
-            </Button>
           )}
           {status === "authenticated" && (
             <>
@@ -147,7 +141,7 @@ function LeaderInvitation({ code }: { code: string }) {
                   })
                 }
               >
-                Brug en anden Google-konto
+                Brug en anden konto
               </Button>
             </>
           )}

@@ -31,6 +31,7 @@ async function mockTeams(page: Page, existing = false) {
       route.request().method() === "POST" && route.request().postData()
         ? route.request().postDataJSON()
         : null
+    if (path === "/leader-invitations") return route.fulfill({ json: [] })
     if (path === "/context")
       return route.fulfill({
         json: { organization, isOwner: true, managedTeams: teams },
@@ -89,6 +90,7 @@ test("leader creates organization and additional teams and switches context", as
 }) => {
   await mockTeams(page)
   await login(page)
+  await page.getByLabel("Dit navn").fill("Ada")
   await page.getByLabel("Organisation", { exact: true }).fill("Acme")
   await page.getByLabel("Teamnavn").fill("IT")
   await page.getByRole("button", { name: "Opret organisation og team" }).click()
@@ -251,6 +253,7 @@ test("creation retries retain the submission IDs after a network failure", async
     return route.fallback()
   })
   await login(page)
+  await page.getByLabel("Dit navn").fill("Ada")
   await page.getByLabel("Organisation", { exact: true }).fill("Acme")
   await page.getByLabel("Teamnavn").fill("IT")
   await page.getByRole("button", { name: "Opret organisation og team" }).click()
@@ -454,7 +457,7 @@ test("owner manages leaders and assigned leader loses controls on revocation", a
   await page.getByRole("link", { name: "Åbn IT" }).click()
   await page.getByRole("button", { name: "Invitér leder", exact: true }).click()
   await page.getByLabel("Lederens e-mail").fill("ada@example.com")
-  await page.getByRole("button", { name: "Opret lederinvitation" }).click()
+  await page.getByRole("button", { name: "Send lederinvitation" }).click()
   await expect(page.getByLabel("ada@example.com", { exact: true })).toHaveValue(
     /\/leader-invite\/personal-code$/,
   )
@@ -560,7 +563,7 @@ test("invalid leader links and wrong Google accounts show clear errors", async (
   await page.goto("/leader-invite/valid")
   await page.getByRole("button", { name: "Acceptér invitation" }).click()
   await expect(
-    page.getByText(/Log ind med den verificerede Google-e-mail/),
+    page.getByText(/Log ind med den verificerede e-mail/),
   ).toBeVisible()
 })
 

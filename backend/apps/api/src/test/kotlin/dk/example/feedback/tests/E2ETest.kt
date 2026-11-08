@@ -43,6 +43,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class E2ETest(
     @param:Autowired val mockMvc: MockMvc,
     @param:Autowired val eventRepo: EventRepo,
+    @param:Autowired val firebaseService: dk.example.feedback.utils.FirebaseMockEngine,
 ) {
     private val objectMapper = jacksonObjectMapper()
         .registerModule(JavaTimeModule())
@@ -439,6 +440,7 @@ class E2ETest(
     }
 
     private fun createParticipantAccount(accountId: String, email: String) {
+        firebaseService.updateUser(accountId, email, null, null)
         mockMvc.perform(
             MockMvcRequestBuilders.post("/account")
                 .content(objectMapper.writeValueAsString(CreateAccountInput(requestedRole = Role.Manager, fcmToken = null)))

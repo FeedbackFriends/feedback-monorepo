@@ -34,11 +34,17 @@ import {
 import { useTeamResource } from "./useTeamResource"
 import {
   getTeamContext,
+  getPendingLeaderInvitations,
   createOrganization as createOrganizationAPI,
   createTeam,
   type OrganizationInput,
   type TeamInput,
 } from "@/lib/api/teams"
+
+async function loadDashboard(signal: AbortSignal) {
+  const [context, invitations] = await Promise.all([getTeamContext(signal), getPendingLeaderInvitations(signal)])
+  return { ...context, invitations }
+}
 
 export default function DashboardScreen() {
   const router = useRouter()
@@ -50,8 +56,9 @@ export default function DashboardScreen() {
     refresh,
     mutate,
     setError,
-  } = useTeamResource(getTeamContext)
+  } = useTeamResource(loadDashboard)
   const [createOpen, setCreateOpen] = useState(false)
+  const [ownerName, setOwnerName] = useState("")
   const [organizationName, setOrganizationName] = useState("")
   const [teamName, setTeamName] = useState("")
   const organizationDraft = useRef<OrganizationInput | null>(null)
@@ -61,11 +68,12 @@ export default function DashboardScreen() {
     organizationDraft.current = {
       id: organizationDraft.current?.id ?? crypto.randomUUID(),
       name: organizationName.trim(),
+      ownerName: ownerName.trim(),
       teamId: organizationDraft.current?.teamId ?? crypto.randomUUID(),
       teamName: teamName.trim(),
     }
     const input = organizationDraft.current
-    const next = await mutate((signal) => createOrganizationAPI(input, signal))
+    const next = await mutate(async (signal) => ({ ...await createOrganizationAPI(input, signal), invitations: [] }))
     if (next) router.push(`/dashboard/teams/${input.teamId}`)
   }
   async function addTeam(event: FormEvent) {
@@ -116,7 +124,16 @@ export default function DashboardScreen() {
         <div role="status" aria-label="Henter dine teams">
           <Skeleton className="h-32 w-full" />
         </div>
-      ) : !context ? null : !context.organization ? (
+      ) : !context ? null : context.invitations.length > 0 ? (
+        <Card>
+          <CardHeader><CardTitle>Du er inviteret som teamleder</CardTitle><CardDescription>Vælg invitationen for at se og acceptere din adgang.</CardDescription></CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            {context.invitations.map(invitation => <Button key={invitation.code} variant="outline" asChild>
+              <Link href={`/leader-invite/${invitation.code}`}>{invitation.team.organizationName} · {invitation.team.name}</Link>
+            </Button>)}
+          </CardContent>
+        </Card>
+      ) : !context.organization ? (
         context.membership || context.request?.status === "Pending" ? (
           <Alert>
             <AlertDescription>
@@ -136,6 +153,11 @@ export default function DashboardScreen() {
             </CardHeader>
             <CardContent>
               <form onSubmit={createOrganization} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="owner-name">Dit navn</Label>
+                  <Input id="owner-name" autoComplete="name" required maxLength={100} value={ownerName}
+                    onChange={event => setOwnerName(event.target.value)} disabled={busy} />
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="organization-name">Organisation</Label>
                   <Input
@@ -162,7 +184,7 @@ export default function DashboardScreen() {
                 </div>
                 <Button
                   disabled={
-                    busy || !organizationName.trim() || !teamName.trim()
+                    busy || !ownerName.trim() || !organizationName.trim() || !teamName.trim()
                   }
                 >
                   {busy ? "Opretter…" : "Opret organisation og team"}

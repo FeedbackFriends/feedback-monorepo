@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { Lightbulb, HeartHandshake, MessageCircle, Target, TrendingUp, Users } from "lucide-react"
 import PhoneFrames from "@/components/landing/PhoneFrames"
-import { contactUrl } from "@/components/landing/content"
+import { getStartedUrl } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
 import PrimaryButton from "@/components/ui/PrimaryButton"
 import SecondaryButton from "@/components/ui/SecondaryButton"
@@ -66,8 +66,8 @@ function HeroSection() {
             variants={fadeInUp}
           >
             <PrimaryButton asChild className="h-12 px-6" size="lg">
-              <a href={contactUrl} target="_blank" rel="noopener noreferrer">
-                Få tidlig adgang
+              <a href={getStartedUrl} target="_blank" rel="noopener noreferrer">
+                Kom i gang
               </a>
             </PrimaryButton>
             <SecondaryButton

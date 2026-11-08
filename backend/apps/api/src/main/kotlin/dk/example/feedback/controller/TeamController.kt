@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
-data class CreateOrganizationInput(val id: UUID, val name: String, val teamId: UUID, val teamName: String)
+data class CreateOrganizationInput(val id: UUID, val name: String, val teamId: UUID, val teamName: String, val ownerName: String)
 data class CreateTeamInput(val id: UUID, val name: String)
 data class InviteLeaderInput(val id: UUID, val email: String)
 data class AcceptLeaderInput(val code: String)
@@ -19,6 +19,9 @@ data class JoinTeamInput(val id: UUID, val code: String, val name: String)
 @RequestMapping("/teams")
 @PreAuthorize("isAuthenticated()")
 class TeamController(private val teams: TeamRepo, private val service: TeamService) {
+    @GetMapping("/leader-invitations")
+    fun pendingLeaderInvitations(@AuthenticationPrincipal jwt: Jwt): List<PendingLeaderInvitation> = service.pendingInvitations(jwt)
+
     @GetMapping("/leader-invitations/{code}")
     fun leaderInvitation(@PathVariable code: String): LeaderInvitationInfo = teams.leaderInvitation(service.code(code))
 
@@ -32,7 +35,7 @@ class TeamController(private val teams: TeamRepo, private val service: TeamServi
 
     @PostMapping("/{teamId}/leaders/invitations")
     fun inviteLeader(@AuthenticationPrincipal jwt: Jwt, @PathVariable teamId: UUID, @RequestBody input: InviteLeaderInput): TeamLeadership =
-        teams.inviteLeader(service.actor(jwt), teamId, input.id, service.email(input.email))
+        service.inviteLeader(jwt, teamId, input.id, input.email)
 
     @DeleteMapping("/{teamId}/leaders/invitations/{invitationId}")
     fun revokeLeaderInvite(@AuthenticationPrincipal jwt: Jwt, @PathVariable teamId: UUID, @PathVariable invitationId: UUID): TeamLeadership =
@@ -47,7 +50,7 @@ class TeamController(private val teams: TeamRepo, private val service: TeamServi
 
     @PostMapping("/organizations")
     fun createOrganization(@AuthenticationPrincipal jwt: Jwt, @RequestBody input: CreateOrganizationInput): TeamContext =
-        service.createOrganization(jwt, input.id, input.name, input.teamId, input.teamName)
+        service.createOrganization(jwt, input.id, input.name, input.teamId, input.teamName, input.ownerName)
 
     @PostMapping("/organizations/{organizationId}")
     fun createTeam(@AuthenticationPrincipal jwt: Jwt, @PathVariable organizationId: UUID, @RequestBody input: CreateTeamInput): TeamInfo =

@@ -37,6 +37,7 @@ class TeamTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val mapper: ObjectMapper,
     @Autowired private val dataSource: DataSource,
+    @Autowired private val applicationMail: dk.example.feedback.service.LeaderInvitationMail,
 ) {
     private fun account(): String = UUID.randomUUID().toString().also { accounts.createOrGetAccount(null, null, null, it) }
     private fun team(owner: String): UUID = UUID.randomUUID().also {
@@ -100,16 +101,16 @@ class TeamTest(
     }
 
     @Test
-    fun `API enforces Google creation and isolates management from employees and legacy managers`() {
+    fun `API enforces verified identity creation and isolates management from employees and legacy managers`() {
         val owner = account(); val employee = account(); val team = team(owner)
         mvc.perform(get("/teams/context")).andExpect(status().isUnauthorized)
         mvc.perform(get("/teams/$team").with(jwt().jwt { it.subject(employee).claim("role", "Manager") }))
             .andExpect(status().isForbidden)
-        val input = mapOf("id" to UUID.randomUUID(), "name" to "Acme", "teamId" to UUID.randomUUID(), "teamName" to "Product")
+        val input = mapOf("id" to UUID.randomUUID(), "name" to "Acme", "teamId" to UUID.randomUUID(), "teamName" to "Product", "ownerName" to "Ada")
         mvc.perform(post("/teams/organizations").with(jwt().jwt { it.subject(employee) })
             .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(input))).andExpect(status().isForbidden)
         mvc.perform(post("/teams/organizations").with(jwt().jwt {
-            it.subject(employee).claim("firebase", mapOf("sign_in_provider" to "google.com"))
+            it.subject(employee).claim("email", "ada@example.com").claim("email_verified", true)
         }).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(input))).andExpect(status().isOk)
     }
     private fun invite(owner: String, team: UUID, email: String): String =
@@ -168,7 +169,7 @@ class TeamTest(
     }
 
     @Test
-    fun `leader invitations require verified matching Google email and owner only controls`() {
+    fun `leader invitations require verified matching email and owner only controls`() {
         val owner = account(); val leader = account(); val first = team(owner)
         val id = UUID.randomUUID()
         val code = repo.inviteLeader(owner, first, id, "ada@example.com").invitations.single().code
@@ -176,7 +177,7 @@ class TeamTest(
         fun accept(email: String, verified: Boolean, provider: String) = mvc.perform(
             post("/teams/leader-invitations/accept").with(jwt().jwt {
                 it.subject(leader).claim("email", email).claim("email_verified", verified)
-                    .claim("firebase", mapOf("sign_in_provider" to provider))
+                    .claim("is_anonymous", provider == "anonymous")
             }).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(mapOf("code" to code)))
         )
         accept("ada@example.com", false, "google.com").andExpect(status().isForbidden)
@@ -238,6 +239,81 @@ class TeamTest(
         mvc.perform(post("/teams/$first/leaders/invitations").with(jwt().jwt { it.subject(leader) })
             .contentType(MediaType.APPLICATION_JSON).content(input)).andExpect(status().isForbidden)
         mvc.perform(get("/teams/$first").with(jwt().jwt { it.subject(leader) })).andExpect(status().isOk)
+    }
+
+    @Test
+    fun `fresh Supabase owner stays separate from same-email legacy content and onboarding retry is idempotent`() {
+        val email = "${UUID.randomUUID()}@example.com"
+        val legacy = account()
+        accounts.updateAccount(legacy, "Legacy", email, null)
+        val legacyTeam = team(legacy)
+        val subject = UUID.randomUUID().toString()
+        val id = "supabase:$subject"
+        val input = mapOf("id" to UUID.randomUUID(), "name" to "New organization", "teamId" to UUID.randomUUID(),
+            "teamName" to "New team", "ownerName" to "Ada")
+        mvc.perform(post("/teams/organizations").with(jwt().jwt {
+            it.subject(subject).issuer("https://project.supabase.co/auth/v1").claim("is_anonymous", false)
+                .claim("email", email).claim("email_verified", true)
+        }).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(input + ("ownerName" to " "))))
+            .andExpect(status().isBadRequest)
+        assertNull(repo.context(id).organization)
+        repeat(2) {
+            mvc.perform(post("/teams/organizations").with(jwt().jwt {
+                it.subject(subject).issuer("https://project.supabase.co/auth/v1").claim("is_anonymous", false)
+                    .claim("email", email).claim("email_verified", true).claim("role", "authenticated")
+            }).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(input)))
+                .andExpect(status().isOk).andExpect(jsonPath("$.isOwner").value(true))
+        }
+        assertEquals("Ada", accounts.getAccount(id).name)
+        assertEquals(email, accounts.getAccount(id).email)
+        assertEquals(listOf(input["teamId"]), repo.context(id).managedTeams.map { it.id })
+        assertEquals(legacyTeam, repo.context(legacy).managedTeams.single().id)
+        assertThrows(ForbiddenResourceAccessException::class.java) { repo.management(id, legacyTeam) }
+        assertThrows(IllegalArgumentException::class.java) {
+            accounts.createOrGetAccount(null, email, null, "supabase:${UUID.randomUUID()}")
+        }
+    }
+
+    @Test
+    fun `pending invitations require verified exact email and exclude revoked expired and consumed links`() {
+        val owner = account(); val team = team(owner)
+        val email = "${UUID.randomUUID()}@example.com"
+        val code = invite(owner, team, email)
+        val revoked = repo.inviteLeader(owner, team, UUID.randomUUID(), email).invitations.last()
+        repo.revokeLeaderInvite(owner, team, revoked.id)
+        fun pending(address: String, verified: Boolean = true) = mvc.perform(
+            get("/teams/leader-invitations").with(jwt().jwt {
+                it.subject(account()).claim("email", address).claim("email_verified", verified)
+            })
+        )
+        pending(email, false).andExpect(status().isForbidden)
+        pending("other-$email").andExpect(status().isOk).andExpect(jsonPath("$.length()").value(0))
+        pending(email).andExpect(status().isOk).andExpect(jsonPath("$.length()").value(1))
+            .andExpect(jsonPath("$[0].code").value(code))
+        repo.acceptLeadership(account(), code, email)
+        pending(email).andExpect(status().isOk).andExpect(jsonPath("$.length()").value(0))
+    }
+
+    @Test
+    fun `invitation email failure is visible and retry sends the same invitation without duplicate authority`() {
+        val owner = account(); val first = team(owner)
+        val id = UUID.randomUUID()
+        val email = "${UUID.randomUUID()}@example.com"
+        val invitation = repo.inviteLeader(owner, first, id, email).invitations.single()
+        val mail = applicationMail
+        try {
+            org.mockito.Mockito.doThrow(org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE))
+                .`when`(mail).send(invitation)
+            fun send() = mvc.perform(post("/teams/$first/leaders/invitations").with(jwt().jwt { it.subject(owner) })
+                .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(mapOf("id" to id, "email" to email))))
+            send().andExpect(status().isServiceUnavailable)
+            assertEquals(1, repo.leadership(owner, first).invitations.size)
+            assertTrue(repo.leadership(owner, first).leaders.isEmpty())
+            org.mockito.Mockito.reset(mail)
+            send().andExpect(status().isOk)
+            org.mockito.Mockito.verify(mail).send(invitation)
+            assertEquals(invitation.code, repo.leadership(owner, first).invitations.single().code)
+        } finally { org.mockito.Mockito.reset(mail) }
     }
 
 }

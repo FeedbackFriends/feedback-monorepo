@@ -8,7 +8,7 @@ For agent setup, Xcode MCP connection checks, test configuration, local authenti
 
 For manual development, select the `Feedback Localhost` scheme and an iOS simulator in Xcode, then Build & Run. Run the shared `UnitTests` plan from the same scheme. Other schemes target different configurations; `Feedback Production` is the production scheme.
 
-Live authentication requires the Firebase configuration read from the app's Info.plist, populated through `App/Config/secrets.xcconfig`. Keep that file local and ignored by Git. See [configuration](CONFIGURATION.md) and the harness overview for local backend addressing and test-account login.
+Live authentication requires managed Supabase and Google configuration in the app's Info.plist, populated through `App/Config/secrets.xcconfig`; see [Supabase setup](../../docs/agents/supabase-auth.md). Firebase configuration is still used for push and crash reporting. Keep that file local and ignored by Git. See [configuration](CONFIGURATION.md) and the harness overview for local backend addressing and test-account login.
 
 The backend owns the API contract. Regenerate the committed contract and both clients from the monorepo root using `./scripts/generate-api-artifacts.sh`; do not hand-edit generated Swift sources.
 

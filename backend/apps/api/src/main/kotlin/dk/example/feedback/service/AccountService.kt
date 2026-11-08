@@ -28,7 +28,7 @@ class AccountService(
         fcmToken: String?
     ) {
         when (requestedRole) {
-            // Firebase user is anonymous if null
+            // Anonymous employees have no account role.
             null -> {
                 val accountId = jwt.getAccountId()
                 accountRepo.createOrGetAccount(

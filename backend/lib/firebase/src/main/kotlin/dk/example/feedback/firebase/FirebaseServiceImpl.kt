@@ -3,14 +3,11 @@ package dk.example.feedback.firebase
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserRecord
 import com.google.firebase.messaging.ApnsConfig
 import com.google.firebase.messaging.Aps
 import com.google.firebase.messaging.ApsAlert
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
-import dk.example.feedback.model.enumerations.Role
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.Base64
@@ -18,7 +15,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class FirebaseServiceImpl : FirebaseService, FirebaseAdminService {
+class FirebaseServiceImpl : FirebaseService {
 
     private val logger = LoggerFactory.getLogger(FirebaseServiceImpl::class.java)
 
@@ -76,78 +73,4 @@ class FirebaseServiceImpl : FirebaseService, FirebaseAdminService {
         )
     }
 
-    override fun getUser(userId: String): FirebaseUser {
-
-        val userRecord = FirebaseAuth.getInstance().getUser(userId)
-        return FirebaseUser(
-            displayName = userRecord.displayName,
-            phoneNumber = userRecord.phoneNumber,
-            email = userRecord.email,
-            photoUrl = userRecord.photoUrl
-        )
-    }
-
-    override fun deleteUser(userId: String) {
-        FirebaseAuth.getInstance().deleteUserAsync(userId)
-    }
-
-    override fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?) {
-        val updateRequest = UserRecord.UpdateRequest(userId).apply {
-            if (email != null) {
-                setEmail(email)
-            }
-            if (displayName != null) {
-                setDisplayName(displayName)
-            }
-            if (phoneNumber != null) {
-                setPhoneNumber(phoneNumber)
-            }
-        }
-        FirebaseAuth.getInstance().updateUser(updateRequest)
-    }
-
-    override fun setRole(userId: String, requestedRole: Role?) {
-        logger.info("Setting role ${requestedRole?.toString()} for user $userId")
-        try {
-            FirebaseAuth.getInstance()
-                .setCustomUserClaims(userId, mapOf("role" to requestedRole?.toString()))
-            logger.info("Role successfully set for user $userId")
-        } catch (e: Exception) {
-            logger.error("Failed to set role for user $userId", e)
-            throw RuntimeException("Failed to set role", e)
-        }
-    }
-
-    override fun createUserIfMissing(uid: String, email: String, displayName: String) {
-        val createUserRequest = UserRecord.CreateRequest()
-            .setUid(uid)
-            .setEmail(email)
-            .setDisplayName(displayName)
-
-        try {
-            logger.debug("Firebase: Creating user")
-            FirebaseAuth.getInstance().createUser(createUserRequest)
-        } catch (e: Exception) {
-            logger.debug("Firebase: User already exists so will sign in")
-        }
-    }
-
-    override fun createCustomToken(uid: String): String {
-        return FirebaseAuth.getInstance().createCustomTokenAsync(uid).get()
-    }
-
-    override fun deleteUsers(uids: Set<String>) {
-        val auth = FirebaseAuth.getInstance()
-        var page = auth.listUsers(null)
-        do {
-            val userIds = page.values.map { it.uid }.filter { uids.contains(it) }
-            if (userIds.isNotEmpty()) {
-                val result = auth.deleteUsers(userIds.toList())
-                if (result.failureCount > 0) {
-                    throw RuntimeException("Failed to delete Firebase users. failures=${result.failureCount}")
-                }
-            }
-            page = page.nextPage ?: break
-        } while (true)
-    }
 }

@@ -24,12 +24,18 @@ spring:
     name: feedback-api
   jpa:
     open-in-view: false
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-url: ${JWK_SET_URL}
-          issuer-uri: ${JWT_ISSUER_URI}
+  mail:
+    host: ${SMTP_HOST:}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
   liquibase:
     enabled: true
   exposed:
@@ -43,7 +49,11 @@ springdoc:
     path: /
   default-produces-media-type: application/json
 feedback:
-  firebase-api-key: ${FIREBASE_API_KEY}
+  supabase-url: ${SUPABASE_URL:}
+  supabase-publishable-key: ${SUPABASE_PUBLISHABLE_KEY:}
+  supabase-secret-key: ${SUPABASE_SECRET_KEY:}
+  invitation-from: ${INVITATION_FROM:}
+  app-url: ${LETSGROW_APP_URL:https://app.letsgrow.dk}
   firebase-service-account-json-b64: ${FIREBASE_SERVICE_ACCOUNT_JSON_B64:}
   enable-test-admin-endpoints: false
   enable-test-admin-database-reset: false

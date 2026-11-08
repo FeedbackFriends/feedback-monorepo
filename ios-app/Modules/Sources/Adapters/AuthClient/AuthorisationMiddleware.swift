@@ -4,7 +4,7 @@ import OpenAPIURLSession
 import Network
 import HTTPTypes
 import Logger
-import FirebaseAuth
+import Auth
 
 public struct AuthorisationMiddleware: ClientMiddleware {
     public init() {}
@@ -19,17 +19,10 @@ public struct AuthorisationMiddleware: ClientMiddleware {
         guard request.needsAuthorization else {
             return try await next(request, body, baseURL)
         }
-        guard let currentUser = Auth.auth().currentUser else {
-            Logger.log(.error, "Session has expired for good, should only happen if user is deleted or disabled")
-            throw URLError(URLError.Code.userAuthenticationRequired)
-        }
-        let idToken = try await currentUser.getIDToken()
+        let idToken = try await SupabaseSession.client().session.accessToken
         var mutableRequest = request
         mutableRequest.headerFields[.authorization] = "Bearer \(idToken)"
         let response = try await next(mutableRequest, body, baseURL)
-        if request.forceRefreshAfter {
-            _ = try await currentUser.getIDToken(forcingRefresh: true)
-        }
         return response
     }
 }

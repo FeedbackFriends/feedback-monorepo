@@ -1,18 +1,18 @@
 # Architecture Overview
 
 ## Services
-- **API (`apps/api`)**: Spring Boot REST endpoints for feedback events, events, accounts, and questions. Uses JWT validation against Google/Firebase. Controllers delegate to services, which call persistence DAOs and emit notifications.
+- **API (`apps/api`)**: Spring Boot REST endpoints for feedback events, events, accounts, and questions. Uses JWT validation against managed Supabase Auth. Controllers delegate to services, which call persistence DAOs and emit notifications.
 - **Scheduler (`apps/scheduler`)**: Background jobs that batch/remind owners about new feedback and handle delayed notifications.
 
 ## Shared Libraries
 - **model (`lib/model`)**: DTOs, enums, JPA/Exposed entities, and Jackson config shared across services.
 - **persistence (`lib/persistence`)**: Exposed-based DAOs/repos and Liquibase migrations in `src/main/resources/db/changelog/`.
-- **firebase (`lib/firebase`)**: Wrapper for Firebase messaging/auth helpers.
+- **firebase (`lib/firebase`)**: Wrapper for Firebase messaging helpers.
 
 ## Data & Configuration
 - Postgres is the runtime datasource for the application services.
 - Liquibase runs on startup and keeps schema aligned with change sets (`000X-description.yaml`).
-- Security: Resource server with JWT (Google/Firebase) configured in `apps/api/src/main/resources/application.yml`.
+- Security: Resource server with Supabase JWT validation configured in `SupabaseJwtConfig`, with managed project values in `apps/api/src/main/resources/application.yml`.
 - Logging: services use Spring Boot console logging, and the API interceptor captures request context for Render logs.
 
 ## Request/Notification Flow

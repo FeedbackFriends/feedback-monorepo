@@ -125,7 +125,7 @@ def prepare_backend(skip_start=False, seed_manager=False):
         # No /admin/reset and no Compose volume deletion.
         backend_request("POST", "/admin/seed-manager-with-data")
     login = backend_request("POST", "/admin/login", payload={"id": "mock-manager-with-data"})
-    token = login["firebaseResponse"]["idToken"]
+    token = login["session"]["accessToken"]
     bootstrap = backend_request("GET", "/bootstrap", token=token)
     if bootstrap.get("managerData") is None:
         raise RuntimeError("Sample manager is not prepared; rerun with --seed-manager")

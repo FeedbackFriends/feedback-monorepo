@@ -23,6 +23,7 @@ class ControllerAdvisor() {
 
         val domainCode = if (exception is DomainException) exception.domainCode else null
         val status = when (exception) {
+            is org.springframework.web.server.ResponseStatusException -> HttpStatus.resolve(exception.statusCode.value()) ?: HttpStatus.INTERNAL_SERVER_ERROR
             is AccessDeniedException -> HttpStatus.FORBIDDEN
             is AuthenticationException -> HttpStatus.UNAUTHORIZED
             is dk.example.feedback.model.exceptions.InvalidSupportSubmissionException -> HttpStatus.BAD_REQUEST

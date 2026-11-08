@@ -1,4 +1,4 @@
-import type { UserInfo } from "firebase/auth"
+export type UserInfo = { providerId: string; email: string | null; displayName: string | null; uid: string; phoneNumber?: string | null; photoURL?: string | null }
 
 export type AppAuthUser = {
   displayName: string | null
@@ -17,6 +17,8 @@ export interface AuthClient {
   initializePersistence(): Promise<void>
   isConfigured(): boolean
   signInWithGoogle(): Promise<void>
+  sendEmailCode(email: string): Promise<void>
+  verifyEmailCode(email: string, code: string): Promise<void>
   signOut(): Promise<void>
   subscribeToAuthState(
     onUser: AuthStateListener,

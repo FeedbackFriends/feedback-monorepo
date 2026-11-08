@@ -1,4 +1,4 @@
-import type { UserInfo } from "firebase/auth"
+import type { UserInfo } from "./types"
 
 export function createProviderData(
   providerId: string,

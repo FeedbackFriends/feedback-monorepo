@@ -1,8 +1,8 @@
 "use client"
 
 import { E2EAuthClient } from "@/lib/auth/e2e-auth-client"
-import { FirebaseAuthClient } from "@/lib/auth/firebase-auth-client"
-import type { FirebaseConfigInput } from "@/lib/auth/firebase-config"
+import { SupabaseAuthClient } from "@/lib/auth/supabase-auth-client"
+import type { SupabaseConfigInput } from "@/lib/auth/supabase-config"
 import type {
   AuthClient,
   AuthErrorListener,
@@ -15,13 +15,13 @@ const e2eAuthEnabled = process.env.NEXT_PUBLIC_E2E_AUTH === "1"
 let authClient: AuthClient = createAuthClient()
 let runtimeAuthLoadPromise: Promise<AuthClient> | null = null
 
-function createAuthClient(firebaseConfig: FirebaseConfigInput = {}) {
+function createAuthClient(supabaseConfig: SupabaseConfigInput = {}) {
   if (e2eAuthEnabled && process.env.NODE_ENV === "production") {
     throw new Error("Test authentication is unavailable in production")
   }
   return e2eAuthEnabled
     ? new E2EAuthClient()
-    : new FirebaseAuthClient(firebaseConfig)
+    : new SupabaseAuthClient(supabaseConfig)
 }
 
 export type { AppAuthUser, AuthClient } from "@/lib/auth/types"
@@ -40,12 +40,12 @@ export async function loadRuntimeAuthClient() {
 
       if (!response.ok) {
         throw new Error(
-          `Unable to load Firebase configuration (${response.status}).`
+          `Unable to load login configuration (${response.status}).`
         )
       }
 
       authClient = createAuthClient(
-        (await response.json()) as FirebaseConfigInput
+        (await response.json()) as SupabaseConfigInput
       )
       return authClient
     })().catch((error: unknown) => {
@@ -87,3 +87,6 @@ export function signInWithGoogle() {
 export function signOut() {
   return authClient.signOut()
 }
+
+export const sendEmailCode = (email: string) => authClient.sendEmailCode(email)
+export const verifyEmailCode = (email: string, code: string) => authClient.verifyEmailCode(email, code)

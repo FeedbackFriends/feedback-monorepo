@@ -1,81 +1,16 @@
 package dk.example.feedback.utils
 
 import dk.example.feedback.firebase.FeedbackReceivedNotification
-import dk.example.feedback.firebase.FirebaseAdminService
 import dk.example.feedback.firebase.FirebaseService
-import dk.example.feedback.firebase.FirebaseUser
-import dk.example.feedback.model.enumerations.Role
 
-class FirebaseMockEngine(userId: String) : FirebaseService, FirebaseAdminService {
+data class TestIdentity(val displayName: String?, val email: String?, val phoneNumber: String?)
 
-    private val users = mutableMapOf(
-        userId to FirebaseUser(
-            displayName = null,
-            email = null,
-            phoneNumber = null,
-            photoUrl = null
-        )
-    )
-
-    private val roles = mutableMapOf<String, Role?>()
-
+class FirebaseMockEngine(userId: String) : FirebaseService {
+    private val users = mutableMapOf(userId to TestIdentity(null, null, null))
     override fun configure(serviceAccountJsonB64: String) {}
-
-    override fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {
-        println("Mock sending ${feedbackReceivedNotifications.size} notifications")
+    override fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {}
+    fun getUser(userId: String): TestIdentity = users.getOrPut(userId) { TestIdentity(null, null, null) }
+    fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?) {
+        users[userId] = TestIdentity(displayName, email, phoneNumber)
     }
-
-    override fun getUser(userId: String): FirebaseUser {
-        return users.getOrPut(userId) {
-            FirebaseUser(
-                displayName = null,
-                email = null,
-                phoneNumber = null,
-                photoUrl = null
-            )
-        }
-    }
-
-    override fun deleteUser(userId: String) {
-        users.remove(userId)
-        roles.remove(userId)
-    }
-
-    override fun updateUser(userId: String, email: String?, displayName: String?, phoneNumber: String?) {
-        users[userId] = FirebaseUser(
-            displayName = displayName,
-            email = email,
-            phoneNumber = phoneNumber,
-            photoUrl = null
-        )
-    }
-
-    override fun setRole(userId: String, requestedRole: Role?) {
-        roles[userId] = requestedRole
-    }
-
-    override fun createUserIfMissing(uid: String, email: String, displayName: String) {}
-
-    override fun createCustomToken(uid: String): String {
-        return "mock-custom-token-$uid"
-    }
-
-    override fun deleteUsers(uids: Set<String>) {
-        uids.forEach { uid ->
-            users.remove(uid)
-            roles.remove(uid)
-        }
-    }
-
-//    suspend fun getToken(): SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor {
-//        val token = mutex.withLock {
-//            when (role) {
-//                Role.Organizer -> mockJwtFactory.organizerToken()
-//                else -> mockJwtFactory.anonymousToken()
-//            }
-//        }
-//        println("Getting token for role $role")
-//        return token
-//    }
-
 }

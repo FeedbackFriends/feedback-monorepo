@@ -50,6 +50,7 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
   const { data, error, busy, accessDenied, refresh, mutate, setError } =
     useTeamResource(load)
   const [email, setEmail] = useState("")
+  const [sent, setSent] = useState(false)
   const [copied, setCopied] = useState(false)
   const [open, setOpen] = useState(false)
   const draft = useRef<LeaderInvitationInput | null>(null)
@@ -60,10 +61,12 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
       draft.current = { id: crypto.randomUUID(), email: normalized }
     const input = draft.current
     setCopied(false)
+    setSent(false)
     const next = await mutate((signal) =>
       inviteTeamLeader(teamId, input, signal),
     )
     if (next) {
+      setSent(true)
       draft.current = null
       setEmail("")
     }
@@ -107,9 +110,7 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
             <DialogHeader>
               <DialogTitle>Invitér teamleder</DialogTitle>
               <DialogDescription>
-                Lederen får kun adgang til dette team. Del det personlige link,
-                og bed personen logge ind med den angivne Google-e-mail. Linket
-                gælder i syv dage.
+                Lederen får en personlig invitation på e-mail og kun adgang til dette team. Invitationen gælder i syv dage.
               </DialogDescription>
             </DialogHeader>
             {error && (
@@ -130,9 +131,10 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
                 disabled={busy}
               />
               <Button disabled={busy || !email.trim()}>
-                Opret lederinvitation
+                Send lederinvitation
               </Button>
             </form>
+            {sent && <p role="status">Invitationen er sendt.</p>}
             {data?.invitations.map((invitation) => (
               <div key={invitation.id} className="space-y-2">
                 <Label htmlFor={`invite-${invitation.id}`}>
@@ -161,7 +163,7 @@ export default function TeamLeaders({ teamId }: { teamId: string }) {
                   Kopiér lederlink
                 </Button>
                 <p className="text-sm text-muted-foreground">
-                  Del linket med denne person.
+                  Hvis mailen ikke kommer frem, kan du også dele linket med denne person.
                 </p>
               </div>
             ))}

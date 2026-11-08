@@ -30,6 +30,5 @@ management:
     enabled-by-default: false
 
 feedback:
-  firebase-api-key: "openapi"
   firebase-service-account-json-b64: ""
   admin-emails: "openapi-admin@example.com"

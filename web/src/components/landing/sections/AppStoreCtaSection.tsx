@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
-import { contactUrl } from "@/components/landing/content"
+import { getStartedUrl } from "@/components/landing/content"
 import { fadeInUp, stagger } from "@/components/landing/motion"
 import PrimaryButton from "@/components/ui/PrimaryButton"
 
@@ -21,9 +21,7 @@ function AppStoreCtaSection() {
             Vær med fra starten
           </h2>
           <p className="text-lg leading-8 text-muted-foreground">
-            Den nye Lets Grow er under udvikling. Vil I være med til at
-            gøre medarbejdernes idéer til en bedre arbejdsdag? Skriv til os
-            på hello@letsgrow.dk om tidlig adgang.
+            Opret jeres organisation og første team med din arbejdsmail.
           </p>
         </motion.div>
 
@@ -32,8 +30,8 @@ function AppStoreCtaSection() {
           variants={fadeInUp}
         >
           <PrimaryButton asChild className="h-12 px-7 text-sm font-semibold" size="lg">
-            <a href={contactUrl} target="_blank" rel="noopener noreferrer">
-              Få tidlig adgang
+            <a href={getStartedUrl} target="_blank" rel="noopener noreferrer">
+              Kom i gang
               <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </PrimaryButton>

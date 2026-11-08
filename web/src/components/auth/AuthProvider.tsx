@@ -55,7 +55,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setConfigured(false)
         setStatus("unauthenticated")
         setAuthError(
-          getErrorMessage(error, "Unable to load the Firebase configuration.")
+          getErrorMessage(error, "Kunne ikke indlæse login. Prøv igen.")
         )
         return
       }
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } catch (error: unknown) {
         if (isMounted) {
           setAuthError(
-            getErrorMessage(error, "Unable to persist Firebase auth state.")
+            getErrorMessage(error, "Kunne ikke gemme din session.")
           )
         }
       }
@@ -92,7 +92,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser(null)
           setStatus("unauthenticated")
           setAuthError(
-            getErrorMessage(error, "Unable to read the Firebase auth session.")
+            getErrorMessage(error, "Kunne ikke læse din session. Log ind igen.")
           )
         }
       )

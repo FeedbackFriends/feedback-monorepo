@@ -32,7 +32,9 @@ extension AuthClient: TestDependencyKey {
             userStateChanged: {
                 await mockAuthEngine.stream()
             },
-            signInWithCustomToken: { _ in }
+            restoreTestSession: { _ in },
+            sendEmailCode: { _ in },
+            verifyEmailCode: { _, _ in await mockAuthEngine.yield(.authenticated) }
         )
     }
 }

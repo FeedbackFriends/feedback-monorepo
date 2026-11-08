@@ -32,6 +32,13 @@ public struct SignUp: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         @Presents public var destination: Destination.State?
+        var email = ""
+        var emailCode = ""
+        var emailCodeSent = false
+        var emailLoginInFlight = false
+        var emailResendAt: Date?
+        var emailStatus: String?
+        var loginInFlight: Bool { emailLoginInFlight || googleLoginInFlight || appleLoginInFlight }
         var googleLoginInFlight: Bool
         var appleLoginInFlight: Bool
         var e2eAuthenticationSheetPresented: Bool
@@ -52,6 +59,11 @@ public struct SignUp: Sendable {
     }
     
     public enum Action: BindableAction {
+        case emailContinueTap
+        case emailResendTap
+        case emailChangeTap
+        case emailCodeSent(Date)
+        case emailFailed
         case signUpWithAppleButtonTap
         case signUpWithGoogleButtonTap
         case destination(PresentationAction<Destination.Action>)
@@ -69,6 +81,7 @@ public struct SignUp: Sendable {
     public init() {}
     
     @Dependency(\.authClient) var authClient
+    @Dependency(\.date.now) var now
     @Dependency(\.continuousClock) var clock
     
     public var body: some ReducerOf<Self> {
@@ -76,6 +89,59 @@ public struct SignUp: Sendable {
         Reduce { state, action in
             
             switch action {
+            case .emailChangeTap:
+                guard !state.loginInFlight else { return .none }
+                state.emailCodeSent = false
+                state.emailCode = ""
+                state.emailStatus = nil
+                return .none
+
+            case .emailCodeSent(let sentAt):
+                state.emailLoginInFlight = false
+                state.emailCodeSent = true
+                state.emailResendAt = sentAt.addingTimeInterval(60)
+                state.emailStatus = String(appStrings: .signInCodeSent)
+                return .none
+
+            case .emailFailed:
+                state.emailLoginInFlight = false
+                state.emailStatus = String(appStrings: .signInCodeFailed)
+                return .none
+
+            case .emailResendTap:
+                guard !state.loginInFlight else { return .none }
+                if let resendAt = state.emailResendAt, now < resendAt {
+                    state.emailStatus = String(appStrings: .signInResendWait)
+                    return .none
+                }
+                state.emailLoginInFlight = true
+                state.emailStatus = nil
+                return .run { [email = state.email, now] send in
+                    do {
+                        try await authClient.sendEmailCode(email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased())
+                        await send(.emailCodeSent(now))
+                    } catch { await send(.emailFailed) }
+                }
+
+            case .emailContinueTap:
+                guard !state.loginInFlight else { return .none }
+                let email = state.email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                guard email.contains("@"), email.count <= 254,
+                      !state.emailCodeSent || !state.emailCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return .none }
+                state.emailLoginInFlight = true
+                state.emailStatus = nil
+                return .run { [verify = state.emailCodeSent, code = state.emailCode, now] send in
+                    do {
+                        if verify {
+                            try await authClient.verifyEmailCode(email, code.trimmingCharacters(in: .whitespacesAndNewlines))
+                            await send(.signUpSuccess)
+                        } else {
+                            try await authClient.sendEmailCode(email)
+                            await send(.emailCodeSent(now))
+                        }
+                    } catch { await send(.emailFailed) }
+                }
+
             case .e2eAuthenticationIconTap:
                 state.e2eAuthenticationSheetPresented = true
                 return .none
@@ -96,7 +162,7 @@ public struct SignUp: Sendable {
                             return
                         }
 
-                        try await authClient.signInWithCustomToken(token)
+                        try await authClient.restoreTestSession(token)
                         await send(.e2eAuthenticationStatusResponse(String(appStrings: .debugLoginSucceeded)))
                     } catch {
                         await send(.e2eAuthenticationStatusResponse(error.localizedDescription))
@@ -111,7 +177,7 @@ public struct SignUp: Sendable {
                     }
 
                     do {
-                        try await authClient.signInWithCustomToken(token)
+                        try await authClient.restoreTestSession(token)
                     } catch {
                         await send(.presentError(error))
                     }
@@ -130,6 +196,7 @@ public struct SignUp: Sendable {
                 return .none
                 
             case .signUpWithAppleButtonTap:
+                guard !state.loginInFlight else { return .none }
                 state.appleLoginInFlight = true
                 return .run { [authClient = self.authClient] send in
                     do {
@@ -144,6 +211,7 @@ public struct SignUp: Sendable {
                 }
                 
             case .signUpWithGoogleButtonTap:
+                guard !state.loginInFlight else { return .none }
                 state.googleLoginInFlight = true
                 return .run { [authClient = self.authClient] send in
                     do {
@@ -162,6 +230,7 @@ public struct SignUp: Sendable {
                 return .none
                 
             case .signUpSuccess:
+                state.emailLoginInFlight = false
                 state.appleLoginInFlight = false
                 state.googleLoginInFlight = false
                 return .none

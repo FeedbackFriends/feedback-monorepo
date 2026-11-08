@@ -10,6 +10,7 @@ import dk.example.feedback.persistence.table.FCMTokenTable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.*
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
@@ -37,6 +38,7 @@ class AccountRepo {
             ensureEmailAvailable(email = email, accountId = accountId)
         }
         return AccountDao.new(id = accountId) {
+            this.authProvider = provider(accountId)
             this.name = name
             this.email = email
             this.phoneNumber = phoneNumber
@@ -85,7 +87,7 @@ class AccountRepo {
     fun getAccountFromEmail(emailInput: String): AccountEntity? {
         val normalizedEmail = emailInput.normalizedEmail() ?: return null
         logger.info("Trying to find account with email: $normalizedEmail")
-        return AccountDao.find { email eq normalizedEmail }.firstOrNull()?.toModel()
+        return AccountDao.find { (email eq normalizedEmail) and (AccountTable.authProvider eq "supabase") }.firstOrNull()?.toModel()
     }
 
     fun upsertFcmToken(accountId: String, fcmToken: String) {
@@ -122,8 +124,10 @@ class AccountRepo {
         }
     }
 
+    private fun provider(accountId: String) = if (accountId.startsWith("supabase:")) "supabase" else "firebase"
+
     private fun ensureEmailAvailable(email: String, accountId: String) {
-        val existing = AccountDao.find { AccountTable.email eq email }.firstOrNull()
+        val existing = AccountDao.find { (AccountTable.email eq email) and (AccountTable.authProvider eq provider(accountId)) }.firstOrNull()
         if (existing != null && existing.id.value != accountId) {
             throw IllegalArgumentException("Email already in use")
         }

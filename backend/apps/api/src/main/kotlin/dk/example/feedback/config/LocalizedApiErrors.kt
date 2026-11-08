@@ -43,6 +43,7 @@ object LocalizedApiErrors {
             404 -> "notFound"
             409 -> "conflict"
             429 -> "rateLimited"
+            503 -> "serviceUnavailable"
             else -> "unexpected"
         }
         val error = ApiError(

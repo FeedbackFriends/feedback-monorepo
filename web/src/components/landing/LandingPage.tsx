@@ -1,4 +1,4 @@
-import { contactUrl } from "@/components/landing/content"
+import { getStartedUrl } from "@/components/landing/content"
 import AppStoreCtaSection from "@/components/landing/sections/AppStoreCtaSection"
 import HeroSection from "@/components/landing/sections/HeroSection"
 import HowItWorksSection from "@/components/landing/sections/HowItWorksSection"
@@ -14,7 +14,7 @@ export default function LandingPage() {
       <HowItWorksSection />
       <OutcomesSection />
       <AppStoreCtaSection />
-      <MobileStickyCta ctaHref={contactUrl} />
+      <MobileStickyCta ctaHref={getStartedUrl} />
     </>
   )
 }

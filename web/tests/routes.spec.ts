@@ -9,7 +9,7 @@ test.describe("route smoke tests", () => {
         name: "Gør arbejdsdagen lidt bedre",
       })
     ).toBeVisible()
-    await expect(page.getByRole("link", { name: "Få tidlig adgang", exact: true }).first()).toHaveAttribute("href", "mailto:hello@letsgrow.dk")
+    await expect(page.getByRole("link", { name: "Kom i gang", exact: true }).first()).toHaveAttribute("href", "https://app.letsgrow.dk/login")
     await expect(page.getByRole("link", { name: "hello@letsgrow.dk", exact: true })).toHaveAttribute("href", "mailto:hello@letsgrow.dk")
     await expect(page.getByRole("heading", { name: "Snart: Fra idé til forbedring i 4 enkle trin" })).toBeAttached()
     await expect(page.getByRole("link", { name: /Hent.*app|App Store/i })).toHaveCount(0)

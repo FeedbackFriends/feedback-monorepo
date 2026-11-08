@@ -40,10 +40,10 @@ Browser CLI setup is documented in [browser access](../../../docs/agents/browser
 
 ## Test boundaries
 
-`npm run test:e2e` starts an isolated development app on port 3100 and a controlled HTTP upstream on 3199. Keep both ports free. Team UI tests mock browser responses; `relay.spec.ts` exercises the actual Next.js relay against that upstream, including status/body/header forwarding, denied requests, redirects and the real 15-second timeout. These tests do not establish Firebase or Kotlin authorization correctness. `architecture.spec.ts` checks public auth isolation, indexing and responsive anchor navigation. Tests run in CI and block release on failure.
+`npm run test:e2e` starts an isolated development app on port 3100 and a controlled HTTP upstream on 3199. Keep both ports free. Team UI tests mock browser responses; `relay.spec.ts` exercises the actual Next.js relay against that upstream, including status/body/header forwarding, denied requests, redirects and the real 15-second timeout. These tests do not establish Supabase or Kotlin authorization correctness. `architecture.spec.ts` checks public auth isolation, indexing and responsive anchor navigation. Tests run in CI and block release on failure.
 
-`PLAYWRIGHT_BASE_URL` selects an externally managed app and disables both automatic servers. That app must use development E2E auth and the controlled upstream at 3199 for this complete suite; start the fixture with `node tests/fixtures/upstream.ts`. Use a separate focused journey for live Firebase/backend verification, with test credentials and no database reset.
+`PLAYWRIGHT_BASE_URL` selects an externally managed app and disables both automatic servers. That app must use development E2E auth and the controlled upstream at 3199 for this complete suite; start the fixture with `node tests/fixtures/upstream.ts`. Use a separate focused journey for live Supabase/backend verification, with test credentials and no database reset.
 
 After moving routes, stale `.next/dev/types` may refer to the old paths. Stop the development server before removing those generated declarations and regenerate with Next.js; keep the active server's build state intact.
 
-The Node runtime is pinned in `.nvmrc`, `package.json` and Docker; CI reads `.nvmrc`. Scoped dependency overrides patch Firebase's unused Firestore gRPC dependency and TypeScript ESLint's minimatch dependency. Recheck compatibility and `npm audit` when upstream constraints change before removing these overrides.
+The Node runtime is pinned in `.nvmrc`, `package.json` and Docker; CI reads `.nvmrc`. Scoped dependency overrides patch TypeScript ESLint's minimatch dependency. Recheck compatibility and `npm audit` when upstream constraints change before removing these overrides.

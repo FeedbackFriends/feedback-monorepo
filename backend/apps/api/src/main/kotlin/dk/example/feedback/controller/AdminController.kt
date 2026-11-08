@@ -21,12 +21,12 @@ class AdminController(
 ) {
 
     data class MockTokenDto(
-        val firebaseResponse: SignInFirebaseResponseDto,
+        val session: TestSessionDto,
         val token: String,
     )
 
-    data class SignInFirebaseResponseDto(
-        val idToken: String,
+    data class TestSessionDto(
+        val accessToken: String,
         val refreshToken: String,
         val expiresIn: String,
     )

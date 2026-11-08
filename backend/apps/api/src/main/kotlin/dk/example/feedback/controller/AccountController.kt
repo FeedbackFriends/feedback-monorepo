@@ -1,7 +1,7 @@
 package dk.example.feedback.controller
 
 import dk.example.feedback.dto.BootstrapDto
-import dk.example.feedback.firebase.FirebaseService
+import dk.example.feedback.service.SupabaseIdentityService
 import dk.example.feedback.helpers.getAccountId
 import dk.example.feedback.helpers.role
 import dk.example.feedback.model.enumerations.RoleConstants
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/account")
 class AccountController(
     val accountService: AccountService,
-    val firebaseService: FirebaseService,
+    val identities: SupabaseIdentityService,
     val bootstrapService: BootstrapService,
 ) {
 
@@ -38,23 +38,13 @@ class AccountController(
         @RequestBody input: CreateAccountInput,
         @AuthenticationPrincipal principal: Jwt,
     ): BootstrapDto {
-        val user = firebaseService.getUser(principal.getAccountId())
-        val normalizedEmail = user.email.normalizedEmail()
-        normalizedEmail
-            ?.takeIf { it != user.email }
-            ?.let { normalizedEmail ->
-                firebaseService.updateUser(
-                    userId = principal.getAccountId(),
-                    email = normalizedEmail,
-                    displayName = user.displayName,
-                    phoneNumber = user.phoneNumber
-                )
-            }
+        val user = identities.user(principal)
+        val normalizedEmail = if (user.anonymous || user.emailConfirmedAt.isNullOrBlank()) null else user.email.normalizedEmail()
         accountService.createAccount(
             requestedRole = principal.role(),
-            name = user.displayName,
+            name = user.metadata["full_name"] as? String,
             email = normalizedEmail,
-            phoneNumber = user.phoneNumber,
+            phoneNumber = null,
             jwt = principal,
             fcmToken = input.fcmToken
         )
@@ -67,20 +57,13 @@ class AccountController(
         @AuthenticationPrincipal principal: Jwt,
         @RequestBody input: ModifyAccountInput,
     ) {
-        val normalizedEmail = input.email.normalizedEmail()
-        val existingEmail = accountService.fetchAccount(principal.getAccountId())?.email
-        if (normalizedEmail != null) {
-            firebaseService.updateUser(
-                userId = principal.getAccountId(),
-                email = normalizedEmail,
-                displayName = input.name,
-                phoneNumber = input.phoneNumber
-            )
-        }
+        val normalizedEmail = identities.verifiedEmail(principal)
+        if (input.email.normalizedEmail()?.let { it != normalizedEmail } == true)
+            throw dk.example.feedback.model.exceptions.ForbiddenResourceAccessException("Change email through verified authentication")
         accountService.updateAccount(
             accountId = principal.getAccountId(),
             name = input.name,
-            email = normalizedEmail ?: existingEmail,
+            email = normalizedEmail,
             phoneNumber = input.phoneNumber,
             jwt = principal
         )
@@ -110,7 +93,7 @@ class AccountController(
         @AuthenticationPrincipal principal: Jwt,
     ) {
         val accountId = principal.getAccountId()
-        firebaseService.deleteUser(accountId)
+        identities.deleteUser(principal)
         accountService.deleteAccount(accountId = accountId, jwt = principal)
     }
 }

@@ -18,7 +18,7 @@ Commands:
   seed-participant-with-data
   seed-empty-account
 
-Seed commands print only the custom token to stdout.
+Seed commands print a JSON access/refresh token pair to stdout.
 EOF
 }
 

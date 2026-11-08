@@ -64,7 +64,7 @@ class BackendPreparationTests(unittest.TestCase):
         response = MagicMock()
         response.__enter__.return_value = BytesIO(b'{"status":"UP"}')
         with patch.object(runner, 'urlopen', return_value=response), patch.object(runner, 'backend_request') as request:
-            request.side_effect = [{'firebaseResponse': {'idToken': 'private-token'}}, {'managerData': {}}]
+            request.side_effect = [{'session': {'accessToken': 'private-token'}}, {'managerData': {}}]
             token = runner.prepare_backend(skip_start=True)
         self.assertEqual(token, 'private-token')
         self.assertEqual(request.call_args_list[0].args, ('POST', '/admin/login'))
@@ -77,7 +77,7 @@ class BackendPreparationTests(unittest.TestCase):
         response = MagicMock()
         response.__enter__.return_value = BytesIO(b'{"status":"UP"}')
         with patch.object(runner, 'urlopen', return_value=response), patch.object(runner, 'backend_request') as request:
-            request.side_effect = [{'firebaseResponse': {'idToken': 'private-token'}}, {'managerData': None}]
+            request.side_effect = [{'session': {'accessToken': 'private-token'}}, {'managerData': None}]
             with self.assertRaisesRegex(RuntimeError, '--seed-manager'):
                 runner.prepare_backend(skip_start=True)
         self.assertEqual(request.call_count, 2)

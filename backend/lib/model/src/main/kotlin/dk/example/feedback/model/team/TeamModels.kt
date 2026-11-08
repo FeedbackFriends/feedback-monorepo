@@ -26,3 +26,5 @@ data class TeamLeader(val accountId: String, val email: String)
 data class LeaderInvitation(val id: UUID, val email: String, val code: String, val expiresAt: Long)
 data class TeamLeadership(val leaders: List<TeamLeader>, val invitations: List<LeaderInvitation>)
 data class LeaderInvitationInfo(val team: TeamInfo, val email: String)
+
+data class PendingLeaderInvitation(val code: String, val team: TeamInfo)

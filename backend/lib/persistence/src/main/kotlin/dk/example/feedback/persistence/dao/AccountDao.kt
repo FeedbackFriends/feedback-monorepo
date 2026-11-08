@@ -15,6 +15,7 @@ class AccountDao(id: EntityID<String>): Entity<String>(id){
 
     companion object : EntityClass<String, AccountDao>(AccountTable)
 
+    var authProvider by AccountTable.authProvider
     var name by AccountTable.name
     var email by AccountTable.email
     var phoneNumber by AccountTable.phoneNumber

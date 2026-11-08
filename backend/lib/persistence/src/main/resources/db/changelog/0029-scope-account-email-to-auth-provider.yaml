@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0029-scope-account-email-to-auth-provider
+      author: codex
+      changes:
+        - addColumn:
+            tableName: account
+            columns:
+              - column:
+                  name: auth_provider
+                  type: varchar(16)
+                  defaultValue: firebase
+                  constraints:
+                    nullable: false
+        - dropUniqueConstraint:
+            tableName: account
+            constraintName: uk_account_email
+        - addUniqueConstraint:
+            tableName: account
+            columnNames: email, auth_provider
+            constraintName: uk_account_provider_email
+        - createIndex:
+            tableName: team_leader_invitation
+            indexName: ix_leader_invitation_email_expiry
+            columns:
+              - column:
+                  name: email
+              - column:
+                  name: expires_at

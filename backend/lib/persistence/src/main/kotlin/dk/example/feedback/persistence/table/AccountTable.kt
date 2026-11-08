@@ -15,14 +15,14 @@ import org.jetbrains.exposed.sql.javatime.timestampWithTimeZone
 /**
  * Table for storing user accounts.
  *
- * Each row represents a unique user, identified by a UID from Firebase Authentication. Stores user metadata and notification tokens.
+ * Each row represents a unique user, identified by an internal, provider-scoped identity. Stores user metadata and notification tokens.
  *
  * Relationships:
  * - Referenced by events, feedback, and other tables as the account owner or participant.
  * - Deleting an account cascades to related entries in dependent tables.
  *
  * Columns:
- * @property id Unique account identifier (Firebase UID). Primary key.
+ * @property id Unique internal account identifier. Primary key.
  * @property name Optional display name for the user.
  * @property email Optional email address.
  * @property phoneNumber Optional phone number.
@@ -35,6 +35,7 @@ object AccountTable: IdTable<String>("account") {
     override val id: Column<EntityID<String>> = varchar("id", 255).entityId()
     override val primaryKey = PrimaryKey(id)
 
+    val authProvider = varchar("auth_provider", 16).default("firebase")
     val name = varchar("name", 255).nullable()
     val email = varchar("email", 255).nullable()
     val phoneNumber = varchar("phone_number", 255).nullable()

@@ -245,6 +245,12 @@ class TeamRepo {
         return invite
     }
 
+    fun pendingLeaderInvitations(email: String): List<PendingLeaderInvitation> =
+        LeaderInvitationTable.selectAll().where {
+            (LeaderInvitationTable.email eq email) and (LeaderInvitationTable.revoked eq false) and
+                LeaderInvitationTable.acceptedBy.isNull() and (LeaderInvitationTable.expiresAt greater System.currentTimeMillis())
+        }.map { PendingLeaderInvitation(it[LeaderInvitationTable.code], teamInfo(it[LeaderInvitationTable.team])) }
+
     fun leaderInvitation(code: String): LeaderInvitationInfo {
         val invite = validLeaderInvite(code)
         if (invite[LeaderInvitationTable.acceptedBy] != null) conflict()

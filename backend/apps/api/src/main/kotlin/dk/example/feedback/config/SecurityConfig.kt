@@ -1,6 +1,8 @@
 package dk.example.feedback.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dk.example.feedback.helpers.role
+import dk.example.feedback.service.SupabaseIdentityService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
@@ -32,6 +34,7 @@ import java.util.function.Supplier
 class SecurityConfig(
     private val feedbackConfig: FeedbackConfig,
     private val objectMapper: ObjectMapper,
+    private val identities: SupabaseIdentityService,
 ) {
 
     private val logger = LoggerFactory.getLogger(SecurityConfig::class.java)
@@ -100,7 +103,7 @@ class SecurityConfig(
     fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
         val converter = JwtAuthenticationConverter()
         converter.setJwtGrantedAuthoritiesConverter { jwt ->
-            val role = jwt.getClaimAsString("role")
+            val role = jwt.role()?.value
             val roles = role?.let { listOf(it) } ?: emptyList()
             logger.debug("Extracted roles: {}", roles)
             roles.map { SimpleGrantedAuthority(it) }
@@ -115,8 +118,7 @@ class SecurityConfig(
 
         val principal = authentication.get().principal as? Jwt
             ?: return false
-        val email = principal.getClaimAsString("email")
-            ?: return false
+        val email = try { identities.verifiedEmail(principal) } catch (_: Exception) { return false }
         return feedbackConfig.normalizedAdminEmails.contains(email.trim().lowercase())
     }
 }

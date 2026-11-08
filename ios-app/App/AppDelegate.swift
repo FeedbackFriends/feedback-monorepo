@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import Domain
 import RootFeature
-import FirebaseAuth
 import FirebaseCore
 import FirebasePerformance
 import FirebaseMessaging

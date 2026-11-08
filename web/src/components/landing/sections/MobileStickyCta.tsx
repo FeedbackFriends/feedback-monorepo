@@ -29,13 +29,13 @@ function MobileStickyCta({ ctaHref }: MobileStickyCtaProps) {
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-[#282A47]">Vil I være med?</p>
             <p className="text-xs leading-5 text-muted-foreground">
-              Den nye Lets Grow kommer snart.
+              Opret jeres organisation og første team.
             </p>
           </div>
 
           <PrimaryButton asChild className="h-11 shrink-0 px-5 text-sm" size="sm">
             <a href={ctaHref} target="_blank" rel="noopener noreferrer">
-              Kontakt os
+              Kom i gang
               <ArrowRight className="ml-1.5 h-4 w-4" />
             </a>
           </PrimaryButton>

@@ -1,3 +1,5 @@
+// Set SUPABASE_URL (https:/$()/PROJECT.supabase.co), SUPABASE_PUBLISHABLE_KEY,
+// and GOOGLE_CLIENT_ID in secrets.xcconfig. Never put Supabase secret keys in the app.
 #include? "secrets.xcconfig"
 
 APPSTORE_ID = 6742420307

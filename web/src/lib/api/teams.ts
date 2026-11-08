@@ -12,6 +12,7 @@ export type LeaderInvitationInfo = components["schemas"]["LeaderInvitationInfo"]
 export type LeaderInvitationInput = components["schemas"]["InviteLeaderInput"]
 
 type TeamOperation =
+  | "pendingLeaderInvitations"
   | "context"
   | "management"
   | "leadership"
@@ -154,3 +155,5 @@ export const acceptLeaderInvitation = (
     signal,
     input,
   )
+
+export const getPendingLeaderInvitations = (signal?: AbortSignal) => request<"pendingLeaderInvitations">("/leader-invitations", "GET", signal)

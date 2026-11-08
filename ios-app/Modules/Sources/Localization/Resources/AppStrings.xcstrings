@@ -6496,6 +6496,168 @@
           }
         }
       }
+    },
+    "signIn.workEmail" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arbejdsmail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Work email"
+          }
+        }
+      }
+    },
+    "signIn.emailCode" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engangskode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One-time code"
+          }
+        }
+      }
+    },
+    "signIn.sendCode" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send engangskode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send code"
+          }
+        }
+      }
+    },
+    "signIn.verifyCode" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log ind med kode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in with code"
+          }
+        }
+      }
+    },
+    "signIn.resendCode" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send ny kode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send new code"
+          }
+        }
+      }
+    },
+    "signIn.changeEmail" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug en anden e-mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use another email"
+          }
+        }
+      }
+    },
+    "signIn.codeSent" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi har sendt en kode. Tjek også uønsket post."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We sent a code. Check your spam folder too."
+          }
+        }
+      }
+    },
+    "signIn.codeFailed" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunne ikke logge ind. Tjek koden, eller vent et minut og få en ny kode."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not sign in. Check the code, or wait a minute and request a new one."
+          }
+        }
+      }
+    },
+    "signIn.resendWait" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vent et minut, før du beder om en ny kode."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wait a minute before requesting a new code."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

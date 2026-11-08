@@ -17,6 +17,7 @@ public struct SignUpView: View {
     
     public var body: some View {
         NavigationStack {
+            ScrollView {
             VStack(spacing: 40) {
                 Spacer()
                 Image.letsGrowIcon
@@ -36,6 +37,7 @@ public struct SignUpView: View {
                     #endif
                 Spacer()
                 signUpView
+            }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .toolbar {
@@ -79,6 +81,36 @@ private extension SignUpView {
             Text(String(appStrings: .signInExplanation))
                 .bodyTextStyle()
                 .foregroundColor(.themeText)
+            TextField(String(appStrings: .signInWorkEmail), text: $store.email)
+                .textContentType(.emailAddress)
+                .keyboardType(.emailAddress)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .textFieldStyle(.roundedBorder)
+                .disabled(store.loginInFlight || store.emailCodeSent)
+                .accessibilityLabel(String(appStrings: .signInWorkEmail))
+            if store.emailCodeSent {
+                TextField(String(appStrings: .signInEmailCode), text: $store.emailCode)
+                    .textContentType(.oneTimeCode)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .disabled(store.loginInFlight)
+                    .accessibilityLabel(String(appStrings: .signInEmailCode))
+            }
+            if let status = store.emailStatus {
+                Text(status).captionTextStyle().accessibilityAddTraits(.updatesFrequently)
+            }
+            Button(String(appStrings: store.emailCodeSent ? .signInVerifyCode : .signInSendCode)) {
+                store.send(.emailContinueTap)
+            }
+            .buttonStyle(LargeButtonStyle(backgroundColor: Color.themeText, foregroundColor: Color.themeBackground))
+            .disabled(store.loginInFlight || store.email.isEmpty || (store.emailCodeSent && store.emailCode.isEmpty))
+            if store.emailCodeSent {
+                Button(String(appStrings: .signInResendCode)) { store.send(.emailResendTap) }
+                    .disabled(store.loginInFlight)
+                Button(String(appStrings: .signInChangeEmail)) { store.send(.emailChangeTap) }
+                    .disabled(store.loginInFlight)
+            }
             Button {
                 store.send(.signUpWithAppleButtonTap)
             } label: {
@@ -100,7 +132,7 @@ private extension SignUpView {
                 .padding(.leading, 24)
             }
             .buttonStyle(LargeButtonStyle(backgroundColor: Color.themeText, foregroundColor: Color.themeBackground))
-            .disabled(store.googleLoginInFlight || store.appleLoginInFlight)
+            .disabled(store.loginInFlight)
             Button {
                 store.send(.signUpWithGoogleButtonTap)
             } label: {
@@ -127,7 +159,7 @@ private extension SignUpView {
                     backgroundColor: Color.themeSurface
                 )
             )
-            .disabled(store.googleLoginInFlight || store.appleLoginInFlight)
+            .disabled(store.loginInFlight)
             .lightShadow()
         }
         .animation(.bouncy, value: store.googleLoginInFlight)

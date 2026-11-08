@@ -26,8 +26,8 @@ class AdminResetDatabaseGuardTest(
     @Autowired private val mockMvc: MockMvc,
 ) {
     @Test
-    fun `reset database endpoint returns error when reset flag is disabled`() {
+    fun `reset database endpoint returns not found when reset flag is disabled`() {
         mockMvc.perform(post("/admin/reset"))
-            .andExpect(status().isInternalServerError)
+            .andExpect(status().isNotFound)
     }
 }

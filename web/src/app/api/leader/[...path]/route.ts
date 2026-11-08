@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server"
 
-// The browser supplies a Firebase ID token. The Kotlin API owns all authorization.
+// The browser supplies a Supabase access token. The Kotlin API owns all authorization.
 async function forward(
   request: NextRequest,
   context: { params: Promise<{ path: string[] }> }
@@ -9,7 +9,7 @@ async function forward(
   const noStore = { "Cache-Control": "no-store" }
   const allowed =
     path[0] === "teams" &&
-    path.every((segment) => /^[A-Za-z0-9_-]+$/.test(segment))
+    path.every((segment) => /^[A-Za-z0-9_:-]+$/.test(segment))
   if (!allowed) return Response.json({ error: "Not found" }, { status: 404, headers: noStore })
   const authorization = request.headers.get("authorization")
   if (!authorization?.startsWith("Bearer "))

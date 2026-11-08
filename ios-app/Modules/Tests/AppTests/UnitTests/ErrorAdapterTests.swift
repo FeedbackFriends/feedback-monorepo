@@ -1,7 +1,7 @@
 @testable import Adapters
 import AuthenticationServices
 import Domain
-import FirebaseAuth
+import Auth
 import Foundation
 import GoogleSignIn
 import HTTPTypes
@@ -61,14 +61,12 @@ struct ErrorAdapterTests {
     }
 
     @Test func authenticationSDKCodesAreMappedAtTheBoundary() {
-        let expired = NSError(domain: AuthErrors.domain, code: AuthErrorCode.userTokenExpired.rawValue)
+        let expired = AuthError.sessionMissing
         #expect(normalizedAuthError(expired) as? AuthenticationError == .notSignedIn)
-        let network = NSError(
-            domain: AuthErrors.domain, code: AuthErrorCode.networkError.rawValue,
-            userInfo: [NSUnderlyingErrorKey: URLError(.timedOut)]
-        )
+        let network = URLError(.timedOut)
         #expect((normalizedAuthError(network) as? URLError)?.code == .timedOut)
-        let throttled = NSError(domain: AuthErrors.domain, code: AuthErrorCode.tooManyRequests.rawValue)
+        let throttled = AuthError.api(message: "rate limit", errorCode: .overRequestRateLimit,
+            underlyingData: Data(), underlyingResponse: HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 429, httpVersion: nil, headerFields: nil)!)
         #expect(normalizedAuthError(throttled) as? AppFailure == .rateLimited)
         let apple = NSError(domain: ASAuthorizationErrorDomain, code: ASAuthorizationError.canceled.rawValue)
         let google = NSError(domain: GIDSignInError.errorDomain, code: GIDSignInError.canceled.rawValue)

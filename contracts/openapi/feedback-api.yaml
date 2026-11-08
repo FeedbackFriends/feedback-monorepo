@@ -70,6 +70,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
     delete:
       tags:
       - Events
@@ -116,6 +122,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -171,6 +183,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /admin/mock-new-feedback-notification:
     put:
       tags:
@@ -218,6 +236,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -283,6 +307,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
     delete:
       tags:
       - Activity
@@ -333,6 +363,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /account:
     put:
       tags:
@@ -379,6 +415,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -436,6 +478,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
     delete:
       tags:
       - Account
@@ -475,6 +523,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -525,6 +579,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -590,6 +650,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/requests/{requestId}/approve:
     post:
       tags:
@@ -647,6 +713,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -712,6 +784,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/invite:
     post:
       tags:
@@ -763,6 +841,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -821,6 +905,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/organizations:
     post:
       tags:
@@ -871,6 +961,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -936,6 +1032,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/leader-invitations/accept:
     post:
       tags:
@@ -986,6 +1088,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -1045,6 +1153,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /feedback/submit:
     post:
       tags:
@@ -1095,6 +1209,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -1153,6 +1273,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /event:
     post:
       tags:
@@ -1203,6 +1329,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -1261,6 +1393,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /activity:
     post:
       tags:
@@ -1315,6 +1453,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /account/logout:
     post:
       tags:
@@ -1361,6 +1505,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -1420,6 +1570,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/leaders:
     get:
       tags:
@@ -1471,6 +1627,68 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /teams/leader-invitations:
+    get:
+      tags:
+      - team-controller
+      operationId: pendingLeaderInvitations
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PendingLeaderInvitation"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -1529,6 +1747,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/invites/{code}:
     get:
       tags:
@@ -1583,6 +1807,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/context:
     get:
       tags:
@@ -1631,6 +1861,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /notification-history/mark-as-seen:
     get:
       tags:
@@ -1671,6 +1907,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -1719,6 +1961,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -1783,6 +2031,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/membership:
     delete:
       tags:
@@ -1834,6 +2088,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -1898,6 +2158,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/leaders/{accountId}:
     delete:
       tags:
@@ -1954,6 +2220,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -2019,6 +2291,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/requests/{requestId}:
     delete:
       tags:
@@ -2070,6 +2348,12 @@ paths:
                 $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
           content:
             application/json:
               schema:
@@ -2881,9 +3165,12 @@ components:
           format: uuid
         teamName:
           type: string
+        ownerName:
+          type: string
       required:
       - id
       - name
+      - ownerName
       - teamId
       - teamName
     CreateTeamInput:
@@ -3325,6 +3612,16 @@ components:
           description: Firebase Cloud Messaging token to remove from the account.
       required:
       - fcmToken
+    PendingLeaderInvitation:
+      type: object
+      properties:
+        code:
+          type: string
+        team:
+          $ref: "#/components/schemas/TeamInfo"
+      required:
+      - code
+      - team
     LeaderInvitationInfo:
       type: object
       properties:

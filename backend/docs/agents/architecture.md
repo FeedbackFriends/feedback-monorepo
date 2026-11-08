@@ -32,4 +32,6 @@ Tests live next to their modules under `src/test/kotlin`. API and persistence te
 
 ## Team access
 
-Organization creators own all organization teams. Additional leaders have one database assignment to one team; only the owner creates teams or changes leaders. Check current database authority on every team request, never legacy Manager claims. Personal leader invitations require the matching verified Google email and expire after seven days; employee invitation codes remain separate.
+Organization creators own all organization teams. Additional leaders have one database assignment to one team; only the owner creates teams or changes leaders. Check current database authority on every team request, never legacy Manager claims. Personal leader invitations require the matching verified email and expire after seven days; employee invitation codes remain separate.
+
+Supabase Auth is verified by the API against its project JWKS and user endpoint. See [setup/cutover](../../../docs/agents/supabase-auth.md). `authenticated` is a provider role, never a team role. Nonanonymous sessions retain the existing personal-meeting Manager capability; team authority remains stored ownership/assignment.

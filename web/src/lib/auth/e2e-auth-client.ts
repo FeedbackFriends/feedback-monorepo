@@ -43,6 +43,13 @@ export class E2EAuthClient implements AuthClient {
     })
   }
 
+  async sendEmailCode(_email: string) { void _email }
+
+  async verifyEmailCode(_email: string, code: string) {
+    if (code !== "123456") throw new Error("Invalid code")
+    await this.signInWithGoogle()
+  }
+
   async signOut() {
     this.setUser(null)
   }

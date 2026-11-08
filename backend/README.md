@@ -45,8 +45,9 @@ export POSTGRES_PORT=5432
 export POSTGRES_DB=feedback
 export POSTGRES_USER=feedback
 export POSTGRES_PASSWORD=feedback
-export JWK_SET_URL=https://www.googleapis.com/oauth2/v3/certs
-export JWT_ISSUER_URI=https://securetoken.google.com/feedback2-a4dd9
+export SUPABASE_URL=https://PROJECT.supabase.co
+export SUPABASE_PUBLISHABLE_KEY=<publishable-key>
+export SUPABASE_SECRET_KEY=<server-only-secret>
 export FIREBASE_API_KEY=...
 export FIREBASE_SERVICE_ACCOUNT_JSON_B64="$(base64 < ../firebase_config.json | tr -d '\n')"
 export ZOHO_ACCOUNT_ID=...
@@ -81,8 +82,9 @@ POSTGRES_PORT=5432
 POSTGRES_DB=feedback
 POSTGRES_USER=feedback
 POSTGRES_PASSWORD=feedback
-JWK_SET_URL=https://www.googleapis.com/oauth2/v3/certs
-JWT_ISSUER_URI=https://securetoken.google.com/feedback2-a4dd9
+SUPABASE_URL=https://PROJECT.supabase.co
+SUPABASE_PUBLISHABLE_KEY=<publishable-key>
+SUPABASE_SECRET_KEY=<server-only-secret>
 FIREBASE_API_KEY=...
 FIREBASE_SERVICE_ACCOUNT_JSON_B64=...
 ```
@@ -121,3 +123,5 @@ Zoho OAuth scopes for Self Client should use `ZohoMail.messages.READ` for the sc
 ## Documentation
 - [Architecture Overview](./docs/overview.md) explains module roles and request/notification flows.
 - [Diagrams](./docs/diagrams/) contains PlantUML diagrams.
+
+Managed authentication, invitation SMTP, fresh-account cutover and rollback are documented in [Supabase auth setup](../docs/agents/supabase-auth.md). Firebase remains responsible for push delivery only.
