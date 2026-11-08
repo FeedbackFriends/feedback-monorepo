@@ -1,0 +1,19 @@
+docs/agent-tooling.md
+  s_2171f3b4f22f0c::t_ff8302ad3f980e 77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "36501e05091475351c9a7cbf04662087f3eeada9",
+  "prompts": {},
+  "sessions": {
+    "s_2171f3b4f22f0c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bceb-4b73-7092-869e-d231ae206152",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
