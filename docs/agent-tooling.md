@@ -1,6 +1,6 @@
 # Agent harness architecture
 
-The harness is the repository's instructions, workflows, task files, tool connections, and checks. The agent client provides the model, tool execution, permissions, and personal plugins; this repository has no separate agent runtime.
+The harness is the repository's instructions, workflows, todos, tool connections, and checks. The agent client provides the model, tool execution, permissions, and personal plugins; this repository has no separate agent runtime.
 
 ```mermaid
 flowchart TD
@@ -25,7 +25,7 @@ Reading guidance does not execute a hook or grant tool permission. The agent per
 | [Root AGENTS.md](../AGENTS.md) and app policies | Shared boundaries and routes to platform rules |
 | [Docs index](README.md), root `docs/`, and app docs | Shared knowledge and platform-specific invariants, with one maintained home per topic |
 | [Root .agents/skills](../.agents/skills/) | Reusable execution procedures |
-| [todos/](../todos/README.md) | Unfinished requirements, decisions, progress, evidence, and next action |
+| [todos.md](../todos.md) | Simple nontechnical backlog, added to only on explicit user request |
 | [.codex/config.toml](../.codex/config.toml) | Project MCP startup and connection definitions |
 | [.mcp.json](../.mcp.json) and `.claude/skills/` aliases | Claude Code MCP connections and discovery of canonical skills |
 | Scripts, test suites, and [.github/workflows](../.github/workflows/) | Executable checks and automation |
@@ -45,7 +45,7 @@ Browse the [skills overview](skills.md) for every repository skill and its commu
 
 ## Task and verification flow
 
-The [task workflow](agents/task-workflow.md) owns draft → refinement → implementation → verification and the [human review handoff](agents/human-review.md). Root `todos/` retains unfinished work only. Authorized direct implementation proceeds with a proportionate saved plan; phase boundaries do not add approval gates.
+The [task workflow](agents/task-workflow.md) owns todo → grill → implementation → verification and the [human review handoff](agents/human-review.md). Root `todos.md` holds short, nontechnical items only. Add items only on explicit user request. `lg-refine` grills requirements and architecture in the conversation; implementation uses that plan without creating task files. Phase boundaries do not add approval gates.
 
 Use the owning platform's tools and validation: [iOS workflows](agents/ios-workflows.md), [backend validation](../backend/docs/agents/validation.md), [web validation](../web/docs/agents/validation.md), and [browser access](agents/browser-access.md). The [API guide](agents/api-contract.md) owns backend-to-generated-client flow. The [runtime guide](agents/runtime-and-deployment.md) owns service commands, including the volume reset performed by `scripts/run`.
 
@@ -74,7 +74,7 @@ Connections do not install CLIs, grant account access, or schedule work. The Coo
 
 ## Claude Code setup
 
-Use Claude Code v2.1.277 or later, preferably a current version, and start `claude` at the monorepo root. Claude can load root and app `AGENTS.md` directly, so this repository needs no copied `CLAUDE.md`. Check `/config` → Project instructions if guidance is absent: a `CLAUDE.md` or `CLAUDE.local.md` in the working directory or an ancestor takes precedence under the default setting. Select `claude-md-and-agents-md` to load both when needed. Older or restricted sessions can use a local `CLAUDE.md` containing `@AGENTS.md`; ensure app guidance is also read as root policy requires. See [instruction loading and version caveats](https://code.claude.com/docs/en/memory#agentsmd).
+Start `claude` at the monorepo root. Root [CLAUDE.md](../CLAUDE.md) records that both Codex and Claude Code are active and imports [AGENTS.md](../AGENTS.md), which owns shared policy. Read the nearest app `AGENTS.md` before editing its subtree, as root policy requires. Keep client-specific connection files and skill discovery working for both clients.
 
 Verify a new session:
 

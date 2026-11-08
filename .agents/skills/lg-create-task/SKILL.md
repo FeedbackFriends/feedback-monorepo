@@ -1,42 +1,13 @@
 ---
 name: lg-create-task
-description: Capture a LetsGrow idea or need as a nontechnical draft in root todos/. Use for creating tasks before refinement; refinement settles detailed feature requirements and architecture before implementation.
+description: Add a simple nontechnical item to root todos.md only when the user explicitly asks to capture a todo.
 ---
 
-# Create a LetsGrow task
+# Capture a LetsGrow todo
 
-Root `todos/` is LetsGrow's task backlog and implementation handoff. Do not use GitHub Issues or GitHub Projects for task management. This skill applies across iOS, backend, web, and tooling; read the owning app guidance when inspecting its implementation.
+Read [root policy](../../../AGENTS.md) and the [task workflow](../../../docs/agents/task-workflow.md).
 
-## Locate or create the file
-
-Inspect `todos/` for an existing matching task before creating one. Update the same file throughout refinement and implementation rather than creating competing plans. Use a descriptive English kebab-case filename, with an owning-area prefix: `ios-`, `backend-`, `web-`, `tooling-`, or `docs-`, for example `todos/ios-duplicate-activity.md`. Use `shared-` for tasks spanning multiple product surfaces and list every affected area in frontmatter. Prefixes describe ownership; do not split one coherent cross-platform task just to give every platform a file. If an unrelated task already has that name, choose a more specific name without overwriting it. Keep one task per Markdown file; phases stay inside that task file.
-
-Use [the task template](assets/task.md) as the canonical structure. `todos/README.md` is the entry point, not a separate task list to synchronize. Do not put new task plans under `docs/plans/` or leave the only plan in chat. Existing technical documentation can be linked as context without copying it into the task.
-
-## Fill the structure
-
-The workflow is **create task → refine → implement**. Creation captures the problem, users, desired outcome, and known scope in plain product language. The created task must not contain technical details: no architecture, modules/files, API schemas, data models, migrations, implementation prescriptions, or test commands. Capture enough context to begin refinement without interviewing the user about detailed requirements. Leave missing details explicitly open rather than inventing them. If the request includes technical proposals, link the original source when available and mark them for discussion in refinement without copying them into the draft.
-
-[Refinement](../lg-refine/SKILL.md) then challenges the user on specific feature requirements and technical choices, with most attention on overall architecture, and enriches the same file. The nontechnical restriction applies to creation, not to a refined task: preserve decisions already settled during refinement when updating an existing file. Implementation follows once material requirements and architectural choices are settled.
-
-Preserve the template's frontmatter keys and top-level sections. Replace placeholders with known facts; use `None` or explicit `Unresolved: ...` where appropriate. Do not invent decisions or mark unchecked work complete. Keep detail proportional to the work so a small fix remains a short task.
-
-- `status`: `draft`, `ready`, `in-progress`, or `blocked`. Completed tasks are removed rather than stored with a terminal status.
-- `areas`: one or more of `ios`, `backend`, `web`, `tooling`, `docs`.
-- `created` and `updated`: ISO dates (`YYYY-MM-DD`); preserve `created` on updates.
-- Problem/outcome and scope describe observable behavior and explicit exclusions.
-- Context describes current behavior and relevant product context or prerequisites. Include known documentation links when useful; architecture exploration belongs to refinement and detailed code exploration to implementation. Another agent must be able to understand the need without the originating chat.
-- Decisions initially distinguish confirmed product choices, product assumptions, and unresolved scope questions. Refinement adds architectural decisions, rationale/tradeoffs, dependencies, and execution constraints, including permitted environment/account/fixture actions when relevant. A proposed reset or production mutation in a plan is not authorization to execute it.
-- Acceptance criteria use stable `AC-1`, `AC-2`, etc. identifiers and observable results.
-- Implementation plan is `Pending refinement` at creation. Refinement adds deliverables and architectural direction; implementation adds detailed technical steps after inspecting the code. For large work, use ordered `### Phase 1 — ...` subsections with observable outcomes and dependencies. Keep a small task as one checklist.
-- Verification is `Pending refinement` at creation. Refinement maps acceptance IDs to preconditions, action/check, and expected result. Describe important user-visible failure/role cases and relevant visual expectations. Implementation selects test commands, tools, and environment/data setup. Record actual results separately from planned checks. Separate agent-run automated checks from human manual testing; pending human testing does not block implementation completion.
-- Human review starts as `Not implemented yet`. Implementation fills it using the [human review guide](../../../docs/agents/human-review.md), with decisions, rationale/tradeoffs, source reading path, and verification limits. It explains the change for a human; it is not a review approval record.
-- Handoff records completed work, verification evidence/artifacts, remaining blockers, and the exact next action. Initial results should say `Not run`.
-
-## Lifecycle and handoff
-
-Creation saves `draft` and hands off to refinement, even when the idea seems clear. Use `ready` after refinement has made feature requirements, scope, acceptance, verification, and consequential architectural decisions actionable. Routine implementation details may remain open; material feature or architectural questions keep the task in `draft`. Implementation sets `in-progress`; use `blocked` when a dependency prevents further meaningful progress and record what unblocks it. When implementation acceptance and required automated checks are satisfied (human manual testing may remain), prepare the final human-review explanation and actual verification results, then delete the task file. `todos/` contains unfinished work only: do not keep a `done` file or move it to a completed/archive directory. A completed phase does not finish a task with remaining scope; retain that file and its next action.
-
-Before deletion, move any still-needed architectural or usage documentation into its existing documentation home and update live references to the task so they do not become broken links. Keep the final response self-contained with decisions, source reading links, evidence, and limits rather than linking to the removed file. Git history preserves previously committed task plans. Deletion is part of completing the task and does not require another confirmation; it does not authorize a Git commit or push.
-
-For unfinished work, save the file and return its path and readiness. For completed work, report completion and removal instead. Creating/refining a task does not start implementation unless the user already requested it. If implementation is authorized and the task is ready, continue without another approval gate. Update status, checkboxes, evidence, and handoff as work progresses so another agent can resume accurately. Do not overwrite unrelated concurrent edits to a task.
+1. Add an item only when the user explicitly asks to capture a todo. Implementation, investigation, refinement, and cleanup requests do not implicitly add backlog items.
+2. Read root [todos.md](../../../todos.md) and reuse a matching item rather than duplicating it. Preserve the existing order unless reprioritization is requested.
+3. Write one unchecked Markdown checkbox with one or two short lines describing the problem or desired outcome in plain language. Keep technical details, acceptance criteria, status metadata, and implementation plans in the conversation.
+4. Report the added or updated item. Capture does not start refinement or implementation. Use [lg-refine](../lg-refine/SKILL.md) when the user later wants to grill the idea.

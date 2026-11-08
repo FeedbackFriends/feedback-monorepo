@@ -13,8 +13,8 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-audit-community-skills](../.agents/skills/lg-audit-community-skills/SKILL.md) | Compare installed community skills with skills.sh alternatives and recommend a coherent collection. |
 | [lg-commit-and-push](../.agents/skills/lg-commit-and-push/SKILL.md) | Commit or push when requested. |
 | [lg-coolify-operations](../.agents/skills/lg-coolify-operations/SKILL.md) | Operate and troubleshoot Coolify production deployments. |
-| [lg-create-task](../.agents/skills/lg-create-task/SKILL.md) | Capture an idea as a local draft task. |
-| [lg-implement](../.agents/skills/lg-implement/SKILL.md) | Implement a saved task and prepare its handoff. |
+| [lg-create-task](../.agents/skills/lg-create-task/SKILL.md) | Add a short nontechnical item to `todos.md` only when requested. |
+| [lg-implement](../.agents/skills/lg-implement/SKILL.md) | Implement the agreed conversation plan and prepare its handoff. |
 | [lg-improve-harness](../.agents/skills/lg-improve-harness/SKILL.md) | Improve custom skills, AGENTS.md, rules, docs, and guidance routing. |
 | [lg-investigate](../.agents/skills/lg-investigate/SKILL.md) | Trace a bug and record its cause and follow-up. |
 | [lg-ios-localhost](../.agents/skills/lg-ios-localhost/SKILL.md) | Start the local backend and launch manager/anonymous apps. |
@@ -24,7 +24,7 @@ Custom workflows use `lg-` names. Community provenance is recorded in [skills-lo
 | [lg-ios-sync-openapi](../.agents/skills/lg-ios-sync-openapi/SKILL.md) | Sync handwritten iOS API boundaries with generated clients. |
 | [lg-ios-test-notifications](../.agents/skills/lg-ios-test-notifications/SKILL.md) | Run the iOS notification test command. |
 | [lg-maintain-docs](../.agents/skills/lg-maintain-docs/SKILL.md) | Audit, trim, and update documentation against source. |
-| [lg-refine](../.agents/skills/lg-refine/SKILL.md) | Settle requirements and architectural decisions. |
+| [lg-refine](../.agents/skills/lg-refine/SKILL.md) | Grill requirements and architecture with the user before implementation. |
 | [lg-review](../.agents/skills/lg-review/SKILL.md) | Review changes for concrete regressions. |
 | [lg-tailwind-nextjs-expert](../.agents/skills/lg-tailwind-nextjs-expert/SKILL.md) | Implement web styling with existing tokens and components. |
 

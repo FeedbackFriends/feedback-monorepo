@@ -1,6 +1,6 @@
 ---
 name: lg-investigate
-description: Investigate a LetsGrow bug across iOS, backend, web, or tooling by tracing reproduction steps, runtime evidence, state, API contracts, persistence, and integrations. Produces a grounded diagnosis and local follow-up task; implements a fix only when requested.
+description: Investigate a LetsGrow bug across iOS, backend, web, or tooling by tracing reproduction steps, runtime evidence, state, API contracts, persistence, and integrations. Produces a grounded diagnosis; adds a todo only on explicit request and implements a fix only when requested.
 ---
 
 # Investigate a LetsGrow bug
@@ -15,4 +15,4 @@ Use the owning platform guidance to reproduce the requested behavior, preferably
 
 Construct a timeline using real state/constants. Rank plausible causes by evidence/confidence and identify the check that would distinguish remaining hypotheses. Check whether the cause is in a client, backend/contract, environment, or expected behavior, and whether the examined revision already has a fix.
 
-Deliver the reproduction result, evidence/timeline, likely cause and confidence, smallest recommended fix/regression scenario, and open questions. Investigation alone stops at diagnosis. For requested follow-up work, save those findings with [create-task](../lg-create-task/SKILL.md). If a fix is also authorized, pass the saved task to [implementation](../lg-implement/SKILL.md) once the cause is grounded. Task tracking never uses GitHub Issues or Projects.
+Deliver the reproduction result, evidence/timeline, likely cause and confidence, smallest recommended fix/regression scenario, and open questions. Investigation alone stops at diagnosis. Only when the user explicitly asks to capture a todo, summarize the desired outcome with [create-task](../lg-create-task/SKILL.md). If a fix is also authorized, continue with [implementation](../lg-implement/SKILL.md) once the cause is grounded, using the conversation plan. Task tracking never uses GitHub Issues or Projects.

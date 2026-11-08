@@ -9,7 +9,7 @@ LetsGrow has a Next.js web app, Kotlin/Spring backend and scheduler, and a nativ
 | Backend and scheduler | [Backend README](backend/README.md) |
 | iOS | [iOS README](ios-app/README.md) |
 | Agent instructions | [Root policy](AGENTS.md), [harness architecture](docs/agent-tooling.md) |
-| Unfinished work | [Todos](todos/README.md) |
+| Unfinished work | [Todos](todos.md) |
 
 ## Local development
 

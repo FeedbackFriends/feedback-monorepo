@@ -1,17 +1,17 @@
 ---
 name: lg-refine
-description: Refine a LetsGrow idea or existing task across iOS, backend, web, or tooling through a focused grilling on specific feature requirements and technical choices, especially overall architecture. Saves decisions, acceptance criteria, and an implementation handoff in the same task file.
+description: Grill a LetsGrow idea or todo with the user to settle requirements and architecture before implementation. Keep the detailed plan in the conversation and todos.md simple.
 ---
 
-# Refine a LetsGrow task
+# Grill a LetsGrow idea
 
-Read [root policy](../../../AGENTS.md), [task workflow](../../../docs/agents/task-workflow.md), and [create-task](../lg-create-task/SKILL.md). Always save or update a prefixed Markdown task under root `todos/`. Refinement alone does not authorize implementation.
+Read [root policy](../../../AGENTS.md) and the [task workflow](../../../docs/agents/task-workflow.md). Refinement does not add a todo or create a task file. Keep the selected backlog item short and nontechnical.
 
 ## Understand the need
 
-Read the supplied task, or inspect `todos/` for matching work before creating one. Establish the current problem, target users, desired behavior, affected product surfaces, and scope. Use available product documentation and [domain guidance](../../../docs/product/lets-grow-strategi-teamtrivsel.md) where relevant. Inspect relevant code and architecture documentation to ground questions in existing responsibilities, boundaries, data flows, and constraints. Read the owning app guidance before exploring its implementation.
+Read the selected item in root `todos.md`, or establish the request from the conversation. Establish the current problem, target users, desired behavior, affected product surfaces, and scope. Use available product documentation and [domain guidance](../../../docs/product/lets-grow-strategi-teamtrivsel.md) where relevant. Inspect relevant code and architecture documentation to ground questions in existing responsibilities, boundaries, data flows, and constraints. Read the owning app guidance before exploring its implementation.
 
-For customer interviews, public copy, or first-use journeys, use the relevant [community skill and product constraints](../../../docs/skills.md#choosing-complementary-skills). Research supplies evidence; refinement still owns the saved requirements and architecture.
+For customer interviews, public copy, or first-use journeys, use the relevant [community skill and product constraints](../../../docs/skills.md#choosing-complementary-skills). Research supplies evidence; refinement still owns the requirements and architecture discussed with the user.
 
 ## Grill requirements and architecture
 
@@ -23,10 +23,8 @@ Put most technical discussion into overall architecture: ownership of behavior a
 
 Resolve technical details during refinement when they affect requirements, architectural feasibility, or a consequential contract. Leave routine file-level edits, exact implementation code, and test commands to implementation. Do not turn refinement into a line-by-line coding interview. Record confirmed decisions separately from proposals, assumptions, and unanswered questions.
 
-## Save a usable handoff
+## Hand off to implementation
 
-Use the create-task template and naming rules, for example `todos/ios-duplicate-activity.md` or `todos/backend-session-validation.md`; multi-platform tasks use `shared-`. Include the problem, current and desired behavior, scope, detailed feature requirements, product and architectural decisions with rationale/tradeoffs, acceptance criteria, and observable checks so another agent can understand the task without this chat. Large tasks use ordered phases with outcomes and dependencies in the same file. Include relevant architecture/code references from refinement; implementation adds detailed technical steps and verification commands.
+Summarize the agreed outcome, scope, acceptance criteria, architectural decisions and tradeoffs, relevant source references, and remaining questions in the conversation. Keep confirmed decisions distinct from proposals. For larger work, outline phases with observable outcomes and dependencies.
 
-Persist decisions as they settle. Keep `draft` with explicit material open questions and a precise next action; set `ready` when feature requirements and consequential architectural choices are settled and the plan is actionable. Routine coding details do not block readiness. Save partial refinement before pausing for answers. Do not leave the only plan in chat or under a docs directory.
-
-Finish with the task link, readiness, and remaining decisions. If implementation is already authorized, continue through [implementation](../lg-implement/SKILL.md) using the saved task once material questions are settled, without another approval gate.
+When material requirements and architectural choices are settled, the plan is ready for [implementation](../lg-implement/SKILL.md). If implementation is already authorized, continue without another approval gate; otherwise hand off the plan. Refinement alone does not authorize code changes. Do not expand `todos.md` into a specification or create separate task files.

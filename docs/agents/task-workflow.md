@@ -1,16 +1,14 @@
-# Task workflow
+# Todo, grill, implement
 
-Upcoming LetsGrow work lives in root [todos/](../../todos/README.md), one Markdown file per task. The flow is **create a nontechnical draft task → refine feature requirements and architecture → implement**. GitHub Issues and Projects are not task-management tools for this repository.
+Root [todos.md](../../todos.md) is the single backlog. Each item is one checkbox with one or two short, nontechnical lines describing a problem or desired outcome. Preserve list order unless the user asks to reprioritize. Add items only on explicit user request; ordinary implementation, investigation, refinement, and cleanup requests do not add backlog work.
 
-| Work | Skill | Saved result |
+| Step | Skill | Result |
 | --- | --- | --- |
-| Capture or format a task | [$lg-create-task](../../.agents/skills/lg-create-task/SKILL.md) | Nontechnical draft using the canonical template |
-| Resolve scope and decisions | [$lg-refine](../../.agents/skills/lg-refine/SKILL.md) | Task with detailed feature requirements, architectural decisions, acceptance, observable checks, and phases when large |
-| Execute the plan | [$lg-implement](../../.agents/skills/lg-implement/SKILL.md) | Same file tracks progress/evidence while unfinished; removed on full completion |
-| Review changes | [$lg-review](../../.agents/skills/lg-review/SKILL.md) | Concrete findings; task capture only when requested |
-| Diagnose a bug | [$lg-investigate](../../.agents/skills/lg-investigate/SKILL.md) | Evidence, cause/confidence, and a local task when follow-up is requested |
+| Capture a requested todo | [lg-create-task](../../.agents/skills/lg-create-task/SKILL.md) | A short item in `todos.md` |
+| Grill the idea with the user | [lg-refine](../../.agents/skills/lg-refine/SKILL.md) | Requirements, architecture, acceptance, and open questions settled in the conversation |
+| Implement the agreed change | [lg-implement](../../.agents/skills/lg-implement/SKILL.md) | Working change, automated verification, and human review handoff |
 
-The shared skills select the owning platform guidance; platform-specific tools stay in their specialized skills. A direct implementation request still saves a proportionate plan before code changes, without another approval ceremony. See [create-task](../../.agents/skills/lg-create-task/SKILL.md) for the single definition of task structure, filenames, phases, statuses, and completion rules.
+Keep detailed plans, technical decisions, progress, and evidence in the conversation. Create no separate task files, status frontmatter, or task templates. A clear direct implementation request can proceed without adding a todo; grill material gaps before dependent work. Refinement alone does not authorize implementation. When implementation is already authorized, proceed once material choices are settled without another approval gate.
 
 ## Implementation completion
 
@@ -18,7 +16,7 @@ Run relevant automated tests and required lint/build checks before handoff. Pass
 
 ## Platform guidance and verification
 
-Read the owning `AGENTS.md` before editing. For multi-platform tasks, inspect each affected surface and verify the boundary between them; the filename prefix does not limit scope.
+Read the owning `AGENTS.md` before editing. For multi-platform tasks, inspect each affected surface and verify the boundary between them.
 
 | Area | Guidance | Implementation and verification |
 | --- | --- | --- |
@@ -31,6 +29,6 @@ Read the owning `AGENTS.md` before editing. For multi-platform tasks, inspect ea
 
 Tests should detect the behavior that can regress. Distinguish a compilation pass, passing behavioral tests, service health, app launch, a live acceptance journey, and fresh visual evidence. Planned verification is not a result. A documentation-only task does not require a running app or database.
 
-## Handoff
+## Handoff and completion
 
-Keep requirements, decisions, progress, actual evidence, and the exact next action in the same task file. Follow [create-task](../../.agents/skills/lg-create-task/SKILL.md#lifecycle-and-handoff) for readiness and completion, and [human review](human-review.md) for the architectural explanation. On full completion, deliver that explanation with verification results, preserve enduring guidance, repair callers, and delete the task. Retain partially completed tasks.
+Follow [human review](human-review.md) in the final response: explain the behavior, consequential decisions, reading path, actual verification, limitations, and any remaining next action. Remove the corresponding todo only when its entire outcome and required automated checks are complete and the handoff is prepared. Partial progress leaves the short item in place; do not turn it into a progress log. Preserve enduring knowledge in its owning guide. GitHub Issues and Projects are not used for task management.

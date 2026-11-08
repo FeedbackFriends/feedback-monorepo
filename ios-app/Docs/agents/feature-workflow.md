@@ -1,19 +1,19 @@
 # iOS feature development
 
-Start at the monorepo root. The shared [task workflow](../../../docs/agents/task-workflow.md) connects product decisions, implementation, and verification across platforms. This page adds iOS-specific guidance. Use the shared draft → refinement → implementation lifecycle. A clear direct implementation request still gets a proportionate task file before code changes, without an extra approval ceremony.
+Start at the monorepo root. The shared [task workflow](../../../docs/agents/task-workflow.md) connects product decisions, implementation, and verification across platforms. This page adds iOS-specific guidance. Use the shared todo → grill → implementation flow. Keep detailed plans and evidence in the conversation; add todos only when explicitly requested.
 
 | Task | Entry point | Result |
 | --- | --- | --- |
-| Capture upcoming work or write a task plan | [$lg-create-task](../../../.agents/skills/lg-create-task/SKILL.md) | One task file with the canonical structure and status |
-| Shape an idea or stress-test a plan | [$lg-refine](../../../.agents/skills/lg-refine/SKILL.md) | Code-grounded plan saved to `todos/ios-<slug>.md`, ready for another agent |
-| Implement a feature or fix | [$lg-implement](../../../.agents/skills/lg-implement/SKILL.md) | Implemented slice; the same task file records progress, acceptance, verification, and handoff |
+| Capture upcoming work or write a task plan | [$lg-create-task](../../../.agents/skills/lg-create-task/SKILL.md) | A short, nontechnical item in root `todos.md` |
+| Shape an idea or stress-test a plan | [$lg-refine](../../../.agents/skills/lg-refine/SKILL.md) | Requirements and architecture grilled with the user; an agreed plan in the conversation |
+| Implement a feature or fix | [$lg-implement](../../../.agents/skills/lg-implement/SKILL.md) | Implemented slice with automated verification and a conversation handoff |
 | Write/refactor Swift | [Swift guidance](swift.md) | LetsGrow architecture, UI, localization, and testing conventions applied |
 | Review code or a diff | [$lg-review](../../../.agents/skills/lg-review/SKILL.md) | Ranked findings grounded in a concrete failure path |
 | Find an unknown bug cause | [$lg-investigate](../../../.agents/skills/lg-investigate/SKILL.md) | Evidence, reproduction, cause/confidence, and a regression scenario |
 
 These are agent prompts, not shell commands. Natural-language requests work too. Existing launch, login, screenshot, notification, and API-sync skills continue to own their procedures; see [shared iOS workflows](../../../docs/agents/ios-workflows.md) and [simulator guidance](simulator.md).
 
-Task structure, readiness, phases, completion, and handoff are owned by [create-task](../../../.agents/skills/lg-create-task/SKILL.md). Keep iOS progress/evidence in the same root task file; put enduring knowledge in its owning guide.
+The [shared task workflow](../../../docs/agents/task-workflow.md) owns backlog simplicity, refinement, and completion. Keep iOS plans and evidence in the conversation; put enduring knowledge in its owning guide.
 
 ## Choose verification by the change
 
@@ -50,8 +50,8 @@ The [localhost skill](../../../.agents/skills/lg-ios-localhost/SKILL.md) owns ex
 
 ```text
 $lg-refine Let owners duplicate an activity's question setup.
-# Refinement saves todos/ios-duplicate-activity.md.
-$lg-implement todos/ios-duplicate-activity.md
+# Grill the requirements and architecture in the conversation.
+$lg-implement Implement the agreed duplication behavior.
 $lg-ios-localhost both seed-manager
 $lg-ios-production
 $lg-review Review the current changes for shared-state and navigation regressions.

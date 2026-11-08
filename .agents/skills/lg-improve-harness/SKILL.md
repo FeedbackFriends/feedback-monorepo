@@ -5,7 +5,7 @@ description: Improve LetsGrow's agent harness, including custom lg- skills, AGEN
 
 # Improve the harness
 
-Read [harness ownership](../../../docs/agent-tooling.md), Git status, and the guidance involved in the request. Use [writing-for-agents](../writing-for-agents/SKILL.md). Track unfinished work through the [task workflow](../../../docs/agents/task-workflow.md).
+Read [harness ownership](../../../docs/agent-tooling.md), Git status, and the guidance involved in the request. Use [writing-for-agents](../writing-for-agents/SKILL.md). Follow the [task workflow](../../../docs/agents/task-workflow.md) for the simple backlog and conversation-based planning. Add todos only on explicit user request.
 
 1. Ground the improvement in the user's request, observed session friction, or a concrete mismatch with current code, tools, or configuration. Trace the affected instruction routes and callers. Preserve unrelated work and existing authorization boundaries.
 2. Put the change where it belongs: `AGENTS.md` for concise policy and discovery, owning guides for durable rules and knowledge, `lg-` skills for reusable procedures, and scripts/configuration for executable behavior. Reuse or consolidate existing owners. Use [lg-maintain-docs](../lg-maintain-docs/SKILL.md) for substantial documentation audits.
