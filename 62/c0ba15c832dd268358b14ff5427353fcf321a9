@@ -1,0 +1,45 @@
+.agents/skills/lg-ios-run-production/SKILL.md
+  s_3ec592f238ba1b::t_88720a689e120a 16
+AGENTS.md
+  s_3ec592f238ba1b::t_b7c868c9dd8bc4 7,36
+README.md
+  s_3ec592f238ba1b::t_498540e175d701 18
+docs/ios/CONFIGURATION.md
+  s_3ec592f238ba1b::t_660fdb96bf0e6c 20
+docs/ios/agent-harness.md
+  s_3ec592f238ba1b::t_bc4a86d0d614c5 1,3-19,23
+docs/ios/agents/feature-workflow.md
+  s_3ec592f238ba1b::t_4d2af8c228464d 13
+docs/ios/agents/simulator.md
+  s_3ec592f238ba1b::t_b01a04ce62c085 26
+docs/shared/agent-tooling.md
+  s_3ec592f238ba1b::t_2469d3947e4793 50
+docs/shared/agents/runtime-and-deployment.md
+  s_3ec592f238ba1b::t_54a74d17992f6c 19
+docs/shared/architecture.md
+  s_3ec592f238ba1b::t_aa25601e61812c 110
+docs/shared/skills.md
+  s_3ec592f238ba1b::t_83c70e82525d4c 64
+ios-app/AGENTS.md
+  s_3ec592f238ba1b::t_83999ca7a9a2b1 30
+ios-app/README.md
+  s_3ec592f238ba1b::t_1723b9402ad180 72
+scripts/shared/run
+  s_3ec592f238ba1b::t_594d1507e8e17c 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "62c0ba15c832dd268358b14ff5427353fcf321a9",
+  "prompts": {},
+  "sessions": {
+    "s_3ec592f238ba1b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bd15-6cf7-7cb0-b96c-ce52b0f8a132",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
