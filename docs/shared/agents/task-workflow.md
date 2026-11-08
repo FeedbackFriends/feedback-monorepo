@@ -1,6 +1,6 @@
 # Todo, grill, implement
 
-Root [todos.md](../../../todos.md) is the single backlog. Each item is one checkbox with one or two short, nontechnical lines describing a problem or desired outcome. Preserve list order unless the user asks to reprioritize. Add items only on explicit user request; ordinary implementation, investigation, refinement, and cleanup requests do not add backlog work.
+Root [todos.md](../../../todos.md) is the single backlog. Each item is a plain Markdown bullet with one or two short, nontechnical lines describing a problem or desired outcome. Use no checkboxes; remove completed items after verification and handoff. The list is prioritized from highest to lowest. Preserve that order unless the user asks to reprioritize. Add items only on explicit user request; ordinary implementation, investigation, refinement, and cleanup requests do not add backlog work.
 
 | Step | Skill | Result |
 | --- | --- | --- |
