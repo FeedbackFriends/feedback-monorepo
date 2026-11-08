@@ -1,0 +1,31 @@
+.agents/skills/lg-improve-harness/SKILL.md
+  s_263793f19bb985::t_fecadf19e4792c 3,11-14,16-20
+.agents/skills/lg-review/SKILL.md
+  s_263793f19bb985::t_e5ce02ea4ad6fb 8,10,12,19-47
+backend/AGENTS.md
+  s_263793f19bb985::t_e06a1181f8e0f6 19-20,23,26-75
+docs/README.md
+  s_263793f19bb985::t_43f944b914e7b8 19
+docs/agent-tooling.md
+  s_263793f19bb985::t_648604e70670e0 44
+docs/skills.md
+  s_263793f19bb985::t_b684009a6a9f56 18
+web/AGENTS.md
+  s_263793f19bb985::t_83b6889fe2a8ed 12,14,32-129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "505cf4a9b4ffc3f22287518b998d82f3a8c5ad9c",
+  "prompts": {},
+  "sessions": {
+    "s_263793f19bb985": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bcff-84b0-7e40-840f-62b53b47b54f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
