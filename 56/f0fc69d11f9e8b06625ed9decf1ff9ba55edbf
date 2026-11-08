@@ -1,0 +1,19 @@
+AGENTS.md
+  s_263793f19bb985::t_d965385b169f73 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "56f0fc69d11f9e8b06625ed9decf1ff9ba55edbf",
+  "prompts": {},
+  "sessions": {
+    "s_263793f19bb985": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bcff-84b0-7e40-840f-62b53b47b54f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
