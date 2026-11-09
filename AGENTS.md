@@ -199,7 +199,7 @@ The builder owns correctness, coding standards, verification, and finding resolu
 
 ### Backlog and durable knowledge
 
-Root [todos.md](todos.md) remains the single prioritized backlog. Add items only when explicitly requested, using [lg-add-todo](.agents/skills/lg-add-todo/SKILL.md). Each item is one plain Markdown bullet with one or two short nontechnical lines, without checkboxes. Preserve ordering unless reprioritization is requested. Remove completed items only after the full outcome, required checks, review, and handoff are complete; partial work leaves the item in place. Use no GitHub Issues or Projects for LetsGrow task management.
+Root [todos.md](todos.md) remains the single prioritized backlog. Add items only when explicitly requested, using [lg-add-todo](.agents/skills/lg-add-todo/SKILL.md). Each item is one plain Markdown bullet prefixed with a stable ID (`LG-001:`, for example), followed by one or two short nontechnical lines, without checkboxes. Allocate new IDs from the `Next ID` comment in `todos.md` and advance it; never renumber or reuse IDs. Preserve ordering unless reprioritization is requested. Remove completed items only after the full outcome, required checks, review, and handoff are complete; partial work leaves the item in place. Use no GitHub Issues or Projects for LetsGrow task management.
 
 Keep plans, decisions, progress, review findings, and evidence in the conversation. Put enduring knowledge in its owning guide; create no separate task files or status templates.
 
