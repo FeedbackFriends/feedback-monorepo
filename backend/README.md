@@ -124,4 +124,4 @@ Zoho OAuth scopes for Self Client should use `ZohoMail.messages.READ` for the sc
 - [Architecture Overview](../docs/backend/overview.md) explains module roles and request/notification flows.
 - [Diagrams](../docs/backend/diagrams) contains PlantUML diagrams.
 
-Managed authentication, invitation SMTP, fresh-account cutover and rollback are documented in [Supabase auth setup](../docs/shared/agents/supabase-auth.md). Firebase remains responsible for push delivery only.
+Managed authentication, invitation SMTP, fresh-account cutover and rollback are documented in [Supabase auth setup](../docs/shared/authentication.md#supabase-auth-setup-and-cutover). Firebase remains responsible for push delivery only.

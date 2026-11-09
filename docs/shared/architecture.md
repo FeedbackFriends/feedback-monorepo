@@ -61,7 +61,7 @@ Main traits:
 - Swift OpenAPI generated code lives under `ios-app/Modules/Sources/OpenAPI/GeneratedSources/`.
 - Maestro flows live under `ios-app/.maestro/`.
 
-Architecture docs live in `docs/ios/`, especially `docs/ios/ARCHITECTURE.md`.
+Architecture docs live in `docs/ios/`, especially `docs/ios/app-architecture.md`.
 
 ## Backend
 
@@ -169,4 +169,4 @@ Infrastructure change:
 
 ## Guidance and ownership
 
-Read the owning app policy before editing: [web](../../web/AGENTS.md), [backend](../../backend/AGENTS.md), or [iOS](../../ios-app/AGENTS.md). Keep shared orchestration at the root and product behavior in its owning app. Use the [API contract guide](agents/api-contract.md) for generation and the [runtime guide](agents/runtime-and-deployment.md) before starting services. For product terminology and strategy, read [domain guidance](product/lets-grow-strategi-teamtrivsel.md). The [agent harness overview](agent-tooling.md) explains how these guides are discovered.
+Read the owning app policy before editing: [web](../../web/AGENTS.md), [backend](../../backend/AGENTS.md), or [iOS](../../ios-app/AGENTS.md). Keep shared orchestration at the root and product behavior in its owning app. Use the [API contract guide](../../AGENTS.md#api-contract) for generation and the [runtime guide](../../AGENTS.md#runtime-and-deployment) before starting services. For product terminology and strategy, read [domain guidance](product/lets-grow-strategi-teamtrivsel.md). The [agent harness overview](../../HARNESS.md) explains how these guides are discovered.

@@ -4,18 +4,6 @@ Next.js frontend for LetsGrow, using React, TypeScript, Tailwind CSS, and Supaba
 
 Use npm with Node.js `24.22.2`; run web commands from `web/`. The `dev`, `build`, and `start` scripts load the root `.env` through `dotenv-cli`.
 
-## Read when relevant
-
-| Task | Guidance |
-| --- | --- |
-| Task refinement, implementation, review, or handoff | [Shared task workflow](../docs/shared/agents/task-workflow.md) |
-| Routes, components, or code organization | [Architecture and coding conventions](#architecture-and-conventions) |
-| Layout, styling, or responsive behavior | [UI guidelines](../docs/web/agents/ui.md) |
-| API types, authentication, or environment | [API and auth](#api-authentication-and-environment) |
-| Running, testing, or validating changes | [Commands and validation](../docs/web/agents/validation.md) |
-
-Repository-wide rules remain in the [root AGENTS.md](../AGENTS.md).
-
 ## Leader application UI
 
 Use shadcn registry components and blocks wherever available for the leader application. Compose product screens from those primitives; do not build replacement controls, browser confirm dialogs, bespoke cards, selects, tables, or app-shell primitives. Use `components.json` and the configured shadcn MCP/CLI to discover and add official components. Keep UI primitives in `src/components/ui`; product behavior belongs outside them. Marketing-specific components remain separate.
@@ -36,7 +24,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - `src/lib/api/generated/openapi.ts` is generated from `contracts/openapi/feedback-api.yaml`; never hand-edit it.
 - When the contract changes, regenerate from the monorepo root with `./scripts/shared/generate-api-artifacts.sh` and update typed call sites.
-- Backend controllers, DTOs, and OpenAPI configuration own API shape; see the [shared API contract guide](../docs/shared/agents/api-contract.md).
+- Backend controllers, DTOs, and OpenAPI configuration own API shape; see the [shared API contract guide](../AGENTS.md#api-contract).
 
 ### Auth And Environment
 
@@ -69,7 +57,7 @@ AuthProvider is scoped to `src/app/(account)/layout.tsx`, shared by login, dashb
 
 Use the named operations in `src/lib/api/teams.ts` rather than constructing paths and choosing arbitrary response types in components. The relay propagates the request's cancellation signal, enforces a 15-second upstream timeout, rejects redirects and sends `Cache-Control: no-store` for both success and failure responses.
 
-Managed provider setup, native configuration and fresh-start release/rollback: [Supabase auth](../docs/shared/agents/supabase-auth.md). Pending personal invitations are listed before organization creation; provider roles never grant team authority.
+Managed provider setup, native configuration and fresh-start release/rollback: [Supabase auth](../docs/shared/authentication.md#supabase-auth-setup-and-cutover). Pending personal invitations are listed before organization creation; provider roles never grant team authority.
 
 ## Architecture and conventions
 
@@ -112,7 +100,7 @@ Managed provider setup, native configuration and fresh-start release/rollback: [
 
 ### Community guidance compatibility
 
-Use `next-best-practices` for Next.js architecture and conventions, `vercel-react-best-practices` for relevant performance concerns, and `vercel-composition-patterns` when designing reusable component APIs. Use `next-upgrade` for framework migrations. Runtime verification follows the [validation guide](../docs/web/agents/validation.md#nextjs-runtime-verification).
+Use `next-best-practices` for Next.js architecture and conventions, `vercel-react-best-practices` for relevant performance concerns, and `vercel-composition-patterns` when designing reusable component APIs. Use `next-upgrade` for framework migrations. Runtime verification follows the [validation guide](AGENTS.md#nextjs-runtime-verification).
 
 Use `next-best-practices` as a discovery aid alongside the version-matched Next.js documentation required by web policy. Its upstream `rsc-boundaries.md` incorrectly restricts props to JSON types: React supports `Date`, `Map`, and `Set` containing serializable values across the Server/Client boundary. Follow [React's supported types](https://react.dev/reference/rsc/use-client#serializable-types-returned-by-server-components), rather than converting those types solely to satisfy that reference. This boundary differs from the JSON HTTP API contract.
 
@@ -127,3 +115,93 @@ Use named operations in `lib/api/teams.ts`, with inputs/results derived from the
 Public landing/privacy content renders without auth. Supabase is loaded only inside the account route group; runtime Supabase configuration stays uncached and deployment-specific. Test authentication is available only in development. Public metadata and sitemap use the marketing domain; app-host responses and invitation/account metadata prevent indexing.
 
 Brand-logo links do not prefetch the marketing homepage. Prefetching that optional surface from login would eagerly download its animation code before the user needs it. Supabase stays a static dependency of the account route: another dynamic import adds an initialization waterfall without reducing the authenticated route's required code.
+
+## Web UI
+
+Paths are relative to `web/` unless stated otherwise.
+
+### UI Guidelines
+
+- Keep operational/dashboard UI dense, calm, and easy to scan.
+- Avoid nested cards, decorative gradient orbs, and one-note color palettes.
+- Keep cards to individual repeated items, modals, or framed tools.
+- Use stable dimensions for controls, boards, counters, tiles, and toolbars so state changes do not shift layout.
+
+### shadcn setup and leader app policy
+
+`web/components.json` configures the official registry, New York style, Tailwind
+v4 stylesheet and `@/` aliases. The repository's shadcn MCP starts in `web/`;
+registry discovery, component/block examples, and add commands are available.
+Run CLI commands from `web/`, or explicitly pass `--cwd web` from the root:
+
+```bash
+npx shadcn@latest add @shadcn/sidebar-07 --cwd web
+```
+
+The leader app must use shadcn components wherever available. Product components
+compose the primitives and own behavior; do not build replacement controls or
+primitive styling. Prefer blocks for app-shell structure. `sidebar-07` supplies the leader shell composition in `src/components/dashboard/DashboardShell.tsx`: a
+collapsible desktop sidebar, mobile sheet, Teams/Medarbejdere navigation and account controls.
+Keep navigation tied to implemented features rather than shipping placeholder sections.
+Mobile sidebar buttons omit desktop tooltips so Escape dismisses the sheet directly.
+
+Registry UI components live under `src/components/ui`, with the sidebar's mobile
+hook in `src/hooks/use-mobile.ts`. The registry's `cn` and `radix-ui` dependencies
+are installed. Sidebar theme tokens are registered in `globals.css`. Its provider
+includes tooltip support. When overwriting shared primitives, inspect marketing
+consumers too and rerun lint, production build, and affected browser journeys.
+
+
+Leader navigation separates overview from actions. `/dashboard` lists teams and opens team creation in a registry Dialog. `/dashboard/teams/[teamId]` shows one team's membership and exposes invitation sharing through a Dialog. `/dashboard/employees` lists active employees and pending requests across authorized teams with status and membership actions. Keep unsupported profile fields and management actions out of the UI. The employee overview uses the existing team-management API in parallel after loading context; authorization remains on the backend.
+
+Team invitation sharing lives in `src/components/teams/TeamInviteDialog.tsx`; data/mutations remain owned by the team screen's resource lifecycle. Public anchor navigation uses native links with CSS scroll margins and reduced-motion support. Hidden mobile CTA controls are inert, so keyboard focus cannot enter offscreen actions.
+
+## Web commands and validation
+
+Paths are relative to `web/` unless stated otherwise.
+
+### Commands
+
+Run these from `web/`:
+
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+npm run test:e2e
+npm run generate:api-types
+```
+
+The `dev`, `build`, and `start` scripts load the root `.env` through `dotenv-cli`.
+
+Generate all API artifacts from the monorepo root:
+
+```bash
+./scripts/shared/generate-api-artifacts.sh
+```
+
+### Testing And Validation
+
+- Run `npm run lint` for TypeScript/React changes.
+- Run `npm run build` for route, config, or data-loading changes.
+- Run `npm run test:e2e` when changing login, dashboard, invite, or other user-facing flows covered by Playwright.
+- Hand responsive and visual inspection to the human after automated checks pass.
+
+### Next.js runtime verification
+
+When runtime/browser verification is explicitly requested, use [next-dev-loop](../.agents/skills/next-dev-loop/SKILL.md) with `npm run dev` to check framework compilation/errors, the affected browser journey, and relevant React behavior. Follow its preflight against the running server; framework diagnostics and browser checks complement the checks above. It requires Next.js 16.3+ with Turbopack and `agent-browser` 0.31.1+.
+
+Follow [browser access](../AGENTS.md#browser-access) for isolation, authentication and readiness. Use locators and assertions instead of the upstream skill's generic `networkidle` wait. Keep repeatable regression coverage in `web/tests/`. If preflight fails, report which runtime evidence is missing and continue applicable lint/build/tests; those checks do not establish live behavior.
+
+Browser CLI setup is documented in [browser access](../AGENTS.md#browser-cli-setup).
+
+### Test boundaries
+
+`npm run test:e2e` starts an isolated development app on port 3100 and a controlled HTTP upstream on 3199. Keep both ports free. Team UI tests mock browser responses; `relay.spec.ts` exercises the actual Next.js relay against that upstream, including status/body/header forwarding, denied requests, redirects and the real 15-second timeout. These tests do not establish Supabase or Kotlin authorization correctness. `architecture.spec.ts` checks public auth isolation, indexing and responsive anchor navigation. Tests run in CI and block release on failure.
+
+`PLAYWRIGHT_BASE_URL` selects an externally managed app and disables both automatic servers. That app must use development E2E auth and the controlled upstream at 3199 for this complete suite; start the fixture with `node tests/fixtures/upstream.ts`. Use a separate focused journey for live Supabase/backend verification, with test credentials and no database reset.
+
+After moving routes, stale `.next/dev/types` may refer to the old paths. Stop the development server before removing those generated declarations and regenerate with Next.js; keep the active server's build state intact.
+
+The Node runtime is pinned in `.nvmrc`, `package.json` and Docker; CI reads `.nvmrc`. Scoped dependency overrides patch TypeScript ESLint's minimatch dependency. Recheck compatibility and `npm audit` when upstream constraints change before removing these overrides.

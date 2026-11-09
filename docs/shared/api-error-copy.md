@@ -38,9 +38,9 @@ text; never use HTML rendering. Cancellation remains cancellation; HTML/malforme
 responses, SDK diagnostics and arbitrary exception descriptions are not display
 copy. Authentication headers and successful responses pass through unchanged.
 
-The current web app uses Firebase auth and static dashboard shells; it has no
-backend API screen to migrate. The request boundary is ready for those future
-consumers. This change does not add a language picker or dashboard data model.
+The web app uses Supabase auth and the typed team API boundary described in
+[web policy](../../web/AGENTS.md). Error presentation belongs to that shared request
+boundary; feature screens render its safe display copy.
 
 Offline, timeout, SDK authentication, permissions and local state remain client
 responsibilities. Keep compatibility fallbacks for older servers and incomplete
@@ -65,4 +65,4 @@ or committing this implementation.
   incomplete copy, legacy payloads, malformed bodies and cancellation/SDK fallbacks.
 - `web/tests/api-client.spec.ts` checks the same request/error boundary with injected
   fetch responses in both languages. These tests do not claim a live backend web
-  journey; no such consumer exists yet.
+  journey.

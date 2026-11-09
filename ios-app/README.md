@@ -67,14 +67,14 @@ This ensures the client stays in sync with the backend contract.
 
 ## 🧪 Testing
 
-For the feature-development harness, see [refinement, implementation, Swift, verification, review, and investigation workflows](../docs/ios/agents/feature-workflow.md). These skills are available from agent sessions started at the monorepo root.
+For the feature-development harness, see [refinement, implementation, Swift, verification, review, and investigation workflows](AGENTS.md#feature-development). These skills are available from agent sessions started at the monorepo root.
 
-For a complete backend and simulator run, use `$lg-ios-run-local`. To build a Release simulator app against the existing Coolify deployment, use `$lg-ios-run-production`. See [build/run workflows](../docs/ios/agent-harness.md#workflows).
+For a complete backend and simulator run, use `$lg-ios-run-local`. To build a Release simulator app against the existing Coolify deployment, use `$lg-ios-run-production`. See [build/run workflows](../docs/ios/development.md#setup-and-tooling).
 
 - Unit and reducer tests: `ios-app/Modules/Tests/`
 - Snapshot tests via `swift-snapshot-testing`
 - The `Feedback Localhost` scheme uses the shared `UnitTests` plan with `AppTests` and `InsightsTests`.
-- Agent build, test, launch, and UI verification use the [simulator guide](../docs/ios/agents/simulator.md). See the [harness overview](../docs/ios/agent-harness.md) for Xcode MCP setup and lint commands.
+- Agent build, test, launch, and UI verification use the [simulator guide](AGENTS.md#xcode-and-simulator-workflows). See the [harness overview](../docs/ios/development.md#setup-and-tooling) for Xcode MCP setup and lint commands.
 
 
 ---
@@ -109,7 +109,7 @@ Schemes select different environments (Prod/Debug/Localhost/Mock) using `.xcconf
 ## 🔔 Notifications
 
 - Push is enabled via `ios-app/App/Entitlements.entitlements`.
-- Sample payloads and manual notification-testing instructions are in [notification guide](../docs/ios/NOTIFICATIONS.md).
+- Sample payloads and manual notification-testing instructions are in [notification guide](../docs/ios/development.md#notifications).
 - Local agent simulator operations follow [the iOS harness policy](AGENTS.md).
 
 
@@ -117,7 +117,7 @@ Schemes select different environments (Prod/Debug/Localhost/Mock) using `.xcconf
 
 ## 🧰 CI
 
-- GitHub Actions builds the iOS app, runs both unit-test targets, and gates changed-line lint in the path-filtered `iOS` workflow. See [CI setup and cost assumptions](../docs/shared/agents/ci-cd.md).
+- GitHub Actions builds the iOS app, runs both unit-test targets, and gates changed-line lint in the path-filtered `iOS` workflow. See [CI setup and cost assumptions](../AGENTS.md#cicd).
 - The existing `CI` workflow separately verifies generated Swift OpenAPI sources against the canonical contract.
 - `ios-app/CI_scripts/` contains separate Xcode Cloud hooks; GitHub Actions does not invoke them.
 - Xcode Cloud hooks resolve app files under `CI_PRIMARY_REPOSITORY_PATH/ios-app/`. The pre-build hook writes environment-provided secrets to `ios-app/App/Config/secrets.xcconfig`.

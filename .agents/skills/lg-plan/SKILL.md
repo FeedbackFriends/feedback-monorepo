@@ -5,13 +5,13 @@ description: Grill a LetsGrow idea or todo with the user to settle requirements 
 
 # Grill a LetsGrow idea
 
-Read [root policy](../../../AGENTS.md) and the [task workflow](../../../docs/shared/agents/task-workflow.md). Refinement does not add a todo or create a task file. Keep the selected backlog item short and nontechnical.
+Read [root policy](../../../AGENTS.md) and the [task workflow](../../../AGENTS.md#delivery-workflow). Refinement does not add a todo or create a task file. Keep the selected backlog item short and nontechnical.
 
 ## Understand the need
 
 Read the selected item in root `todos.md`, or establish the request from the conversation. Establish the current problem, target users, desired behavior, affected product surfaces, and scope. Use available product documentation and [domain guidance](../../../docs/shared/product/lets-grow-strategi-teamtrivsel.md) where relevant. Inspect relevant code and architecture documentation to ground questions in existing responsibilities, boundaries, data flows, and constraints. Read the owning app guidance before exploring its implementation.
 
-For customer interviews, public copy, or first-use journeys, use the relevant [community skill and product constraints](../../../docs/shared/skills.md#choosing-complementary-skills). Research supplies evidence; refinement still owns the requirements and architecture discussed with the user.
+For customer interviews, public copy, or first-use journeys, use the relevant [community skill](../../../docs/shared/skills.md#community-skills) and [product constraints](../../../AGENTS.md#applying-community-guidance). Research supplies evidence; refinement still owns the requirements and architecture discussed with the user.
 
 ## Grill requirements and architecture
 
@@ -27,4 +27,4 @@ Resolve technical details during refinement when they affect requirements, archi
 
 Summarize the agreed outcome, scope, acceptance criteria, architectural decisions and tradeoffs, relevant source references, and remaining questions in the conversation. Keep confirmed decisions distinct from proposals. For larger work, outline phases with observable outcomes and dependencies.
 
-When material requirements and architectural choices are settled, the plan is ready for [implementation](../../../docs/shared/agents/task-workflow.md#implementation-completion). If implementation is already authorized, continue without another approval gate; otherwise hand off the plan. Refinement alone does not authorize code changes. Do not expand `todos.md` into a specification or create separate task files.
+When material requirements and architectural choices are settled, the plan is ready for [implementation](../../../AGENTS.md#implementation-completion). If implementation is already authorized, continue without another approval gate; otherwise hand off the plan. Refinement alone does not authorize code changes. Do not expand `todos.md` into a specification or create separate task files.

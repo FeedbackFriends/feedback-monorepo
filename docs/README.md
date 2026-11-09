@@ -1,28 +1,15 @@
 # Documentation
 
-Maintained documentation lives here: `shared/`, `ios/`, `backend/`, and `web/`.
-Helper scripts live under root `scripts/`: [shared helpers](../scripts/shared) and [iOS helpers](../scripts/ios).
-App READMEs and `AGENTS.md` files remain entry points beside their code.
-Use this index to find the maintained source rather than copying it.
+Start with the topic you need. Agent instructions live in root/app `AGENTS.md`; procedures live in `.agents/skills/`. The root [HARNESS.md](../HARNESS.md) explains how to maintain them.
 
-| Topic | Start here |
+| Topic | Reference |
 | --- | --- |
-| Product, audience, UX, marketing, and terminology | [Product guidance](shared/product/lets-grow-strategi-teamtrivsel.md) |
-| Monorepo architecture and contract flow | [Architecture](shared/architecture.md) |
-| Agent harness, skills, tools, hooks, and layout | [Harness architecture](shared/agent-tooling.md) |
-| Available skills and community sources | [Skills overview](shared/skills.md) |
-| Task lifecycle and implementation | [Task workflow](shared/agents/task-workflow.md), [unfinished tasks](../todos.md) |
-| Architectural implementation handoff | [Human review](shared/agents/task-workflow.md#prepare-the-human-review) |
-| Repository ownership and shared conventions | [Repository scope](shared/agents/repository-scope.md) |
-| Shared API contract and generated clients | [API contract](shared/agents/api-contract.md) |
-| Local services and production | [Runtime and deployment](shared/agents/runtime-and-deployment.md) |
-| CI and releases | [CI/CD](shared/agents/ci-cd.md) |
-| Browser access | [Browser policy](shared/agents/browser-access.md) |
-| Web | [Policy, architecture, and guide map](../web/AGENTS.md) |
-| Backend | [App overview](../backend/README.md), [policy and guide map](../backend/AGENTS.md) |
-| iOS | [App overview](../ios-app/README.md), [policy and guide map](../ios-app/AGENTS.md), [iOS harness](ios/agent-harness.md) |
+| Product direction | [Strategy](shared/product/lets-grow-strategi-teamtrivsel.md) |
+| Architecture | [Monorepo](shared/architecture.md), [backend](backend/overview.md), [iOS](ios/app-architecture.md) |
+| iOS development | [Setup, configuration, local testing, notifications](ios/development.md), [localization](ios/localization.md), [answer-type icons](ios/ios-answer-type-icons.md) |
+| Product behavior | [iOS features](ios/features/overview.md), [product contact](shared/product-contact.md), [API error copy](shared/api-error-copy.md) |
+| Authentication and deployment | [Supabase setup and cutover](shared/authentication.md), [Coolify operations](shared/deployment/coolify.md) |
+| Screenshots | [Catalog and tooling](ios/screenshots/README.md) |
+| Skills | [Catalog, sources, and updates](shared/skills.md) |
 
-Repository-wide instructions start at [AGENTS.md](../AGENTS.md). LetsGrow workflow
-skills live in [root .agents/skills](../.agents/skills); rules and durable knowledge
-live in the guides above. Personal/plugin skills and credentials are managed
-outside this repository.
+Build and test rules are inline in [web](../web/AGENTS.md), [backend](../backend/AGENTS.md), and [iOS](../ios-app/AGENTS.md) policy. Shared delivery and review rules are inline in [root policy](../AGENTS.md#delivery-workflow). Helper scripts live under root [`scripts/`](../scripts).

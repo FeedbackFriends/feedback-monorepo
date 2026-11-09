@@ -83,18 +83,25 @@ Source: [ActivityList](../../../ios-app/Modules/Sources/ActivityFeature/Activiti
 **Purpose:** Configure a reusable format and its feedback questions.
 
 - Create an activity in two steps: **name**, then **template and questions**.
-- Require a nonblank name before advancing.
+- Focus the name field when its step opens. Require a nonblank name before advancing.
 - Require an explicit template choice: standard meeting feedback, team meeting, retrospective, workshop, or custom questions.
+- Collapse other templates after selection; **Skift** reveals them again.
 - Start custom questions with an empty question list.
 - Enable creation only when the name is filled in, at least one question exists, and every question has text.
-- Keep the creation action on the combined template/questions step.
+- Keep the creation action on the combined template/questions step, alongside the tappable question summary. Neither the name step nor the question editor can submit creation.
 - Preserve the draft during backward navigation and after request failure.
 - Preserve questions when reselecting the same template. Confirm template replacement when it would overwrite customized questions.
 - Prevent duplicate requests while saving.
 - After creation, show confirmation and open the new activity.
 - Edit existing activities through the combined form with a separate question editor.
 
-Source: [Creation requirements](create-activity.md), [ManageActivity](../../../ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivity.swift), [FeedbackTemplate](../../../ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/FeedbackTemplate.swift).
+Source: [ManageActivity](../../../ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/ManageActivity.swift), [FeedbackTemplate](../../../ios-app/Modules/Sources/ActivityFeature/Activities/ManageActivity/FeedbackTemplate.swift).
+
+### Activity creation details
+
+`ManageActivity` owns the presented `FeedbackFlowCoordinator` preview state. TCA presentation connects child dismissal to the full-screen cover, and preview mode is handled before API calls. Closing the preview with the design-system close button or completing it returns to the question editor without submitting answers.
+
+`ManageActivityTests` covers initial state, invalid creation, template changes, protection of customized questions, and both preview exits. The tests use parent/child presentation; the preview test leaves the API dependency unimplemented to detect accidental submissions.
 
 ## 7. Edit questions and illustrate the participant experience
 

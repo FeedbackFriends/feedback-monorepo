@@ -22,7 +22,7 @@ System/provider interfaces own their own wording: Apple/Google sign-in, permissi
 
 ## Terminology
 
-Follow [product language](agents/product-language.md) for strategy and migration scope. Current technical `Activity`/`Event` names remain unchanged unless the task includes their migration. Existing Danish UI uses aktivitet, session (never technical `Event`), mødeejer, deltager, spørgsmål, feedbackskabelon, and feedbacksvar for counted responses. Use sentence case and concise actions; preserve PIN leading zeros, names, questions, comments, calendar text, and URLs verbatim.
+Follow [product language](../../ios-app/AGENTS.md#ios-domain-and-product-language) for strategy and migration scope. Current technical `Activity`/`Event` names remain unchanged unless the task includes their migration. Existing Danish UI uses aktivitet, session (never technical `Event`), mødeejer, deltager, spørgsmål, feedbackskabelon, and feedbacksvar for counted responses. Use sentence case and concise actions; preserve PIN leading zeros, names, questions, comments, calendar text, and URLs verbatim.
 
 ## Notification and system-string packaging
 
@@ -37,7 +37,7 @@ python3 scripts/ios/validate-localization.py
 python3 scripts/ios/validate-localization.py --app-bundle /absolute/path/to/App.app
 ```
 
-Run from the monorepo root. The optional bundle check verifies packaged translations and development language. The native authorization dialog is system-owned; it has no app-owned purpose-string key. See [notifications](NOTIFICATIONS.md) for delivery tests.
+Run from the monorepo root. The optional bundle check verifies packaged translations and development language. The native authorization dialog is system-owned; it has no app-owned purpose-string key. See [notifications](development.md#notifications) for delivery tests.
 
 ## Error presentation
 

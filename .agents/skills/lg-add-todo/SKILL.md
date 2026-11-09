@@ -5,7 +5,7 @@ description: Add a simple nontechnical item to root todos.md only when the user 
 
 # Capture a LetsGrow todo
 
-Read [root policy](../../../AGENTS.md) and the [task workflow](../../../docs/shared/agents/task-workflow.md).
+Read [root policy](../../../AGENTS.md) and the [task workflow](../../../AGENTS.md#delivery-workflow).
 
 1. Add an item only when the user explicitly asks to capture a todo. Implementation, investigation, refinement, and cleanup requests do not implicitly add backlog items.
 2. Read root [todos.md](../../../todos.md) and reuse a matching item rather than duplicating it. The list is prioritized from highest to lowest. Preserve the existing order unless reprioritization is requested; append new items unless the user specifies their priority.

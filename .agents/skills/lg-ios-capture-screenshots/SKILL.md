@@ -5,7 +5,7 @@ description: Capture and compare the curated LetsGrow iOS catalog through app-ho
 
 # Capture and review iOS screenshots
 
-Follow the [iOS policy](../../../ios-app/AGENTS.md), [visual review rules](../../../docs/ios/agents/visual-review.md), and [capture documentation](../../../docs/ios/screenshots/README.md). Point-Free SnapshotTesting owns catalog capture. Keep SwiftUI previews for interactive development; do not use them to generate review images or silently fall back to another renderer.
+Follow the [iOS policy](../../../ios-app/AGENTS.md), [visual review rules](SKILL.md#visual-review), and [capture documentation](../../../docs/ios/screenshots/README.md). Point-Free SnapshotTesting owns catalog capture. Keep SwiftUI previews for interactive development; do not use them to generate review images or silently fall back to another renderer.
 
 For a one-command local capture, run `./scripts/ios/capture-screenshots.py` from the repository root (`--no-open` skips opening the gallery). It uses Apple's native `xcrun mcpbridge`, builds and captures through Xcode MCP, and publishes only after the capture test passes. Xcode may require first-use permission for this command-line client. Do not automate that permission dialog. The steps below describe the same workflow through the connected tools.
 
@@ -21,3 +21,9 @@ For a one-command local capture, run `./scripts/ios/capture-screenshots.py` from
 Select one representative layout per screen; include extra states only for meaningful content/layout differences. Keep routine loading, saving, disabled, partial-input, and individual answer-value variants as unmarked interactive previews. Prefer full-content coverage over duplicate standard-height images.
 
 For capture-harness changes, verify the full catalog including the native alert, inspect representative controls and the alert PNG, and run the Python tooling tests. Alert readiness requires an attached presentation with no active transition and stable layout; the bounded timeout must name the state and phase. Optional pixel diagnostics may help investigate captures, but tiny numerical differences do not block visual review. Baseline acceptance remains an explicit user decision.
+
+## Visual review
+
+The human owns manual visual review after implementation. Run this procedure when screenshots or visual testing are explicitly requested; it is not an implementation completion gate. Capture the complete catalog and generate the before/after report for requested UI review, including shared design changes. Preserve approved baselines and report capture blockers rather than presenting older captures as fresh evidence.
+
+Keep [simulator verification](../../../ios-app/AGENTS.md#simulator-verification) for behavior and native presentations; app-hosted snapshot tests verify fixture layouts. Native alerts belong to the same catalog, with presentation and text assertions before capture.

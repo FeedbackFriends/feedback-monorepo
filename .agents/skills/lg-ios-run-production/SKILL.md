@@ -5,7 +5,7 @@ description: Build and launch the LetsGrow iOS app on a simulator against the ex
 
 # Build and run LetsGrow against production
 
-Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md) and the [simulator guide](../../../docs/ios/agents/simulator.md) for native Xcode MCP operations.
+Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md) and the [simulator guide](../../../ios-app/AGENTS.md#xcode-and-simulator-workflows) for native Xcode MCP operations.
 
 1. Run `./scripts/ios/prepare-backend.sh production` to check HTTP success and `status: UP` on the existing `https://api.letsgrow.dk/actuator/health` endpoint. This mode does not require Docker, local backend services, or a Coolify token. On failure, report the production health blocker. If deployment troubleshooting was requested, use the [Coolify operations skill](../lg-coolify-operate/SKILL.md); do not redeploy as part of an app build.
 2. Use the shared simulator workflow in **launch-only mode**, explicitly selecting `Feedback Production` (Release), not `Debug Production` or `Feedback Localhost`. Match the current checkout and use an eligible simulator. Call `RunProject` to build, install, and launch through native Xcode MCP. Do not archive, upload to TestFlight/App Store, or change Coolify services.
@@ -13,4 +13,4 @@ Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md) and 
 
 Report production health, API URL, scheme/configuration, simulator, and app build/launch result separately. State whether login or any API journey was actually checked. A production app run uses real production data; additional mutations require the user's requested product action.
 
-See the [harness guide](../../../docs/ios/agent-harness.md) for setup and runtime assumptions.
+See the [harness guide](../../../docs/ios/development.md#setup-and-tooling) for setup and runtime assumptions.

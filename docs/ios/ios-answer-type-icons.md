@@ -25,5 +25,5 @@ the icon is never the only accessible description of an answer type.
 The `answer-type-icons.sizes-and-themes` screen catalog fixture shows all five assets
 at 24 and 32pt against light and dark semantic surfaces. The `answer-type-picker.*`
 fixtures cover the temporary-choice sheet and participant previews. Follow the
-[visual review workflow](agents/visual-review.md) to capture and inspect
+[visual review workflow](../../.agents/skills/lg-ios-capture-screenshots/SKILL.md#visual-review) to capture and inspect
 the current native renderings without accepting baselines automatically.
