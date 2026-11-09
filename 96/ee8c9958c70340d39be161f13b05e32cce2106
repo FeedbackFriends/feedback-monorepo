@@ -1,0 +1,33 @@
+.agents/skills/lg-ios-run-local/SKILL.md
+  s_ccfc9f22979a10::t_9bdb81c502f985 3,6,8,10-13,15,17-21,23-25,27,29-30,32-34,36-38
+HARNESS.md
+  s_ccfc9f22979a10::t_4a4f8c1b284dbe 88
+docs/ios/development.md
+  s_ccfc9f22979a10::t_4a899d67e04f62 15,83,85-88,90-92,94,96-100,102-106
+ios-app/AGENTS.md
+  s_ccfc9f22979a10::t_930691af913bf7 248,261-262
+ios-app/App/DebugMenuView.swift
+  s_ccfc9f22979a10::t_88934067de6078 18,36
+"ios-app/Feedback.xcodeproj/xcshareddata/xcschemes/Feedback Localhost.xcscheme"
+  s_ccfc9f22979a10::t_167b2984a27bf5 79-85
+.agents/skills/lg-ios-run-local/agents/openai.yaml
+  s_ccfc9f22979a10::t_22c0901a94feee 3-4
+docs/shared/skills.md
+  s_ccfc9f22979a10::t_4b278f2fa91d2a 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "96ee8c9958c70340d39be161f13b05e32cce2106",
+  "prompts": {},
+  "sessions": {
+    "s_ccfc9f22979a10": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c0c7-54b9-7cd1-9f01-368f8bdaf96e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
