@@ -14,6 +14,17 @@ For manual development, select the `Feedback Localhost` scheme and an iOS simula
 
 Live authentication requires managed Supabase and Google configuration in the app's Info.plist, populated through `App/Config/secrets.xcconfig`; see [Supabase setup](../shared/authentication.md#supabase-auth-setup-and-cutover). Firebase configuration is still used for push and crash reporting. Keep that file local and ignored by Git. See [configuration](development.md#configuration) and [local testing](development.md#manual-testing-with-two-simulators) for local backend addressing and test-account login.
 
+Firebase Crashlytics is the iOS crash and nonfatal-error reporter; OSLog retains
+local diagnostics. Firebase is configured before the logging clients start.
+Xcode Cloud device builds upload dSYMs with the resolved Firebase SDK and the
+existing `FIREBASE_GOOGLE_APP_ID`. Upload failures fail the build so missing
+symbols are visible. Local and simulator builds skip uploads.
+
+Sentry is no longer used, including its performance tracing. Remove the obsolete
+`SENTRY_DSN_URL`, `SENTRY_DSN_SCHEME`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG` and
+`SENTRY_PROJECT` values from Xcode Cloud and local configuration if present;
+the app requires no replacement Sentry credentials.
+
 The backend owns the API contract. Regenerate the committed contract and both clients from the monorepo root using `./scripts/shared/generate-api-artifacts.sh`; do not hand-edit generated Swift sources.
 
 ### Project configuration format

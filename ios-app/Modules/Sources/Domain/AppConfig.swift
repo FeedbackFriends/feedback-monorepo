@@ -2,7 +2,6 @@ import Foundation
 
 public protocol AppConfig: Sendable {
     var apiBaseUrl: URL { get }
-    var sentryDsnUrl: URL { get }
     var supportEmail: String { get }
     var webBaseUrl: URL { get }
     var appStoreId: String { get }

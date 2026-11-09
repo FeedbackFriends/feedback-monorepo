@@ -78,10 +78,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>SENTRY_DSN_SCHEME</key>
-	<string>$(SENTRY_DSN_SCHEME)</string>
-	<key>SENTRY_DSN_URL</key>
-	<string>$(SENTRY_DSN_URL)</string>
 	<key>SUPPORT_EMAIL</key>
 	<string>$(SUPPORT_EMAIL)</string>
 	<key>UIBackgroundModes</key>

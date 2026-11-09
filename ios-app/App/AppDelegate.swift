@@ -14,7 +14,6 @@ import OpenAPI
 import OpenAPIURLSession
 import OpenAPIRuntime
 import InfoPlist
-import Sentry
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
     
@@ -56,22 +55,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        Logger.setup(
-            logClients: [
-                CrashlyticsLoggingClient.create(deviceId: DeviceInfo().deviceID(), minLevel: .error),
-                SentryLoggingClient.create(deviceId: DeviceInfo().deviceID(), minLevel: .error),
-                OSLogClient(subsystem: DeviceInfo().bundleIdentifier(), category: "LoggingClient")
-            ]
-        )
-        InfoPlistConfig().logConfigurations()
-        SentrySDK.start { options in
-            options.dsn = InfoPlistConfig().sentryDsnUrl.absoluteString
-            options.tracesSampleRate = 1.0
-            options.tracePropagationTargets = [
-                InfoPlistConfig().apiBaseUrl.absoluteString
-            ]
-            options.releaseName = "\(DeviceInfo().version())(\(String(describing: DeviceInfo().build)))"
-        }
         let firebaseOptions = FirebaseOptions(
             googleAppID: InfoPlistConfig().firebaseGoogleAppId,
             gcmSenderID: InfoPlistConfig().firebaseGcmSenderId
@@ -82,6 +65,13 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         firebaseOptions.projectID = InfoPlistConfig().firebaseProjectId
         firebaseOptions.storageBucket = InfoPlistConfig().firebaseStorageBucket
         FirebaseApp.configure(options: firebaseOptions)
+        Logger.setup(
+            logClients: [
+                CrashlyticsLoggingClient.create(deviceId: DeviceInfo().deviceID(), minLevel: .error),
+                OSLogClient(subsystem: DeviceInfo().bundleIdentifier(), category: "LoggingClient")
+            ]
+        )
+        InfoPlistConfig().logConfigurations()
         AppTheme.setUp()
         UNUserNotificationCenter.current().delegate = self
         Messaging.messaging().delegate = self

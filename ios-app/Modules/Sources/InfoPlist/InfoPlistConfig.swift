@@ -9,9 +9,6 @@ public struct InfoPlistConfig: AppConfig {
     public var apiBaseUrl: URL {
         InfoPlistReader().url(for: "API_BASE_URL", scheme: "API_SCHEME")!
     }
-    public var sentryDsnUrl: URL {
-        InfoPlistReader().url(for: "SENTRY_DSN_URL", scheme: "SENTRY_DSN_SCHEME")!
-    }
     public var supportEmail: String {
         InfoPlistReader().string(for: "SUPPORT_EMAIL")!
     }
@@ -47,7 +44,6 @@ public struct InfoPlistConfig: AppConfig {
         Logger.debug(
             """
             🔹 API_BASE_URL: \(self.apiBaseUrl)\n
-            🔹 SENTRY_DSN_URL: \(self.sentryDsnUrl)\n
             🔹 SUPPORT_EMAIL: \(self.supportEmail)\n
             🔹 WEB_BASE_URL: \(self.webBaseUrl)\n
             🔹 APPSTORE_ID: \(self.appStoreId)\n
