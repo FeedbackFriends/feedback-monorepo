@@ -15,7 +15,7 @@ Custom workflows use `lg-` names that describe the action. Group platform workfl
 | [lg-coolify-operate](../../.agents/skills/lg-coolify-operate/SKILL.md) | Operate and troubleshoot Coolify production deployments. |
 | [lg-add-todo](../../.agents/skills/lg-add-todo/SKILL.md) | Add a short nontechnical item to `todos.md` only when requested. |
 | [lg-maintain-harness](../../.agents/skills/lg-maintain-harness/SKILL.md) | Simplify custom skills, AGENTS.md, rules, and documentation; audit guidance against source. |
-| [lg-ios-run-local](../../.agents/skills/lg-ios-run-local/SKILL.md) | Start local backend/iOS, select test accounts, or sign in with `login-only`. |
+| [lg-ios-run-local](../../.agents/skills/lg-ios-run-local/SKILL.md) | Start local backend and one employee simulator; `login-only` skips backend startup. |
 | [lg-ios-run-production](../../.agents/skills/lg-ios-run-production/SKILL.md) | Launch a Release simulator app against deployed production. |
 | [lg-ios-capture-screenshots](../../.agents/skills/lg-ios-capture-screenshots/SKILL.md) | Capture and compare the curated iOS screenshot catalog. |
 | [lg-ios-sync-api](../../.agents/skills/lg-ios-sync-api/SKILL.md) | Sync handwritten iOS API boundaries with generated clients. |

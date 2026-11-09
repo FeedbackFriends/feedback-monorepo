@@ -15,7 +15,7 @@ enum LocalTestAccountLaunch {
     static let environmentKey = "LETSGROW_LOCAL_TEST_ACCOUNT"
 
     static var isRequested: Bool {
-        ProcessInfo.processInfo.environment[environmentKey] != nil
+        !(ProcessInfo.processInfo.environment[environmentKey] ?? "").isEmpty
     }
 
     private struct LoginResponse: Decodable {
@@ -33,7 +33,7 @@ enum LocalTestAccountLaunch {
             case .nonLocalBackend:
                 "Testkonti kræver Feedback Localhost og http://localhost:8080."
             case .unknownAccount:
-                "Ukendt testkonto. Vælg Feedback Localhost Manager eller Feedback Localhost Anonymous."
+                "Ukendt testkonto. Vælg Feedback Localhost."
             case .loginFailed:
                 "Kunne ikke hente testlogin. Start den lokale backend, og aktivér test-admin-endpoints."
             case .managerNotPrepared:

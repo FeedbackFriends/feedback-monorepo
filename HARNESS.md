@@ -85,6 +85,6 @@ Verify a new session:
 
 Claude uses `headersHelper` for the same Coolify helper that Codex names `http_headers_helper`. No credential belongs in `.mcp.json` or tracked Claude settings. Follow [Claude MCP authentication](https://code.claude.com/docs/en/mcp#use-dynamic-headers-for-custom-authentication) for client diagnostics.
 
-The [local iOS skill](.agents/skills/lg-ios-run-local/SKILL.md) owns backend preparation, simulator launch, and test-account login in both clients. Use `manager`, `anonymous`, or `both` for standard roles, `account <account-id>` for another existing account, and `login-only` for sign-in against an already running backend. Data is preserved unless preparation or reset is explicitly requested. Personal Codex plugins and execution wrappers are not automatically available in Claude.
+The [local iOS skill](.agents/skills/lg-ios-run-local/SKILL.md) owns backend preparation and employee launch on one simulator in both clients. `login-only` uses an already running backend; explicit `account <account-id>` supports an existing test account. Data is preserved unless a reset is explicitly requested. Personal Codex plugins and execution wrappers are not automatically available in Claude.
 
 When repository-owned guidance files move, repair callers and indexes. Add executable hooks only for concrete failures they can reliably detect.

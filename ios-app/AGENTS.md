@@ -245,7 +245,7 @@ Report scheme/simulator, build, test counts and targets, Swift lint, launch, log
 
 ### Simulator Login
 
-Use [lg-ios-run-local](../.agents/skills/lg-ios-run-local/SKILL.md) for local launch and authentication. `manager` selects the sample manager; `account <account-id>` selects another existing test account. Add `login-only` to sign in against an already running backend without preparing services or data. The skill owns both login routes, token handling, and UI verification. Login alone must not reset or reseed test data.
+Use [lg-ios-run-local](../.agents/skills/lg-ios-run-local/SKILL.md) for local launch and authentication on one employee simulator. Add `login-only` to use an already running backend without preparing services or data. The skill owns explicit test-account overrides and token handling. Login alone must not reset or reseed test data.
 
 ## Feature development
 
@@ -258,8 +258,8 @@ Use the smallest combination that can detect the actual regression. The [simulat
 | Reducer or validation | Relevant TestStore tests: state transitions, effects, rejected invalid/duplicate actions, failure recovery | Injected dependencies; no live backend required for unit tests |
 | Domain mapper or API/cache mutation | Relevant mapper/adapter/cache tests, then affected live path | Localhost and existing fixture unless preparation requested |
 | SwiftUI layout, components, or copy | Build, complete screenshot catalog/review; interact with changed controls and native presentation | Stable preview fixtures plus a live simulator; check affected language/long-content layouts |
-| Auth, role, root or navigation state | Reducer tests plus owner and anonymous entry/transition paths that changed | Localhost; two simulators when simultaneous roles are needed |
-| Session/PIN/feedback journey | Relevant reducers plus manager creates/selects session → anonymous enters PIN/submits → manager sees result | Two local simulators, reachable session, explicitly requested product mutations |
+| Auth, role, root or navigation state | Reducer tests plus owner and anonymous entry/transition paths that changed | One employee simulator; leader journeys use web |
+| Session/PIN/feedback journey | Relevant reducers; legacy PIN feedback paths only when affected | One employee simulator, reachable session, explicitly requested product mutations |
 | Notification or deep-link routing | Parsing/routing tests plus the affected native path; notification runner when requested | Follow the [notification skill](../.agents/skills/lg-ios-test-notifications/SKILL.md); do not equate a routing test with delivered push |
 | Contract changes | Regenerate clients; relevant backend, mapper and feature tests; affected live path | Backend guidance and [API generation](../AGENTS.md#api-contract) |
 | Documentation/skills only | Skill validation, local link checks, scenario walkthroughs for routing and permissions | No app build, backend reset, or simulator launch needed |

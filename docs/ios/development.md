@@ -12,7 +12,7 @@ Open `ios-app/Feedback.xcodeproj` from the monorepo root. `ios-app/Modules/Packa
 
 For manual development, select the `Feedback Localhost` scheme and an iOS simulator in Xcode, then Build & Run. Run the shared `UnitTests` plan from the same scheme. Other schemes target different configurations; `Feedback Production` is the production scheme.
 
-Live authentication requires managed Supabase and Google configuration in the app's Info.plist, populated through `App/Config/secrets.xcconfig`; see [Supabase setup](../shared/authentication.md#supabase-auth-setup-and-cutover). Firebase configuration is still used for push and crash reporting. Keep that file local and ignored by Git. See [configuration](development.md#configuration) and [local testing](development.md#manual-testing-with-two-simulators) for local backend addressing and test-account login.
+Live authentication requires managed Supabase and Google configuration in the app's Info.plist, populated through `App/Config/secrets.xcconfig`; see [Supabase setup](../shared/authentication.md#supabase-auth-setup-and-cutover). Firebase configuration is still used for push and crash reporting. Keep that file local and ignored by Git. See [configuration](development.md#configuration) and [local testing](development.md#local-employee-testing) for local backend addressing and test-account login.
 
 Firebase Crashlytics is the iOS crash and nonfatal-error reporter; OSLog retains
 local diagnostics. Firebase is configured before the logging clients start.
@@ -80,87 +80,30 @@ The default local scheme is `Feedback Localhost`; `Feedback Production` targets 
 
 Runtime accessors are implemented in [`InfoPlistConfig`](../../ios-app/Modules/Sources/InfoPlist/InfoPlistConfig.swift); inspect the source when adding configuration keys.
 
-## Manual testing with two simulators
+## Local employee testing
 
-Use the shared **Feedback Localhost Manager** and **Feedback Localhost Anonymous**
-schemes to test against the same local backend without manual signup or copying
-login tokens. Both schemes run the real app with `DebugLocalhost`.
+Use one iPhone simulator with **Feedback Localhost**. The scheme signs in an
+employee through Supabase anonymous auth, preserving that identity and its team
+membership across launches. If the simulator still has a leader session, the
+local launch signs it out and creates an employee session. Leaders use the web.
 
-### Agent command
+From an agent session, invoke `$lg-ios-run-local`. It starts the local backend
+and launches the employee app on one simulator, preserving database contents.
+Use `login-only` to skip backend startup when it is already running.
 
-From an agent session in this repository, invoke:
+From Xcode:
 
-```text
-$lg-ios-run-local both
-```
+1. Run `./scripts/ios/prepare-backend.sh localhost` from the monorepo root.
+2. Open `ios-app/Feedback.xcodeproj`, select **Feedback Localhost** and one
+   iPhone simulator, then press Run.
+3. Join a team using its employee invitation code when needed. Membership is
+   retained for the next launch; no sample manager fixture is required.
 
-This starts the backend and launches the manager and anonymous apps on two
-different simulators, preserving existing data. To prepare the sample manager on
-first use, run `$lg-ios-run-local both seed-manager`; this replaces the
-sample manager fixture and its data. To deliberately clear the entire local
-database and recreate the manager fixture, run
-`$lg-ios-run-local both reset-db`.
-
-Use `manager` or `anonymous` instead of `both` for one simulator. You can specify
-the simulator names in the same request. These commands are instructions for the
-agent, not terminal commands. The agent needs a working native Xcode MCP
-connection, Docker, and nonproduction Supabase configuration. Firebase remains required for push and crash reporting.
-
-### First-time setup
-
-From the monorepo root, with Docker running:
-
-```sh
-./scripts/ios/prepare-backend.sh localhost
-./scripts/shared/manage-test-data.sh seed-manager-with-data > /dev/null
-```
-
-The first command builds and starts the local API and Postgres while preserving
-existing database volumes. Configure the nonproduction Supabase project in
-`ios-app/App/Config/secrets.xcconfig` and the backend environment; see
-[authentication setup](../shared/authentication.md). Firebase remains used for push
-and crash reporting.
-
-The second command prepares `mock-manager-with-data` with sample activities and
-feedback. **It resets that fixture account and its sample data**, so run it only
-for initial preparation or when you deliberately want to reset the fixture. The
-token it returns is discarded. Other launches do not seed or reset data.
-
-### Run from Xcode
-
-1. Open `ios-app/Feedback.xcodeproj`.
-2. Choose **Feedback Localhost Manager**, select your first iPhone simulator,
-   and press Run. The app fetches a fresh test token from the local backend and
-   signs in as `mock-manager-with-data` before loading the app's account state.
-3. Detach Xcode's debugger from the first run to leave that app running.
-4. Choose **Feedback Localhost Anonymous**, select a different iPhone simulator,
-   and press Run. No manual account creation is needed.
-5. Create a session on the manager simulator. Enter its PIN on the anonymous
-   simulator and submit feedback, then inspect the results as the manager.
-
-Each simulator keeps its own login. Keep using the same two simulators to retain
-the manager's changes and the anonymous user's participation history. The
-anonymous scheme preserves an existing anonymous identity; if you use it on a
-simulator currently signed in as a manager, it signs out and creates a new
-anonymous identity. Switching back to Manager restores the seeded manager.
-
-The ordinary **Feedback Localhost** scheme keeps the normal startup behavior and
-the simulator's saved login.
-
-### Troubleshooting
-
-- Connection error: start the local backend and check `http://localhost:8080`.
-- Test-login endpoint unavailable: local Compose must enable
-  `FEEDBACK_ENABLE_TEST_ADMIN_ENDPOINTS` (the local override already does).
-- Missing manager access: prepare the fixture with the seed command above and
-  rerun. Seeding deliberately replaces the fixture's data.
-- Missing schemes: reopen the project and check Xcode's scheme menu.
-
-The schemes contain only the non-secret `LETSGROW_LOCAL_TEST_ACCOUNT` selection
-(`manager` or `anonymous`). Tokens are fetched at launch and held in memory.
-The launch code exists only in DEBUG builds and rejects any API URL other than
-`http://localhost:8080`; TestFlight and production Release behavior is unchanged.
-Tests do not inherit the account selection.
+Configure nonproduction Supabase and Firebase in `App/Config/secrets.xcconfig`
+and the backend environment; see [authentication setup](../shared/authentication.md).
+If startup fails, check the local backend at `http://localhost:8080` and the
+Supabase configuration. Employee authentication does not require test-admin login.
+The scheme's account selection is DEBUG-only and is not inherited by tests.
 
 ## Notifications
 

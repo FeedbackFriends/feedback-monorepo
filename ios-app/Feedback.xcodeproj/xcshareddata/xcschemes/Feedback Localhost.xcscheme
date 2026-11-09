@@ -76,6 +76,13 @@
             ReferencedContainer = "container:Feedback.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "LETSGROW_LOCAL_TEST_ACCOUNT"
+            value = "anonymous"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
