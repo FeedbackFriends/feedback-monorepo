@@ -1,0 +1,37 @@
+docs/ios/development.md
+  s_ccfc9f22979a10::t_a8f72a15042fa8 17-27
+ios-app/App/AppDelegate.swift
+  s_ccfc9f22979a10::t_e3834d0c1f3591 68-74
+ios-app/Feedback.xcodeproj/project.xcproj
+  s_ccfc9f22979a10::t_0c999175d93381 268-269,276
+scripts/ios/tests/test_crashlytics_symbols.py
+  s_a365ba08c04577::t_2bc2890f181e64 1-79
+ios-app/Modules/Package.resolved
+  s_ccfc9f22979a10::t_3dac5a9333a3fc 2
+scripts/ios/upload-crashlytics-symbols.sh
+  s_ccfc9f22979a10::t_165948f7e74035 1-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ea76e1bc6dcac3f5416723c1753151b3e4960ef1",
+  "prompts": {},
+  "sessions": {
+    "s_a365ba08c04577": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "74020aeb-180b-454f-b2fc-74b0faf300c4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_ccfc9f22979a10": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c0c7-54b9-7cd1-9f01-368f8bdaf96e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
