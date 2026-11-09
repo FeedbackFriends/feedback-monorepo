@@ -1,0 +1,137 @@
+.agents/skills/lg-add-todo/SKILL.md
+  s_5e3024ad5ddbde::t_acf9b3fb588147 13
+.agents/skills/lg-deliver/SKILL.md
+  s_5e3024ad5ddbde::t_585c21138665f8 1-10
+.agents/skills/lg-ios-capture-screenshots/SKILL.md
+  s_4dd1cf5f203a1e::t_fbdff35dcb063c 10,12,16
+.agents/skills/lg-ios-run-local/SKILL.md
+  s_4dd1cf5f203a1e::t_98ac1d1a0993d8 43-45
+.agents/skills/lg-ios-run-production/SKILL.md
+  s_4dd1cf5f203a1e::t_ae84fcd7a02ee5 10
+.agents/skills/lg-plan/SKILL.md
+  s_5e3024ad5ddbde::t_39ca5375dd9a18 2,30
+.agents/skills/lg-plan/agents/openai.yaml
+  s_5e3024ad5ddbde::t_521806e937a722 2,4
+.claude/skills/lg-deliver
+  s_5e3024ad5ddbde::t_d232162aadf33a 1
+.claude/skills/lg-plan
+  s_5e3024ad5ddbde::t_a16ddeed687f34 1
+.codex/config.toml
+  s_4dd1cf5f203a1e::t_733182fa7d0ad5 7
+.github/workflows/ios.yml
+  s_4dd1cf5f203a1e::t_abd9e13bebb90f 49,59
+.mcp.json
+  s_4dd1cf5f203a1e::t_eb6de579956d2f 11
+AGENTS.md
+  s_1aafd8789ff8ef::t_658bc5b37f54bd 7-9,16
+README.md
+  s_4dd1cf5f203a1e::t_48b9e3afc5b9d8 18
+backend/AGENTS.md
+  s_4dd1cf5f203a1e::t_a32bb9897f93cd 72
+docs/README.md
+  s_4dd1cf5f203a1e::t_64b5f6a6180e95 15
+docs/ios/agents/feature-workflow.md
+  s_5e3024ad5ddbde::t_3c17727e97d950 3,8-9,11,19,51,53,56
+docs/ios/agents/swift.md
+  s_4dd1cf5f203a1e::t_5c3b3a8380160a 52
+docs/ios/local-testing.md
+  s_4dd1cf5f203a1e::t_f1cf8b2667d2fa 32-33
+docs/ios/localization.md
+  s_4dd1cf5f203a1e::t_09800c73c676b6 52
+docs/ios/screenshots/README.md
+  s_4dd1cf5f203a1e::t_2a15ca84cfc0cb 16-18,34,39,57-58,72,80,82
+docs/shared/agent-tooling.md
+  s_5e3024ad5ddbde::t_a8b019bf2b3f2b 48,50,52,54,73,82
+docs/shared/agents/runtime-and-deployment.md
+  s_4dd1cf5f203a1e::t_faa3d59c236bde 12-13,19
+docs/shared/agents/supabase-auth.md
+  s_4dd1cf5f203a1e::t_42348b49bf13ed 34
+docs/shared/agents/task-workflow.md
+  s_5e3024ad5ddbde::t_f2f91ae0e0bf34 1,3,5-23,25-27,31,48-71,73
+docs/shared/architecture.md
+  s_4dd1cf5f203a1e::t_346c6566421a52 107-108,110-111,127
+docs/shared/skills.md
+  s_5e3024ad5ddbde::t_7fc773ea481b73 24-25,56
+ios-app/.maestro/README.md
+  s_4dd1cf5f203a1e::t_d40cfd5580aad0 10,18,25,33-36,41,53,61,64-65,76
+ios-app/.maestro/flows/debug-auth-seed-manager.yaml
+  s_4dd1cf5f203a1e::t_ff4b89e5bbd8f1 2-3
+ios-app/.maestro/flows/manager-create-activity-event.yaml
+  s_4dd1cf5f203a1e::t_68527677f8e6c8 2
+ios-app/.maestro/notifications/README.md
+  s_4dd1cf5f203a1e::t_f57341334db514 14
+ios-app/App/DebugMenuView.swift
+  s_4dd1cf5f203a1e::t_ffc91c70aa632d 40
+ios-app/Modules/Sources/ActivityFeature/ScreenCatalogPreviewView.swift
+  s_4dd1cf5f203a1e::t_56b6b2d27b6291 1047
+ios-app/Modules/Sources/EnterCodeFeature/ScreenCatalogPreviewView.swift
+  s_4dd1cf5f203a1e::t_64a4e2f3c30da9 53
+ios-app/Modules/Sources/FeedbackFlowFeature/ScreenCatalogPreviewView.swift
+  s_4dd1cf5f203a1e::t_92e1523008af9d 460
+ios-app/Modules/Sources/MoreFeature/ScreenCatalogPreviewView.swift
+  s_4dd1cf5f203a1e::t_cddb8a3a7b24c6 172
+ios-app/Modules/Sources/RootFeature/ScreenCatalogPreviewView.swift
+  s_4dd1cf5f203a1e::t_4d17cd0a13bd00 61
+ios-app/Modules/Sources/SignUpFeature/ScreenCatalogPreviewView.swift
+  s_4dd1cf5f203a1e::t_2a5a3a1589a435 70
+ios-app/Modules/Sources/TabbarFeature/ScreenCatalogPreviewView.swift
+  s_4dd1cf5f203a1e::t_6ff526c3e73314 261
+scripts/ios/capture-screenshots.py
+  s_4dd1cf5f203a1e::t_c4651aa9193411 92-93,95-96
+scripts/ios/manage-snapshot-catalog.py
+  s_4dd1cf5f203a1e::t_51691d5fc7e499 95
+scripts/ios/prepare-backend.sh
+  s_4dd1cf5f203a1e::t_074c951d918a5b 8
+scripts/ios/review-screenshots.py
+  s_4dd1cf5f203a1e::t_8431fbc5adbae1 181
+scripts/ios/run-e2e-tests.sh
+  s_4dd1cf5f203a1e::t_618816da385d0c 83,141,155,183,188
+scripts/ios/test-notifications.py
+  s_4dd1cf5f203a1e::t_c40197bc9adb9a 116
+scripts/ios/tests/test_capture_screenshots.py
+  s_4dd1cf5f203a1e::t_8c1484f591de60 6
+scripts/ios/tests/test_prepare_backend.py
+  s_4dd1cf5f203a1e::t_58d607dea795b8 12,21,55
+scripts/ios/tests/test_review_screenshots.py
+  s_4dd1cf5f203a1e::t_9b31ac736d6f64 8
+scripts/ios/tests/test_snapshot_catalog.py
+  s_4dd1cf5f203a1e::t_979c531ab57d84 9
+scripts/ios/tests/test_unlocalized_copy.py
+  s_4dd1cf5f203a1e::t_c0a1fd68f2da5d 8
+scripts/shared/manage-test-data.sh
+  s_4dd1cf5f203a1e::t_99f1a1d7c1207e 11,53-62,66
+scripts/shared/reset-and-start-local-stack.sh
+  s_4dd1cf5f203a1e::t_33987e9777b605 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "da14fe0f5978cd436043a0a10ba6437436192fb1",
+  "prompts": {},
+  "sessions": {
+    "s_1aafd8789ff8ef": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c02c-f4dc-7903-8374-6d7aa9f0ac54",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_4dd1cf5f203a1e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bffe-9df7-7c12-b305-7d18d13af7d7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    },
+    "s_5e3024ad5ddbde": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c020-4c7e-7611-9dd0-e41d64ab027f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
