@@ -1,0 +1,73 @@
+.agents/skills/lg-add-todo/SKILL.md
+  s_8e62b7b64be9d7::t_554eefad8792c0 8
+.agents/skills/lg-audit-community-skills/SKILL.md
+  s_8e62b7b64be9d7::t_6f651910e828ca 12,56
+.agents/skills/lg-deliver/SKILL.md
+  s_8e62b7b64be9d7::t_67efb71fe212ae 8
+.agents/skills/lg-ios-capture-screenshots/SKILL.md
+  s_8e62b7b64be9d7::t_64e93440d3e469 8,24-29
+.agents/skills/lg-ios-run-local/SKILL.md
+  s_8e62b7b64be9d7::t_b4733d6244a4b3 3,8,18,20,24-25,30,43-44,49,57,59-60,63-79
+.agents/skills/lg-ios-run-local/agents/openai.yaml
+  s_8e62b7b64be9d7::t_fadafadb5c2bae 3
+.agents/skills/lg-ios-run-production/SKILL.md
+  s_8e62b7b64be9d7::t_9180a972e34645 8,16
+.agents/skills/lg-maintain-harness/SKILL.md
+  s_8e62b7b64be9d7::t_092bb6e8d921f9 8,12
+.agents/skills/lg-plan/SKILL.md
+  s_8e62b7b64be9d7::t_30acb0f37a3c1e 8,14,30
+.agents/skills/lg-web-style/SKILL.md
+  s_8e62b7b64be9d7::t_64dcac47973e47 8,12
+AGENTS.md
+  s_8e62b7b64be9d7::t_63477e5800425a 7-226
+HARNESS.md
+  s_8e62b7b64be9d7::t_5c1a97253b36f6 25-31,33,39,43-44,48,50,62-65,71,73,77,88
+README.md
+  s_8e62b7b64be9d7::t_d08b2a63793064 11,18
+backend/AGENTS.md
+  s_8e62b7b64be9d7::t_659b0901c88f03 48,54,62-113
+backend/README.md
+  s_8e62b7b64be9d7::t_10caf6aed12aa0 127
+docs/README.md
+  s_8e62b7b64be9d7::t_8856266dfe7235 3,5,7-13,15
+docs/ios/app-architecture.md
+  s_8e62b7b64be9d7::t_a2031abe25f47c 1-25
+docs/ios/development.md
+  s_8e62b7b64be9d7::t_f876d0c08c2ec5 1,3,5-9,15,19,25,29,33,47-152,154,156,158,160
+docs/ios/features/overview.md
+  s_8e62b7b64be9d7::t_fa56bee9d0d0a8 86,88,91,98-104
+docs/ios/ios-answer-type-icons.md
+  s_8e62b7b64be9d7::t_bcc09e99c1408d 28
+docs/ios/localization.md
+  s_8e62b7b64be9d7::t_e25c25f787778d 25,40
+docs/shared/api-error-copy.md
+  s_8e62b7b64be9d7::t_20734efa463b85 41-43,68
+docs/shared/architecture.md
+  s_8e62b7b64be9d7::t_4cb17a5f6150af 64,172
+docs/shared/authentication.md
+  s_8e62b7b64be9d7::t_133e394656cc9b 15
+docs/shared/skills.md
+  s_8e62b7b64be9d7::t_cf07c5c0975096 18,53
+ios-app/AGENTS.md
+  s_8e62b7b64be9d7::t_455576ab346c5f 11,13,15,17-161,163-269
+ios-app/README.md
+  s_8e62b7b64be9d7::t_0e8b7d2d61bc6c 70,72,77,112,120
+web/AGENTS.md
+  s_8e62b7b64be9d7::t_3f7024953995d9 27,60,103,118-207
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c69d4d8a6f6b2ec85b37d36557b42e880fd7ce0e",
+  "prompts": {},
+  "sessions": {
+    "s_8e62b7b64be9d7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c037-28d6-76a0-9227-e3a5afbefcf1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
