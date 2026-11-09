@@ -1,0 +1,23 @@
+.agents/skills/lg-add-todo/SKILL.md
+  s_ccfc9f22979a10::t_62c7853f40b40e 12
+AGENTS.md
+  s_ccfc9f22979a10::t_a652cdffea0b4c 202
+todos.md
+  s_ccfc9f22979a10::t_8fcf9198035737 3-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fb401a01e3371848b94b8275866f2a7db4615920",
+  "prompts": {},
+  "sessions": {
+    "s_ccfc9f22979a10": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c0c7-54b9-7cd1-9f01-368f8bdaf96e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
