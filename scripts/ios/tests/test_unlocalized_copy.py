@@ -5,7 +5,7 @@ import unittest
 
 
 SPEC = importlib.util.spec_from_file_location(
-    'localized_copy', Path(__file__).resolve().parents[1] / 'check-localized-copy.py'
+    'localized_copy', Path(__file__).resolve().parents[1] / 'check-unlocalized-copy.py'
 )
 guard = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(guard)

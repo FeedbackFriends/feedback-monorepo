@@ -1,4 +1,0 @@
-interface:
-  display_name: "LetsGrow Refine"
-  short_description: "Challenge feature requirements and overall architecture"
-  default_prompt: "Use $lg-refine to grill me on specific feature requirements and overall architecture, then save the decisions in the task before implementation."

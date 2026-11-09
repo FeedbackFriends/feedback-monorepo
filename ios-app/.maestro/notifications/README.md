@@ -11,7 +11,7 @@ From the repository root:
 python3 scripts/ios/test-notifications.py --counts 0 1 2 99
 ```
 
-The runner starts the backend through `scripts/ios/ios-backend localhost`, preserving
+The runner starts the backend through `scripts/ios/prepare-backend.sh localhost`, preserving
 Compose volumes. It requires the existing `mock-manager-with-data` account. On
 first use, explicitly prepare that standard sample fixture:
 

@@ -89,11 +89,11 @@ def main():
     python = APP / '.build/screenshot-tools/bin/python'
     if not python.exists():
         run(sys.executable, '-m', 'venv', python.parents[1])
-        run(python, '-m', 'pip', 'install', '-r', Path(__file__).resolve().parent / 'screenshot-requirements.txt')
-    run(sys.executable, Path(__file__).resolve().parent / 'screen-catalog.py', '--check')
+        run(python, '-m', 'pip', 'install', '-r', Path(__file__).resolve().parent / 'requirements-screenshots.txt')
+    run(sys.executable, Path(__file__).resolve().parent / 'manage-snapshot-catalog.py', '--check')
     capture()
-    run(sys.executable, Path(__file__).resolve().parent / 'screen-catalog.py', '--publish', APP.parent / 'screenshots/capture')
-    run(python, Path(__file__).resolve().parent / 'review-preview-catalog.py')
+    run(sys.executable, Path(__file__).resolve().parent / 'manage-snapshot-catalog.py', '--publish', APP.parent / 'screenshots/capture')
+    run(python, Path(__file__).resolve().parent / 'review-screenshots.py')
     gallery = APP.parent / 'screenshots/index.html'
     print(f'\nScreenshots: {APP.parent / "screenshots/capture"}\nGallery: {gallery}', flush=True)
     if not args.no_open:

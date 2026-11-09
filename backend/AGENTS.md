@@ -69,7 +69,7 @@ Supabase Auth is verified by the API against its project JWKS and user endpoint.
 
 ## Runtime and environment
 
-- Local full-stack runtime is orchestrated from the monorepo root with `./scripts/shared/run`.
+- Local full-stack runtime is orchestrated from the monorepo root with `./scripts/shared/reset-and-start-local-stack.sh`.
 - Direct service runs require the same environment contract described in `backend/README.md` and the root `.env.example`.
 - Keep secrets out of source control. Treat Supabase secret keys, SMTP credentials, Firebase service accounts and Zoho values as secrets.
 - Configure managed auth, mail, native clients and cutover through [Supabase auth setup](../docs/shared/agents/supabase-auth.md).

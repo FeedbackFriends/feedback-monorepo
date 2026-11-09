@@ -5,7 +5,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 
 usage() {
-  echo "Usage: ./scripts/ios/ios-backend localhost|production"
+  echo "Usage: ./scripts/ios/prepare-backend.sh localhost|production"
   echo "  localhost   Build the local API image, start API/Postgres, and wait for health."
   echo "  production  Check the existing production API without building or deploying it."
 }

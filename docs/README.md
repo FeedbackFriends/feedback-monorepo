@@ -12,7 +12,7 @@ Use this index to find the maintained source rather than copying it.
 | Agent harness, skills, tools, hooks, and layout | [Harness architecture](shared/agent-tooling.md) |
 | Available skills and community sources | [Skills overview](shared/skills.md) |
 | Task lifecycle and implementation | [Task workflow](shared/agents/task-workflow.md), [unfinished tasks](../todos.md) |
-| Architectural implementation handoff | [Human review](../.agents/skills/lg-implement/SKILL.md#prepare-the-human-review) |
+| Architectural implementation handoff | [Human review](shared/agents/task-workflow.md#prepare-the-human-review) |
 | Repository ownership and shared conventions | [Repository scope](shared/agents/repository-scope.md) |
 | Shared API contract and generated clients | [API contract](shared/agents/api-contract.md) |
 | Local services and production | [Runtime and deployment](shared/agents/runtime-and-deployment.md) |

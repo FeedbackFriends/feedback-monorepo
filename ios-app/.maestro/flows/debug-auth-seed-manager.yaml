@@ -1,6 +1,6 @@
 # Debug auth smoke flow (localhost):
-# - Reset is handled by scripts/ios/e2e
-# - Seed manager-empty through scripts/shared/e2e-admin
+# - Reset is handled by scripts/ios/run-e2e-tests.sh
+# - Seed manager-empty through scripts/shared/manage-test-data.sh
 # - Login through the debug E2E authentication sheet with the injected token
 # - Verify the manager Activities tab becomes visible
 

@@ -29,8 +29,8 @@ connection, Docker, and the existing local Firebase configuration.
 From the monorepo root, with Docker running:
 
 ```sh
-./scripts/ios/ios-backend localhost
-./scripts/shared/e2e-admin seed-manager-with-data > /dev/null
+./scripts/ios/prepare-backend.sh localhost
+./scripts/shared/manage-test-data.sh seed-manager-with-data > /dev/null
 ```
 
 The first command builds and starts the local API and Postgres while preserving

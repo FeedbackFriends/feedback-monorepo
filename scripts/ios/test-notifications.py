@@ -113,7 +113,7 @@ def backend_request(method, path, token=None, payload=None):
 
 def prepare_backend(skip_start=False, seed_manager=False):
     if not skip_start:
-        subprocess.run([str(IOS.parent / "scripts/ios/ios-backend"), "localhost"], check=True)
+        subprocess.run([str(IOS.parent / "scripts/ios/prepare-backend.sh"), "localhost"], check=True)
     try:
         with urlopen(HEALTH_URL, timeout=5) as response:
             if json.load(response).get("status") != "UP":

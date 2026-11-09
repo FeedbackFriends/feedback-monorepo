@@ -104,11 +104,11 @@ Location: `scripts/`
 
 Important scripts:
 
-- `./scripts/shared/run`: checks Docker, brings the stack down, regenerates API artifacts, builds local backend images, and starts Docker Compose.
-- `./scripts/shared/run -d`: same flow in detached mode.
+- `./scripts/shared/reset-and-start-local-stack.sh`: checks Docker, brings the stack down, regenerates API artifacts, builds local backend images, and starts Docker Compose.
+- `./scripts/shared/reset-and-start-local-stack.sh -d`: same flow in detached mode.
 - `./scripts/shared/generate-api-artifacts.sh`: regenerates the backend OpenAPI contract, web TypeScript API types, and iOS Swift OpenAPI sources.
-- `./scripts/shared/e2e-admin reset`: posts to the backend admin reset endpoint.
-- `./scripts/ios/e2e`: starts the local stack, waits for API health, builds/installs the iOS localhost app, and runs the Maestro manager flow.
+- `./scripts/shared/manage-test-data.sh reset`: posts to the backend admin reset endpoint.
+- `./scripts/ios/run-e2e-tests.sh`: starts the local stack, waits for API health, builds/installs the iOS localhost app, and runs the Maestro manager flow.
 
 The scripts intentionally fail when prerequisites are missing.
 
@@ -124,7 +124,7 @@ The root `.env` file supplies local configuration. Secrets belong in `.env`, Git
 Common root commands:
 
 ```bash
-./scripts/shared/run -d
+./scripts/shared/reset-and-start-local-stack.sh -d
 docker compose ps
 docker compose logs -f
 docker compose down

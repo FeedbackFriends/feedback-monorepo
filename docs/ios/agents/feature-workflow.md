@@ -1,14 +1,14 @@
 # iOS feature development
 
-Start at the monorepo root. The shared [task workflow](../../shared/agents/task-workflow.md) connects product decisions, implementation, and verification across platforms. This page adds iOS-specific guidance. Use the shared todo → grill → implementation flow. Keep detailed plans and evidence in the conversation; add todos only when explicitly requested.
+Start at the monorepo root. The shared [task workflow](../../shared/agents/task-workflow.md) connects product decisions, implementation, and verification across platforms. This page adds iOS-specific guidance. Use the shared outcome → build and verify → independent review → resolve → handoff flow. Keep detailed plans and evidence in the conversation; add todos only when explicitly requested.
 
 | Task | Entry point | Result |
 | --- | --- | --- |
 | Capture a requested todo | [$lg-add-todo](../../../.agents/skills/lg-add-todo/SKILL.md) | A short, nontechnical item in root `todos.md` |
-| Shape an idea or stress-test a plan | [$lg-refine](../../../.agents/skills/lg-refine/SKILL.md) | Requirements and architecture grilled with the user; an agreed plan in the conversation |
-| Implement a feature or fix | [$lg-implement](../../../.agents/skills/lg-implement/SKILL.md) | Implemented slice with automated verification and a conversation handoff |
+| Shape an idea or stress-test a plan | [$lg-plan](../../../.agents/skills/lg-plan/SKILL.md) | Requirements and architecture grilled with the user; an agreed plan in the conversation |
+| Implement a feature or fix | [$lg-deliver](../../../.agents/skills/lg-deliver/SKILL.md) | Verified implementation, agent review, finding resolution, and human handoff |
 | Write/refactor Swift | [Swift guidance](swift.md) | LetsGrow architecture, UI, localization, and testing conventions applied |
-| Review code or a diff | [$lg-review](../../../.agents/skills/lg-review/SKILL.md) | Ranked findings grounded in a concrete failure path |
+| Review code or a diff | [Shared review guidance](../../shared/agents/task-workflow.md#code-review) | Ranked findings grounded in a concrete failure path |
 
 These are agent prompts, not shell commands. Natural-language requests work too. Existing launch, login, screenshot, notification, and API-sync skills continue to own their procedures; see [iOS workflows](../agent-harness.md#workflows) and [simulator guidance](simulator.md).
 
@@ -16,7 +16,7 @@ The [shared task workflow](../../shared/agents/task-workflow.md) owns backlog si
 
 ## Choose verification by the change
 
-Use the smallest combination that can detect the actual regression. The [simulator guide](simulator.md) owns project-specific execution rules and result reporting; [testing](testing.md) owns lint and test policy. Implementation finishes with relevant automated tests, build and lint checks. Human manual testing and [visual review](visual-review.md) follow handoff; the runtime paths below are guidance for explicitly requested testing, not implementation completion gates.
+Use the smallest combination that can detect the actual regression. The [simulator guide](simulator.md) owns project-specific execution rules and result reporting; [testing](testing.md) owns lint and test policy. Implementation finishes with relevant automated tests, build and lint checks, applicable agent review, and material findings resolved. Human manual testing and [visual review](visual-review.md) follow handoff; the runtime paths below are guidance for explicitly requested testing, not implementation completion gates.
 
 | Change | Behavioral evidence | Runtime/data needs |
 | --- | --- | --- |
@@ -48,10 +48,10 @@ The [localhost skill](../../../.agents/skills/lg-ios-run-local/SKILL.md) owns ex
 ## Example requests
 
 ```text
-$lg-refine Let owners duplicate an activity's question setup.
+$lg-plan Let owners duplicate an activity's question setup.
 # Grill the requirements and architecture in the conversation.
-$lg-implement Implement the agreed duplication behavior.
+Implement the agreed duplication behavior.
 $lg-ios-run-local both seed-manager
 $lg-ios-run-production
-$lg-review Review the current changes for shared-state and navigation regressions.
+Review the current changes for shared-state and navigation regressions.
 ```

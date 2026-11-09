@@ -14,7 +14,6 @@ Custom workflows use `lg-` names that describe the action. Group platform workfl
 | [lg-commit-and-push](../../.agents/skills/lg-commit-and-push/SKILL.md) | Commit or push when requested. |
 | [lg-coolify-operate](../../.agents/skills/lg-coolify-operate/SKILL.md) | Operate and troubleshoot Coolify production deployments. |
 | [lg-add-todo](../../.agents/skills/lg-add-todo/SKILL.md) | Add a short nontechnical item to `todos.md` only when requested. |
-| [lg-implement](../../.agents/skills/lg-implement/SKILL.md) | Implement the agreed conversation plan and prepare its handoff. |
 | [lg-maintain-harness](../../.agents/skills/lg-maintain-harness/SKILL.md) | Simplify custom skills, AGENTS.md, rules, and documentation; audit guidance against source. |
 | [lg-ios-run-local](../../.agents/skills/lg-ios-run-local/SKILL.md) | Start the local backend and launch manager/anonymous apps. |
 | [lg-ios-login](../../.agents/skills/lg-ios-login/SKILL.md) | Launch iOS with a local test-account login. |
@@ -22,8 +21,8 @@ Custom workflows use `lg-` names that describe the action. Group platform workfl
 | [lg-ios-capture-screenshots](../../.agents/skills/lg-ios-capture-screenshots/SKILL.md) | Capture and compare the curated iOS screenshot catalog. |
 | [lg-ios-sync-api](../../.agents/skills/lg-ios-sync-api/SKILL.md) | Sync handwritten iOS API boundaries with generated clients. |
 | [lg-ios-test-notifications](../../.agents/skills/lg-ios-test-notifications/SKILL.md) | Run the iOS notification test command. |
-| [lg-refine](../../.agents/skills/lg-refine/SKILL.md) | Grill requirements and architecture with the user before implementation. |
-| [lg-review](../../.agents/skills/lg-review/SKILL.md) | Review changes for concrete regressions. |
+| [lg-deliver](../../.agents/skills/lg-deliver/SKILL.md) | Coordinate outcome agreement, implementation, verification, independent review, finding resolution, and human handoff. |
+| [lg-plan](../../.agents/skills/lg-plan/SKILL.md) | Grill requirements and architecture with the user before implementation. |
 | [lg-web-style](../../.agents/skills/lg-web-style/SKILL.md) | Implement web styling with existing tokens and components. |
 
 ## Community skills
@@ -54,7 +53,7 @@ Custom workflows use `lg-` names that describe the action. Group platform workfl
 
 | Work | Owner and supporting guidance |
 | --- | --- |
-| Customer evidence and pilots | `customer-research` for interview plans and synthesis; `lg-refine` turns evidence into requirements and architecture. |
+| Customer evidence and pilots | `customer-research` for interview plans and synthesis; `lg-plan` turns evidence into requirements and architecture. |
 | Public positioning and landing copy | `copywriting`, informed by research and the [product strategy](product/lets-grow-strategi-teamtrivsel.md); `seo-audit` checks public-page discoverability. |
 | First-use journeys | `onboarding` for the path to value; task requirements own account roles, invitations, and access checks. |
 | Web UI | `lg-web-style` and `shadcn` implement existing tokens/components; `frontend-design` supports visual direction, `ui-ux-pro-max` targeted lookup, and `web-design-guidelines` interface review. |

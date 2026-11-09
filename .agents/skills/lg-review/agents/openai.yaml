@@ -1,4 +1,0 @@
-interface:
-  display_name: "LetsGrow Review"
-  short_description: "Find concrete regressions across LetsGrow platforms"
-  default_prompt: "Use $lg-review to review the current changes against the task and target branch."

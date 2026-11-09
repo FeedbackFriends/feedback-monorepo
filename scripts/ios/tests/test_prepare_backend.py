@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 
-SCRIPT = Path(__file__).resolve().parents[1] / "ios-backend"
+SCRIPT = Path(__file__).resolve().parents[1] / "prepare-backend.sh"
 
 
 class IOSBackendTests(unittest.TestCase):
@@ -18,7 +18,7 @@ class IOSBackendTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         (self.root / "scripts/ios").mkdir(parents=True)
-        shutil.copy2(SCRIPT, self.root / "scripts/ios/ios-backend")
+        shutil.copy2(SCRIPT, self.root / "scripts/ios/prepare-backend.sh")
         config = self.root / "ios-app/App/Config"
         config.mkdir(parents=True)
         (config / "localhost.xcconfig").write_text("API_SCHEME = http\nAPI_BASE_URL = localhost:8080\n")
@@ -52,7 +52,7 @@ elif name == 'gradlew' and os.environ.get('BUILD_FAIL'):
             path.chmod(0o755)
 
     def run_script(self, mode, **env):
-        return subprocess.run([str(self.root / "scripts/ios/ios-backend"), mode], cwd=self.root,
+        return subprocess.run([str(self.root / "scripts/ios/prepare-backend.sh"), mode], cwd=self.root,
                               env=dict(self.env, **env), text=True, capture_output=True)
 
     def calls(self):

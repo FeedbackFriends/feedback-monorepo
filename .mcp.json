@@ -8,7 +8,7 @@
     "coolify": {
       "type": "http",
       "url": "https://coolify.letsgrow.dk/mcp",
-      "headersHelper": "./scripts/shared/coolify-mcp-auth-headers"
+      "headersHelper": "./scripts/shared/print-coolify-auth-headers.py"
     },
     "maestro": {
       "type": "stdio",

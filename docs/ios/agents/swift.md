@@ -49,4 +49,4 @@ These are reading paths, not code templates; confirm their current behavior befo
 | Navigation-aware success timing | [SuccessConfirmation tests](../../../ios-app/Modules/Tests/AppTests/ReducerTests/FocusFeature/SuccessConfirmationTests.swift), [UI rules](ui.md) |
 | API-to-Bootstrap mutations | [APIClientCache tests](../../../ios-app/Modules/Tests/AppTests/APIClientLiveTests/APIClientCacheMutationTests.swift) |
 
-Follow [testing](testing.md) and the [implementation workflow](../../../.agents/skills/lg-implement/SKILL.md) to finish. Test behavior that can regress: a rejected second submission, response arriving after navigation, cache updates visible to a sibling screen, or an error returning the form to a usable state. Avoid asserting incidental reducer structure.
+Follow [testing](testing.md) and the [implementation workflow](../../shared/agents/task-workflow.md) to finish. Test behavior that can regress: a rejected second submission, response arriving after navigation, cache updates visible to a sibling screen, or an error returning the form to a usable state. Avoid asserting incidental reducer structure.

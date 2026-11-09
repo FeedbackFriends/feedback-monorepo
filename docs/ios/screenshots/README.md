@@ -13,9 +13,9 @@ Select one representative layout per screen. Add empty, error, role, or presenta
 Generate the test factories after changing a selected preview or its screenshot selection:
 
 ```sh
-python3 scripts/ios/screen-catalog.py --generate
-python3 scripts/ios/screen-catalog.py --check
-python3 scripts/ios/screen-catalog.py --plan
+python3 scripts/ios/manage-snapshot-catalog.py --generate
+python3 scripts/ios/manage-snapshot-catalog.py --check
+python3 scripts/ios/manage-snapshot-catalog.py --plan
 ```
 
 The generator writes marked sections into the existing feature catalog files, where factories can use the same private helpers as previews. Never hand-edit those generated sections. The compiler and generated-factory check must pass before capturing.
@@ -31,12 +31,12 @@ Generated output paths beginning with `screenshots/` are relative to the monorep
 From the repository root in Warp:
 
 ```sh
-./scripts/ios/screenshots
+./scripts/ios/capture-screenshots.py
 ```
 
 This checks the generated inventory, builds and runs the catalog capture test using Apple's native Xcode MCP bridge, publishes the complete successful batch, generates the current screenshot grid, and opens it in your default browser. Xcode must have MCP access enabled and an eligible iPhone simulator selected. On first use, Xcode may ask you to approve the command-line client and project folder. Allow that prompt in Xcode. The script creates the local screenshot-tools virtual environment and installs its requirements if it does not exist. It returns the Localhost scheme to the `UnitTests` plan after capture and never accepts baselines.
 
-Use `./scripts/ios/screenshots --no-open` to skip opening the browser. The command works from any directory when invoked by its full path.
+Use `./scripts/ios/capture-screenshots.py --no-open` to skip opening the browser. The command works from any directory when invoked by its full path.
 
 - Original captures: `screenshots/capture/`
 - Native alert: `screenshots/capture/sign-in.error.png` (included in the same gallery)
@@ -54,8 +54,8 @@ Use **native Xcode MCP** for every build and test operation; do not substitute c
 5. Publish the complete successful batch and generate the review:
 
 ```sh
-python3 scripts/ios/screen-catalog.py --publish screenshots/capture
-ios-app/.build/screenshot-tools/bin/python scripts/ios/review-preview-catalog.py
+python3 scripts/ios/manage-snapshot-catalog.py --publish screenshots/capture
+ios-app/.build/screenshot-tools/bin/python scripts/ios/review-screenshots.py
 open screenshots/index.html
 ```
 
@@ -69,7 +69,7 @@ Install the local comparison dependency once:
 
 ```sh
 python3 -m venv ios-app/.build/screenshot-tools
-ios-app/.build/screenshot-tools/bin/pip install -r scripts/ios/screenshot-requirements.txt
+ios-app/.build/screenshot-tools/bin/pip install -r scripts/ios/requirements-screenshots.txt
 ```
 
 Human or agent visual review is the decision step. Review every current screenshot for missing content, clipping, overlap, layout, typography, copy, and color changes. Record the reviewed IDs and hashes from `report.json`, meaningful findings, and uncertainty in a findings file beside the report. The agent recommends changes; it never automatically approves baselines. The first migration compares against historical Xcode captures with different framing and potentially stale content, so those differences require context.
@@ -77,9 +77,9 @@ Human or agent visual review is the decision step. Review every current screensh
 Optional `--pixel-diff` and `--check-repeat FIRST SECOND` compare decoded RGBA pixels for investigation; numerical differences do not fail the workflow. Only after the user approves the displayed changes:
 
 ```sh
-ios-app/.build/screenshot-tools/bin/python scripts/ios/review-preview-catalog.py --accept home.populated
+ios-app/.build/screenshot-tools/bin/python scripts/ios/review-screenshots.py --accept home.populated
 # Only when all reported changes have been approved:
-ios-app/.build/screenshot-tools/bin/python scripts/ios/review-preview-catalog.py --accept-all
+ios-app/.build/screenshot-tools/bin/python scripts/ios/review-screenshots.py --accept-all
 ```
 
 Acceptance copies the exact reviewed images and rejects a changed baseline or modified review image. It does not commit or push anything. System alert appearance is not included in the pixel guarantee.

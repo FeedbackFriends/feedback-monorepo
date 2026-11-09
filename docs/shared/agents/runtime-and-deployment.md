@@ -9,14 +9,14 @@
 Run these commands from the monorepo root:
 
 ```bash
-./scripts/shared/run
-./scripts/shared/run -d
+./scripts/shared/reset-and-start-local-stack.sh
+./scripts/shared/reset-and-start-local-stack.sh -d
 docker compose down
 docker compose logs -f
 docker compose ps
 ```
 
-`./scripts/shared/run` stops the stack with `docker compose down --volumes --remove-orphans`, regenerates API artifacts, rebuilds backend images, and starts Compose. For local backend plus iOS work, use the [data-preserving localhost skill](../../../.agents/skills/lg-ios-run-local/SKILL.md).
+`./scripts/shared/reset-and-start-local-stack.sh` stops the stack with `docker compose down --volumes --remove-orphans`, regenerates API artifacts, rebuilds backend images, and starts Compose. For local backend plus iOS work, use the [data-preserving localhost skill](../../../.agents/skills/lg-ios-run-local/SKILL.md).
 
 ## Environment
 

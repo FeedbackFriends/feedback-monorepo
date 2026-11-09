@@ -46,7 +46,7 @@ jobs:
       - name: Install screenshot tooling dependencies
         run: |
           python3 -m venv "$RUNNER_TEMP/ios-tools"
-          "$RUNNER_TEMP/ios-tools/bin/python" -m pip install -r scripts/ios/screenshot-requirements.txt
+          "$RUNNER_TEMP/ios-tools/bin/python" -m pip install -r scripts/ios/requirements-screenshots.txt
           echo "$RUNNER_TEMP/ios-tools/bin" >> "$GITHUB_PATH"
 
       - name: Check iOS helper behavior
@@ -56,7 +56,7 @@ jobs:
         run: python3 scripts/ios/validate-localization.py
 
       - name: Check direct user-visible literals
-        run: python3 scripts/ios/check-localized-copy.py
+        run: python3 scripts/ios/check-unlocalized-copy.py
 
       - name: Check shared helper behavior
         run: python3 -m unittest discover -s scripts/shared/tests -v

@@ -1,0 +1,4 @@
+interface:
+  display_name: "LetsGrow Plan"
+  short_description: "Challenge feature requirements and overall architecture"
+  default_prompt: "Use $lg-plan to grill me on specific feature requirements and overall architecture, then summarize the agreed outcome, acceptance criteria, and decisions in the conversation before implementation."

@@ -5,7 +5,7 @@ import unittest
 
 from PIL import Image, PngImagePlugin
 
-spec = importlib.util.spec_from_file_location('reviewer', Path(__file__).parents[1] / 'review-preview-catalog.py')
+spec = importlib.util.spec_from_file_location('reviewer', Path(__file__).parents[1] / 'review-screenshots.py')
 reviewer = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(reviewer)
 

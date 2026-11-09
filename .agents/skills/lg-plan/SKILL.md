@@ -1,5 +1,5 @@
 ---
-name: lg-refine
+name: lg-plan
 description: Grill a LetsGrow idea or todo with the user to settle requirements and architecture before implementation. Keep the detailed plan in the conversation and todos.md simple.
 ---
 
@@ -27,4 +27,4 @@ Resolve technical details during refinement when they affect requirements, archi
 
 Summarize the agreed outcome, scope, acceptance criteria, architectural decisions and tradeoffs, relevant source references, and remaining questions in the conversation. Keep confirmed decisions distinct from proposals. For larger work, outline phases with observable outcomes and dependencies.
 
-When material requirements and architectural choices are settled, the plan is ready for [implementation](../lg-implement/SKILL.md). If implementation is already authorized, continue without another approval gate; otherwise hand off the plan. Refinement alone does not authorize code changes. Do not expand `todos.md` into a specification or create separate task files.
+When material requirements and architectural choices are settled, the plan is ready for [implementation](../../../docs/shared/agents/task-workflow.md#implementation-completion). If implementation is already authorized, continue without another approval gate; otherwise hand off the plan. Refinement alone does not authorize code changes. Do not expand `todos.md` into a specification or create separate task files.

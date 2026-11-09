@@ -6,7 +6,7 @@ import unittest
 
 from PIL import Image
 
-spec = importlib.util.spec_from_file_location('catalog', Path(__file__).parents[1] / 'screen-catalog.py')
+spec = importlib.util.spec_from_file_location('catalog', Path(__file__).parents[1] / 'manage-snapshot-catalog.py')
 catalog = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(catalog)
 

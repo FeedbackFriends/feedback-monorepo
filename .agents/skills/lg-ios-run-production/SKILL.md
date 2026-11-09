@@ -7,7 +7,7 @@ description: Build and launch the LetsGrow iOS app on a simulator against the ex
 
 Run from the monorepo root. Follow [iOS policy](../../../ios-app/AGENTS.md) and the [simulator guide](../../../docs/ios/agents/simulator.md) for native Xcode MCP operations.
 
-1. Run `./scripts/ios/ios-backend production` to check HTTP success and `status: UP` on the existing `https://api.letsgrow.dk/actuator/health` endpoint. This mode does not require Docker, local backend services, or a Coolify token. On failure, report the production health blocker. If deployment troubleshooting was requested, use the [Coolify operations skill](../lg-coolify-operate/SKILL.md); do not redeploy as part of an app build.
+1. Run `./scripts/ios/prepare-backend.sh production` to check HTTP success and `status: UP` on the existing `https://api.letsgrow.dk/actuator/health` endpoint. This mode does not require Docker, local backend services, or a Coolify token. On failure, report the production health blocker. If deployment troubleshooting was requested, use the [Coolify operations skill](../lg-coolify-operate/SKILL.md); do not redeploy as part of an app build.
 2. Use the shared simulator workflow in **launch-only mode**, explicitly selecting `Feedback Production` (Release), not `Debug Production` or `Feedback Localhost`. Match the current checkout and use an eligible simulator. Call `RunProject` to build, install, and launch through native Xcode MCP. Do not archive, upload to TestFlight/App Store, or change Coolify services.
 3. Observe launch success. Do not inject localhost admin-login arguments or reset/seed production data. If login is needed, the user signs in normally through the app. Unit tests belong to `Feedback Localhost`/`UnitTests`, not this production launch scheme.
 

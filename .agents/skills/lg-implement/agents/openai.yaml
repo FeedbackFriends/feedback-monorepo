@@ -1,4 +1,0 @@
-interface:
-  display_name: "LetsGrow Implement"
-  short_description: "Implement the agreed plan and verify the change"
-  default_prompt: "Use $lg-implement to implement the agreed conversation plan, run the required checks, and prepare the human review handoff."

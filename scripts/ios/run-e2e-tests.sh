@@ -80,7 +80,7 @@ seed_command_for_flow() {
       ;;
     *)
       echo "No seed command configured for Maestro flow: $flow_name" >&2
-      echo "Add the flow to seed_command_for_flow in scripts/ios/e2e before running it." >&2
+      echo "Add the flow to seed_command_for_flow in scripts/ios/run-e2e-tests.sh before running it." >&2
       return 1
       ;;
   esac
@@ -138,7 +138,7 @@ require_cmd xcodebuild
 require_cmd xcrun
 require_cmd curl
 require_cmd rg
-require_cmd ruby
+require_cmd python3
 
 FLOW_PATHS=()
 while IFS= read -r flow_path; do
@@ -152,7 +152,7 @@ fi
 
 cd "$REPO_ROOT"
 if [ "$SKIP_BACKEND_START" != "1" ]; then
-  ./scripts/shared/run -d
+  ./scripts/shared/reset-and-start-local-stack.sh -d
 fi
 wait_for_api_health "$API_HEALTH_TIMEOUT_SECONDS"
 SIMULATOR_UDID="$(ensure_booted_simulator "$SIMULATOR_NAME")"
@@ -180,12 +180,12 @@ for flow_path in "${FLOW_PATHS[@]}"; do
   seed_command="$(seed_command_for_flow "$flow_path")"
 
   echo "Resetting E2E backend state for: $flow_name"
-  API_BASE_URL="$API_BASE_URL" "$REPO_ROOT/scripts/shared/e2e-admin" reset
+  API_BASE_URL="$API_BASE_URL" "$REPO_ROOT/scripts/shared/manage-test-data.sh" reset
 
   maestro_env=()
   if [ -n "$seed_command" ]; then
     echo "Seeding E2E backend state for: $flow_name ($seed_command)"
-    e2e_token="$(API_BASE_URL="$API_BASE_URL" "$REPO_ROOT/scripts/shared/e2e-admin" "$seed_command")"
+    e2e_token="$(API_BASE_URL="$API_BASE_URL" "$REPO_ROOT/scripts/shared/manage-test-data.sh" "$seed_command")"
     maestro_env=(-e "E2E_CUSTOM_TOKEN=$e2e_token")
   fi
 

@@ -3,7 +3,7 @@ import runpy
 import unittest
 from unittest.mock import MagicMock, patch
 
-runner = runpy.run_path(str(Path(__file__).parents[1] / 'screenshots'))
+runner = runpy.run_path(str(Path(__file__).parents[1] / 'capture-screenshots.py'))
 capture = runner['capture']
 
 

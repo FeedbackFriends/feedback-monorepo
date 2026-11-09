@@ -40,9 +40,9 @@ $lg-ios-run-local anonymous
 
 ## Backend and data
 
-1. Run `./scripts/ios/ios-backend localhost`. It builds the API image, starts API/Postgres, and waits for health while preserving volumes. Stop on failure and report the failing stage. Do not use `scripts/shared/run` or remove Compose volumes.
-2. Only when `reset-db` was requested, run `API_BASE_URL=http://localhost:8080 E2E_ADMIN_RETRIES=1 ./scripts/shared/e2e-admin reset`. Stop on failure; never retry a destructive operation automatically.
-3. If `seed-manager` was requested, or after a successful requested database reset when mode is `manager` or `both`, run `API_BASE_URL=http://localhost:8080 E2E_ADMIN_RETRIES=1 ./scripts/shared/e2e-admin seed-manager-with-data > /dev/null`. Stop on failure. Discard token output and never log credentials. Do not seed twice when both options are present.
+1. Run `./scripts/ios/prepare-backend.sh localhost`. It builds the API image, starts API/Postgres, and waits for health while preserving volumes. Stop on failure and report the failing stage. Do not use `scripts/shared/reset-and-start-local-stack.sh` or remove Compose volumes.
+2. Only when `reset-db` was requested, run `API_BASE_URL=http://localhost:8080 E2E_ADMIN_RETRIES=1 ./scripts/shared/manage-test-data.sh reset`. Stop on failure; never retry a destructive operation automatically.
+3. If `seed-manager` was requested, or after a successful requested database reset when mode is `manager` or `both`, run `API_BASE_URL=http://localhost:8080 E2E_ADMIN_RETRIES=1 ./scripts/shared/manage-test-data.sh seed-manager-with-data > /dev/null`. Stop on failure. Discard token output and never log credentials. Do not seed twice when both options are present.
 
 The fixed loopback origin prevents a caller's `API_BASE_URL` environment override from redirecting fixture operations elsewhere. Missing fixtures or disabled admin endpoints are actionable failures; do not silently seed/reset without the corresponding option. Explain that `seed-manager` replaces the fixture's sample data when describing a first-time invocation.
 

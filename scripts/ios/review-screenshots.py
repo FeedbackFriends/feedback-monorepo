@@ -178,7 +178,7 @@ def main():
     if args.accept or args.accept_all:
         print(f'Accepted {accept(identifiers=args.accept, all_changes=args.accept_all)} screenshots.')
     else:
-        spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parent / 'screen-catalog.py')
+        spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parent / 'manage-snapshot-catalog.py')
         publisher = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(publisher)
         expected = {screen['id'] for screen in publisher.load_registry()['screens']}

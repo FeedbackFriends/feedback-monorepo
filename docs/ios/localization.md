@@ -49,7 +49,7 @@ From the monorepo root:
 
 ```sh
 python3 scripts/ios/validate-localization.py
-python3 scripts/ios/check-localized-copy.py
+python3 scripts/ios/check-unlocalized-copy.py
 ```
 
 The copy guard detects direct literal presentation APIs with narrow file/value/count exceptions; it does not parse all Swift or follow indirect/custom-component values. Review those values and interpolation manually. Catalog/formatting behavior tests live in [LocalizationTests](../../ios-app/Modules/Tests/AppTests/UnitTests/LocalizationTests.swift) and [DateTests](../../ios-app/Modules/Tests/AppTests/UnitTests/DateTests.swift); run through `Feedback Localhost` / `UnitTests`.

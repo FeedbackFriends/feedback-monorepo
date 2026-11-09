@@ -8,7 +8,7 @@ COMMAND="${1:-}"
 
 usage() {
   cat >&2 <<'EOF'
-Usage: scripts/shared/e2e-admin <command>
+Usage: scripts/shared/manage-test-data.sh <command>
 
 Commands:
   reset
@@ -50,16 +50,20 @@ post_admin() {
 }
 
 print_token_from_json() {
-  ruby -rjson -e '
-    payload = JSON.parse(STDIN.read)
-    token = payload.fetch("token")
-    abort("Seed response did not include token") if token.empty?
-    puts token
-  '
+  python3 -c '
+import json
+import sys
+
+payload = json.load(sys.stdin)
+token = payload.get("token")
+if not isinstance(token, str) or not token:
+    sys.exit("Seed response did not include token")
+print(token)
+'
 }
 
 require_cmd curl
-require_cmd ruby
+require_cmd python3
 
 case "$COMMAND" in
   reset)
