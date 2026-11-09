@@ -6353,6 +6353,390 @@
         }
       }
     },
+    "suggestions.empty" : {
+      "comment" : "Employee team suggestions: empty. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der er ingen forslag endnu. Hvad kan gøre jeres arbejdsdag bedre?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No suggestions yet. What could improve your team’s workday?"
+          }
+        }
+      }
+    },
+    "suggestions.impact" : {
+      "comment" : "Employee team suggestions: impact. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad betyder det for arbejdsdagen? (påkrævet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How does it affect your workday? (required)"
+          }
+        }
+      }
+    },
+    "suggestions.lengthHint" : {
+      "comment" : "Employee team suggestions: lengthHint. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Højst 1.000 tegn i hvert felt. Undgå navne og følsomme personlige oplysninger."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up to 1,000 characters per field. Avoid names and sensitive personal information."
+          }
+        }
+      }
+    },
+    "suggestions.membershipRequired" : {
+      "comment" : "Employee team suggestions: membershipRequired. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du skal være godkendt i et team for at se og dele forslag."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You must be an approved team member to view and share suggestions."
+          }
+        }
+      }
+    },
+    "suggestions.new" : {
+      "comment" : "Employee team suggestions: new. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foreslå en forbedring"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggest an improvement"
+          }
+        }
+      }
+    },
+    "suggestions.privacy" : {
+      "comment" : "Employee team suggestions: privacy. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forslag deles med teamet. Dit navn og hvem der støtter vises ikke til kolleger eller ledere. Lets Grow gemmer forbindelsen til din konto. Indholdet kan afsløre, hvem du er, især i små teams. Del ikke følsomme personsager her."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestions are shared with your team. Your name and who supports ideas are not shown to colleagues or leaders. Lets Grow stores the link to your account. Your wording may identify you, especially in small teams. Do not share sensitive personal concerns here."
+          }
+        }
+      }
+    },
+    "suggestions.problem" : {
+      "comment" : "Employee team suggestions: problem. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad vil du forbedre? (påkrævet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What would you improve? (required)"
+          }
+        }
+      }
+    },
+    "suggestions.removeSupport" : {
+      "comment" : "Employee team suggestions: removeSupport. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fjern din støtte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove your support"
+          }
+        }
+      }
+    },
+    "suggestions.solution" : {
+      "comment" : "Employee team suggestions: solution. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din idé til en løsning (valgfrit)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your idea for a solution (optional)"
+          }
+        }
+      }
+    },
+    "suggestions.submit" : {
+      "comment" : "Employee team suggestions: submit. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del med teamet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share with the team"
+          }
+        }
+      }
+    },
+    "suggestions.submitted" : {
+      "comment" : "Employee team suggestions: submitted. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit forslag er delt med teamet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your suggestion has been shared with the team."
+          }
+        }
+      }
+    },
+    "suggestions.support" : {
+      "comment" : "Employee team suggestions: support. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Støt forslaget"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support this idea"
+          }
+        }
+      }
+    },
+    "suggestions.supportCount" : {
+      "comment" : "Number of anonymous supporters of a team suggestion. Argument is an integer count.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld støtter"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld støtter"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld supporter"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld supporters"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "suggestions.title" : {
+      "comment" : "Employee team suggestions: title. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forslag"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestions"
+          }
+        }
+      }
+    },
+    "suggestions.withdraw" : {
+      "comment" : "Employee team suggestions: withdraw. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Træk dit forslag tilbage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withdraw your suggestion"
+          }
+        }
+      }
+    },
+    "suggestions.withdrawTitle" : {
+      "comment" : "Employee team suggestions: withdrawTitle. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Træk forslaget tilbage?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withdraw this suggestion?"
+          }
+        }
+      }
+    },
+    "suggestions.report" : {
+      "comment" : "Team suggestion content reporting: report. Reports go to authorized team leaders without reporter identity.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapportér indhold"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report content"
+          }
+        }
+      }
+    },
+    "suggestions.reportTitle" : {
+      "comment" : "Team suggestion content reporting: reportTitle. Reports go to authorized team leaders without reporter identity.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapportér dette forslag?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report this suggestion?"
+          }
+        }
+      }
+    },
+    "suggestions.reportExplanation" : {
+      "comment" : "Team suggestion content reporting: reportExplanation. Reports go to authorized team leaders without reporter identity.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapportér indhold, der er upassende eller kan identificere en kollega. Teamets ledere gennemgår forslaget og kan fjerne det. De kan ikke se, hvem der rapporterer. Forslaget er synligt, indtil det bliver fjernet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report content that is inappropriate or could identify a colleague. Your team leaders review the suggestion and can remove it. They cannot see who reports it. The suggestion remains visible until removed."
+          }
+        }
+      }
+    },
+    "suggestions.reportSubmitted" : {
+      "comment" : "Team suggestion content reporting: reportSubmitted. Reports go to authorized team leaders without reporter identity.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forslaget er rapporteret til teamets ledere til gennemgang."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The suggestion has been reported to your team leaders for review."
+          }
+        }
+      }
+    },
     "team.cancelAction" : {
       "comment" : "Employee team membership. App-owned interface copy.",
       "extractionState" : "manual",

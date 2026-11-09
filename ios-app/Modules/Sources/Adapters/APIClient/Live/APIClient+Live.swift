@@ -8,6 +8,11 @@ public extension APIClient {
         sessionCache: APIClientCache = APIClientCache()
     ) -> APIClient {
         APIClient(
+            listSuggestions: makeListSuggestions(api: api),
+            createSuggestion: makeCreateSuggestion(api: api),
+            setSuggestionSupport: makeSetSuggestionSupport(api: api),
+            reportSuggestion: makeReportSuggestion(api: api),
+            withdrawSuggestion: makeWithdrawSuggestion(api: api),
             getTeamContext: { try await withAuthorization { EmployeeTeamContext(try await api.context(.init()).ok.body.json) } },
             requestTeamMembership: { id, code, name in
                 try await withAuthorization {

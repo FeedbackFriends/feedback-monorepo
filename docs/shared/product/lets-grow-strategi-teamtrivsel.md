@@ -219,7 +219,7 @@ Byg den mindste sammenhængende oplevelse, der kan gennemføre hele forbedringsl
 
 Adgang, anonymitet, håndtering af upassende indhold og en vej for følsomt input skal tænkes ind i denne første version.
 
-Den eksisterende iOS-app er den primære medarbejderoplevelse. Giv også en enkel webbaseret deltagelsesmulighed, så Android-brugere kan være med. Virksomheder skal kunne inkludere hele teamet.
+Medarbejderoplevelsen bygges først i den eksisterende iOS-app. Android kommer senere; der bygges ikke en medarbejderoplevelse på web. Lederens arbejdsflade er webbaseret.
 
 Udskyd omfattende surveybyggere, avancerede HR-moduler, tunge integrationer, store rapportpakker og automatiske konklusioner om medarbejdere. Udvid først, når pilotforløbene viser et konkret behov.
 

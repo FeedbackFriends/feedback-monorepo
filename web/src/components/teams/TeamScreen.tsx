@@ -1,6 +1,7 @@
 "use client"
 
 import TeamLeaders from "./TeamLeaders"
+import TeamSuggestionReports from "./TeamSuggestionReports"
 import Link from "next/link"
 import { useCallback, useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -126,6 +127,7 @@ export default function TeamScreen({ teamId }: { teamId: string }) {
             </div>
           </div>
           {isOwner && <TeamLeaders teamId={teamId} />}
+          <TeamSuggestionReports key={teamId} teamId={teamId} />
           {details.pendingRequests.length > 0 && (
             <section className="space-y-4" aria-labelledby="pending-heading">
               <div className="flex items-center justify-between gap-4">

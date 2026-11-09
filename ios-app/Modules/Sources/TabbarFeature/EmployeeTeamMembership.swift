@@ -8,6 +8,7 @@ public struct EmployeeTeamMembership: Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         @Shared var bootstrap: Bootstrap
+        var suggestions: TeamSuggestions.State
         var code = ""
         var name = ""
         var isBusy = false
@@ -18,6 +19,7 @@ public struct EmployeeTeamMembership: Sendable {
 
         public init(bootstrap: Shared<Bootstrap>, code: String = "") {
             self._bootstrap = bootstrap
+            self.suggestions = .init(bootstrap: bootstrap)
             self.code = code
         }
 
@@ -32,6 +34,7 @@ public struct EmployeeTeamMembership: Sendable {
     public enum AlertAction: Equatable, Sendable { case confirmLeave, confirmCancel }
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
+        case suggestions(TeamSuggestions.Action)
         case refresh
         case submit
         case cancelTapped
@@ -48,6 +51,7 @@ public struct EmployeeTeamMembership: Sendable {
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
+        Scope(state: \.suggestions, action: \.suggestions) { TeamSuggestions() }
         Reduce { state, action in
             switch action {
             case .refresh:
@@ -63,6 +67,7 @@ public struct EmployeeTeamMembership: Sendable {
                 let name = state.name.trimmingCharacters(in: .whitespacesAndNewlines)
                 return request { try await apiClient.requestTeamMembership(id, code, name) }
             case .response(let context):
+                let membershipChanged = state.context?.membership?.id != context.membership?.id
                 state.isBusy = false
                 state.hasLoaded = true
                 state.$bootstrap.withLock { $0.teamContext = context }
@@ -71,7 +76,7 @@ public struct EmployeeTeamMembership: Sendable {
                     state.code = ""
                     state.name = ""
                 }
-                return .none
+                return membershipChanged ? .send(.suggestions(.membershipChanged)) : .none
             case .cancelled:
                 state.isBusy = false
                 return .none
@@ -112,6 +117,8 @@ public struct EmployeeTeamMembership: Sendable {
                 return request { try await apiClient.leaveTeam(id) }
             case .binding(\.code), .binding(\.name):
                 state.requestID = nil
+                return .none
+            case .suggestions:
                 return .none
             case .binding, .alert:
                 return .none

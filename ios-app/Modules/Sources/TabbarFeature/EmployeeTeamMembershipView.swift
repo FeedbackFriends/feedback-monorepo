@@ -22,6 +22,13 @@ public struct EmployeeTeamMembershipView: View {
                     Text(team.name).largeTitleTextStyle()
                     Text(team.organizationName).supportingTextStyle()
                     Text(String(appStrings: .teamJoinedMessage)).bodyTextStyle()
+                    NavigationLink {
+                        TeamSuggestionsView(store: store.scope(state: \.suggestions, action: \.suggestions))
+                    } label: {
+                        Text(String(appStrings: .suggestionsTitle))
+                    }
+                    .buttonStyle(LargeButtonStyle())
+                    .accessibilityIdentifier("team_suggestions")
                     Button(String(appStrings: .teamLeaveAction)) { store.send(.leaveTapped) }
                         .buttonStyle(LargeButtonStyle())
                         .disabled(store.isBusy)

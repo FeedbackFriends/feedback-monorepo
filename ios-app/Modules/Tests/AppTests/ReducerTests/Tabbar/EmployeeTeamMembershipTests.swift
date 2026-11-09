@@ -40,12 +40,14 @@ struct EmployeeTeamMembershipTests {
             $0.isBusy = false
             $0.$bootstrap.withLock { $0.teamContext = EmployeeTeamContext(membership: team) }
         }
+        await store.receive(\.suggestions.membershipChanged)
         store.dependencies.apiClient.getTeamContext = { .init() }
         await store.send(.refresh) { $0.isBusy = true }
         await store.receive(\.response) {
             $0.isBusy = false
             $0.$bootstrap.withLock { $0.teamContext = .init() }
         }
+        await store.receive(\.suggestions.membershipChanged)
     }
 
     @Test
@@ -101,6 +103,7 @@ struct EmployeeTeamMembershipTests {
             $0.isBusy = false
             $0.$bootstrap.withLock { $0.teamContext = .init() }
         }
+        await store.receive(\.suggestions.membershipChanged)
         #expect(!store.state.canSubmit)
     }
 

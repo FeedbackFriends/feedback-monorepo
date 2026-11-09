@@ -3,6 +3,11 @@ import ComposableArchitecture
 extension APIClient: TestDependencyKey {
     public static let previewValue = APIClient()
     public static let testValue = APIClient(
+        listSuggestions: { _ in [] },
+        createSuggestion: { _, _, _, _, _ in [] },
+        setSuggestionSupport: { _, _, _ in [] },
+        reportSuggestion: { _, _ in [] },
+        withdrawSuggestion: { _, _ in [] },
         getTeamContext: { .init() },
         requestTeamMembership: { _, _, _ in .init() },
         cancelTeamRequest: { _ in .init() },

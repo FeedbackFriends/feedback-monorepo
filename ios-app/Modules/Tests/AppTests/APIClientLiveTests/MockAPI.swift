@@ -1,6 +1,55 @@
 import OpenAPI
 
 struct MockAPI: APIProtocol {
+    var reportSuggestionHandler: @Sendable (Operations.ReportSuggestion.Input) async throws -> Operations.ReportSuggestion.Output = { _ in
+        fatalError("MockAPI: reportSuggestion unimplemented")
+    }
+    func reportSuggestion(_ input: Operations.ReportSuggestion.Input) async throws -> Operations.ReportSuggestion.Output {
+        try await reportSuggestionHandler(input)
+    }
+
+    var reportedSuggestionsHandler: @Sendable (Operations.ReportedSuggestions.Input) async throws -> Operations.ReportedSuggestions.Output = { _ in
+        fatalError("MockAPI: reportedSuggestions unimplemented")
+    }
+    func reportedSuggestions(_ input: Operations.ReportedSuggestions.Input) async throws -> Operations.ReportedSuggestions.Output {
+        try await reportedSuggestionsHandler(input)
+    }
+
+    var moderateSuggestionHandler: @Sendable (Operations.ModerateSuggestion.Input) async throws -> Operations.ModerateSuggestion.Output = { _ in
+        fatalError("MockAPI: moderateSuggestion unimplemented")
+    }
+    func moderateSuggestion(_ input: Operations.ModerateSuggestion.Input) async throws -> Operations.ModerateSuggestion.Output {
+        try await moderateSuggestionHandler(input)
+    }
+
+    var listSuggestionsHandler: @Sendable (Operations.ListSuggestions.Input) async throws -> Operations.ListSuggestions.Output = { _ in
+        fatalError("MockAPI: listSuggestions unimplemented")
+    }
+    func listSuggestions(_ input: Operations.ListSuggestions.Input) async throws -> Operations.ListSuggestions.Output {
+        try await listSuggestionsHandler(input)
+    }
+
+    var createSuggestionHandler: @Sendable (Operations.CreateSuggestion.Input) async throws -> Operations.CreateSuggestion.Output = { _ in
+        fatalError("MockAPI: createSuggestion unimplemented")
+    }
+    func createSuggestion(_ input: Operations.CreateSuggestion.Input) async throws -> Operations.CreateSuggestion.Output {
+        try await createSuggestionHandler(input)
+    }
+
+    var setSuggestionSupportHandler: @Sendable (Operations.SetSuggestionSupport.Input) async throws -> Operations.SetSuggestionSupport.Output = { _ in
+        fatalError("MockAPI: setSuggestionSupport unimplemented")
+    }
+    func setSuggestionSupport(_ input: Operations.SetSuggestionSupport.Input) async throws -> Operations.SetSuggestionSupport.Output {
+        try await setSuggestionSupportHandler(input)
+    }
+
+    var withdrawSuggestionHandler: @Sendable (Operations.WithdrawSuggestion.Input) async throws -> Operations.WithdrawSuggestion.Output = { _ in
+        fatalError("MockAPI: withdrawSuggestion unimplemented")
+    }
+    func withdrawSuggestion(_ input: Operations.WithdrawSuggestion.Input) async throws -> Operations.WithdrawSuggestion.Output {
+        try await withdrawSuggestionHandler(input)
+    }
+
     var pendingLeaderInvitationsHandler: @Sendable (Operations.PendingLeaderInvitations.Input) async throws -> Operations.PendingLeaderInvitations.Output = { _ in
         fatalError("MockAPI: pendingLeaderInvitations unimplemented")
     }

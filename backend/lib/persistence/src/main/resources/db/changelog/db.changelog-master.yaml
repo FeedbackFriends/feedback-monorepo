@@ -107,3 +107,9 @@ databaseChangeLog:
       file: db/changelog/0028-add-team-leaders.yaml
   - include:
       file: db/changelog/0029-scope-account-email-to-auth-provider.yaml
+  - include:
+      file: 0030-add-team-suggestions.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0031-add-suggestion-reports.yaml
+      relativeToChangelogFile: true

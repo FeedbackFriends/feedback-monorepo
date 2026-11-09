@@ -1,8 +1,7 @@
 # Todos
 
-<!-- Next ID: LG-024 -->
+<!-- Next ID: LG-025 -->
 
-- LG-001: Let employees suggest improvements and support ideas anonymously, with a safe way to report sensitive concerns.
 - LG-002: Let leaders respond to suggestions with a clear decision, explanation, responsible person, and follow-up date.
 - LG-003: Let teams try small improvements, evaluate them, and share whether to continue, adjust, or stop.
 - LG-004: Give leaders a web workspace for suggestions, decisions, trials, and follow-ups without monitoring individual employees.
@@ -25,3 +24,4 @@
 - LG-021: Add a Danish and English language switch to the web app. Low priority.
 - LG-022: Consider an optional team well-being check if pilots ask for it; keep the focus on visible improvements. Low priority.
 - LG-023: Reassess broad automated iOS journey coverage against the new product before expanding it. Deferred.
+- LG-024: Give employees a clear route to an external confidential contact, such as a tillidsrepræsentant, for sensitive concerns. Low priority.

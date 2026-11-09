@@ -12,6 +12,8 @@ export type LeaderInvitationInfo = components["schemas"]["LeaderInvitationInfo"]
 export type LeaderInvitationInput = components["schemas"]["InviteLeaderInput"]
 
 type TeamOperation =
+  | "reportedSuggestions"
+  | "moderateSuggestion"
   | "pendingLeaderInvitations"
   | "context"
   | "management"
@@ -157,3 +159,8 @@ export const acceptLeaderInvitation = (
   )
 
 export const getPendingLeaderInvitations = (signal?: AbortSignal) => request<"pendingLeaderInvitations">("/leader-invitations", "GET", signal)
+
+export const getReportedSuggestions = (teamId: string, signal?: AbortSignal) =>
+  request<"reportedSuggestions">(`/${segment(teamId)}/suggestions/reports`, "GET", signal)
+export const moderateTeamSuggestion = (teamId: string, suggestionId: string, remove: boolean, signal?: AbortSignal) =>
+  request<"moderateSuggestion">(`/${segment(teamId)}/suggestions/${segment(suggestionId)}/moderation`, "POST", signal, { remove })

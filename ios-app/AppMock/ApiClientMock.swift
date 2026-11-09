@@ -11,6 +11,13 @@ extension APIClient {
     static var mock: Self {
         let delay = 1
         return .init(
+            listSuggestions: { _ in [] },
+            createSuggestion: { _, id, problem, impact, solution in
+                [.init(id: id.uuidString, problem: problem, impact: impact, solution: solution, supportCount: 0, supportedByMe: false, mine: true)]
+            },
+            setSuggestionSupport: { _, _, _ in [] },
+            reportSuggestion: { _, _ in [] },
+            withdrawSuggestion: { _, _ in [] },
             deleteAccount: {
                 try await Task.sleep(for: .seconds(delay))
                 return ()

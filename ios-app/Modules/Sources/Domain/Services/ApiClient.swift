@@ -3,6 +3,11 @@ import Foundation
 
 @DependencyClient
 public struct APIClient: Sendable {
+    public var listSuggestions: @Sendable (_ teamID: String) async throws -> [Suggestion]
+    public var createSuggestion: @Sendable (_ teamID: String, _ id: UUID, _ problem: String, _ impact: String, _ solution: String?) async throws -> [Suggestion]
+    public var setSuggestionSupport: @Sendable (_ teamID: String, _ suggestionID: String, _ supported: Bool) async throws -> [Suggestion]
+    public var reportSuggestion: @Sendable (_ teamID: String, _ suggestionID: String) async throws -> [Suggestion]
+    public var withdrawSuggestion: @Sendable (_ teamID: String, _ suggestionID: String) async throws -> [Suggestion]
     public var getTeamContext: @Sendable () async throws -> EmployeeTeamContext
     @DependencyEndpoint
     public var requestTeamMembership: @Sendable (_ id: UUID, _ code: String, _ name: String) async throws -> EmployeeTeamContext

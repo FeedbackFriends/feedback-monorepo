@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0030-add-team-suggestions
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE team_suggestion (
+                id UUID PRIMARY KEY,
+                team_id UUID NOT NULL REFERENCES team(id),
+                author_id VARCHAR(255) REFERENCES account(id) ON DELETE SET NULL,
+                problem VARCHAR(1000) NOT NULL CHECK (CHAR_LENGTH(TRIM(problem)) > 0),
+                impact VARCHAR(1000) NOT NULL CHECK (CHAR_LENGTH(TRIM(impact)) > 0),
+                solution VARCHAR(1000),
+                withdrawn BOOLEAN NOT NULL DEFAULT FALSE
+              );
+              CREATE INDEX idx_suggestion_team ON team_suggestion(team_id);
+              CREATE INDEX idx_suggestion_author ON team_suggestion(author_id);
+              CREATE TABLE suggestion_support (
+                suggestion_id UUID NOT NULL REFERENCES team_suggestion(id) ON DELETE CASCADE,
+                account_id VARCHAR(255) NOT NULL REFERENCES account(id) ON DELETE CASCADE,
+                PRIMARY KEY (suggestion_id, account_id)
+              );
+              CREATE INDEX idx_support_account ON suggestion_support(account_id);

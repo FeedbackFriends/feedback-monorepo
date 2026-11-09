@@ -9,6 +9,81 @@ servers:
 security:
 - bearerAuth: []
 paths:
+  /teams/{teamId}/suggestions/{suggestionId}/support:
+    put:
+      tags:
+      - suggestion-controller
+      operationId: setSuggestionSupport
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: suggestionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuggestionSupportInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Suggestion"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /event/{eventId}:
     put:
       tags:
@@ -547,6 +622,281 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /teams/{teamId}/suggestions:
+    get:
+      tags:
+      - suggestion-controller
+      operationId: listSuggestions
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Suggestion"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      tags:
+      - suggestion-controller
+      operationId: createSuggestion
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSuggestionInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Suggestion"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /teams/{teamId}/suggestions/{suggestionId}/report:
+    post:
+      tags:
+      - suggestion-controller
+      operationId: reportSuggestion
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: suggestionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Suggestion"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /teams/{teamId}/suggestions/{suggestionId}/moderation:
+    post:
+      tags:
+      - suggestion-controller
+      operationId: moderateSuggestion
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: suggestionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModerateSuggestionInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReportedSuggestion"
         "400":
           description: Bad Request
           content:
@@ -1576,6 +1926,69 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /teams/{teamId}/suggestions/reports:
+    get:
+      tags:
+      - suggestion-controller
+      operationId: reportedSuggestions
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReportedSuggestion"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/leaders:
     get:
       tags:
@@ -2037,6 +2450,75 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /teams/{teamId}/suggestions/{suggestionId}:
+    delete:
+      tags:
+      - suggestion-controller
+      operationId: withdrawSuggestion
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: suggestionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Suggestion"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/membership:
     delete:
       tags:
@@ -2360,6 +2842,39 @@ paths:
                 $ref: "#/components/schemas/ApiError"
 components:
   schemas:
+    SuggestionSupportInput:
+      type: object
+      properties:
+        supported:
+          type: boolean
+      required:
+      - supported
+    Suggestion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        problem:
+          type: string
+        impact:
+          type: string
+        solution:
+          type: string
+        supportCount:
+          type: integer
+          format: int64
+        supportedByMe:
+          type: boolean
+        mine:
+          type: boolean
+      required:
+      - id
+      - impact
+      - mine
+      - problem
+      - supportCount
+      - supportedByMe
     EventInput:
       type: object
       description: Input payload for creating a new feedback event for an activity.
@@ -2982,6 +3497,45 @@ components:
           description: Firebase Cloud Messaging token for push notifications.
       required:
       - fcmToken
+    CreateSuggestionInput:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        problem:
+          type: string
+        impact:
+          type: string
+        solution:
+          type: string
+      required:
+      - id
+      - impact
+      - problem
+    ModerateSuggestionInput:
+      type: object
+      properties:
+        remove:
+          type: boolean
+      required:
+      - remove
+    ReportedSuggestion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        problem:
+          type: string
+        impact:
+          type: string
+        solution:
+          type: string
+      required:
+      - id
+      - impact
+      - problem
     TeamInfo:
       type: object
       properties:

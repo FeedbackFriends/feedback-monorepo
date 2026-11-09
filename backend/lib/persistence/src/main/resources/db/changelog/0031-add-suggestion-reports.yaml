@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0031-add-suggestion-reports
+      author: codex
+      changes:
+        - addColumn:
+            tableName: team_suggestion
+            columns:
+              - column:
+                  name: reported
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

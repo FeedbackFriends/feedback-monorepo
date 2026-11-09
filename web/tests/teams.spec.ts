@@ -58,6 +58,7 @@ async function mockTeams(page: Page, existing = false) {
       teams.push(team)
       return route.fulfill({ json: team })
     }
+    if (path.endsWith("/suggestions/reports")) return route.fulfill({ json: [] })
     if (path.endsWith("/leaders"))
       return route.fulfill({ json: { leaders: [], invitations: [] } })
     const team = teams.find((team) => path.split("/")[1] === team.id)!
@@ -621,4 +622,48 @@ test("dashboard error boundary retries the real rendering path", async ({ page }
   await page.unroute("**/api/leader/teams/it")
   await page.getByRole("button", { name: "Prøv igen", exact: true }).click()
   await expect(page.getByRole("heading", { name: "IT", exact: true })).toBeVisible()
+})
+
+test("leader reviews anonymous suggestion reports and handles removal failures and revoked access", async ({ page }) => {
+  await mockTeams(page, true)
+  let reports = [
+    { id: "first", problem: "Identificerende forslag", impact: "Personoplysninger", solution: null },
+    { id: "second", problem: "Personangreb", impact: "Utryghed", solution: "Fjern navne" },
+  ]
+  let failRemoval = true
+  let denied = false
+  await page.route("**/api/leader/teams/it/suggestions/**", async (route) => {
+    if (denied) return route.fulfill({ status: 403, json: { userTitle: "Ingen adgang", userMessage: "Du har ikke længere adgang til teamet." } })
+    if (route.request().method() === "POST") {
+      const id = new URL(route.request().url()).pathname.split("/").at(-2)
+      const { remove } = route.request().postDataJSON()
+      if (remove && failRemoval) return route.fulfill({ status: 503, json: { userTitle: "Prøv igen", userMessage: "Forslaget kunne ikke fjernes. Prøv igen." } })
+      reports = reports.filter((item) => item.id !== id)
+    }
+    return route.fulfill({ json: reports })
+  })
+  await login(page)
+  await page.getByRole("link", { name: "Åbn IT" }).click()
+  const section = page.getByRole("region", { name: "Rapporterede forslag" })
+  await expect(section.getByText("Identificerende forslag", { exact: true })).toBeVisible()
+  await section.getByRole("row").filter({ hasText: "Identificerende forslag" }).getByRole("button", { name: "Behold forslag" }).click()
+  await expect(section.getByText("Identificerende forslag", { exact: true })).not.toBeVisible()
+  await section.getByRole("button", { name: "Fjern forslag" }).click()
+  await page.getByRole("alertdialog").getByRole("button", { name: "Annuller" }).click()
+  await expect(section.getByText("Personangreb", { exact: true })).toBeVisible()
+  await section.getByRole("button", { name: "Fjern forslag" }).click()
+  await page.getByRole("alertdialog").getByRole("button", { name: "Fjern forslag", exact: true }).click()
+  await expect(section.getByRole("alert")).toContainText("Forslaget kunne ikke fjernes")
+  await expect(section.getByText("Personangreb", { exact: true })).toBeVisible()
+  failRemoval = false
+  await section.getByRole("button", { name: "Fjern forslag" }).click()
+  await page.getByRole("alertdialog").getByRole("button", { name: "Fjern forslag", exact: true }).click()
+  await expect(section.getByText("Ingen forslag afventer gennemgang.")).toBeVisible()
+  reports = [{ id: "third", problem: "Beskyttet indhold", impact: "Skal ryddes ved mistet adgang", solution: null }]
+  await section.getByRole("button", { name: "Opdater rapporter" }).click()
+  await expect(section.getByText("Beskyttet indhold", { exact: true })).toBeVisible()
+  denied = true
+  await section.getByRole("button", { name: "Opdater rapporter" }).click()
+  await expect(section.getByText("Beskyttet indhold", { exact: true })).not.toBeVisible()
+  await expect(section.getByRole("alert")).toContainText("Du har ikke længere adgang")
 })

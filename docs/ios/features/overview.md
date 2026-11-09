@@ -247,5 +247,15 @@ Source: [MoreSection](../../../ios-app/Modules/Sources/MoreFeature/MoreSection/M
 - Current navigation has two tabs, Giv feedback and Aktiviteter; a separate overview tab is not reachable from `TabbarView`.
 - Communication preferences are UI state only, as noted above.
 - Workspace administration, owner invitations, billing, and subscription checkout are not exposed as iOS features in the reviewed navigation.
-- Improvement suggestions and action tracking are deferred in the existing feature documentation.
+- Leader decisions and action tracking are deferred in the existing feature documentation.
 - Files for a feature or a preview do not by themselves establish that it is reachable in the app. This overview follows the current root/tab navigation and presented feature flows.
+
+## Team suggestions
+
+Approved employees open **Mit team → Forslag** to share a problem and its impact, with an optional solution. Team members can support or remove support once per suggestion, withdraw their own suggestions, and report inappropriate or identifying content after confirmation. Suggestions are independent of legacy meeting feedback. Leader decisions and trials are separate work.
+
+The API checks current membership for every operation. Colleagues and leaders receive no author or supporter identities or activity timestamps. LetsGrow retains account links in the database; the screen discloses this and warns that wording and small-team context may identify someone. Reports flag the content for the team’s current authorized leaders, who can keep or remove it in the web team workspace. Reports retain no reporter identity or timestamp and do not hide content automatically. Removed content and support are cleared; delayed retries cannot republish it. This is not a confidential reporting channel. External contact with a tillidsrepræsentant is deferred as LG-024. Employee participation is iOS-only; Android is later, with no employee web app.
+
+Creation retains a submission ID across retries. Withdrawal clears the text and support records while retaining a receipt to prevent delayed creation retries from republishing it. Membership changes reset the feed and draft; failed requests clear displayed suggestions until a successful refresh. No polling or engagement notifications are added.
+
+Source: [TeamSuggestions](../../../ios-app/Modules/Sources/TabbarFeature/TeamSuggestions.swift), [TeamSuggestionsView](../../../ios-app/Modules/Sources/TabbarFeature/TeamSuggestionsView.swift), [SuggestionRepo](../../../backend/lib/persistence/src/main/kotlin/dk/example/feedback/persistence/repo/SuggestionRepo.kt).
