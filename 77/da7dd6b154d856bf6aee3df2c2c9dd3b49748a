@@ -1,0 +1,25 @@
+.agents/skills/lg-deliver/SKILL.md
+  s_8ecc07d762e183::t_a30f0e99cc8d29 10-14
+.agents/skills/lg-plan/SKILL.md
+  s_8ecc07d762e183::t_06af64b51deaef 18-20,30
+AGENTS.md
+  s_8ecc07d762e183::t_a5486b4e114c7b 148-150,156-157,162
+HARNESS.md
+  s_8ecc07d762e183::t_c22325b9b9a177 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "77da7dd6b154d856bf6aee3df2c2c9dd3b49748a",
+  "prompts": {},
+  "sessions": {
+    "s_8ecc07d762e183": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c4a0-0108-7c91-8a93-3894baff1235",
+        "model": "unknown"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
