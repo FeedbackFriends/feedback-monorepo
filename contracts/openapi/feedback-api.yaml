@@ -939,6 +939,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /teams/{teamId}/suggestions/{suggestionId}/decisions:
+    post:
+      tags:
+      - suggestion-controller
+      operationId: publishSuggestionDecision
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: suggestionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishSuggestionDecisionInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuggestionInbox"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/requests/{requestId}/reject:
     post:
       tags:
@@ -1989,6 +2062,67 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /teams/{teamId}/suggestions/inbox:
+    get:
+      tags:
+      - suggestion-controller
+      operationId: suggestionInbox
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuggestionInbox"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "503":
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /teams/{teamId}/leaders:
     get:
       tags:
@@ -2861,20 +2995,56 @@ components:
           type: string
         solution:
           type: string
-        supportCount:
-          type: integer
-          format: int64
+        hasFiveSupporters:
+          type: boolean
         supportedByMe:
           type: boolean
         mine:
           type: boolean
+        decisions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SuggestionDecision"
       required:
+      - decisions
+      - hasFiveSupporters
       - id
       - impact
       - mine
       - problem
-      - supportCount
       - supportedByMe
+    SuggestionDecision:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        revision:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - Reviewing
+          - Planned
+          - Deferred
+          - Declined
+        explanation:
+          type: string
+        responsibleName:
+          type: string
+        followUpDate:
+          type: string
+        publishedAt:
+          type: integer
+          format: int64
+      required:
+      - explanation
+      - id
+      - publishedAt
+      - responsibleName
+      - revision
+      - status
     EventInput:
       type: object
       description: Input payload for creating a new feedback event for an activity.
@@ -3536,6 +3706,62 @@ components:
       - id
       - impact
       - problem
+    PublishSuggestionDecisionInput:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        expectedRevision:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - Reviewing
+          - Planned
+          - Deferred
+          - Declined
+        explanation:
+          type: string
+        responsibleId:
+          type: string
+        responsibleName:
+          type: string
+        followUpDate:
+          type: string
+      required:
+      - expectedRevision
+      - explanation
+      - id
+      - responsibleId
+      - responsibleName
+      - status
+    SuggestionInbox:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Suggestion"
+        responsiblePeople:
+          type: array
+          items:
+            $ref: "#/components/schemas/SuggestionResponsiblePerson"
+      required:
+      - responsiblePeople
+      - suggestions
+    SuggestionResponsiblePerson:
+      type: object
+      properties:
+        accountId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+      required:
+      - accountId
     TeamInfo:
       type: object
       properties:

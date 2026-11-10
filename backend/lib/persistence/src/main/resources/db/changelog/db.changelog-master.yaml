@@ -113,3 +113,6 @@ databaseChangeLog:
   - include:
       file: 0031-add-suggestion-reports.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0032-add-suggestion-decisions.yaml
+      relativeToChangelogFile: true

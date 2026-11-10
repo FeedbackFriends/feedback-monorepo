@@ -164,6 +164,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/teams/{teamId}/suggestions/{suggestionId}/decisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["publishSuggestionDecision"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/teams/{teamId}/requests/{requestId}/reject": {
         parameters: {
             query?: never;
@@ -437,6 +453,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/teams/{teamId}/suggestions/inbox": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["suggestionInbox"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/teams/{teamId}/leaders": {
         parameters: {
             query?: never;
@@ -678,10 +710,23 @@ export interface components {
             problem: string;
             impact: string;
             solution?: string;
-            /** Format: int64 */
-            supportCount: number;
+            hasFiveSupporters: boolean;
             supportedByMe: boolean;
             mine: boolean;
+            decisions: components["schemas"]["SuggestionDecision"][];
+        };
+        SuggestionDecision: {
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            revision: number;
+            /** @enum {string} */
+            status: "Reviewing" | "Planned" | "Deferred" | "Declined";
+            explanation: string;
+            responsibleName: string;
+            followUpDate?: string;
+            /** Format: int64 */
+            publishedAt: number;
         };
         /** @description Input payload for creating a new feedback event for an activity. */
         EventInput: {
@@ -1030,6 +1075,27 @@ export interface components {
             problem: string;
             impact: string;
             solution?: string;
+        };
+        PublishSuggestionDecisionInput: {
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            expectedRevision: number;
+            /** @enum {string} */
+            status: "Reviewing" | "Planned" | "Deferred" | "Declined";
+            explanation: string;
+            responsibleId: string;
+            responsibleName: string;
+            followUpDate?: string;
+        };
+        SuggestionInbox: {
+            suggestions: components["schemas"]["Suggestion"][];
+            responsiblePeople: components["schemas"]["SuggestionResponsiblePerson"][];
+        };
+        SuggestionResponsiblePerson: {
+            accountId: string;
+            name?: string;
+            email?: string;
         };
         TeamInfo: {
             /** Format: uuid */
@@ -2661,6 +2727,96 @@ export interface operations {
             };
         };
     };
+    publishSuggestionDecision: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                teamId: string;
+                suggestionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublishSuggestionDecisionInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuggestionInbox"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     reject: {
         parameters: {
             query?: never;
@@ -4065,6 +4221,91 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReportedSuggestion"][];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    suggestionInbox: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                teamId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuggestionInbox"];
                 };
             };
             /** @description Bad Request */

@@ -108,7 +108,21 @@ private struct SuggestionRowView: View {
             Text(suggestion.problem).rowTitleTextStyle()
             Text(suggestion.impact).bodyTextStyle()
             if let solution = suggestion.solution { Text(solution).bodyTextStyle() }
-            Text(String(appStrings: .suggestionsSupportCount(suggestion.supportCount))).supportingTextStyle()
+            if suggestion.hasFiveSupporters {
+                Text(String(appStrings: .suggestionsFiveSupporters)).supportingTextStyle()
+            }
+            if let latest = suggestion.decisions.first {
+                SuggestionDecisionView(decision: latest)
+                if suggestion.decisions.count > 1 {
+                    DisclosureGroup(String(appStrings: .suggestionsDecisionHistory)) {
+                        ForEach(suggestion.decisions.dropFirst()) { decision in
+                            SuggestionDecisionView(decision: decision)
+                        }
+                    }
+                }
+            } else {
+                Text(String(appStrings: .suggestionsReceived)).supportingTextStyle()
+            }
             Button(String(appStrings: suggestion.supportedByMe ? .suggestionsRemoveSupport : .suggestionsSupport), action: support)
                 .buttonStyle(LargeButtonStyle())
             Button(String(appStrings: .suggestionsReport), action: report)
@@ -120,5 +134,30 @@ private struct SuggestionRowView: View {
         }
         .surfaceCard()
         .disabled(isBusy)
+    }
+}
+
+private struct SuggestionDecisionView: View {
+    let decision: SuggestionDecision
+
+    private var status: String {
+        switch decision.status {
+        case .reviewing: String(appStrings: .suggestionsStatusReviewing)
+        case .planned: String(appStrings: .suggestionsStatusPlanned)
+        case .deferred: String(appStrings: .suggestionsStatusDeferred)
+        case .declined: String(appStrings: .suggestionsStatusDeclined)
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.padding) {
+            Text(status).rowTitleTextStyle()
+            Text(decision.explanation).bodyTextStyle()
+            Text(String(appStrings: .suggestionsResponsible(decision.responsibleName))).supportingTextStyle()
+            if let date = decision.followUpDate {
+                Text(String(appStrings: .suggestionsFollowUp(L10n.Format.date(date, timeZone: .gmt)))).supportingTextStyle()
+            }
+            Text(String(appStrings: .suggestionsPublished(L10n.Format.date(decision.publishedAt, time: .shortened)))).supportingTextStyle()
+        }
     }
 }

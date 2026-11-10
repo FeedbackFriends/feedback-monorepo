@@ -7,7 +7,7 @@ import Testing
 @MainActor
 struct TeamSuggestionsTests {
     let team = EmployeeTeam(id: "team", name: "IT", organizationName: "Acme")
-    let idea = Suggestion(id: "idea", problem: "Meetings", impact: "Focus", solution: nil, supportCount: 0, supportedByMe: false, mine: true)
+    let idea = Suggestion(id: "idea", problem: "Meetings", impact: "Focus", solution: nil, hasFiveSupporters: false, supportedByMe: false, mine: true)
 
     private func state() -> TeamSuggestions.State {
         let shared = Shared(value: Bootstrap.mockAnonymous())
@@ -92,7 +92,7 @@ struct TeamSuggestionsTests {
         initial.hasLoaded = true
         initial.suggestions = [idea]
         let supported = Suggestion(id: idea.id, problem: idea.problem, impact: idea.impact, solution: nil,
-                                   supportCount: 1, supportedByMe: true, mine: true)
+                                   hasFiveSupporters: false, supportedByMe: true, mine: true)
         let store = TestStore(initialState: initial) { TeamSuggestions() } withDependencies: {
             $0.apiClient.setSuggestionSupport = { teamID, suggestionID, supportedByMe in
                 #expect(teamID == "team"); #expect(suggestionID == "idea"); #expect(supportedByMe)

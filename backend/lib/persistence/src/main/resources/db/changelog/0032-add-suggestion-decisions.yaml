@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0032-add-suggestion-decisions
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE suggestion_decision (
+                id UUID PRIMARY KEY,
+                suggestion_id UUID NOT NULL REFERENCES team_suggestion(id) ON DELETE CASCADE,
+                revision INTEGER NOT NULL CHECK (revision > 0),
+                status VARCHAR(16) NOT NULL CHECK (status IN ('Reviewing', 'Planned', 'Deferred', 'Declined')),
+                explanation VARCHAR(1000) NOT NULL CHECK (CHAR_LENGTH(TRIM(explanation)) > 0),
+                request_fingerprint VARCHAR(64) NOT NULL,
+                responsible_name VARCHAR(255) NOT NULL CHECK (CHAR_LENGTH(TRIM(responsible_name)) > 0),
+                follow_up_date VARCHAR(10),
+                published_at BIGINT NOT NULL,
+                UNIQUE (suggestion_id, revision),
+                CHECK (status = 'Declined' OR follow_up_date IS NOT NULL)
+              );

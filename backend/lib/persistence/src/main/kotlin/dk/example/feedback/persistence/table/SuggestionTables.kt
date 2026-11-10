@@ -19,3 +19,17 @@ object SuggestionSupportTable : Table("suggestion_support") {
     val account = reference("account_id", AccountTable.id)
     override val primaryKey = PrimaryKey(suggestion, account)
 }
+
+object SuggestionDecisionTable : Table("suggestion_decision") {
+    val id = uuid("id")
+    val suggestion = reference("suggestion_id", SuggestionTable.id)
+    val revision = integer("revision")
+    val status = varchar("status", 16)
+    val explanation = varchar("explanation", 1000)
+    // Compare normalized retry commands without retaining a historical account association.
+    val requestFingerprint = varchar("request_fingerprint", 64)
+    val responsibleName = varchar("responsible_name", 255)
+    val followUpDate = varchar("follow_up_date", 10).nullable()
+    val publishedAt = long("published_at")
+    override val primaryKey = PrimaryKey(id)
+}

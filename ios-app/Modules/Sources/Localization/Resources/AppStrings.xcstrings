@@ -6569,44 +6569,182 @@
         }
       }
     },
-    "suggestions.supportCount" : {
-      "comment" : "Number of anonymous supporters of a team suggestion. Argument is an integer count.",
+    "suggestions.fiveSupporters" : {
+      "comment" : "Fixed threshold label; never interpolate an exact count.",
       "extractionState" : "manual",
       "localizations" : {
         "da" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld støtter"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld støtter"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5+ støtter"
           }
         },
         "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld supporter"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld supporters"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5+ supporters"
+          }
+        }
+      }
+    },
+    "suggestions.decisionHistory" : {
+      "comment" : "Disclosure label for immutable decision history, newest first.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidligere svar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous responses"
+          }
+        }
+      }
+    },
+    "suggestions.received" : {
+      "comment" : "Suggestion without a leader response.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modtaget — afventer svar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Received — awaiting a response"
+          }
+        }
+      }
+    },
+    "suggestions.statusReviewing" : {
+      "comment" : "Leader decision status.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Under vurdering"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Under review"
+          }
+        }
+      }
+    },
+    "suggestions.statusPlanned" : {
+      "comment" : "Leader decision status; no trial has started.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planlagt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planned"
+          }
+        }
+      }
+    },
+    "suggestions.statusDeferred" : {
+      "comment" : "Leader decision status.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udskudt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deferred"
+          }
+        }
+      }
+    },
+    "suggestions.statusDeclined" : {
+      "comment" : "Leader decision status.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afvist"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Declined"
+          }
+        }
+      }
+    },
+    "suggestions.responsible" : {
+      "comment" : "Argument is the published name, preserved verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansvarlig: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Responsible: %@"
+          }
+        }
+      }
+    },
+    "suggestions.followUp" : {
+      "comment" : "Argument is a localized calendar date.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opfølgning: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follow-up: %@"
+          }
+        }
+      }
+    },
+    "suggestions.published" : {
+      "comment" : "Argument is a localized publication date and time.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offentliggjort %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Published %@"
           }
         }
       }

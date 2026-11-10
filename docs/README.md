@@ -4,7 +4,7 @@ Start with the topic you need. Agent instructions live in root/app `AGENTS.md`; 
 
 | Topic | Reference |
 | --- | --- |
-| Product direction | [Strategy](shared/product/lets-grow-strategi-teamtrivsel.md) |
+| Product direction | [Strategy](shared/product/lets-grow-strategi-teamtrivsel.md), [improvement-loop foundation](shared/product/improvement-loop.md) |
 | Architecture | [Monorepo](shared/architecture.md), [backend](backend/overview.md), [iOS](ios/app-architecture.md) |
 | iOS development | [Setup, configuration, local testing, notifications](ios/development.md), [localization](ios/localization.md), [answer-type icons](ios/ios-answer-type-icons.md) |
 | Product behavior | [iOS features](ios/features/overview.md), [product contact](shared/product-contact.md), [API error copy](shared/api-error-copy.md) |

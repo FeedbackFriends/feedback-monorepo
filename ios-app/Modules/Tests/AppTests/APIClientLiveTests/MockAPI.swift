@@ -1,6 +1,13 @@
 import OpenAPI
 
 struct MockAPI: APIProtocol {
+    func suggestionInbox(_ input: Operations.SuggestionInbox.Input) async throws -> Operations.SuggestionInbox.Output {
+        fatalError("MockAPI: web-only suggestionInbox unimplemented")
+    }
+    func publishSuggestionDecision(_ input: Operations.PublishSuggestionDecision.Input) async throws -> Operations.PublishSuggestionDecision.Output {
+        fatalError("MockAPI: web-only publishSuggestionDecision unimplemented")
+    }
+
     var reportSuggestionHandler: @Sendable (Operations.ReportSuggestion.Input) async throws -> Operations.ReportSuggestion.Output = { _ in
         fatalError("MockAPI: reportSuggestion unimplemented")
     }
