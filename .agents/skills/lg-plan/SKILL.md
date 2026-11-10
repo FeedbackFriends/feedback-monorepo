@@ -15,7 +15,9 @@ For customer interviews, public copy, or first-use journeys, use the relevant [c
 
 ## Grill requirements and architecture
 
-Actively challenge ambiguous requirements and assumptions with the user. Look up repository facts before asking; do not ask the user to supply facts the code can answer. Ask focused questions in small rounds, following up on answers until consequential decisions are clear. Use the session's question tool when available and continue independent investigation while answers are pending. Do not silently settle material choices while waiting for the user's answer.
+Map the full requested scope and its decision dependencies before the first question, including later phases of a continuation request. Briefly show the branches that need agreement and track settled decisions and remaining questions in the conversation. Reuse existing agreements.
+
+Actively challenge ambiguous requirements and assumptions with the user. Look up repository facts before asking; do not ask the user to supply facts the code can answer. Traverse dependencies one branch at a time: ask one focused question, provide a recommended answer and its tradeoff, then wait for feedback before the next question. Use the session's question tool when available and continue independent investigation while answers are pending. Resolve all known material choices before implementation or acceptance verification, following the [agreement criteria](../../../AGENTS.md#1-agree-on-the-outcome).
 
 Start with concrete feature scenarios: who does what, when, with which permissions, what success looks like, and what happens in relevant failure or edge cases. Challenge scope, exclusions, dependencies, and acceptance criteria with examples that expose ambiguity.
 
@@ -25,6 +27,6 @@ Resolve technical details during refinement when they affect requirements, archi
 
 ## Hand off to implementation
 
-Summarize the agreed outcome, scope, acceptance criteria, architectural decisions and tradeoffs, relevant source references, and remaining questions in the conversation. Keep confirmed decisions distinct from proposals. For larger work, outline phases with observable outcomes and dependencies.
+Summarize the outcome, scope, acceptance criteria, architectural decisions and tradeoffs, relevant source references, and any remaining questions in the conversation. Keep confirmed decisions distinct from proposals. For larger work, outline phases with observable outcomes and dependencies. Obtain agreement on the summary when refinement was needed; unresolved material questions keep refinement open. Record enduring domain decisions in their existing owning guides rather than creating parallel task documents.
 
 When material requirements and architectural choices are settled, the plan is ready for [implementation](../../../AGENTS.md#implementation-completion). If implementation is already authorized, continue without another approval gate; otherwise hand off the plan. Refinement alone does not authorize code changes. Do not expand `todos.md` into a specification or create separate task files.

@@ -145,17 +145,21 @@ One builder owns delivery; a fresh reviewer independently challenges substantive
 
 Inspect the affected code, callers, tests, and owning guidance before choosing an implementation. State the observable outcome, scope, constraints, acceptance checks, and consequential decisions in the conversation. A clear fix needs only a few sentences; larger or ambiguous work needs a short plan with observable increments. Use [lg-plan](.agents/skills/lg-plan/SKILL.md) when product requirements or architecture need discussion.
 
-Resolve material product, public-contract, security, data, billing, and hard-to-reverse choices with the user before dependent work. The builder owns routine implementation details. An implementation request authorizes continuing through verification, review, and fixes without another phase approval. Refinement alone does not authorize implementation.
+Inspect the full requested scope, including later phases and their dependencies, before starting implementation or acceptance verification. Grill material product, public-contract, security, data, billing, and hard-to-reverse choices up front using `lg-plan`: ask one focused question at a time, recommend an answer, and wait for the response. Investigate repository facts while waiting. The builder owns routine implementation details.
+
+Agreement is complete when the requested outcome, scope, acceptance checks, and all known material decisions are settled with the user. For ambiguous work, summarize these and obtain agreement before proceeding; a clear request that already settles them needs no ceremonial confirmation. For a continuation request, reuse prior agreements and resolve known gaps across the remaining requested scope first. An unanswered question remains pending; elapsed time is not agreement. An implementation request authorizes continuing through verification, review, and fixes after agreement without another phase approval. Refinement alone does not authorize implementation.
 
 ### 2. Build and verify
 
 The builder implements the agreed outcome in small increments, using relevant platform skills and existing patterns. Preserve unrelated work, update guidance made stale by the change, and keep broader refactors within scope. Run relevant automated tests and required lint/build checks. Fix failures introduced by the change; report unrelated failures or unavailable checks with their limits.
 
+Carry the whole agreed scope through completion; intermediate milestones and cleared verification blockers are progress updates, not final handoffs. If new evidence exposes a material decision that could not reasonably be settled up front, explain the evidence and ask the smallest necessary question, keeping it pending while continuing safe independent work. Resolve routine implementation choices autonomously. When an external blocker prevents completion, report the exact blocker and remaining work without claiming delivery is complete.
+
 Completion of this stage requires an implemented outcome and actual verification evidence, ready for independent review.
 
 ### 3. Review independently
 
-For substantive changes, start a fresh read-only reviewer agent or session. This workflow explicitly requests delegation for that review. Give it the agreed requirements, constraints, relevant guidance, review base, exact changed-file scope, and verification evidence. Let it inspect the implementation independently; the builder's conclusions are claims to verify. When the workspace contains unrelated changes, provide the task's delta against its starting state and enough surrounding context to assess it.
+First self-review the complete task delta against the agreed outcome and acceptance checks, fixing issues and rerunning affected checks. For substantive changes, then start a fresh read-only reviewer agent or session. This workflow explicitly requests delegation for that review. Give it the agreed requirements, constraints, relevant guidance, review base, exact changed-file scope, and verification evidence. Let it inspect the implementation independently; the builder's conclusions are claims to verify. When the workspace contains unrelated changes, provide the task's delta against its starting state and enough surrounding context to assess it.
 
 The reviewer applies [code review](AGENTS.md#code-review), checks acceptance coverage, and examines correctness, security, compatibility, data integrity, complexity, and meaningful test gaps. Return ranked concrete findings, checks performed, and residual uncertainty. A review with no findings is evidence of review, not a correctness guarantee.
 

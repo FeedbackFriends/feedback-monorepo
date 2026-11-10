@@ -7,4 +7,8 @@ description: Deliver LetsGrow features, fixes, refactors, or harness changes thr
 
 Read [root policy](../../../AGENTS.md), the [shared delivery workflow](../../../AGENTS.md#delivery-workflow), and the owning app guidance. Follow the shared workflow as the coordinating builder; it owns stage criteria, reviewer delegation, finding resolution, and handoff.
 
-Use focused technical skills when the affected work needs them. For ambiguous requirements or architecture, use [lg-plan](../lg-plan/SKILL.md). Keep the plan and evidence in the conversation. Carry an authorized implementation through review and fixes; preserve separate authorization for commits, pushes, deployments, and external updates.
+1. Inspect the full requested scope and existing agreements. Use [lg-plan](../lg-plan/SKILL.md) to grill unresolved material requirements and architecture before implementation or acceptance verification. Finish the shared workflow's agreement criteria first, including known decisions in later requested phases.
+2. Deliver the whole agreed scope using focused technical skills and owning platform checks. Continue across milestones; clearing a prior blocker is a progress update when agreed work remains.
+3. Self-review, obtain the required fresh review, resolve findings, and rerun affected checks. Hand over the completed outcome with actual evidence, or identify the exact blocker and unfinished work.
+
+Keep the plan and evidence in the conversation. Follow the shared workflow for newly discovered material decisions; routine choices belong to the builder. Preserve separate authorization for commits, pushes, deployments, and external updates.
