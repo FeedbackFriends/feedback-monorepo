@@ -3,6 +3,7 @@ package dk.example.feedback.firebase
 import java.util.*
 
 interface FirebaseService {
+    fun pushImprovementNotification(token: String, teamId: UUID, notificationId: UUID): Boolean
     fun configure(serviceAccountJsonB64: String)
     fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>)
 }

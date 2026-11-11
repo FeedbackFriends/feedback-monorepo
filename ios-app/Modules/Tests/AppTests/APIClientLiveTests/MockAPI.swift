@@ -1,9 +1,26 @@
 import OpenAPI
 
 struct MockAPI: APIProtocol {
+    func openSuggestionEvaluation(_ input: Operations.OpenSuggestionEvaluation.Input) async throws -> Operations.OpenSuggestionEvaluation.Output {
+        fatalError("MockAPI: web-only openSuggestionEvaluation unimplemented")
+    }
+    func publishSuggestionOutcome(_ input: Operations.PublishSuggestionOutcome.Input) async throws -> Operations.PublishSuggestionOutcome.Output {
+        fatalError("MockAPI: web-only publishSuggestionOutcome unimplemented")
+    }
+    var answerSuggestionEvaluationHandler: @Sendable (Operations.AnswerSuggestionEvaluation.Input) async throws -> Operations.AnswerSuggestionEvaluation.Output = { _ in
+        fatalError("MockAPI: answerSuggestionEvaluation unimplemented")
+    }
+    func answerSuggestionEvaluation(_ input: Operations.AnswerSuggestionEvaluation.Input) async throws -> Operations.AnswerSuggestionEvaluation.Output {
+        try await answerSuggestionEvaluationHandler(input)
+    }
+
     func suggestionInbox(_ input: Operations.SuggestionInbox.Input) async throws -> Operations.SuggestionInbox.Output {
         fatalError("MockAPI: web-only suggestionInbox unimplemented")
     }
+    func publishSuggestionTrial(_ input: Operations.PublishSuggestionTrial.Input) async throws -> Operations.PublishSuggestionTrial.Output {
+        fatalError("MockAPI: web-only publishSuggestionTrial unimplemented")
+    }
+
     func publishSuggestionDecision(_ input: Operations.PublishSuggestionDecision.Input) async throws -> Operations.PublishSuggestionDecision.Output {
         fatalError("MockAPI: web-only publishSuggestionDecision unimplemented")
     }

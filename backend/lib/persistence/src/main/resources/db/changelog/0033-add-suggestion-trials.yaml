@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0033-add-suggestion-trials
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE suggestion_trial (
+                id UUID PRIMARY KEY,
+                suggestion_id UUID NOT NULL REFERENCES team_suggestion(id) ON DELETE CASCADE,
+                revision INTEGER NOT NULL CHECK (revision > 0),
+                decision_id UUID NOT NULL REFERENCES suggestion_decision(id) ON DELETE CASCADE,
+                trial_change VARCHAR(1000) NOT NULL CHECK (CHAR_LENGTH(TRIM(trial_change)) > 0),
+                intended_benefit VARCHAR(1000) NOT NULL CHECK (CHAR_LENGTH(TRIM(intended_benefit)) > 0),
+                responsible_fingerprint VARCHAR(64) NOT NULL,
+                responsible_name VARCHAR(255) NOT NULL CHECK (CHAR_LENGTH(TRIM(responsible_name)) > 0),
+                request_fingerprint VARCHAR(64) NOT NULL,
+                start_date VARCHAR(10) NOT NULL,
+                end_date VARCHAR(10) NOT NULL,
+                follow_up_date VARCHAR(10) NOT NULL,
+                published_at BIGINT NOT NULL,
+                UNIQUE (suggestion_id, revision),
+                CHECK (start_date <= end_date AND end_date <= follow_up_date)
+              );
+              CREATE INDEX suggestion_trial_decision_idx ON suggestion_trial(decision_id);

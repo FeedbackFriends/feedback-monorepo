@@ -38,12 +38,12 @@ public extension Tabbar.State {
     
     init(
         bootstrap: Shared<Bootstrap>,
-        selectedTab: Tab = .feedback,
+        selectedTab: Tab? = nil,
         destination: Tabbar.Destination.State? = nil,
     ) {
         self._bootstrap = bootstrap
         self.enterCode = .init()
-        self.selectedTab = selectedTab
+        self.selectedTab = selectedTab ?? (bootstrap.wrappedValue.role == nil ? .activities : .feedback)
         self.moreSection = .init()
         self.accountSection = .init(bootstrap: bootstrap)
         self.initialiseFeedback = .init()

@@ -82,3 +82,44 @@ for (const width of [320, 390, 1280]) {
     ).toBe(true)
   })
 }
+
+
+for (const host of ["localhost:3100", "app.letsgrow.dk", "letsgrow.dk", "www.letsgrow.dk"]) {
+  test(`email callbacks at the site root reach login on ${host}`, async ({ request }) => {
+    const response = await request.get("/?code=test-auth-code", {
+      headers: { host }, maxRedirects: 0,
+    })
+    expect(response.status()).toBe(307)
+    const destination = new URL(response.headers().location, response.url())
+    expect(destination.pathname).toBe("/login")
+    expect(destination.searchParams.get("code")).toBe("test-auth-code")
+    if (host.includes("letsgrow.dk")) {
+      expect(destination.host).toBe("app.letsgrow.dk")
+      expect(destination.protocol).toBe("https:")
+    }
+    expect(response.headers()["cache-control"]).toBe("no-store")
+  })
+}
+
+
+for (const host of ["letsgrow.localhost", "app.letsgrow.localhost"]) {
+  test(`local domains keep account routing local on ${host}`, async ({ request }) => {
+    for (const path of ["/?code=local-test-code", "/login", "/dashboard", "/leader-invite/personal"]) {
+      const response = await request.get(path, { headers: { host }, maxRedirects: 0 })
+      if (host === "letsgrow.localhost" || path.startsWith("/?")) {
+        expect(response.status()).toBe(307)
+        const destination = new URL(response.headers().location, response.url())
+        expect(destination.origin).toBe("https://app.letsgrow.localhost")
+        expect(destination.pathname).toBe(path.startsWith("/?") ? "/login" : path)
+        if (path.startsWith("/?")) expect(destination.searchParams.get("code")).toBe("local-test-code")
+      }
+    }
+    const root = await request.get("/", { headers: { host }, maxRedirects: 0 })
+    if (host === "app.letsgrow.localhost") {
+      expect(root.status()).toBe(307)
+      expect(root.headers().location).toBe("https://app.letsgrow.localhost/dashboard")
+    } else {
+      expect(root.status()).toBe(200)
+    }
+  })
+}

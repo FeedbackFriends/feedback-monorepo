@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0034-add-suggestion-evaluations
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE suggestion_evaluation (
+                id UUID PRIMARY KEY,
+                suggestion_id UUID NOT NULL REFERENCES team_suggestion(id) ON DELETE CASCADE,
+                trial_id UUID NOT NULL UNIQUE REFERENCES suggestion_trial(id) ON DELETE CASCADE,
+                closes_at BIGINT NOT NULL,
+                summary VARCHAR(32)
+              );
+              CREATE INDEX suggestion_evaluation_suggestion_idx ON suggestion_evaluation(suggestion_id);
+              CREATE TABLE suggestion_evaluation_response (
+                evaluation_id UUID NOT NULL REFERENCES suggestion_evaluation(id) ON DELETE CASCADE,
+                account_fingerprint VARCHAR(64) NOT NULL,
+                answer VARCHAR(16),
+                PRIMARY KEY (evaluation_id, account_fingerprint),
+                CHECK (answer IS NULL OR answer IN ('Better', 'Unchanged', 'Worse', 'CannotAssess'))
+              );
+              CREATE TABLE suggestion_outcome (
+                id UUID PRIMARY KEY,
+                suggestion_id UUID NOT NULL REFERENCES team_suggestion(id) ON DELETE CASCADE,
+                trial_id UUID NOT NULL UNIQUE REFERENCES suggestion_trial(id) ON DELETE CASCADE,
+                outcome VARCHAR(16) NOT NULL CHECK (outcome IN ('Continue', 'Adjust', 'Stop')),
+                explanation VARCHAR(1000) NOT NULL CHECK (CHAR_LENGTH(TRIM(explanation)) > 0),
+                published_at BIGINT NOT NULL
+              );
+              CREATE INDEX suggestion_outcome_suggestion_idx ON suggestion_outcome(suggestion_id);

@@ -14,6 +14,9 @@ export type LeaderInvitationInput = components["schemas"]["InviteLeaderInput"]
 type TeamOperation =
   | "suggestionInbox"
   | "publishSuggestionDecision"
+  | "publishSuggestionTrial"
+  | "openSuggestionEvaluation"
+  | "publishSuggestionOutcome"
   | "reportedSuggestions"
   | "moderateSuggestion"
   | "pendingLeaderInvitations"
@@ -173,3 +176,14 @@ export const getSuggestionInbox = (teamId: string, signal?: AbortSignal) =>
   request<"suggestionInbox">(`/${segment(teamId)}/suggestions/inbox`, "GET", signal)
 export const publishSuggestionDecision = (teamId: string, suggestionId: string, input: PublishSuggestionDecisionInput, signal?: AbortSignal) =>
   request<"publishSuggestionDecision">(`/${segment(teamId)}/suggestions/${segment(suggestionId)}/decisions`, "POST", signal, input)
+
+export type PublishSuggestionTrialInput = components["schemas"]["PublishSuggestionTrialInput"]
+export const publishSuggestionTrial = (teamId: string, suggestionId: string, input: PublishSuggestionTrialInput, signal?: AbortSignal) =>
+  request<"publishSuggestionTrial">(`/${segment(teamId)}/suggestions/${segment(suggestionId)}/trials`, "POST", signal, input)
+
+export type OpenSuggestionEvaluationInput = components["schemas"]["OpenSuggestionEvaluationInput"]
+export type PublishSuggestionOutcomeInput = components["schemas"]["PublishSuggestionOutcomeInput"]
+export const openSuggestionEvaluation = (teamId: string, suggestionId: string, input: OpenSuggestionEvaluationInput, signal?: AbortSignal) =>
+  request<"openSuggestionEvaluation">(`/${segment(teamId)}/suggestions/${segment(suggestionId)}/evaluations`, "POST", signal, input)
+export const publishSuggestionOutcome = (teamId: string, suggestionId: string, input: PublishSuggestionOutcomeInput, signal?: AbortSignal) =>
+  request<"publishSuggestionOutcome">(`/${segment(teamId)}/suggestions/${segment(suggestionId)}/outcomes`, "POST", signal, input)

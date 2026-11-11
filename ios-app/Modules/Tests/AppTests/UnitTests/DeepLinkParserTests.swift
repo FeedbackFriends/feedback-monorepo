@@ -59,7 +59,7 @@ class DeeplinkParserTests {
         switch deeplink {
         case .joinEvent(let pinCode):
             #expect(pinCode == .init(value: "1234"))
-        case .managerEvent, .joinTeam:
+        case .managerEvent, .joinTeam, .improvements:
             fatalError()
         }
     }
@@ -76,5 +76,15 @@ class DeeplinkParserTests {
         let url = URL(string: "wtf://")!
         let deeplink = Deeplink(url: url)
         #expect(deeplink == nil)
+    }
+}
+
+
+extension DeeplinkParserTests {
+    @Test
+    func improvementNotificationValidatesTeamIdentity() {
+        let id = UUID()
+        #expect(Deeplink(notificationUserInfo: ["type": "IMPROVEMENT_UPDATED", "teamId": id.uuidString]) == .improvements(teamID: id))
+        #expect(Deeplink(notificationUserInfo: ["type": "IMPROVEMENT_UPDATED", "teamId": "invalid"]) == nil)
     }
 }

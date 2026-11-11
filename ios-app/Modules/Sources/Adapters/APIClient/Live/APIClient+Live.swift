@@ -8,6 +8,7 @@ public extension APIClient {
         sessionCache: APIClientCache = APIClientCache()
     ) -> APIClient {
         APIClient(
+            answerSuggestionEvaluation: makeAnswerSuggestionEvaluation(api: api),
             listSuggestions: makeListSuggestions(api: api),
             createSuggestion: makeCreateSuggestion(api: api),
             setSuggestionSupport: makeSetSuggestionSupport(api: api),

@@ -35,16 +35,22 @@ These are delivery phases. The [foundation reference](docs/shared/product/improv
 
 ## Progress
 
-Checked items record completed implementation or agreed decisions, not a claim of live end-to-end verification. Phase 2 implementation and independent review are complete; phase 2 remains open until the required native iOS build and tests pass. Xcode workspace opening currently times out, so those checks are blocked.
+Checked items record completed implementation or agreed decisions, not a claim of live end-to-end verification. Phase 2 implementation, independent review, and required automated verification are complete. Native Xcode verification passed on 10 November 2026 using `Feedback Localhost`, the `UnitTests` plan, and the `LetsGrow Manager` iOS 27.2 simulator: build-for-testing succeeded and all eight suggestion adapter/reducer tests passed. Discovery included both `AppTests` and `InsightsTests` (249 enabled tests); only the eight relevant tests were run.
 
-Next: finish native iOS verification, then phase 3 (small trials). Settle trial ownership and departure behavior before implementing trials.
+Phase 3 implementation, required automated verification, and independent review are complete. Trials extend Planned decisions with immutable plan revisions, responsible-person departure flags, web publication/overdue follow-ups, and iOS plan history. Remaining policy recommendations were authorized by the user on 10 November 2026 and are recorded in the foundation reference.
+
+Phases 4–5 implementation, automated verification, and independent review are complete. Employees can evaluate concrete trials, leaders publish immutable outcomes, and both apps expose the full loop. Phase 6 automated checks and human-test preparation are complete; operational backup/restore verification and actual pilot commitments remain open below. No deployment, participant outreach, live push delivery, or live pilot loop was performed.
+
+Verification on 10 November 2026: all 68 API tests passed, including 15 focused suggestion tests; the 15 suggestion tests passed again after final regression assertions. Persistence checks passed (zero tests); scheduler compiled (no tests). Web lint/build and all 21 team browser tests passed with two workers. Native `Feedback Localhost` / `UnitTests` on `LetsGrow Manager` iOS 27.2 passed all 277 test cases across `AppTests` and `InsightsTests`; localization, copy guard, and changed-line Swift lint passed with zero violations. Independent review identified and rechecked fixes for permanent push-token failures blocking delivery and unsupported evaluation timestamps crashing web rendering. Native Postgres concurrency was not exercised.
+
+Retention deletion remains disabled: read-only Coolify inspection found no backup schedules for the healthy `feedback_db`. A maximum backup lifetime, coverage of external copies, and restore-before-serving purge must be verified before enabling deletion. Pilot ownership/capacity and a live full loop require actual participants; recommendations and human journeys are in the foundation reference.
 
 ## Phase 1 — Confirm the foundation and privacy rules
 
 **Tasks:** LG-001; foundations for LG-002–005.
 
 - [x] Review existing suggestions, support, withdrawal, reporting, membership, and authorization behavior before adding anything.
-- [ ] Finish LG-001 acceptance verification. Backend suggestion tests and web checks passed; required native iOS build and tests remain blocked by Xcode workspace opening.
+- [x] Finish LG-001 automated acceptance verification. Backend suggestion tests and web checks passed; native iOS build and all eight relevant tests passed on 10 November 2026. Live end-to-end acceptance remains human testing.
 - [x] Confirm team boundaries and leader permissions for every operation.
 - [x] Agree on stored identities, visible metadata, administrator access, retention, and small-team result protection.
 - [x] Define moderation responsibilities and handling of sensitive or identifying content.
@@ -70,7 +76,7 @@ Verification:
 - [x] Pass web lint, production build, and all 19 team browser tests.
 - [x] Pass iOS localization validation, localized-copy guard, and changed-line Swift lint (zero violations).
 - [x] Complete independent review and resolve all three findings; corrections rechecked with no new findings.
-- [ ] Build iOS and run relevant native tests through Xcode. Blocked: opening the project times out waiting for its initial run destination; no workspace becomes available.
+- [x] Build iOS and run relevant native tests through Xcode. `Feedback Localhost` build-for-testing passed on the `LetsGrow Manager` iOS 27.2 simulator; `SuggestionAdapterTests` and `TeamSuggestionsTests` passed (8/8).
 
 **Exit criteria:** An employee can suggest an improvement, colleagues can support it, and a leader can publish a response employees can read and understand.
 
@@ -78,12 +84,23 @@ Verification:
 
 **Tasks:** LG-003; extend LG-004 and LG-005.
 
-- [ ] Let leaders turn a selected suggestion into a trial.
-- [ ] Record the concrete change, intended benefit, responsible person, trial period, and follow-up date.
-- [ ] Show active trials and next steps in iOS.
-- [ ] Give leaders an overview of active trials and overdue follow-ups.
-- [ ] Preserve the connection between the original suggestion, decision, and trial.
-- [ ] Encourage a manageable number of active trials without introducing an arbitrary hard limit unless agreed.
+- [x] Let leaders turn a selected suggestion into a trial.
+- [x] Record the concrete change, intended benefit, responsible person, trial period, and follow-up date.
+- [x] Show active trials and next steps in iOS.
+- [x] Give leaders an overview of active trials and overdue follow-ups.
+- [x] Preserve the connection between the original suggestion, decision, and trial.
+- [x] Encourage a manageable number of active trials without introducing an arbitrary hard limit unless agreed.
+
+Verification on 10 November 2026:
+
+- [x] Regenerate OpenAPI and TypeScript/Swift clients through the root script.
+- [x] Pass all ten focused suggestion API tests, including current authority, private assignment metadata, date validation, retry behavior, owner departure, and distinct-actor concurrent trial publication. These exercise the migration and repository on H2. `:persistence:test` also completed successfully but contains zero tests.
+- [x] Pass web lint and production build, all 20 team browser tests, and the focused trial test again after adding duplicate-name assignment coverage.
+- [x] Pass native `Feedback Localhost` build on `LetsGrow Manager` iOS 27.2 and all ten suggestion adapter/reducer tests. `UnitTests` discovery includes both targets (251 enabled tests); only the ten relevant tests were run.
+- [x] Pass localization validation, localized-copy guard, and changed-line Swift lint (zero violations).
+- [x] Complete independent review; fix and recheck both findings (Postgres foreign-key lock inversion and indistinguishable same-name assignment choices).
+
+Native Postgres concurrency and live end-to-end/manual journeys were not run. Publish the backend migration/API before clients requiring the additive `trials` response field. No new environment variables or services are required.
 
 **Exit criteria:** Employees and leaders can see what is being tried, why, who owns it, and when it will be reviewed.
 
@@ -91,12 +108,12 @@ Verification:
 
 **Tasks:** LG-003; extend LG-004 and LG-005.
 
-- [ ] Offer a short evaluation tied to a specific trial.
-- [ ] Prevent duplicate responses while preserving the agreed anonymity protections.
-- [ ] Display aggregate results only after at least five responses, with no live participation count.
-- [ ] Let leaders publish a decision to continue, adjust, or stop, with an explanation.
-- [ ] Make adjustments and subsequent trials traceable.
-- [ ] Publish the outcome even when participation is too low to display evaluation results.
+- [x] Offer a short evaluation tied to a specific trial.
+- [x] Prevent duplicate responses while preserving the agreed anonymity protections.
+- [x] Display aggregate results only after at least five responses, with no live participation count.
+- [x] Let leaders publish a decision to continue, adjust, or stop, with an explanation.
+- [x] Make adjustments and subsequent trials traceable.
+- [x] Publish the outcome even when participation is too low to display evaluation results.
 
 **Exit criteria:** A team can complete the full improvement loop, and employees can see the outcome and reasoning.
 
@@ -104,12 +121,12 @@ Verification:
 
 **Tasks:** LG-004, LG-005.
 
-- [ ] Consolidate iOS around suggestions, active improvements, results, and relevant evaluations.
-- [ ] Make the employee home screen show useful next actions and visible progress.
-- [ ] Consolidate web around unanswered suggestions, decisions, active trials, and follow-ups.
-- [ ] Provide clear empty, loading, error, and access-change states.
-- [ ] Keep reporting focused on team improvements; exclude individual participation tracking and employee rankings.
-- [ ] Coordinate legacy navigation with LG-018. Retiring old functionality or deleting existing data requires its separately agreed migration plan.
+- [x] Consolidate iOS around suggestions, active improvements, results, and relevant evaluations.
+- [x] Make the employee home screen show useful next actions and visible progress.
+- [x] Consolidate web around unanswered suggestions, decisions, active trials, and follow-ups.
+- [x] Provide clear empty, loading, error, and access-change states.
+- [x] Keep reporting focused on team improvements; exclude individual participation tracking and employee rankings.
+- [x] Coordinate legacy navigation with LG-018. Retiring old functionality or deleting existing data requires its separately agreed migration plan.
 
 LG-005 evolves throughout phases 2–4; this phase consolidates the experience rather than postponing the employee redesign until the end.
 
@@ -119,14 +136,15 @@ LG-005 evolves throughout phases 2–4; this phase consolidates the experience r
 
 **Tasks:** LG-001–005 together.
 
-- [ ] Test lifecycle behavior, permissions, cross-team isolation, duplicate submissions, concurrent updates, and anonymity protections.
-- [ ] Implement and verify retention enforcement: delete suggestion content and account links 24 months after closure, account for backup expiry, and preserve safe retry behavior. Do not purge data until closure and receipt semantics are defined.
-- [ ] Verify generated API contracts and affected client integrations.
-- [ ] Run required backend, web, and native iOS automated checks in each implementation phase; this phase verifies the combined outcome.
-- [ ] Obtain independent review of substantive changes and resolve material findings.
-- [ ] Prepare human testing for submission, support, decisions, trials, evaluations, and published results. Run manual or visual checks only when explicitly requested.
+- [x] Test lifecycle behavior, permissions, cross-team isolation, duplicate submissions, concurrent decision/trial publication, and anonymity protections. Evaluation/outcome tests cover editable answers, opening snapshots, deadline closure, private summaries, suppression, and linked adjustments. These use H2; native Postgres concurrency remains unverified.
+- [x] Implement and test closure tracking, 24-month content/account-link purge, reopening protection, and permanent UUID-only retry receipts. Provide a daily scheduler disabled by default through `IMPROVEMENTS_RETENTION_ENABLED=false`.
+- [ ] Verify maximum backup lifetime and restore-before-serving purge before enabling retention. Coolify currently has no database backup schedules; external/host copies and restore safety are not established. No production purge is enabled.
+- [x] Verify generated API contracts and affected client integrations.
+- [x] Run required backend, web, and native iOS automated checks in each implementation phase; this phase verifies the combined outcome.
+- [x] Obtain independent review of substantive changes and resolve material findings.
+- [x] Prepare human testing for submission, support, decisions, trials, evaluations, and published results. Run manual or visual checks only when explicitly requested.
 - [ ] Agree on pilot leadership ownership, response expectations, and follow-up capacity.
-- [ ] Validate at least one complete loop before expanding dashboards or reporting.
+- [x] Validate the complete loop with automated backend lifecycle tests and affected client tests before expanding reporting. A deployed or pilot loop remains human acceptance, not an automated-test claim.
 
 **Exit criteria:** Required automated checks and independent review are complete; remaining limitations and human testing steps are explicit. Pilot readiness does not itself authorize deployment or participant outreach.
 
@@ -142,14 +160,16 @@ LG-005 evolves throughout phases 2–4; this phase consolidates the experience r
 ## Decisions required before dependent implementation
 
 - [x] Implement the agreed suggestion anonymity boundary and support-count threshold for phase 2.
-- [ ] Design and implement 24-month post-closure retention, including backup expiry and safe retry receipts.
-- [ ] Settle evaluation format, eligibility, response-editing rules, and behavior when team membership changes.
+- [ ] Complete operational backup expiry and restore verification for 24-month retention. Closure/purge/retry implementation and tests are complete; deletion stays disabled until this prerequisite is met.
+- [x] Settle evaluation format, eligibility, response-editing rules, and membership changes: fixed short question, eligibility snapshot at opening, continued membership required, one editable response until closure; see the foundation reference.
 - [x] Settle decision ownership: current team leaders or the organization owner; retain the public name after departure and require a current assignment on the next revision.
-- [ ] Settle trial ownership and what happens when the responsible person leaves.
+- [x] Settle trial ownership and what happens when the responsible person leaves: current leaders/owner; preserve public name, flag reassignment, and require a current owner on the next update.
 - [x] Settle decision revisions: append immutable history with status, explanation, responsible name, follow-up date, and publication date.
 - [x] Exclude confidential contact from this iteration; current authorized leaders and owners retain moderation responsibility.
-- [ ] Decide which meaningful updates warrant notifications.
+- [x] Decide which meaningful updates warrant notifications: decisions, trial starts/material changes, evaluation openings and published outcomes; no engagement-only reminders. Implemented with generic localized push copy, current-member/token resolution, retry receipts, permanent-token cleanup, and no participation counters. Live delivery remains unverified.
 
 ## Pilot learning
 
 Assess whether the loop identifies problems that otherwise go unheard, produces explained decisions and concrete changes, and helps employees feel their input makes a difference. Also assess whether leaders can sustain follow-up without ongoing help and whether customers want to pay to continue. Treat these as questions to validate, not established product claims.
+
+Final review also refined notification classification: an unchanged revision of an ongoing plan is silent, while a subsequent trial after Adjust still notifies even when its plan fields repeat. Regression coverage distinguishes those cases.

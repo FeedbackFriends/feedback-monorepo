@@ -116,3 +116,15 @@ databaseChangeLog:
   - include:
       file: 0032-add-suggestion-decisions.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 0033-add-suggestion-trials.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0034-add-suggestion-evaluations.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0035-add-suggestion-retention.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 0036-add-improvement-notifications.yaml
+      relativeToChangelogFile: true

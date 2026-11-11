@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
-import { getSuggestionInbox, publishSuggestionDecision, type PublishSuggestionDecisionInput, type SuggestionInbox } from "@/lib/api/teams"
+import { getSuggestionInbox, publishSuggestionDecision, publishSuggestionTrial, type PublishSuggestionTrialInput, type PublishSuggestionDecisionInput, type SuggestionInbox } from "@/lib/api/teams"
+import { TrialEvaluation } from "./TrialEvaluation"
 import { useTeamResource } from "./useTeamResource"
 
 type Suggestion = SuggestionInbox["suggestions"][number]
@@ -21,6 +22,7 @@ const statusLabels: Record<Decision["status"], string> = {
 const dateLabel = (date: string) => new Intl.DateTimeFormat("da-DK", { dateStyle: "long", timeZone: "UTC" }).format(new Date(`${date}T00:00:00Z`))
 
 export default function TeamSuggestions({ teamId }: { teamId: string }) {
+  const [filter, setFilter] = useState("all")
   const load = useCallback((signal: AbortSignal) => getSuggestionInbox(teamId, signal), [teamId])
   const { data, error, busy, refresh, mutate } = useTeamResource(load)
   return (
@@ -30,9 +32,24 @@ export default function TeamSuggestions({ teamId }: { teamId: string }) {
         <Button variant="outline" disabled={busy} onClick={() => void refresh()}>Opdater forslag</Button>
       </div>
       <p className="text-sm text-muted-foreground">Giv et begrundet svar og en tydelig næste handling. Støtte er input til vurderingen og afgør ikke beslutningen.</p>
+      {data && <p className="text-sm">{data.suggestions.filter((item) => item.trials.length > 0 && !item.outcomes.some((outcome) => outcome.trialId === item.trials[0].id)).length} aktive forsøg. Hold få forsøg i gang, så der er tid til opfølgning.</p>}
+      <Field>
+        <FieldLabel htmlFor="suggestion-filter">Vis forbedringer</FieldLabel>
+        <NativeSelect id="suggestion-filter" value={filter} onChange={(event) => setFilter(event.target.value)}>
+          <NativeSelectOption value="all">Alle forslag</NativeSelectOption>
+          <NativeSelectOption value="unanswered">Afventer svar</NativeSelectOption>
+          <NativeSelectOption value="active">Aktive forsøg og opfølgning</NativeSelectOption>
+          <NativeSelectOption value="results">Resultater</NativeSelectOption>
+        </NativeSelect>
+      </Field>
       {error && <Alert variant="destructive"><AlertDescription>{error} Opdater forslag før en ny revision.</AlertDescription></Alert>}
       {!data ? !error && <Skeleton className="h-24 w-full" aria-label="Henter forslag" /> : (
-        data.suggestions.length === 0 ? <p>Teamet har ingen forslag endnu.</p> : data.suggestions.map((suggestion) => (
+        data.suggestions.length === 0 ? <p>Teamet har ingen forslag endnu.</p> : data.suggestions.filter((suggestion) => {
+          if (filter === "unanswered") return suggestion.decisions.length === 0
+          if (filter === "results") return suggestion.outcomes.length > 0 || suggestion.decisions[0]?.status === "Declined"
+          if (filter === "active") return suggestion.trials.length === 0 ? !!suggestion.decisions[0]?.followUpDate : !suggestion.outcomes.some((outcome) => outcome.trialId === suggestion.trials[0].id && outcome.outcome !== "Adjust")
+          return true
+        }).map((suggestion) => (
           <Card key={suggestion.id}>
             <CardHeader><CardTitle className="whitespace-pre-wrap break-words">{suggestion.problem}</CardTitle></CardHeader>
             <CardContent className="flex flex-col gap-4">
@@ -52,9 +69,26 @@ export default function TeamSuggestions({ teamId }: { teamId: string }) {
                   ))}
                 </ol>
               )}
-              <DecisionForm key={`${suggestion.id}-${suggestion.decisions[0]?.revision ?? 0}`} suggestion={suggestion}
+              {suggestion.trials.length > 0 && (
+                <div className="flex flex-col gap-3" aria-label="Forsøgshistorik, nyeste først">
+                  {suggestion.trials.map((trial, index) => <div key={trial.id} className="flex flex-col gap-1">
+                    <h3 className="font-medium">{suggestion.outcomes.some((outcome) => outcome.trialId === trial.id) ? "Afsluttet forsøg" : index === 0 ? "Afprøves" : "Tidligere forsøgsplan"}</h3>
+                    <p className="whitespace-pre-wrap break-words">{trial.change}</p>
+                    <p className="whitespace-pre-wrap break-words">Formål: {trial.intendedBenefit}</p>
+                    <p>Ansvarlig: {trial.responsibleName}</p>
+                    {index === 0 && trial.needsReassignment && <p role="status">Vælg en ny ansvarlig. Den tidligere ansvarlige leder ikke længere teamet.</p>}
+                    <p>Periode: {dateLabel(trial.startDate)} – {dateLabel(trial.endDate)}</p>
+                    <p>Opfølgning: {dateLabel(trial.followUpDate)}{index === 0 && trial.followUpDate < new Intl.DateTimeFormat("sv-SE").format(new Date()) ? " — overskredet" : ""}</p>
+                  </div>)}
+                </div>
+              )}
+              {suggestion.decisions[0]?.status === "Planned" && (!suggestion.trials[0] || (!suggestion.evaluations.some((evaluation) => evaluation.trialId === suggestion.trials[0].id) || suggestion.outcomes.some((outcome) => outcome.trialId === suggestion.trials[0].id && outcome.outcome === "Adjust"))) && <TrialForm key={`${suggestion.id}-trial-${suggestion.trials[0]?.revision ?? 0}`}
+                suggestion={suggestion} people={data.responsiblePeople} busy={busy} error={error}
+                publish={(input) => mutate((signal) => publishSuggestionTrial(teamId, suggestion.id, input, signal))} />}
+              <TrialEvaluation teamId={teamId} suggestion={suggestion} busy={busy} error={error} mutate={mutate} />
+              {suggestion.trials.length === 0 && <DecisionForm key={`${suggestion.id}-${suggestion.decisions[0]?.revision ?? 0}`} suggestion={suggestion}
                 people={data.responsiblePeople} busy={busy} error={error}
-                publish={(input) => mutate((signal) => publishSuggestionDecision(teamId, suggestion.id, input, signal))} />
+                publish={(input) => mutate((signal) => publishSuggestionDecision(teamId, suggestion.id, input, signal))} />}
             </CardContent>
           </Card>
         ))
@@ -140,4 +174,69 @@ function DecisionForm({ suggestion, people, busy, error, publish }: {
       </DialogContent>
     </Dialog>
   )
+}
+
+function TrialForm({ suggestion, people, busy, error, publish }: {
+  suggestion: Suggestion
+  people: SuggestionInbox["responsiblePeople"]
+  busy: boolean
+  error: string | null
+  publish: (input: PublishSuggestionTrialInput) => Promise<SuggestionInbox | undefined>
+}) {
+  const prefix = useId()
+  const latest = suggestion.trials[0]
+  const [open, setOpen] = useState(false)
+  const [change, setChange] = useState(latest?.change ?? "")
+  const [intendedBenefit, setIntendedBenefit] = useState(latest?.intendedBenefit ?? "")
+  const [responsibleId, setResponsibleId] = useState("")
+  const [responsibleName, setResponsibleName] = useState("")
+  const [startDate, setStartDate] = useState(latest?.startDate ?? "")
+  const [endDate, setEndDate] = useState(latest?.endDate ?? "")
+  const [followUpDate, setFollowUpDate] = useState(latest?.followUpDate ?? "")
+  const receipt = useRef<{ content: string; id: string } | null>(null)
+  const submitting = useRef(false)
+  const valid = [change, intendedBenefit].every((value) => value.trim().length > 0 && value.trim().length <= 1000) &&
+    people.some((person) => person.accountId === responsibleId) && responsibleName.trim().length > 0 && responsibleName.trim().length <= 255 &&
+    startDate.length === 10 && endDate.length === 10 && followUpDate.length === 10 && startDate <= endDate && endDate <= followUpDate
+  return <Dialog open={open} onOpenChange={setOpen}>
+    <DialogTrigger asChild><Button variant="outline" disabled={busy}>{latest ? "Revider forsøg" : "Start forsøg"}</Button></DialogTrigger>
+    <DialogContent className="max-h-[90dvh] overflow-y-auto">
+      <DialogHeader><DialogTitle>{latest ? "Revider forsøg" : "Start forsøg"}</DialogTitle>
+        <DialogDescription>Beskriv en lille ændring, teamet kan afprøve. Planen og dens revisioner bliver synlige for teamet. Alle felter skal udfyldes.</DialogDescription></DialogHeader>
+      <form onSubmit={async (event) => {
+        event.preventDefault()
+        if (!valid || busy || submitting.current) return
+        const content = { expectedRevision: latest?.revision ?? 0, expectedDecisionId: suggestion.decisions[0].id,
+          change: change.trim(), intendedBenefit: intendedBenefit.trim(), responsibleId, responsibleName: responsibleName.trim(), startDate, endDate, followUpDate }
+        const serialized = JSON.stringify(content)
+        if (receipt.current?.content !== serialized) receipt.current = { content: serialized, id: crypto.randomUUID() }
+        submitting.current = true
+        try { if (await publish({ ...content, id: receipt.current.id })) setOpen(false) }
+        finally { submitting.current = false }
+      }}><FieldGroup>
+        <Field><FieldLabel htmlFor={`${prefix}-change`}>Konkret ændring *</FieldLabel>
+          <Textarea id={`${prefix}-change`} required maxLength={1000} value={change} disabled={busy} onChange={(event) => setChange(event.target.value)} /></Field>
+        <Field><FieldLabel htmlFor={`${prefix}-benefit`}>Hvad skal ændringen hjælpe med? *</FieldLabel>
+          <Textarea id={`${prefix}-benefit`} required maxLength={1000} value={intendedBenefit} disabled={busy} onChange={(event) => setIntendedBenefit(event.target.value)} /></Field>
+        <Field><FieldLabel htmlFor={`${prefix}-person`}>Ansvarlig person *</FieldLabel>
+          <NativeSelect id={`${prefix}-person`} required value={responsibleId} disabled={busy} onChange={(event) => {
+            setResponsibleId(event.target.value)
+            setResponsibleName(people.find((person) => person.accountId === event.target.value)?.name ?? "")
+          }}><NativeSelectOption value="">Vælg en leder eller organisationsejer</NativeSelectOption>
+            {people.map((person) => <NativeSelectOption key={person.accountId} value={person.accountId}>{person.email ? (person.name ? `${person.name} (${person.email})` : person.email) : (person.name || "Organisationsejer")}</NativeSelectOption>)}
+          </NativeSelect></Field>
+        <Field><FieldLabel htmlFor={`${prefix}-name`}>Ansvarliges navn til teamet *</FieldLabel>
+          <Input id={`${prefix}-name`} required maxLength={255} value={responsibleName} disabled={busy} onChange={(event) => setResponsibleName(event.target.value)} />
+          <FieldDescription>Navnet bevares efter afgang. Vælg en nuværende ansvarlig ved hver revision.</FieldDescription></Field>
+        {([
+          ["start", "Startdato *", startDate, setStartDate], ["end", "Slutdato *", endDate, setEndDate],
+          ["follow", "Opfølgningsdato *", followUpDate, setFollowUpDate],
+        ] as const).map(([key, label, value, setValue]) => <Field key={key}><FieldLabel htmlFor={`${prefix}-${key}`}>{label}</FieldLabel>
+          <Input id={`${prefix}-${key}`} type="date" required value={value} disabled={busy} onChange={(event) => setValue(event.target.value)} /></Field>)}
+        <FieldDescription>Slutdatoen skal være på eller efter startdatoen. Opfølgningen skal være på eller efter slutdatoen.</FieldDescription>
+        {error && <Alert variant="destructive"><AlertDescription>{error} Luk og opdater forslag før en ny revision.</AlertDescription></Alert>}
+        <Button type="submit" disabled={!valid || busy}>{busy ? "Offentliggør…" : "Offentliggør forsøg"}</Button>
+      </FieldGroup></form>
+    </DialogContent>
+  </Dialog>
 }

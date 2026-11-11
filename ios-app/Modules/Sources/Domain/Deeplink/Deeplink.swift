@@ -2,6 +2,7 @@ import Foundation
 import Logger
 
 public enum Deeplink: Equatable, Sendable {
+    case improvements(teamID: UUID)
     case joinTeam(code: String)
     case joinEvent(pinCodeInput: PinCodeInput)
     case managerEvent(id: UUID)
@@ -38,6 +39,9 @@ public extension Deeplink {
         }
 
         switch type {
+        case "IMPROVEMENT_UPDATED":
+            guard let value = userInfo["teamId"] as? String, let id = UUID(uuidString: value) else { return nil }
+            self = .improvements(teamID: id)
         case "FEEDBACK_RECEIVED":
             guard
                 let eventIdString = userInfo["eventId"] as? String,

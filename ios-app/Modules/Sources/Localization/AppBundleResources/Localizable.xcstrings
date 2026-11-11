@@ -37,6 +37,42 @@
         }
       }
     },
+    "notification_improvement_body" : {
+      "comment" : "Generic improvement update. Contains no employee content or activity counters.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn LetsGrow for at se teamets næste skridt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open LetsGrow to see your team’s next steps."
+          }
+        }
+      }
+    },
+    "notification_improvement_title" : {
+      "comment" : "Generic improvement update. Contains no employee content or activity counters.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nyt om teamets forbedringer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Team improvement update"
+          }
+        }
+      }
+    },
     "notification_start_feedback_body" : {
       "comment" : "Legacy start-feedback push body. No current sender found in this repository; retained for compatibility with queued or external payloads.",
       "extractionState" : "manual",

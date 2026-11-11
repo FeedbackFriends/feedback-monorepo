@@ -40,19 +40,19 @@ export class SupabaseAuthClient implements AuthClient {
     const { error } = await this.requireClient().auth.initialize()
     if (error) throw error
   }
-  async sendEmailCode(email: string) {
-    const { error } = await this.requireClient().auth.signInWithOtp({ email })
+  async sendEmailCode(email: string, name?: string) {
+    const { error } = await this.requireClient().auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: window.location.origin + window.location.pathname,
+        shouldCreateUser: Boolean(name),
+        ...(name ? { data: { full_name: name } } : {}),
+      },
+    })
     if (error) throw error
   }
   async verifyEmailCode(email: string, token: string) {
     const { error } = await this.requireClient().auth.verifyOtp({ email, token, type: "email" })
-    if (error) throw error
-  }
-  async signInWithGoogle() {
-    const { error } = await this.requireClient().auth.signInWithOAuth({ provider: "google", options: {
-      redirectTo: window.location.origin + window.location.pathname,
-      queryParams: { prompt: "select_account" },
-    } })
     if (error) throw error
   }
   async signOut() {

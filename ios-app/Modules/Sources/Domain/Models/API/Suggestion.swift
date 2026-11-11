@@ -9,8 +9,12 @@ public struct Suggestion: Equatable, Sendable, Identifiable {
     public let supportedByMe: Bool
     public let mine: Bool
     public let decisions: [SuggestionDecision]
+    public let trials: [SuggestionTrial]
+    public let evaluations: [SuggestionEvaluation]
+    public let outcomes: [SuggestionOutcome]
 
-    public init(id: String, problem: String, impact: String, solution: String?, hasFiveSupporters: Bool, supportedByMe: Bool, mine: Bool, decisions: [SuggestionDecision] = []) {
+    public init(id: String, problem: String, impact: String, solution: String?, hasFiveSupporters: Bool, supportedByMe: Bool, mine: Bool,
+                decisions: [SuggestionDecision] = [], trials: [SuggestionTrial] = [], evaluations: [SuggestionEvaluation] = [], outcomes: [SuggestionOutcome] = []) {
         self.id = id
         self.problem = problem
         self.impact = impact
@@ -19,5 +23,8 @@ public struct Suggestion: Equatable, Sendable, Identifiable {
         self.supportedByMe = supportedByMe
         self.mine = mine
         self.decisions = decisions
+        self.trials = trials
+        self.evaluations = evaluations
+        self.outcomes = outcomes
     }
 }

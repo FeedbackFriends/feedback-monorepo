@@ -80,13 +80,9 @@ export function subscribeToAuthState(
   return authClient.subscribeToAuthState(onUser, onError)
 }
 
-export function signInWithGoogle() {
-  return authClient.signInWithGoogle()
-}
-
 export function signOut() {
   return authClient.signOut()
 }
 
-export const sendEmailCode = (email: string) => authClient.sendEmailCode(email)
+export const sendEmailCode = (email: string, name?: string) => authClient.sendEmailCode(email, name)
 export const verifyEmailCode = (email: string, code: string) => authClient.verifyEmailCode(email, code)

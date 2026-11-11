@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0036-add-improvement-notifications
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE improvement_notification (
+                id UUID PRIMARY KEY,
+                suggestion_id UUID NOT NULL REFERENCES team_suggestion(id) ON DELETE CASCADE
+              );
+              CREATE INDEX improvement_notification_suggestion_idx ON improvement_notification(suggestion_id);

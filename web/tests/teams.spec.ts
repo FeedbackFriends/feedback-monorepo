@@ -83,7 +83,12 @@ async function mockTeams(page: Page, existing = false) {
 }
 async function login(page: Page) {
   await page.goto("/login")
-  await page.getByRole("button", { name: "Fortsæt med Google" }).click()
+  await expect(page.getByRole("button", { name: /Google/ })).toHaveCount(0)
+  await page.getByRole("button", { name: "Log ind med email", exact: true }).click()
+  await page.getByLabel("Arbejdsmail").fill("playwright@example.com")
+  await page.getByRole("button", { name: "Fortsæt", exact: true }).click()
+  await page.getByLabel("Engangskode", { exact: true }).fill("123456")
+  await page.getByRole("button", { name: "Bekræft kode" }).click()
   await expect(page).toHaveURL(/\/dashboard$/)
 }
 
@@ -511,7 +516,7 @@ test("owner manages leaders and assigned leader loses controls on revocation", a
   ).toHaveCount(0)
 })
 
-test("personal leader link preserves invitation through Google login", async ({
+test("personal leader link preserves invitation through email login", async ({
   page,
 }) => {
   await mockTeams(page, true)
@@ -530,7 +535,12 @@ test("personal leader link preserves invitation through Google login", async ({
     })
   })
   await page.goto("/leader-invite/personal-code")
-  await page.getByRole("button", { name: "Fortsæt med Google" }).click()
+  await expect(page.getByRole("button", { name: /Google/ })).toHaveCount(0)
+  await page.getByRole("button", { name: "Log ind med email", exact: true }).click()
+  await page.getByLabel("Arbejdsmail").fill("playwright@example.com")
+  await page.getByRole("button", { name: "Fortsæt", exact: true }).click()
+  await page.getByLabel("Engangskode", { exact: true }).fill("123456")
+  await page.getByRole("button", { name: "Bekræft kode" }).click()
   await expect(page).toHaveURL(/\/leader-invite\/personal-code$/)
   await expect(
     page.getByText(/Invitationen gælder ada@example.com/),
@@ -539,14 +549,19 @@ test("personal leader link preserves invitation through Google login", async ({
   await expect(page).toHaveURL(/\/dashboard\/teams\/it$/)
 })
 
-test("invalid leader links and wrong Google accounts show clear errors", async ({
+test("invalid leader links and wrong email accounts show clear errors", async ({
   page,
 }) => {
   await page.route("**/api/leader/teams/leader-invitations/**", (route) =>
     route.fulfill({ status: 404, json: {} }),
   )
   await page.goto("/leader-invite/expired")
-  await page.getByRole("button", { name: "Fortsæt med Google" }).click()
+  await expect(page.getByRole("button", { name: /Google/ })).toHaveCount(0)
+  await page.getByRole("button", { name: "Log ind med email", exact: true }).click()
+  await page.getByLabel("Arbejdsmail").fill("playwright@example.com")
+  await page.getByRole("button", { name: "Fortsæt", exact: true }).click()
+  await page.getByLabel("Engangskode", { exact: true }).fill("123456")
+  await page.getByRole("button", { name: "Bekræft kode" }).click()
   await expect(page.getByText(/Invitationen er udløbet/)).toBeVisible()
   await expect(
     page.getByRole("button", { name: "Acceptér invitation" }),
@@ -591,7 +606,12 @@ test("a response from a previous login cannot replace the current team's data", 
     await requested
     await page.getByRole("button", { name: "Log ud", exact: true }).click()
     await expect(page).toHaveURL(/\/login$/)
-    await page.getByRole("button", { name: "Fortsæt med Google" }).click()
+    await expect(page.getByRole("button", { name: /Google/ })).toHaveCount(0)
+  await page.getByRole("button", { name: "Log ind med email", exact: true }).click()
+  await page.getByLabel("Arbejdsmail").fill("playwright@example.com")
+  await page.getByRole("button", { name: "Fortsæt", exact: true }).click()
+  await page.getByLabel("Engangskode", { exact: true }).fill("123456")
+  await page.getByRole("button", { name: "Bekræft kode" }).click()
     await expect(page).toHaveURL(/\/dashboard$/)
     await page.goto("/dashboard/teams/it")
     await expect(page.getByRole("heading", { name: "IT", exact: true })).toBeVisible()
@@ -674,7 +694,7 @@ test("leader reviews anonymous suggestion reports and handles removal failures a
 test("leader publishes and revises explained decisions with retry identity and clears denied content", async ({ page }) => {
   await mockTeams(page, true)
   const suggestion = { id: "idea", problem: "Kortere møder", impact: "Mere tid til fokus", hasFiveSupporters: true,
-    supportedByMe: false, mine: false, decisions: [] as Record<string, unknown>[] }
+    supportedByMe: false, mine: false, evaluations: [], outcomes: [], trials: [], decisions: [] as Record<string, unknown>[] }
   let submission: Record<string, unknown> | undefined
   let attempts = 0
   let denied = false
@@ -724,4 +744,110 @@ test("leader publishes and revises explained decisions with retry identity and c
   await inbox.getByRole("button", { name: "Opdater forslag" }).click()
   await expect(inbox.getByText("Kortere møder", { exact: true })).toHaveCount(0)
   await expect(inbox.getByRole("button", { name: "Revider svar" })).toHaveCount(0)
+})
+
+
+test("leader starts a trial with retry identity, revises its owner and clears denied trial content", async ({ page }) => {
+  await mockTeams(page, true)
+  const suggestion = { id: "idea", problem: "Fokus om formiddagen", impact: "Færre afbrydelser", hasFiveSupporters: false,
+    supportedByMe: false, mine: false, evaluations: [], outcomes: [], trials: [] as Record<string, unknown>[], decisions: [{ id: "decision", revision: 1, status: "Planned",
+      explanation: "Prøv mødefri formiddage", responsibleName: "Ada", followUpDate: "2099-01-01", publishedAt: 1794297600000 }] }
+  const people = [{ accountId: "owner", name: "Ada", email: "owner@example.com" }, { accountId: "leader", name: "Ada", email: "leader@example.com" }]
+  let denied = false
+  let receipt: unknown
+  let attempts = 0
+  await page.route("**/api/leader/teams/it/suggestions/inbox", (route) => denied
+    ? route.fulfill({ status: 403, json: {} }) : route.fulfill({ json: { suggestions: [suggestion], responsiblePeople: people } }))
+  await page.route("**/api/leader/teams/it/suggestions/idea/trials", (route) => {
+    const input = route.request().postDataJSON()
+    expect(input.expectedDecisionId).toBe("decision")
+    if (++attempts === 1) { receipt = input; return route.abort() }
+    if (attempts === 2) expect(input).toEqual(receipt)
+    expect(input.expectedRevision).toBe(suggestion.trials.length)
+    suggestion.trials.unshift({ ...input, revision: input.expectedRevision + 1, decisionId: input.expectedDecisionId,
+      needsReassignment: false, publishedAt: 1794297600000 })
+    return route.fulfill({ json: { suggestions: [suggestion], responsiblePeople: people } })
+  })
+  await login(page)
+  await page.getByRole("link", { name: "Åbn IT" }).click()
+  const inbox = page.getByRole("region", { name: "Forslag og beslutninger" })
+  await inbox.getByRole("button", { name: "Start forsøg" }).click()
+  const dialog = page.getByRole("dialog")
+  const publish = dialog.getByRole("button", { name: "Offentliggør forsøg", exact: true })
+  await expect(publish).toBeDisabled()
+  await dialog.getByLabel("Konkret ændring").fill("Ingen interne møder tirsdag formiddag")
+  await dialog.getByLabel("Hvad skal ændringen hjælpe med?").fill("Tid til koncentration")
+  await expect(dialog.getByRole("option", { name: "Ada (owner@example.com)", exact: true })).toHaveCount(1)
+  await expect(dialog.getByRole("option", { name: "Ada (leader@example.com)", exact: true })).toHaveCount(1)
+  await dialog.getByLabel("Ansvarlig person").selectOption({ label: "Ada (leader@example.com)" })
+  await expect(dialog.getByLabel("Ansvarliges navn til teamet")).toHaveValue("Ada")
+  await dialog.getByLabel("Startdato", { exact: false }).fill("2020-01-01")
+  await dialog.getByLabel("Slutdato", { exact: false }).fill("2019-01-01")
+  await dialog.getByLabel("Opfølgningsdato", { exact: false }).fill("2020-02-02")
+  await expect(publish).toBeDisabled()
+  await dialog.getByLabel("Slutdato", { exact: false }).fill("2020-02-01")
+  await publish.click()
+  await expect(dialog.getByRole("alert")).toBeVisible()
+  await publish.click()
+  await expect(dialog).not.toBeVisible()
+  await expect(inbox.getByText("1 aktive forsøg.", { exact: false })).toBeVisible()
+  await expect(inbox.getByText("— overskredet", { exact: false })).toBeVisible()
+  await expect(inbox.getByRole("button", { name: "Revider svar" })).toHaveCount(0)
+  suggestion.trials[0].needsReassignment = true
+  await inbox.getByRole("button", { name: "Opdater forslag" }).click()
+  await expect(inbox.getByRole("status")).toContainText("Vælg en ny ansvarlig")
+  await inbox.getByRole("button", { name: "Revider forsøg" }).click()
+  await expect(dialog.getByLabel("Konkret ændring")).toHaveValue("Ingen interne møder tirsdag formiddag")
+  await expect(publish).toBeDisabled()
+  await dialog.getByLabel("Ansvarlig person").selectOption("owner")
+  await publish.click()
+  await expect(inbox.getByText("Tidligere forsøgsplan", { exact: true })).toBeVisible()
+  denied = true
+  await inbox.getByRole("button", { name: "Opdater forslag" }).click()
+  await expect(inbox.getByText("Ingen interne møder tirsdag formiddag", { exact: true })).toHaveCount(0)
+  await expect(inbox.getByRole("button", { name: "Revider forsøg" })).toHaveCount(0)
+})
+
+test("leader opens an evaluation and publishes suppressed results", async ({ page }) => {
+  await mockTeams(page, true)
+  const suggestion = { id: "idea", problem: "Arbejdsro", impact: "Fokus", hasFiveSupporters: false, supportedByMe: false, mine: false,
+    decisions: [{ id: "decision", revision: 1, status: "Planned", explanation: "Afprøv", responsibleName: "Ada", followUpDate: "2020-01-01", publishedAt: 1 }],
+    trials: [{ id: "trial", revision: 1, decisionId: "decision", change: "Mødefri formiddage", intendedBenefit: "Fokus", responsibleName: "Ada",
+      needsReassignment: false, startDate: "2020-01-01", endDate: "2020-02-01", followUpDate: "2020-02-02", publishedAt: 1 }],
+    evaluations: [] as Record<string, unknown>[], outcomes: [] as Record<string, unknown>[] }
+  const inbox = { suggestions: [suggestion], responsiblePeople: [] }
+  await page.route("**/api/leader/teams/it/suggestions/inbox", (route) => route.fulfill({ json: inbox }))
+  await page.route("**/api/leader/teams/it/suggestions/idea/evaluations", (route) => {
+    const input = route.request().postDataJSON()
+    expect(input.trialId).toBe("trial")
+    expect(input.closesAt).toBeGreaterThan(Date.now())
+    suggestion.evaluations = [{ ...input, closed: false, eligible: false }]
+    return route.fulfill({ json: inbox })
+  })
+  await page.route("**/api/leader/teams/it/suggestions/idea/outcomes", (route) => {
+    const input = route.request().postDataJSON()
+    expect(input.outcome).toBe("Stop")
+    suggestion.outcomes = [{ ...input, publishedAt: Date.now() }]
+    suggestion.evaluations[0].summary = "InsufficientResponses"
+    return route.fulfill({ json: inbox })
+  })
+  await login(page)
+  await page.getByRole("link", { name: "Åbn IT" }).click()
+  const region = page.getByRole("region", { name: "Forslag og beslutninger" })
+  await region.getByLabel("Svarfrist for evaluering").fill("2099-01-01T12:00")
+  await region.getByRole("button", { name: "Åbn evaluering", exact: true }).click()
+  await expect(region.getByText("Åben for svar.", { exact: false })).toBeVisible()
+  await expect(region.getByRole("button", { name: "Revider forsøg" })).toHaveCount(0)
+  suggestion.evaluations[0].closed = true
+  suggestion.evaluations[0].closesAt = 1
+  await region.getByRole("button", { name: "Opdater forslag" }).click()
+  await region.getByLabel("Beslutning efter forsøget").selectOption("Stop")
+  await region.getByLabel("Begrundelse", { exact: false }).fill("Ændringen hjalp ikke nok.")
+  await region.getByRole("button", { name: "Offentliggør resultat", exact: true }).click()
+  await expect(region.getByText("Resultat: Stop", { exact: true })).toBeVisible()
+  await expect(region.getByText("Resultatet vises ikke af hensyn til anonymiteten.", { exact: false })).toBeVisible()
+  await expect(region.getByText("0 aktive forsøg.", { exact: false })).toBeVisible()
+  await expect(region.getByRole("button", { name: "Revider forsøg" })).toHaveCount(0)
+  await region.getByLabel("Vis forbedringer").selectOption("results")
+  await expect(region.getByText("Resultat: Stop", { exact: true })).toBeVisible()
 })

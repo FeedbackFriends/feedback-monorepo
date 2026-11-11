@@ -3,6 +3,17 @@ import Foundation
 import OpenAPI
 
 extension APIClient {
+    static func makeAnswerSuggestionEvaluation(api: APIProtocol) -> @Sendable (String, String, String, EvaluationAnswer) async throws -> [Suggestion] {
+        { teamID, suggestionID, evaluationID, answer in
+            try await withAuthorization {
+                try await api.answerSuggestionEvaluation(.init(
+                    path: .init(teamId: teamID, suggestionId: suggestionID, evaluationId: evaluationID),
+                    body: .json(.init(answer: .init(rawValue: answer.rawValue)!))
+                )).ok.body.json.map(Suggestion.init)
+            }
+        }
+    }
+
     static func makeListSuggestions(api: APIProtocol) -> @Sendable (String) async throws -> [Suggestion] {
         { teamID in
             try await withAuthorization {

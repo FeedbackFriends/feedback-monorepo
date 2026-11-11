@@ -57,18 +57,18 @@ struct RootNavigationTests {
     }
 
     @Test
-    func anonymousUsersStartOnFeedback() {
+    func anonymousUsersStartOnTeamImprovements() {
         let store = Store(initialState: RootFeature.State()) { RootFeature() }
         store.send(.createAccountResponse(.mockAnonymous(), nil))
         #expect(store.destination.loggedIn?.bootstrap.role == nil)
-        #expect(store.destination.loggedIn?.selectedTab == .feedback)
+        #expect(store.destination.loggedIn?.selectedTab == .activities)
     }
 
     @Test
-    func restoredAnonymousSessionStartsOnFeedback() {
+    func restoredAnonymousSessionStartsOnTeamImprovements() {
         let store = Store(initialState: RootFeature.State()) { RootFeature() }
         store.send(.getSessionResponse(bootstrap: .mockAnonymous()))
-        #expect(store.destination.loggedIn?.selectedTab == .feedback)
+        #expect(store.destination.loggedIn?.selectedTab == .activities)
     }
 
     @Test

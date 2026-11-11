@@ -4,6 +4,11 @@ LetsGrow is a feedback-after-meetings product with a Next.js web app, Kotlin bac
 
 - Both Codex and Claude Code are actively used. Maintain shared guidance and working discovery/tool configuration for both clients.
 - Read the nearest app `AGENTS.md` before editing its subtree.
+
+## Preproduction data policy
+
+LetsGrow is not in production. Existing users and databases, including the current hosted Supabase project, are disposable development data. Agents may reset users and databases when needed to complete authorized development or testing, without asking again. Prefer the simplest implementation; backward compatibility, data preservation, and migration work solely to preserve this preproduction data are unnecessary. This policy overrides data-preservation, reset-confirmation, and incremental-migration requirements elsewhere in repository guidance during preproduction. Keep schema setup reproducible for a fresh database. Reassess this policy before onboarding production users.
+
 ## Reference material
 
 Read the owning app policy before editing: [web](web/AGENTS.md), [backend](backend/AGENTS.md), or [iOS](ios-app/AGENTS.md). iOS build, test, launch, and verification policy applies even when working from the root.

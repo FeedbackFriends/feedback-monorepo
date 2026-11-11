@@ -3,7 +3,7 @@ import LoginScreen from "@/components/auth/LoginScreen"
 
 export const metadata: Metadata = {
   title: "Log ind | Lets Grow",
-  description: "Log ind i Lets Grow med Google.",
+  description: "Log ind i Lets Grow med email.",
 }
 
 export default function LoginPage() {

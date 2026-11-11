@@ -51,7 +51,7 @@ stored in cookies by this relay; requests and responses use no-store caching.
 `letsgrow://team-invite?code=...`, with an App Store link and manual code. It does
 not create a join request in the browser. The matching iOS flow uses anonymous Supabase sessions and owner approval. Event invitations retain `/invite/[id]`.
 
-`TeamContext.isOwner` gates organization/team creation and leadership administration; `managedTeams` already contains only the caller’s authorized scope. Team detail clears protected state on denied responses. `/leader-invite/[code]` keeps its personal token in the URL through shared email-code or Google login and explicitly accepts via the API; the API requires the matching verified email. Only owners create/revoke these links or remove leaders. Links expire after seven days and are distinct from employee invitations.
+`TeamContext.isOwner` gates organization/team creation and leadership administration; `managedTeams` already contains only the caller’s authorized scope. Team detail clears protected state on denied responses. `/leader-invite/[code]` keeps its personal token in the URL through shared email-code login and explicitly accepts via the API; the API requires the matching verified email. Only owners create/revoke these links or remove leaders. Links expire after seven days and are distinct from employee invitations.
 
 AuthProvider is scoped to `src/app/(account)/layout.tsx`, shared by login, dashboard and leader invitations. Public routes do not initialize auth. Supabase is imported only by the account route group, initializes from runtime configuration and rejects E2E authentication in production. Protected screen state is recreated on account changes.
 

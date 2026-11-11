@@ -15,19 +15,26 @@ public struct TeamSuggestionsView: View {
             LazyVStack(alignment: .leading, spacing: Theme.padding) {
                 Text(String(appStrings: .suggestionsPrivacy)).supportingTextStyle()
                 if store.teamID != nil {
-                    SuggestionFormView(store: store)
+                    Picker(String(appStrings: .suggestionsTitle), selection: $store.section) {
+                        Text(String(appStrings: .improvementsSuggestions)).tag(TeamSuggestions.Section.suggestions)
+                        Text(String(appStrings: .improvementsActive)).tag(TeamSuggestions.Section.active)
+                        Text(String(appStrings: .improvementsResults)).tag(TeamSuggestions.Section.results)
+                    }
+                    .pickerStyle(.segmented)
+                    if store.section == .suggestions { SuggestionFormView(store: store) }
                     if store.reportSubmitted { Text(String(appStrings: .suggestionsReportSubmitted)).bodyTextStyle() }
                     if store.isBusy { ProgressView().frame(maxWidth: .infinity) }
-                    if store.hasLoaded && store.suggestions.isEmpty {
+                    if store.hasLoaded && store.visibleSuggestions.isEmpty {
                         Text(String(appStrings: .suggestionsEmpty)).bodyTextStyle()
                     }
-                    ForEach(store.suggestions) { suggestion in
+                    ForEach(store.visibleSuggestions) { suggestion in
                         SuggestionRowView(
                             suggestion: suggestion,
                             isBusy: store.isBusy,
                             support: { store.send(.support(suggestion.id)) },
                             withdraw: { store.send(.withdrawTapped(suggestion.id)) },
-                            report: { store.send(.reportTapped(suggestion.id)) }
+                            report: { store.send(.reportTapped(suggestion.id)) },
+                            answer: { store.send(.answer(suggestion.id, $0, $1)) }
                         )
                     }
                     Button(String(appStrings: .teamRefresh)) { store.send(.refresh) }
@@ -102,6 +109,7 @@ private struct SuggestionRowView: View {
     let support: () -> Void
     let withdraw: () -> Void
     let report: () -> Void
+    let answer: (String, EvaluationAnswer) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.padding) {
@@ -110,6 +118,28 @@ private struct SuggestionRowView: View {
             if let solution = suggestion.solution { Text(solution).bodyTextStyle() }
             if suggestion.hasFiveSupporters {
                 Text(String(appStrings: .suggestionsFiveSupporters)).supportingTextStyle()
+            }
+            ForEach(suggestion.outcomes) { outcome in
+                VStack(alignment: .leading, spacing: Theme.padding) {
+                    Text(String(appStrings: outcome.outcome == .continued ? .outcomeContinue : outcome.outcome == .adjust ? .outcomeAdjust : .outcomeStop)).rowTitleTextStyle()
+                    if let plan = suggestion.trials.first(where: { $0.id == outcome.trialID }) { Text(plan.change).bodyTextStyle() }
+                    Text(outcome.explanation).bodyTextStyle()
+                }
+            }
+            ForEach(suggestion.evaluations) { evaluation in
+                SuggestionEvaluationView(evaluation: evaluation,
+                                         change: suggestion.trials.first(where: { $0.id == evaluation.trialID })?.change,
+                                         answer: { answer(evaluation.id, $0) })
+            }
+            if let trial = suggestion.trials.first {
+                SuggestionTrialView(trial: trial, isCurrent: !suggestion.outcomes.contains { $0.trialID == trial.id })
+                if suggestion.trials.count > 1 {
+                    DisclosureGroup(String(appStrings: .suggestionsTrialHistory)) {
+                        ForEach(suggestion.trials.dropFirst()) { previous in
+                            SuggestionTrialView(trial: previous, isCurrent: false)
+                        }
+                    }
+                }
             }
             if let latest = suggestion.decisions.first {
                 SuggestionDecisionView(decision: latest)
@@ -158,6 +188,73 @@ private struct SuggestionDecisionView: View {
                 Text(String(appStrings: .suggestionsFollowUp(L10n.Format.date(date, timeZone: .gmt)))).supportingTextStyle()
             }
             Text(String(appStrings: .suggestionsPublished(L10n.Format.date(decision.publishedAt, time: .shortened)))).supportingTextStyle()
+        }
+    }
+}
+
+private struct SuggestionTrialView: View {
+    let trial: SuggestionTrial
+    let isCurrent: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.padding) {
+            Text(String(appStrings: isCurrent ? .suggestionsTrialTitle : .suggestionsTrialHistory)).rowTitleTextStyle()
+            Text(trial.change).bodyTextStyle()
+            Text(String(appStrings: .suggestionsTrialBenefit(trial.intendedBenefit))).bodyTextStyle()
+            Text(String(appStrings: .suggestionsResponsible(trial.responsibleName))).supportingTextStyle()
+            if isCurrent && trial.needsReassignment {
+                Text(String(appStrings: .suggestionsTrialReassignment)).supportingTextStyle()
+            }
+            Text(String(appStrings: .suggestionsTrialPeriod(
+                L10n.Format.date(trial.startDate, timeZone: .gmt),
+                L10n.Format.date(trial.endDate, timeZone: .gmt)
+            ))).supportingTextStyle()
+            Text(String(appStrings: .suggestionsFollowUp(L10n.Format.date(trial.followUpDate, timeZone: .gmt)))).supportingTextStyle()
+        }
+    }
+}
+
+private struct SuggestionEvaluationView: View {
+    let evaluation: SuggestionEvaluation
+    let change: String?
+    let answer: (EvaluationAnswer) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.padding) {
+            Text(String(appStrings: .evaluationQuestion)).rowTitleTextStyle()
+            if let change { Text(change).bodyTextStyle() }
+            Text(String(appStrings: .evaluationDeadline(L10n.Format.date(evaluation.closesAt, time: .shortened)))).supportingTextStyle()
+            if let summary = evaluation.summary {
+                Text(summaryText(summary)).bodyTextStyle()
+            } else if evaluation.closed {
+                Text(String(appStrings: .evaluationClosed)).bodyTextStyle()
+            } else if evaluation.eligible {
+                Text(String(appStrings: .evaluationPrivacy)).supportingTextStyle()
+                ForEach(EvaluationAnswer.allCases) { value in
+                    Button(label(value)) { answer(value) }
+                        .buttonStyle(LargeButtonStyle())
+                        .accessibilityAddTraits(evaluation.myAnswer == value ? .isSelected : [])
+                }
+                if evaluation.myAnswer != nil { Text(String(appStrings: .evaluationSaved)).supportingTextStyle() }
+            }
+        }
+    }
+
+    private func label(_ answer: EvaluationAnswer) -> String {
+        switch answer {
+        case .better: String(appStrings: .evaluationBetter)
+        case .unchanged: String(appStrings: .evaluationUnchanged)
+        case .worse: String(appStrings: .evaluationWorse)
+        case .cannotAssess: String(appStrings: .evaluationCannotAssess)
+        }
+    }
+
+    private func summaryText(_ summary: SuggestionEvaluation.Summary) -> String {
+        switch summary {
+        case .improved: String(appStrings: .evaluationImproved)
+        case .mixed: String(appStrings: .evaluationMixed)
+        case .notImproved: String(appStrings: .evaluationNotImproved)
+        case .insufficientResponses: String(appStrings: .evaluationInsufficientResponses)
         }
     }
 }

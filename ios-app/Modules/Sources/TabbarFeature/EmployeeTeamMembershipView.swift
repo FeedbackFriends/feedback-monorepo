@@ -13,26 +13,31 @@ public struct EmployeeTeamMembershipView: View {
     }
 
     public var body: some View {
+        Group {
+            if let team = store.context?.membership {
+                TeamSuggestionsView(store: store.scope(state: \.suggestions, action: \.suggestions))
+                    .navigationTitle(team.name)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button(String(appStrings: .teamLeaveAction)) { store.send(.leaveTapped) }
+                                .disabled(store.isBusy)
+                        }
+                    }
+            } else {
+                membershipForm
+            }
+        }
+        .alert($store.scope(state: \.alert, action: \.alert))
+        .task { await store.send(.refresh).finish() }
+    }
+
+    private var membershipForm: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.padding) {
                 if store.isBusy {
                     ProgressView().frame(maxWidth: .infinity)
                 }
-                if let team = store.context?.membership {
-                    Text(team.name).largeTitleTextStyle()
-                    Text(team.organizationName).supportingTextStyle()
-                    Text(String(appStrings: .teamJoinedMessage)).bodyTextStyle()
-                    NavigationLink {
-                        TeamSuggestionsView(store: store.scope(state: \.suggestions, action: \.suggestions))
-                    } label: {
-                        Text(String(appStrings: .suggestionsTitle))
-                    }
-                    .buttonStyle(LargeButtonStyle())
-                    .accessibilityIdentifier("team_suggestions")
-                    Button(String(appStrings: .teamLeaveAction)) { store.send(.leaveTapped) }
-                        .buttonStyle(LargeButtonStyle())
-                        .disabled(store.isBusy)
-                } else if let request = store.context?.request, request.status == .pending {
+                if let request = store.context?.request, request.status == .pending {
                     Text(request.team.name).largeTitleTextStyle()
                     Text(String(appStrings: .teamPendingTitle)).titleTextStyle()
                     Text(String(appStrings: .teamPendingMessage)).bodyTextStyle()
@@ -76,7 +81,5 @@ public struct EmployeeTeamMembershipView: View {
         }
         .background(LetsGrowLandingGradient())
         .navigationTitle(String(appStrings: .teamTitle))
-        .alert($store.scope(state: \.alert, action: \.alert))
-        .task { await store.send(.refresh).finish() }
     }
 }

@@ -9,6 +9,7 @@ public struct TeamSuggestions: Sendable {
     public struct State: Equatable, Sendable {
         @Shared var bootstrap: Bootstrap
         var suggestions: [Suggestion] = []
+        var section: Section = .suggestions
         var problem = ""
         var impact = ""
         var solution = ""
@@ -22,6 +23,18 @@ public struct TeamSuggestions: Sendable {
 
         public init(bootstrap: Shared<Bootstrap>) { self._bootstrap = bootstrap }
 
+        var visibleSuggestions: [Suggestion] {
+            suggestions.filter { suggestion in
+                let trial = suggestion.trials.first
+                let outcome = suggestion.outcomes.first { $0.trialID == trial?.id }
+                switch section {
+                case .suggestions: return trial == nil
+                case .active: return trial != nil && (outcome == nil || outcome?.outcome == .adjust)
+                case .results: return !suggestion.outcomes.isEmpty || suggestion.decisions.first?.status == .declined
+                }
+            }
+        }
+
         var canSubmit: Bool {
             !isBusy && hasLoaded && teamID != nil && Self.valid(problem) && Self.valid(impact) && solution.utf16.count <= 1000
         }
@@ -31,12 +44,18 @@ public struct TeamSuggestions: Sendable {
         }
     }
 
+    public enum Section: String, CaseIterable, Identifiable, Sendable {
+        case suggestions, active, results
+        public var id: Self { self }
+    }
+
     public enum AlertAction: Equatable, Sendable { case withdraw(String), report(String) }
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case refresh
         case submit
         case support(String)
+        case answer(String, String, EvaluationAnswer)
         case reportTapped(String)
         case withdrawTapped(String)
         case response(String, [Suggestion], submitted: Bool, reported: Bool = false)
@@ -71,6 +90,12 @@ public struct TeamSuggestions: Sendable {
                 return request(teamID: teamID, submitted: true) {
                     try await apiClient.createSuggestion(teamID, id, problem, impact, solution.isEmpty ? nil : solution)
                 }
+            case let .answer(suggestionID, evaluationID, answer):
+                guard !state.isBusy, state.hasLoaded, let teamID = state.teamID,
+                      let suggestion = state.suggestions.first(where: { $0.id == suggestionID }),
+                      suggestion.evaluations.contains(where: { $0.id == evaluationID && $0.eligible && !$0.closed }) else { return .none }
+                state.isBusy = true
+                return request(teamID: teamID) { try await apiClient.answerSuggestionEvaluation(teamID, suggestionID, evaluationID, answer) }
             case .support(let id):
                 guard !state.isBusy, state.hasLoaded, let teamID = state.teamID,
                       let suggestion = state.suggestions.first(where: { $0.id == id }) else { return .none }
@@ -111,6 +136,9 @@ public struct TeamSuggestions: Sendable {
             case let .response(teamID, suggestions, submitted, reported):
                 guard teamID == state.teamID else { return .none }
                 state.isBusy = false
+                if !state.hasLoaded && suggestions.contains(where: { suggestion in
+                    suggestion.evaluations.contains { $0.eligible && !$0.closed }
+                }) { state.section = .active }
                 state.hasLoaded = true
                 state.suggestions = suggestions
                 if reported { state.reportSubmitted = true }

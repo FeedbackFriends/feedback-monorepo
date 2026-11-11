@@ -176,7 +176,7 @@ public struct RootFeature: Sendable {
                     state.destination = Destination.State.loggedIn(
                         Tabbar.State(
                             bootstrap: sharedBootstrap,
-                            selectedTab: .feedback,
+                            selectedTab: bootstrap.role == nil ? .activities : .feedback,
                         )
                     )
                     return .none
@@ -203,7 +203,7 @@ public struct RootFeature: Sendable {
                 state.destination = Destination.State.loggedIn(
                     Tabbar.State(
                         bootstrap: Shared(value: bootstrap),
-                        selectedTab: .feedback
+                        selectedTab: bootstrap.role == nil ? .activities : .feedback
                     )
                 )
                 return .none
@@ -265,6 +265,9 @@ extension RootFeature.State {
                     )
                 )
             )
+        case .improvements:
+            // Refreshing team context on appearance enforces current access; never restore queued content.
+            return RootFeature.State(destination: .loggedIn(Tabbar.State(bootstrap: sharedBootstrap, selectedTab: .activities)))
         case .joinTeam(let code):
             var tabs = Tabbar.State(bootstrap: sharedBootstrap, selectedTab: .activities)
             tabs.employeeTeam = .init(bootstrap: sharedBootstrap, code: code)

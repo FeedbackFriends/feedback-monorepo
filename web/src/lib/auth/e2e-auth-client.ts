@@ -30,24 +30,17 @@ export class E2EAuthClient implements AuthClient {
     return true
   }
 
-  async signInWithGoogle() {
-    this.setUser({
-      displayName: "Playwright Test User",
-      email: "playwright@example.com",
-      providerData: createProviderData(
-        "google.com",
-        "playwright@example.com",
-        "Playwright Test User"
-      ),
-      uid: "playwright-google-user",
-    })
-  }
+  private pendingName: string | undefined
 
-  async sendEmailCode(_email: string) { void _email }
+  async sendEmailCode(_email: string, name?: string) { this.pendingName = name }
 
   async verifyEmailCode(_email: string, code: string) {
     if (code !== "123456") throw new Error("Invalid code")
-    await this.signInWithGoogle()
+    const name = this.pendingName ?? "Playwright Test User"
+    this.setUser({
+      displayName: name, email: _email, uid: "playwright-email-user",
+      providerData: createProviderData("email", _email, name),
+    })
   }
 
   async signOut() {

@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0035-add-suggestion-retention
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              ALTER TABLE team_suggestion ADD COLUMN closed_at BIGINT;
+              CREATE INDEX team_suggestion_closed_at_idx ON team_suggestion(closed_at);
+              CREATE TABLE suggestion_receipt (id UUID PRIMARY KEY);
+              INSERT INTO suggestion_receipt (id) SELECT id FROM team_suggestion;
+              UPDATE team_suggestion SET closed_at = CAST(EXTRACT(EPOCH FROM CURRENT_TIMESTAMP) * 1000 AS BIGINT)
+                WHERE withdrawn = TRUE;
+              UPDATE team_suggestion SET closed_at = (
+                SELECT d.published_at FROM suggestion_decision d
+                WHERE d.suggestion_id = team_suggestion.id AND d.revision = (
+                  SELECT MAX(latest.revision) FROM suggestion_decision latest WHERE latest.suggestion_id = team_suggestion.id
+                ) AND d.status = 'Declined' AND d.follow_up_date IS NULL
+              ) WHERE withdrawn = FALSE;

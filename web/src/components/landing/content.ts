@@ -29,4 +29,4 @@ export const calendarPlatforms = [
 
 export const contactUrl = "mailto:hello@letsgrow.dk"
 
-export const getStartedUrl = "https://app.letsgrow.dk/login"
+export const getStartedUrl = "/login"

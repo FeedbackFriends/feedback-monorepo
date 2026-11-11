@@ -2757,6 +2757,240 @@
         }
       }
     },
+    "evaluation.better" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bedre"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Better"
+          }
+        }
+      }
+    },
+    "evaluation.cannotAssess" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kan ikke vurdere"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cannot assess"
+          }
+        }
+      }
+    },
+    "evaluation.closed" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evalueringen er lukket. Afventer lederens resultat."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The evaluation is closed. Awaiting the leader’s outcome."
+          }
+        }
+      }
+    },
+    "evaluation.deadline" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Svarfrist: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Response deadline: %@"
+          }
+        }
+      }
+    },
+    "evaluation.improved" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samlet peger evalueringen på en forbedring."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overall, the evaluation indicates an improvement."
+          }
+        }
+      }
+    },
+    "evaluation.insufficientResponses" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultatet vises ikke af hensyn til anonymiteten. Der kræves mindst fem svar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Results are hidden to protect anonymity. At least five responses are required."
+          }
+        }
+      }
+    },
+    "evaluation.mixed" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evalueringen giver ikke en entydig retning."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The evaluation gives no clear direction."
+          }
+        }
+      }
+    },
+    "evaluation.notImproved" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samlet peger evalueringen på en forværring."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overall, the evaluation indicates a worsening."
+          }
+        }
+      }
+    },
+    "evaluation.privacy" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit svar kan ændres indtil fristen. LetsGrow gemmer en intern kontotilknytning. Ledere og kolleger kan ikke se individuelle svar. Kun en samlet vurdering vises efter fristen ved mindst fem svar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can edit your answer until the deadline. LetsGrow stores an internal account association. Leaders and colleagues cannot see individual answers. Only an overall summary is released after the deadline with at least five responses."
+          }
+        }
+      }
+    },
+    "evaluation.question" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Har ændringen gjort din arbejdsdag bedre?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has the change improved your working day?"
+          }
+        }
+      }
+    },
+    "evaluation.saved" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit svar er gemt. Du kan vælge et andet indtil fristen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your answer is saved. You can choose another until the deadline."
+          }
+        }
+      }
+    },
+    "evaluation.unchanged" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uændret"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unchanged"
+          }
+        }
+      }
+    },
+    "evaluation.worse" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Værre"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Worse"
+          }
+        }
+      }
+    },
     "feedback.agree" : {
       "comment" : "Feedback: agree. App-owned Danish interface copy.",
       "extractionState" : "manual",
@@ -2807,6 +3041,78 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tell us more about why"
+          }
+        }
+      }
+    },
+    "feedback.emoji.happy" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilfreds"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Satisfied"
+          }
+        }
+      }
+    },
+    "feedback.emoji.sad" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilfreds"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dissatisfied"
+          }
+        }
+      }
+    },
+    "feedback.emoji.veryHappy" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meget tilfreds"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Very satisfied"
+          }
+        }
+      }
+    },
+    "feedback.emoji.verySad" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meget utilfreds"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Very dissatisfied"
           }
         }
       }
@@ -3335,6 +3641,60 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "improvements.active" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det arbejder vi på"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In progress"
+          }
+        }
+      }
+    },
+    "improvements.results" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultater"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Results"
+          }
+        }
+      }
+    },
+    "improvements.suggestions" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forslag"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestions"
           }
         }
       }
@@ -4123,6 +4483,456 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Notifications"
+          }
+        }
+      }
+    },
+    "outcome.adjust" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Juster"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjust"
+          }
+        }
+      }
+    },
+    "outcome.continue" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortsæt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
+    "outcome.stop" : {
+      "comment" : "Improvement loop. Dates are localized before interpolation; employee content is verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
+          }
+        }
+      }
+    },
+    "productContact.bugDescription" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beskriv fejlen (påkrævet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Describe the bug (required)"
+          }
+        }
+      }
+    },
+    "productContact.bugPrompt" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad skete der, og hvordan kan vi gentage det?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What happened, and how can we reproduce it?"
+          }
+        }
+      }
+    },
+    "productContact.comment" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad kan vi gøre bedre?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What could we improve?"
+          }
+        }
+      }
+    },
+    "productContact.commentPrompt" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriv gerne, hvad der virker, og hvad du savner."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tell us what works and what is missing."
+          }
+        }
+      }
+    },
+    "productContact.email" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontaktmail (valgfrit)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact email (optional)"
+          }
+        }
+      }
+    },
+    "productContact.emailHelp" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriv din mailadresse, hvis vi må kontakte dig om fejlen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your email address if we may contact you about the bug."
+          }
+        }
+      }
+    },
+    "productContact.emailInvalid" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriv en gyldig mailadresse, eller lad feltet være tomt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a valid email address or leave the field empty."
+          }
+        }
+      }
+    },
+    "productContact.expectedBehavior" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad forventede du der skulle ske? (valgfrit)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What did you expect to happen? (optional)"
+          }
+        }
+      }
+    },
+    "productContact.expectedPrompt" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beskriv den forventede adfærd."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Describe the expected behavior."
+          }
+        }
+      }
+    },
+    "productContact.feedbackHelp" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vælg en vurdering, skriv en kommentar, eller gør begge dele."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a rating, write a comment, or do both."
+          }
+        }
+      }
+    },
+    "productContact.feedbackMailBody" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vurdering: %1$@\n\nKommentar:\n%2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rating: %1$@\n\nComment:\n%2$@"
+          }
+        }
+      }
+    },
+    "productContact.feedbackQuestion" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvordan oplever du LetsGrow?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How is your experience with LetsGrow?"
+          }
+        }
+      }
+    },
+    "productContact.mailBody" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nForventet adfærd:\n%2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nExpected behavior:\n%2$@"
+          }
+        }
+      }
+    },
+    "productContact.mailFailed" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mailen kunne ikke sendes. Prøv igen, eller kopiér vores mailadresse."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The email could not be sent. Try again or copy our email address."
+          }
+        }
+      }
+    },
+    "productContact.mailInstead" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriv en mail i stedet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write an email instead"
+          }
+        }
+      }
+    },
+    "productContact.mailUnavailableMessage" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopiér %1$@, og skriv til os, når det passer dig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy %1$@ and email us when convenient."
+          }
+        }
+      }
+    },
+    "productContact.mailUnavailableTitle" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail er ikke sat op"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail is not configured"
+          }
+        }
+      }
+    },
+    "productContact.noRating" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke valgt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not selected"
+          }
+        }
+      }
+    },
+    "productContact.received" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din henvendelse er modtaget. Du kan nu lukke vinduet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your message has been received. You can close this window now."
+          }
+        }
+      }
+    },
+    "productContact.send" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send"
+          }
+        }
+      }
+    },
+    "productContact.textLimit" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Højst 5000 tegn i hvert tekstfelt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At most 5000 characters in each text field."
+          }
+        }
+      }
+    },
+    "productContact.thankYou" : {
+      "comment" : "Product contact and reusable emoji rating. App-owned interface copy. Parameters, if any, are verbatim user text or contact address.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tak for din hjælp!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thank you for your help!"
           }
         }
       }
@@ -5201,6 +6011,78 @@
         }
       }
     },
+    "signIn.changeEmail" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug en anden e-mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use another email"
+          }
+        }
+      }
+    },
+    "signIn.codeFailed" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunne ikke logge ind. Tjek koden, eller vent et minut og få en ny kode."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not sign in. Check the code, or wait a minute and request a new one."
+          }
+        }
+      }
+    },
+    "signIn.codeSent" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi har sendt en kode. Tjek også uønsket post."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We sent a code. Check your spam folder too."
+          }
+        }
+      }
+    },
+    "signIn.emailCode" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engangskode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One-time code"
+          }
+        }
+      }
+    },
     "signIn.explanation" : {
       "comment" : "SignIn: explanation. App-owned Danish interface copy.",
       "extractionState" : "manual",
@@ -5237,6 +6119,60 @@
         }
       }
     },
+    "signIn.resendCode" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send ny kode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send new code"
+          }
+        }
+      }
+    },
+    "signIn.resendWait" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vent et minut, før du beder om en ny kode."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wait a minute before requesting a new code."
+          }
+        }
+      }
+    },
+    "signIn.sendCode" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send engangskode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send code"
+          }
+        }
+      }
+    },
     "signIn.title" : {
       "comment" : "SignIn: title. App-owned Danish interface copy.",
       "extractionState" : "manual",
@@ -5251,6 +6187,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Your activities"
+          }
+        }
+      }
+    },
+    "signIn.verifyCode" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log ind med kode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in with code"
+          }
+        }
+      }
+    },
+    "signIn.workEmail" : {
+      "comment" : "Email code sign-in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arbejdsmail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Work email"
           }
         }
       }
@@ -5741,6 +6713,618 @@
         }
       }
     },
+    "suggestions.decisionHistory" : {
+      "comment" : "Disclosure label for immutable decision history, newest first.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidligere svar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous responses"
+          }
+        }
+      }
+    },
+    "suggestions.empty" : {
+      "comment" : "Employee team suggestions: empty. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der er ingen forslag endnu. Hvad kan gøre jeres arbejdsdag bedre?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No suggestions yet. What could improve your team’s workday?"
+          }
+        }
+      }
+    },
+    "suggestions.fiveSupporters" : {
+      "comment" : "Fixed threshold label; never interpolate an exact count.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5+ støtter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5+ supporters"
+          }
+        }
+      }
+    },
+    "suggestions.followUp" : {
+      "comment" : "Argument is a localized calendar date.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opfølgning: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follow-up: %@"
+          }
+        }
+      }
+    },
+    "suggestions.impact" : {
+      "comment" : "Employee team suggestions: impact. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad betyder det for arbejdsdagen? (påkrævet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How does it affect your workday? (required)"
+          }
+        }
+      }
+    },
+    "suggestions.lengthHint" : {
+      "comment" : "Employee team suggestions: lengthHint. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Højst 1.000 tegn i hvert felt. Undgå navne og følsomme personlige oplysninger."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up to 1,000 characters per field. Avoid names and sensitive personal information."
+          }
+        }
+      }
+    },
+    "suggestions.membershipRequired" : {
+      "comment" : "Employee team suggestions: membershipRequired. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du skal være godkendt i et team for at se og dele forslag."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You must be an approved team member to view and share suggestions."
+          }
+        }
+      }
+    },
+    "suggestions.new" : {
+      "comment" : "Employee team suggestions: new. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foreslå en forbedring"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggest an improvement"
+          }
+        }
+      }
+    },
+    "suggestions.privacy" : {
+      "comment" : "Employee team suggestions: privacy. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forslag deles med teamet. Dit navn og hvem der støtter vises ikke til kolleger eller ledere. Lets Grow gemmer forbindelsen til din konto. Indholdet kan afsløre, hvem du er, især i små teams. Del ikke følsomme personsager her."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestions are shared with your team. Your name and who supports ideas are not shown to colleagues or leaders. Lets Grow stores the link to your account. Your wording may identify you, especially in small teams. Do not share sensitive personal concerns here."
+          }
+        }
+      }
+    },
+    "suggestions.problem" : {
+      "comment" : "Employee team suggestions: problem. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvad vil du forbedre? (påkrævet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What would you improve? (required)"
+          }
+        }
+      }
+    },
+    "suggestions.published" : {
+      "comment" : "Argument is a localized publication date and time.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offentliggjort %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Published %@"
+          }
+        }
+      }
+    },
+    "suggestions.received" : {
+      "comment" : "Suggestion without a leader response.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modtaget — afventer svar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Received — awaiting a response"
+          }
+        }
+      }
+    },
+    "suggestions.removeSupport" : {
+      "comment" : "Employee team suggestions: removeSupport. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fjern din støtte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove your support"
+          }
+        }
+      }
+    },
+    "suggestions.report" : {
+      "comment" : "Team suggestion content reporting: report. Reports go to authorized team leaders without reporter identity.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapportér indhold"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report content"
+          }
+        }
+      }
+    },
+    "suggestions.reportExplanation" : {
+      "comment" : "Team suggestion content reporting: reportExplanation. Reports go to authorized team leaders without reporter identity.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapportér indhold, der er upassende eller kan identificere en kollega. Teamets ledere gennemgår forslaget og kan fjerne det. De kan ikke se, hvem der rapporterer. Forslaget er synligt, indtil det bliver fjernet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report content that is inappropriate or could identify a colleague. Your team leaders review the suggestion and can remove it. They cannot see who reports it. The suggestion remains visible until removed."
+          }
+        }
+      }
+    },
+    "suggestions.reportSubmitted" : {
+      "comment" : "Team suggestion content reporting: reportSubmitted. Reports go to authorized team leaders without reporter identity.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forslaget er rapporteret til teamets ledere til gennemgang."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The suggestion has been reported to your team leaders for review."
+          }
+        }
+      }
+    },
+    "suggestions.reportTitle" : {
+      "comment" : "Team suggestion content reporting: reportTitle. Reports go to authorized team leaders without reporter identity.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapportér dette forslag?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report this suggestion?"
+          }
+        }
+      }
+    },
+    "suggestions.responsible" : {
+      "comment" : "Argument is the published name, preserved verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansvarlig: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Responsible: %@"
+          }
+        }
+      }
+    },
+    "suggestions.solution" : {
+      "comment" : "Employee team suggestions: solution. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din idé til en løsning (valgfrit)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your idea for a solution (optional)"
+          }
+        }
+      }
+    },
+    "suggestions.statusDeclined" : {
+      "comment" : "Leader decision status.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afvist"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Declined"
+          }
+        }
+      }
+    },
+    "suggestions.statusDeferred" : {
+      "comment" : "Leader decision status.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udskudt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deferred"
+          }
+        }
+      }
+    },
+    "suggestions.statusPlanned" : {
+      "comment" : "Leader decision status; no trial has started.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planlagt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planned"
+          }
+        }
+      }
+    },
+    "suggestions.statusReviewing" : {
+      "comment" : "Leader decision status.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Under vurdering"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Under review"
+          }
+        }
+      }
+    },
+    "suggestions.submit" : {
+      "comment" : "Employee team suggestions: submit. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del med teamet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share with the team"
+          }
+        }
+      }
+    },
+    "suggestions.submitted" : {
+      "comment" : "Employee team suggestions: submitted. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit forslag er delt med teamet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your suggestion has been shared with the team."
+          }
+        }
+      }
+    },
+    "suggestions.support" : {
+      "comment" : "Employee team suggestions: support. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Støt forslaget"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support this idea"
+          }
+        }
+      }
+    },
+    "suggestions.title" : {
+      "comment" : "Employee team suggestions: title. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forslag"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestions"
+          }
+        }
+      }
+    },
+    "suggestions.trial.benefit" : {
+      "comment" : "The argument is the leader-authored intended benefit; preserve it verbatim.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formål: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intended benefit: %@"
+          }
+        }
+      }
+    },
+    "suggestions.trial.history" : {
+      "comment" : "Disclosure label for immutable trial plan revisions.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidligere forsøgsplaner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous trial plans"
+          }
+        }
+      }
+    },
+    "suggestions.trial.period" : {
+      "comment" : "First argument is formatted start date; second is formatted end date.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periode: %1$@ – %2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Period: %1$@ – %2$@"
+          }
+        }
+      }
+    },
+    "suggestions.trial.reassignment" : {
+      "comment" : "Shown when the trial owner no longer leads the team.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teamets ledelse skal vælge en ny ansvarlig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The team leadership needs to assign a new responsible person."
+          }
+        }
+      }
+    },
+    "suggestions.trial.title" : {
+      "comment" : "Heading above a team improvement trial.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afprøves"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trial"
+          }
+        }
+      }
+    },
+    "suggestions.withdraw" : {
+      "comment" : "Employee team suggestions: withdraw. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Træk dit forslag tilbage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withdraw your suggestion"
+          }
+        }
+      }
+    },
+    "suggestions.withdrawTitle" : {
+      "comment" : "Employee team suggestions: withdrawTitle. Shared team content, not confidential reporting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Træk forslaget tilbage?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withdraw this suggestion?"
+          }
+        }
+      }
+    },
     "support.appDetails" : {
       "comment" : "Support email app section. Arguments: name, version, build, bundle ID.",
       "extractionState" : "manual",
@@ -5773,6 +7357,330 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Device:\nName: %1$@\nModel: %2$@\nSystem: %3$@ %4$@\nDevice ID: %5$@"
+          }
+        }
+      }
+    },
+    "team.cancelAction" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuller anmodning"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel request"
+          }
+        }
+      }
+    },
+    "team.cancelTitle" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuller din anmodning?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel your request?"
+          }
+        }
+      }
+    },
+    "team.code" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitationskode"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitation code"
+          }
+        }
+      }
+    },
+    "team.joinAction" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmod om adgang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request access"
+          }
+        }
+      }
+    },
+    "team.joinMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indtast koden fra din leder og dit navn for at anmode om adgang til teamet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the code from your leader and your name to request access to the team."
+          }
+        }
+      }
+    },
+    "team.joinedMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du er tilmeldt teamet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have joined the team."
+          }
+        }
+      }
+    },
+    "team.leaderMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du er leder. Administrer dit team på app.letsgrow.dk."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are a leader. Manage your team at app.letsgrow.dk."
+          }
+        }
+      }
+    },
+    "team.leaveAction" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forlad team"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave team"
+          }
+        }
+      }
+    },
+    "team.leaveMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du mister adgang til teamet og skal godkendes igen for at deltage."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You lose access to the team and need approval to rejoin."
+          }
+        }
+      }
+    },
+    "team.leaveTitle" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forlad teamet?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave the team?"
+          }
+        }
+      }
+    },
+    "team.legacySignIn" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log ind på eksisterende aktivitetskonto"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to an existing activity account"
+          }
+        }
+      }
+    },
+    "team.name" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit navn"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your name"
+          }
+        }
+      }
+    },
+    "team.nameExplanation" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din leder bruger navnet til at godkende dig. Navnet knyttes ikke til fremtidige anonyme forslag eller stemmer."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your leader uses your name to approve you. It is not linked to future anonymous suggestions or votes."
+          }
+        }
+      }
+    },
+    "team.pendingMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din leder skal godkende din anmodning. Tryk Opdater for at se, om du er godkendt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your leader needs to approve your request. Tap Refresh to check your status."
+          }
+        }
+      }
+    },
+    "team.pendingTitle" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afventer godkendelse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for approval"
+          }
+        }
+      }
+    },
+    "team.refresh" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opdater"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh"
+          }
+        }
+      }
+    },
+    "team.rejectedMessage" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Din anmodning blev afvist. Kontakt din leder. Du kan sende en ny anmodning med en invitationskode."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your request was declined. Contact your leader. You can send a new request with an invitation code."
+          }
+        }
+      }
+    },
+    "team.title" : {
+      "comment" : "Employee team membership. App-owned interface copy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit team"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My team"
           }
         }
       }
@@ -6169,1014 +8077,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "How useful was the workshop?"
-          }
-        }
-      }
-    },
-    "team.title" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mit team"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "My team"
-          }
-        }
-      }
-    },
-    "team.code" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invitationskode"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invitation code"
-          }
-        }
-      }
-    },
-    "team.name" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dit navn"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your name"
-          }
-        }
-      }
-    },
-    "team.nameExplanation" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Din leder bruger navnet til at godkende dig. Navnet knyttes ikke til fremtidige anonyme forslag eller stemmer."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your leader uses your name to approve you. It is not linked to future anonymous suggestions or votes."
-          }
-        }
-      }
-    },
-    "team.joinMessage" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Indtast koden fra din leder og dit navn for at anmode om adgang til teamet."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter the code from your leader and your name to request access to the team."
-          }
-        }
-      }
-    },
-    "team.joinAction" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anmod om adgang"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Request access"
-          }
-        }
-      }
-    },
-    "team.pendingTitle" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afventer godkendelse"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Waiting for approval"
-          }
-        }
-      }
-    },
-    "team.pendingMessage" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Din leder skal godkende din anmodning. Tryk Opdater for at se, om du er godkendt."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your leader needs to approve your request. Tap Refresh to check your status."
-          }
-        }
-      }
-    },
-    "team.joinedMessage" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du er tilmeldt teamet."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have joined the team."
-          }
-        }
-      }
-    },
-    "team.rejectedMessage" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Din anmodning blev afvist. Kontakt din leder. Du kan sende en ny anmodning med en invitationskode."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your request was declined. Contact your leader. You can send a new request with an invitation code."
-          }
-        }
-      }
-    },
-    "suggestions.empty" : {
-      "comment" : "Employee team suggestions: empty. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Der er ingen forslag endnu. Hvad kan gøre jeres arbejdsdag bedre?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No suggestions yet. What could improve your team’s workday?"
-          }
-        }
-      }
-    },
-    "suggestions.impact" : {
-      "comment" : "Employee team suggestions: impact. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hvad betyder det for arbejdsdagen? (påkrævet)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "How does it affect your workday? (required)"
-          }
-        }
-      }
-    },
-    "suggestions.lengthHint" : {
-      "comment" : "Employee team suggestions: lengthHint. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Højst 1.000 tegn i hvert felt. Undgå navne og følsomme personlige oplysninger."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Up to 1,000 characters per field. Avoid names and sensitive personal information."
-          }
-        }
-      }
-    },
-    "suggestions.membershipRequired" : {
-      "comment" : "Employee team suggestions: membershipRequired. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du skal være godkendt i et team for at se og dele forslag."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You must be an approved team member to view and share suggestions."
-          }
-        }
-      }
-    },
-    "suggestions.new" : {
-      "comment" : "Employee team suggestions: new. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foreslå en forbedring"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suggest an improvement"
-          }
-        }
-      }
-    },
-    "suggestions.privacy" : {
-      "comment" : "Employee team suggestions: privacy. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Forslag deles med teamet. Dit navn og hvem der støtter vises ikke til kolleger eller ledere. Lets Grow gemmer forbindelsen til din konto. Indholdet kan afsløre, hvem du er, især i små teams. Del ikke følsomme personsager her."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suggestions are shared with your team. Your name and who supports ideas are not shown to colleagues or leaders. Lets Grow stores the link to your account. Your wording may identify you, especially in small teams. Do not share sensitive personal concerns here."
-          }
-        }
-      }
-    },
-    "suggestions.problem" : {
-      "comment" : "Employee team suggestions: problem. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hvad vil du forbedre? (påkrævet)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "What would you improve? (required)"
-          }
-        }
-      }
-    },
-    "suggestions.removeSupport" : {
-      "comment" : "Employee team suggestions: removeSupport. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fjern din støtte"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove your support"
-          }
-        }
-      }
-    },
-    "suggestions.solution" : {
-      "comment" : "Employee team suggestions: solution. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Din idé til en løsning (valgfrit)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your idea for a solution (optional)"
-          }
-        }
-      }
-    },
-    "suggestions.submit" : {
-      "comment" : "Employee team suggestions: submit. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Del med teamet"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Share with the team"
-          }
-        }
-      }
-    },
-    "suggestions.submitted" : {
-      "comment" : "Employee team suggestions: submitted. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dit forslag er delt med teamet."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your suggestion has been shared with the team."
-          }
-        }
-      }
-    },
-    "suggestions.support" : {
-      "comment" : "Employee team suggestions: support. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Støt forslaget"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Support this idea"
-          }
-        }
-      }
-    },
-    "suggestions.fiveSupporters" : {
-      "comment" : "Fixed threshold label; never interpolate an exact count.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "5+ støtter"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "5+ supporters"
-          }
-        }
-      }
-    },
-    "suggestions.decisionHistory" : {
-      "comment" : "Disclosure label for immutable decision history, newest first.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tidligere svar"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Previous responses"
-          }
-        }
-      }
-    },
-    "suggestions.received" : {
-      "comment" : "Suggestion without a leader response.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modtaget — afventer svar"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Received — awaiting a response"
-          }
-        }
-      }
-    },
-    "suggestions.statusReviewing" : {
-      "comment" : "Leader decision status.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Under vurdering"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Under review"
-          }
-        }
-      }
-    },
-    "suggestions.statusPlanned" : {
-      "comment" : "Leader decision status; no trial has started.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Planlagt"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Planned"
-          }
-        }
-      }
-    },
-    "suggestions.statusDeferred" : {
-      "comment" : "Leader decision status.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Udskudt"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deferred"
-          }
-        }
-      }
-    },
-    "suggestions.statusDeclined" : {
-      "comment" : "Leader decision status.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afvist"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Declined"
-          }
-        }
-      }
-    },
-    "suggestions.responsible" : {
-      "comment" : "Argument is the published name, preserved verbatim.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ansvarlig: %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Responsible: %@"
-          }
-        }
-      }
-    },
-    "suggestions.followUp" : {
-      "comment" : "Argument is a localized calendar date.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opfølgning: %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Follow-up: %@"
-          }
-        }
-      }
-    },
-    "suggestions.published" : {
-      "comment" : "Argument is a localized publication date and time.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offentliggjort %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Published %@"
-          }
-        }
-      }
-    },
-    "suggestions.title" : {
-      "comment" : "Employee team suggestions: title. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Forslag"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suggestions"
-          }
-        }
-      }
-    },
-    "suggestions.withdraw" : {
-      "comment" : "Employee team suggestions: withdraw. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Træk dit forslag tilbage"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Withdraw your suggestion"
-          }
-        }
-      }
-    },
-    "suggestions.withdrawTitle" : {
-      "comment" : "Employee team suggestions: withdrawTitle. Shared team content, not confidential reporting.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Træk forslaget tilbage?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Withdraw this suggestion?"
-          }
-        }
-      }
-    },
-    "suggestions.report" : {
-      "comment" : "Team suggestion content reporting: report. Reports go to authorized team leaders without reporter identity.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rapportér indhold"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Report content"
-          }
-        }
-      }
-    },
-    "suggestions.reportTitle" : {
-      "comment" : "Team suggestion content reporting: reportTitle. Reports go to authorized team leaders without reporter identity.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rapportér dette forslag?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Report this suggestion?"
-          }
-        }
-      }
-    },
-    "suggestions.reportExplanation" : {
-      "comment" : "Team suggestion content reporting: reportExplanation. Reports go to authorized team leaders without reporter identity.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rapportér indhold, der er upassende eller kan identificere en kollega. Teamets ledere gennemgår forslaget og kan fjerne det. De kan ikke se, hvem der rapporterer. Forslaget er synligt, indtil det bliver fjernet."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Report content that is inappropriate or could identify a colleague. Your team leaders review the suggestion and can remove it. They cannot see who reports it. The suggestion remains visible until removed."
-          }
-        }
-      }
-    },
-    "suggestions.reportSubmitted" : {
-      "comment" : "Team suggestion content reporting: reportSubmitted. Reports go to authorized team leaders without reporter identity.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Forslaget er rapporteret til teamets ledere til gennemgang."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The suggestion has been reported to your team leaders for review."
-          }
-        }
-      }
-    },
-    "team.cancelAction" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Annuller anmodning"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel request"
-          }
-        }
-      }
-    },
-    "team.cancelTitle" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Annuller din anmodning?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel your request?"
-          }
-        }
-      }
-    },
-    "team.leaveAction" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Forlad team"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leave team"
-          }
-        }
-      }
-    },
-    "team.leaveTitle" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Forlad teamet?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leave the team?"
-          }
-        }
-      }
-    },
-    "team.leaveMessage" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du mister adgang til teamet og skal godkendes igen for at deltage."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You lose access to the team and need approval to rejoin."
-          }
-        }
-      }
-    },
-    "team.refresh" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opdater"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Refresh"
-          }
-        }
-      }
-    },
-    "team.leaderMessage" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du er leder. Administrer dit team på app.letsgrow.dk."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You are a leader. Manage your team at app.letsgrow.dk."
-          }
-        }
-      }
-    },
-    "team.legacySignIn" : {
-      "comment" : "Employee team membership. App-owned interface copy.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log ind på eksisterende aktivitetskonto"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign in to an existing activity account"
-          }
-        }
-      }
-    },
-    "signIn.workEmail" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arbejdsmail"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Work email"
-          }
-        }
-      }
-    },
-    "signIn.emailCode" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Engangskode"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "One-time code"
-          }
-        }
-      }
-    },
-    "signIn.sendCode" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send engangskode"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send code"
-          }
-        }
-      }
-    },
-    "signIn.verifyCode" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Log ind med kode"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign in with code"
-          }
-        }
-      }
-    },
-    "signIn.resendCode" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send ny kode"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send new code"
-          }
-        }
-      }
-    },
-    "signIn.changeEmail" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Brug en anden e-mail"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use another email"
-          }
-        }
-      }
-    },
-    "signIn.codeSent" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vi har sendt en kode. Tjek også uønsket post."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "We sent a code. Check your spam folder too."
-          }
-        }
-      }
-    },
-    "signIn.codeFailed" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kunne ikke logge ind. Tjek koden, eller vent et minut og få en ny kode."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Could not sign in. Check the code, or wait a minute and request a new one."
-          }
-        }
-      }
-    },
-    "signIn.resendWait" : {
-      "comment" : "Email code sign-in.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vent et minut, før du beder om en ny kode."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wait a minute before requesting a new code."
           }
         }
       }

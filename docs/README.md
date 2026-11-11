@@ -9,6 +9,7 @@ Start with the topic you need. Agent instructions live in root/app `AGENTS.md`; 
 | iOS development | [Setup, configuration, local testing, notifications](ios/development.md), [localization](ios/localization.md), [answer-type icons](ios/ios-answer-type-icons.md) |
 | Product behavior | [iOS features](ios/features/overview.md), [product contact](shared/product-contact.md), [API error copy](shared/api-error-copy.md) |
 | Authentication and deployment | [Supabase setup and cutover](shared/authentication.md), [Coolify operations](shared/deployment/coolify.md) |
+| Local web development | [HTTPS domains and auth redirects](web/local-domains.md) |
 | Screenshots | [Catalog and tooling](ios/screenshots/README.md) |
 | Skills | [Catalog, sources, and updates](shared/skills.md) |
 

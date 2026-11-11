@@ -7,6 +7,7 @@ data class TestIdentity(val displayName: String?, val email: String?, val phoneN
 
 class FirebaseMockEngine(userId: String) : FirebaseService {
     private val users = mutableMapOf(userId to TestIdentity(null, null, null))
+    override fun pushImprovementNotification(token: String, teamId: java.util.UUID, notificationId: java.util.UUID): Boolean = true
     override fun configure(serviceAccountJsonB64: String) {}
     override fun pushFeedbackReceivedNotifications(feedbackReceivedNotifications: List<FeedbackReceivedNotification>) {}
     fun getUser(userId: String): TestIdentity = users.getOrPut(userId) { TestIdentity(null, null, null) }

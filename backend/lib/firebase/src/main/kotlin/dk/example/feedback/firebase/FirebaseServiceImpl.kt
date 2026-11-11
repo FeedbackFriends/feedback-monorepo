@@ -8,6 +8,8 @@ import com.google.firebase.messaging.Aps
 import com.google.firebase.messaging.ApsAlert
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
+import com.google.firebase.messaging.FirebaseMessagingException
+import com.google.firebase.messaging.MessagingErrorCode
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.Base64
@@ -18,6 +20,29 @@ import org.springframework.stereotype.Service
 class FirebaseServiceImpl : FirebaseService {
 
     private val logger = LoggerFactory.getLogger(FirebaseServiceImpl::class.java)
+
+    override fun pushImprovementNotification(token: String, teamId: java.util.UUID, notificationId: java.util.UUID): Boolean {
+        try {
+            FirebaseMessaging.getInstance().send(
+            Message.builder()
+                .setToken(token)
+                .putData("type", "IMPROVEMENT_UPDATED")
+                .putData("teamId", teamId.toString())
+                .setApnsConfig(ApnsConfig.builder()
+                    .putHeader("apns-collapse-id", notificationId.toString())
+                    .setAps(Aps.builder().setAlert(ApsAlert.builder()
+                        .setTitleLocalizationKey("notification_improvement_title")
+                        .setLocalizationKey("notification_improvement_body").build()).build()).build())
+                .build()
+            )
+        } catch (error: FirebaseMessagingException) {
+            // The payload is fixed and valid; these failures belong to the stored recipient token.
+            if (error.messagingErrorCode in setOf(MessagingErrorCode.UNREGISTERED, MessagingErrorCode.INVALID_ARGUMENT,
+                    MessagingErrorCode.SENDER_ID_MISMATCH)) return false
+            throw error
+        }
+        return true
+    }
 
     override fun configure(serviceAccountJsonB64: String) {
         try {

@@ -16,8 +16,7 @@ export interface AuthClient {
   getConfigError(): string | null
   initializePersistence(): Promise<void>
   isConfigured(): boolean
-  signInWithGoogle(): Promise<void>
-  sendEmailCode(email: string): Promise<void>
+  sendEmailCode(email: string, name?: string): Promise<void>
   verifyEmailCode(email: string, code: string): Promise<void>
   signOut(): Promise<void>
   subscribeToAuthState(

@@ -50,6 +50,7 @@ struct TeamSuggestionsTests {
         await store.send(.support("idea"))
         await store.send(.withdrawTapped("idea"))
         await store.send(.refresh)
+        await store.send(.answer("idea", "evaluation", .better))
     }
 
     @Test
@@ -147,4 +148,27 @@ struct TeamSuggestionsTests {
         }
     }
 
+}
+
+
+extension TeamSuggestionsTests {
+    @Test
+    func evaluationRejectsIneligibleAndDuplicateRequestsAndSavesOwnAnswer() async {
+        var initial = state()
+        initial.hasLoaded = true
+        let evaluation = SuggestionEvaluation(id: "evaluation", trialID: "trial", closesAt: .distantFuture,
+            closed: false, eligible: true, myAnswer: nil, summary: nil)
+        let item = Suggestion(id: "idea", problem: "Meetings", impact: "Focus", solution: nil, hasFiveSupporters: false,
+            supportedByMe: false, mine: false, evaluations: [evaluation])
+        initial.suggestions = [item]
+        let store = TestStore(initialState: initial) { TeamSuggestions() } withDependencies: {
+            $0.apiClient.answerSuggestionEvaluation = { team, suggestion, evaluation, answer in
+                #expect(team == "team" && suggestion == "idea" && evaluation == "evaluation" && answer == .better)
+                return [item]
+            }
+        }
+        await store.send(.answer("idea", "missing", .better))
+        await store.send(.answer("idea", "evaluation", .better)) { $0.isBusy = true }
+        await store.receive(\.response) { $0.isBusy = false }
+    }
 }

@@ -11,6 +11,7 @@ extension APIClient {
     static var mock: Self {
         let delay = 1
         return .init(
+            answerSuggestionEvaluation: { _, _, _, _ in [] },
             listSuggestions: { _ in [] },
             createSuggestion: { _, id, problem, impact, solution in
                 [.init(id: id.uuidString, problem: problem, impact: impact, solution: solution, hasFiveSupporters: false, supportedByMe: false, mine: true)]

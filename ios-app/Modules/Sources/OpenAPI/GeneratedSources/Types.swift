@@ -14,6 +14,9 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `PUT /teams/{teamId}/suggestions/{suggestionId}/support`.
     /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/support/put(setSuggestionSupport)`.
     func setSuggestionSupport(_ input: Operations.SetSuggestionSupport.Input) async throws -> Operations.SetSuggestionSupport.Output
+    /// - Remark: HTTP `PUT /teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)`.
+    func answerSuggestionEvaluation(_ input: Operations.AnswerSuggestionEvaluation.Input) async throws -> Operations.AnswerSuggestionEvaluation.Output
     /// - Remark: HTTP `PUT /event/{eventId}`.
     /// - Remark: Generated from `#/paths//event/{eventId}/put(updateEvent)`.
     func updateEvent(_ input: Operations.UpdateEvent.Input) async throws -> Operations.UpdateEvent.Output
@@ -50,12 +53,21 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `POST /teams/{teamId}/suggestions`.
     /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/post(createSuggestion)`.
     func createSuggestion(_ input: Operations.CreateSuggestion.Input) async throws -> Operations.CreateSuggestion.Output
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/trials`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)`.
+    func publishSuggestionTrial(_ input: Operations.PublishSuggestionTrial.Input) async throws -> Operations.PublishSuggestionTrial.Output
     /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/report`.
     /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/report/post(reportSuggestion)`.
     func reportSuggestion(_ input: Operations.ReportSuggestion.Input) async throws -> Operations.ReportSuggestion.Output
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/outcomes`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)`.
+    func publishSuggestionOutcome(_ input: Operations.PublishSuggestionOutcome.Input) async throws -> Operations.PublishSuggestionOutcome.Output
     /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/moderation`.
     /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/moderation/post(moderateSuggestion)`.
     func moderateSuggestion(_ input: Operations.ModerateSuggestion.Input) async throws -> Operations.ModerateSuggestion.Output
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/evaluations`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)`.
+    func openSuggestionEvaluation(_ input: Operations.OpenSuggestionEvaluation.Input) async throws -> Operations.OpenSuggestionEvaluation.Output
     /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/decisions`.
     /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/decisions/post(publishSuggestionDecision)`.
     func publishSuggestionDecision(_ input: Operations.PublishSuggestionDecision.Input) async throws -> Operations.PublishSuggestionDecision.Output
@@ -173,6 +185,19 @@ extension APIProtocol {
         body: Operations.SetSuggestionSupport.Input.Body
     ) async throws -> Operations.SetSuggestionSupport.Output {
         try await setSuggestionSupport(Operations.SetSuggestionSupport.Input(
+            path: path,
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `PUT /teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)`.
+    public func answerSuggestionEvaluation(
+        path: Operations.AnswerSuggestionEvaluation.Input.Path,
+        headers: Operations.AnswerSuggestionEvaluation.Input.Headers = .init(),
+        body: Operations.AnswerSuggestionEvaluation.Input.Body
+    ) async throws -> Operations.AnswerSuggestionEvaluation.Output {
+        try await answerSuggestionEvaluation(Operations.AnswerSuggestionEvaluation.Input(
             path: path,
             headers: headers,
             body: body
@@ -310,6 +335,19 @@ extension APIProtocol {
             body: body
         ))
     }
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/trials`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)`.
+    public func publishSuggestionTrial(
+        path: Operations.PublishSuggestionTrial.Input.Path,
+        headers: Operations.PublishSuggestionTrial.Input.Headers = .init(),
+        body: Operations.PublishSuggestionTrial.Input.Body
+    ) async throws -> Operations.PublishSuggestionTrial.Output {
+        try await publishSuggestionTrial(Operations.PublishSuggestionTrial.Input(
+            path: path,
+            headers: headers,
+            body: body
+        ))
+    }
     /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/report`.
     /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/report/post(reportSuggestion)`.
     public func reportSuggestion(
@@ -321,6 +359,19 @@ extension APIProtocol {
             headers: headers
         ))
     }
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/outcomes`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)`.
+    public func publishSuggestionOutcome(
+        path: Operations.PublishSuggestionOutcome.Input.Path,
+        headers: Operations.PublishSuggestionOutcome.Input.Headers = .init(),
+        body: Operations.PublishSuggestionOutcome.Input.Body
+    ) async throws -> Operations.PublishSuggestionOutcome.Output {
+        try await publishSuggestionOutcome(Operations.PublishSuggestionOutcome.Input(
+            path: path,
+            headers: headers,
+            body: body
+        ))
+    }
     /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/moderation`.
     /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/moderation/post(moderateSuggestion)`.
     public func moderateSuggestion(
@@ -329,6 +380,19 @@ extension APIProtocol {
         body: Operations.ModerateSuggestion.Input.Body
     ) async throws -> Operations.ModerateSuggestion.Output {
         try await moderateSuggestion(Operations.ModerateSuggestion.Input(
+            path: path,
+            headers: headers,
+            body: body
+        ))
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/evaluations`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)`.
+    public func openSuggestionEvaluation(
+        path: Operations.OpenSuggestionEvaluation.Input.Path,
+        headers: Operations.OpenSuggestionEvaluation.Input.Headers = .init(),
+        body: Operations.OpenSuggestionEvaluation.Input.Body
+    ) async throws -> Operations.OpenSuggestionEvaluation.Output {
+        try await openSuggestionEvaluation(Operations.OpenSuggestionEvaluation.Input(
             path: path,
             headers: headers,
             body: body
@@ -746,6 +810,12 @@ public enum Components {
             public var mine: Swift.Bool
             /// - Remark: Generated from `#/components/schemas/Suggestion/decisions`.
             public var decisions: [Components.Schemas.SuggestionDecision]
+            /// - Remark: Generated from `#/components/schemas/Suggestion/trials`.
+            public var trials: [Components.Schemas.SuggestionTrial]
+            /// - Remark: Generated from `#/components/schemas/Suggestion/evaluations`.
+            public var evaluations: [Components.Schemas.SuggestionEvaluation]
+            /// - Remark: Generated from `#/components/schemas/Suggestion/outcomes`.
+            public var outcomes: [Components.Schemas.SuggestionOutcome]
             /// Creates a new `Suggestion`.
             ///
             /// - Parameters:
@@ -757,6 +827,9 @@ public enum Components {
             ///   - supportedByMe:
             ///   - mine:
             ///   - decisions:
+            ///   - trials:
+            ///   - evaluations:
+            ///   - outcomes:
             public init(
                 id: Swift.String,
                 problem: Swift.String,
@@ -765,7 +838,10 @@ public enum Components {
                 hasFiveSupporters: Swift.Bool,
                 supportedByMe: Swift.Bool,
                 mine: Swift.Bool,
-                decisions: [Components.Schemas.SuggestionDecision]
+                decisions: [Components.Schemas.SuggestionDecision],
+                trials: [Components.Schemas.SuggestionTrial],
+                evaluations: [Components.Schemas.SuggestionEvaluation],
+                outcomes: [Components.Schemas.SuggestionOutcome]
             ) {
                 self.id = id
                 self.problem = problem
@@ -775,6 +851,9 @@ public enum Components {
                 self.supportedByMe = supportedByMe
                 self.mine = mine
                 self.decisions = decisions
+                self.trials = trials
+                self.evaluations = evaluations
+                self.outcomes = outcomes
             }
             public enum CodingKeys: String, CodingKey {
                 case id
@@ -785,6 +864,9 @@ public enum Components {
                 case supportedByMe
                 case mine
                 case decisions
+                case trials
+                case evaluations
+                case outcomes
             }
         }
         /// - Remark: Generated from `#/components/schemas/SuggestionDecision`.
@@ -845,6 +927,219 @@ public enum Components {
                 case responsibleName
                 case followUpDate
                 case publishedAt
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation`.
+        public struct SuggestionEvaluation: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/trialId`.
+            public var trialId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/closesAt`.
+            public var closesAt: Swift.Int64
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/closed`.
+            public var closed: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/eligible`.
+            public var eligible: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/myAnswer`.
+            @frozen public enum MyAnswerPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case better = "Better"
+                case unchanged = "Unchanged"
+                case worse = "Worse"
+                case cannotAssess = "CannotAssess"
+            }
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/myAnswer`.
+            public var myAnswer: Components.Schemas.SuggestionEvaluation.MyAnswerPayload?
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/summary`.
+            @frozen public enum SummaryPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case improved = "Improved"
+                case mixed = "Mixed"
+                case notImproved = "NotImproved"
+                case insufficientResponses = "InsufficientResponses"
+            }
+            /// - Remark: Generated from `#/components/schemas/SuggestionEvaluation/summary`.
+            public var summary: Components.Schemas.SuggestionEvaluation.SummaryPayload?
+            /// Creates a new `SuggestionEvaluation`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - trialId:
+            ///   - closesAt:
+            ///   - closed:
+            ///   - eligible:
+            ///   - myAnswer:
+            ///   - summary:
+            public init(
+                id: Swift.String,
+                trialId: Swift.String,
+                closesAt: Swift.Int64,
+                closed: Swift.Bool,
+                eligible: Swift.Bool,
+                myAnswer: Components.Schemas.SuggestionEvaluation.MyAnswerPayload? = nil,
+                summary: Components.Schemas.SuggestionEvaluation.SummaryPayload? = nil
+            ) {
+                self.id = id
+                self.trialId = trialId
+                self.closesAt = closesAt
+                self.closed = closed
+                self.eligible = eligible
+                self.myAnswer = myAnswer
+                self.summary = summary
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case trialId
+                case closesAt
+                case closed
+                case eligible
+                case myAnswer
+                case summary
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/SuggestionOutcome`.
+        public struct SuggestionOutcome: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SuggestionOutcome/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionOutcome/trialId`.
+            public var trialId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionOutcome/outcome`.
+            @frozen public enum OutcomePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case _continue = "Continue"
+                case adjust = "Adjust"
+                case stop = "Stop"
+            }
+            /// - Remark: Generated from `#/components/schemas/SuggestionOutcome/outcome`.
+            public var outcome: Components.Schemas.SuggestionOutcome.OutcomePayload
+            /// - Remark: Generated from `#/components/schemas/SuggestionOutcome/explanation`.
+            public var explanation: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionOutcome/publishedAt`.
+            public var publishedAt: Swift.Int64
+            /// Creates a new `SuggestionOutcome`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - trialId:
+            ///   - outcome:
+            ///   - explanation:
+            ///   - publishedAt:
+            public init(
+                id: Swift.String,
+                trialId: Swift.String,
+                outcome: Components.Schemas.SuggestionOutcome.OutcomePayload,
+                explanation: Swift.String,
+                publishedAt: Swift.Int64
+            ) {
+                self.id = id
+                self.trialId = trialId
+                self.outcome = outcome
+                self.explanation = explanation
+                self.publishedAt = publishedAt
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case trialId
+                case outcome
+                case explanation
+                case publishedAt
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/SuggestionTrial`.
+        public struct SuggestionTrial: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/revision`.
+            public var revision: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/decisionId`.
+            public var decisionId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/change`.
+            public var change: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/intendedBenefit`.
+            public var intendedBenefit: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/responsibleName`.
+            public var responsibleName: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/needsReassignment`.
+            public var needsReassignment: Swift.Bool
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/startDate`.
+            public var startDate: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/endDate`.
+            public var endDate: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/followUpDate`.
+            public var followUpDate: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionTrial/publishedAt`.
+            public var publishedAt: Swift.Int64
+            /// Creates a new `SuggestionTrial`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - revision:
+            ///   - decisionId:
+            ///   - change:
+            ///   - intendedBenefit:
+            ///   - responsibleName:
+            ///   - needsReassignment:
+            ///   - startDate:
+            ///   - endDate:
+            ///   - followUpDate:
+            ///   - publishedAt:
+            public init(
+                id: Swift.String,
+                revision: Swift.Int32,
+                decisionId: Swift.String,
+                change: Swift.String,
+                intendedBenefit: Swift.String,
+                responsibleName: Swift.String,
+                needsReassignment: Swift.Bool,
+                startDate: Swift.String,
+                endDate: Swift.String,
+                followUpDate: Swift.String,
+                publishedAt: Swift.Int64
+            ) {
+                self.id = id
+                self.revision = revision
+                self.decisionId = decisionId
+                self.change = change
+                self.intendedBenefit = intendedBenefit
+                self.responsibleName = responsibleName
+                self.needsReassignment = needsReassignment
+                self.startDate = startDate
+                self.endDate = endDate
+                self.followUpDate = followUpDate
+                self.publishedAt = publishedAt
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case revision
+                case decisionId
+                case change
+                case intendedBenefit
+                case responsibleName
+                case needsReassignment
+                case startDate
+                case endDate
+                case followUpDate
+                case publishedAt
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/AnswerSuggestionEvaluationInput`.
+        public struct AnswerSuggestionEvaluationInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/AnswerSuggestionEvaluationInput/answer`.
+            @frozen public enum AnswerPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case better = "Better"
+                case unchanged = "Unchanged"
+                case worse = "Worse"
+                case cannotAssess = "CannotAssess"
+            }
+            /// - Remark: Generated from `#/components/schemas/AnswerSuggestionEvaluationInput/answer`.
+            public var answer: Components.Schemas.AnswerSuggestionEvaluationInput.AnswerPayload
+            /// Creates a new `AnswerSuggestionEvaluationInput`.
+            ///
+            /// - Parameters:
+            ///   - answer:
+            public init(answer: Components.Schemas.AnswerSuggestionEvaluationInput.AnswerPayload) {
+                self.answer = answer
+            }
+            public enum CodingKeys: String, CodingKey {
+                case answer
             }
         }
         /// Input payload for creating a new feedback event for an activity.
@@ -2038,6 +2333,170 @@ public enum Components {
                 case solution
             }
         }
+        /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput`.
+        public struct PublishSuggestionTrialInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/expectedRevision`.
+            public var expectedRevision: Swift.Int32
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/expectedDecisionId`.
+            public var expectedDecisionId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/change`.
+            public var change: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/intendedBenefit`.
+            public var intendedBenefit: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/responsibleId`.
+            public var responsibleId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/responsibleName`.
+            public var responsibleName: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/startDate`.
+            public var startDate: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/endDate`.
+            public var endDate: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionTrialInput/followUpDate`.
+            public var followUpDate: Swift.String
+            /// Creates a new `PublishSuggestionTrialInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - expectedRevision:
+            ///   - expectedDecisionId:
+            ///   - change:
+            ///   - intendedBenefit:
+            ///   - responsibleId:
+            ///   - responsibleName:
+            ///   - startDate:
+            ///   - endDate:
+            ///   - followUpDate:
+            public init(
+                id: Swift.String,
+                expectedRevision: Swift.Int32,
+                expectedDecisionId: Swift.String,
+                change: Swift.String,
+                intendedBenefit: Swift.String,
+                responsibleId: Swift.String,
+                responsibleName: Swift.String,
+                startDate: Swift.String,
+                endDate: Swift.String,
+                followUpDate: Swift.String
+            ) {
+                self.id = id
+                self.expectedRevision = expectedRevision
+                self.expectedDecisionId = expectedDecisionId
+                self.change = change
+                self.intendedBenefit = intendedBenefit
+                self.responsibleId = responsibleId
+                self.responsibleName = responsibleName
+                self.startDate = startDate
+                self.endDate = endDate
+                self.followUpDate = followUpDate
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case expectedRevision
+                case expectedDecisionId
+                case change
+                case intendedBenefit
+                case responsibleId
+                case responsibleName
+                case startDate
+                case endDate
+                case followUpDate
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/SuggestionInbox`.
+        public struct SuggestionInbox: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SuggestionInbox/suggestions`.
+            public var suggestions: [Components.Schemas.Suggestion]
+            /// - Remark: Generated from `#/components/schemas/SuggestionInbox/responsiblePeople`.
+            public var responsiblePeople: [Components.Schemas.SuggestionResponsiblePerson]
+            /// Creates a new `SuggestionInbox`.
+            ///
+            /// - Parameters:
+            ///   - suggestions:
+            ///   - responsiblePeople:
+            public init(
+                suggestions: [Components.Schemas.Suggestion],
+                responsiblePeople: [Components.Schemas.SuggestionResponsiblePerson]
+            ) {
+                self.suggestions = suggestions
+                self.responsiblePeople = responsiblePeople
+            }
+            public enum CodingKeys: String, CodingKey {
+                case suggestions
+                case responsiblePeople
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/SuggestionResponsiblePerson`.
+        public struct SuggestionResponsiblePerson: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/SuggestionResponsiblePerson/accountId`.
+            public var accountId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/SuggestionResponsiblePerson/name`.
+            public var name: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/SuggestionResponsiblePerson/email`.
+            public var email: Swift.String?
+            /// Creates a new `SuggestionResponsiblePerson`.
+            ///
+            /// - Parameters:
+            ///   - accountId:
+            ///   - name:
+            ///   - email:
+            public init(
+                accountId: Swift.String,
+                name: Swift.String? = nil,
+                email: Swift.String? = nil
+            ) {
+                self.accountId = accountId
+                self.name = name
+                self.email = email
+            }
+            public enum CodingKeys: String, CodingKey {
+                case accountId
+                case name
+                case email
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/PublishSuggestionOutcomeInput`.
+        public struct PublishSuggestionOutcomeInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionOutcomeInput/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionOutcomeInput/trialId`.
+            public var trialId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionOutcomeInput/outcome`.
+            @frozen public enum OutcomePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case _continue = "Continue"
+                case adjust = "Adjust"
+                case stop = "Stop"
+            }
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionOutcomeInput/outcome`.
+            public var outcome: Components.Schemas.PublishSuggestionOutcomeInput.OutcomePayload
+            /// - Remark: Generated from `#/components/schemas/PublishSuggestionOutcomeInput/explanation`.
+            public var explanation: Swift.String
+            /// Creates a new `PublishSuggestionOutcomeInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - trialId:
+            ///   - outcome:
+            ///   - explanation:
+            public init(
+                id: Swift.String,
+                trialId: Swift.String,
+                outcome: Components.Schemas.PublishSuggestionOutcomeInput.OutcomePayload,
+                explanation: Swift.String
+            ) {
+                self.id = id
+                self.trialId = trialId
+                self.outcome = outcome
+                self.explanation = explanation
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case trialId
+                case outcome
+                case explanation
+            }
+        }
         /// - Remark: Generated from `#/components/schemas/ModerateSuggestionInput`.
         public struct ModerateSuggestionInput: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/ModerateSuggestionInput/remove`.
@@ -2086,6 +2545,35 @@ public enum Components {
                 case problem
                 case impact
                 case solution
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/OpenSuggestionEvaluationInput`.
+        public struct OpenSuggestionEvaluationInput: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/OpenSuggestionEvaluationInput/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/OpenSuggestionEvaluationInput/trialId`.
+            public var trialId: Swift.String
+            /// - Remark: Generated from `#/components/schemas/OpenSuggestionEvaluationInput/closesAt`.
+            public var closesAt: Swift.Int64
+            /// Creates a new `OpenSuggestionEvaluationInput`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - trialId:
+            ///   - closesAt:
+            public init(
+                id: Swift.String,
+                trialId: Swift.String,
+                closesAt: Swift.Int64
+            ) {
+                self.id = id
+                self.trialId = trialId
+                self.closesAt = closesAt
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case trialId
+                case closesAt
             }
         }
         /// - Remark: Generated from `#/components/schemas/PublishSuggestionDecisionInput`.
@@ -2146,58 +2634,6 @@ public enum Components {
                 case responsibleId
                 case responsibleName
                 case followUpDate
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/SuggestionInbox`.
-        public struct SuggestionInbox: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/SuggestionInbox/suggestions`.
-            public var suggestions: [Components.Schemas.Suggestion]
-            /// - Remark: Generated from `#/components/schemas/SuggestionInbox/responsiblePeople`.
-            public var responsiblePeople: [Components.Schemas.SuggestionResponsiblePerson]
-            /// Creates a new `SuggestionInbox`.
-            ///
-            /// - Parameters:
-            ///   - suggestions:
-            ///   - responsiblePeople:
-            public init(
-                suggestions: [Components.Schemas.Suggestion],
-                responsiblePeople: [Components.Schemas.SuggestionResponsiblePerson]
-            ) {
-                self.suggestions = suggestions
-                self.responsiblePeople = responsiblePeople
-            }
-            public enum CodingKeys: String, CodingKey {
-                case suggestions
-                case responsiblePeople
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/SuggestionResponsiblePerson`.
-        public struct SuggestionResponsiblePerson: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/SuggestionResponsiblePerson/accountId`.
-            public var accountId: Swift.String
-            /// - Remark: Generated from `#/components/schemas/SuggestionResponsiblePerson/name`.
-            public var name: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/SuggestionResponsiblePerson/email`.
-            public var email: Swift.String?
-            /// Creates a new `SuggestionResponsiblePerson`.
-            ///
-            /// - Parameters:
-            ///   - accountId:
-            ///   - name:
-            ///   - email:
-            public init(
-                accountId: Swift.String,
-                name: Swift.String? = nil,
-                email: Swift.String? = nil
-            ) {
-                self.accountId = accountId
-                self.name = name
-                self.email = email
-            }
-            public enum CodingKeys: String, CodingKey {
-                case accountId
-                case name
-                case email
             }
         }
         /// - Remark: Generated from `#/components/schemas/TeamInfo`.
@@ -4026,6 +4462,510 @@ public enum Operations {
             /// - Throws: An error if `self` is not `.serviceUnavailable`.
             /// - SeeAlso: `.serviceUnavailable`.
             public var serviceUnavailable: Operations.SetSuggestionSupport.Output.ServiceUnavailable {
+                get throws {
+                    switch self {
+                    case let .serviceUnavailable(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "serviceUnavailable",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `PUT /teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)`.
+    public enum AnswerSuggestionEvaluation {
+        public static let id: Swift.String = "answerSuggestionEvaluation"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/path/suggestionId`.
+                public var suggestionId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/path/evaluationId`.
+                public var evaluationId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - suggestionId:
+                ///   - evaluationId:
+                public init(
+                    teamId: Swift.String,
+                    suggestionId: Swift.String,
+                    evaluationId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.suggestionId = suggestionId
+                    self.evaluationId = evaluationId
+                }
+            }
+            public var path: Operations.AnswerSuggestionEvaluation.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.AnswerSuggestionEvaluation.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.AnswerSuggestionEvaluation.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.AnswerSuggestionEvaluation.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/requestBody/content/application\/json`.
+                case json(Components.Schemas.AnswerSuggestionEvaluationInput)
+            }
+            public var body: Operations.AnswerSuggestionEvaluation.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            ///   - body:
+            public init(
+                path: Operations.AnswerSuggestionEvaluation.Input.Path,
+                headers: Operations.AnswerSuggestionEvaluation.Input.Headers = .init(),
+                body: Operations.AnswerSuggestionEvaluation.Input.Body
+            ) {
+                self.path = path
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/200/content/application\/json`.
+                    case json([Components.Schemas.Suggestion])
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: [Components.Schemas.Suggestion] {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AnswerSuggestionEvaluation.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AnswerSuggestionEvaluation.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.AnswerSuggestionEvaluation.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.AnswerSuggestionEvaluation.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AnswerSuggestionEvaluation.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AnswerSuggestionEvaluation.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.AnswerSuggestionEvaluation.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.AnswerSuggestionEvaluation.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AnswerSuggestionEvaluation.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AnswerSuggestionEvaluation.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.AnswerSuggestionEvaluation.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.AnswerSuggestionEvaluation.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AnswerSuggestionEvaluation.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AnswerSuggestionEvaluation.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.AnswerSuggestionEvaluation.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.AnswerSuggestionEvaluation.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AnswerSuggestionEvaluation.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AnswerSuggestionEvaluation.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.AnswerSuggestionEvaluation.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.AnswerSuggestionEvaluation.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AnswerSuggestionEvaluation.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AnswerSuggestionEvaluation.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.AnswerSuggestionEvaluation.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.AnswerSuggestionEvaluation.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AnswerSuggestionEvaluation.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AnswerSuggestionEvaluation.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.AnswerSuggestionEvaluation.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.AnswerSuggestionEvaluation.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct ServiceUnavailable: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/503/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/PUT/responses/503/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.AnswerSuggestionEvaluation.Output.ServiceUnavailable.Body
+                /// Creates a new `ServiceUnavailable`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.AnswerSuggestionEvaluation.Output.ServiceUnavailable.Body) {
+                    self.body = body
+                }
+            }
+            /// Service Unavailable
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/{evaluationId}/answer/put(answerSuggestionEvaluation)/responses/503`.
+            ///
+            /// HTTP response code: `503 serviceUnavailable`.
+            case serviceUnavailable(Operations.AnswerSuggestionEvaluation.Output.ServiceUnavailable)
+            /// The associated value of the enum case if `self` is `.serviceUnavailable`.
+            ///
+            /// - Throws: An error if `self` is not `.serviceUnavailable`.
+            /// - SeeAlso: `.serviceUnavailable`.
+            public var serviceUnavailable: Operations.AnswerSuggestionEvaluation.Output.ServiceUnavailable {
                 get throws {
                     switch self {
                     case let .serviceUnavailable(response):
@@ -9734,6 +10674,505 @@ public enum Operations {
             }
         }
     }
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/trials`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)`.
+    public enum PublishSuggestionTrial {
+        public static let id: Swift.String = "publishSuggestionTrial"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/path/suggestionId`.
+                public var suggestionId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - suggestionId:
+                public init(
+                    teamId: Swift.String,
+                    suggestionId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.suggestionId = suggestionId
+                }
+            }
+            public var path: Operations.PublishSuggestionTrial.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.PublishSuggestionTrial.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.PublishSuggestionTrial.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.PublishSuggestionTrial.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.PublishSuggestionTrialInput)
+            }
+            public var body: Operations.PublishSuggestionTrial.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            ///   - body:
+            public init(
+                path: Operations.PublishSuggestionTrial.Input.Path,
+                headers: Operations.PublishSuggestionTrial.Input.Headers = .init(),
+                body: Operations.PublishSuggestionTrial.Input.Body
+            ) {
+                self.path = path
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.SuggestionInbox)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.SuggestionInbox {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionTrial.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionTrial.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.PublishSuggestionTrial.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.PublishSuggestionTrial.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionTrial.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionTrial.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.PublishSuggestionTrial.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.PublishSuggestionTrial.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionTrial.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionTrial.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.PublishSuggestionTrial.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.PublishSuggestionTrial.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionTrial.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionTrial.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.PublishSuggestionTrial.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.PublishSuggestionTrial.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionTrial.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionTrial.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.PublishSuggestionTrial.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.PublishSuggestionTrial.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionTrial.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionTrial.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.PublishSuggestionTrial.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.PublishSuggestionTrial.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionTrial.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionTrial.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.PublishSuggestionTrial.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.PublishSuggestionTrial.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct ServiceUnavailable: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/503/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/trials/POST/responses/503/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionTrial.Output.ServiceUnavailable.Body
+                /// Creates a new `ServiceUnavailable`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionTrial.Output.ServiceUnavailable.Body) {
+                    self.body = body
+                }
+            }
+            /// Service Unavailable
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/trials/post(publishSuggestionTrial)/responses/503`.
+            ///
+            /// HTTP response code: `503 serviceUnavailable`.
+            case serviceUnavailable(Operations.PublishSuggestionTrial.Output.ServiceUnavailable)
+            /// The associated value of the enum case if `self` is `.serviceUnavailable`.
+            ///
+            /// - Throws: An error if `self` is not `.serviceUnavailable`.
+            /// - SeeAlso: `.serviceUnavailable`.
+            public var serviceUnavailable: Operations.PublishSuggestionTrial.Output.ServiceUnavailable {
+                get throws {
+                    switch self {
+                    case let .serviceUnavailable(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "serviceUnavailable",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
     /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/report`.
     /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/report/post(reportSuggestion)`.
     public enum ReportSuggestion {
@@ -10181,6 +11620,505 @@ public enum Operations {
             /// - Throws: An error if `self` is not `.serviceUnavailable`.
             /// - SeeAlso: `.serviceUnavailable`.
             public var serviceUnavailable: Operations.ReportSuggestion.Output.ServiceUnavailable {
+                get throws {
+                    switch self {
+                    case let .serviceUnavailable(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "serviceUnavailable",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/outcomes`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)`.
+    public enum PublishSuggestionOutcome {
+        public static let id: Swift.String = "publishSuggestionOutcome"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/path/suggestionId`.
+                public var suggestionId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - suggestionId:
+                public init(
+                    teamId: Swift.String,
+                    suggestionId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.suggestionId = suggestionId
+                }
+            }
+            public var path: Operations.PublishSuggestionOutcome.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.PublishSuggestionOutcome.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.PublishSuggestionOutcome.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.PublishSuggestionOutcome.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.PublishSuggestionOutcomeInput)
+            }
+            public var body: Operations.PublishSuggestionOutcome.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            ///   - body:
+            public init(
+                path: Operations.PublishSuggestionOutcome.Input.Path,
+                headers: Operations.PublishSuggestionOutcome.Input.Headers = .init(),
+                body: Operations.PublishSuggestionOutcome.Input.Body
+            ) {
+                self.path = path
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.SuggestionInbox)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.SuggestionInbox {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionOutcome.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionOutcome.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.PublishSuggestionOutcome.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.PublishSuggestionOutcome.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionOutcome.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionOutcome.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.PublishSuggestionOutcome.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.PublishSuggestionOutcome.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionOutcome.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionOutcome.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.PublishSuggestionOutcome.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.PublishSuggestionOutcome.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionOutcome.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionOutcome.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.PublishSuggestionOutcome.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.PublishSuggestionOutcome.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionOutcome.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionOutcome.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.PublishSuggestionOutcome.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.PublishSuggestionOutcome.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionOutcome.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionOutcome.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.PublishSuggestionOutcome.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.PublishSuggestionOutcome.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionOutcome.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionOutcome.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.PublishSuggestionOutcome.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.PublishSuggestionOutcome.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct ServiceUnavailable: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/503/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/outcomes/POST/responses/503/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.PublishSuggestionOutcome.Output.ServiceUnavailable.Body
+                /// Creates a new `ServiceUnavailable`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.PublishSuggestionOutcome.Output.ServiceUnavailable.Body) {
+                    self.body = body
+                }
+            }
+            /// Service Unavailable
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/outcomes/post(publishSuggestionOutcome)/responses/503`.
+            ///
+            /// HTTP response code: `503 serviceUnavailable`.
+            case serviceUnavailable(Operations.PublishSuggestionOutcome.Output.ServiceUnavailable)
+            /// The associated value of the enum case if `self` is `.serviceUnavailable`.
+            ///
+            /// - Throws: An error if `self` is not `.serviceUnavailable`.
+            /// - SeeAlso: `.serviceUnavailable`.
+            public var serviceUnavailable: Operations.PublishSuggestionOutcome.Output.ServiceUnavailable {
                 get throws {
                     switch self {
                     case let .serviceUnavailable(response):
@@ -10680,6 +12618,505 @@ public enum Operations {
             /// - Throws: An error if `self` is not `.serviceUnavailable`.
             /// - SeeAlso: `.serviceUnavailable`.
             public var serviceUnavailable: Operations.ModerateSuggestion.Output.ServiceUnavailable {
+                get throws {
+                    switch self {
+                    case let .serviceUnavailable(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "serviceUnavailable",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// - Remark: HTTP `POST /teams/{teamId}/suggestions/{suggestionId}/evaluations`.
+    /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)`.
+    public enum OpenSuggestionEvaluation {
+        public static let id: Swift.String = "openSuggestionEvaluation"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/path`.
+            public struct Path: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/path/teamId`.
+                public var teamId: Swift.String
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/path/suggestionId`.
+                public var suggestionId: Swift.String
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - teamId:
+                ///   - suggestionId:
+                public init(
+                    teamId: Swift.String,
+                    suggestionId: Swift.String
+                ) {
+                    self.teamId = teamId
+                    self.suggestionId = suggestionId
+                }
+            }
+            public var path: Operations.OpenSuggestionEvaluation.Input.Path
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.OpenSuggestionEvaluation.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.OpenSuggestionEvaluation.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.OpenSuggestionEvaluation.Input.Headers
+            /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/requestBody`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/requestBody/content/application\/json`.
+                case json(Components.Schemas.OpenSuggestionEvaluationInput)
+            }
+            public var body: Operations.OpenSuggestionEvaluation.Input.Body
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            ///   - body:
+            public init(
+                path: Operations.OpenSuggestionEvaluation.Input.Path,
+                headers: Operations.OpenSuggestionEvaluation.Input.Headers = .init(),
+                body: Operations.OpenSuggestionEvaluation.Input.Body
+            ) {
+                self.path = path
+                self.headers = headers
+                self.body = body
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            public struct Ok: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/200/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/200/content/application\/json`.
+                    case json(Components.Schemas.SuggestionInbox)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.SuggestionInbox {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.OpenSuggestionEvaluation.Output.Ok.Body
+                /// Creates a new `Ok`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.OpenSuggestionEvaluation.Output.Ok.Body) {
+                    self.body = body
+                }
+            }
+            /// OK
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Operations.OpenSuggestionEvaluation.Output.Ok)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Operations.OpenSuggestionEvaluation.Output.Ok {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct BadRequest: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/400/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/400/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.OpenSuggestionEvaluation.Output.BadRequest.Body
+                /// Creates a new `BadRequest`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.OpenSuggestionEvaluation.Output.BadRequest.Body) {
+                    self.body = body
+                }
+            }
+            /// Bad Request
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Operations.OpenSuggestionEvaluation.Output.BadRequest)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Operations.OpenSuggestionEvaluation.Output.BadRequest {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Unauthorized: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/401/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/401/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.OpenSuggestionEvaluation.Output.Unauthorized.Body
+                /// Creates a new `Unauthorized`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.OpenSuggestionEvaluation.Output.Unauthorized.Body) {
+                    self.body = body
+                }
+            }
+            /// Unauthorized
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Operations.OpenSuggestionEvaluation.Output.Unauthorized)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Operations.OpenSuggestionEvaluation.Output.Unauthorized {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Forbidden: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/403/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/403/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.OpenSuggestionEvaluation.Output.Forbidden.Body
+                /// Creates a new `Forbidden`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.OpenSuggestionEvaluation.Output.Forbidden.Body) {
+                    self.body = body
+                }
+            }
+            /// Forbidden
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)/responses/403`.
+            ///
+            /// HTTP response code: `403 forbidden`.
+            case forbidden(Operations.OpenSuggestionEvaluation.Output.Forbidden)
+            /// The associated value of the enum case if `self` is `.forbidden`.
+            ///
+            /// - Throws: An error if `self` is not `.forbidden`.
+            /// - SeeAlso: `.forbidden`.
+            public var forbidden: Operations.OpenSuggestionEvaluation.Output.Forbidden {
+                get throws {
+                    switch self {
+                    case let .forbidden(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "forbidden",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct NotFound: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/404/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/404/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.OpenSuggestionEvaluation.Output.NotFound.Body
+                /// Creates a new `NotFound`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.OpenSuggestionEvaluation.Output.NotFound.Body) {
+                    self.body = body
+                }
+            }
+            /// Not Found
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Operations.OpenSuggestionEvaluation.Output.NotFound)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Operations.OpenSuggestionEvaluation.Output.NotFound {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct Conflict: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/409/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/409/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.OpenSuggestionEvaluation.Output.Conflict.Body
+                /// Creates a new `Conflict`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.OpenSuggestionEvaluation.Output.Conflict.Body) {
+                    self.body = body
+                }
+            }
+            /// Conflict
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)/responses/409`.
+            ///
+            /// HTTP response code: `409 conflict`.
+            case conflict(Operations.OpenSuggestionEvaluation.Output.Conflict)
+            /// The associated value of the enum case if `self` is `.conflict`.
+            ///
+            /// - Throws: An error if `self` is not `.conflict`.
+            /// - SeeAlso: `.conflict`.
+            public var conflict: Operations.OpenSuggestionEvaluation.Output.Conflict {
+                get throws {
+                    switch self {
+                    case let .conflict(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "conflict",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct InternalServerError: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/500/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/500/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.OpenSuggestionEvaluation.Output.InternalServerError.Body
+                /// Creates a new `InternalServerError`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.OpenSuggestionEvaluation.Output.InternalServerError.Body) {
+                    self.body = body
+                }
+            }
+            /// Internal Server Error
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Operations.OpenSuggestionEvaluation.Output.InternalServerError)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Operations.OpenSuggestionEvaluation.Output.InternalServerError {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            public struct ServiceUnavailable: Sendable, Hashable {
+                /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/503/content`.
+                @frozen public enum Body: Sendable, Hashable {
+                    /// - Remark: Generated from `#/paths/teams/{teamId}/suggestions/{suggestionId}/evaluations/POST/responses/503/content/application\/json`.
+                    case json(Components.Schemas.ApiError)
+                    /// The associated value of the enum case if `self` is `.json`.
+                    ///
+                    /// - Throws: An error if `self` is not `.json`.
+                    /// - SeeAlso: `.json`.
+                    public var json: Components.Schemas.ApiError {
+                        get throws {
+                            switch self {
+                            case let .json(body):
+                                return body
+                            }
+                        }
+                    }
+                }
+                /// Received HTTP response body
+                public var body: Operations.OpenSuggestionEvaluation.Output.ServiceUnavailable.Body
+                /// Creates a new `ServiceUnavailable`.
+                ///
+                /// - Parameters:
+                ///   - body: Received HTTP response body
+                public init(body: Operations.OpenSuggestionEvaluation.Output.ServiceUnavailable.Body) {
+                    self.body = body
+                }
+            }
+            /// Service Unavailable
+            ///
+            /// - Remark: Generated from `#/paths//teams/{teamId}/suggestions/{suggestionId}/evaluations/post(openSuggestionEvaluation)/responses/503`.
+            ///
+            /// HTTP response code: `503 serviceUnavailable`.
+            case serviceUnavailable(Operations.OpenSuggestionEvaluation.Output.ServiceUnavailable)
+            /// The associated value of the enum case if `self` is `.serviceUnavailable`.
+            ///
+            /// - Throws: An error if `self` is not `.serviceUnavailable`.
+            /// - SeeAlso: `.serviceUnavailable`.
+            public var serviceUnavailable: Operations.OpenSuggestionEvaluation.Output.ServiceUnavailable {
                 get throws {
                     switch self {
                     case let .serviceUnavailable(response):
