@@ -1,0 +1,21 @@
+.github/workflows/ci.yml
+  s_69208f419ca452::t_d7b08ae694222b 19
+.github/workflows/release.yml
+  s_69208f419ca452::t_947f9363a1ce1d 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "00752060e19ea4783c012a046b8871aac1f4c3f4",
+  "prompts": {},
+  "sessions": {
+    "s_69208f419ca452": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1caf0-31da-7451-bb82-c598c9b06858",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Nicolai Dam <nicolaidam96@gmail.com>"
+    }
+  }
+}
