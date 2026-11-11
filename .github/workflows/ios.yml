@@ -105,6 +105,7 @@ jobs:
             -derivedDataPath ios-app/.build/ci/DerivedData \
             -resultBundlePath ios-app/.build/ci/UnitTests.xcresult \
             -skipMacroValidation \
+            -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Validate notification strings in the built app
