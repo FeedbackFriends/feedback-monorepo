@@ -23,7 +23,7 @@
     "cn": "^0.4.0",
     "framer-motion": "12.36.0",
     "lucide-react": "^0.468.0",
-    "next": "16.4.1",
+    "next": "16.4.5",
     "radix-ui": "^1.8.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
